@@ -120,7 +120,7 @@ En fil som inneholder versjoner av alle pakker du benytter i koden din.
 **renv**  
 Mappe som inneholder alle pakkene du installerer.
 
-Nå som vi har et virtuelle miljøet på plass kan vi installere en R-pakke. Du kan gjøre dette fra både terminalen og fra en Notebook. Vi anbefaler på gjøre det fra terminalen fordi du da får tilbakemelding på om installeringen gikk bra heller ikke. For å installere i terminalen gjør du følgende:
+Både lock filen og renv mappe kan fint ligger på GitHub. Nå som vi har et virtuelle miljøet på plass kan vi installere en R-pakke. Du kan gjøre dette fra både terminalen og fra en Notebook. Vi anbefaler på gjøre det fra terminalen fordi du da får tilbakemelding på om installeringen gikk bra heller ikke. For å installere i terminalen gjør du følgende:
 
 1. Åpne en terminal i Jupyterlab
 2. Stå i mappen der du aktiverte det virtuelle miljøet
@@ -133,7 +133,24 @@ renv::install("PxWebApiData")
 
 ```
 
-Over installerte vi pakken [PxWebApiData](https://cran.r-project.org/web/packages/PxWebApiData/vignettes/Introduction.html) som er en pakke skrevet i SSB for å hente ut data fra vår statistikkbank. La oss bruke pakken i koden vår med ved å skrive følgende i kodecelle i Notebooken vår:
+Over installerte vi pakken [PxWebApiData](https://cran.r-project.org/web/packages/PxWebApiData/vignettes/Introduction.html) fra den R sentral repository CRAN. Dette er en pakke skrevet i SSB for å hente ut data fra vår statistikkbank. Det er også mulig å installere pakker som ligger på SSBs GitHub. Da må vi spesifisere at pakke ligger på 'statisticsnorway' område. For eksempel:
+
+```R
+renv::install("statisticsnorway/klassR")
+
+```
+
+Pakken [klassR](https://statisticsnorway.github.io/klassR/articles/klassR-vignette.html) er skrevet for å hente ut klassifikasjoner fra SSBs KLASS. Det er en public repository på Github og åpen for alle å laste ned. For pakker som er på et lukket område på 'statsitcsnorway' må vi bruke Personal Authentication Token for å installere. Vi kan gjøre dette ved hjelp av funksjonen `install_github()` i `devtools` pakken. For eksempel:
+
+```{{R}}
+renv::install("devtools")
+renv::install("getPass")
+devtools::install_github("statisticsnorway/fellesr", 
+                        auth_token = getPass::getPass())
+
+```
+
+La oss bruke pakken PxWebApiData i koden vår med ved å skrive følgende i kodecelle i Notebooken vår:
 
 ```R
 library(PxWebApiData)
