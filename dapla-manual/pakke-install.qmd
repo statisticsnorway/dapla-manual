@@ -183,8 +183,53 @@ Kikker du nå inne i **renv.lock**-filen så ser du nå at verjsonen av **PxWebA
 
 ![](images/renv_install.png)
 
+For å installere alle pakker som ligger i **renv.lock**-filen med riktig versjon kan du skriver
 
+```R
+renv:restore()
+```
+Dette er nyttig om det er nye medlemmer i gruppen som skal kjøre en produksjonsløp utviklet av andre.
 
 ### Avinstallering
 
+Individe pakker kan fjernes fra library ved `remove()` funksjonen. For eksempel:
+
+```R
+renv::remove("PxWebApiData")
+```
+
+For å fjerne fra **renv.lock**-filen også må du ta en `snapshot()` etterpå.
+
+```R
+renv::snapshot()
+```
+
+En annen nyttig funksjon er `renv::clean()`. Dette fjerner alle pakker fra library som ikke er i bruk
+
+```R
+renv::clean()
+```
+
+Igjen må du ta en `snapshot()` for at endringer skal lagres på **renv.lock**-filen
+
+
+
 ### Oppgradere pakker
+For å oppgradere en pakke kan du bruke `renv::update()`. For eksempel å oppgradere `PxWebApiData` skriv:
+
+```R
+renv::update("PxWebApiData")
+```
+
+For å installere et spesifikk versjon av en pakke kan du spesifisere dette med installering med `@` og versjonsnummer. For eksempel å installere `PxWEbApiData` versjon 0.4.0:
+
+
+```R
+renv::install("PxWebApiData@0.4.0")
+```
+
+Husk å ta en `snapshot()` etterpå for å lagre endringer til **renv.lock**-filen. Det betyr at du og andre kan gjenskape miljø på nytt.
+
+```R
+renv::snapshot()
+```
