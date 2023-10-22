@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="A manual for using Statistics Norways data platform Dapla.">
+
+<title>Dapla-test</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="index.css">
+<meta property="og:title" content="Dapla-test">
+<meta property="og:description" content="A manual for using Statistics Norways data platform Dapla.">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-logo.png">
+<meta property="og:site-name" content="Dapla-manualen">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./images/dapla-long.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./statistikkere/introduksjon.html" rel="" target="">
+ <span class="menu-text">Statistikkere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./utviklere/index.html" rel="" target="">
+ <span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./notebooks/index.html" rel="" target="">
+ <span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://start.dapla.ssb.no/" rel="" target=""><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Opprette Dapla-team</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all" rel="" target=""><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7" rel="" target=""><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual" rel="" target=""><i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-layout-custom page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+<!-- main -->
+
+
+
+<div class="hero-banner">
+<div class="content-block">
+<section id="dapla-manualen" class="hero-text">
+<h1>Dapla-manualen</h1>
+<h3 id="brukermanualen-for-ssbs-dataplattform-dapla">Brukermanualen for SSBs dataplattform Dapla</h3>
+<ul>
+<li>Lær om Dapla-team</li>
+<li>Utvikle kode i R eller Python</li>
+<li>Velg programmeringsmiljøer som <a href="https://jupyter.org/">Jupyterlab</a>, <a href="https://code.visualstudio.com/docs/editor/vscode-web">VSCode</a> eller <a href="https://posit.co/products/open-source/rstudio-server/">RStudio</a></li>
+<li>Utnytt prosesseringskraften i et skalerbart <a href="https://kubernetes.io/">Kubernetes</a>-miljø</li>
+<li>Reproduserbare resultater med Git og GitHub</li>
+<li>Uendelig med lagringsplass i <em>Google Cloud Storage</em> bøtter</li>
+</ul>
+<h3 id="hvordan-hva-hvorfor-dapla-manualen-gjør-overgangen-til-dapla-enklere.">Hvordan? Hva? Hvorfor? Dapla-manualen gjør overgangen til Dapla enklere.</h3>
+<div class="hero-buttons">
+<p><a href="./statistikkere/introduksjon.html" class="btn-action-primary btn-action btn btn-success btn-lg" role="button">Hurtigstart</a> <a href="docs/guide/" id="btn-guide" class="btn-action btn btn-info btn-lg" role="button">Manual</a> <a href="https://jupyter.dapla.ssb.no/" id="btn-guide" class="btn-action btn btn-info btn-lg" role="button">Logg inn på Dapla</a></p>
+</div>
+</section>
+<div class="hero-animation">
+<video autoplay="" muted="" playsinline="" loop="">
+<source src="images/dapla-test5.mp4 " type="video/mp4">
+</video>
+</div>
+</div>
+</div>
+<div class="hello-quarto alt-background">
+<section id="velkommen" class="content-block">
+<h1>Velkommen</h1>
+<p>Denne boken tar sikte på å gi SSB-ansatte mulighet til å ta i bruk grunnleggende funksjonalitet på DAPLA uten hjelp fra <em>eksperter</em>. Boken er bygget opp som den reisen vi mener en statistikker skal gjennom når de flytter sin produksjon fra bakke til sky. Første del inneholder en del grunnleggende kunnskap som vi mener er viktig å ha før man skal starte å jobbe i skyen. Andre del forklarer hvordan man søker om å opprette et Dapla-team, en forutsetning for å drive databehandling på plattformen. Det vil ofte være første steget i ta i bruk plattformen, siden det er slik man får et sted å lagre data. Her forklarer vi hvilke tjenester som inkluderes i et statistikkteam og hvordan man bruker og administerer dem. Den tredje delen tar utgangspunkt i at man skal starte å kode opp sin statistikkproduksjon eller kjøre eksisterende kode. <em>ssb-project</em> er et verktøy som er utviklet i SSB for å gjøre denne prosessen så enkel som mulig. Da kan brukerne implementere det som anses som god praksis i SSB med noen få tastetrykk, samtidig som vi også forklarer mer detaljert hva som skjer <em>under panseret</em>.</p>
+<div class="grid">
+
+</div>
+</section>
+</div>
+<div class="content-block">
+<div class="features">
+<section id="ssb-project" class="feature">
+<h3>ssb-project</h3>
+<p><em>Lett å gjøre rett</em> med ssb-project. Bruk en mal for å komme i gang med statistikkproduksjonen. Følg SSBs beste praksis for å sikre kvalitet og effektivitet.</p>
+<div class="learn-more">
+<p><a href="./statistikkere/test.html">Les mer »</a></p>
+</div>
+</section>
+<section id="r-og-python" class="feature">
+<h3>R og Python</h3>
+<p>Publish high-quality articles, reports, presentations, websites, and books in HTML, PDF, MS Word, ePub, and more. Use a single source document to target multiple formats.</p>
+<div class="learn-more">
+<p><a href="./statistikkere/test.html">Les mer »</a></p>
+</div>
+</section>
+<section id="metadata" class="feature">
+<h3>Metadata</h3>
+<p>Pandoc markdown has excellent support for LaTeX equations and citations. Quarto adds extensions for cross-references, figure panels, callouts, advanced page layout, and more.</p>
+<div class="learn-more">
+<p><a href="./statistikkere/test.html">Les mer »</a></p>
+</div>
+</section>
+<section id="git-og-github" class="feature">
+<h3>Git og GitHub</h3>
+<p>Use your favorite tools including VS Code, RStudio, Jupyter Lab, or any text editor. Use the Quarto visual markdown editor for long-form documents.</p>
+<div class="learn-more">
+<p><a href="./statistikkere/test.html">Les mer »</a></p>
+</div>
+</section>
+<section id="programmeringsmiljøer" class="feature">
+<h3>Programmeringsmiljøer</h3>
+<p>Engage readers by adding interactive data exploration to your documents using Jupyter Widgets, htmlwidgets for R, Observable JS, and Shiny.</p>
+<div class="learn-more">
+<p><a href="./statistikkere/test.html">Les mer »</a></p>
+</div>
+</section>
+<section id="dapla-team" class="feature">
+<h3>Dapla-team</h3>
+<p>Publish collections of documents as a blog or full website. Create books and manuscripts in both print formats (PDF and MS Word) and online formats (HTML and ePub).</p>
+<div class="learn-more">
+<p><a href="./statistikkere/test.html">Les mer »</a></p>
+</div>
+</section>
+</div>
+</div>
+<div class="get-started alt-background">
+<div class="content-block">
+<p><a href="./statistikkere/test.html" class="btn-action-primary btn-action btn btn-success btn-lg" role="button" style="margin-top: 1em;">Kom i gang</a></p>
+</div>
+</div>
+
+
+
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopiert!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopiert!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">This is site heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</div>   
+    <div class="nav-footer-center">Kom i gang med Dapla<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/index.qmd" class="toc-action">Rediger siden</a></p><p><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action">Rapporter feil</a></p></div></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

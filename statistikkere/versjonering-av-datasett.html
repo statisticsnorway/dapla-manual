@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Dapla-manualen – versjonering-av-datasett</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/dapla-long.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../statistikkere/introduksjon.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Statistikkere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../utviklere/index.html" rel="" target="">
+ <span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../notebooks/index.html" rel="" target="">
+ <span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://start.dapla.ssb.no/" rel="" target=""><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Opprette Dapla-team</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all" rel="" target=""><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7" rel="" target=""><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual" rel="" target=""><i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/statistikkproduksjon.html">Statistikkproduksjon</a></li><li class="breadcrumb-item"><a href="../statistikkere/produksjonsløp.html">Produksjonsløp</a></li><li class="breadcrumb-item"><a href="../statistikkere/standarder.html">Standarder</a></li><li class="breadcrumb-item"><a href="../statistikkere/versjonering-av-datasett.html">Versjonering av datasett</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/preface.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Forord</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../hurtigstart/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hurtigstart</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">hurtigstart/hva-er-dapla.qmd</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/innlogging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Innlogging</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/introduksjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduksjon</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-dapla.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er Dapla?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/innlogging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Innlogging</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/statistikkproduksjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistikkproduksjon</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/dapla-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dapla Team</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er Dapla-team?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/administrasjon-av-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Administrasjon av team</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Google Cloud Console</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/overføring-av-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overføring av data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/produksjonsløp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Produksjonsløp</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jobbe-med-kode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jobbe med kode</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jobbe med data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth3 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-botter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er bøtter?</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standarder</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth3 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datatilstander.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datatilstander</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/navnestandard-datalagring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Navnestandard datalagring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/versjonering-av-datasett.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Versjonering av datasett</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/kildedata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kildedata</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth3 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/automatisering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automatisering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/automatisering-avansert.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automatisering Avansert</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/statistikkbanken.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistikkbanken</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/visualisering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualisering</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dashboard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dash og dashboard</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/annet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Annet</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git og Github</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DataDoc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/github-app-integrasjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Koble prosjektet til Github</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/gjenopprette-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gjenopprette data fra bøtter</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/spark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apache Spark</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/slette-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slette data fra bøtter</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Altinn 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kartdata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kartdata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ordforklaringer.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Ordforklaringer</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bidra til Dapla-manualen</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#versjonering-av-datasett" id="toc-versjonering-av-datasett" class="nav-link active" data-scroll-target="#versjonering-av-datasett">Versjonering av datasett</a>
+  <ul class="collapse">
+  <li><a href="#regler-for-hva-som-skaper-en-ny-versjon-av-et-datasett-breaking-changes" id="toc-regler-for-hva-som-skaper-en-ny-versjon-av-et-datasett-breaking-changes" class="nav-link" data-scroll-target="#regler-for-hva-som-skaper-en-ny-versjon-av-et-datasett-breaking-changes">Regler for hva som skaper en ny versjon av et datasett (“breaking changes”)</a>
+  <ul class="collapse">
+  <li><a href="#hvordan-vil-versjoneringen-fungere-i-praksis" id="toc-hvordan-vil-versjoneringen-fungere-i-praksis" class="nav-link" data-scroll-target="#hvordan-vil-versjoneringen-fungere-i-praksis"><strong>Hvordan vil versjoneringen fungere i praksis?</strong></a></li>
+  </ul></li>
+  <li><a href="#funksjonalitet-for-å-hente-siste-gjeldende-versjon-av-et-datasett" id="toc-funksjonalitet-for-å-hente-siste-gjeldende-versjon-av-et-datasett" class="nav-link" data-scroll-target="#funksjonalitet-for-å-hente-siste-gjeldende-versjon-av-et-datasett">Funksjonalitet for å hente siste (gjeldende) versjon av et datasett</a>
+  <ul class="collapse">
+  <li><a href="#eksempel-på-versjon-1-av-et-datasett" id="toc-eksempel-på-versjon-1-av-et-datasett" class="nav-link" data-scroll-target="#eksempel-på-versjon-1-av-et-datasett">Eksempel på “versjon 1” av et datasett</a></li>
+  <li><a href="#behov-for-felles-ssb-kodebibliotek-i-python-og-r-for-å-finne-siste-versjon-av-et-datasett" id="toc-behov-for-felles-ssb-kodebibliotek-i-python-og-r-for-å-finne-siste-versjon-av-et-datasett" class="nav-link" data-scroll-target="#behov-for-felles-ssb-kodebibliotek-i-python-og-r-for-å-finne-siste-versjon-av-et-datasett">Behov for felles SSB kodebibliotek i Python og R for å finne siste versjon av et datasett</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/statistikkere/versjonering-av-datasett.qmd" class="toc-action">Rediger siden</a></p><p><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action">Rapporter feil</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="versjonering-av-datasett" class="level1">
+<h1>Versjonering av datasett</h1>
+<p>Versjonering av data(sett) er viktig for å dekke kravet om uforanderlighet og etterprøvbarhet. Hovedpoenget med versjonering er at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer, dvs. tilgang både til en stabil versjon (uforanderlighet), men også tilgang til eventuelle nye data- versjoner som oppstår. Se mer om dette i SSBs produksjonsarkitektur og prinsippet om “<a href="https://statistics-%20norway.atlassian.net/wiki/spaces/ARK/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data">uforandelighet av data</a>”</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det finnes i dag ingen internasjonale standarder eller spesifikasjoner for hvordan endringer av data skal versjoneres. Dette påpekes også av <a href="http://w3.org">w3.org</a> (<a href="https://www.w3.org/TR/dwbp/#dataVersioning" class="uri">https://www.w3.org/TR/dwbp/#dataVersioning</a>) :</p>
+<p><em>Datasets published on the Web may change over time. Some datasets are updated on a scheduled basis, and other datasets are changed as improvements in collecting the data make updates worthwhile. In order to deal with these changes, new versions of a dataset may be created. Unfortunately, there is no consensus about when changes to a dataset should cause it to be considered a different dataset altogether rather than a new version. In the following, we present some scenarios where most publishers would agree that the revision should be considered a new version of the existing dataset.</em></p>
+<ul>
+<li><p><em>Scenario 1: a new bus stop is created and it should be added to the dataset;</em></p></li>
+<li><p><em>Scenario 2: an existing bus stop is removed and it should be deleted from the dataset;</em></p></li>
+<li><p><em>Scenario 3: an error was identified in one of the existing bus stops stored in the dataset and this error must be corrected.</em></p></li>
+</ul>
+<p>Australian National Data Service (ANDS) beskriver også i sitt dokument <a href="https://www.ands.org.au/working-with-data/data-management/data-versioning" class="uri">https://www.ands.org.au/working-with-data/data-management/data-versioning</a> behovet for versjonering, men også utfordringene med å implementere data- versjonering i praksis.</p>
+<p>Erfaringer fra <a href="https://www.microdata.no/wp-%20content/uploads/2022/02/FAIR_Data_Versioning_in_Microdata.pdf">versjonering i microdata.no</a> viser at data- versjoneringen i SSB bør baseres på prinsippet om “breaking changes” ( <em>major changes</em> ) fra <a href="https://en.wikipedia.org/wiki/Software_versioning#Semantic_versioning">Semantic Versioning (SemVer)</a>, dvs. at alle endringer som gjør at vi ikke kan gjenskape samme resultat vil medføre at det opprettes en ny versjon av datasettet (en ny versjon i tillegg til gammel/forrige versjon av datasettet).</p>
+</div>
+</div>
+<section id="regler-for-hva-som-skaper-en-ny-versjon-av-et-datasett-breaking-changes" class="level2">
+<h2 class="anchored" data-anchor-id="regler-for-hva-som-skaper-en-ny-versjon-av-et-datasett-breaking-changes">Regler for hva som skaper en ny versjon av et datasett (“breaking changes”)</h2>
+<p><strong>Følgende hendelser skaper en ny versjon av et datasett:</strong></p>
+<ul>
+<li><p>Reberegninger av data med nye metoder.</p></li>
+<li><p>Korrigeringer av verdier for eksisterende observasjoner/enheter i datasettet.</p>
+<ul>
+<li><em>Selv manuell endring av bare én data-verdi (celle) i et stort datasett skaper en ny versjon!</em></li>
+</ul></li>
+<li><p>Lagt til nye og/eller fjernet observasjoner/enheter i datasettet.</p></li>
+<li><p>Omkodinger, dvs. oppdatert/erstattet kodeverk.</p></li>
+<li><p>Lagt til nye variabler. Dette skaper en ny versjon i og med at dette kan påvirke prosesser (programkode).</p>
+<ul>
+<li>Hvis det gjøres vesentlige endringer (mange nye variabler) så bør det vurderes om dette er et annet (et helt nytt) datasett, ikke en ny versjon av et eksisterende datasett.</li>
+</ul></li>
+<li><p>Fjernet variabler.</p>
+<ul>
+<li>Ved fjerning av variabler fra et datasett bør det vurderes om dette egentlig er et annet (et helt nytt) datasett, ikke en ny versjon av et eksisterende datasett!</li>
+</ul></li>
+<li><p>Andre strukturendringer, f.eks. bytte av datatyper eller formater.</p></li>
+</ul>
+<section id="hvordan-vil-versjoneringen-fungere-i-praksis" class="level3">
+<h3 class="anchored" data-anchor-id="hvordan-vil-versjoneringen-fungere-i-praksis"><strong>Hvordan vil versjoneringen fungere i praksis?</strong></h3>
+<section id="kladd---temporære-datasett-under-arbeid" class="level4">
+<h4 class="anchored" data-anchor-id="kladd---temporære-datasett-under-arbeid"><strong>Kladd - temporære datasett under arbeid</strong></h4>
+<p>Data som er under utarbeiding skal ikke deles/publiseres, og det er derfor ikke behov for å versjonere slike data/datasett. Disse må betraktes som temporære og “versjonsløse”. Bearbeiding av data bør derfor foregå i egne temporære dataområder<strong><sup>1</sup></strong>. Det er først på det tidspunktet et datasett er ferdig bearbeidet og klart for deling/publisering at det skal versjoneres og dokumenteres.</p>
+<p><strong><sup>1</sup></strong> <em>Med temporære dataområder menes f.eks. egne mapper med temporære datafiler i bøtter (noe tilsvarende “wk-katalogene” i SSBs eksisterende stammekataloger på Linux). For en del statistikkområder vil databearbeidingen også foregå i temporære datasett i datatjenester som Google BigQuery og CloudSQL.</em></p>
+</section>
+<section id="versjon-1---første-gangs-delingpublisering-av-et-datasett" class="level4">
+<h4 class="anchored" data-anchor-id="versjon-1---første-gangs-delingpublisering-av-et-datasett"><strong>Versjon 1 - første gangs deling/publisering av et datasett</strong></h4>
+<p>Ved første gangs deling/publisering av et ferdig bearbeidet datasett oppstår “versjon 1”. Dette er datasett som må bevares uforandret for ettertiden for å dekke kravet til etterprøvbarhet av SSBs statistikk. I tillegg til selve versjonsnummeret er det viktig å dokumentere versjonstidspunktet (metadata om tidspunktet versjonen ble frigitt for bruk) samt en beskrivelse av hvorfor det er utarbeidet en ny versjon. Dette er informasjon data-konsumentene trenger for å kunne reprodusere statistikk med gamle versjoner av data.</p>
+<p>Versjonsnummer skal legges på som et eget element i filnavnet. For versjon 1 vil dette være “_v1”, eksempelvis <em>“framskrevne-befolkningsendringer_p2019_p2050<strong>_v1</strong>.parquet”</em></p>
+<p><em>Eksempel på versjon 1 av et datasett i en mappe-struktur:</em></p>
+<pre><code>ssb-prod-team-personstatistikk-data-produkt/  
+└── befolkningsframskrivinger/  
+    └── klargjorte_data/  
+        └── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet</code></pre>
+</section>
+<section id="flere-versjoner-av-et-datasett" class="level4">
+<h4 class="anchored" data-anchor-id="flere-versjoner-av-et-datasett">Flere versjoner av et datasett</h4>
+<p>For hver versjon som oppstår av datasettet opprettes det en ny fysisk fil hvor versjonsnummeret økes med 1. Alle gamle versjoner av et datasett skal også eksistere i mappen.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Permanente data skal ikke endres eller slettes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Tidligere delte/publiserte data skal ikke slettes eller overskrives!</strong><br>
+<em>Det må derfor lagres fysiske filer for hver versjon av datasettet. Dette er viktig for at SSB skal oppfylle krav om etterprøvbarhet av statistikkene.</em></p>
+</div>
+</div>
+<p><strong>Eksempel på versjon 1, 2 og 3 av et datasett i en mappe-struktur:</strong></p>
+<pre><code>ssb-prod-team-personstatistikk-data-produkt/  
+└── befolkningsframskrivinger/  
+    └── klargjorte_data/  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v2.parquet  
+        └── framskrevne-befolkningsendringer_p2019_p2050_v3.parquet</code></pre>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Eksempel på versjonsinformasjon og bearbeidingshistorikk for et datasett:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong><em>Versjonsinformasjon:</em></strong></p>
+<p>Datasett: framskrevne-befolkningsendringer_p2019_p2050</p>
+<p><strong><em>Versjon: 1</em></strong><br>
+Versjonstidspunkt: 2019-01-01T10:00:00<br>
+Versjonsbeskrivelse: Første deling/publisering<br>
+Filnavn: framskrevne-befolkningsendringer_p2019_p2050_v1.parquet</p>
+<p><strong><em>Versjon: 2</em></strong><br>
+Versjonstidspunkt: 2020-02-15T08:00:00<br>
+Versjonsbeskrivelse: Reberegning med nytt datagrunnlag<br>
+Filnavn: framskrevne-befolkningsendringer_p2019_p2050_v2.parquet</p>
+<p><strong><em>Versjon: 3</em></strong><br>
+Versjonstidspunkt: 2021-05-31T10:00:00<br>
+Versjonsbeskrivelse: Revisjon og reberegning med nye framskrivingsmetoder<br>
+Filnavn: framskrevne-befolkningsendringer_p2019_p2050_v3.parquet</p>
+</div>
+</div>
+</section>
+<section id="deling-av-data-som-ikke-har-oppnådd-stabil-tilstand---versjon-0" class="level4">
+<h4 class="anchored" data-anchor-id="deling-av-data-som-ikke-har-oppnådd-stabil-tilstand---versjon-0">Deling av data som ikke har oppnådd stabil tilstand - versjon 0</h4>
+<p>Hvis det er behov for å dele data som er som er i “fart”, dvs. data som fortsatt er under innsamling eller pågående klargjøring, gjøres dette ved å bruke versjonsnummer 0 i filnavnet. Versjonsnummer 0 skal kun brukes midlertidig fram til datasettet oppnår stabil tilstand <em>(ved stabil tilstand byttes versjonsnummer for datasettet til 1 eller høyere).</em></p>
+<p><em>Eksempel på deling av “versjon 0” av et datasett:</em></p>
+<pre><code>ssb-prod-team-personstatistikk-data-produkt/  
+└── befolkningsframskrivinger/  
+    └── klargjorte_data/  
+        └── framskrevne-befolkningsendringer_p2019_p2050_v0.parquet</code></pre>
+</section>
+</section>
+</section>
+<section id="funksjonalitet-for-å-hente-siste-gjeldende-versjon-av-et-datasett" class="level2">
+<h2 class="anchored" data-anchor-id="funksjonalitet-for-å-hente-siste-gjeldende-versjon-av-et-datasett">Funksjonalitet for å hente siste (gjeldende) versjon av et datasett</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="http://w3.org">w3.org</a> anbefaler at gjeldende versjon av et datasett alltid skal være tilgjengelig også uten versjonsnummer. Dette vil også være svært nyttig for statistikkproduksjonen i SSB, i og med at det i de aller fleste tilfeller er siste versjon (den mest oppdaterte) av de klargjorte datasettene som skal benyttes. Den samme programkoden (Python/R) kan da kjøres ved hver statistikkproduksjon uten at filnavnet må endres i programkoden. Det er kun i de få tilfellene hvor gamle versjoner skal benyttes at programkoden må endres, f.eks. ved “reprodusering” av gamle tall.</p>
+<p><em>Eksempel fra w3.org:</em></p>
+<ul>
+<li><p><code>/data_example/transport/dataset/bus/stops</code> is the “generic URI” at which the current version of a dataset is always available</p></li>
+<li><p><code>/data_example/transport/dataset/bus/stops_v2</code> is the versioned URI for the current dataset</p></li>
+<li><p><code>/data_example/transport/dataset/bus/stops_v1</code> is the versioned URI of the prior version of the dataset</p></li>
+</ul>
+</div>
+</div>
+<section id="eksempel-på-versjon-1-av-et-datasett" class="level3">
+<h3 class="anchored" data-anchor-id="eksempel-på-versjon-1-av-et-datasett">Eksempel på “versjon 1” av et datasett</h3>
+<p>Eksempel på “versjon 1” (hvor versjonen også er tilgjengelig uten versjonsnummer i datasettnavnet):</p>
+<pre><code>ssb-prod-personstatistikk-data-produkt/  
+└── befolkningsframskrivinger/  
+    └── klargjorte-data/  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  
+        └── framskrevne-befolkningsendringer_p2019_p2050.parquet</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="http://w3.org">w3.org</a> <em>anbefaling er at siste versjon også er tilgjengelig uten versjonselement i navnet. I eksempelet over er derfor filen <code>framskrevne-befolkningsendringer_p2019_p2050.parquet</code> helt identisk med <code>framskrevne-befolkningsendringer_p2019_p2050_v1.parquet</code> (versjon 1).</em></p>
+</div>
+</div>
+<p><em>Eksempel med versjon 1, 2, 3 og 4 (hvor versjon 4 også er tilgjengelig uten versjonsnummer i datasettnavnet)</em></p>
+<pre><code>ssb-prod-personstatistikk-data-produkt/  
+└── befolkningsframskrivinger/  
+    └── klargjorte-data/  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v2.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v3.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v4.parquet  
+        └── framskrevne-befolkningsendringer_p2019_p2050.parquet</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="http://w3.org">w3.org</a> <em>anbefaling er at siste versjon også er tilgjengelig uten versjonselement i navnet. I eksempelet over er derfor filen <code>framskrevne-befolkningsendringer_p2019_p2050.parquet</code> helt identisk med <code>framskrevne-befolkningsendringer_p2019_p2050_v4.parquet</code> (versjon 4).</em></p>
+</div>
+</div>
+</section>
+<section id="behov-for-felles-ssb-kodebibliotek-i-python-og-r-for-å-finne-siste-versjon-av-et-datasett" class="level3">
+<h3 class="anchored" data-anchor-id="behov-for-felles-ssb-kodebibliotek-i-python-og-r-for-å-finne-siste-versjon-av-et-datasett">Behov for felles SSB kodebibliotek i Python og R for å finne siste versjon av et datasett</h3>
+<p>For å unngå dobbeltlagring av data i form av at siste versjon av et datasett skal lagres som en fysisk datafil både med og uten versjonsnummer (som vist i kapittelet over), anbefales det at det utvikles felles SSB-programbibliotek i Python og R for utlede denne informasjonen. Da vil da kun være nødvendig å lagre filer med fullt versjonsnummer, men statistikkprodusentene kan bruke en funksjon for å finne siste versjon - eksempelvis <em>gi meg siste versjon av datasettet “framskrevne-befolkningsendringer_p2019_p2050“</em>.</p>
+<p>Nedenfor vises en enkel Python-funksjon for hvordan dette kan fungere i praksis. <em>Denne funksjonaliteten er imidlertid ikke tilgjengelig i Dapla i skrivende stund, så dette er bare et forslag til løsning.</em></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksempel på en felles SSB-funksjon for å hente riktig fysisk filnavn til siste versjon</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># av et datasettt i en mappe (katalog) i en bøtte hvor det eksisterer flere versjoner</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (flere filversjoner) av datasettet.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># NB! Dette er kun ment som et eksempel (konsept), og er ikke en produksjonsklar løsning!</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> operator</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_current_dataset_version(path:<span class="bu">str</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                dataset_name_without_version:<span class="bu">str</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                                file_type:<span class="bu">str</span> <span class="op">=</span> <span class="st">"parquet"</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                               ) <span class="op">-&gt;</span> <span class="bu">str</span>:    </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    gcs_dataset_files <span class="op">=</span> fs.glob(path<span class="op">=</span>path <span class="op">+</span> dataset_name_without_version <span class="op">+</span> <span class="st">"*."</span> <span class="op">+</span> file_type)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    file_list <span class="op">=</span> []</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> gcs_dataset_files:</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        file_version <span class="op">=</span> <span class="bu">file</span>.split(<span class="st">"_v"</span>)[<span class="op">-</span><span class="dv">1</span>].split(<span class="st">"."</span>)[<span class="dv">0</span>]</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> file_version.isnumeric():</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>            file_list.append({<span class="st">"file_path"</span>: <span class="bu">str</span>(<span class="bu">file</span>), <span class="st">"file_version"</span>: <span class="bu">int</span>(file_version) })</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    file_list.sort(key<span class="op">=</span>operator.itemgetter(<span class="st">'file_version'</span>))</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(file_list) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> file_list[<span class="op">-</span><span class="dv">1</span>][<span class="st">"file_path"</span>]</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">### Eksempel på bruk </span><span class="al">###</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Hent sti og filnavn til siste versjon av datasettet "framskrevne-befolkningsendringer_p2019_p2050"</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># i mappen gs://ssb-prod-befolkning-data-produkt/befolkningsendringer/klargjorte-data/</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># som inneholder 4 versjoner ("framskrevne-befolkningsendringer_p2019_p2050_v1" </span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co"># til "framskrevne-befolkningsendringer_p2019_p2050_v4")</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>get_current_dataset_version(</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    path<span class="op">=</span><span class="st">"gs://ssb-prod-befolkning-data-produkt/befolkningsendringer/klargjorte-data/"</span>,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    dataset_name_without_version<span class="op">=</span><span class="st">"framskrevne-befolkningsendringer_p2019_p2050"</span>,</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    file_type<span class="op">=</span><span class="st">"parquet"</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co">### Eksempel på resultat (sti og filnavn til versjon 4 av datasettet) </span><span class="al">###</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>prod<span class="op">-</span>befolkning<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">/</span>befolkningsendringer<span class="op">/</span>klargjorte<span class="op">-</span>data<span class="op">/</span>framskrevne<span class="op">-</span>befolkningsendringer_p2019_p2050_v4</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopiert!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopiert!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">This is site heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</div>   
+    <div class="nav-footer-center">Kom i gang med Dapla</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
