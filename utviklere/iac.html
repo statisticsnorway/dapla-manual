@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,6 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../utviklere/appendix.html" rel="prev">
 <link href="../images/dapla-favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -41,11 +76,11 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 20,
   "language": {
     "search-no-results-text": "Ingen resultater",
@@ -72,12 +107,13 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../images/dapla-long.png" alt="" class="navbar-logo">
+    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Dapla-manualen</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
@@ -94,6 +130,10 @@ ul.task-list li input[type="checkbox"] {
   <li class="nav-item">
     <a class="nav-link" href="../notebooks/index.html" rel="" target="">
  <span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../om-dapla.html" rel="" target="">
+ <span class="menu-text">Om Dapla</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
@@ -119,8 +159,37 @@ ul.task-list li input[type="checkbox"] {
   </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-logg-inn" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+      <i class="bi bi-person-circle" role="img">
+</i> 
+ <span class="menu-text">Logg inn</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-logg-inn">    
+        <li>
+    <a class="dropdown-item" href="https://datahub.external.staging.ssb.cloud.nais.io/explore" rel="" target=""><i class="bi bi-database-fill" role="img">
+</i> 
+ <span class="dropdown-text">DaplaHub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../om-dapla.html" rel="" target=""><i class="bi bi-graph-up" role="img">
+</i> 
+ <span class="dropdown-text">DaplaLab</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="hhttps://jupyter.dapla.ssb.no/" rel="" target=""><i class="bi bi-journal-code" role="img">
+</i> 
+ <span class="dropdown-text">JupyterLab (legacy)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/" rel="" target=""><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual" rel="" target=""><i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual" rel="" target=""><i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -138,9 +207,6 @@ ul.task-list li input[type="checkbox"] {
       <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../utviklere/appendix.html">Appendix</a></li><li class="breadcrumb-item"><a href="../utviklere/iac.html">Infrastructure-as-Code (IaC)</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
@@ -148,11 +214,6 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -205,9 +266,20 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#infrastructure-as-code-iac" id="toc-infrastructure-as-code-iac" class="nav-link active" data-scroll-target="#infrastructure-as-code-iac">Infrastructure-as-Code (IaC)</a></li>
+  <li><a href="#infrastructure-as-code-iac" id="toc-infrastructure-as-code-iac" class="nav-link active" data-scroll-target="#infrastructure-as-code-iac">Infrastructure-as-Code (IaC)</a>
+  <ul class="collapse">
+  <li><a href="#struktur" id="toc-struktur" class="nav-link" data-scroll-target="#struktur">Struktur</a>
+  <ul class="collapse">
+  <li><a href="#eksempel-iac-repo-struktur" id="toc-eksempel-iac-repo-struktur" class="nav-link" data-scroll-target="#eksempel-iac-repo-struktur">Eksempel IaC-repo struktur</a></li>
+  <li><a href="#automation" id="toc-automation" class="nav-link" data-scroll-target="#automation">automation</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">data</a></li>
+  <li><a href="#docs" id="toc-docs" class="nav-link" data-scroll-target="#docs">docs</a></li>
+  <li><a href="#infra" id="toc-infra" class="nav-link" data-scroll-target="#infra">infra</a></li>
+  <li><a href="#atlantis.yaml" id="toc-atlantis.yaml" class="nav-link" data-scroll-target="#atlantis.yaml">atlantis.yaml</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/utviklere/iac.qmd" class="toc-action">Rediger siden</a></p><p><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action">Rapporter feil</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/utviklere/iac.qmd" class="toc-action">Rediger siden</a></p><p><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action">Rapporter feil</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -216,9 +288,177 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="infrastructure-as-code-iac" class="level1">
 <h1>Infrastructure-as-Code (IaC)</h1>
-<p>løgkjfdskljfgkl</p>
+<section id="struktur" class="level2">
+<h2 class="anchored" data-anchor-id="struktur">Struktur</h2>
+<section id="eksempel-iac-repo-struktur" class="level3">
+<h3 class="anchored" data-anchor-id="eksempel-iac-repo-struktur">Eksempel IaC-repo struktur</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>IaC-repo</strong></pre>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source_data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       │</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">│       │</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── dapla-example-prod</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">├── data</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">├── docs</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">├── infra</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">│   ├── stack</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── projects</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">│       │</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   │</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   ├── project.yaml</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   │</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   ├── ....tf</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="at">│       │</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── dapla-example-prod</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">│           │</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="at">│           ├── project.yaml</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="at">│           │</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="at">│           ├── ....tf</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="at">└── atlantis.yaml</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="automation" class="level3">
+<h3 class="anchored" data-anchor-id="automation">automation</h3>
+<p>Mappe for skript som blir brukt av automatiseringstjenesten.</p>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">data</h3>
+<p>Mappe for å ha metadata som teamet selv ønsker.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Viktig">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Viktig
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Data mappen er ikke ment for å lagre data til bruk i statistikkproduksjon.</p>
+</div>
+</div>
+</section>
+<section id="docs" class="level3">
+<h3 class="anchored" data-anchor-id="docs">docs</h3>
+<p>Mappe for å samle dokumentasjon.</p>
+</section>
+<section id="infra" class="level3">
+<h3 class="anchored" data-anchor-id="infra">infra</h3>
+<p>Mappe for teamets infrastruktur.</p>
+<section id="infraprojects.yaml" class="level4">
+<h4 class="anchored" data-anchor-id="infraprojects.yaml">infra/projects.yaml</h4>
+<p>Dette er en fil som teamet selv kan spesifisere prosjekter og features som er ønsket at et prosjekt skal ha. Når man lager en PR etter å lagt inn f.eks et nytt prosjekt, så trigger det en Github Action som genererer Terraform koden som lager prosjektet. <code>project_name</code> feltet skal ikke inneholde miljøtypen eller andre prefiks eller suffikser, disse blir automatisk lagt på.</p>
+<p>Eksemplet under vil lage 3 prosjekter i Google Cloud som vil få følgende prosjekt navn <code>dapla-example-p</code>, <code>dapla-example-t</code>, og <code>dapla-example-d</code>, prosjekt ID’ene vil være det samme bare med 2 tilfeldige karakterer på slutten.</p>
+<section id="eksempel-projects.yaml" class="level5">
+<h5 class="anchored" data-anchor-id="eksempel-projects.yaml">Eksempel projects.yaml</h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_uniform_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">projects</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> transfer-service</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> dev</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="features" class="level5">
+<h5 class="anchored" data-anchor-id="features">Features</h5>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Description</th>
+<th>Interacts with</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>dapla-buckets</code></td>
+<td>Oppretter “standard” Dapla-bøttene (kilde, produkt, delt) samt et kildeprosjekt.</td>
+<td><code>transfer-service,disable-default-bucket-iam,disable-default-project-iam</code></td>
+</tr>
+<tr class="even">
+<td><code>transfer-service</code></td>
+<td>Oppretter bindinger for Transfer Service service kontoer</td>
+<td><code>dapla-buckets</code></td>
+</tr>
+<tr class="odd">
+<td><code>source-data-automation</code></td>
+<td>Ikke helt klar ennå :)</td>
+<td><code>none</code></td>
+</tr>
+<tr class="even">
+<td><code>disable-default-project-iam</code></td>
+<td>Deaktiverer standard IAM-bindinger for standard Dapla-prosjekter</td>
+<td><code>dapla-buckets</code></td>
+</tr>
+<tr class="odd">
+<td><code>disable-default-bucket-iam</code></td>
+<td>Deaktiverer standard IAM-bindinger for standard Dapla-bøttene</td>
+<td><code>dapla-buckets</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="infraprojects" class="level4">
+<h4 class="anchored" data-anchor-id="infraprojects">infra/projects</h4>
+<p>Her er det en mappe for hvert prosjekt teamet har i Google Cloud. Hvis man bruker <code>infra/projects.yaml</code> for å opprette prosjekter så blir det automatisk opprettet en egen mappe under her som inneholder all Terraform kode for det prosjektet.</p>
+</section>
+<section id="infrastack" class="level4">
+<h4 class="anchored" data-anchor-id="infrastack">infra/stack</h4>
+<p>Hvis teamet har noen gjenbrukbare moduler som skal brukes i alle prosjekter så kan de opprettes her.</p>
+</section>
+</section>
+<section id="atlantis.yaml" class="level3">
+<h3 class="anchored" data-anchor-id="atlantis.yaml">atlantis.yaml</h3>
+<p>Konfigurasjon av prosjektene Atlantis automatisk kjører <code>atlantis plan</code> for. Hvis et prosjekt er opprettet via <code>infra/projects.yaml</code> så blir det automatisk lagt til i denne filen.</p>
+<section id="eksempel-atlantis.yaml" class="level4">
+<h4 class="anchored" data-anchor-id="eksempel-atlantis.yaml">Eksempel atlantis.yaml</h4>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="dv">3</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parallel_plan</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">parallel_apply</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">projects</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">dir</span><span class="kw">:</span><span class="at"> ./infra/projects/dapla-example-prod</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">autoplan</span><span class="kw">:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">when_modified</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"*.tf"</span><span class="kw">,</span><span class="at"> </span><span class="st">"terraform.tfvars"</span><span class="kw">,</span><span class="at"> </span><span class="st">"*.yaml"</span><span class="kw">]</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">dir</span><span class="kw">:</span><span class="at"> ./infra/projects/dapla-example-test</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">autoplan</span><span class="kw">:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">when_modified</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"*.tf"</span><span class="kw">,</span><span class="at"> </span><span class="st">"terraform.tfvars"</span><span class="kw">,</span><span class="at"> </span><span class="st">"*.yaml"</span><span class="kw">]</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">dir</span><span class="kw">:</span><span class="at"> ./infra/projects/dapla-example-dev</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">autoplan</span><span class="kw">:</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">when_modified</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"*.tf"</span><span class="kw">,</span><span class="at"> </span><span class="st">"terraform.tfvars"</span><span class="kw">,</span><span class="at"> </span><span class="st">"*.yaml"</span><span class="kw">]</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -455,6 +695,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../utviklere/appendix.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Appendix</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
