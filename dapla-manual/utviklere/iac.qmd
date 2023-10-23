@@ -1,3 +1,131 @@
 # Infrastructure-as-Code (IaC)
 
-løgkjfdskljfgkl
+## Struktur
+
+### Eksempel IaC-repo struktur
+
+```{.yaml filename="IaC-repo"}
+dapla-example-iac
+│
+├── automation
+│   │
+│   └── source_data
+│       │
+│       ├── dapla-example-test
+│       │
+│       └── dapla-example-prod
+│
+├── data
+│
+├── docs
+│
+├── infra
+│   │
+│   ├── stack
+│   │
+│   └── projects
+│       │
+│       ├── dapla-example-test
+│       │   │
+│       │   ├── project.yaml
+│       │   │
+│       │   ├── ....tf
+│       │
+│       └── dapla-example-prod
+│           │
+│           ├── project.yaml
+│           │
+│           ├── ....tf
+│
+└── atlantis.yaml
+```
+
+###  automation
+
+Mappe for skript som blir brukt av automatiseringstjenesten.
+
+### data
+
+Mappe for å ha metadata som teamet selv ønsker.
+
+::: {.callout-important title="Viktig"}
+Data mappen er ikke ment for å lagre data til bruk i statistikkproduksjon.
+:::
+
+### docs
+
+Mappe for å samle dokumentasjon.
+
+### infra
+
+Mappe for teamets infrastruktur.
+
+#### infra/projects.yaml
+
+Dette er en fil som teamet selv kan spesifisere prosjekter og features som er ønsket at et prosjekt skal ha.
+Når man lager en PR etter å lagt inn f.eks et nytt prosjekt, så trigger det en Github Action som genererer Terraform koden som lager prosjektet.
+`project_name` feltet skal ikke inneholde miljøtypen eller andre prefiks eller suffikser, disse blir automatisk lagt på.
+
+Eksemplet under vil lage 3 prosjekter i Google Cloud som vil få følgende prosjekt navn `dapla-example-p`, `dapla-example-t`, og `dapla-example-d`, prosjekt ID'ene vil være det samme bare med 2 tilfeldige karakterer på slutten.
+
+##### Eksempel projects.yaml
+
+```yaml
+team_uniform_name: dapla-example
+
+projects:
+  - project_name: dapla-example
+    env: test
+    features:
+      - dapla-buckets
+
+  - project_name: dapla-example
+    env: prod
+    features:
+      - dapla-buckets
+      - transfer-service
+  
+  - project_name: dapla-example
+    env: dev
+```
+
+##### Features
+| Name | Description | Interacts with |
+| -------- | -------- | -------- |
+| `dapla-buckets` | Oppretter "standard" Dapla-bøttene (kilde, produkt, delt) samt et kildeprosjekt. | `transfer-service,disable-default-bucket-iam,disable-default-project-iam` |
+| `transfer-service` | Oppretter bindinger for Transfer Service service kontoer | `dapla-buckets`|
+| `source-data-automation` | Ikke helt klar ennå :) | `none` |
+| `disable-default-project-iam` | Deaktiverer standard IAM-bindinger for standard Dapla-prosjekter | `dapla-buckets` |
+| `disable-default-bucket-iam` | Deaktiverer standard IAM-bindinger for standard Dapla-bøttene | `dapla-buckets` |
+
+#### infra/projects
+
+Her er det en mappe for hvert prosjekt teamet har i Google Cloud.
+Hvis man bruker `infra/projects.yaml` for å opprette prosjekter så blir det automatisk opprettet en egen mappe under her som inneholder all Terraform kode for det prosjektet.
+
+#### infra/stack
+
+Hvis teamet har noen gjenbrukbare moduler som skal brukes i alle prosjekter så kan de opprettes her.
+
+### atlantis.yaml
+
+Konfigurasjon av prosjektene Atlantis automatisk kjører `atlantis plan` for.
+Hvis et prosjekt er opprettet via `infra/projects.yaml` så blir det automatisk lagt til i denne filen.
+
+#### Eksempel atlantis.yaml
+
+```yaml
+version: 3
+parallel_plan: true
+parallel_apply: true
+projects:
+- dir: ./infra/projects/dapla-example-prod
+  autoplan:
+    when_modified: ["*.tf", "terraform.tfvars", "*.yaml"]
+- dir: ./infra/projects/dapla-example-test
+  autoplan:
+    when_modified: ["*.tf", "terraform.tfvars", "*.yaml"]
+- dir: ./infra/projects/dapla-example-dev
+  autoplan:
+    when_modified: ["*.tf", "terraform.tfvars", "*.yaml"]
+```
