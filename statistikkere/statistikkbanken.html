@@ -64,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../statistikkere/gcp-overview.html" rel="next">
+<link href="../statistikkere/transfer-service.html" rel="next">
 <link href="../statistikkere/automatisering-avansert.html" rel="prev">
 <link href="../images/dapla-favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
@@ -205,7 +205,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/datatjenester-overview.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/statistikkbanken.html">Statistikkbanken</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/datatjenester-overview.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/statistikkbanken.html">dapla-statbank-client</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -271,12 +271,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/hva-er-botter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hva er bøtter?</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../statistikkere/overføring-av-data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overføring av data</span></a>
   </div>
 </li>
       </ul>
@@ -367,6 +361,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kildomaten</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../statistikkere/automatisering.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Automatisering</span></a>
   </div>
@@ -380,7 +380,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/statistikkbanken.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Statistikkbanken</span></a>
+ <span class="menu-text">dapla-statbank-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/transfer-service.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Transfer Service</span></a>
   </div>
 </li>
       </ul>
@@ -471,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#statistikkbanken" id="toc-statistikkbanken" class="nav-link active" data-scroll-target="#statistikkbanken">Statistikkbanken</a>
+  <li><a href="#dapla-statbank-client" id="toc-dapla-statbank-client" class="nav-link active" data-scroll-target="#dapla-statbank-client">dapla-statbank-client</a>
   <ul class="collapse">
   <li><a href="#testoverføring-fra-staging---faktisk-oppdatering-fra-prod" id="toc-testoverføring-fra-staging---faktisk-oppdatering-fra-prod" class="nav-link" data-scroll-target="#testoverføring-fra-staging---faktisk-oppdatering-fra-prod">Testoverføring fra STAGING - faktisk oppdatering fra PROD</a></li>
   <li><a href="#kode-eksempler" id="toc-kode-eksempler" class="nav-link" data-scroll-target="#kode-eksempler">Kode-eksempler</a>
@@ -491,8 +497,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="statistikkbanken" class="level1">
-<h1>Statistikkbanken</h1>
+<section id="dapla-statbank-client" class="level1">
+<h1>dapla-statbank-client</h1>
 <p>Pakken “dapla-statbank-client” kan brukes til å overføre tabeller til Statistikkbanken fra Jupyterlab i prodsonen og på Dapla. Den henter også “filbeskrivelsen” som beskriver formen dataene skal ha når de sendes inn til Statistikkbanken. Og den kan også hente publiserte data fra Statistikkbanken. Pakken er en python-pakke som baserer seg på at dataene (deltabellene) lastes inn i en eller flere pandas DataFrames før overføring. Ved å hente ned “filbeskrivelsen” kan man validere dataene sine (dataframene) mot denne lokalt, uten å sende dataene til Statistikkbanken. Dette kan være til hjelp under setting av formen på dataene. Å hente publiserte data fra Statistikkbanken kan gjøres gjennom løse funksjoner, eller via “klienten”.</p>
 <p>Lenker: - <a href="https://pypi.org/project/dapla-statbank-client/">Pakken ligger her på Pypi.</a> Og kan installeres via poetry med: <code>poetry add dapla-statbank-client</code> - <a href="https://github.com/statisticsnorway/dapla-statbank-client">Kodebasen for pakken ligger her</a>, <strong>readme-en gir en teknisk innføring</strong> som du kan følge og kopiere kode fra, og om du finner noe du vil rapportere om bruken av pakken så gjør det gjerne under “issues” på github-sidene. - <a href="https://github.com/statisticsnorway/dapla-statbank-client/blob/main/demo/">Noe demokode ligger i repoet</a>, og kan være ett godt utgangspunkt å kopiere og endre fra.</p>
 <section id="testoverføring-fra-staging---faktisk-oppdatering-fra-prod" class="level2">
@@ -824,15 +830,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../statistikkere/gcp-overview.html" class="pagination-link">
-        <span class="nav-page-text">Google Cloud Platform (GCP)</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../statistikkere/transfer-service.html" class="pagination-link">
+        <span class="nav-page-text">Transfer Service</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">This is site heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</div>   
+    <div class="nav-footer-left">This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</div>   
     <div class="nav-footer-center">Kom i gang med Dapla</div>
     <div class="nav-footer-right">
       &nbsp;
