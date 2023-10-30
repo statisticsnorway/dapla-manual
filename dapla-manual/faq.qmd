@@ -7,4 +7,26 @@ css: faq.css
 
 ### Hvordan løser jeg feilmeldinger knyttet til at **data rate exceeded** i Jupyter? 
 
-Johnny skriver en forklaring. 
+Når du mottar følgende melding i Jupyter:
+
+> **Feilmelding:**
+> ```
+> IOPub data rate exceeded.
+> The Jupyter server will temporarily stop sending output
+> to the client in order to avoid crashing it.
+> To change this limit, set the config variable
+> `--ServerApp.iopub_data_rate_limit`.
+> 
+> Current values:
+> ServerApp.iopub_data_rate_limit=1000000.0 (bytes/sec)
+> ServerApp.rate_limit_window=3.0 (secs)
+> ```
+
+betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-frontend overskrider den tillatte grensen. Selv om det er mulig å justere `ServerApp.iopub_data_rate_limit` og `ServerApp.rate_limit_window` for å endre denne grensen, ønsker vi ikke dette. Å endre disse verdiene kan påvirke jupyterlabs ytelse negativt.
+
+#### Her er noen løsningsforslag:
+
+1. Reduser datamengden: Prøv å redusere datamengden du prøver å vise. Hvis du for eksempel viser en stor pandas dataframe, kan du vise kun toppradene med `df.head()` eller et tilfeldig utvalg med `df.sample(10)`.
+2. Legg til forsinkelse: Bruk `time.sleep()`-funksjonen i Python for å legge til en pause mellom hver utskrift. Dette kan spre utdataene over en lengre tidsperiode, noe som kan hjelpe med å unngå å overskride datagrensen.
+3. Skriv til en fil: I stedet for å skrive utdata direkte i Jupyter, kan du vurdere å skrive dataene til en fil. Dette omgår IOPub-datahastighetsgrensen, og du kan se gjennom dataene i ettertid.
+4. Unngå utskrift: Hvis du kun trenger å utføre beregninger eller operasjoner på dataene, vurder å gjøre det uten å skrive ut resultatene i Jupyter.
