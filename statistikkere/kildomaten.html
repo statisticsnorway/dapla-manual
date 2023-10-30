@@ -162,6 +162,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </i> 
  <span class="dropdown-text">Kundeservice</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../faq.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="dropdown-text">FAQ</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -486,7 +491,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link active" data-scroll-target="#forberedelser">Forberedelser</a></li>
   <li><a href="#sette-opp-tjenesten" id="toc-sette-opp-tjenesten" class="nav-link" data-scroll-target="#sette-opp-tjenesten">Sette opp tjenesten</a>
   <ul class="collapse">
-  <li><a href="#forbered-iac-repoet" id="toc-forbered-iac-repoet" class="nav-link" data-scroll-target="#forbered-iac-repoet">Forbered IaC-repoet</a></li>
+  <li><a href="#klone-iac-repoet" id="toc-klone-iac-repoet" class="nav-link" data-scroll-target="#klone-iac-repoet">Klone IaC-repoet</a></li>
+  <li><a href="#opprett-mappestruktur" id="toc-opprett-mappestruktur" class="nav-link" data-scroll-target="#opprett-mappestruktur">Opprett mappestruktur</a></li>
+  <li><a href="#velg-trigger-mappe" id="toc-velg-trigger-mappe" class="nav-link" data-scroll-target="#velg-trigger-mappe">Velg trigger-mappe</a></li>
   </ul></li>
   <li><a href="#vedlikehold" id="toc-vedlikehold" class="nav-link" data-scroll-target="#vedlikehold">Vedlikehold</a></li>
   </ul>
@@ -512,7 +519,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p><em>Kildomaten</em> er tjeneste som er tilgjenglig for alle Dapla-team. Den lar <strong>data-admins</strong> automatisere prosesseringen av <strong>kildedata</strong> til <strong>inndata</strong>. Det skjer ved brukeren skriver et python-skript som skal prosessere alle filer som kommer inn i en gitt mappe i kildedata-bøtta. Brukeren bestemmer selv hvilken mappe tjenesten skal trigge på.</p>
+<p><em>Kildomaten</em> er tjeneste som er tilgjenglig for alle Dapla-team. Den lar <strong>data-admins</strong> automatisere prosesseringen fra <strong>kildedata</strong> til <strong>inndata</strong>. Det skjer ved brukeren skriver et python-skript som skal prosessere alle filer som kommer inn i en gitt mappe i kildedata-bøtta. Brukeren bestemmer selv hvilken undermappe i bøtta som tjenesten skal trigge på.</p>
 <p>Prosessering som skal skje i overgangen fra kildedata til inndata har SSB definert som:</p>
 <ul>
 <li><strong>Dataminimering</strong>:<br>
@@ -525,50 +532,73 @@ Legge på standard kodeverk fra for eksempel <a href="https://www.ssb.no/klass/"
 <li><strong>Standardisering</strong>:<br>
 Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 </ul>
+<p>Under forklarer vi nærmere hvordan man bruker tjenesten.</p>
 <section id="forberedelser" class="level2">
 <h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
 <p>Før et Dapla-team kan ta i bruk <em>Kildomaten</em> må man koble teamets GitHub-IaC-repo til kildeprosjektet <a href="./github-app-integrasjon.html">slik som beskrevet her</a>. Det er en engangsjobb som må gjøre av teamets <strong>data-admin</strong>.</p>
 </section>
 <section id="sette-opp-tjenesten" class="level2">
 <h2 class="anchored" data-anchor-id="sette-opp-tjenesten">Sette opp tjenesten</h2>
-<p>I denne delen bryter vi ned prosessen med å sette <em>kildomaten</em> i de stegene vi mener det er hensiktsmessig å gjøre det når den settes opp for første gang.</p>
-<section id="forbered-iac-repoet" class="level3">
-<h3 class="anchored" data-anchor-id="forbered-iac-repoet">Forbered IaC-repoet</h3>
-<p>For å sette opp tjenesten for en kilde må teamet legge inn to filer i teamets IaC-repo<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.:</p>
+<p>I denne delen bryter vi ned prosessen med å sette opp <em>kildomaten</em> i de stegene vi mener det er hensiktsmessig å gjøre det når den settes opp for første gang.</p>
+<section id="klone-iac-repoet" class="level3">
+<h3 class="anchored" data-anchor-id="klone-iac-repoet">Klone IaC-repoet</h3>
+<p>Siden vi skal endre på teamets IaC-repo så må vi først klone ned repoet. Man finner teamets IaC-repo ved gå inn på <a href="https://github.com/statisticsnorway">SSBs GitHub-organisasjon</a> og søke etter repoet som heter <code>&lt;teamnavn&gt;-iac</code>. Når du har funnet repoet så kan du gjøre følgende:</p>
 <ol type="1">
-<li><p>Et python-skript prosesserer filene.</p></li>
-<li><p>En konfigurasjonsfil som angir hvilken mappe skriptet skal trigges på.</p></li>
+<li>Klon ned ditt teams Iac-repo <code>git clone &lt;repo-url&gt;</code></li>
+<li>Opprett en ny branch: <code>git checkout -b add-kildomaten-source</code></li>
 </ol>
-<p>Man finner teamets IaC-repo ved gå inn på <a href="https://github.com/statisticsnorway">SSBs GitHub-organisasjon</a> og søke etter repoet som heter <code>&lt;teamnavn&gt;-iac</code>. Det gjøres på følgende måte:</p>
-<ol type="1">
-<li>Klon ned ditt teams Iac-repo.</li>
-<li>Opprett en ny branch som f.eks. heter <code>add-source</code>.</li>
-</ol>
-<div class="grid">
-<div class="g-col-4">
-<ol start="3" type="1">
-<li>Opprett en mappe som heter <code>automation</code> i rotmappen til IaC-repoet, med tilhørende undermapper slik som vist i mappestrukren til høyre.</li>
-</ol>
-</div>
-<div class="g-col-8">
+</section>
+<section id="opprett-mappestruktur" class="level3">
+<h3 class="anchored" data-anchor-id="opprett-mappestruktur">Opprett mappestruktur</h3>
+<p>For at <em>Kildomaten</em> skal fungere så må vi følge en bestemt mappestruktur i IaC-repoet. Denne strukturen er nødvendig for at tjenesten skal vite hvor den skal hente kildedata fra, og hvor den skal legge inndata. Denne strukturen blir ikke laget ved opprettelsen av teamet, siden ikke alle team kommer til å bruke tjenesten. Vi kan derfor starte med å opprette denne strukturen. Den skal se slik ut:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
+<pre><strong>github.com/statisticsnorway/&lt;teamnavn&gt;-iac</strong></pre>
 </div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source_data</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── prod</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source_data/</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── prod/</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   </span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── test</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│           </span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── test/</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Husk at du kun skal opprette mappen som heter <code>automation</code> og dets undermapper. Resten av mappene skal allerede være opprettet og du skal ikke endre de.</p>
+</section>
+<section id="velg-trigger-mappe" class="level3">
+<h3 class="anchored" data-anchor-id="velg-trigger-mappe">Velg trigger-mappe</h3>
+<p>Siden tjenesten kan trigges på filer som skrives til undermapper i en bøtte, og ulike undermapper kan trigge ulike python-skript, så er det viktig å tenke gjennom hvordan man organiserer filer i bøtta.</p>
+<div class="columns">
+<div class="column" style="width:47%;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bøtte</strong></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source_data/</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── prod/</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── test/</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:6%;">
+
+</div><div class="column" style="width:47%;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>repo</strong></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source_data/</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── prod/</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── test/</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-<p>Som vist i mappestrukturen over så kan man sette opp <em>kildomaten</em> i både test- og prod-miljøet på Dapla. I de neste stegene så følger du instruksene for det miljøet du ønsker å sette opp tjenesten for. I eksemplet under setter vi det opp for prod-miljøet, og derfor opererer vi <code>automation/source_data/prod/</code>-mappen.</p>
-<ol start="4" type="1">
-<li></li>
-</ol>
 </section>
 </section>
 <section id="vedlikehold" class="level2">
@@ -578,13 +608,7 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
-
-<ol>
-<li id="fn1"><p><em>Infrastructure-as-Code (IaC)</em>-repoet til hvert Dapla-team holder koden som ruller ut ressursene til teamet på SSB sin GCP-organisasjon. Les mer om IaC-repoer her.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
