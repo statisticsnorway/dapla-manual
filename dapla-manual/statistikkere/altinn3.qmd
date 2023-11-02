@@ -100,7 +100,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 # Sett inn filstien din her
-file = "gs://ssb-prod-dapla-felles-data-delt/altinn3/form_dc551844cd74.xml"
+file = "gs://ssb-dapla-felles-data-delt-prod/altinn3/form_dc551844cd74.xml"
 
 dom = parseString(fs.cat_file(file))
 pretty_xml = dom.toprettyxml(indent="  ")
@@ -227,7 +227,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 from_path = "gs://ssb-prod-arbmark-skjema-data-kilde/ledstill/altinn/2022/11/21/"
-to_path = "gs://ssb-prod-dapla-felles-data-delt/altinn3/"
+to_path = "gs://ssb-dapla-felles-data-delt-prod/altinn3/"
 fs.copy(from_path, to_path, recursive=True)
 
 ```
@@ -247,7 +247,7 @@ xml_files = fs.glob("gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/10/*
 
 # Stien du ønsker å kopiere til.
 # Koden under foutsetter at du har med gs:// først
-to_folder = "gs://ssb-prod-dapla-felles-data-delt/"
+to_folder = "gs://ssb-dapla-felles-data-delt-prod/"
 
 # Kopierer over filene
 for file in xml_files:

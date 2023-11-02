@@ -60,15 +60,15 @@ I denne delen viser vi hvordan man gjør veldig vanlige operasjoner når man kod
 ## Eksempeldata
 
 Det finnes et område som alle SSB-ansatte har lese- og skrivetilgang til. Det er  
-**gs://ssb-prod-dapla-felles-data-delt/** i prod-miljøet på Dapla, og  
-**gs://ssb-staging-dapla-felles-data-delt/** i staging-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv. 
+**gs://ssb-dapla-felles-data-delt-prod/** i prod-miljøet på Dapla, og  
+**gs://ssb-dapla-felles-data-delt-test/** i staging-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv. 
 
 Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.
 :::
 
 Å liste ut innhold i et gitt mappe på Dapla er ganske enkelt. Under ser du hvordan du kan liste ut innholdet i følgende mappe:
 
-`gs://ssb-prod-dapla-felles-data-delt/felles/veiledning/python/eksempler/purchases`
+`gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/python/eksempler/purchases`
 
 
 ::: {.panel-tabset}
@@ -81,7 +81,7 @@ Vi bruker modulen `FileClient` fra **dapla-toolbelt** for å liste ut innholdet 
 from dapla import FileClient
 
 # Set path to folder
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 FileClient.ls(f"{bucket}/{folder}")
@@ -102,7 +102,7 @@ Syntaksen med `ls` er veldig lik det man kjenner fra en Linux-terminal. Men når
 library(fellesr)
 
 # Path to folder
-bucket <- "ssb-prod-dapla-felles-data-delt/"
+bucket <- "ssb-dapla-felles-data-delt-prod/"
 folder <- "felles/veiledning/python/eksempler/purchases"
 
 # List files in folder 
@@ -133,7 +133,7 @@ import pandas as pd
 import numpy as np
 
 # Set path to folder
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 # Create pandas dataframe
@@ -161,7 +161,7 @@ Når vi jobber med Parquet-fil i R, bruker vi pakken [arrow](https://arrow.apach
 library(fellesr)
 
 # Set stien til hvor data skal lagres
-bucket <- "ssb-prod-dapla-felles-data-delt"
+bucket <- "ssb-dapla-felles-data-delt-prod"
 folder <- "felles/veiledning/r/eksempler/purchases"
 
 # Lage en eksempel dataframe
@@ -192,7 +192,7 @@ import pandas as pd
 from dapla import FileClient
 
 # Set path to folder
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 # Create a dataframe with Pandas
@@ -216,7 +216,7 @@ Først kaller vi biblioteket og lage noe test data ved:
 library(fellesr)
 
 # Set stien til hvor data skal lagres
-bucket <- "ssb-prod-dapla-felles-data-delt"
+bucket <- "ssb-dapla-felles-data-delt-prod"
 folder <- "felles/veiledning/r/eksempler/purchases"
 
 # Lage en eksempel dataframe
@@ -244,7 +244,7 @@ from dapla import AuthClient
 token = AuthClient.fetch_google_credentials()
 
 # Filsti
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 df.to_excel(f"{bucket}/{folder}/test.xlsx",
@@ -273,7 +273,7 @@ Under finner du eksempler på hvordan du kan lese inn data til en Jupyter Notebo
 import dapla as dp
 
 # Set path to folder
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 # Read path into pandas dataframe 
@@ -297,7 +297,7 @@ Her er et eksempel av å lese inn parquet fil "1987".
 ```{.r filename="notebook"}
 library(fellesr)
 
-bucket <- "ssb-prod-dapla-felles-data-delt"
+bucket <- "ssb-dapla-felles-data-delt-prod"
 folder <- "R_smoke_test"
 
 dt_1987 <- read_SSB(file.path(bucket, folder, "1987.parquet"))
@@ -330,7 +330,7 @@ Kommer mer snart. Python-koden under bygger på eksempelet over.
 import dapla as dp
 
 # Path to write to
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 # Read in json-file from dapla-storage
@@ -349,7 +349,7 @@ Først kaller vi inn biblioteket [fellesr](https://statisticsnorway.github.io/fe
 library(fellesr)
 
 # Filsti
-bucket <- "ssb-prod-dapla-felles-data-delt"
+bucket <- "ssb-dapla-felles-data-delt-prod"
 folder <- "R_smoke_test"
 
 # Lese inn CSV-fil
@@ -404,7 +404,7 @@ from dapla import FileClient
 
 fs = FileClient.get_gcs_file_system()
 
-sti = "gs://ssb-prod-dapla-felles-data-delt/felles/veiledning/sas/statbank_ledstill.sas7bdat"
+sti = "gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/sas/statbank_ledstill.sas7bdat"
 
 with fs.open(sti) as sas:
     df = pd.read_sas(sas, format="sas7bdat", encoding="latin1")
@@ -431,7 +431,7 @@ Mer om dette kommer.
 from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler/purchases"
 
 fs.rm(f"{bucket}/{from_folder}/df.json")
@@ -444,7 +444,7 @@ Funksjonen `gc_delete_object` kan brukes til å slette data på lagringsområdet
 ```{.r filename="notebook"}
 library(fellesr)
 
-bucket <- "ssb-prod-dapla-felles-data-delt"
+bucket <- "ssb-dapla-felles-data-delt-prod"
 folder <- "felles/veiledning/r/eksempler/purchases"
 
 gcs_delete_object(file.path(bucket, folder, "purchases.parquet"))
@@ -467,7 +467,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 # Path to folders
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 from_folder = "felles/veiledning/python/eksempler/purchases"
 to_folder = "felles/veiledning/python/eksempler"
 
@@ -489,7 +489,7 @@ with open('/home/jovyan/test.txt', 'w') as f:
     f.write('Create a new text file!')
 
 #Path to folder
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler"
 
 # Copy file from local to remote file system
@@ -525,7 +525,7 @@ Kommer snart
 from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 from_folder = "felles/veiledning/python/eksempler/purchases"
 to_folder = "felles/veiledning/python/eksempler"
 
@@ -552,7 +552,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 #Path to folder
-bucket = "gs://ssb-prod-dapla-felles-data-delt"
+bucket = "gs://ssb-dapla-felles-data-delt-prod"
 folder = "felles/veiledning/python/eksempler"
 
 # Create folder
