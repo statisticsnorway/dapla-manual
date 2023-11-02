@@ -6,7 +6,7 @@ Det er også SSBs standard-rutenett i ulike størrelser samt Eurostats rutenett 
 
 Man søker om tilgang til dataene til kundeservice (tilgangsrollen kart-consumers), men bruk gjerne standard LDA-prosedyre som for øvrige data.
 
-I tillegg ligger det noe **testdata** i fellesbøtta her: **ssb-prod-dapla-felles-data-delt/GIS/testdata**
+I tillegg ligger det noe **testdata** i fellesbøtta her: **ssb-dapla-felles-data-delt-prod/GIS/testdata**
 
 ## Python
 ### GIS-pakker og lesing/skriving av geodata
@@ -65,7 +65,7 @@ I tillegg til kartdataene, ligger det testdata i fellesbøtta som man kan leke s
 Testdataene finnes for Oslo og Kongsvinger, og kan leses sånn her:
 
 ```{.python filename="notebook"}
-testdatasti = "ssb-prod-dapla-felles-data-delt/GIS/testdata"
+testdatasti = "ssb-dapla-felles-data-delt-prod/GIS/testdata"
 veger = sg.read_geopandas(f"{testdatasti}/veger_oslo.parquet")
 ```
 
@@ -183,7 +183,7 @@ Sindre Mikael Haugen har lagd [funksjoner for å lese og skrive](https://statist
 ```{.r filename="notebook"}
 library(fellesr)
 
-veger = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/veger_oslo.parquet", sf = TRUE)
+veger = read_SSB("ssb-dapla-felles-data-delt-prod/GIS/testdata/veger_oslo.parquet", sf = TRUE)
 ```
 
 Haugen har også lagd en [pakke for å gjøre nettverksanalyse](https://statisticsnorway.github.io/GISSB/articles/GISSB_vignette.html), 
@@ -199,8 +199,8 @@ Her får man ett bygg per kommune som overlapper (som maksimalt er én kommune s
 ```{.r filename="notebook"}
 library(sf)
 
-boligbygg = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/noen_boligbygg_oslo.parquet", sf = TRUE)
-enkle_kommuner = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/enkle_kommuner.parquet", sf = TRUE)
+boligbygg = read_SSB("ssb-dapla-felles-data-delt-prod/GIS/testdata/noen_boligbygg_oslo.parquet", sf = TRUE)
+enkle_kommuner = read_SSB("ssb-dapla-felles-data-delt-prod/GIS/testdata/enkle_kommuner.parquet", sf = TRUE)
 
 boligbygg_med_kommuneinfo = st_join(boligbygg, enkle_kommuner)
 ```
