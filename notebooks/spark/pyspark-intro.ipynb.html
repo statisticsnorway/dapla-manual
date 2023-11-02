@@ -416,13 +416,13 @@ only showing top 5 rows
 <h2 class="anchored" data-anchor-id="skrive-til-parquet">Skrive til Parquet</h2>
 <p>PySpark tilbyr mange opsjoner ved skriving til parquet-filer som vi kanskje ikke er vant til å forholde oss til med enklere rammeverk som Pandas. Den enkleste måten å skrive ut en fil er som følger:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.write.parquet(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet"</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Dette vil fungere hvis filen ikke finnes fra før. Hvis den finnes fra før så vil den feile. Grunnen er at vi ikke har spesifisert hva vi ønsker at den skal gjøre. Vi kan velge mellom <code>overwrite</code>, <code>append</code>, <code>ignore</code> eller <code>errorifexists</code>. Sistnevnte er også default-oppførsel hvis du ikke ber den gjøre noe annet.</p>
 <p>Under bruker vi opsjonen <code>overwrite</code>, det vil si at den skriver over en evt eksisterende fil med samme navn.</p>
 <div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [6]:</pre></div><div class="cell" data-tags="[]" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df.write.mode(<span class="st">"overwrite"</span>).parquet(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet"</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <p>Vi kan inspisere hva som ble skrevet ved å liste ut innholder i bøtta.</p>
@@ -431,14 +431,14 @@ only showing top 5 rows
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp/**"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp/**"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>['ssb-prod-dapla-felles-data-delt/temp/',
- 'ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet/',
- 'ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet/_SUCCESS',
- 'ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet/part-00000-b32e7299-0590-4b31-bcc2-dc3d58725529-c000.snappy.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet/part-00001-b32e7299-0590-4b31-bcc2-dc3d58725529-c000.snappy.parquet']</code></pre>
+<pre><code>['ssb-dapla-felles-data-delt-prod/temp/',
+ 'ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet/',
+ 'ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet/_SUCCESS',
+ 'ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet/part-00000-b32e7299-0590-4b31-bcc2-dc3d58725529-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet/part-00001-b32e7299-0590-4b31-bcc2-dc3d58725529-c000.snappy.parquet']</code></pre>
 </div>
 </div></div>
 <p>Hvis denne parquet-filen hadde vært partisjonert etter en kolonne, så ville det vært egne undermapper med navnestruktur <code>column_name=value</code> som indikerte hva filen er partisjonert på. Siden vi her bruker en maskin og har et lite datasett, valgte Spark å ikke partisjonere.</p>
@@ -448,7 +448,7 @@ only showing top 5 rows
 <p>Apache Spark kan lese inn flere parquet-filer samtidig. Syntaxen er like enkel som den for å skrive ut.</p>
 <div class="cell-container column-page-left"><div class="cell-decorator"><pre>In [8]:</pre></div><div class="cell" data-tags="[]" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_ts <span class="op">=</span> spark.read.parquet(</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp/timeseries.parquet"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp/timeseries.parquet"</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>df_ts.select(<span class="st">"Date"</span>, <span class="st">"Year"</span>, <span class="st">"Quarter"</span>, <span class="st">"Month"</span>, <span class="st">"serie66"</span>, <span class="st">"serie55"</span>).show(<span class="dv">5</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

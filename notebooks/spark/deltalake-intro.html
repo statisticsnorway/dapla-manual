@@ -304,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-tags="[]" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data.write.<span class="bu">format</span>(<span class="st">"delta"</span>).mode(<span class="st">"overwrite"</span>).save(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CPU times: user 3.38 ms, sys: 1.7 ms, total: 5.08 ms
@@ -317,13 +317,13 @@ Wall time: 5.59 s</code></pre>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4/**"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4/**"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
-<pre><code>['ssb-prod-dapla-felles-data-delt/temp4/_delta_log',
- 'ssb-prod-dapla-felles-data-delt/temp4/_delta_log/',
- 'ssb-prod-dapla-felles-data-delt/temp4/_delta_log/00000000000000000000.json',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00000-9b3b81a9-2771-4fb4-9f0f-659fd160d643-c000.snappy.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00001-0f2f8ba5-3161-41e8-b5d1-2084128a5bed-c000.snappy.parquet']</code></pre>
+<pre><code>['ssb-dapla-felles-data-delt-prod/temp4/_delta_log',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000000.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-9b3b81a9-2771-4fb4-9f0f-659fd160d643-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00001-0f2f8ba5-3161-41e8-b5d1-2084128a5bed-c000.snappy.parquet']</code></pre>
 </div>
 </div>
 <section id="delta-lake-tabellstruktur" class="level3">
@@ -353,7 +353,7 @@ Wall time: 5.59 s</code></pre>
 <section id="lese-inn-tabell" class="level2">
 <h2 class="anchored" data-anchor-id="lese-inn-tabell">Lese inn tabell</h2>
 <div class="cell" data-tags="[]" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>deltaTable <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span>)</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>deltaTable <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>deltaTable.toDF().show()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>+---+
@@ -380,7 +380,7 @@ Wall time: 5.59 s</code></pre>
 </div>
 <p>Et viktig poeng å få med seg her er at vi nå oppdaterte Delta Lake Table objektet både i minnet og på disk. La oss bevise det ved å lese inn fra disk:</p>
 <div class="cell" data-tags="[]" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>deltaTable2 <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span>)</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>deltaTable2 <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>deltaTable2.toDF().show()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>+---+
@@ -432,7 +432,7 @@ Wall time: 5.59 s</code></pre>
 <p>Deretter kan vi appendere det til vår opprinnelige dataframe:</p>
 <div class="cell" data-tags="[]" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>new_df.write.<span class="bu">format</span>(<span class="st">"delta"</span>).mode(<span class="st">"append"</span>).save(</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="12">
@@ -459,18 +459,18 @@ Wall time: 5.59 s</code></pre>
 <div class="cell" data-tags="[]" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lister ut filene i bøtta</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4/**"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4/**"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
-<pre><code>['ssb-prod-dapla-felles-data-delt/temp4/_delta_log',
- 'ssb-prod-dapla-felles-data-delt/temp4/_delta_log/',
- 'ssb-prod-dapla-felles-data-delt/temp4/_delta_log/00000000000000000000.json',
- 'ssb-prod-dapla-felles-data-delt/temp4/_delta_log/00000000000000000001.json',
- 'ssb-prod-dapla-felles-data-delt/temp4/_delta_log/00000000000000000002.json',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00000-73e5052f-1b82-48da-ab37-2cbc01bb46c1-c000.snappy.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00000-9b3b81a9-2771-4fb4-9f0f-659fd160d643-c000.snappy.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00000-d04d0ca2-8e8b-42e9-a8a3-0fed9a0e4e41-c000.snappy.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00001-0f2f8ba5-3161-41e8-b5d1-2084128a5bed-c000.snappy.parquet',
- 'ssb-prod-dapla-felles-data-delt/temp4/part-00001-30d707e4-dd9a-4bfd-a4c7-7fbb1933e9ae-c000.snappy.parquet']</code></pre>
+<pre><code>['ssb-dapla-felles-data-delt-prod/temp4/_delta_log',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000000.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000001.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000002.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-73e5052f-1b82-48da-ab37-2cbc01bb46c1-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-9b3b81a9-2771-4fb4-9f0f-659fd160d643-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-d04d0ca2-8e8b-42e9-a8a3-0fed9a0e4e41-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00001-0f2f8ba5-3161-41e8-b5d1-2084128a5bed-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00001-30d707e4-dd9a-4bfd-a4c7-7fbb1933e9ae-c000.snappy.parquet']</code></pre>
 </div>
 </div>
 <p>Vi ser av transaksjonsloggen i <code>_delta_log</code>-mappen at det nå har vært 3 transaksjoner på datasettet. vi ser også av navnene på parquet-filene, <code>part-00000</code> og <code>part-00001</code>, at det finnes to versjoner av filen. Hvis vi ønsker å bli bedre kjent med hva slags informasjon som blir lagret fra transaksjonene, så kan vi printe ut den siste transaksjonen som heter <code>00000000000000000002.json</code>:</p>
@@ -483,7 +483,7 @@ Wall time: 5.59 s</code></pre>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4/_delta_log/00000000000000000002.json"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000002.json"</span></span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> fs.<span class="bu">open</span>(path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
@@ -600,7 +600,7 @@ Wall time: 5.59 s</code></pre>
 <p>Delta Lake støtter også egendefinert metadata. Det kan for eksempel være nyttig hvis man ønsker å bruke Delta Lake som en backend for et GUI som lar brukeren oppdatere en tabell fra GUI-et. Da ønsker man typisk å lagre hvem som gjorde endringer og når det ble gjort. La oss legge på noe slik metadata:</p>
 <div class="cell" data-tags="[]" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Leser inn filen</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.<span class="bu">format</span>(<span class="st">"delta"</span>).load(<span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.<span class="bu">format</span>(<span class="st">"delta"</span>).load(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="20">
 <details>
@@ -627,12 +627,12 @@ Wall time: 5.59 s</code></pre>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    df.write.<span class="bu">format</span>(<span class="st">"delta"</span>)</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    .mode(<span class="st">"append"</span>)</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">"userMetadata"</span>, json.dumps(metadata))  <span class="co"># Serialize metadata to a string</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    .save(<span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    .save(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span>)</span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-tags="[]" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn tabellen</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>deltaTable <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>deltaTable <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4"</span>)</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter ut historien</span></span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>history_df <span class="op">=</span> deltaTable.history()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -676,7 +676,7 @@ Wall time: 5.59 s</code></pre>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-prod-dapla-felles-data-delt/temp4/_delta_log/00000000000000000003.json"</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000003.json"</span></span>
 <span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> fs.<span class="bu">open</span>(path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
 <span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
