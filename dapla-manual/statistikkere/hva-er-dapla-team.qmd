@@ -1,12 +1,92 @@
 # Hva er Dapla-team?
 
-For å kunne jobbe med skarpe/ekte data på Dapla må man opprette et et **Dapla-team**. Et dapla-team er en gruppe personer som jobber med ett eller flere emneområder på SSBs dataplattform/Dapla. Når man [oppretter et Dapla-team](./opprette-dapla-team.html) i SSB får man følgende: 
+For å kunne jobbe på Dapla må man være en del av et **Dapla-team**. Et dapla-team er en gruppe personer som har tilgang til spesifikke ressurser på Dapla. Ressursene kan være data, kode, tjenester eller annet. Følgelig er teamet helt sentral i tilgangsstyringen på Dapla. Derfor er det viktig at alle som jobber på Dapla gjør seg godt kjent med innholdet i dette kapittelet.
 
-- Lagringsområde for data i [Google Cloud Storage (GCS)](https://cloud.google.com/storage#section-1)^[Lagringsområdet tilsvarer *stammene* på bakken.]
-- Tilgangskontroll til lagringsområdet
-- Tjeneste for synkronisering av data mellom bakke og sky ([Transfer Service](https://cloud.google.com/storage-transfer-service))
+## Opprette Dapla-team
 
-Et Dapla-team er ikke bare et sett med Google-tjenester knyttet til en gruppe ansatte. Det er også knyttet arbeidsprosesser og rutiner til et Dapla-team som er bestemt av SSB selv. I det følgende forklarer vi begge deler.
+Dapla-team opprettes av dataeier for teamets kildedata. I de fleste tilfeller vil dette være en seksjonsleder i SSB. Selve opprettelsen av teamet gjøres i **Manager-portalen**.
+
+::: {.callout-warning}
+# Manager-portalen er under arbeid
+Manager-portalen er under arbeid og vil være klar i 1. kvartal 2024. Inntill da kan man bruke den [gamle portalen for å opprette Dapla-team](https://start.dapla.ssb.no/).
+:::
+
+## Roller i teamet
+
+Medlemskap i et Dapla-team gir tilgang på spesifikke ressurser på Dapla. Men siden kildedataene til alle team er klassifisert som *sensitive*, så kan ikke alle på teamet ha lik tilgang til alle ressurser. Av den grunn er det definert 5 ulike roller på et team. Under forklarer vi hva de ulike rollene innebærer.
+
+### Managers
+
+Rollen *managers* skal bestå av en eller flere data-ansvarlige (ofte omtalt som data-eiere eller seksjonsledere). *managers* har ansvar for følgende i teamet:
+
+- opprette teamet
+- hvem i teamet som får tilgang til hvilke data og tjenester.
+- at teamet følger SSBs retningslinjer for tilgangsstyring.
+- at teamet følger SSBs retningslinjer for klassifisering av data.
+- vedlikehold og monitorering av tilganger.
+- at teamet følger og forstår hvordan sensitive data skal behandles i SSB.
+
+*Manager*-rollen krever ingen tilgang til data eller databehandlende tjenester på Dapla. 
+
+### Data-admins
+
+Rollen *data-admins* er en priveligert rolle blant de som jobber med data i teamet. Rollen skal kun tildeles 2-3 personer på et team. *data-admins* har tilgang til samme data og ressurser som *developers*, med følgende unntak:
+
+- de er forhåndsgodkjent til å gi seg selv tidsbegrenset tilgang til kildedata ved behov. Tilgang til kildedata skal kun aktiveres i særskilte tilfeller, der eneste løsning er å se på data i klartekst. Tilgang til kildedata skal kun gis i en begrenset periode, og krever en skriftlig begrunnelse. *managers* skal lett kunne monitere hvem som aktiverer denne tilgangen og hvor ofte. 
+- de kan godkjenne endringer i automatiske jobber som prosesserer kildedata til inndata.
+- de kan overføre kildedata mellom bakke og sky.  
+
+### Developers
+
+Rollen *developers* er den mest vanlige rollen på et Dapla-team. Denne rollen skal tildeles alle som jobber med data i teamet som ikke har *data-admins*-rollen. *developers* har tilgang til følgende ressurser:
+
+- alt av teamets data, med unntak av kildedata.
+- alle ressurser som behandler datatilstandene fra inndata til utdata.
+
+### Consumers
+
+Gruppen consumers er medlemmer av andre team som skal få tilgang til de dataene teamet velger å dele.  Det er søkers seksjonsleder som skal godkjenne denne tilgangen, ikke managers for teamet som eier dataene. 
+
+### Support
+
+Gruppen support skal brukes når team trenger assistanse fra IT-utviklere eller andre for å løse et problem som innebærer at IT-utvikleren må ha tilgang. IT-utvikleren legges da i support-gruppen. Følgende gjelder for denne gruppen:
+
+- Tilgangen skal være tidsbegrenset (< 8 timer).
+- Tilgangen bør ikke som default gi tilgang til kildedata-prosjektet.
+- Tilgangssøknaden skal begrunnes.
+- Skal godkjennes av teamets managers.
+
+## Teamets ressurser
+
+Når du oppretter et dapla-team så får man en grunnpakke med ressurser som de fleste i SSB vil trenge for å kunne jobbe med data på Dapla. I tillegg kan teamet selvbetjent skru på andre tjenester hvis man ønsker det. I det følgende forklarer vi hva som er inkludert i grunnpakken, og hva som er tilgjengelig for å skru på ved behov.
+
+### Grunnpakken
+
+Etter at et nytt Dapla-team er opprettet er følgende ressurser tilgjengelig for teamet:
+
+- Et IaC-repo på GitHub som definerer alle ressursene for teamet på Dapla. Kort fortalt er dette en samling med tekstfiler som beskriver hvordan teamets ressurser skal settes opp. IaC står for *Infrastructure as Code* og er en måte å automatisere oppsett av ressurser på.
+
+- Ett Google-prosjekt i et prod-miljø med en lagringsbøtte for kildedata.
+
+- Ett Google-prosjekt i et test-miljø med en lagringsbøtte for kildedata.
+
+- Ett Google-prosjekt  i et prod-miljø med en lagringsbøtte for datatilstandene inndata, klargjorte data, statistikkdata og utdata. Det blir også opprettet en lagringsbøtte for deling av data med andre Dapla-team.
+
+- Ett Google-prosjekt i et test-miljø med en lagringsbøtte for datatilstandene inndata, klargjorte data, statistikkdata og utdata. Det blir også opprettet en lagringsbøtte for deling av data med andre Dapla-team.
+
+Grunnpakken med ressurser som opprettes reflekterer at statistikkproduksjon skal jobbe med data iht vedtatte datatilstander, og at disse datatilstandene automatisk klassifiseres som enten sensitive, skjermede eller åpne data.
+
+### Ekstra tjenester
+
+I tillegg til grunnpakken med ressurser, så kan teamet selvbetjent skru på følgende tjenester:
+
+- **Transfer Service** kan skrus på hvis teamet trenger å synkronisere data mellom ulike lagringssystemer. For eksempel mellom bakke og sky, eller mellom to ulike skytjenester.
+
+- **Kildeomaten** kan skrus på hvis teamet trenger å automatisere overgangen fra kildedata til inndata.
+
+
+
+
 
 ## Google-tjenester
 
