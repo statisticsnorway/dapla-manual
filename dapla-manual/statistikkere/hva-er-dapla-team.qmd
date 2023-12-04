@@ -1,162 +1,115 @@
 # Hva er Dapla-team?
 
-For å kunne jobbe med skarpe/ekte data på Dapla må man opprette et et **Dapla-team**. Et dapla-team er en gruppe personer som jobber med ett eller flere emneområder på SSBs dataplattform/Dapla. Når man [oppretter et Dapla-team](./opprette-dapla-team.html) i SSB får man følgende: 
+For å kunne jobbe på Dapla må man være en del av et **Dapla-team**. Et dapla-team er en gruppe personer som har tilgang til spesifikke ressurser på Dapla. Ressursene kan være data, kode eller tjenester. Følgelig er teamet helt sentral for tilgangsstyringen på Dapla. Derfor er det viktig at alle som jobber på Dapla gjør seg godt kjent med innholdet i dette delen.
 
-- Lagringsområde for data i [Google Cloud Storage (GCS)](https://cloud.google.com/storage#section-1)^[Lagringsområdet tilsvarer *stammene* på bakken.]
-- Tilgangskontroll til lagringsområdet
-- Tjeneste for synkronisering av data mellom bakke og sky ([Transfer Service](https://cloud.google.com/storage-transfer-service))
+## Opprette Dapla-team
 
-Et Dapla-team er ikke bare et sett med Google-tjenester knyttet til en gruppe ansatte. Det er også knyttet arbeidsprosesser og rutiner til et Dapla-team som er bestemt av SSB selv. I det følgende forklarer vi begge deler.
+Dapla-team opprettes av dataeier for teamets kildedata. I de fleste tilfeller vil dette være en seksjonsleder i SSB. Selve opprettelsen av teamet gjøres i **Manager-portalen**.
 
-## Google-tjenester
-
-Når man oppretter et Dapla-team så får man tilgang til et sett med ferdig konfigurerte ressurser og tjenester i GCP. For å få en god forståelse for hvordan disse ressursene og tjenestene fungerer sammen med andre Dapla-team, er det viktig å skjønne hvordan den felles stukturen på GCP er bygd opp. 
-
-Anta at noen oppretter et Dapla-team som heter **Arbmark skjema**. De vil da få tildelt et teknisk navn som er **arbmark-skjema**. Sistnevnte navn vil bli brukt i alle ressursene som blir opprettet for teamet.
-
-SSB har sin egen organisasjon på GCP. Derfor heter toppnivået **ssb**. Under SSB ligger det 3 *Folders*^[*Folders* er et element som en organisasjon kan bruke for å organisere underenheter i GCP. I SSB er Folders brukt til å skille mellom produksjons-, test- og utviklingsmiljøer. Statistikkseksjonene trenger ikke å forholde seg noe særlig til det tekniske rundt *Folders*, bortsett fra at miljøene for test og produksjon er satt opp noe annerledes. Hvis du ønsker kan du lese mer om Folders kan gå til [Google sine sider](https://cloud.google.com/resource-manager/docs/creating-managing-folders).]: **development**, **production** og **staging**, som vist i @fig-folder-structure. 
-
-Under hver *Folder* ligger det ett eller to Google-prosjekter. Det som brukes til statistikkproduksjon ligger under **production**, mens det som brukes til utvikling og testing ligger under henholdsvis **development** og **staging**. I det følgende vil vi kun fokusere på **production**, som er det som brukes til statistikkproduksjon.
-
-::: {.panel-tabset}
-
-## Folders
-
-![*Folders* under SSB sin organisasjon på GCP](../images/gcc_tree.png){fig-alt="Bilde av Folders-strukturen i SSB sin GCP-organisasjon" #fig-folder-structure}
-
-## Projects
-
-![Prosjektene som opprettes i et Dapla-team.](..images/gcc_tree1.png){fig-alt="Bilde av prosjektene som opprettes i et Dapla-team." #fig-project-structure}
-
-## Buckets
-
-![Bøttene som opprettes i et Dapla-team.](../images/gcc_tree2.png){fig-alt="Bilde av bøttene som opprettes i et Dapla-team sine prosjekter." #fig-bucket-structure}
-
+::: {.callout-warning}
+# Manager-portalen er under arbeid
+Manager-portalen er under arbeid og vil være klar i 1. kvartal 2024. I mellomtiden kan man bruke den [gamle portalen for å opprette Dapla-team](https://start.dapla.ssb.no/).
 :::
 
-I @fig-project-structure ser vi hvilke prosjekter som blir opprettet for Dapla-teamet **arbmark-skjema**. Under **production** ligger prosjektene **arbmark-skjema-ts** og **prod-arbmark-skjema**. Det første prosjektet brukes til å synkronisere data mellom bakke og sky. **prod-arbmark-skjema** er det som brukes til i å lagre data i en  statistikkproduksjon.
+## Roller i teamet
 
-I @fig-bucket-structure ser vi hvordan lagringsbøttene plasserer seg under prosjektene. I neste kapittel forklarer vi hva de ulike lagringsbøttene skal brukes til.
+Medlemskap i et Dapla-team gir tilgang på spesifikke ressurser på Dapla. Men siden kildedataene til alle team er klassifisert som *sensitive*, så kan ikke alle på teamet ha lik tilgang til alle ressurser. Av den grunn er det definert 5 ulike roller på et team. Under forklarer vi hva de ulike rollene innebærer.
 
-::: {.callout-note}
-## Hva er en bøtte?
+### Managers
 
-Vi kommer til å bruke ordet **bøtte** mye i denne delen, og det er derfor ryddig å forklare hva det er. 
+Rollen *managers* skal bestå av en eller flere data-ansvarlige (ofte omtalt som data-eiere eller seksjonsledere). *managers* har ansvar for følgende i teamet:
 
-En [*bøtte*](https://cloud.google.com/storage/docs/buckets) er et lagringsområde for data i GCP. En bøtte inneholder objekter av data og metadata som kan organiseres på en slik måte at det likner på filer organisert i mapper og undermapper. Objektene i bøtter er lagret "distribuert", det vil si at de ligger lagret på ulike maskiner ute i "skyen", og kan nås via en tjeneste i GCP som heter Cloud Storage (GCS). Bøtter er noe annet enn mapper, og har derfor fått et eget ord på engelsk (*buckets*).
+- opprette teamet
+- hvem i teamet som får tilgang til hvilke data og tjenester.
+- at teamet følger SSBs retningslinjer for tilgangsstyring.
+- at teamet følger SSBs retningslinjer for klassifisering av data.
+- vedlikehold og monitorering av tilganger.
+- at teamet følger og forstår hvordan sensitive data skal behandles i SSB.
 
-Hvis vi skulle sammenlignet det med våre systemer på bakken vil det ligne mye på en diskstasjon, for eksempel X- og S-disken. 
+*Manager*-rollen krever ingen tilgang til data eller databehandlende tjenester på Dapla. 
 
-:::
+### Data-admins
 
-### Lagringsområdet
+Rollen *data-admins* er en priveligert rolle blant de som jobber med data i teamet. Rollen skal kun tildeles 2-3 personer på et team. *data-admins* har tilgang til samme data og ressurser som *developers*, med følgende unntak:
 
-Lagringsområdene for Dapla-team består av *Google Cloud Storage (GCS) buckets*. Disse bøttene følger en navnestandard som henger sammen med SSBs datatilstander og tilgangsroller. I det følgende forklarer vi hvordan de ulike bøttene er tenkt strukturert.
+- de er forhåndsgodkjent til å gi seg selv tidsbegrenset tilgang til kildedata ved behov. Tilgang til kildedata skal kun aktiveres i særskilte tilfeller, der eneste løsning er å se på data i klartekst. Tilgang til kildedata skal kun gis i en begrenset periode, og krever en skriftlig begrunnelse. *managers* skal lett kunne monitere hvem som aktiverer denne tilgangen og hvor ofte. 
+- de kan godkjenne endringer i automatiske jobber som prosesserer kildedata til inndata.
+- de kan overføre kildedata mellom bakke og sky.  
 
-#### prod-arbmark-skjema {.unnumbered}
+### Developers
 
-Under prosjektet **prod-arbmark-skjema** ligger det 3 bøtter:
+Rollen *developers* er den mest vanlige rollen på et Dapla-team. Denne rollen skal tildeles alle som jobber med data i teamet som ikke har *data-admins*-rollen. *developers* har tilgang til følgende ressurser:
 
-- **ssb-prod-arbmark-skjema-data-delt**  
-Lagring av data som skal deles med andre i SSB. Kan innholde *inndata*, *klargjorte data*, *statistikkdata* og *utdata*.
+- alt av teamets data, med unntak av kildedata.
+- alle ressurser som behandler datatilstandene fra inndata til utdata.
 
-- **ssb-prod-arbmark-skjema-data-kilde**  
-Langtidslagring av kildedata (se definisjon). Kan kun inneholde *kildedata*.
+### Consumers
 
-- **ssb-prod-arbmark-skjema-data-produkt**  
-Lagring av data i statistikkproduksjon. Kan innholde *inndata*, *klargjorte data*, *statistikkdata* og *utdata*.
+Gruppen consumers er medlemmer av andre team som skal få tilgang til de dataene teamet velger å dele.  Det er søkers seksjonsleder som skal godkjenne denne tilgangen, ikke managers for teamet som eier dataene. 
 
-Disse lagringsområdene er nært knyttet til de ulike datatilstandene som blir beskrevet senere. 
+### Support
 
-#### arbmark-skjema-ts {.unnumbered}
+Gruppen support skal brukes når team trenger assistanse fra IT-utviklere eller andre for å løse et problem som innebærer at IT-utvikleren må ha tilgang. IT-utvikleren legges da i support-gruppen. Følgende gjelder for denne gruppen:
 
-Under prosjektet **arbmark-skjema-ts** ligger det 2 bøtter som kun er tilgjengelig for kildedata-ansvarlig (data-admins) i Dapla-teamet. Disse bøttene er:
+- Tilgangen skal være tidsbegrenset (< 8 timer).
+- Tilgangen bør ikke som default gi tilgang til kildedata-prosjektet.
+- Tilgangssøknaden skal begrunnes.
+- Skal godkjennes av teamets managers.
 
-- **ssb-arbmark-skjema-ts-data-synk-opp**  
-Her ligger data som er blitt synkronisert opp fra bakke til sky.
+## Ressurser
 
-- **ssb-arbmark-skjema-ts-data-synk-ned**  
-Her ligger data som skal synkroniseres ned fra sky til bakke.
+Når du oppretter et dapla-team så får man en grunnpakke med ressurser som de fleste i SSB vil trenge for å kunne jobbe med data på Dapla. I tillegg kan teamet selvbetjent skru på andre tjenester hvis man ønsker det. I det følgende forklarer vi hva som er inkludert i grunnpakken, og hva som er tilgjengelig for å skru på ved behov.
 
-- **/ssb/cloud_sync/arbmark-skjema/**  
-Lagringsområdet på bakken for synkronisering av data mellom bakke og sky.
+### Grunnpakken
 
-Kun kildedata-ansvarlig har lese- og skrivetilgang til disse bøttene. Det er også kildedata-ansvarlig som kan sette opp jobber med **Transfer Service** for å synkronisere data mellom bakke og sky.
+Etter at et nytt Dapla-team er opprettet er følgende ressurser tilgjengelig for teamet:
 
-### Tilgangsroller
+- Et IaC-repo på GitHub som definerer alle ressursene for teamet på Dapla. Kort fortalt er dette en samling med tekstfiler som beskriver hvordan teamets ressurser skal settes opp. IaC står for *Infrastructure as Code* og er en måte å automatisere oppsett av ressurser på.
 
-Ved opprettelsen av et Dapla-team så blir du bedt om å plassere medlemmene i teamet i en av tre ulike tilgangsroller. Disse er:
+- Ett Google-prosjekt i et prod-miljø med en lagringsbøtte for kildedata.
 
-- **data-admins**  
-Har lese- og skrivetilgang i alle lagringsområdene i Dapla-teamet. Siden dette er en priveligert rolle med potensiell tilgang til sensitiv data, så er det kun noen få personer som skal ha denne rollen i et Dapla-team. 
+- Ett Google-prosjekt i et test-miljø med en lagringsbøtte for kildedata.
 
-- **developers**  
-Har lese- og skrivetilgang i alle lagringsområdene i Dapla-teamet, med unntak av **ssb-prod-arbmark-skjema-data-kilde**, og bøttene i prosjektet **arbmark-skjema-ts**. Dvs. at alle som jobber med statistikkproduksjon tilknyttet teamets data, og som ikke er data-admin, skal ha denne rollen.
+- Ett Google-prosjekt  i et prod-miljø med en lagringsbøtte for datatilstandene inndata, klargjorte data, statistikkdata og utdata. Det blir også opprettet en lagringsbøtte for deling av data med andre Dapla-team.
 
-- **consumers**  
-Medlemmer fra andre Dapla-team som har behov for tilgang til dette teamets data. De får lesetilgang til **ssb-prod-arbmark-skjema-data-delt**.  
+- Ett Google-prosjekt i et test-miljø med en lagringsbøtte for datatilstandene inndata, klargjorte data, statistikkdata og utdata. Det blir også opprettet en lagringsbøtte for deling av data med andre Dapla-team.
 
-**data-admin** har i tillegg til lagringsområdene på sky, tilgang til denne mappen på bakken: `/ssb/cloud_sync/arbmark-skjema`. Her kan de legge filer som de ønsker å flytte til skyen.
+- *Just-In-Time Access (JIT)* applikasjon som kan brukes av *data-admins* for å gi seg selv tidsbegrenset tilgang til kildedata.
 
-@tbl-tilgangsroller viser hvilke roller som har tilgang til hvilke bøtter/mapper. 
+Grunnpakken med ressurser som opprettes reflekterer at statistikkproduksjon skal jobbe med data iht vedtatte datatilstander, og at disse datatilstandene automatisk klassifiseres som enten sensitive, skjermede eller åpne data.
 
-|                                 | data-admin | developer | consumer |
-| ------------------------------- | ---------- | --------- | -------- |
-| arbmark-skjema-kilde            | X          |           |          |
-| arbmark-skjema-produkt          | X          | X         |          |
-| arbmark-skjema-delt             | X          | X         | X        |
-| arbmark-skjema-synk-opp         | X          |          |          |
-| arbmark-skjema-synk-ned         | X          |          |          |
-| /ssb/cloud\_sync/arbmark\_skjema/ | X          |           |          |
-: Tilgangsroller og lagringsområder {#tbl-tilgangsroller}
+### *Features*
 
-### Automatiseringstjeneste
+I tillegg til grunnpakken med ressurser, så kan teamet selvbetjent skru på følgende *features* eller tjenester ved behov:
 
-Team Statistikktjenester jobber med en tjeneste for å automatisere overgangen fra **kildedata** til **inndata**. Denne tjenesten vil bli tilgjengelig for alle Dapla-team.
+- [Transfer Service](./transfer-service.html) kan skrus på hvis teamet trenger å synkronisere data mellom ulike lagringssystemer. For eksempel mellom bakke og sky, eller mellom to ulike skytjenester.
 
-## Prosesser og arbeidsrutiner
+- [Kildomaten](./kildomaten.html) kan skrus på hvis teamet trenger å automatisere overgangen fra kildedata til inndata.
 
-I tillegg til man får tilgang til spesifikke GCP-tjenester ved opprettelse av et Dapla-team, så er det også lagt opp til noen spesifikke arbeidsprosesser rundt bøtter og tilgangsroller. I denne delen forklarer vi hvordan dette forholder seg GCP-tjenestene vi beskrev i forrige del.
+Foreløpig er det kun disse to *features* som er tilgjengelig. Det vil komme flere etterhvert som behovene melder seg.
 
-### Datatilstander
+[Les mer om features](./features.html) her. 
 
-Et viktig konsept på Dapla er datatilstander. Disse er definert i definert i vårt interne dokument **Datatilstander** av @datatilstander. I dokumentet presiseres det at tilstandene kildedata, klargjorte data og statistikkdata er obligatoriske for statistikkprodusenter på Dapla. 
+## Miljøer
 
-I tillegg har @tilgangsstyring konkretisert hvordan klassifisering og tilgangskontroll skal utføres på DAPLA. Under beskriver vi hvordan de to dokumentene påvirker et Dapla-team.
-
-### Kildedata
-
-Kildedata er data som er produsert av andre enn SSB. Det kan være data fra andre statlige etater, eller fra private aktører. Kildedata er ofte i form av en fil, eller en mappe med filer. Kildedata skal lagres i bøtten *kilde* i GCS.
-
-Kildedata skal lagres i den formen den kom til SSB i kildebøtta. Det vil ofte forekomme at disse dataene er sensitive og at de kan inneholde informasjon som ikke skal brukes videre i statistikkproduksjon. Derfor er det kun data-admin som skal ha tilgang til denne bøtten. Og det bør være så få som mulig på teamet som har rollen *data-admin*, spesielt hvis det er sensitive data.
-
-**data-admin** har ansvaret for å sørge for at kildedata behandles på en måte som gjør at den tilgjengeliggjøres for resten av teamet. Typisk vil dette innebære^[Hvilken behandling av dataene som kreves vil avhenge av datakildene og kan variere fra statistikk til statistikk.]:
-
-- pseudonymisering
-- dataminimering
-- kvalitetssikring
-- konvertering til et felles format
-
-Det er ikke tenkt at data-admin skal måtte kjøre dette *manuelt*, men at det skal være en del av en automatisk prosess som kjøres hver gang en ny fil kommer inn i kildebøtta. Det er kun ved mistanke om feil i datafangsten, som gir tjenestlige behov for data-admins til å se data i klartekst, at data-admins bruker tilgangen sin til å se på data i kildebøtta. 
-
-### Inndata, statistikkdata og utdata
-
-Når kildedata har blitt transformert og beveget seg over i en av de andre datatilstandene, vil det ligge i **produkt-bøtta** og være tilgjengelig for alle med **developers**-tilgangen. 
-
-I produktbøtta skal det lagres tre typer data:
-
-1. Inndata
-2. Klargjorte data
-2. Statistikkdata
-3. Utdata
-
-Les mer om det her.
-
-### Deling av data
-
-Når andre Dapla-team skal ha tilgang til data fra ditt team, må de søke om å få tilgangsrollen **consumer** i ditt team. Du må dermed tilgjengeliggjøre dataene som skal deles i din delt-bøtte.
-
-Mer kommer. 
+Et Dapla-team har tilgang til to ulike miljøer på Dapla. Disse er:
 
 
+### prod
 
+kldsfjkds
+
+### test
+
+dkfs    
+
+### dev
+
+kfldjgklfjg
+
+
+## GitHub-team
+
+Ved opprettelsen av et Dapla-team så blir det også opprettet et tilsvarende GitHub-team med samme navn som Dapla-teamet. Grunnen til at det blir opprettet et GitHub-team er at GitHub er en sentral del av Dapla. Alle ressurser som skal opprettes på plattformen defineres av GitHub-repoer, og vi ønsker at tilganger her også skal reflektere tilgangene på Dapla. 
+
+For eksempel vil et team med navnet **dapla-example** få et GitHub-team med navnet **dapla-example**. Alle som er medlem av Dapla-teamet vil automatisk bli medlem av GitHub-teamet. I tillegg vil gruppetilhørighet og tilgangsroller på GitHub-teamet reflektere tilgangsroller på Dapla-teamet. For eksempel så kan **dapla-example-data-admins** gis tilgang til repo, og da vil alle som er medlem av Dapla-teamet med rollen *data-admins* få tilgang til repoet. Dette benyttes blant annet for å gi teamet tilgang til automation-mappen i sitt IaC-repo. I tillegg kan teamet bruke GitHub-teamet til å gi tilgang til andre GitHub-repoer som er relevante for teamet, for eksempel kodenbasen til en statistikkproduksjon eller lignende. Fordelen er at tilganger er gitt på teamnivå og ikke på personnivå. For eksempel hvis *manager* for teamet fjerner en ansatt fra developers-gruppa, så mister de all tilgang til data, tjenester og kode på GitHub som er tilgjengelig for *developers*. 
