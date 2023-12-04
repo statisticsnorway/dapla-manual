@@ -1,0 +1,89 @@
+# Features
+
+En *feature* er en GCP-tjeneste som som er satt opp og konfigurert slik at Dapla-team kan ta det i bruk på en enkel og selvbetjent måte. Når man tar i bruk en feature kan man være sikker på at sikkerhet og beste-praksis i SSB er ivaretatt. Et viktig poeng med features er at teamene selv skal kunne skru av og på *features* etter behov. 
+
+Foreløpig er det tilgjengeliggjort følgende features på Dapla:
+
+- **dapla-buckets**  
+*dapla-buckets* er en feature som gir deg [Google Cloud Storage](https://cloud.google.com/storage/docs/creating-buckets) bøttene som statistikkteam skal bruke for å lagre data i Dapla. Dvs. en bøtte for kildedata, en bøtte for produkt-data, og en bøtte for delt data. 
+- **source-data-automation**  
+*source-data-automation* er en feature som gir deg tilgang til **Kildomaten**. Den lar deg automatisere prosessering av data fra kildedata til inndata ved hjelp av [Cloud Run](https://cloud.google.com/run?hl=nb).
+- **transfer-service**  
+*transfer-service* er en feature som gir deg tilgang til å overføre data mellom lagringstjenester i Dapla. Den lar deg overføre data mellom bøtter, og mellom bakke- og skyplattformen i SSB. Den er bygget på GCP-tjenesten [Google Transfer Service](https://cloud.google.com/storage-transfer-service?hl=nb).
+
+## Aktivere feature
+
+::: {.callout-warning}
+# Skru på en feature om gangen.
+Hvis du ønsker å skru på flere *features* samtidig, så må du gjøre det i flere PR-er. Atlantis vil ikke klare å håndtere flere features i samme PR. Følg oppskriften under for hver feature du ønsker å skru på.
+:::
+
+ Aktivering av en *feature* for Dapla-teamet ditt er veldig enkelt. Endringen er så liten at vi anbefaler å gjøre endringen direkte i GitHubs grensesnitt, uten å klone repoet først. Slik går du frem:
+
+1. Søk opp ditt teams sitt IaC-repoet under <https://github.com/statisticsnorway/>.
+
+
+:::: {.columns}
+
+::: {.column width="60%"}
+2. I repoet åpner du fila `./infra/projects.yaml`. Se eksempel for teamet `play-obr` til høyre. 
+3. Finn ut om du ønsker å skru på en feature i **test** eller **prod**. Hvis du ønsker å gjøre det i **prod**, så skal du legge til en linje under *features* der `env: prod`. Hvis du ønsker å gjøre det i **test**, så skal du legge til en linje under *features* der `env: test`.
+4. Du kan legge til linjen ved å trykke på {{< fa pencil >}}-ikonet øverst til høyre i fila, endre teksten, og trykke på **Commit changes**. Velg deretter hvilket navn du ønsker på branchen, og trykk **Create pull request**.
+5. I PR-en venter du og ser at *All checks have passed*, slik som vist i @fig-atlantis-checks.
+:::
+
+
+
+::: {.column width="40%"}
+
+```{.yaml filename="./infra/projects.yaml" caption="Eksempel på en feature"}
+team_uniform_name: play-obr
+
+projects:
+  - project_name: play-obr
+    env: test
+    features:
+      - dapla-buckets
+      - source-data-automation
+
+  - project_name: play-obr
+    env: prod
+    features:
+      - dapla-buckets
+```
+
+:::
+
+::::
+
+
+![Sjekker av PR-er i teamets IaC-repo.](../images/feature-pr-checks.png){ fig-alt="Bilde av testene som Atlantis gjør i en PR mot et IaC-repo i SSB." #fig-atlantis-checks }
+
+6. Hvis alt er i orden så ber du en kollega om å se over endringen og godkjenne. 
+7. Når den er godkjent så skriver du `atlantis apply` i kommentarfeltet til PR-en. Da vil endringen bli gjennomført i GCP.
+8. Etter at `atlantis apply` er kjørt, så kan du merge inn branchen til *main*.
+9. Til slutt kan du slette branchen. 
+
+Når dette er gjort så endringen effektuert på Dapla og klar til bruk. For eksempel, hvis vi hadde aktivert **transfer-service** i prod for `projects.yaml` over, så ville den etter endringen sett slik ut: 
+
+```{.yaml filename="./infra/projects.yaml" caption="Eksempel på en feature"}
+team_uniform_name: play-obr
+
+projects:
+  - project_name: play-obr
+    env: test
+    features:
+      - dapla-buckets
+      - source-data-automation
+
+  - project_name: play-obr
+    env: prod
+    features:
+      - dapla-buckets
+      - transfer-service
+```
+
+
+## Deaktivere en feature
+
+For å deaktivere en *feature* som ikke lenger i bruk, så følger du bare beskrivelsen for [Aktivere tjeneste](./features.html#aktivere-feature) over, med det unntak at du nå fjerner en linje istedenfor å legge til.  
