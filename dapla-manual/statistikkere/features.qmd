@@ -29,7 +29,9 @@ Hvis du ønsker å skru på flere *features* samtidig, så må du gjøre det i f
 2. I repoet åpner du fila `./infra/projects.yaml`. Se eksempel for teamet `play-obr` til høyre. 
 3. Finn ut om du ønsker å skru på en feature i **test** eller **prod**. Hvis du ønsker å gjøre det i **prod**, så skal du legge til en linje under *features* der `env: prod`. Hvis du ønsker å gjøre det i **test**, så skal du legge til en linje under *features* der `env: test`.
 4. Du kan legge til linjen ved å trykke på {{< fa pencil >}}-ikonet øverst til høyre i fila, endre teksten, og trykke på **Commit changes**. Velg deretter hvilket navn du ønsker på branchen, og trykk **Create pull request**.
-5. I PR-en venter du og ser at *All checks have passed*, slik som vist i @fig-atlantis-checks.
+5. I PR-en venter du og ser at `atlantis/plan`^[Det som skjer når `atlantis plan` kjøres er at det genereres en detaljert beskrivelse av hvilke endringer som må skje på plattformen for at teamets feature skal aktiveres. Derfor må eventuelle feilmeldinger fra `atlantis plan` fikses før man faktiske kan effektuere endringene med `atlantis apply`.  ] har blitt kjørt og får en  <i class="fa-solid fa-check" style="color: #36c947;"></i> til venstre for hver kjøring, slik som vist i @fig-atlantis-checks. 
+
+
 :::
 
 
@@ -57,9 +59,12 @@ projects:
 ::::
 
 
-![Sjekker av PR-er i teamets IaC-repo.](../images/feature-pr-checks.png){ fig-alt="Bilde av testene som Atlantis gjør i en PR mot et IaC-repo i SSB." #fig-atlantis-checks }
+![Atlantis plan planlegger endringen og sjekker om den er klar til gjennomføring.](../images/atlantis-plan.png){ fig-alt="Bilde av testene som Atlantis plan gjør i en PR mot et IaC-repo i SSB." #fig-atlantis-checks }
 
-6. Hvis alt er i orden så ber du en kollega om å se over endringen og godkjenne. 
+6. Hvis alt er i orden så ber du en kollega om å se over endringen og godkjenne hvis alt ser riktig ut. Når den er godkjent vil du se et bilde som ligner det du ser i @fig-atlantis-pr-approved. 
+
+![Sjekker av PR-er i teamets IaC-repo.](../images/atlantis-pr-approved.png){ fig-alt="Bilde av testene som Atlantis gjør i en PR mot et IaC-repo i SSB." #fig-atlantis-pr-approved }
+
 7. Når den er godkjent så skriver du `atlantis apply` i kommentarfeltet til PR-en. Da vil endringen bli gjennomført i GCP.
 8. Etter at `atlantis apply` er kjørt, så kan du merge inn branchen til *main*.
 9. Til slutt kan du slette branchen. 
