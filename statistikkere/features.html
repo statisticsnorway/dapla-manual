@@ -539,7 +539,7 @@ Skru på en feature om gangen.
 <li>I repoet åpner du fila <code>./infra/projects.yaml</code>. Se eksempel for teamet <code>play-obr</code> til høyre.</li>
 <li>Finn ut om du ønsker å skru på en feature i <strong>test</strong> eller <strong>prod</strong>. Hvis du ønsker å gjøre det i <strong>prod</strong>, så skal du legge til en linje under <em>features</em> der <code>env: prod</code>. Hvis du ønsker å gjøre det i <strong>test</strong>, så skal du legge til en linje under <em>features</em> der <code>env: test</code>.</li>
 <li>Du kan legge til linjen ved å trykke på <i class="fa-solid fa-pencil" aria-label="pencil"></i>-ikonet øverst til høyre i fila, endre teksten, og trykke på <strong>Commit changes</strong>. Velg deretter hvilket navn du ønsker på branchen, og trykk <strong>Create pull request</strong>.</li>
-<li>I PR-en venter du og ser at <em>All checks have passed</em>, slik som vist i <a href="#fig-atlantis-checks">Figur&nbsp;1</a>.</li>
+<li>I PR-en venter du og ser at <code>atlantis/plan</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> har blitt kjørt og får en <i class="fa-solid fa-check" style="color: #36c947;"></i> til venstre for hver kjøring, slik som vist i <a href="#fig-atlantis-checks">Figur&nbsp;1</a>.</li>
 </ol>
 </div><div class="column" style="width:40%;">
 <div class="code-with-filename">
@@ -564,12 +564,20 @@ Skru på en feature om gangen.
 </div>
 <div id="fig-atlantis-checks" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="../images/feature-pr-checks.png" class="img-fluid figure-img" alt="Bilde av testene som Atlantis gjør i en PR mot et IaC-repo i SSB."></p>
-<figcaption class="figure-caption">Figur&nbsp;1: Sjekker av PR-er i teamets IaC-repo.</figcaption>
+<p><img src="../images/atlantis-plan.png" class="img-fluid figure-img" alt="Bilde av testene som Atlantis plan gjør i en PR mot et IaC-repo i SSB."></p>
+<figcaption class="figure-caption">Figur&nbsp;1: Atlantis plan planlegger endringen og sjekker om den er klar til gjennomføring.</figcaption>
 </figure>
 </div>
 <ol start="6" type="1">
-<li>Hvis alt er i orden så ber du en kollega om å se over endringen og godkjenne.</li>
+<li>Hvis alt er i orden så ber du en kollega om å se over endringen og godkjenne hvis alt ser riktig ut. Når den er godkjent vil du se et bilde som ligner det du ser i <a href="#fig-atlantis-pr-approved">Figur&nbsp;2</a>.</li>
+</ol>
+<div id="fig-atlantis-pr-approved" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="../images/atlantis-pr-approved.png" class="img-fluid figure-img" alt="Bilde av testene som Atlantis gjør i en PR mot et IaC-repo i SSB."></p>
+<figcaption class="figure-caption">Figur&nbsp;2: Sjekker av PR-er i teamets IaC-repo.</figcaption>
+</figure>
+</div>
+<ol start="7" type="1">
 <li>Når den er godkjent så skriver du <code>atlantis apply</code> i kommentarfeltet til PR-en. Da vil endringen bli gjennomført i GCP.</li>
 <li>Etter at <code>atlantis apply</code> er kjørt, så kan du merge inn branchen til <em>main</em>.</li>
 <li>Til slutt kan du slette branchen.</li>
@@ -603,7 +611,13 @@ Skru på en feature om gangen.
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>Det som skjer når <code>atlantis plan</code> kjøres er at det genereres en detaljert beskrivelse av hvilke endringer som må skje på plattformen for at teamets feature skal aktiveres. Derfor må eventuelle feilmeldinger fra <code>atlantis plan</code> fikses før man faktiske kan effektuere endringene med <code>atlantis apply</code>. <a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
