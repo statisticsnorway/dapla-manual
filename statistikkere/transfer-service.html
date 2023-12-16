@@ -76,6 +76,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,15 +102,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Dapla-manualen - Transfer Service">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/ts-kilde-cropped.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/data-transfer-tilsky.png">
 <meta property="og:site-name" content="Dapla-manualen">
-<meta property="og:image:height" content="600">
-<meta property="og:image:width" content="950">
+<meta property="og:image:height" content="752">
+<meta property="og:image:width" content="2390">
 <meta name="twitter:title" content="Dapla-manualen - Transfer Service">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/ts-kilde-cropped.png">
-<meta name="twitter:image-height" content="600">
-<meta name="twitter:image-width" content="950">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/data-transfer-tilsky.png">
+<meta name="twitter:image-height" content="752">
+<meta name="twitter:image-width" content="2390">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -499,8 +501,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#to-transfer-services" id="toc-to-transfer-services" class="nav-link active" data-scroll-target="#to-transfer-services">To Transfer Services</a></li>
-  <li><a href="#prodsonen" id="toc-prodsonen" class="nav-link" data-scroll-target="#prodsonen">Prodsonen</a></li>
+  <li><a href="#tilgangsstyring" id="toc-tilgangsstyring" class="nav-link active" data-scroll-target="#tilgangsstyring">Tilgangsstyring</a></li>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#overføring-av-data" id="toc-overføring-av-data" class="nav-link" data-scroll-target="#overføring-av-data">Overføring av data</a>
+  <ul class="collapse">
+  <li><a href="#prodsonen-og-dapla" id="toc-prodsonen-og-dapla" class="nav-link" data-scroll-target="#prodsonen-og-dapla">Prodsonen og Dapla</a></li>
+  <li><a href="#bøtte-til-bøtte" id="toc-bøtte-til-bøtte" class="nav-link" data-scroll-target="#bøtte-til-bøtte">Bøtte til bøtte</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/statisticsnorway/dapla-manual-internal/blob/main/statistikkere/transfer-service.ipynb" class="toc-action">Rediger siden</a></p><p><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action">Rapporter feil</a></p></div></div></nav>
     </div>
@@ -530,45 +537,247 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Flytte data mellom bøtter på Dapla<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p></li>
 </ol>
 <p>Tjenesten støtter både automatiserte og ad-hoc overføringer, og den inkluderer et brukergrensesnitt for å sette opp og administrere overføringene i <a href="https://console.cloud.google.com/">Google Cloud Console (GCC)</a>.</p>
-<p>Under viser vi hvordan du kan sette dette opp selv i dine prosjekter.</p>
-<section id="to-transfer-services" class="level2">
-<h2 class="anchored" data-anchor-id="to-transfer-services">To Transfer Services</h2>
-<p>Hvert Dapla-team som har bedt om å få <em>skrudd på</em> Transfer Service vil få en Transfer Service for hvert av de to prosjektene sine. Det skyldes at det kun er teamets <strong>data-admins</strong> som skal ha tilgang til å sette opp overføringer knyttet til kildedata, mens alle i teamet skal ha tilgang til å sette opp overføringer fra produktprosjektet.</p>
+<section id="tilgangsstyring" class="level2">
+<h2 class="anchored" data-anchor-id="tilgangsstyring">Tilgangsstyring</h2>
+<p>Tilgangsstyringen til data gjelder også for overføringer av data med Transfer Service. Det betyr at du må ha tilgang til dataene du skal sette opp overføringsjobber for. Ved bruk av Transfer Service for overføring av data mellom bakke og sky så er det satt opp en dedikerte mapper for dette i prodsonen. Også her følges tilgangsstyringen til dataene, med unntak av at data-admins har permanent tilgang til kildedata som er synkronisert ned til bakken, mens man på Dapla må de gi seg selv korte, begrunnede tilganger ved behov.</p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p>På Dapla så er det opprettet dedikerte bøtter for overføring av data mellom bakke og sky. Disse heter <strong>synk_opp</strong> og <strong>synk_ned</strong>. Tanken med disse “<em>mellomstasjonene</em>” for overføring av data er at de skal beskytte Dapla-team fra å overskrive data ved en feil. Ved å ha egne bøtter som data blir synkronisert gjennom, så legges det opp til at man deretter manuelt<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> flytter dataene til riktig bøtte.</p>
+<p>Men det er ikke lagt noen sperrer for synkronisere direkte til en annen bøtte man har tilgang til. Systembrukeren (se forklaringsboks) som kjører Transfer Service har tilgang til alle bøttene i prosjektet. Det betyr at en data-admin kan velge å synkronisere data direkte inn i kildebøtta hvis man mener at det er hensiktsmessig. Det samme gjelder for <strong>developers</strong> som setter opp dataoverføringer i standardprosjektet. Men da er det som sagt viktig å være bevisst på hvordan man setter opp reglene for overskriving av data hvis filene har like navn. Disse opsjonene forklares nærmere senere i kapitlet.</p>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:35%;">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Personlig bruker vs systembruker
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Når du setter opp en overføringsjobb med Transfer Service så setter du opp en jobb som kjøres av en systembruker<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> og ikke din egen personlige bruker. Dette er spesielt viktig å være klar over når man setter opp automatiserte overføringsjobber. En konsekves av dette er at automatiske overføringsjobber vil fortsette å kjøre selv om din tilgang til dataene er midlertidig, siden det er en systembruker som faktisk kjører jobben.</p>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="prodsonen" class="level2">
-<h2 class="anchored" data-anchor-id="prodsonen">Prodsonen</h2>
-<p>Overføring av data mellom prodsonen og Dapla skjer via dedikerte lagringsområder i prodsonen. Når et team opprettes</p>
+<section id="forberedelser" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
+<p>Første gang du bruker Transfer Service må du sjekke at tjenesten er aktivert for teamet. Transfer Service er en såkalt <a href="./features.html">feature</a> som teamet kan skru av og på selv. For å sjekke om den er <em>skrudd på</em> går du inn i teamets IaC-repo<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> og sjekker filen <code>./infra/projects.yaml</code>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>/ssb/cloud_sync/dapla-example/</strong></pre>
+<pre><strong>dapla-example-iac/infra/projects.yaml</strong></pre>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">ssb</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">├── cloud_sync</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── dapla-example</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       │</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── kilde</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   │</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   │── tilsky</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   │</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">│       │   └── frasky</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">│       │</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">│       └── produkt</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">│           │</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">│           │── tilsky</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">│           │</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── frasky</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_uniform_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">projects</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> transfer-service</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="fig-ts2" class="quarto-figure quarto-figure-center anchored">
+<p>I filen over ser du at teamet har skrudd på tjenesten i prod-miljøet, siden den <code>transfer-service</code> er listet under <code>features</code>. Hvis tjenesten ikke er skrudd på kan du lese om hvordan du skrur den på i <a href="./features.html">feature-dokumentasjonen</a>.</p>
+</section>
+<section id="overføring-av-data" class="level2">
+<h2 class="anchored" data-anchor-id="overføring-av-data">Overføring av data</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Overføring av kildedata
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Overføring av kildedata må gjøres av en <em>data-admin</em> i teamet som har aktivert sin forhåndsgodkjente tilgang til kildedata. Tilgangen aktiveres ved å gå inn i <a href="https://jitaccess.dapla.ssb.no/">JIT-applikasjonen</a> og velge prosjekt-id. Deretter velger du rollene <strong>ssb.bucket.write</strong>, <strong>ssb.buckets.list</strong> og <strong>storagetransfer.admin</strong>, og hvor lenge du ønsker tilgangen. Til slutt oppgir du en begrunnelse for hvorfor du trenger tilgangentilgangen og trykker <strong>Request access</strong>. Når du har gjort dette vil du få en bekreftelse på at tilgangen er aktivert, og det tar ca 1 minutt før den aktiverte tilgangen er synlig i GCC.</p>
+</div>
+</div>
+<p>Grensesnittet for å sette opp overføringsjobber i Transfer Service er tilgjengelig i <em>Google Cloud Console</em> (GCC).</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li><p>Gå inn på <a href="https://console.cloud.google.com">Google Cloud Console</a> i en nettleser.</p></li>
+<li><p>Sjekk, øverst i høyre hjørne, at du er logget inn med din SSB-konto (xxx@ssb.no).</p></li>
+<li><p>Velg prosjektet<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> som overføringen skal settes opp under.</p></li>
+<li><p>Etter at du har valgt prosjekt kan du søke etter <strong>Storage Transfer</strong> i søkefeltet øverst på siden, og gå inn på siden.</p></li>
+</ol>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:45%;">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hva er mitt prosjektnavn?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Når det opprettes et Dapla-team, så opprettes det flere Google-prosjekter for teamet. Når du skal velge hvilket prosjekt du skal jobbe på i GCC, så følger de en fast navnestruktur. For eksempel så vil et team med navnet <strong>dapla-example</strong> få et standardprosjekt som heter <code>dapla-example-p</code>. Det blir også opprettet et kildeprosjekt som heter <code>dapla-example-kilde-p</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Første gang du bruker <strong>Storage Transfer</strong> må man gjøre en engangsjobb for å bruke tjenesten. Dette gjøres kun første gang din bruker setter opp en jobb, og deretter trenger du ikke å gjøre det flere ganger.</p>
+<p>Når du kommer inn på siden til <strong>Storage Transfer</strong> så trykker du på <strong>Set Up Connection</strong>. Når du trykker på denne vil det dukke opp et nytt felt hvor du får valget <strong>Create Pub-Sub Resources</strong>. Trykk på den blå <strong>Create</strong>-knappen, og deretter trykk på <strong>Close</strong> lenger nede. Da er engangsjobben gjort, og du kan begynne å sette opp overføringsjobber.</p>
+<ol start="5" type="1">
+<li>I navigasjonsmenyen til venstre trykk <code>Transfer jobs</code>, og deretter trykk på <code>+ Create transfer job</code> øverst på siden for å opprette en ny overføringsjobb. Da får du opp bildet som vist i <a href="#fig-transfer-tilsky">Figur&nbsp;1</a>.</li>
+</ol>
+<div id="fig-transfer-tilsky" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="ts-kilde-cropped.png" class="img-fluid figure-img" alt="Bilde av SSB sitt intranett der Dapla-lenken er uthevet"></p>
-<figcaption class="figure-caption">Figur&nbsp;1: blabla</figcaption>
+<p><img src="../images/data-transfer-tilsky.png" class="img-fluid figure-img" alt="Bilde som viser Create a transfer job i Google Cloud Console."></p>
+<figcaption class="figure-caption">Figur&nbsp;1: Opprett overføringsjobb i Google Cloud Console.</figcaption>
 </figure>
 </div>
-<p>jdhfdsjkfhkjdshfkjdsh</p>
+<p>Videre vil det variere om man skal overføre data mellom bøtter eller mellom Dapla og prodsonen. Under forklarer vi begge fremgangsmåtene.</p>
+<section id="prodsonen-og-dapla" class="level3">
+<h3 class="anchored" data-anchor-id="prodsonen-og-dapla">Prodsonen og Dapla</h3>
+<p>Overføring mellom bakke og sky er en overføring av data mellom en bøtte på Dapla og en mappe i prodsonen. Siden tilgangsstyring til kildedata er strengere enn tilgangsstyring til annen data, så er det det to litt fremgangsmåter for å sette opp overføringsjobber for disse.</p>
+<p>Siden stegene er litt forskjellig avhengig av om man skal flytte kildedata eller annen data, så deler vi denne delen i to. <a href="#fig-ts-bakke-sky">Figur&nbsp;2</a> viser hvordan dette er satt opp. Kildeprosjektet på Dapla har en <strong>synk-opp</strong>-bøtte for å flytting av data fra prodsonen til Dapla, og den har en <strong>synk-ned</strong>-bøtte for å flytte data fra Dapla til prodsonen. Standardprosjektet på Dapla har også en <strong>synk-opp</strong>-bøtte for å flytte data fra prodsonen til Dapla, og den har en <strong>synk-ned</strong>-bøtte for å flytte data fra Dapla til prodsonen.</p>
+<div id="fig-ts-bakke-sky" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="ts-kilde-cropped.png" class="img-fluid figure-img" alt="Diagram av mapper i prodsonen og bøtter på Dapla, og hvordan overføringene kan skje mellom de."></p>
+<figcaption class="figure-caption">Figur&nbsp;2: Overføring av data mellom prodsonen og Dapla.</figcaption>
+</figure>
+</div>
+<p>Videre viser vi hvordan man overfører fra Dapla til prodsonen. Overføring motsatt vei innebærer bare at man bytter om på <strong>Source type</strong> og <strong>Destination type</strong>.</p>
+<ol start="6" type="1">
+<li>I fanen <strong>Get started</strong> velger du:
+<ul>
+<li>Source type: <strong>Google Cloud Storage</strong></li>
+<li>Destination type: <strong>POSIX filesystem</strong></li>
+</ul></li>
+<li>I fanen <strong>Choose a source</strong> trykker du på <strong>Browse</strong>, velger hvilken bøtte eller “<em>undermappe</em>” i en bøtte du skal overføre fra, og trykker <strong>Select</strong><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</li>
+<li>I fanen <strong>Choose a destination</strong> velger du <strong>transfer_service_default</strong> under <strong>Agent pool</strong>. Under <strong>Destination directory path</strong> velger du hvilken undermappe av som filen skal overføres til. Tjenesten vet allerede om du er i kilde- eller standardprosjektet, så du trenger kun å skrive inn <code>frasky/</code> eller <code>tilsky/</code> her, og evt. undermappenavn hvis det er aktuelt (f.eks. <code>frasky/data/</code><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>). Trykk <strong>Next step</strong>.</li>
+<li>I fanen <strong>Choose when to run job</strong> velger du hvor ofte og hvordan jobber skal kjøre. <a href="#tbl-ts-frekvens">Tabell&nbsp;1</a> viser hvilke valg du kan ta. Trykk <strong>Next step</strong>.</li>
+</ol>
+<div id="tbl-ts-frekvens" class="anchored">
+<table class="table">
+<caption>Tabell&nbsp;1: Valg under <em>Choose when to run job</em></caption>
+<colgroup>
+<col style="width: 36%">
+<col style="width: 63%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Valg</th>
+<th>Frekvens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Run once</td>
+<td>Engangoverføringer</td>
+</tr>
+<tr class="even">
+<td>Run every day</td>
+<td>Synkroniser hver dag</td>
+</tr>
+<tr class="odd">
+<td>Run every week</td>
+<td>Synkroniser hver uke</td>
+</tr>
+<tr class="even">
+<td>Run with custom frequency</td>
+<td>Synkroniser inntill hver time</td>
+</tr>
+<tr class="odd">
+<td>Run on demand</td>
+<td>Synkroniserer når du manuelt trigger jobben</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="10" type="1">
+<li>I fanen <strong>Choose settings</strong> kan du velge hvordan detaljer knyttet til overføringen skal håndteres. <a href="#tbl-ts-settings">Tabell&nbsp;2</a> viser hvilke valg du kan ta.</li>
+</ol>
+<div id="tbl-ts-settings" class="anchored">
+<table class="table">
+<caption>Tabell&nbsp;2: Valg under <em>Choose settings</em></caption>
+<colgroup>
+<col style="width: 45%">
+<col style="width: 17%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Valg</th>
+<th>Undervalg</th>
+<th>Handling</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Identify your job</td>
+<td></td>
+<td>Beskriv jobben kort.</td>
+</tr>
+<tr class="even">
+<td>Manifest file</td>
+<td></td>
+<td>Ikke relevant. Bruk default valg.</td>
+</tr>
+<tr class="odd">
+<td>Choose how to handle your data</td>
+<td>Metatdata options</td>
+<td>Ikke relevant. Bruk default valg.</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>When to overwrite</td>
+<td>Tenk nøye gjennom hva du velger her.</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>When to delete</td>
+<td>Tenk nøye gjennom hva du velger her.</td>
+</tr>
+<tr class="even">
+<td>Choose how to keep track of transfer progress</td>
+<td>Logging options</td>
+<td>Skru på logging.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Valgene <strong>When to overwrite</strong> og <strong>When to delete</strong> er det viktig at tenkes nøye gjennom, spesielt ved automatiske synkroniseringer. <strong>When to overwrite</strong> er spesielt siden det kan føre til data blir overskrevet eller tapt.</p>
+<ol start="11" type="1">
+<li>Trykk på den blå <strong>Create</strong>-knappen for å opprette overføringsjobben. Du vil kunne se kjørende jobber under menyen <code>Transfer jobs</code>.</li>
+</ol>
+<section id="mappestrukturen-i-prodsonen" class="level4">
+<h4 class="anchored" data-anchor-id="mappestrukturen-i-prodsonen">Mappestrukturen i prodsonen</h4>
+<p>Mappestrukturen for overføringer med Transfer Service mellom bakke og sky har en fast struktur som er likt for alle team. Hvis du logger deg inn i terminalen på en av Linux-serverne i prodsonen, åpner du mappen ved å skrive <code>cd /ssb/cloud_sync</code>. Under denne mappen finner du en mappe for hvert team som har aktivert Transfer Service. Hvis et team for eksempel heter <strong>dapla-example</strong> så vil det være en mappe som heter <code>dapla-example-p</code>. Her kan teamet hente og levere data som skal synkroniseres mellom bakke og sky. Videre er det undermapper for kilde- og standardprosjektet til teamet. Det er kun <strong>data-admins</strong> som har tilgang til kildeprosjektet, og det er kun <strong>developers</strong> som har tilgang til standardprosjektet. Under finner du en oversikt over hvordan mappene ser ut for et team som heter <strong>dapla-example</strong>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>/ssb/cloud_sync/dapla-example-p/</strong></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-p</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">├── kilde</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">│   │── tilsky</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── frasky</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">└── standard</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">    │</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    │── tilsky</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">    │</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">    └── frasky</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="bøtte-til-bøtte" class="level3">
+<h3 class="anchored" data-anchor-id="bøtte-til-bøtte">Bøtte til bøtte</h3>
+<p>Overføring mellom bøtter er en overføring av data mellom to bøtter på Dapla. Fremgangsmåten er helt likt som beskrevet tidligere, men at du nå velger <strong>Google Cloud Storage</strong> som både kilde og destinasjon. Igjen er vi avhengig av at systembrukeren som utfører jobben har tilgang til begge bøttene som er involvert i overføringen. Default er at et team kan overføre mellom bøtter i kildeprosjektet, og at de kan overføre mellom bøtter i standardprosjektet, men aldri mellom de to. Hvis du ønsker å overføre mellom bøtter i ditt prosjekt og et annet teams prosjekt, så må du be det andre teamet om å gi din systembruker tilgang til dette.</p>
 
 
+</section>
 </section>
 
 
@@ -577,6 +786,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol>
 <li id="fn1"><p>I SSB kaller vi tjenesten for <em>Transfer Service</em>, men du kan oppleve at Google kaller den litt forskjellige ting. Den blir omtalt som <em>Storage Transfer Service</em> noen steder, mens i <em>Google Cloud Console</em> blir den omtalt som <em>Data Transfer</em> eller <em>Storage Transfer</em><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Flytting av data mellom bøtter krever at prosjektets Transfer Service har tilgang til begge bøttene.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Med manuelt menes her at man går inn og flytter filer fra en bøtte til en annen. Men det kan også bety at man flytter data til riktig bøtte som en del produksjonskoden sin, som igjen kan kjøres automatisk.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Systembrukere heter <em>Service Accounts</em> på engelsk og blir ofte referert til som <em>SA</em>-er i dagligtale.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Du finner teamets IaC-repo ved å gå inn på <a href="https://github.com/orgs/statisticsnorway/repositories" class="uri">https://github.com/orgs/statisticsnorway/repositories</a> og søke etter ditt teamnavn og åpne den som har navnestrukturen teamnavn<code>-iac</code>. For eksempel vil et team som heter <strong>dapla-example</strong> har et IaC-repo som heter <code>dapla-example-iac</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Du kan velge prosjekt øverst på siden, til høyre for teksten <strong>Google Cloud</strong>. I bildet under ser du at hvordan det ser ut når prosjektet <code>dapla-felles-p</code> er valgt.<img src="../images/gcc-project-selector.png" class="img-fluid" alt="Diagram av mapper i prodsonen og bøtter på Dapla, og hvordan overføringene kan skje mellom de."><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Når du skal velge en undermappe i en bøtte så er grensesnittet litt lite intuitivt. Du kan ikke trykke på navnet, men du på trykke på <i class="fa-solid fa-greater-than" aria-label="greater-than"></i>-tegnet for å se undermappene.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Når du skal synkronisere fra Dapla til en undermappe i prodsonen, så må mappen i prodsonen allerede eksisterere. Hvis den ikke gjør det vil jobben feile. Ved synkronsiering fra prodsonen til Dapla trenger ikke undermappen eksistere, siden bøtter egentlig ikke har undermapper og filstien fra prodsonen bare blir til filnavnet i bøtta.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
