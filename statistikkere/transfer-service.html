@@ -265,6 +265,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../statistikkere/tilgangsstyring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tilgangsstyring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../statistikkere/administrasjon-av-team.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Administrasjon av team</span></a>
   </div>
@@ -544,7 +550,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Tilgangsstyringen til data gjelder også for overføringer av data med Transfer Service. Det betyr at du må ha tilgang til dataene du skal sette opp overføringsjobber for. Ved bruk av Transfer Service for overføring av data mellom bakke og sky så er det satt opp en dedikerte mapper for dette i prodsonen. Også her følges tilgangsstyringen til dataene, med unntak av at data-admins har permanent tilgang til kildedata som er synkronisert ned til bakken, mens man på Dapla må de gi seg selv korte, begrunnede tilganger ved behov.</p>
 <div class="columns">
 <div class="column" style="width:60%;">
-<p>På Dapla så er det opprettet dedikerte bøtter for overføring av data mellom bakke og sky. Disse heter <strong>synk_opp</strong> og <strong>synk_ned</strong>. Tanken med disse “<em>mellomstasjonene</em>” for overføring av data er at de skal beskytte Dapla-team fra å overskrive data ved en feil. Ved å ha egne bøtter som data blir synkronisert gjennom, så legges det opp til at man deretter manuelt<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> flytter dataene til riktig bøtte.</p>
+<p>På Dapla så er det opprettet dedikerte bøtter for overføring av data mellom bakke og sky. Disse heter <strong>tilsky</strong> og <strong>frasky</strong>. Tanken med disse “<em>mellomstasjonene</em>” for overføring av data er at de skal beskytte Dapla-team fra å overskrive data ved en feil. Ved å ha egne bøtter som data blir synkronisert gjennom, så legges det opp til at man deretter manuelt<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> flytter dataene til riktig bøtte.</p>
 <p>Men det er ikke lagt noen sperrer for synkronisere direkte til en annen bøtte man har tilgang til. Systembrukeren (se forklaringsboks) som kjører Transfer Service har tilgang til alle bøttene i prosjektet. Det betyr at en data-admin kan velge å synkronisere data direkte inn i kildebøtta hvis man mener at det er hensiktsmessig. Det samme gjelder for <strong>developers</strong> som setter opp dataoverføringer i standardprosjektet. Men da er det som sagt viktig å være bevisst på hvordan man setter opp reglene for overskriving av data hvis filene har like navn. Disse opsjonene forklares nærmere senere i kapitlet.</p>
 </div><div class="column" style="width:5%;">
 <!-- empty column to create gap -->
@@ -640,7 +646,7 @@ Hva er mitt prosjektnavn?
 <section id="prodsonen-og-dapla" class="level3">
 <h3 class="anchored" data-anchor-id="prodsonen-og-dapla">Prodsonen og Dapla</h3>
 <p>Overføring mellom bakke og sky er en overføring av data mellom en bøtte på Dapla og en mappe i prodsonen. Siden tilgangsstyring til kildedata er strengere enn tilgangsstyring til annen data, så er det det to litt fremgangsmåter for å sette opp overføringsjobber for disse.</p>
-<p>Siden stegene er litt forskjellig avhengig av om man skal flytte kildedata eller annen data, så deler vi denne delen i to. <a href="#fig-ts-bakke-sky">Figur&nbsp;3</a> viser hvordan dette er satt opp. Kildeprosjektet på Dapla har en <strong>synk-opp</strong>-bøtte for å flytting av data fra prodsonen til Dapla, og den har en <strong>synk-ned</strong>-bøtte for å flytte data fra Dapla til prodsonen. Standardprosjektet på Dapla har også en <strong>synk-opp</strong>-bøtte for å flytte data fra prodsonen til Dapla, og den har en <strong>synk-ned</strong>-bøtte for å flytte data fra Dapla til prodsonen.</p>
+<p>Siden stegene er litt forskjellig avhengig av om man skal flytte kildedata eller annen data, så deler vi denne delen i to. <a href="#fig-ts-bakke-sky">Figur&nbsp;3</a> viser hvordan dette er satt opp. Kildeprosjektet på Dapla har en <strong>tilsky</strong>-bøtte for å flytting av data fra prodsonen til Dapla, og den har en <strong>frasky</strong>-bøtte for å flytte data fra Dapla til prodsonen. Standardprosjektet på Dapla har også en <strong>tilsky</strong>-bøtte for å flytte data fra prodsonen til Dapla, og den har en <strong>frasky</strong>-bøtte for å flytte data fra Dapla til prodsonen.</p>
 <div id="fig-ts-bakke-sky" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="../images/ts-kilde-cropped.png" class="img-fluid figure-img" alt="Diagram av mapper i prodsonen og bøtter på Dapla, og hvordan overføringene kan skje mellom de."></p>
@@ -726,7 +732,7 @@ Hva er mitt prosjektnavn?
 </tr>
 <tr class="odd">
 <td>Choose how to handle your data</td>
-<td>Metatdata options</td>
+<td>Metadata options</td>
 <td>Ikke relevant. Bruk default valg.</td>
 </tr>
 <tr class="even">
@@ -753,12 +759,12 @@ Hva er mitt prosjektnavn?
 </ol>
 <section id="mappestrukturen-i-prodsonen" class="level4">
 <h4 class="anchored" data-anchor-id="mappestrukturen-i-prodsonen">Mappestrukturen i prodsonen</h4>
-<p>Mappestrukturen for overføringer med Transfer Service mellom bakke og sky har en fast struktur som er likt for alle team. Hvis du logger deg inn i terminalen på en av Linux-serverne i prodsonen, åpner du mappen ved å skrive <code>cd /ssb/cloud_sync</code>. Under denne mappen finner du en mappe for hvert team som har aktivert Transfer Service. Hvis et team for eksempel heter <strong>dapla-example</strong> så vil det være en mappe som heter <code>dapla-example-p</code>. Her kan teamet hente og levere data som skal synkroniseres mellom bakke og sky. Videre er det undermapper for kilde- og standardprosjektet til teamet. Det er kun <strong>data-admins</strong> som har tilgang til kildeprosjektet, og det er kun <strong>developers</strong> som har tilgang til standardprosjektet. Under finner du en oversikt over hvordan mappene ser ut for et team som heter <strong>dapla-example</strong>.</p>
+<p>Mappestrukturen for overføringer med Transfer Service mellom bakke og sky har en fast struktur som er likt for alle team. Hvis du logger deg inn i terminalen på en av Linux-serverne i prodsonen, åpner du mappen ved å skrive <code>cd /ssb/cloud_sync</code>. Under denne mappen finner du en mappe for hvert team som har aktivert Transfer Service. Hvis et team for eksempel heter <strong>dapla-example</strong> så vil det være en mappe som heter <code>dapla-example</code>. Her kan teamet hente og levere data som skal synkroniseres mellom bakke og sky. Videre er det undermapper for kilde- og standardprosjektet til teamet. Det er kun <strong>data-admins</strong> som har tilgang til kildeprosjektet, og det er kun <strong>developers</strong> som har tilgang til standardprosjektet. Under finner du en oversikt over hvordan mappene ser ut for et team som heter <strong>dapla-example</strong>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>/ssb/cloud_sync/dapla-example-p/</strong></pre>
+<pre><strong>/ssb/cloud_sync/dapla-example/</strong></pre>
 </div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-p</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">├── kilde</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">│   │</span></span>
