@@ -606,7 +606,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>PySpark er et Python-grensesnitt for Apache Spark. Det er en Python-pakke som gir tilgang til Spark-funksjonalitet fra Python. Det er enkelt å bruke, og har mange av de samme funksjonene som Pandas.</p>
 <p>Under ser du datasettet som benyttes for i vedlagt notebook <strong>pyspark-intro.ipynb</strong>. Den viser hvordan man kan gjøre vanlige databehandling med PySpark. I eksempelet brukes kernel som vist i <a href="#fig-py-local">Figur&nbsp;1 (b)</a>.</p>
 <div class="quarto-embed-nb-cell">
-<div id="gen-df" class="cell" data-tags="[]">
+<div id="gen-df" class="cell" data-tags="[]" data-execution_count="5">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Legger til row index til DataFrame før join med dates_df</span></span>
@@ -626,6 +626,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df.select(<span class="st">"Date"</span>, <span class="st">"Year"</span>, <span class="st">"Quarter"</span>, <span class="st">"Month"</span>, <span class="st">"serie00"</span>, <span class="st">"serie01"</span>).show(<span class="dv">5</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-stdout">
+<pre><code>+----------+----+-------+-----+------------------+------------------+
+|      Date|Year|Quarter|Month|           serie00|           serie01|
++----------+----+-------+-----+------------------+------------------+
+|2000-01-01|2000|      1|   01| 9.495232388801012|   19.016168503192|
+|2000-02-01|2000|      1|   02| 10.70952411634649|21.404467063442723|
+|2000-03-01|2000|      1|   03|11.118293927071951| 21.25035527677261|
+|2000-04-01|2000|      2|   04| 9.346911680164684|19.982136698759238|
+|2000-05-01|2000|      2|   05| 9.663303382177363|19.925236690504494|
++----------+----+-------+-----+------------------+------------------+
+only showing top 5 rows
+</code></pre>
+</div>
 </div>
 <a class="quarto-notebook-link" id="nblink-1" href="../notebooks/spark/pyspark-intro.ipynb.html#gen-df">Source: pyspark-intro.ipynb</a></div>
 <p>Det finnes også et <a href="https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html">Pandas API/grensesnitt mot Spark</a>. Målet med en er å gjøre overgangen fra Pandas til Spark lettere for nybegynneren. Men hvis man skal gjøre litt mer avansert databehandling anbefales det at man bruker PySpark direkte og ikke Pandas API-et.</p>
@@ -634,9 +647,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="sparkr">SparkR</h3>
 <p>SparkR er et R-grensesnitt for Apache Spark. Det er en R-pakke som gir tilgang til Spark-funksjonalitet fra R. Det er enkelt å bruke, og har mange av de samme funksjonene som dplyr. Se eksempel i notebook under:</p>
 <div class="quarto-embed-nb-cell">
-<div id="print-cell" class="cell" data-tags="[]">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>selectedColumns <span class="ot">&lt;-</span> <span class="fu">select</span>(file, <span class="st">"Date"</span>, <span class="st">"Year"</span>, <span class="st">"Quarter"</span>, <span class="st">"Month"</span>, <span class="st">"serie00"</span>, <span class="st">"serie01"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showDF</span>(selectedColumns, <span class="at">numRows =</span> <span class="dv">5</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="print-cell" class="cell" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>selectedColumns <span class="ot">&lt;-</span> <span class="fu">select</span>(file, <span class="st">"Date"</span>, <span class="st">"Year"</span>, <span class="st">"Quarter"</span>, <span class="st">"Month"</span>, <span class="st">"serie00"</span>, <span class="st">"serie01"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showDF</span>(selectedColumns, <span class="at">numRows =</span> <span class="dv">5</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+----------+----+-------+-----+------------------+------------------+
+|      Date|Year|Quarter|Month|           serie00|           serie01|
++----------+----+-------+-----+------------------+------------------+
+|2000-01-01|2000|      1|   01| 9.495232388801012|   19.016168503192|
+|2000-02-01|2000|      1|   02| 10.70952411634649|21.404467063442723|
+|2000-03-01|2000|      1|   03|11.118293927071951| 21.25035527677261|
+|2000-04-01|2000|      2|   04| 9.346911680164684|19.982136698759238|
+|2000-05-01|2000|      2|   05| 9.663303382177363|19.925236690504494|
++----------+----+-------+-----+------------------+------------------+
+only showing top 5 rows</code></pre>
+</div>
 </div>
 <a class="quarto-notebook-link" id="nblink-2" href="../notebooks/spark/sparkr-intro.ipynb.html#print-cell">Source: sparkr-intro.ipynb</a></div>
 </section>
@@ -675,21 +700,26 @@ Warning
 </ul>
 <p>I vedlagt notebook <strong>deltalake-intro.ipynb</strong> finner du blant annet eksempler på hvordan du legger til følgende metadata i spesifikk versjon av en fil:</p>
 <div class="quarto-embed-nb-cell">
-<div id="show-meta" class="cell" data-tags="[]">
+<div class="cell" data-tags="[]" data-execution_count="20">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagrer egendefinert metadata i en json-fil</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> {</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"comment"</span>: <span class="st">"Kontaktet oppgavegiver og kranglet!"</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"manueltEditert"</span>: <span class="st">"True"</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"maskineltEditert"</span>: <span class="st">"False"</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>metadata</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagrer egendefinert metadata i en json-fil</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"comment"</span>: <span class="st">"Kontaktet oppgavegiver og kranglet!"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"manueltEditert"</span>: <span class="st">"True"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"maskineltEditert"</span>: <span class="st">"False"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>metadata</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div id="show-meta" class="cell-output cell-output-display" data-execution_count="45">
+<pre><code>{'comment': 'Kontaktet oppgavegiver og kranglet!',
+ 'manueltEditert': 'True',
+ 'maskineltEditert': 'False'}</code></pre>
 </div>
-<a class="quarto-notebook-link" id="nblink-3" href="../notebooks/spark/deltalake-intro.ipynb.html#show-meta">Source: deltalake-intro.ipynb</a></div>
+</div>
+<a class="quarto-notebook-link" id="nblink-3" href="../notebooks/spark/deltalake-intro.ipynb.html">Source: deltalake-intro.ipynb</a></div>
 
 
 </section>
