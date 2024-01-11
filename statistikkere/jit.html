@@ -469,35 +469,13 @@ ul.task-list li input[type="checkbox"] {
 <p><em>Just-in-Time Access</em> (JIT) er en applikasjon der <a href="./hva-er-dapla-team.html#data-admins">data-admins</a> kan gi seg selv midlertidig tilgang til <a href="datatilstander.html#kildedata">kildedata</a>. På Dapla benyttes for dette for å unngå at data-admins har permanent tilgang til sensitive data, siden all kildedata er definert som sensitiv informasjon. <em>data-admins</em> må bruke JIT-applikasjonen for å gi seg selv korte, begrunnede tilganger til kildedata ved behov. Den som er ansvarlig for teamet kan monitere i hvilken grad teamets data-admins benytter seg av denne muligheten.</p>
 <section id="hvordan-bruke-jit" class="level2">
 <h2 class="anchored" data-anchor-id="hvordan-bruke-jit">Hvordan bruke JIT</h2>
-<p>For å bruke JIT må du være <a href="./hva-er-dapla-team.html#data-admins">data-admin</a> for teamet som eier kildedataene du ønsker tilgang til. Før du kan jobbe med kildedataene må du gå inn i JIT-applikasjonen og aktivere tilgangen. Det er en applikasjon for prod-miljøet og en for test-miljøet. Du logger deg inn på følgende lenker<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<div id="tbl-jit-url" class="anchored">
-<table class="table">
-<caption>Tabell&nbsp;1: Nettadresser for de prod- og test-miljøet</caption>
-<thead>
-<tr class="header">
-<th>Miljø</th>
-<th>Nettadresse</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>prod</td>
-<td><a href="https://jitaccess.dapla.ssb.no/" class="uri">https://jitaccess.dapla.ssb.no/</a></td>
-</tr>
-<tr class="even">
-<td>test</td>
-<td><a href="https://jitaccess.dapla-test.ssb.no/" class="uri">https://jitaccess.dapla-test.ssb.no/</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Trenger du tilgang til kildedata i prod-miljøet<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> så bruker du lenken fra i første rad <a href="#tbl-jit-url">Tabell&nbsp;1</a>. Trenger du tilgang til kildedata i test-miljøet så bruker du lenken fra andre rad <a href="#tbl-jit-url">Tabell&nbsp;1</a>.</p>
-<p>I nettiden som åpnes blir du bedt om å oppgi følgende:</p>
+<p>For å bruke JIT må du være <a href="./hva-er-dapla-team.html#data-admins">data-admin</a> for teamet som eier kildedataene du ønsker tilgang til. Du aktiverer tilganger i JIT-appen ved gjøre følgende:</p>
 <ol type="1">
-<li><a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Prosjekt-id</a> der kildebøtta ligger.</li>
-<li>Deretter blir du bedt om å oppgi hvilke tilgangsroller du ønsker aktivert. Se forklaring av rollen i</li>
-<li>Deretter velger du hvor lenge tilgangen skal vare. Den kan maksimalt vare i 8 timer.</li>
-<li>Deretter må du skrive en begrunnelse for at aktiverer tilgangen.</li>
+<li>Gå inn på nettsiden <a href="https://jitaccess.dapla.ssb.no/" class="uri">https://jitaccess.dapla.ssb.no/</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Oppgi <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Prosjekt-id</a> for prosjektet der kildedataene du ønsker tilgang til er lagret.</li>
+<li>Huk av hvilke tilgangsroller du ønsker aktivert. Se beskrivelse av roller i <a href="#tbl-jit-roles">Tabell&nbsp;1</a>.</li>
+<li>Velg hvor lenge tilgangen du ønsker at tilgangen skal vare. Den kan maksimalt vare i 8 timer.</li>
+<li>Oppgi en begrunnelse for at aktiverer tilgangen.</li>
 <li>Til slutt trykker du på <strong>Request access</strong>.</li>
 </ol>
 <p>Tilgangen vil deretter være aktiv ila. noen minutter.</p>
@@ -507,7 +485,7 @@ ul.task-list li input[type="checkbox"] {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Hvordan skal begrunnelsen se ut?
+Hvordan bør begrunnelsen skrives?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -516,7 +494,7 @@ Hvordan skal begrunnelsen se ut?
 </div>
 <div id="tbl-jit-roles" class="anchored">
 <table class="table">
-<caption>Tabell&nbsp;2: De mest relevante tilgangene som kan aktiveres i JIT-applikasjonen</caption>
+<caption>Tabell&nbsp;1: De mest relevante tilgangene som kan aktiveres i JIT-applikasjonen</caption>
 <colgroup>
 <col style="width: 28%">
 <col style="width: 72%">
@@ -543,6 +521,7 @@ Hvordan skal begrunnelsen se ut?
 </tbody>
 </table>
 </div>
+<p>Skal du sette opp en Transfer Service overføring med kildedata så må du aktivere <strong>ssb.bucket.write</strong> og <strong>storagetransfer.admin</strong>. SKal du skrive og lese fra et miljø som Jupyter, så må du aktivere rollene <strong>ssb.bucket.write</strong> og <strong>ssb.buckets.list</strong>.</p>
 
 
 </section>
@@ -551,8 +530,7 @@ Hvordan skal begrunnelsen se ut?
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
 
 <ol>
-<li id="fn1"><p>Hvis du jobber fra hjemmekontor må du bruke VPN for å få tilgang til JIT-applikasjonen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Prod-miljøet er der man har “ekte” data, mens test-miljøet kun inneholder syntetiske data.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Hvis du jobber fra hjemmekontor så må du være på VPN for å få tilgang til JIT-appen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
