@@ -7,29 +7,20 @@ title: Just-in-Time Access
 
 ## Hvordan bruke JIT
 
-For å bruke JIT må du være [data-admin](./hva-er-dapla-team.html#data-admins) for teamet som eier kildedataene du ønsker tilgang til. Før du kan jobbe med kildedataene må du gå inn i JIT-applikasjonen og aktivere tilgangen. Det er en applikasjon for prod-miljøet og en for test-miljøet. Du logger deg inn på følgende lenker^[Hvis du jobber fra hjemmekontor må du bruke VPN for å få tilgang til JIT-applikasjonen.]:
+For å bruke JIT må du være [data-admin](./hva-er-dapla-team.html#data-admins) for teamet som eier kildedataene du ønsker tilgang til. Du aktiverer tilganger i JIT-appen ved gjøre følgende:
 
-| Miljø | Nettadresse                                                                                                         |
-| ----- | ------------------------------------------------------------------------------------------------------------------- |
-| prod  | <https://jitaccess.dapla.ssb.no/>                                                                                   |
-| test  | <https://jitaccess.dapla-test.ssb.no/>                                                                              |
-: Nettadresser for de prod- og test-miljøet {#tbl-jit-url}
-
-Trenger du tilgang til kildedata i prod-miljøet^[Prod-miljøet er der man har "ekte" data, mens test-miljøet kun inneholder syntetiske data.] så bruker du lenken fra i første rad @tbl-jit-url. Trenger du tilgang til kildedata i test-miljøet så bruker du lenken fra andre rad @tbl-jit-url.
-
-I nettiden som åpnes blir du bedt om å oppgi følgende:
-
-1. [Prosjekt-id](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id) der kildebøtta ligger. 
-2. Deretter blir du bedt om å oppgi hvilke tilgangsroller du ønsker aktivert. Se forklaring av rollen i 
-3. Deretter velger du hvor lenge tilgangen skal vare. Den kan maksimalt vare i 8 timer. 
-4. Deretter må du skrive en begrunnelse for at aktiverer tilgangen. 
+1. Gå inn på nettsiden <https://jitaccess.dapla.ssb.no/>^[Hvis du jobber fra hjemmekontor så må du være på VPN for å få tilgang til JIT-appen.]
+1. Oppgi [Prosjekt-id](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id) for prosjektet der kildedataene du ønsker tilgang til er lagret. 
+2. Huk av hvilke tilgangsroller du ønsker aktivert. Se beskrivelse av roller i @tbl-jit-roles.
+3. Velg hvor lenge tilgangen du ønsker at tilgangen skal vare. Den kan maksimalt vare i 8 timer. 
+4. Oppgi en begrunnelse for at aktiverer tilgangen. 
 5. Til slutt trykker du på **Request access**.
 
 Tilgangen vil deretter være aktiv ila. noen minutter. 
 
 ::: {.callout-note}
-# Hvordan skal begrunnelsen se ut?
-Prøv å gjør begrunnelsen forståelig for andre enn deg selv på det tidspunktet. Den som er ansvarlig for teamet skal kunne forstå begrunnelsen når de ser på loggene. I tillegg vil sentralt i SSB monitere i hvilken grad Dapla-teamene benytter seg av tilgangene. 
+# Hvordan bør begrunnelsen skrives?
+Prøv å gjør begrunnelsen forståelig for andre enn deg selv på det tidspunktet. Den som er ansvarlig for teamet skal kunne forstå begrunnelsen når de ser på loggene. I tillegg vil sentralt i SSB monitere i hvilken grad Dapla-teamene benytter seg av tilgangene.  
 :::
 
 | Roller                | Hva?                                                   |
@@ -38,3 +29,5 @@ Prøv å gjør begrunnelsen forståelig for andre enn deg selv på det tidspunkt
 | storagetransfer.admin | Sette opp jobb med Transfer Service i kildeprosjektet. |
 | ssb.bucket.write      | Lese og skrive til kildebøtta.                         |
 : De mest relevante tilgangene som kan aktiveres i JIT-applikasjonen {#tbl-jit-roles}
+
+Skal du sette opp en Transfer Service overføring med kildedata så må du aktivere **ssb.bucket.write** og **storagetransfer.admin**. SKal du skrive og lese fra et miljø som Jupyter, så må du aktivere rollene **ssb.bucket.write** og **ssb.buckets.list**.
