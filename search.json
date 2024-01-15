@@ -686,6 +686,48 @@
     "text": "Introduksjon\nMålet med dette kapittelet er å gi en grunnleggende innføring i hva som legges i ordet Dapla. I tillegg gis en forklaring på hvorfor disse valgene er tatt."
   },
   {
+    "objectID": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html",
+    "href": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html",
+    "title": "Fra Fame til Python",
+    "section": "",
+    "text": "Mange i SSB har data lagret i Fame som de ønsker å bearbeide med Python og R. Dette er spesielt relevant når man skal flytte statistikkproduksjon til Dapla. fython er en Python-pakke som gjør dette på en enkel måte for deg. Den lar deg eksportere data fra Fame med en enkel funksjon, og kan returnere dataene som enten CSV eller Pandas DataFrame."
+  },
+  {
+    "objectID": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#installasjon",
+    "href": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#installasjon",
+    "title": "Fra Fame til Python",
+    "section": "Installasjon",
+    "text": "Installasjon\nPakken ligger på GitHub og kan installeres derfra. I et ssb-project installerer du ved å kjøre følgende kommando:\n\n\nterminal\n\npoetry add git+https://github.com/statisticsnorway/ssb-fame-to-python.git\n\nPakken er også ferdiginstallert på serveren der Fame installert: sl-fame-1.ssb.no. Dette kan være nyttig i flere sammenhenger som vi kommer inn på senere i innelegget."
+  },
+  {
+    "objectID": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#bruk-av-funksjonene",
+    "href": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#bruk-av-funksjonene",
+    "title": "Fra Fame til Python",
+    "section": "Bruk av funksjonene",
+    "text": "Bruk av funksjonene\nfython har to funksjoner: fame_to_csv og fame_to_df. Begge disse funksjonene tar inn de samme argumentene og de er listet opp i Tabell 1.\n\n\nTabell 1: Forklaring av argumentene i funksjonene til fython\n\n\n\n\n\n\nArgument\nForklaring\n\n\n\n\ndatabases\nList of Fame databases to access (with full path).\n\n\nfrequency\nFrequency of the data (‘a’, ‘q’, ‘m’).\n\n\ndate_from\nStart date for the data in Fame syntax (e.g., ‘2023:1’ for quarterly, ‘2023’ for annual).\n\n\ndate_to\nEnd date for the data in Fame syntax (e.g., ‘2023:1’ for quarterly, ‘2023’ for annual).\n\n\nsearch_string\nQuery string for fetching specific data.  The search is not case sensitive, and “^” and “?” are wildcards (for exactly one and any number of characters, respectively)\n\n\ndecimals\nNumber of decimal places in the fetched data (default is 10).\n\n\n\n\nLa se på noen eksempler.\n\nEksempler\nDersom vi ønsker å hente alt i database1.db og database2.db fra januar 2012 til desember 2022, og få det returnert i en DataFrame, kan vi skrive følgende kode:\n\n\npython\n\nfrom fython import fame_to_pandas\n\ndf = fame_to_pandas(\n  ['sti/til/database1.db', 'sti/til/database2.db', 'm', '2012:1', '2022:12', '?']\n  )\n\nDersom vi i stedet ønsker å hente alle serier som begynner på abc, slutter på d etterfulgt av ett vilkårlig tegn, kan vi skrive følgende kode:\n\n\npython\n\nfrom fython import fame_to_pandas\n\ndf = fame_to_pandas(\n  ['sti/til/database1.db', 'sti/til/database2.db', 'm', '2012:1', '2022:12', 'abc?d^']\n  )\n\n? og ^ er altså jokertegn/wildcards som representerer henholdvis et vilkårlig antall tegn og nøyaktig ett tegn.\nDersom vi i stedet vil lagre dataene til en csv-fil kan vi skrive\n\n\npython\n\nfrom fython import fame_to_csv\n\nfame_to_csv(\n  ['sti/til/database1.db', 'sti/til/database2.db', 'm', '2012:1', '2022:12', 'abc?d^', 'sti/til/csv-fil.csv']\n  )"
+  },
+  {
+    "objectID": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#kjøringer-på-serveren",
+    "href": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#kjøringer-på-serveren",
+    "title": "Fra Fame til Python",
+    "section": "Kjøringer på serveren",
+    "text": "Kjøringer på serveren\nNår du skal bruke fython så må du ta hensyn til hvilken server Fame er installert på, og hvilken server du har tenkt til å jobbe på. Fame er som sagt installert på sl-fame-1.ssb.no, mens Jupyterlab er installert på sl-jupyter-p.ssb.no. Dvs. at hvis du ønsker å bruke fython i en notebook i Jupyterlab, så må du bruke ssh til å koble deg til sl-fame-1.ssb.no, og så kjøre koden derfra. Koden din kan skrive en fil til ønsket stammeområdet, som du igjen kan lese inn direkte i Jupyterlab."
+  },
+  {
+    "objectID": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#automatiserte-uttrekk",
+    "href": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#automatiserte-uttrekk",
+    "title": "Fra Fame til Python",
+    "section": "Automatiserte uttrekk",
+    "text": "Automatiserte uttrekk\nHvis man ønsker at utrekk fra Fame skal skje automatisk på gitte tidspunkter eller intervaller, så kan man ta kontakt med Kundeservice. Fordelen med dette er at man ikke trenger å bruke ssh slik som beskrevet over. Man kan lese inn direkte fra stammeområdet."
+  },
+  {
+    "objectID": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#overføre-data-til-dapla",
+    "href": "blog/posts/2023-01-12-jupyter-cell-embedding/index.html#overføre-data-til-dapla",
+    "title": "Fra Fame til Python",
+    "section": "Overføre data til Dapla",
+    "text": "Overføre data til Dapla\nHvis man ønsker å overføre data fra Fame til Dapla, så kan dette settes opp som en MoveIt-operasjon. For å sette opp en MoveIt-jobb må ma kontakte Kundeservice. Overføring til Dapla forutsetter at man har et Dapla-team, og at man setter opp en synkroniseringjobb med Transfer Service."
+  },
+  {
     "objectID": "statistikkere/hva-er-dapla-team.html",
     "href": "statistikkere/hva-er-dapla-team.html",
     "title": "Hva er Dapla-team?",
