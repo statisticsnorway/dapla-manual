@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Magnus Kvåle Helliesen">
+<meta name="dcterms.date" content="2024-01-12">
+
+<title>Dapla-manualen - Fra Fame til Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #e3f1e6;
+      }
+</style>
+
+
+<meta property="og:title" content="Dapla-manualen - Fra Fame til Python">
+<meta property="og:description" content="Python-pakken fython lar deg hente ut data fra Fame-databaser.">
+<meta property="og:image" content="https://manual.dapla.ssb.no/blog/posts/2023-01-12-fame-extractor-python/fame.png">
+<meta property="og:site-name" content="Dapla-manualen">
+<meta property="og:image:height" content="192">
+<meta property="og:image:width" content="204">
+<meta property="og:image:alt" content="Bilde av Fame-logoen">
+<meta name="twitter:title" content="Dapla-manualen - Fra Fame til Python">
+<meta name="twitter:description" content="Python-pakken fython lar deg hente ut data fra Fame-databaser.">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/blog/posts/2023-01-12-fame-extractor-python/fame.png">
+<meta name="twitter:image-height" content="192">
+<meta name="twitter:image-width" content="204">
+<meta name="twitter:image:alt" content="Bilde av Fame-logoen">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../statistikkere/index.html" rel="" target="">
+ <span class="menu-text">Statistikkere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../utviklere/index.html" rel="" target="">
+ <span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebooks/index.html" rel="" target="">
+ <span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html" rel="" target="">
+ <span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../om-dapla.html" rel="" target="">
+ <span class="menu-text">Om Dapla</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://start.dapla.ssb.no/" rel="" target=""><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Opprette Dapla-team</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all" rel="" target=""><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7" rel="" target=""><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../faq.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="dropdown-text">FAQ</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-logg-inn" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+      <i class="bi bi-person-circle" role="img">
+</i> 
+ <span class="menu-text">Logg inn</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-logg-inn">    
+        <li>
+    <a class="dropdown-item" href="https://datahub.external.staging.ssb.cloud.nais.io/explore" rel="" target=""><i class="bi bi-database-fill" role="img">
+</i> 
+ <span class="dropdown-text">DaplaHub</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../om-dapla.html" rel="" target=""><i class="bi bi-graph-up" role="img">
+</i> 
+ <span class="dropdown-text">DaplaLab</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="hhttps://jupyter.dapla.ssb.no/" rel="" target=""><i class="bi bi-journal-code" role="img">
+</i> 
+ <span class="dropdown-text">JupyterLab (legacy)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/" rel="" target=""><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual-internal" rel="" target=""><i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Fra Fame til Python</h1>
+            <p class="subtitle lead">Python-pakken <code>fython</code> lar deg hente ut data fra Fame-databaser.</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Fame</div>
+                <div class="quarto-category">Python</div>
+                <div class="quarto-category">Tidsserier</div>
+              </div>
+                  </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Forfatter</div>
+    <div class="quarto-title-meta-heading">Tilhører</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author">Magnus Kvåle Helliesen </p>
+    </div>
+      <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              Seksjon for nasjonalregnskap (210)
+            </p>
+        </div>
+      </div>
+
+  <div class="quarto-title-meta">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Opprettet</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 12, 2024</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Endret</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">January 16, 2024</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#installasjon" id="toc-installasjon" class="nav-link active" data-scroll-target="#installasjon">Installasjon</a></li>
+  <li><a href="#bruk-av-funksjonene" id="toc-bruk-av-funksjonene" class="nav-link" data-scroll-target="#bruk-av-funksjonene">Bruk av funksjonene</a>
+  <ul class="collapse">
+  <li><a href="#eksempler" id="toc-eksempler" class="nav-link" data-scroll-target="#eksempler">Eksempler</a></li>
+  </ul></li>
+  <li><a href="#kjøringer-på-serveren" id="toc-kjøringer-på-serveren" class="nav-link" data-scroll-target="#kjøringer-på-serveren">Kjøringer på serveren</a></li>
+  <li><a href="#automatiserte-uttrekk" id="toc-automatiserte-uttrekk" class="nav-link" data-scroll-target="#automatiserte-uttrekk">Automatiserte uttrekk</a></li>
+  <li><a href="#overføre-data-til-dapla" id="toc-overføre-data-til-dapla" class="nav-link" data-scroll-target="#overføre-data-til-dapla">Overføre data til Dapla</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/blog/posts/2023-01-12-fame-extractor-python/index.qmd" class="toc-action">Rediger siden</a></p><p><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action">Rapporter feil</a></p></div></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Mange i SSB har data lagret i Fame som de ønsker å bearbeide med Python og R. Dette er spesielt relevant når man skal flytte statistikkproduksjon til Dapla. <code>fython</code> er en Python-pakke som gjør dette på en enkel måte for deg. Den lar deg eksportere data fra Fame med en enkel funksjon, og kan returnere dataene som enten CSV eller Pandas DataFrame.</p>
+<p><a href="https://github.com/statisticsnorway/ssb-fame-to-python">Pakken finner du på GitHub</a>.</p>
+<section id="installasjon" class="level2">
+<h2 class="anchored" data-anchor-id="installasjon">Installasjon</h2>
+<p>Pakken er avhengig av at Fame er installert miljøet der den benyttes. Siden den er installert på <code>sl-fame-1.ssb.no</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> så vil de færreste har behov for å installere den selv.</p>
+<p>Skulle du likevel ønske å installere pakken selv kan det gjøres med <a href="https://python-poetry.org/">Poetry</a> på følgende måte:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add git+https://github.com/statisticsnorway/ssb-fame-to-python.git</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="bruk-av-funksjonene" class="level2">
+<h2 class="anchored" data-anchor-id="bruk-av-funksjonene">Bruk av funksjonene</h2>
+<p><code>fython</code> har to funksjoner: <code>fame_to_csv</code> og <code>fame_to_df</code>. Begge disse funksjonene tar inn de samme argumentene og de er listet opp i <a href="#tbl-fython-args">Tabell&nbsp;1</a>.</p>
+<div id="tbl-fython-args" class="anchored">
+<table class="table">
+<caption>Tabell&nbsp;1: Forklaring av argumentene i funksjonene til <code>fython</code></caption>
+<colgroup>
+<col style="width: 9%">
+<col style="width: 70%">
+<col style="width: 9%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Forklaring</th>
+<th>fame_to_csv()</th>
+<th>fame_to_pandas()</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>databases</td>
+<td>List of Fame databases to access (with full path).</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>frequency</td>
+<td>Frequency of the data (‘a’, ‘q’, ‘m’).</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>date_from</td>
+<td>Start date for the data in Fame syntax (e.g., ‘2023:1’ for quarterly, ‘2023’ for annual).</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>date_to</td>
+<td>End date for the data in Fame syntax (e.g., ‘2023:1’ for quarterly, ‘2023’ for annual).</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>search_string</td>
+<td>Query string for fetching specific data. The search is not case sensitive, and “^” and “?” are wildcards (for exactly one and any number of characters, respectively)</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>decimals</td>
+<td>Number of decimal places in the fetched data (default is 10).</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>path</td>
+<td>Path to write the csv-file.</td>
+<td>✓</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>La se på noen eksempler.</p>
+<section id="eksempler" class="level3">
+<h3 class="anchored" data-anchor-id="eksempler">Eksempler</h3>
+<p>Dersom vi ønsker å hente alt i <code>database1.db</code> og <code>database2.db</code> fra <strong>januar 2012</strong> til <strong>desember 2022</strong>, og få det returnert i en DataFrame, kan vi skrive følgende kode:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>python</strong></pre>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fython <span class="im">import</span> fame_to_pandas</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> fame_to_pandas(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'sti/til/database1.db'</span>, <span class="st">'sti/til/database2.db'</span>, <span class="st">'m'</span>, <span class="st">'2012:1'</span>, <span class="st">'2022:12'</span>, <span class="st">'?'</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dersom vi i stedet ønsker å hente alle serier som begynner på <strong>abc</strong>, slutter på <strong>d</strong> etterfulgt av ett vilkårlig tegn, kan vi skrive følgende kode:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>python</strong></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fython <span class="im">import</span> fame_to_pandas</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> fame_to_pandas(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'sti/til/database1.db'</span>, <span class="st">'sti/til/database2.db'</span>, <span class="st">'m'</span>, <span class="st">'2012:1'</span>, <span class="st">'2022:12'</span>, <span class="st">'abc?d^'</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>?</code> og <code>^</code> er altså jokertegn/wildcards som representerer henholdvis et vilkårlig antall tegn og nøyaktig ett tegn.</p>
+<p>Dersom vi i stedet vil lagre dataene til en csv-fil kan vi skrive</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>python</strong></pre>
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fython <span class="im">import</span> fame_to_csv</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fame_to_csv(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'sti/til/database1.db'</span>, <span class="st">'sti/til/database2.db'</span>, <span class="st">'m'</span>, <span class="st">'2012:1'</span>, <span class="st">'2022:12'</span>, <span class="st">'abc?d^'</span>, <span class="st">'sti/til/csv-fil.csv'</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det er viktig å påpeke at enhver serie kun skrives én gang, og da fra den første databasen den finnes i (kronologisk iht. til listen med databaser).</p>
+</div>
+</div>
+</section>
+</section>
+<section id="kjøringer-på-serveren" class="level2">
+<h2 class="anchored" data-anchor-id="kjøringer-på-serveren">Kjøringer på serveren</h2>
+<p>Når du skal bruke <code>fython</code> så må du ta hensyn til hvilken server Fame er installert på, og hvilken server du har tenkt til å jobbe på. Fame er som sagt installert på <code>sl-fame-1.ssb.no</code>, mens Jupyterlab er installert på <code>sl-jupyter-p.ssb.no</code>. Dvs. at hvis du ønsker å bruke <code>fython</code> i en notebook i Jupyterlab, så må du <a href="https://ubiquitous-doodle-n15e62e.pages.github.io/posts/ssh-onprem/">bruke ssh</a> til å koble deg til <code>sl-fame-1.ssb.no</code>, og så kjøre koden derfra. Koden din kan skrive en fil til ønsket stammeområdet, som du igjen kan lese inn direkte i Jupyterlab.</p>
+</section>
+<section id="automatiserte-uttrekk" class="level2">
+<h2 class="anchored" data-anchor-id="automatiserte-uttrekk">Automatiserte uttrekk</h2>
+<p>Hvis man ønsker at utrekk fra Fame skal skje automatisk på gitte tidspunkter eller intervaller, så kan man ta kontakt med Kundeservice. Fordelen med dette er at man ikke trenger å bruke <code>ssh</code> slik som beskrevet over. Man kan lese inn direkte fra stammeområdet.</p>
+</section>
+<section id="overføre-data-til-dapla" class="level2">
+<h2 class="anchored" data-anchor-id="overføre-data-til-dapla">Overføre data til Dapla</h2>
+<p>Hvis man ønsker å overføre data fra Fame til Dapla, så kan dette settes opp som en MoveIt-operasjon. For å sette opp en MoveIt-jobb må ma kontakte Kundeservice. Overføring til Dapla forutsetter at man har et Dapla-team, og at man setter opp en synkroniseringjobb med <a href="../../../statistikkere/transfer-service.html">Transfer Service</a>.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>Pakken er installert i Python-versjon 3.6 på serveren. Du kan åpne et Python-shell i terminalen på <code>sl-fame-1.ssb.no</code> ved å skrive: <code>python3.6</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopiert!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopiert!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</div>   
+    <div class="nav-footer-center">Kom i gang med Dapla</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>
