@@ -1,6 +1,6 @@
 ---
 title: Fra Fame til Python
-subtitle: Python-pakken `fython` lar deg hente ut data fra Fame-databaser for å jobbe med det i Python.
+subtitle: Python-pakken `fython` lar deg hente ut data fra Fame-databaser.
 categories:
   - Fame
   - Python
@@ -11,7 +11,7 @@ author:
       - name: Seksjon for nasjonalregnskap (210)
         email: magnus.helliesen@ssb.no
 date: "01/12/2024"
-date-modified: "01/13/2024"
+date-modified: "01/16/2024"
 image: fame.png
 image-alt: "Bilde av Fame-logoen"
 draft: false
@@ -19,28 +19,31 @@ draft: false
 
 Mange i SSB har data lagret i Fame som de ønsker å bearbeide med Python og R. Dette er spesielt relevant når man skal flytte statistikkproduksjon til Dapla. `fython` er en Python-pakke som gjør dette på en enkel måte for deg. Den lar deg eksportere data fra Fame med en enkel funksjon, og kan returnere dataene som enten CSV eller Pandas DataFrame. 
 
+[Pakken finner du på GitHub](https://github.com/statisticsnorway/ssb-fame-to-python).
+
 ## Installasjon
 
-Pakken ligger på GitHub og kan installeres derfra. I et [ssb-project](../../../statistikkere/jobbe-med-kode.html#opprett-ssb-project) installerer du ved å kjøre følgende kommando:
+Pakken er avhengig av at Fame er installert miljøet der den benyttes. Siden den er installert på `sl-fame-1.ssb.no`^[Pakken er installert i Python-versjon 3.6 på serveren. Du kan åpne et Python-shell i terminalen på `sl-fame-1.ssb.no` ved å skrive: `python3.6`.]  så vil de færreste har behov for å installere den selv. 
+
+Skulle du likevel ønske å installere pakken selv kan det gjøres med [Poetry](https://python-poetry.org/) på følgende måte:
 
 ```{.bash filename="terminal"}
 poetry add git+https://github.com/statisticsnorway/ssb-fame-to-python.git
 ```
 
-Pakken er også ferdiginstallert på serveren der Fame installert: `sl-fame-1.ssb.no`. Dette kan være nyttig i flere sammenhenger som vi kommer inn på senere i innelegget. 
-
 ## Bruk av funksjonene
 
 `fython` har to funksjoner: `fame_to_csv` og `fame_to_df`. Begge disse funksjonene tar inn de samme argumentene og de er listet opp i @tbl-fython-args.
 
-| Argument      | Forklaring                                                                                                                                                             |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| databases     | List of Fame databases to access (with full path).                                                                                                                     |
-| frequency     | Frequency of the data ('a', 'q', 'm').                                                                                                                                 |
-| date_from     | Start date for the data in Fame syntax (e.g., '2023:1' for quarterly, '2023' for annual).                                                                              |
-| date_to       | End date for the data in Fame syntax (e.g., '2023:1' for quarterly, '2023' for annual).                                                                                |
-| search_string | Query string for fetching specific data.  The search is not case sensitive, and "^" and "?" are wildcards (for exactly one and any number of characters, respectively) |
-| decimals      | Number of decimal places in the fetched data (default is 10).                                                                                                          |
+| Argument      | Forklaring                                                                                          | fame_to_csv() | fame_to_pandas() |
+| ------------- | --------------------------------------------------------------------------------------------------- | ------------- | ---------------- |
+| databases     | List of Fame databases to access (with full path).                                                  | ✓             | ✓                |
+| frequency     | Frequency of the data ('a', 'q', 'm').                                                              | ✓             | ✓                |
+| date_from     | Start date for the data in Fame syntax (e.g., '2023:1' for quarterly, '2023' for annual).           | ✓             | ✓                |
+| date_to       | End date for the data in Fame syntax (e.g., '2023:1' for quarterly, '2023' for annual).             | ✓             | ✓                |
+| search_string | Query string for fetching specific data. The search is not case sensitive, and "^" and "?" are wildcards (for exactly one and any number of characters, respectively) | ✓             | ✓                |
+| decimals      | Number of decimal places in the fetched data (default is 10).                                       | ✓             | ✓                |
+| path          | Path to write the csv-file.                                                                         | ✓             |                  |                                                                                                         |
 : Forklaring av argumentene i funksjonene til `fython` {#tbl-fython-args}
 
 La se på noen eksempler. 
@@ -78,6 +81,12 @@ fame_to_csv(
   )
 ```
 
+::: {.callout-warning}
+Det er viktig å påpeke at enhver serie kun skrives én gang, og da fra den første databasen den finnes i (kronologisk iht. til listen med databaser). 
+:::
+
+
+
 ## Kjøringer på serveren
 
 Når du skal bruke `fython` så må du ta hensyn til hvilken server Fame er installert på, og hvilken server du har tenkt til å jobbe på. Fame er som sagt installert på `sl-fame-1.ssb.no`, mens Jupyterlab er installert på `sl-jupyter-p.ssb.no`. Dvs. at hvis du ønsker å bruke `fython` i en notebook i Jupyterlab, så må du [bruke ssh](https://ubiquitous-doodle-n15e62e.pages.github.io/posts/ssh-onprem/) til å koble deg til `sl-fame-1.ssb.no`, og så kjøre koden derfra. Koden din kan skrive en fil til ønsket stammeområdet, som du igjen kan lese inn direkte i Jupyterlab. 
@@ -89,6 +98,9 @@ Hvis man ønsker at utrekk fra Fame skal skje automatisk på gitte tidspunkter e
 ## Overføre data til Dapla
 
 Hvis man ønsker å overføre data fra Fame til Dapla, så kan dette settes opp som en MoveIt-operasjon. For å sette opp en MoveIt-jobb må ma kontakte Kundeservice. Overføring til Dapla forutsetter at man har et Dapla-team, og at man setter opp en synkroniseringjobb med [Transfer Service](../../../statistikkere/transfer-service.html).
+
+
+
 
 
 
