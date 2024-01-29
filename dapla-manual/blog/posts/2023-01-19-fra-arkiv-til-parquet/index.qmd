@@ -1,0 +1,190 @@
+---
+title: Fra arkiv til parquet
+subtitle: Konvertering av arkivfiler
+image: ../../../images/parquet-logo.jpg
+categories:
+  - Python
+  - Arkiv
+  - Datadok
+  - Parquet
+author:
+  - name: Carl F. Corneil
+    affiliation:
+      - name: Seksjon for Kultur- og Utdanningsstatistikk (360)
+        email: cfc@ssb.no
+date: 01/19/2024
+date-modified: 01/22/2024
+jupyter: manual-kernel
+draft: false
+freeze: true
+---
+
+I arkivet til SSB ligger data lagret som posisjonerte flatfiler, også kalt fastbredde-fil eller *fixed width file* på engelsk. I Datadok ligger det spesifisert hvordan du leser inn disse filene fra arkivet til **sas7bdat**-formatet, men ikke hvordan man konverterer til Parquet-formatet. I denne artikkelen deler jeg hvordan jeg gikk frem for å konvertere arkivfiler til Parquet. 
+
+## Hva er en fastbredde-fil?
+
+En fastbredde-fil er en fil der hver rad har en fast lengde, og hver kolonne har en fast posisjon. Det er ingen komma eller andre tegn som skiller kolonnene, slik som i en CSV-fil. En fastbredde-fil er en ren tekstfil, dvs. at du kan åpne den opp i teksteditor og kikke på innholdet direkte.
+
+Under er et eksempel hvor samme data er lagret både på CSV-formatet og som fastbredde-fil:
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+```{.python filename="csv"}
+012345;;Ola Nordmann;
+345678;Kvinne;Kari Nordmann;
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+```{.python filename="fastbredde-fil"}
+012345      Ola Nordmann
+345678KvinneKari Nordmann
+```
+:::
+
+::::
+
+I csv-filen over til venstre ser vi at hver kolonne er separert med et semikolon, og at hver rad er separert med et linjeskift. I fastbredde-filen til høyre ser vi at hver kolonne har en fast lengde, og at hver rad har en fast lengde. I tillegg ser vi at det er et ekstra mellomrom mellom `Ola Nordmann` og `Kari Nordmann` i den første raden. Dette er fordi `Ola Nordmann` er 12 tegn lang, mens `Kari Nordmann` er 13 tegn lang.
+
+
+
+## Lese med Pandas
+
+Vi kan bruke pandas-funksjonen `read_fwf()` for å lese inn en fastbredde-fil. Denne funksjonen tar inn en filsti, og en liste med bredder for hver kolonne. I tillegg kan vi spesifisere navn på kolonnene, og hvilken datatype kolonnene skal ha og hvordan missing-verdier skal representeres. 
+
+Vi er helt avhengig av å vite bredden på hver kolonne for å kunne lese inn en fastbredde-fil. Dette kan vi finne ut ved å åpne filen i en teksteditor og telle antall tegn i hver kolonne. Alternativt kan vi bruke innlesingsskriptet for SAS som finnes i Datadok, siden breddene er spesifisert der. Under er et ekspempel på hvordan vi kan lese inn en fastbredde-fil fra forrige avsnitt^[`/n` i strengen `112345      Ola Nordmann \n345678KvinneKari Nordmann\n` betyr linjeskift.]:
+
+```{python filename="python"}
+import pandas as pd
+from io import StringIO  # Nødvendig siden vi sender en streng, ikke en filsti til .read_fwf
+instring = "112345      Ola Nordmann \n345678KvinneKari Nordmann\n"
+df = pd.read_fwf(StringIO(instring),
+                 names=['pers_id', 'kjonn', 'navn'],  # Navngi kolonner
+                 dtype='object',  # Alle kolonnene settes til "object"
+                 na_values=['.', ' .'],  # Hvilke karakterer bruker SAS for tom verdi?
+                 widths=[6, 6, 13])  # Tell/regn ut dissa sjøl
+df
+```
+
+
+Koden over returnerer en Pandas Dataframe i minnet. Den kan vi lett lagre til Parquet-formatet. Men innlesingen måtte vi spesifisere en masse detaljer manuelt. Hvis vi skal lese inn mange filer med ulik struktur, så er ikke denne fremgangsmåten skalerbar. Dette er en fremgangsmåte for å lese inn noen få filer. 
+
+## Datadok
+
+Som nevnt over så finnes det et innlesingsskript for SAS i Datadok. Dette skriptet kan vi bruke til å lese inn en fastbredde-fil i Python. Vi kan også bruke det til å finne breddene på hver kolonne. Et slik skript har denne formen:
+
+```{.bash filename="innlesingsskript.sas"}
+DATA sas_data;
+   INFILE '/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.dat' MISSOVER PAD LRECL=36;
+   INPUT
+      @1 pers_id 6.0
+      @7 kjonn $CHAR6.0
+      @13 navn $CHAR13.0
+   ;
+RUN;
+```
+Vi kunne brukt informasjonen her til å finne ut hvordan filen skal leses inn med `read_fwf()`. Men fortsatt innebærer dette potensielt en del manuelt arbeid. 
+
+## Lese med saspy
+
+En annen tilnærming enn å bruke .read_fwf fra Pandas er å bruke biblioteket `saspy`. Dette biblioteket lar oss kjøre SAS-kode fra Python. Vi kan bruke det til å kjøre sas-skript hentet fra Datadok, konvertere til en pandas dataframe, og til slutt skrive til Parquet. I det følgende antar vi at du jobber i Jupyterlab i prodsonen (sl-jupyter-p), og at du har lagret innlesingsskriptet i en variabel, slik som vist under: 
+
+```{.python filename="python"}
+script = """
+DATA sas_data;
+   INFILE '/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.dat' MISSOVER PAD LRECL=36;
+   INPUT
+      @1 pers_id 6.0
+      @7 kjonn $CHAR6.0
+      @13 navn $CHAR13.0
+   ;
+RUN;
+"""
+```
+
+La oss deretter kjøre følgende kode fra Jupyterlab:
+
+```{.python filename="python"}
+from fagfunksjoner import saspy_session
+
+# Kobler til sas-serverne
+sas = saspy_session()
+
+# Vi bruker tilkoblingen til å sende inn Datadok-skriptet
+result = sas.submit(script)
+
+# Lagere sas-loggen i en variabel
+log = result["LOG"]
+
+# Ber om å få dataframe tilbake
+df_frasas = sas.sd2df("sas_data", "work")
+
+# Lukker koblingen til sas-serverne
+sas._endsas()
+
+# Printer ut datasettet
+df_frasas
+```
+
+I koden over har vi brukt en pakke som heter `ssb-fagfunksjoner` for å gjøre en del oppgaver. Pakken er et overbygg over saspy, og koden over forutsetter at du har lagret passordet ditt på en spesiell måte^[Hvis du ønsker kan du bruker `ssb-fagfunksjoner` til å lagre passordet ditt i kryptert form. Da kan du lagre passordet i en fil på din egen maskin, og slipper å skrive det inn hver gang du skal koble til SAS. Funksjonen heter `fagfunksjoner.prodsone.saspy_ssb.set_password()`.].
+
+### Datatyper
+
+Vi har nå en pandas dataframe med datatyper, men disse er basert på den lave mengden datatyper i SAS. Ofte bør det ryddes i datatyper før man skriver til Parquet. Spesielt bør du tenke på følgende:
+
+- `Character` mappes gjerne til `object` i pandas, ikke den strengere varianten `string` eller den mer spesifikke `string[pyarrow]`. 
+- `Numeric` mappes stort sett til `float64` i pandas, vi får som regel ikke heltall direkte `Int64` uten videre behandling. 
+
+Du kan la Pandas gjøre ett nytt forsøk på å gjette datatyper ved å kjøre følgende kode:
+
+```{.python filename="python"}
+df_pd_dtypes = df_frasas.convert_dtypes()
+df_pd_dtypes.dtypes
+```
+
+Om du vil teste min selvskrevne funksjon for å gjette på datatyper så ligger den i fellesfunksjons-pakken:
+
+```{.python filename="python"}
+from fagfunksjoner import auto_dtype
+df_auto = auto_dtype(df_frasas)
+df_auto.dtypes
+```
+
+Sjekk gjerne ut parameteret `cardinality_threshold` på `auto_dtype`, om du er interessert i å automatisk sette `categorical dtypes`.
+
+### Skalering
+
+Hvis du har mange arkivfiler, med mange forskjellige innlesingsskript, så kan du lagre alle skriptene i en mappe, og så hente innholdet programmatisk. 
+
+```{.python filename="python"}
+sas_script_path = "/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.sas"
+with open(sas_script_path, "r", encoding="latin1") as sas_script:
+    script = sas_script.read().strip()
+    script = "DATA " + script.split("DATA ")[1] # Forkort ned scriptet til det vi trenger
+print(script)
+```
+Her henter jeg inn et innlesingsskript fra Datadok som jeg har lagret som en tekstfil i en mappe. Deretter gjør jeg den om til et tekst-object i minnet som kan sendes til saspy-koden som er vist over. Dermed er det bare å finne en logikk som gjør at du vet hvilket innlesingskript som skal brukes til hvilke filer (siste valide datadok-script før datafil oppstod feks), og du kan jobbe veldig effektivt med konvertering. Når alt er konvertert kan du f.eks. kjøre et script som validerer datatypene på tvers av alle årganger og filnavn. 
+
+## Lagre dataframen til parquet
+
+Nå er det veldig lett å skrive filen til Parquet-formatet. 
+
+```{.python filename="python"}
+df_auto.to_parquet(
+    "/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.parquet"
+    )
+```
+
+## NUDB
+
+I omleggingen av NUDB (Nasjonal utdanningsdatabase), måtte vi konvertere hele arkivet vårt på 750+ dat-filer.
+
+Det var ønskelig å slippe å lagre til sas7bdat i mellom, for å slippe mye dataduplikasjon og arbeidsprosesser.
+
+I stor grad kunne dette arbeidet automatiseres (bortsett fra å lagre ut innlastingsscript fra gamle datadok). Funksjonene jeg utviklet for dette, ligger stort sett i denne filen:  
+[github.com/utd-nudb/prodsone/konverter_arkiv/archive.py](https://github.com/statisticsnorway/utd-nudb/blob/main/prodsone/konverter_arkiv/archive.py)
