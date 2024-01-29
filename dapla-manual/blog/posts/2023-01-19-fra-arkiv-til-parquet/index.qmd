@@ -92,7 +92,7 @@ Vi kunne brukt informasjonen her til å finne ut hvordan filen skal leses inn me
 
 ## Lese med saspy
 
-En annen tilnærming enn å bruke Pandas er å bruke biblioteket `saspy`. Dette biblioteket lar oss kjøre SAS-kode fra Python. Vi kan bruke det til å kjøre sas-skript hentet fra Datadok, konvertere til dataframe, og til slutt skrive til Parquet. I det følgende antar vi at du jobber i Jupyterlab i prodsonen (sl-jupyter-p), og at du har lagret innlesingsskriptet i en variabel, slik som vist under: 
+En annen tilnærming enn å bruke .read_fwf fra Pandas er å bruke biblioteket `saspy`. Dette biblioteket lar oss kjøre SAS-kode fra Python. Vi kan bruke det til å kjøre sas-skript hentet fra Datadok, konvertere til en pandas dataframe, og til slutt skrive til Parquet. I det følgende antar vi at du jobber i Jupyterlab i prodsonen (sl-jupyter-p), og at du har lagret innlesingsskriptet i en variabel, slik som vist under: 
 
 ```{.python filename="python"}
 script = """
@@ -110,7 +110,7 @@ RUN;
 La oss deretter kjøre følgende kode fra Jupyterlab:
 
 ```{.python filename="python"}
-from fagfunksjoner import saspy_session@
+from fagfunksjoner import saspy_session
 
 # Kobler til sas-serverne
 sas = saspy_session()
@@ -131,14 +131,14 @@ sas._endsas()
 df_frasas
 ```
 
-I koden over har vi brukt en pakke som heter `ssb-fagfunksjoner` for å gjøre en del oppgaver. Pakken er et overbygg over saspy, og koden over forutsetter at du har lagret passorder ditt på en spesiell måte^[Hvis du ønsker kan du bruker `ssb-fagfunksjoner` til å lagre passordet ditt i kryptert form. Da kan du lagre passordet i en fil på din egen maskin, og slipper å skrive det inn hver gang du skal koble til SAS. Funksjonen heter `set_password()`.].
+I koden over har vi brukt en pakke som heter `ssb-fagfunksjoner` for å gjøre en del oppgaver. Pakken er et overbygg over saspy, og koden over forutsetter at du har lagret passordet ditt på en spesiell måte^[Hvis du ønsker kan du bruker `ssb-fagfunksjoner` til å lagre passordet ditt i kryptert form. Da kan du lagre passordet i en fil på din egen maskin, og slipper å skrive det inn hver gang du skal koble til SAS. Funksjonen heter `fagfunksjoner.prodsone.saspy_ssb.set_password()`.].
 
 ### Datatyper
 
 Vi har nå en pandas dataframe med datatyper, men disse er basert på den lave mengden datatyper i SAS. Ofte bør det ryddes i datatyper før man skriver til Parquet. Spesielt bør du tenke på følgende:
 
-- `Character` mappes gjerne til `object` i pandas, ikke den strengere varianten `string`. 
-- `Numeric` mappes stort sett til `float64` i pandas, vi får som regel ikke heltall direkte `Int64`. 
+- `Character` mappes gjerne til `object` i pandas, ikke den strengere varianten `string` eller den mer spesifikke `string[pyarrow]`. 
+- `Numeric` mappes stort sett til `float64` i pandas, vi får som regel ikke heltall direkte `Int64` uten videre behandling. 
 
 Du kan la Pandas gjøre ett nytt forsøk på å gjette datatyper ved å kjøre følgende kode:
 
@@ -155,12 +155,11 @@ df_auto = auto_dtype(df_frasas)
 df_auto.dtypes
 ```
 
-
-Sjekk gjerne ut parameteret `cardinality_threshold`, om du er interessert i å automatisk sette `categorical dtypes`.
+Sjekk gjerne ut parameteret `cardinality_threshold` på `auto_dtype`, om du er interessert i å automatisk sette `categorical dtypes`.
 
 ### Skalering
 
-Hvis du har mange arkivfiler, med mange forskjellige innlesingsskript, så kan du lagre alle skriptene i en mappe, og så iterere over de. 
+Hvis du har mange arkivfiler, med mange forskjellige innlesingsskript, så kan du lagre alle skriptene i en mappe, og så hente innholdet programmatisk. 
 
 ```{.python filename="python"}
 sas_script_path = "/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.sas"
@@ -169,11 +168,11 @@ with open(sas_script_path, "r", encoding="latin1") as sas_script:
     script = "DATA " + script.split("DATA ")[1] # Forkort ned scriptet til det vi trenger
 print(script)
 ```
-Her henter jeg inn et innlesingsskript fra Datadok som jeg har lagret som en tekstfil i en mappe. Deretter gjør jeg den om til et object i minnet som kan brukes i saspy-koden som er vist over. Dermed er det bare å finne en logikk som gjør at du vet hvilket innlesingskript som skal brukes til hvilke filer, og du kan jobbe veldig effektivt med konvertering. Når alt er konvertert kan du f.eks. kjøre et script som validerer datatypene i alle parquet-filer. 
+Her henter jeg inn et innlesingsskript fra Datadok som jeg har lagret som en tekstfil i en mappe. Deretter gjør jeg den om til et tekst-object i minnet som kan sendes til saspy-koden som er vist over. Dermed er det bare å finne en logikk som gjør at du vet hvilket innlesingskript som skal brukes til hvilke filer (siste valide datadok-script før datafil oppstod feks), og du kan jobbe veldig effektivt med konvertering. Når alt er konvertert kan du f.eks. kjøre et script som validerer datatypene på tvers av alle årganger og filnavn. 
 
 ## Lagre dataframen til parquet
 
-Nå er det veldig rett å skrive filen til Parquet-formatet. 
+Nå er det veldig lett å skrive filen til Parquet-formatet. 
 
 ```{.python filename="python"}
 df_auto.to_parquet(
@@ -187,5 +186,5 @@ I omleggingen av NUDB (Nasjonal utdanningsdatabase), måtte vi konvertere hele a
 
 Det var ønskelig å slippe å lagre til sas7bdat i mellom, for å slippe mye dataduplikasjon og arbeidsprosesser.
 
-I stor grad kunne dette arbeidet automatiseres (bortsett fra å lagre ut innlastingsscript fra gamle datadok). Funksjonene jeg utviklet for dette ligger stort sett i denne filen:  
+I stor grad kunne dette arbeidet automatiseres (bortsett fra å lagre ut innlastingsscript fra gamle datadok). Funksjonene jeg utviklet for dette, ligger stort sett i denne filen:  
 [github.com/utd-nudb/prodsone/konverter_arkiv/archive.py](https://github.com/statisticsnorway/utd-nudb/blob/main/prodsone/konverter_arkiv/archive.py)
