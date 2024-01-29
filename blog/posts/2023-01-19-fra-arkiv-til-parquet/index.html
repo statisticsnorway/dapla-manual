@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Magnus Kvåle Helliesen">
-<meta name="dcterms.date" content="2024-01-12">
+<meta name="author" content="Carl F. Corneil">
+<meta name="dcterms.date" content="2024-01-19">
 
-<title>Dapla-manualen - Fra Fame til Python</title>
+<title>Dapla-manualen - Fra arkiv til parquet</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,21 +109,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         background: #e3f1e6;
       }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
-<meta property="og:title" content="Dapla-manualen - Fra Fame til Python">
-<meta property="og:description" content="Python-pakken fython lar deg hente ut data fra Fame-databaser.">
-<meta property="og:image" content="https://manual.dapla.ssb.no/blog/posts/2023-01-12-fame-extractor-python/fame.png">
+<meta property="og:title" content="Dapla-manualen - Fra arkiv til parquet">
+<meta property="og:description" content="Konvertering av arkivfiler">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/parquet-logo.jpg">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:height" content="192">
-<meta property="og:image:width" content="204">
-<meta property="og:image:alt" content="Bilde av Fame-logoen">
-<meta name="twitter:title" content="Dapla-manualen - Fra Fame til Python">
-<meta name="twitter:description" content="Python-pakken fython lar deg hente ut data fra Fame-databaser.">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/blog/posts/2023-01-12-fame-extractor-python/fame.png">
-<meta name="twitter:image-height" content="192">
-<meta name="twitter:image-width" content="204">
-<meta name="twitter:image:alt" content="Bilde av Fame-logoen">
+<meta name="twitter:title" content="Dapla-manualen - Fra arkiv til parquet">
+<meta name="twitter:description" content="Konvertering av arkivfiler">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/parquet-logo.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -241,12 +238,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Fra Fame til Python</h1>
-            <p class="subtitle lead">Python-pakken <code>fython</code> lar deg hente ut data fra Fame-databaser.</p>
+      <h1 class="title">Fra arkiv til parquet</h1>
+            <p class="subtitle lead">Konvertering av arkivfiler</p>
                                 <div class="quarto-categories">
-                <div class="quarto-category">Fame</div>
                 <div class="quarto-category">Python</div>
-                <div class="quarto-category">Tidsserier</div>
+                <div class="quarto-category">Arkiv</div>
+                <div class="quarto-category">Datadok</div>
+                <div class="quarto-category">Parquet</div>
               </div>
                   </div>
   </div>
@@ -256,11 +254,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div class="quarto-title-meta-heading">Tilhører</div>
     
       <div class="quarto-title-meta-contents">
-      <p class="author">Magnus Kvåle Helliesen </p>
+      <p class="author">Carl F. Corneil </p>
     </div>
     <div class="quarto-title-meta-contents">
           <p class="affiliation">
-              Seksjon for nasjonalregnskap (210)
+              Seksjon for Kultur- og Utdanningsstatistikk (360)
             </p>
         </div>
     </div>
@@ -271,14 +269,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Opprettet</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 12, 2024</p>
+        <p class="date">January 19, 2024</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Endret</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">January 16, 2024</p>
+        <p class="date-modified">January 22, 2024</p>
       </div>
     </div>
       
@@ -292,16 +290,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#installasjon" id="toc-installasjon" class="nav-link active" data-scroll-target="#installasjon">Installasjon</a></li>
-  <li><a href="#bruk-av-funksjonene" id="toc-bruk-av-funksjonene" class="nav-link" data-scroll-target="#bruk-av-funksjonene">Bruk av funksjonene</a>
+  <li><a href="#hva-er-en-fastbredde-fil" id="toc-hva-er-en-fastbredde-fil" class="nav-link active" data-scroll-target="#hva-er-en-fastbredde-fil">Hva er en fastbredde-fil?</a></li>
+  <li><a href="#lese-med-pandas" id="toc-lese-med-pandas" class="nav-link" data-scroll-target="#lese-med-pandas">Lese med Pandas</a></li>
+  <li><a href="#datadok" id="toc-datadok" class="nav-link" data-scroll-target="#datadok">Datadok</a></li>
+  <li><a href="#lese-med-saspy" id="toc-lese-med-saspy" class="nav-link" data-scroll-target="#lese-med-saspy">Lese med saspy</a>
   <ul class="collapse">
-  <li><a href="#eksempler" id="toc-eksempler" class="nav-link" data-scroll-target="#eksempler">Eksempler</a></li>
+  <li><a href="#datatyper" id="toc-datatyper" class="nav-link" data-scroll-target="#datatyper">Datatyper</a></li>
+  <li><a href="#skalering" id="toc-skalering" class="nav-link" data-scroll-target="#skalering">Skalering</a></li>
   </ul></li>
-  <li><a href="#kjøringer-på-serveren" id="toc-kjøringer-på-serveren" class="nav-link" data-scroll-target="#kjøringer-på-serveren">Kjøringer på serveren</a></li>
-  <li><a href="#automatiserte-uttrekk" id="toc-automatiserte-uttrekk" class="nav-link" data-scroll-target="#automatiserte-uttrekk">Automatiserte uttrekk</a></li>
-  <li><a href="#overføre-data-til-dapla" id="toc-overføre-data-til-dapla" class="nav-link" data-scroll-target="#overføre-data-til-dapla">Overføre data til Dapla</a></li>
+  <li><a href="#lagre-dataframen-til-parquet" id="toc-lagre-dataframen-til-parquet" class="nav-link" data-scroll-target="#lagre-dataframen-til-parquet">Lagre dataframen til parquet</a></li>
+  <li><a href="#nudb" id="toc-nudb" class="nav-link" data-scroll-target="#nudb">NUDB</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/blog/posts/2023-01-12-fame-extractor-python/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/blog/posts/2023-01-19-fra-arkiv-til-parquet/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -314,154 +314,204 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>Mange i SSB har data lagret i Fame som de ønsker å bearbeide med Python og R. Dette er spesielt relevant når man skal flytte statistikkproduksjon til Dapla. <code>fython</code> er en Python-pakke som gjør dette på en enkel måte for deg. Den lar deg eksportere data fra Fame med en enkel funksjon, og kan returnere dataene som enten CSV eller Pandas DataFrame.</p>
-<p><a href="https://github.com/statisticsnorway/ssb-fame-to-python">Pakken finner du på GitHub</a>.</p>
-<section id="installasjon" class="level2">
-<h2 class="anchored" data-anchor-id="installasjon">Installasjon</h2>
-<p>Pakken er avhengig av at Fame er installert miljøet der den benyttes. Siden den er installert på <code>sl-fame-1.ssb.no</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> så vil de færreste har behov for å installere den selv.</p>
-<p>Skulle du likevel ønske å installere pakken selv kan det gjøres med <a href="https://python-poetry.org/">Poetry</a> på følgende måte:</p>
+<p>I arkivet til SSB ligger data lagret som posisjonerte flatfiler, også kalt fastbredde-fil eller <em>fixed width file</em> på engelsk. I Datadok ligger det spesifisert hvordan du leser inn disse filene fra arkivet til <strong>sas7bdat</strong>-formatet, men ikke hvordan man konverterer til Parquet-formatet. I denne artikkelen deler jeg hvordan jeg gikk frem for å konvertere arkivfiler til Parquet.</p>
+<section id="hva-er-en-fastbredde-fil" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-en-fastbredde-fil">Hva er en fastbredde-fil?</h2>
+<p>En fastbredde-fil er en fil der hver rad har en fast lengde, og hver kolonne har en fast posisjon. Det er ingen komma eller andre tegn som skiller kolonnene, slik som i en CSV-fil. En fastbredde-fil er en ren tekstfil, dvs. at du kan åpne den opp i teksteditor og kikke på innholdet direkte.</p>
+<p>Under er et eksempel hvor samme data er lagret både på CSV-formatet og som fastbredde-fil:</p>
+<div class="columns">
+<div class="column" style="width:47.5%;">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>terminal</strong></pre>
+<pre><strong>csv</strong></pre>
 </div>
-<div class="sourceCode" id="cb1" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add git+https://github.com/statisticsnorway/ssb-fame-to-python.git</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-filename="csv"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="er">12345</span><span class="op">;;</span>Ola Nordmann<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dv">345678</span><span class="op">;</span>Kvinne<span class="op">;</span>Kari Nordmann<span class="op">;</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:47.5%;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>fastbredde-fil</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="fastbredde-fil"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="er">12345</span>      Ola Nordmann</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">345678</span><span class="er">KvinneKari</span> Nordmann</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>I csv-filen over til venstre ser vi at hver kolonne er separert med et semikolon, og at hver rad er separert med et linjeskift. I fastbredde-filen til høyre ser vi at hver kolonne har en fast lengde, og at hver rad har en fast lengde. I tillegg ser vi at det er et ekstra mellomrom mellom <code>Ola Nordmann</code> og <code>Kari Nordmann</code> i den første raden. Dette er fordi <code>Ola Nordmann</code> er 12 tegn lang, mens <code>Kari Nordmann</code> er 13 tegn lang.</p>
 </section>
-<section id="bruk-av-funksjonene" class="level2">
-<h2 class="anchored" data-anchor-id="bruk-av-funksjonene">Bruk av funksjonene</h2>
-<p><code>fython</code> har to funksjoner: <code>fame_to_csv</code> og <code>fame_to_df</code>. Begge disse funksjonene tar inn de samme argumentene og de er listet opp i <a href="#tbl-fython-args" class="quarto-xref">Tabell&nbsp;1</a>.</p>
-<div id="tbl-fython-args" class="quarto-float anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fython-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;1: Forklaring av argumentene i funksjonene til <code>fython</code>
-</figcaption>
-<div aria-describedby="tbl-fython-args-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table">
-<colgroup>
-<col style="width: 9%">
-<col style="width: 70%">
-<col style="width: 9%">
-<col style="width: 11%">
-</colgroup>
+<section id="lese-med-pandas" class="level2">
+<h2 class="anchored" data-anchor-id="lese-med-pandas">Lese med Pandas</h2>
+<p>Vi kan bruke pandas-funksjonen <code>read_fwf()</code> for å lese inn en fastbredde-fil. Denne funksjonen tar inn en filsti, og en liste med bredder for hver kolonne. I tillegg kan vi spesifisere navn på kolonnene, og hvilken datatype kolonnene skal ha og hvordan missing-verdier skal representeres.</p>
+<p>Vi er helt avhengig av å vite bredden på hver kolonne for å kunne lese inn en fastbredde-fil. Dette kan vi finne ut ved å åpne filen i en teksteditor og telle antall tegn i hver kolonne. Alternativt kan vi bruke innlesingsskriptet for SAS som finnes i Datadok, siden breddene er spesifisert der. Under er et ekspempel på hvordan vi kan lese inn en fastbredde-fil fra forrige avsnitt<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> StringIO  <span class="co"># Nødvendig siden vi sender en streng, ikke en filsti til .read_fwf</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>instring <span class="op">=</span> <span class="st">"112345      Ola Nordmann </span><span class="ch">\n</span><span class="st">345678KvinneKari Nordmann</span><span class="ch">\n</span><span class="st">"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_fwf(StringIO(instring),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                 names<span class="op">=</span>[<span class="st">'pers_id'</span>, <span class="st">'kjonn'</span>, <span class="st">'navn'</span>],  <span class="co"># Navngi kolonner</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                 dtype<span class="op">=</span><span class="st">'object'</span>,  <span class="co"># Alle kolonnene settes til "object"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                 na_values<span class="op">=</span>[<span class="st">'.'</span>, <span class="st">' .'</span>],  <span class="co"># Hvilke karakterer bruker SAS for tom verdi?</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                 widths<span class="op">=</span>[<span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">13</span>])  <span class="co"># Tell/regn ut dissa sjøl</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
-<th>Argument</th>
-<th>Forklaring</th>
-<th>fame_to_csv()</th>
-<th>fame_to_pandas()</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">pers_id</th>
+<th data-quarto-table-cell-role="th">kjonn</th>
+<th data-quarto-table-cell-role="th">navn</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>databases</td>
-<td>List of Fame databases to access (with full path).</td>
-<td>✓</td>
-<td>✓</td>
+<td data-quarto-table-cell-role="th">0</td>
+<td>112345</td>
+<td>NaN</td>
+<td>Ola Nordmann</td>
 </tr>
 <tr class="even">
-<td>frequency</td>
-<td>Frequency of the data (‘a’, ‘q’, ‘m’).</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr class="odd">
-<td>date_from</td>
-<td>Start date for the data in Fame syntax (e.g., ‘2023:1’ for quarterly, ‘2023’ for annual).</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr class="even">
-<td>date_to</td>
-<td>End date for the data in Fame syntax (e.g., ‘2023:1’ for quarterly, ‘2023’ for annual).</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr class="odd">
-<td>search_string</td>
-<td>Query string for fetching specific data. The search is not case sensitive, and “^” and “?” are wildcards (for exactly one and any number of characters, respectively)</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr class="even">
-<td>decimals</td>
-<td>Number of decimal places in the fetched data (default is 10).</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-<tr class="odd">
-<td>path</td>
-<td>Path to write the csv-file.</td>
-<td>✓</td>
-<td></td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>345678</td>
+<td>Kvinne</td>
+<td>Kari Nordmann</td>
 </tr>
 </tbody>
 </table>
+
 </div>
-</figure>
 </div>
-<p>La se på noen eksempler.</p>
-<section id="eksempler" class="level3">
-<h3 class="anchored" data-anchor-id="eksempler">Eksempler</h3>
-<p>Dersom vi ønsker å hente alt i <code>database1.db</code> og <code>database2.db</code> fra <strong>januar 2012</strong> til <strong>desember 2022</strong>, og få det returnert i en DataFrame, kan vi skrive følgende kode:</p>
+</div>
+<p>Koden over returnerer en Pandas Dataframe i minnet. Den kan vi lett lagre til Parquet-formatet. Men innlesingen måtte vi spesifisere en masse detaljer manuelt. Hvis vi skal lese inn mange filer med ulik struktur, så er ikke denne fremgangsmåten skalerbar. Dette er en fremgangsmåte for å lese inn noen få filer.</p>
+</section>
+<section id="datadok" class="level2">
+<h2 class="anchored" data-anchor-id="datadok">Datadok</h2>
+<p>Som nevnt over så finnes det et innlesingsskript for SAS i Datadok. Dette skriptet kan vi bruke til å lese inn en fastbredde-fil i Python. Vi kan også bruke det til å finne breddene på hver kolonne. Et slik skript har denne formen:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>innlesingsskript.sas</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="innlesingsskript.sas"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">DATA</span> sas_data<span class="kw">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>   <span class="ex">INFILE</span> <span class="st">'/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.dat'</span> MISSOVER PAD LRECL=36<span class="kw">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>   <span class="ex">INPUT</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      <span class="ex">@1</span> pers_id 6.0</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="ex">@7</span> kjonn <span class="va">$CHAR6</span>.0</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="ex">@13</span> navn <span class="va">$CHAR13</span>.0</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   <span class="kw">;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">RUN</span><span class="kw">;</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Vi kunne brukt informasjonen her til å finne ut hvordan filen skal leses inn med <code>read_fwf()</code>. Men fortsatt innebærer dette potensielt en del manuelt arbeid.</p>
+</section>
+<section id="lese-med-saspy" class="level2">
+<h2 class="anchored" data-anchor-id="lese-med-saspy">Lese med saspy</h2>
+<p>En annen tilnærming enn å bruke Pandas er å bruke biblioteket <code>saspy</code>. Dette biblioteket lar oss kjøre SAS-kode fra Python. Vi kan bruke det til å kjøre sas-skript hentet fra Datadok, konvertere til dataframe, og til slutt skrive til Parquet. I det følgende antar vi at du jobber i Jupyterlab i prodsonen (sl-jupyter-p), og at du har lagret innlesingsskriptet i en variabel, slik som vist under:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
 </div>
-<div class="sourceCode" id="cb2" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fython <span class="im">import</span> fame_to_pandas</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> fame_to_pandas(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'sti/til/database1.db'</span>, <span class="st">'sti/til/database2.db'</span>, <span class="st">'m'</span>, <span class="st">'2012:1'</span>, <span class="st">'2022:12'</span>, <span class="st">'?'</span>]</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>script <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">DATA sas_data;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">   INFILE '/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.dat' MISSOVER PAD LRECL=36;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">   INPUT</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">      @1 pers_id 6.0</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">      @7 kjonn $CHAR6.0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">      @13 navn $CHAR13.0</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">   ;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">RUN;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Dersom vi i stedet ønsker å hente alle serier som begynner på <strong>abc</strong>, slutter på <strong>d</strong> etterfulgt av ett vilkårlig tegn, kan vi skrive følgende kode:</p>
+<p>La oss deretter kjøre følgende kode fra Jupyterlab:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
 </div>
-<div class="sourceCode" id="cb3" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fython <span class="im">import</span> fame_to_pandas</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> fame_to_pandas(</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'sti/til/database1.db'</span>, <span class="st">'sti/til/database2.db'</span>, <span class="st">'m'</span>, <span class="st">'2012:1'</span>, <span class="st">'2022:12'</span>, <span class="st">'abc?d^'</span>]</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> saspy_session<span class="op">@</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler til sas-serverne</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>sas <span class="op">=</span> saspy_session()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Vi bruker tilkoblingen til å sende inn Datadok-skriptet</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> sas.submit(script)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagere sas-loggen i en variabel</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>log <span class="op">=</span> result[<span class="st">"LOG"</span>]</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Ber om å få dataframe tilbake</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>df_frasas <span class="op">=</span> sas.sd2df(<span class="st">"sas_data"</span>, <span class="st">"work"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Lukker koblingen til sas-serverne</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>sas._endsas()</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Printer ut datasettet</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>df_frasas</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>?</code> og <code>^</code> er altså jokertegn/wildcards som representerer henholdvis et vilkårlig antall tegn og nøyaktig ett tegn.</p>
-<p>Dersom vi i stedet vil lagre dataene til en csv-fil kan vi skrive</p>
+<p>I koden over har vi brukt en pakke som heter <code>ssb-fagfunksjoner</code> for å gjøre en del oppgaver. Pakken er et overbygg over saspy, og koden over forutsetter at du har lagret passorder ditt på en spesiell måte<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<section id="datatyper" class="level3">
+<h3 class="anchored" data-anchor-id="datatyper">Datatyper</h3>
+<p>Vi har nå en pandas dataframe med datatyper, men disse er basert på den lave mengden datatyper i SAS. Ofte bør det ryddes i datatyper før man skriver til Parquet. Spesielt bør du tenke på følgende:</p>
+<ul>
+<li><code>Character</code> mappes gjerne til <code>object</code> i pandas, ikke den strengere varianten <code>string</code>.</li>
+<li><code>Numeric</code> mappes stort sett til <code>float64</code> i pandas, vi får som regel ikke heltall direkte <code>Int64</code>.</li>
+</ul>
+<p>Du kan la Pandas gjøre ett nytt forsøk på å gjette datatyper ved å kjøre følgende kode:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
 </div>
-<div class="sourceCode" id="cb4" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fython <span class="im">import</span> fame_to_csv</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fame_to_csv(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">'sti/til/database1.db'</span>, <span class="st">'sti/til/database2.db'</span>, <span class="st">'m'</span>, <span class="st">'2012:1'</span>, <span class="st">'2022:12'</span>, <span class="st">'abc?d^'</span>, <span class="st">'sti/til/csv-fil.csv'</span>]</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_pd_dtypes <span class="op">=</span> df_frasas.convert_dtypes()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_pd_dtypes.dtypes</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Om du vil teste min selvskrevne funksjon for å gjette på datatyper så ligger den i fellesfunksjons-pakken:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>python</strong></pre>
 </div>
-<div class="callout-title-container flex-fill">
-Warning
+<div class="sourceCode" id="cb8" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> auto_dtype</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_auto <span class="op">=</span> auto_dtype(df_frasas)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df_auto.dtypes</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Sjekk gjerne ut parameteret <code>cardinality_threshold</code>, om du er interessert i å automatisk sette <code>categorical dtypes</code>.</p>
+</section>
+<section id="skalering" class="level3">
+<h3 class="anchored" data-anchor-id="skalering">Skalering</h3>
+<p>Hvis du har mange arkivfiler, med mange forskjellige innlesingsskript, så kan du lagre alle skriptene i en mappe, og så iterere over de.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>python</strong></pre>
 </div>
-<div class="callout-body-container callout-body">
-<p>Det er viktig å påpeke at enhver serie kun skrives én gang, og da fra den første databasen den finnes i (kronologisk iht. til listen med databaser).</p>
+<div class="sourceCode" id="cb9" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sas_script_path <span class="op">=</span> <span class="st">"/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.sas"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(sas_script_path, <span class="st">"r"</span>, encoding<span class="op">=</span><span class="st">"latin1"</span>) <span class="im">as</span> sas_script:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    script <span class="op">=</span> sas_script.read().strip()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    script <span class="op">=</span> <span class="st">"DATA "</span> <span class="op">+</span> script.split(<span class="st">"DATA "</span>)[<span class="dv">1</span>] <span class="co"># Forkort ned scriptet til det vi trenger</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(script)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+<p>Her henter jeg inn et innlesingsskript fra Datadok som jeg har lagret som en tekstfil i en mappe. Deretter gjør jeg den om til et object i minnet som kan brukes i saspy-koden som er vist over. Dermed er det bare å finne en logikk som gjør at du vet hvilket innlesingskript som skal brukes til hvilke filer, og du kan jobbe veldig effektivt med konvertering. Når alt er konvertert kan du f.eks. kjøre et script som validerer datatypene i alle parquet-filer.</p>
 </section>
 </section>
-<section id="kjøringer-på-serveren" class="level2">
-<h2 class="anchored" data-anchor-id="kjøringer-på-serveren">Kjøringer på serveren</h2>
-<p>Når du skal bruke <code>fython</code> så må du ta hensyn til hvilken server Fame er installert på, og hvilken server du har tenkt til å jobbe på. Fame er som sagt installert på <code>sl-fame-1.ssb.no</code>, mens Jupyterlab er installert på <code>sl-jupyter-p.ssb.no</code>. Dvs. at hvis du ønsker å bruke <code>fython</code> i en notebook i Jupyterlab, så må du <a href="https://ubiquitous-doodle-n15e62e.pages.github.io/posts/ssh-onprem/">bruke ssh</a> til å koble deg til <code>sl-fame-1.ssb.no</code>, og så kjøre koden derfra. Koden din kan skrive en fil til ønsket stammeområdet, som du igjen kan lese inn direkte i Jupyterlab.</p>
+<section id="lagre-dataframen-til-parquet" class="level2">
+<h2 class="anchored" data-anchor-id="lagre-dataframen-til-parquet">Lagre dataframen til parquet</h2>
+<p>Nå er det veldig rett å skrive filen til Parquet-formatet.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>python</strong></pre>
+</div>
+<div class="sourceCode" id="cb10" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_auto.to_parquet(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"/ssb/bruker/felles/flatfileksempel_dapla_manual_blogg.parquet"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="automatiserte-uttrekk" class="level2">
-<h2 class="anchored" data-anchor-id="automatiserte-uttrekk">Automatiserte uttrekk</h2>
-<p>Hvis man ønsker at utrekk fra Fame skal skje automatisk på gitte tidspunkter eller intervaller, så kan man ta kontakt med Kundeservice. Fordelen med dette er at man ikke trenger å bruke <code>ssh</code> slik som beskrevet over. Man kan lese inn direkte fra stammeområdet.</p>
-</section>
-<section id="overføre-data-til-dapla" class="level2">
-<h2 class="anchored" data-anchor-id="overføre-data-til-dapla">Overføre data til Dapla</h2>
-<p>Hvis man ønsker å overføre data fra Fame til Dapla, så kan dette settes opp som en MoveIt-operasjon. For å sette opp en MoveIt-jobb må ma kontakte Kundeservice. Overføring til Dapla forutsetter at man har et Dapla-team, og at man setter opp en synkroniseringjobb med <a href="../../../statistikkere/transfer-service.html">Transfer Service</a>.</p>
+<section id="nudb" class="level2">
+<h2 class="anchored" data-anchor-id="nudb">NUDB</h2>
+<p>I omleggingen av NUDB (Nasjonal utdanningsdatabase), måtte vi konvertere hele arkivet vårt på 750+ dat-filer.</p>
+<p>Det var ønskelig å slippe å lagre til sas7bdat i mellom, for å slippe mye dataduplikasjon og arbeidsprosesser.</p>
+<p>I stor grad kunne dette arbeidet automatiseres (bortsett fra å lagre ut innlastingsscript fra gamle datadok). Funksjonene jeg utviklet for dette ligger stort sett i denne filen:<br>
+<a href="https://github.com/statisticsnorway/utd-nudb/blob/main/prodsone/konverter_arkiv/archive.py">github.com/utd-nudb/prodsone/konverter_arkiv/archive.py</a></p>
 
 
 </section>
@@ -470,7 +520,8 @@ Warning
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
 
 <ol>
-<li id="fn1"><p>Pakken er installert i Python-versjon 3.6 på serveren. Du kan åpne et Python-shell i terminalen på <code>sl-fame-1.ssb.no</code> ved å skrive: <code>python3.6</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><code>/n</code> i strengen <code>112345      Ola Nordmann \n345678KvinneKari Nordmann\n</code> betyr linjeskift.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Hvis du ønsker kan du bruker <code>ssb-fagfunksjoner</code> til å lagre passordet ditt i kryptert form. Da kan du lagre passordet i en fil på din egen maskin, og slipper å skrive det inn hver gang du skal koble til SAS. Funksjonen heter <code>set_password()</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -868,7 +919,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/blog/posts/2023-01-12-fame-extractor-python/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/blog/posts/2023-01-19-fra-arkiv-til-parquet/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
