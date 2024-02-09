@@ -314,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>I arkivet til SSB ligger data lagret som posisjonerte flatfiler, også kalt fastbredde-fil eller <em>fixed width file</em> på engelsk. I Datadok ligger det spesifisert hvordan du leser inn disse filene fra arkivet til <strong>sas7bdat</strong>-formatet, men ikke hvordan man konverterer til Parquet-formatet. I denne artikkelen deler jeg hvordan jeg gikk frem for å konvertere arkivfiler til Parquet.</p>
+<p>I arkivet til SSB ligger data lagret som posisjonerte flatfiler, også kalt fastbredde-fil eller <em>fixed width file</em> på engelsk. I Datadok ligger det spesifisert hvordan du leser inn disse filene fra <strong>dat</strong> eller <strong>txt</strong> i arkivet til <strong>sas7bdat</strong>-formatet, men ikke hvordan man konverterer til Parquet-formatet. I denne artikkelen deler jeg hvordan jeg gikk frem for å konvertere arkivfiler til Parquet.</p>
 <section id="hva-er-en-fastbredde-fil" class="level2">
 <h2 class="anchored" data-anchor-id="hva-er-en-fastbredde-fil">Hva er en fastbredde-fil?</h2>
 <p>En fastbredde-fil er en fil der hver rad har en fast lengde, og hver kolonne har en fast posisjon. Det er ingen komma eller andre tegn som skiller kolonnene, slik som i en CSV-fil. En fastbredde-fil er en ren tekstfil, dvs. at du kan åpne den opp i teksteditor og kikke på innholdet direkte.</p>
@@ -335,17 +335,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>fastbredde-fil</strong></pre>
 </div>
-<div class="sourceCode" id="cb2" data-filename="fastbredde-fil"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="er">12345</span>      Ola Nordmann</span>
+<div class="sourceCode" id="cb2" data-filename="fastbredde-fil"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="er">12345</span>      Ola Nordmann </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dv">345678</span><span class="er">KvinneKari</span> Nordmann</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-<p>I csv-filen over til venstre ser vi at hver kolonne er separert med et semikolon, og at hver rad er separert med et linjeskift. I fastbredde-filen til høyre ser vi at hver kolonne har en fast lengde, og at hver rad har en fast lengde. I tillegg ser vi at det er et ekstra mellomrom mellom <code>Ola Nordmann</code> og <code>Kari Nordmann</code> i den første raden. Dette er fordi <code>Ola Nordmann</code> er 12 tegn lang, mens <code>Kari Nordmann</code> er 13 tegn lang.</p>
+<p>I csv-filen over til venstre ser vi at hver kolonne er separert med et semikolon, og at hver rad er separert med et linjeskift. I fastbredde-filen til høyre ser vi at hver kolonne har en fast lengde, den tomme kjønnsvariabelen på rad 1 fylles med spaces, hver rad har dermed den samme lengden i antall tegn. I tillegg er det et ekstra mellomrom etter <code>Ola Nordmann</code> ift. <code>Kari Nordmann</code>. Dette er fordi <code>Ola Nordmann</code> er 12 tegn lang, mens <code>Kari Nordmann</code> er 13 tegn lang.</p>
 </section>
 <section id="lese-med-pandas" class="level2">
 <h2 class="anchored" data-anchor-id="lese-med-pandas">Lese med Pandas</h2>
 <p>Vi kan bruke pandas-funksjonen <code>read_fwf()</code> for å lese inn en fastbredde-fil. Denne funksjonen tar inn en filsti, og en liste med bredder for hver kolonne. I tillegg kan vi spesifisere navn på kolonnene, og hvilken datatype kolonnene skal ha og hvordan missing-verdier skal representeres.</p>
-<p>Vi er helt avhengig av å vite bredden på hver kolonne for å kunne lese inn en fastbredde-fil. Dette kan vi finne ut ved å åpne filen i en teksteditor og telle antall tegn i hver kolonne. Alternativt kan vi bruke innlesingsskriptet for SAS som finnes i Datadok, siden breddene er spesifisert der. Under er et ekspempel på hvordan vi kan lese inn en fastbredde-fil fra forrige avsnitt<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<p>Vi er helt avhengig av å vite bredden på hver kolonne for å kunne lese inn en fastbredde-fil. Dette kan vi finne ut ved å åpne filen i en teksteditor og telle/gjette antall tegn i hver kolonne. Alternativt kan vi bruke innlesingsskriptet for SAS som finnes i Datadok, siden breddene er spesifisert der. Under er et ekspempel på hvordan vi kan lese inn en fastbredde-fil fra forrige avsnitt<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> io <span class="im">import</span> StringIO  <span class="co"># Nødvendig siden vi sender en streng, ikke en filsti til .read_fwf</span></span>
@@ -356,7 +356,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                 na_values<span class="op">=</span>[<span class="st">'.'</span>, <span class="st">' .'</span>],  <span class="co"># Hvilke karakterer bruker SAS for tom verdi?</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                 widths<span class="op">=</span>[<span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">13</span>])  <span class="co"># Tell/regn ut dissa sjøl</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -406,11 +406,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   <span class="kw">;</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">RUN</span><span class="kw">;</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Vi kunne brukt informasjonen her til å finne ut hvordan filen skal leses inn med <code>read_fwf()</code>. Men fortsatt innebærer dette potensielt en del manuelt arbeid.</p>
+<p>Vi kunne lest av informasjonen her og omsatt innholdet til argumentene <code>read_fwf()</code> trenger. Men fortsatt innebærer dette potensielt en del manuelt arbeid.</p>
 </section>
 <section id="lese-med-saspy" class="level2">
 <h2 class="anchored" data-anchor-id="lese-med-saspy">Lese med saspy</h2>
-<p>En annen tilnærming enn å bruke Pandas er å bruke biblioteket <code>saspy</code>. Dette biblioteket lar oss kjøre SAS-kode fra Python. Vi kan bruke det til å kjøre sas-skript hentet fra Datadok, konvertere til dataframe, og til slutt skrive til Parquet. I det følgende antar vi at du jobber i Jupyterlab i prodsonen (sl-jupyter-p), og at du har lagret innlesingsskriptet i en variabel, slik som vist under:</p>
+<p>En annen tilnærming enn å bruke .read_fwf fra Pandas er å bruke biblioteket <code>saspy</code>. Dette biblioteket lar oss kjøre SAS-kode fra Python, på SAS-serverene i prodsonen, og få Dataframes tilbake. Vi kan bruke det til å kjøre sas-skript hentet fra Datadok, konvertere til en pandas dataframe, og til slutt skrive til Parquet. I det følgende antar vi at du jobber i Jupyterlab i prodsonen (sl-jupyter-p), og at du har lagret innlesingsskriptet i en variabel, slik som vist under:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
@@ -431,7 +431,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
 </div>
-<div class="sourceCode" id="cb6" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> saspy_session<span class="op">@</span></span>
+<div class="sourceCode" id="cb6" data-filename="python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> saspy_session</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler til sas-serverne</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>sas <span class="op">=</span> saspy_session()</span>
@@ -439,7 +439,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Vi bruker tilkoblingen til å sende inn Datadok-skriptet</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> sas.submit(script)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagere sas-loggen i en variabel</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagre sas-loggen i en variabel</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>log <span class="op">=</span> result[<span class="st">"LOG"</span>]</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Ber om å få dataframe tilbake</span></span>
@@ -451,13 +451,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Printer ut datasettet</span></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>df_frasas</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>I koden over har vi brukt en pakke som heter <code>ssb-fagfunksjoner</code> for å gjøre en del oppgaver. Pakken er et overbygg over saspy, og koden over forutsetter at du har lagret passorder ditt på en spesiell måte<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>I koden over har vi brukt en pakke som heter <code>ssb-fagfunksjoner</code> for å opprette koblingen til sas-serveren. Pakken inneholder et overbygg over saspy, og koden over forutsetter at du har lagret passordet ditt på en spesiell måte<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <section id="datatyper" class="level3">
 <h3 class="anchored" data-anchor-id="datatyper">Datatyper</h3>
-<p>Vi har nå en pandas dataframe med datatyper, men disse er basert på den lave mengden datatyper i SAS. Ofte bør det ryddes i datatyper før man skriver til Parquet. Spesielt bør du tenke på følgende:</p>
+<p>Vi har nå en pandas dataframe med datatyper påført, men disse er basert på den lave mengden datatyper i SAS. Ofte bør det ryddes i datatyper før man skriver til Parquet. Spesielt bør du tenke på følgende:</p>
 <ul>
-<li><code>Character</code> mappes gjerne til <code>object</code> i pandas, ikke den strengere varianten <code>string</code>.</li>
-<li><code>Numeric</code> mappes stort sett til <code>float64</code> i pandas, vi får som regel ikke heltall direkte <code>Int64</code>.</li>
+<li><code>Character</code> mappes gjerne til <code>object</code> i pandas, ikke den strengere varianten <code>string</code> eller den mer spesifikke <code>string[pyarrow]</code>.</li>
+<li><code>Numeric</code> mappes stort sett til <code>float64</code> i pandas, vi får som regel ikke heltall direkte <code>Int64</code> uten videre behandling.</li>
 </ul>
 <p>Du kan la Pandas gjøre ett nytt forsøk på å gjette datatyper ved å kjøre følgende kode:</p>
 <div class="code-with-filename">
@@ -476,11 +476,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_auto <span class="op">=</span> auto_dtype(df_frasas)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df_auto.dtypes</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Sjekk gjerne ut parameteret <code>cardinality_threshold</code>, om du er interessert i å automatisk sette <code>categorical dtypes</code>.</p>
+<p>Sjekk gjerne ut parameteret <code>cardinality_threshold</code> på <code>auto_dtype</code>, om du er interessert i å automatisk sette <code>categorical dtypes</code>.</p>
 </section>
 <section id="skalering" class="level3">
 <h3 class="anchored" data-anchor-id="skalering">Skalering</h3>
-<p>Hvis du har mange arkivfiler, med mange forskjellige innlesingsskript, så kan du lagre alle skriptene i en mappe, og så iterere over de.</p>
+<p>Hvis du har mange arkivfiler, med mange forskjellige innlesingsskript, så kan du lagre alle skriptene i en mappe, og så hente innholdet programmatisk. Her er koden for én slik “henting”.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
@@ -491,12 +491,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    script <span class="op">=</span> <span class="st">"DATA "</span> <span class="op">+</span> script.split(<span class="st">"DATA "</span>)[<span class="dv">1</span>] <span class="co"># Forkort ned scriptet til det vi trenger</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(script)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Her henter jeg inn et innlesingsskript fra Datadok som jeg har lagret som en tekstfil i en mappe. Deretter gjør jeg den om til et object i minnet som kan brukes i saspy-koden som er vist over. Dermed er det bare å finne en logikk som gjør at du vet hvilket innlesingskript som skal brukes til hvilke filer, og du kan jobbe veldig effektivt med konvertering. Når alt er konvertert kan du f.eks. kjøre et script som validerer datatypene i alle parquet-filer.</p>
+<p>Her henter jeg inn et innlesingsskript fra Datadok som jeg har lagret som en tekstfil i en mappe på linux-serveren i prodsonen. Deretter gjør jeg den om til et streng-objekt i minnet som kan sendes til saspy-koden som er vist over. Dermed er det bare å finne en logikk som gjør at du vet hvilket innlesingskript som skal brukes til hvilke arkivfiler (siste valide datadok-script før datafil oppstod feks), og du kan jobbe veldig effektivt med konvertering. Når alt er konvertert kan du f.eks. kjøre et script som validerer datatypene på tvers av alle årganger og filnavn.</p>
 </section>
 </section>
 <section id="lagre-dataframen-til-parquet" class="level2">
 <h2 class="anchored" data-anchor-id="lagre-dataframen-til-parquet">Lagre dataframen til parquet</h2>
-<p>Nå er det veldig rett å skrive filen til Parquet-formatet.</p>
+<p>Nå er det veldig lett å skrive filen til Parquet-formatet.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>python</strong></pre>
@@ -509,8 +509,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="nudb" class="level2">
 <h2 class="anchored" data-anchor-id="nudb">NUDB</h2>
 <p>I omleggingen av NUDB (Nasjonal utdanningsdatabase), måtte vi konvertere hele arkivet vårt på 750+ dat-filer.</p>
-<p>Det var ønskelig å slippe å lagre til sas7bdat i mellom, for å slippe mye dataduplikasjon og arbeidsprosesser.</p>
-<p>I stor grad kunne dette arbeidet automatiseres (bortsett fra å lagre ut innlastingsscript fra gamle datadok). Funksjonene jeg utviklet for dette ligger stort sett i denne filen:<br>
+<p>Det var ønskelig å slippe å lagre til sas7bdat i mellom, for å slippe mye dataduplikasjon og arbeidsprosesser. Målet vårt var pseudonymiserte parquetfiler i sky.</p>
+<p>I stor grad kunne dette arbeidet automatiseres (bortsett fra å lagre ut innlastingsscript fra gamle datadok). Funksjonene jeg utviklet for dette, ligger stort sett i denne filen:<br>
 <a href="https://github.com/statisticsnorway/utd-nudb/blob/main/prodsone/konverter_arkiv/archive.py">github.com/utd-nudb/prodsone/konverter_arkiv/archive.py</a></p>
 
 
@@ -521,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <ol>
 <li id="fn1"><p><code>/n</code> i strengen <code>112345      Ola Nordmann \n345678KvinneKari Nordmann\n</code> betyr linjeskift.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Hvis du ønsker kan du bruker <code>ssb-fagfunksjoner</code> til å lagre passordet ditt i kryptert form. Da kan du lagre passordet i en fil på din egen maskin, og slipper å skrive det inn hver gang du skal koble til SAS. Funksjonen heter <code>set_password()</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Hvis du ønsker kan du bruker <code>ssb-fagfunksjoner</code> til å lagre passordet ditt i kryptert form. Da kan du lagre passordet i en fil på din egen maskin, og slipper å skrive det inn hver gang du skal koble til SAS. Funksjonen heter <code>fagfunksjoner.prodsone.saspy_ssb.set_password()</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
