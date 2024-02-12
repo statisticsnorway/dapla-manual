@@ -146,6 +146,19 @@ fs.info(file)
 
 Dette gir deg blant annet informasjon om filstørrelse, tidspunkt for opprettelse, og tidspunkt for siste endring. Hvis du ønsker dette for flere filer så kan man også bruke `fs.glob(<pattern>, details=True)` som vi så på tidligere.
 
+### fs.ls()
+
+`fs.ls()` brukes for å gi en liste av filer i et område. Det kan brukes for både bøtter og mapper.
+
+```{.python filename="notebook"}
+from dapla import FileClient
+
+fs = FileClient.get_gcs_file_system()
+
+fs.ls("gs://ssb-dapla-felles-data-delt-prod/altinn3")
+```
+Koden returnerer en liste.
+
 ### fs.open()
 
 `fs.open()` lar oss åpne en fil i bøtta for lesing og skriving med vanlige Python-funksjoner. Funksjonen returnerer et fil-aktig objekt som kan brukes med vanlige som Python-biblioteker som **Pandas** og **NumPy**. 
