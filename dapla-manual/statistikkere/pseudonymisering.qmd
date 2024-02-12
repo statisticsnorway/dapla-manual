@@ -1,0 +1,87 @@
+# Pseudonymisering
+
+Kildedata som inneholder sensitive opplysninger skal pseudonymiseres i overgangen fra [kildedata](./datatilstander.html#kildedata) til [inndata](./datatilstander.html#inndata). På Dapla er det flere tjenester som til sammen gir et team kapabiliteten til å pseudomymisere. @fig-papis viser hvilke tjenester som typisk benyttes når man skal pseudonymisere fødselsnummer (fnr). All prosessering av kildedata skal skje med automatisk prosessering i [Kildomaten](./kildomaten.html). I Kildomaten bruker man python-pakken [dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/). Den kan kalle på SNR-katalogen for å kode om fødselsnummer til stabil ID (snr), og deretter blir sendt til tjeneste som pseudonymisere snr.  
+
+
+
+```{mermaid}
+%%| label: fig-papis
+%%| fig-cap: "Pseudonymisering med Papis-nøkkel på Dapla."
+
+stateDiagram
+state Kildomaten {
+        direction LR
+        fnr --> snr
+        snr --> pseudonym
+
+        state dapla_toolbelt {
+        fnr
+        } 
+
+        state sidService {
+        snr
+        }
+
+        state pseudoService {
+        pseudonym
+        }
+    }
+
+```
+
+@fig-papis viser hvordan man kan få samme pseudonym på Dapla som man får med Papis og stabil ID i prodsonen. Men på Dapla kan man også spesifisere hvilke krypteringsalgoritmer man ønsker, og man kan kryptere uten å kode om til stabil ID først.
+
+## Forberedelser
+
+For å kunne bruke pseudonymiseringstjenestene på Dapla må man gjøre følgende:
+
+- Be Kundeservice om å gi teamet tilgang til [Dapla Pseudo Service](https://github.com/statisticsnorway/dapla-dlp-pseudo-service).
+- Be Kundeservice om å sette opp [Kildomaten](./kildomaten.html) for teamet.
+
+Selv om statistikkere/forskere forholder seg til python-pakken [dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/) når de skal pseudonymisere, så krever pakken at teamet har tilgang til *Dapla Pseudo Service*. 
+
+*Kildomaten* er tjeneste som lar brukeren automatisere overgangen fra kildedata til inndata. Derfor trenger teamet tilgang til denne for å kjøre pseudonymiseringen. 
+
+## Tilgangsstyring
+
+Når et team har fått tilgang til *Dapla Pseudo Service*, så må de fortsatt forholde seg til tilgangsstyring på 2 nivåer:
+
+1. **Miljøet**  
+I prod-miljøet til teamet kan man bare pseudonymisere data via automatiske prosesseringer i Kildomaten. Dvs. at man IKKE kan sitte i Jupyter og interaktivt pseudonymisere sensitiv informasjon. Ønsker man å gjøre dette fra Jupyter må man gjøre det med testdata i teamets test-miljø. 
+2. **Teamet**  
+Siden personopplysninger kun skal forekomme i [kildedata](./datatilstander.html#kildedata), og det kun er de med tilgangsrollen [data-admins](./hva-er-dapla-team.html#data-admins) som kan godkjenne den automatiske prosesseringen som skjer fra kildedata til inndata.
+3. **data-admins**  
+data-admins er de eneste på teamet som kan gi seg selv tilgang til å manuelt inspisere kildedata. Disse tilgangene er kortvarige og aktiveres med en begrunnelse i [JIT-applikasjonen](./jit.qmd).
+
+På grunn av den strenge tilgangen til kildedata og pseudonymisering så er det anbefalt at man utvikler skriptet som pseudonymiserer i test-miljøet til teamet. Under forklarer vi hvordan dette gjøres. Les mer her.
+
+## Filformater
+
+Kommer snart. 
+
+## Papis-pseudonym
+
+Kommer snart.
+
+
+
+
+
+
+
+## Anbefalt arbeidsflyt
+
+Når man skal sette opp et Python-skript som automatisere overgangen fra kildedata til inndata, inkludert pseudonymisering, så er det anbefalt å utvikle koden i test-miljøet til teamet. Der kan hele teamet ha tilgang til både data, pseudonymisering og Kildomaten. Skriptet som genereres her kan enkelt overføres til prodmiljøet senere. 
+
+### Testdata
+
+Kommer snart.
+
+
+
+
+
+
+
+
+
