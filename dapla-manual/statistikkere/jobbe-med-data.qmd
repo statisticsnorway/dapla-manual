@@ -399,15 +399,11 @@ Her er et eksempel på hvordan man leser inn en sas7bdat-fil på Dapla som har b
 ## Python {{< fa brands python >}}
 
 ```{.python filename="notebook"}
-import pandas as pd
-from dapla import FileClient
-
-fs = FileClient.get_gcs_file_system()
+import dapla as dp
 
 sti = "gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/sas/statbank_ledstill.sas7bdat"
 
-with fs.open(sti) as sas:
-    df = pd.read_sas(sas, format="sas7bdat", encoding="latin1")
+dp.read_pandas(sti, file_format="sas7bdat", encoding="latin1")
 ```
 
 ## {{< fa brands r-project >}}
