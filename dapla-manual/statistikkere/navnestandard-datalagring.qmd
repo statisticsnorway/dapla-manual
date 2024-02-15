@@ -1,101 +1,55 @@
 # Navnestandard datalagring
 
-::: {.callout-note}
-## Krav til dokumentasjon av datasett
-I SSB er det et krav at datasett i datatilstandene**^1^** (inndata), klargjorte
-data, statistikk og utdata dokumenteres. Det er spesielt viktig at klargjorte
-data, som er grunnlag både for statistikk, arkiv og datadeling, dokumenteres
-godt. Dokumentasjon er nødvendig for at vi skal finne, forstå og (gjen)bruke
-SSBs data. De fysiske datasettene og variablene som inngår i disse skal
-dokumenteres med bruk av metadataløsningene
-[DataDoc](https://manual.dapla.ssb.no/datadoc.html) (datasettdokumentasjon),
-[VarDef](/wiki/spaces/MPD/pages/3009839199/VarDef+-+Krav+til+dokumentasjon+av+variabler)
-**^2^** (variabeldefinisjoner) og [KLASS](https://www.ssb.no/klass/) (kodelister
-og klassifikasjoner).
+Alle statistikkteam skal følge navnestandarden for lagring av [datatilstander](./datatilstander.html) på Dapla. Standarden gjelder i alle kilde-, produkt- og delt-bøttene som teamet måtte ha, så lenge datasettet er i en av de definerte datatilstandene [inndata](./datatilstander.html#inndata), [klargjorte data](./datatilstander.html#klargjorte-data), [statistikk](./datatilstander.html#statistikk) og [utdata](./datatilstander.html#utdata)^[Datatilstanden “kildedata” omfattes ikke av denne navnestandarden i og med at kildedata mottas av SSB i mange former/strukturer, og at kildedata i
+liten grad skal deles internt og eksternt (begrenset tilgang). Det må eventuelt vurderes om det skal utarbeides egne retningslinjer for lagring av kildedata. Datatilstanden “inndata” er nevnt i parentes i og med at denne datatilstanden ikke er obligatorisk.]. Navnestandarden gjelder foreløpig kun for lagring av datafiler i bøttene Google Cloud Storage og ikke i alternative lagringsressurser som *BigQuery* og *CloudSQL*.
 
-*Se også detaljerte krav til datasett-metadata i dokumentene [DataDoc - Krav
-til dokumentasjon av datasett](https://statistics-
-norway.atlassian.net/l/c/JFFaM2ix) og for variablene som inngår i
-datasettet [DataDoc - Variabelforekomst](https://statistics-
-norway.atlassian.net/l/c/VtfAPDaV)*
+```{.bash filename="Mappestruktur for team dapla-example"}
+ssb-play-obr-data-produkt-prod
+|
+└─ statistikkprodukt1
+|  |
+|  └── klargjorte
+|  |   |-- datasett1
+|  |   |-- datasett2
+|  |
+|  └── statistikkdata
+|  |   |-- datasett1
+|  |   |-- datasett2
+|  |
+|  └── utdata
+|      |-- datasett1
+|      |-- datasett2
+|
+└─ statistikkprodukt2
+|  |
+|  └── klargjorte
+|  |   |-- datasett1
+|  |   |-- datasett2
+|  |
+|  └── statistikkdata
+|  |   |-- datasett1
+|  |   |-- datasett2
+|  |
+|  └── utdata
+|      |-- datasett1
+|      |-- datasett2
+|
+└─ dataprodukt1
+   |
+   └── klargjorte
+   |   |-- datasett1
+   |   |-- datasett2
+   |
+   └── statistikkdata
+   |   |-- datasett1
+   |   |-- datasett2
+   |
+   └── utdata
+       |-- datasett1
+       |-- datasett2
 
-En viktig del av datadokumentasjonsarbeidet er hvordan datasett versjoneres og
-organiseres i en standardisert mappestruktur (katalogstruktur). Dette
-dokumentet beskriver en **navnestandard for mappestruktur og datasett**
-(datafilene), i tillegg til **regler for versjonering av datasett**
-(datafilene).
+```
 
-**^1^** *Datatilstanden “kildedata” omfattes ikke av denne navnestandarden i og
-med at kildedata mottas av SSB i mange former/strukturer, og at kildedata i
-liten grad skal deles internt og eksternt (begrenset tilgang). Det må
-eventuelt vurderes om det skal utarbeides egne retningslinjer for lagring av
-kildedata. Datatilstanden “inndata” er nevnt i parentes i og med at denne
-datatilstanden ikke er obligatorisk.*
-
-**^2^** *Utvikling av nye VarDef er i skrivende stund ikke påbegynt. SSBs
-eksisterende variabeldefinisjonsløsning*
-[_Vardok_](https://www.ssb.no/a/metadata/definisjoner/variabler/main.html)
-*skal derfor benyttes fram til ny løsning er klar.*
-:::
-
-::: {.callout-note}
-## Krav til lagringsformater for datasett
-Dokumentet “[Standardformater for datalagring i SSB](https://statistics-
-norway.atlassian.net/l/c/6JLd40Go#Anbefalte-dokumenttyper-\(filformater\)-for-
-datautveksling-og-lagring)” beskriver krav til filformater og dataformater ved
-lagring av klargjorte data som skal benyttes til utarbeiding av statistikk,
-datadeling og arkivering.
-:::
-
-
-# Navngiving av mapper og datasett (filer)
-
-Navnestandarden**^3^** baseres på kapitelet [“Bøtter” i Dapla-
-manualen](https://manual.dapla.ssb.no/b%C3%B8tter.html), interndokumentet
-[Datatilstander i
-SSB](https://ssbno.sharepoint.com/sites/Internedokumenter/Delte%20dokumenter/Forms/AllItems.aspx?id=%2Fsites%2FInternedokumenter%2FDelte%20dokumenter%2FInterne%20dokumenter%202021%2F2021%2D17%20Datatilstander%20i%20SSB%20%2Epdf&parent=%2Fsites%2FInternedokumenter%2FDelte%20dokumenter%2FInterne%20dokumenter%202021https://ssbno.sharepoint.com/sites/Internedokumenter/Delte%20dokumenter/Forms/AllItems.aspx?id=%2Fsites%2FInternedokumenter%2FDelte%20dokumenter%2FInterne%20dokumenter%202021%2F2021%2D17%20Datatilstander%20i%20SSB%20%2Epdf&parent=%2Fsites%2FInternedokumenter%2FDelte%20dokumenter%2FInterne%20dokumenter%202021)
-og *“statistikk kortnavn”* i
-[Statistikkregisteret](https://wiki.ssb.no/display/SSBNO/4.3.1+Statistikkregisteret).
-
-**^3^** *Navnestandarden er foreløpig begrenset til lagring av datafiler
-i _[_Google Cloud Storage
-Buckets_](https://cloud.google.com/storage/docs/introduction) _\- ofte kalt
-“bøtte(r)” i SSB. Navnestandard for bruk av andre typer
-datalagringsteknologier i Google Cloud, f.eks. BigQuery og CloudSQL, dekkes
-ikke av denne navnestandarden!*
-
-## Mapper (kataloger)
-
-### Standard lagringsområder (bøtter) som opprettes for alle statistikkprodukt-team i SSB
-
-Følgende lagringsområder (bøtter) operettes for alle team:
-
-*  **ssb-prod-**<**teamnavn**>**-data-kilde** : Inneholder ubehandlede rådata fra datakildene.
-*  **ssb-prod-**<**teamnavn**>**-data-produkt** : Inneholder data knyttet til statistikkproduktet.
-*  **ssb-prod-**<**teamnavn**>**-data-delt** : Inneholder data knyttet til statistikkproduktet som kan deles med andre statistikkteam.
-
-Denne navnestandarden gjelder primært for lagringsområdene *data-produkt* *og *data-delt*, men er også anbefalt brukt for *data-kilde*.
-
-### Datatilstander, prosesser, permanente data og temporære data
-
-I en statistikkproduksjon skal det for hver datatilstand lagres permanente
-datasett (datafiler). Disse datasettene skal følge denne navnestandarden
-inkludert kravet til versjonering og dokumentasjon (metadata). Det er
-imidlertid **viktig å skille mellom behovet for permanente data og temporære
-data**. I prosessene som kjøres mellom hver datatilstand, f.eks.
-klargjøringsprosessene mellom inndata og klargjorte data, vil det være behov
-for temporær datalagring. **Temporære data skal aldri deles**, og det stilles
-derfor ingen krav til verken navnestandard, versjonering eller dokumentasjon
-(metadata) av disse. Det er helt opp til hvert produkt-team hvordan de vil
-organisere temporære data. **Ved å skille mellom permanent datalagring og
-temporære datalagring oppnår vi en optimal løsning både for dataprodusenter
-(statistikkseksjonene) og data-konsumentene (interne og eksterne brukere)**.
-Produsentene får nødvendig fleksibilitet til å prosessere data i temporære
-områder, mens konsumentene får godt dokumenterte og versjonerte data i en
-standardisert mappe-struktur og tilgjengelig for gjenfinning i en søkbar
-datakatalog.
-
-![Figur 1: Datatilstander, permanente og temporære data](../images/navnestandard_datatilstander.png)
 
 
 ### Statistikkprodukter og dataprodukter
@@ -142,7 +96,7 @@ mapper som representerer dataprodukter ha endelsen "**\_data**", f.eks.
 :::
 
 
-### Mappestruktur for organisering av datasett i Dapla-teamenes lagringsområder (bøtter)
+### Mappestruktur
 
 Med utgangspunkt i standard bøtter som opprettes for alle statistikk-team i
 DAPLA, Statistikkregisteret og datatilstander, er det utarbeidet følgende
@@ -150,14 +104,41 @@ regler for mappestrukturen og navngiving av mappene i bøttene _(gjelder for
 data-produkt-bøtte og data-delt-bøtte, men anbefalt også for data-kilde-
 bøtte)_ :
 
+```{.bash filename="Mappestruktur for team dapla-example"}
+ssb-play-obr-data-produkt-prod  
+    └─ statistikkprodukt1 
+            └── klargjorte  
+                    ├── datasett1  
+                    ├── datasett2
+            └── statistikkdata  
+                    ├── datasett1  
+                    ├── datasett2
+            └── utdata  
+                    ├── datasett1  
+                    ├── datasett2
+    └─ statistikkprodukt2 
+            └── klargjorte  
+                    ├── datasett1  
+                    ├── datasett2
+            └── statistikkdata  
+                    ├── datasett1  
+                    ├── datasett2
+            └── utdata  
+                    ├── datasett1  
+                    ├── datasett2
+    └─ dataprodukt1 
+            └── klargjorte  
+                    ├── datasett1  
+                    ├── datasett2
+            └── statistikkdata  
+                    ├── datasett1  
+                    ├── datasett2
+            └── utdata  
+                    ├── datasett1  
+                    ├── datasett2   
 ```
-ssb-prod-<team-name>-data-produkt/  
-└─ <statistikk-kortnavn> | <dataprodukt>_data/  
-   └── <datatilstand>/  
-       ├── [datasett-1]  
-       ├── [datasett-2]  
-       └── [datasett-NN]
-```
+
+
 
 ::: {.callout-tip}
 ## Forklaring av mappe-nivåer i navenstandarden
