@@ -1,4 +1,80 @@
-# Pseudonymisering
+# Pseudonymisering (utkast)
+
+På Dapla er det flere tjenester som til sammen gir team muligheten til å pseudonymisere, de-pseudonymisere eller re-pseudonymisere data^[Pseudonymisering defineres her som å erstatte spesifikke data med kunstige data (pseudonymer), mens de-pseudonymisering gjør det samme bare motsatt vei. Re-pseudonymisering defineres som å bytte ut et pseudonym med et annet, uten at brukeren nødvendigvis får tilgang til den opprinnelige verdien. ]. Disse tjenestene er satt opp på en slik måte at statistikkteam kan være selvbetjent i bruken av funksjonaliteten, samtidig som de sikrer at *direkte identifiserende opplysninger* håndteres i henhold til lovverk og SSBs egne bestemmelser.
+
+I dette kapitlet forteller vi hvordan man går frem for å pseudonymisere data i et statistikkteam på Dapla. Før man leser videre er det viktig at leseren har en klar forståelse av hvordan [Dapla-team og tilgangsstyring](./hva-er-dapla-team.html) fungerer på Dapla, samt er kjent med tjenesten [Kildomaten](./kildomaten.html). Kildomaten er tjenesten som automatiserer jobben med, blant annet, å pseudonymisere.  
+
+## Forberedelser
+
+For å pseudonymisere på Dapla må man være en del av Dapla-team og [Kildomaten](./kildomaten.html) må være skrudd på for teamet. Hvis du er usikker på om Kildomaten er skrudd på kan du [sjekke dette selv i teamets IaC-repo](../faq.html#hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team).  
+
+
+## Hva skal pseudonymiseres?
+
+Hvert team er ansvarlig for å selv vurdere hvordan sine [kildedata](./datatilstander.html.#kildedata) skal behandles. All kildedata i SSB er klassifisert som sensitivt, og hvis man har kildedata som skal pseudonymiseres, så skal det skje i overgangen fra kildedata til [inndata](./datatilstander.html#inndata). Er man usikker på om man skal pseudonymisere eller ikke, eller hvilke regler som gjelder for teamets kildedata, så kan man diskutere med [personvernombudet](https://ssbno.sharepoint.com/sites/Sikkerhetogpersonvern/SitePages/Personvernombud-i-SSB.aspx), eventuelt ta kontakt med juristene i SSB.
+
+::: {.callout-warning}
+## Pseudonymisering erstatter ikke dataminimering!  
+Prinsippet om dataminimering er et grunnleggende prinsipp for personvern, og personverndirektivet sier at data som hentes inn og prosesseres skal *… være adekvate, relevante og begrenset til det som er nødvendig for formålene*. Det vil si at hvis man av ulike årsaker ikke får dataminimert ved innhenting av data til SSB, så skal man fjerne all data som ikke er relevant for formålet i overgangen fra kildedata til inndata.  
+:::
+
+### Personidentifiserende informasjon (PII)
+
+:::: {.columns}
+
+::: {.column width="65%"}
+Det følger av både personopplysningsloven og statistikkloven at personidentifiserende informasjon (PII) som samles inn for statistikkformål skal pseudonymiseres. Dette kommer også tydelig fram i [Personvernkonsekvensutredningen (PVK) for personstatistikk](https://statistics-norway.atlassian.net/wiki/spaces/ARK/pages/2888237093/Personvernkonsekvensvurdering+PVK+-+Personstatistikk+p+SSBs+skyplattform)^[Personvernkonsekvensutredningen (PVK) er det norske ordet for den engelske betegnelsen *Data Protection Impact Assessment (DPIA)*. Datatilsynet definerer en DPIA som en *systematisk prosess, som identifiserer og evaluerer potensielle personvernkonsekvenser fra alle interessenters synsvinkel i et prosjekt, initiativ, foreslått system eller prosess.* [Les mer om DPIA i SSB](https://statistics-norway.atlassian.net/wiki/spaces/ARK/pages/2889154616/Personvernkonsekvensvurdering+DPIA)]. 
+
+Det neste spørsmålet blir da; hvilken type informasjon er å regne som PII? @tbl-pii-examples viser en ikke-uttømmende liste over PII som har vært identifisert i SSB tidligere. For mange er fødselsnummer en viktig variabel i kraft at den fungerer som en koblingsnøkkel for ulike typer persondata. Men som vist i @tbl-pii-examples så er mye annen informasjon som regnes som PII. For eksempel er også adresse og bankkontonummer å regne som PII. 
+
+Hvilken type informasjon som skal pseudonymiseres kan også påvirke hvordan vi pseudonymiserer. Siden fødselsnummer er mye brukt som koblingsnøkkel på tvers av team, så er man mer avhengig av at alle bruker samme pseudonym. Kravet til krypteringsalgoritmen trenger heller ikke være like strengt for et fødselsnummer bestående av 11 siffer. Til sammenligning vil informasjon som navn, som f.eks. kan inkludere mellomrom og særnorske bokstaver, kreve en algoritme som håndterer slike tilfeller. Vi diskuterer ulike algoritmer senere i kapitlet. 
+
+#### Enkeltpersonforetak
+
+PVK for personstatistikk som var nevnt i forrige avsnitt hadde en viktig begrensning; den vurderte ikke enkeltpersonforetak (ENK). En ENK eies av en fysisk person, og drives for vedkommendes regning og risiko. Mange opplysninger om en ENK vil derfor være å regne som personopplysninger. Informasjon om ENK benyttes både i personstatistikk og næringsstatistikk i SSB.
+
+
+
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="30%"}
+
+| PII                                        |
+| ------------------------------------------ |
+| Fødselsnummer                              |
+| D-nummer                                   |
+| S-nummer                                   |
+| Ektefellenummer                            |
+| Mors fødelsnummer                          |
+| Fars fødelsnummer                          |
+| Partners fødselsnummer                     |
+| Familienummer                              |
+| Barns fødselsnummer                        |
+| Husholdningsnummer                         |
+| Fødselsnummer til medlemmer av husholdning |
+| Dufnummer                                  |
+| Bankkontonummer                            |
+| Adresse (tekstlig)                         |
+| Eiendomsidentifikator                      |
+| Veiadresse (numerisk)                      |
+| Matrikkeladresse (numerisk)                |
+| Registreringsnummer (kjøretøy)             |
+| Navn                                       |
+| Kontaktinformasjon                         |
+| Helsepersonellnummer                       |
+| Organisasjonsnummer enkeltpersonsforetak   |
+| Foretakets navn                            |
+: Eksempler på PII som skal pseudonymiseres fra kildedata til inndata. {#tbl-pii-examples}
+
+:::
+
+::::
+
+### Organisasjonsidentifiserende informasjon (OII)
 
 Kildedata som inneholder sensitive opplysninger skal pseudonymiseres i overgangen fra [kildedata](./datatilstander.html#kildedata) til [inndata](./datatilstander.html#inndata). På Dapla er det flere tjenester som til sammen gir et team kapabiliteten til å pseudomymisere. @fig-papis viser hvilke tjenester som typisk benyttes når man skal pseudonymisere fødselsnummer (fnr). All prosessering av kildedata skal skje med automatisk prosessering i [Kildomaten](./kildomaten.html). I Kildomaten bruker man python-pakken [dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/). Den kan kalle på SNR-katalogen for å kode om fødselsnummer til stabil ID (snr), og deretter blir sendt til tjeneste som pseudonymisere snr.  
 
@@ -31,16 +107,6 @@ state Kildomaten {
 
 @fig-papis viser hvordan man kan få samme pseudonym på Dapla som man får med Papis og stabil ID i prodsonen. Men på Dapla kan man også spesifisere hvilke krypteringsalgoritmer man ønsker, og man kan kryptere uten å kode om til stabil ID først.
 
-## Forberedelser
-
-For å kunne bruke pseudonymiseringstjenestene på Dapla må man gjøre følgende:
-
-- Be Kundeservice om å gi teamet tilgang til [Dapla Pseudo Service](https://github.com/statisticsnorway/dapla-dlp-pseudo-service).
-- Be Kundeservice om å sette opp [Kildomaten](./kildomaten.html) for teamet.
-
-Selv om statistikkere/forskere forholder seg til python-pakken [dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/) når de skal pseudonymisere, så krever pakken at teamet har tilgang til *Dapla Pseudo Service*. 
-
-*Kildomaten* er tjeneste som lar brukeren automatisere overgangen fra kildedata til inndata. Derfor trenger teamet tilgang til denne for å kjøre pseudonymiseringen. 
 
 ## Tilgangsstyring
 

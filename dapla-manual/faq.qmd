@@ -94,3 +94,40 @@ Slettingen kan ta noe tid. Når denne er ferdig vil filen være slettet, men den
 4. Til slutt må man bekrefte at man ønsker å slette alle versioner (@fig-confirm-delete-all-versions) med å skrive inn DELETE og trykke på den blå "Delete"-knappen:
 
 ![Bekreft sletting av alle versjoner](./images/full-delete-step-6.png){ fig-alt="Bilde som viser at man må bekrefte sletting" width=100% #fig-confirm-delete-all-versions }
+
+### Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team? 
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+Du kan sjekke om teamet ditt har tilgang til Kildomaten ved å gå inn i teamets IaC-repo. Du finner IaC-repoet ved å søke etter team-navnet på statisticsnorway på Github. Repoet er det som heter `<teamnavn>-iac`. Inne i repoet går du inn filen `infra/projects.yaml`.
+
+I eksemplet til høyre ser vi hvordan filen ser ut for det fiktive teamet **dapla-example**. For dette teamet ser vi at Kildomaten er skrudd på i prod-miljøet til teamet, men ikke test-miljøet.  
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+
+```{.yaml filename="dapla-example-iac/infra/projects.yaml"}
+team_uniform_name: dapla-example
+
+projects:
+  - project_name: dapla-example
+    env: test
+    features:
+      - dapla-buckets
+
+  - project_name: dapla-example
+    env: prod
+    features:
+      - dapla-buckets
+      - transfer-service
+      - kildomaten
+```
+
+:::
+
+::::
