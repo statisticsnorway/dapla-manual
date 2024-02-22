@@ -208,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/kildomaten.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/pseudonymisering.html">Pseudonymisering</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/kildomaten.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/pseudonymisering.html">Pseudonymisering (utkast)</a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -400,7 +400,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/pseudonymisering.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Pseudonymisering</span></a>
+ <span class="menu-text">Pseudonymisering (utkast)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -474,9 +474,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#pseudonymisering" id="toc-pseudonymisering" class="nav-link active" data-scroll-target="#pseudonymisering">Pseudonymisering</a>
+  <li><a href="#pseudonymisering-utkast" id="toc-pseudonymisering-utkast" class="nav-link active" data-scroll-target="#pseudonymisering-utkast">Pseudonymisering (utkast)</a>
   <ul class="collapse">
   <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#hva-skal-pseudonymiseres" id="toc-hva-skal-pseudonymiseres" class="nav-link" data-scroll-target="#hva-skal-pseudonymiseres">Hva skal pseudonymiseres?</a>
+  <ul class="collapse">
+  <li><a href="#personidentifiserende-informasjon-pii" id="toc-personidentifiserende-informasjon-pii" class="nav-link" data-scroll-target="#personidentifiserende-informasjon-pii">Personidentifiserende informasjon (PII)</a></li>
+  <li><a href="#organisasjonsidentifiserende-informasjon-oii" id="toc-organisasjonsidentifiserende-informasjon-oii" class="nav-link" data-scroll-target="#organisasjonsidentifiserende-informasjon-oii">Organisasjonsidentifiserende informasjon (OII)</a></li>
+  </ul></li>
   <li><a href="#tilgangsstyring" id="toc-tilgangsstyring" class="nav-link" data-scroll-target="#tilgangsstyring">Tilgangsstyring</a></li>
   <li><a href="#filformater" id="toc-filformater" class="nav-link" data-scroll-target="#filformater">Filformater</a></li>
   <li><a href="#papis-pseudonym" id="toc-papis-pseudonym" class="nav-link" data-scroll-target="#papis-pseudonym">Papis-pseudonym</a></li>
@@ -494,8 +499,136 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="pseudonymisering" class="level1">
-<h1>Pseudonymisering</h1>
+<section id="pseudonymisering-utkast" class="level1">
+<h1>Pseudonymisering (utkast)</h1>
+<p>På Dapla er det flere tjenester som til sammen gir team muligheten til å pseudonymisere, de-pseudonymisere eller re-pseudonymisere data<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Disse tjenestene er satt opp på en slik måte at statistikkteam kan være selvbetjent i bruken av funksjonaliteten, samtidig som de sikrer at <em>direkte identifiserende opplysninger</em> håndteres i henhold til lovverk og SSBs egne bestemmelser.</p>
+<p>I dette kapitlet forteller vi hvordan man går frem for å pseudonymisere data i et statistikkteam på Dapla. Før man leser videre er det viktig at leseren har en klar forståelse av hvordan <a href="./hva-er-dapla-team.html">Dapla-team og tilgangsstyring</a> fungerer på Dapla, samt er kjent med tjenesten <a href="./kildomaten.html">Kildomaten</a>. Kildomaten er tjenesten som automatiserer jobben med, blant annet, å pseudonymisere.</p>
+<section id="forberedelser" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
+<p>For å pseudonymisere på Dapla må man være en del av Dapla-team og <a href="./kildomaten.html">Kildomaten</a> må være skrudd på for teamet. Hvis du er usikker på om Kildomaten er skrudd på kan du <a href="../faq.html#hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team">sjekke dette selv i teamets IaC-repo</a>.</p>
+</section>
+<section id="hva-skal-pseudonymiseres" class="level2">
+<h2 class="anchored" data-anchor-id="hva-skal-pseudonymiseres">Hva skal pseudonymiseres?</h2>
+<p>Hvert team er ansvarlig for å selv vurdere hvordan sine <a href="./datatilstander.html.#kildedata">kildedata</a> skal behandles. All kildedata i SSB er klassifisert som sensitivt, og hvis man har kildedata som skal pseudonymiseres, så skal det skje i overgangen fra kildedata til <a href="./datatilstander.html#inndata">inndata</a>. Er man usikker på om man skal pseudonymisere eller ikke, eller hvilke regler som gjelder for teamets kildedata, så kan man diskutere med <a href="https://ssbno.sharepoint.com/sites/Sikkerhetogpersonvern/SitePages/Personvernombud-i-SSB.aspx">personvernombudet</a>, eventuelt ta kontakt med juristene i SSB.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pseudonymisering erstatter ikke dataminimering!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Prinsippet om dataminimering er et grunnleggende prinsipp for personvern, og personverndirektivet sier at data som hentes inn og prosesseres skal <em>… være adekvate, relevante og begrenset til det som er nødvendig for formålene</em>. Det vil si at hvis man av ulike årsaker ikke får dataminimert ved innhenting av data til SSB, så skal man fjerne all data som ikke er relevant for formålet i overgangen fra kildedata til inndata.</p>
+</div>
+</div>
+<section id="personidentifiserende-informasjon-pii" class="level3">
+<h3 class="anchored" data-anchor-id="personidentifiserende-informasjon-pii">Personidentifiserende informasjon (PII)</h3>
+<div class="columns">
+<div class="column" style="width:65%;">
+<p>Det følger av både personopplysningsloven og statistikkloven at personidentifiserende informasjon (PII) som samles inn for statistikkformål skal pseudonymiseres. Dette kommer også tydelig fram i <a href="https://statistics-norway.atlassian.net/wiki/spaces/ARK/pages/2888237093/Personvernkonsekvensvurdering+PVK+-+Personstatistikk+p+SSBs+skyplattform">Personvernkonsekvensutredningen (PVK) for personstatistikk</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Det neste spørsmålet blir da; hvilken type informasjon er å regne som PII? <a href="#tbl-pii-examples" class="quarto-xref">Tabell&nbsp;1</a> viser en ikke-uttømmende liste over PII som har vært identifisert i SSB tidligere. For mange er fødselsnummer en viktig variabel i kraft at den fungerer som en koblingsnøkkel for ulike typer persondata. Men som vist i <a href="#tbl-pii-examples" class="quarto-xref">Tabell&nbsp;1</a> så er mye annen informasjon som regnes som PII. For eksempel er også adresse og bankkontonummer å regne som PII.</p>
+<p>Hvilken type informasjon som skal pseudonymiseres kan også påvirke hvordan vi pseudonymiserer. Siden fødselsnummer er mye brukt som koblingsnøkkel på tvers av team, så er man mer avhengig av at alle bruker samme pseudonym. Kravet til krypteringsalgoritmen trenger heller ikke være like strengt for et fødselsnummer bestående av 11 siffer. Til sammenligning vil informasjon som navn, som f.eks. kan inkludere mellomrom og særnorske bokstaver, kreve en algoritme som håndterer slike tilfeller. Vi diskuterer ulike algoritmer senere i kapitlet.</p>
+<section id="enkeltpersonforetak" class="level4">
+<h4 class="anchored" data-anchor-id="enkeltpersonforetak">Enkeltpersonforetak</h4>
+<p>PVK for personstatistikk som var nevnt i forrige avsnitt hadde en viktig begrensning; den vurderte ikke enkeltpersonforetak (ENK). En ENK eies av en fysisk person, og drives for vedkommendes regning og risiko. Mange opplysninger om en ENK vil derfor være å regne som personopplysninger. Informasjon om ENK benyttes både i personstatistikk og næringsstatistikk i SSB.</p>
+</section>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:30%;">
+<div id="tbl-pii-examples" class="quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pii-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: Eksempler på PII som skal pseudonymiseres fra kildedata til inndata.
+</figcaption>
+<div aria-describedby="tbl-pii-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table">
+<thead>
+<tr class="header">
+<th>PII</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fødselsnummer</td>
+</tr>
+<tr class="even">
+<td>D-nummer</td>
+</tr>
+<tr class="odd">
+<td>S-nummer</td>
+</tr>
+<tr class="even">
+<td>Ektefellenummer</td>
+</tr>
+<tr class="odd">
+<td>Mors fødelsnummer</td>
+</tr>
+<tr class="even">
+<td>Fars fødelsnummer</td>
+</tr>
+<tr class="odd">
+<td>Partners fødselsnummer</td>
+</tr>
+<tr class="even">
+<td>Familienummer</td>
+</tr>
+<tr class="odd">
+<td>Barns fødselsnummer</td>
+</tr>
+<tr class="even">
+<td>Husholdningsnummer</td>
+</tr>
+<tr class="odd">
+<td>Fødselsnummer til medlemmer av husholdning</td>
+</tr>
+<tr class="even">
+<td>Dufnummer</td>
+</tr>
+<tr class="odd">
+<td>Bankkontonummer</td>
+</tr>
+<tr class="even">
+<td>Adresse (tekstlig)</td>
+</tr>
+<tr class="odd">
+<td>Eiendomsidentifikator</td>
+</tr>
+<tr class="even">
+<td>Veiadresse (numerisk)</td>
+</tr>
+<tr class="odd">
+<td>Matrikkeladresse (numerisk)</td>
+</tr>
+<tr class="even">
+<td>Registreringsnummer (kjøretøy)</td>
+</tr>
+<tr class="odd">
+<td>Navn</td>
+</tr>
+<tr class="even">
+<td>Kontaktinformasjon</td>
+</tr>
+<tr class="odd">
+<td>Helsepersonellnummer</td>
+</tr>
+<tr class="even">
+<td>Organisasjonsnummer enkeltpersonsforetak</td>
+</tr>
+<tr class="odd">
+<td>Foretakets navn</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="organisasjonsidentifiserende-informasjon-oii" class="level3">
+<h3 class="anchored" data-anchor-id="organisasjonsidentifiserende-informasjon-oii">Organisasjonsidentifiserende informasjon (OII)</h3>
 <p>Kildedata som inneholder sensitive opplysninger skal pseudonymiseres i overgangen fra <a href="./datatilstander.html#kildedata">kildedata</a> til <a href="./datatilstander.html#inndata">inndata</a>. På Dapla er det flere tjenester som til sammen gir et team kapabiliteten til å pseudomymisere. <a href="#fig-papis" class="quarto-xref">Figur&nbsp;1</a> viser hvilke tjenester som typisk benyttes når man skal pseudonymisere fødselsnummer (fnr). All prosessering av kildedata skal skje med automatisk prosessering i <a href="./kildomaten.html">Kildomaten</a>. I Kildomaten bruker man python-pakken <a href="https://pypi.org/project/dapla-toolbelt-pseudo/">dapla-toolbelt-pseudo</a>. Den kan kalle på SNR-katalogen for å kode om fødselsnummer til stabil ID (snr), og deretter blir sendt til tjeneste som pseudonymisere snr.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
@@ -533,15 +666,7 @@ Figur&nbsp;1: Pseudonymisering med Papis-nøkkel på Dapla.
 </div>
 </div>
 <p><a href="#fig-papis" class="quarto-xref">Figur&nbsp;1</a> viser hvordan man kan få samme pseudonym på Dapla som man får med Papis og stabil ID i prodsonen. Men på Dapla kan man også spesifisere hvilke krypteringsalgoritmer man ønsker, og man kan kryptere uten å kode om til stabil ID først.</p>
-<section id="forberedelser" class="level2">
-<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
-<p>For å kunne bruke pseudonymiseringstjenestene på Dapla må man gjøre følgende:</p>
-<ul>
-<li>Be Kundeservice om å gi teamet tilgang til <a href="https://github.com/statisticsnorway/dapla-dlp-pseudo-service">Dapla Pseudo Service</a>.</li>
-<li>Be Kundeservice om å sette opp <a href="./kildomaten.html">Kildomaten</a> for teamet.</li>
-</ul>
-<p>Selv om statistikkere/forskere forholder seg til python-pakken <a href="https://pypi.org/project/dapla-toolbelt-pseudo/">dapla-toolbelt-pseudo</a> når de skal pseudonymisere, så krever pakken at teamet har tilgang til <em>Dapla Pseudo Service</em>.</p>
-<p><em>Kildomaten</em> er tjeneste som lar brukeren automatisere overgangen fra kildedata til inndata. Derfor trenger teamet tilgang til denne for å kjøre pseudonymiseringen.</p>
+</section>
 </section>
 <section id="tilgangsstyring" class="level2">
 <h2 class="anchored" data-anchor-id="tilgangsstyring">Tilgangsstyring</h2>
@@ -576,7 +701,14 @@ data-admins er de eneste på teamet som kan gi seg selv tilgang til å manuelt i
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>Pseudonymisering defineres her som å erstatte spesifikke data med kunstige data (pseudonymer), mens de-pseudonymisering gjør det samme bare motsatt vei. Re-pseudonymisering defineres som å bytte ut et pseudonym med et annet, uten at brukeren nødvendigvis får tilgang til den opprinnelige verdien. <a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Personvernkonsekvensutredningen (PVK) er det norske ordet for den engelske betegnelsen <em>Data Protection Impact Assessment (DPIA)</em>. Datatilsynet definerer en DPIA som en <em>systematisk prosess, som identifiserer og evaluerer potensielle personvernkonsekvenser fra alle interessenters synsvinkel i et prosjekt, initiativ, foreslått system eller prosess.</em> <a href="https://statistics-norway.atlassian.net/wiki/spaces/ARK/pages/2889154616/Personvernkonsekvensvurdering+DPIA">Les mer om DPIA i SSB</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -240,6 +274,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#hvordan-løser-jeg-feilmeldinger-knyttet-til-at-data-rate-exceeded-i-jupyter" id="toc-hvordan-løser-jeg-feilmeldinger-knyttet-til-at-data-rate-exceeded-i-jupyter">Hvordan løser jeg feilmeldinger knyttet til at <strong>data rate exceeded</strong> i Jupyter?</a></li>
   <li><a href="#hvordan-kan-jeg-gjennopprette-data-fra-bøtter" id="toc-hvordan-kan-jeg-gjennopprette-data-fra-bøtter">Hvordan kan jeg gjennopprette data fra bøtter?</a></li>
   <li><a href="#hvordan-sletter-jeg-data-fra-bøtter" id="toc-hvordan-sletter-jeg-data-fra-bøtter">Hvordan sletter jeg data fra bøtter?</a></li>
+  <li><a href="#hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team" id="toc-hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team">Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team?</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/faq.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
 <section id="hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id" class="level3">
@@ -408,6 +443,37 @@ Figur&nbsp;9: Slett alle versioner
 Figur&nbsp;10: Bekreft sletting av alle versjoner
 </figcaption>
 </figure>
+</div>
+</section>
+<section id="hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team" class="level3">
+<h3 class="anchored" data-anchor-id="hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team">Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team?</h3>
+<div class="columns">
+<div class="column" style="width:47.5%;">
+<p>Du kan sjekke om teamet ditt har tilgang til Kildomaten ved å gå inn i teamets IaC-repo. Du finner IaC-repoet ved å søke etter team-navnet på statisticsnorway på Github. Repoet er det som heter <code>&lt;teamnavn&gt;-iac</code>. Inne i repoet går du inn filen <code>infra/projects.yaml</code>.</p>
+<p>I eksemplet til høyre ser vi hvordan filen ser ut for det fiktive teamet <strong>dapla-example</strong>. For dette teamet ser vi at Kildomaten er skrudd på i prod-miljøet til teamet, men ikke test-miljøet.</p>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:47.5%;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>dapla-example-iac/infra/projects.yaml</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="dapla-example-iac/infra/projects.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_uniform_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">projects</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> transfer-service</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> kildomaten</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </div>
 
 
