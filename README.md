@@ -8,6 +8,10 @@ På sikt er det ment at dette repoet skal inneholde kapitler i boken som ikke sk
 
 ## Bidra
 
+Kjør følgende kommando for å se preview av manualen mens du jobber: `quarto preview dapla-manual`.
+
+For å legge til nye elementer i menyen må filen `dapla-manual/_quarto.yml` oppdateres.
+
 > [!WARNING]
 > Notebooks i dette repoet bør ikke strippes, i det output er vist i selve manualen. Kjøre kommandoen under for å slå av stripping kun for dette repoet.
 
