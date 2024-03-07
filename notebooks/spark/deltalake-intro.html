@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -242,9 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#introduksjon-til-delta-lake" id="toc-introduksjon-til-delta-lake" class="nav-link active" data-scroll-target="#introduksjon-til-delta-lake">Introduksjon til Delta Lake</a>
-  <ul class="collapse">
-  <li><a href="#oppsett" id="toc-oppsett" class="nav-link" data-scroll-target="#oppsett">Oppsett</a></li>
+  <li><a href="#oppsett" id="toc-oppsett" class="nav-link active" data-scroll-target="#oppsett">Oppsett</a></li>
   <li><a href="#genererer-noe-data" id="toc-genererer-noe-data" class="nav-link" data-scroll-target="#genererer-noe-data">Genererer noe data</a></li>
   <li><a href="#skriver-ut-en-delta-lake-table" id="toc-skriver-ut-en-delta-lake-table" class="nav-link" data-scroll-target="#skriver-ut-en-delta-lake-table">Skriver ut en Delta Lake Table</a>
   <ul class="collapse">
@@ -255,7 +253,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#append-data" id="toc-append-data" class="nav-link" data-scroll-target="#append-data">Append data</a></li>
   <li><a href="#historien-og-metadata-til-filen" id="toc-historien-og-metadata-til-filen" class="nav-link" data-scroll-target="#historien-og-metadata-til-filen">Historien og metadata til filen</a></li>
   <li><a href="#egendefinert-metadata" id="toc-egendefinert-metadata" class="nav-link" data-scroll-target="#egendefinert-metadata">Egendefinert metadata</a></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.dev/statisticsnorway/dapla-manual-internal/blob/main/notebooks/spark/deltalake-intro.ipynb" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
     </div>
@@ -281,8 +278,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduksjon-til-delta-lake" class="level1">
-<h1>Introduksjon til Delta Lake</h1>
 <p>Delta Lake er et databaselag som kan <em>legges over</em> parquet-filer i bøtter. Det kan gi oss mye av den funksjonaliteten vi har vært vant til i relasjonelle databaser og datavarehus. I denne notebooken vises hvordan man kan ta det i bruk på Dapla.</p>
 <section id="oppsett" class="level2">
 <h2 class="anchored" data-anchor-id="oppsett">Oppsett</h2>
@@ -765,7 +760,6 @@ Wall time: 5.59 s</code></pre>
 
 
 </section>
-</section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
@@ -853,6 +847,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -887,7 +899,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');

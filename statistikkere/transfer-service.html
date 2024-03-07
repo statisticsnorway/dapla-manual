@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -507,15 +507,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#transfer-service" id="toc-transfer-service" class="nav-link active" data-scroll-target="#transfer-service">Transfer Service</a>
-  <ul class="collapse">
-  <li><a href="#tilgangsstyring" id="toc-tilgangsstyring" class="nav-link" data-scroll-target="#tilgangsstyring">Tilgangsstyring</a></li>
+  <li><a href="#tilgangsstyring" id="toc-tilgangsstyring" class="nav-link active" data-scroll-target="#tilgangsstyring">Tilgangsstyring</a></li>
   <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a></li>
   <li><a href="#overføring-av-data" id="toc-overføring-av-data" class="nav-link" data-scroll-target="#overføring-av-data">Overføring av data</a>
   <ul class="collapse">
   <li><a href="#prodsonen-og-dapla" id="toc-prodsonen-og-dapla" class="nav-link" data-scroll-target="#prodsonen-og-dapla">Prodsonen og Dapla</a></li>
   <li><a href="#bøtte-til-bøtte" id="toc-bøtte-til-bøtte" class="nav-link" data-scroll-target="#bøtte-til-bøtte">Bøtte til bøtte</a></li>
-  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.dev/statisticsnorway/dapla-manual-internal/blob/main/statistikkere/transfer-service.ipynb" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
@@ -542,8 +539,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="transfer-service" class="level1">
-<h1>Transfer Service</h1>
 <p><a href="https://cloud.google.com/storage-transfer-service">Storage Transfer Service</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> er en Google-tjeneste for å flytte data mellom lagringsområder. I SSB bruker vi hovedsakelig tjenesten til å:</p>
 <ol type="1">
 <li><p>Flytte data mellom et Dapla-team sine bøtter på Dapla og deres lagringsområde i prodsonen.</p></li>
@@ -825,7 +820,6 @@ Tabell&nbsp;2: Valg under <em>Choose settings</em>
 
 </section>
 </section>
-</section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
@@ -920,6 +914,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -954,7 +966,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');

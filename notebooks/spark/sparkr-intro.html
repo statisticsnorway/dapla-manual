@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -242,11 +242,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#introduksjon-til-sparkr" id="toc-introduksjon-til-sparkr" class="nav-link active" data-scroll-target="#introduksjon-til-sparkr">Introduksjon til SparkR</a>
-  <ul class="collapse">
-  <li><a href="#oppsett" id="toc-oppsett" class="nav-link" data-scroll-target="#oppsett">Oppsett</a></li>
+  <li><a href="#oppsett" id="toc-oppsett" class="nav-link active" data-scroll-target="#oppsett">Oppsett</a></li>
   <li><a href="#lese-inn-fil" id="toc-lese-inn-fil" class="nav-link" data-scroll-target="#lese-inn-fil">Lese inn fil</a></li>
-  </ul></li>
   <li><a href="#skrive-ut-fil" id="toc-skrive-ut-fil" class="nav-link" data-scroll-target="#skrive-ut-fil">Skrive ut fil</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.dev/statisticsnorway/dapla-manual-internal/blob/main/notebooks/spark/sparkr-intro.ipynb" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
@@ -273,8 +270,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduksjon-til-sparkr" class="level1">
-<h1>Introduksjon til SparkR</h1>
 <p>Akkurat som PySpark så gir <a href="https://spark.apache.org/docs/latest/sparkr">SparkR</a> oss et grensesnitt mot Apache Spark fra R. I denne notebooken viser vi noen eksempler hvordan du gjøre vanlige operasjoner med SparkR.</p>
 <section id="oppsett" class="level2">
 <h2 class="anchored" data-anchor-id="oppsett">Oppsett</h2>
@@ -307,7 +302,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 only showing top 5 rows</code></pre>
 </div>
 </div>
-</section>
 </section>
 <section id="skrive-ut-fil" class="level1">
 <h1>Skrive ut fil</h1>
@@ -401,6 +395,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -435,7 +447,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');

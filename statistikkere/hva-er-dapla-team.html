@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -471,9 +471,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#hva-er-dapla-team" id="toc-hva-er-dapla-team" class="nav-link active" data-scroll-target="#hva-er-dapla-team">Hva er Dapla-team?</a>
-  <ul class="collapse">
-  <li><a href="#opprette-dapla-team" id="toc-opprette-dapla-team" class="nav-link" data-scroll-target="#opprette-dapla-team">Opprette Dapla-team</a></li>
+  <li><a href="#opprette-dapla-team" id="toc-opprette-dapla-team" class="nav-link active" data-scroll-target="#opprette-dapla-team">Opprette Dapla-team</a></li>
   <li><a href="#roller-i-teamet" id="toc-roller-i-teamet" class="nav-link" data-scroll-target="#roller-i-teamet">Roller i teamet</a>
   <ul class="collapse">
   <li><a href="#managers" id="toc-managers" class="nav-link" data-scroll-target="#managers">Managers</a></li>
@@ -487,7 +485,6 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#github-team" id="toc-github-team" class="nav-link" data-scroll-target="#github-team">GitHub-team</a></li>
   <li><a href="#navnestruktur" id="toc-navnestruktur" class="nav-link" data-scroll-target="#navnestruktur">Navnestruktur</a></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.dev/statisticsnorway/dapla-manual-internal/blob/main/statistikkere/hva-er-dapla-team.ipynb" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
     </div>
@@ -513,8 +510,6 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="hva-er-dapla-team" class="level1">
-<h1>Hva er Dapla-team?</h1>
 <p>For å kunne jobbe på Dapla må man være en del av et <strong>Dapla-team</strong>. Et Dapla-team er en gruppe personer som har tilgang til spesifikke ressurser på Dapla. Ressursene kan være data, kode eller tjenester. Følgelig er teamet helt sentral for tilgangsstyringen på Dapla. Derfor er det viktig at alle som jobber på Dapla gjør seg godt kjent med innholdet i dette delen.</p>
 <section id="opprette-dapla-team" class="level2">
 <h2 class="anchored" data-anchor-id="opprette-dapla-team">Opprette Dapla-team</h2>
@@ -716,7 +711,6 @@ Tabell&nbsp;2: Navnestruktur for teamet <strong>Skatt næring</strong> sine bøt
 
 
 </section>
-</section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
@@ -804,6 +798,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -838,7 +850,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
