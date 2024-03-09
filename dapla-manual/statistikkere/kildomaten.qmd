@@ -1,6 +1,6 @@
 # Kildomaten
 
-*Kildomaten* er en tjeneste for å automatisere overgangen fra **kildedata** til **inndata**. Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjonn til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.  
+*Kildomaten* er en tjeneste for å automatisere overgangen fra [kildedata](./datatilstander.html#kildedata) til [inndata](./datatilstander.html#inndata). Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjonn til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.  
 
 Prosessering som skal skje i overgangen fra kildedata til inndata har SSB definert til å være:
 
@@ -17,57 +17,80 @@ Under forklarer vi nærmere hvordan man bruker tjenesten. Da forutsetter vi at d
 
 ## Forberedelser
 
-Før et Dapla-team kan ta i bruk *Kildomaten* må man tjenesten være skrudd på for teamet. Tjenesten er en [feature](./features.html) som kan skrus på i både prod-miljøet og test-miljøet.
+Før et Dapla-team kan ta i bruk *Kildomaten* må man tjenesten aktivert for teamet. Som standard får alle statistikkteam dette skrudd på i **prod**-miljøet som opprettes for teamet. Ønsker du å aktivere *Kildomaten* i **test**-miljøet kan dette gjøres selvbetjent som en [feature](./features.html). Alternativt kan man opprette en [Kundeservice](https://ssb.pureservice.com/#/categories/14/new)-sak og be om å hjelp til dette. 
 
-### Sette opp tjenesten
+## Sette opp tjenesten
 
 I denne delen bryter vi ned prosessen med å sette opp *Kildomaten* i de stegene vi mener det er hensiktsmessig å gjøre det når den settes opp for første gang på en enkeltkilde. Senere i kapitlet forklarer vi hvordan man setter den opp flere kilder og hvordan man vedlikeholder tjenesten. 
 
 Husk at alle på teamet kan gjøre det meste av arbeidet her, men det er **data-admins** som må godkjenne at [tjenesten rulles ut](./kildomaten.html#rull-ut-tjenesten)^[I tillegg er det **data-admins** som må [teste tjenesten](./kildomaten.html#test-koden) manuelt hvis det gjøres på skarpe data, siden det kun er data-admins som kan få tilgang til de dataene.].
 
-#### Klone IaC-repoet
+### Klone IaC-repoet
 
-Siden vi skal endre på teamets IaC-repo så må vi først klone ned repoet. Man finner teamets IaC-repo ved gå inn på [SSBs GitHub-organisasjon](https://github.com/statisticsnorway) og søke etter repoet som heter `<teamnavn>-iac`. Når du har funnet repoet så kan du gjøre følgende:
+Oppsett av *Kildomaten* gjøres i teamets *IaC*-repo^[*Infrastructure-as-Code* (*IaC*) er repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub og du finner det ved å søke etter repoet <teamnavn>-iac under [statisticsnorway](https://github.com/orgs/statisticsnorway/repositories).]. Når vi skal sette opp *Kildomaten*-kilde må vi gjøre gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på [SSBs GitHub-organisasjon](https://github.com/statisticsnorway) og søke etter repoet som heter `<teamnavn>-iac`. Når du har funnet repoet så kan du gjøre følgende:
 
 1. Klon ned ditt teams Iac-repo `git clone <repo-url>`
 2. Opprett en ny branch: `git checkout -b add-kildomaten-source`
 
-#### Opprett mappestruktur
+### Opprett mappestruktur
 
-For at *Kildomaten* skal fungere så må vi følge en bestemt mappestruktur i IaC-repoet. Denne strukturen er nødvendig for at tjenesten skal vite hvor den skal hente kildedata fra, og hvor den skal legge inndata. Denne strukturen blir ikke laget ved opprettelsen av teamet, siden ikke alle team kommer til å bruke tjenesten. Vi kan derfor starte med å opprette denne strukturen. Anta at det er Dapla-team som heter **dapla-example**, de har et IaC-repo som heter **dapla-example-iac** og de ønsker å sette opp *Kildomaten* for en kilde som heter **altinn** i både test og prod. Da må de opprette følgende mappestruktur i IaC-repoet sitt. Da vil mappestrukturen se slik ut:
+::: {.callout-note}
+
+# Automatisk oppretting kommer snart
+
+Plattformteamene jobber med å automatisere opprettelsen av mappestruktur i prod-miljøet for alle statistikkteam ved opprettelse av teamet. Av den grunn vil innholdet her endre seg snart.   
+:::
+
+For at *Kildomaten* skal fungere så må vi følge en bestemt mappestruktur i IaC-repoet. Denne strukturen er nødvendig for at tjenesten skal vite hvor den skal hente kildedata fra, og hvor den skal legge inndata. Denne strukturen blir ikke laget ved opprettelsen av teamet, siden ikke alle team kommer til å bruke tjenesten. 
+
+Anta at det er Dapla-team som heter **dapla-example**, og de har et IaC-repo som heter **dapla-example-iac**. De ønsker å sette opp *Kildomaten* for en kilde som heter **altinn** i prod-miljøet til teamet. Følgende mappestruktur må da opprettes i IaC-repoet til teamet:
 
 ```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
 dapla-example-iac
 ├── automation/
 │   └── source-data/
 │       ├── dapla-example-prod/
-│       │   └── altinn/
-│       └── dapla-example-test/
 │           └── altinn/
+│ 
 │...           
 ```
 
-I eksempelet over så har vi laget mappen `dapla-example-prod` for å legge til kilder som skal kjøre i prod-miljøet, og `dapla-example-test` for å legge til kilder som skal kjøre i test-miljøet. Strukturen på denne mappen må alltid være **teamnavn** etterfulgt av **-miljø**. 
+I eksempelet over så har vi laget mappen `dapla-example-prod` for å legge til kilder som skal kjøre i prod-miljøet. Strukturen på denne mappen må alltid være **teamnavn** etterfulgt av **-miljø**. 
 
-Under miljømappen skal vi legge til alle kildene vi ønsker å prosessere. I dette tilfellet er det kun en kilde, og den har vi navngitt `altinn` i både prod og test. I denne mappen skal vi legge til et python-script og konfigurasjonsfil som forteller Kildomaten hvilke filer som skal prosesseres, hvordan de skal prosesseres og hvor mye minne og CPU hver prosessering skal ha.
-
-::: {.callout-caution}
-# Pass deg for `ipynb_checkpoints/`-mappen
-Hvis du jobber i Notebooks så vil det automatisk genereres mapper som heter `ipynb_checkpoints` som håndterer **autosave**. Hvis disse blir *pushet*  til teamets IaC-repoet vil det trolig føre til at noe feiler. Pass på at det ikke ligger noen slike mapper under `automation/` ved å gjøre `git status` før du *stager* endringene dine. 
+::: {.callout-important}
+# Alle kilder på samme nivå
+Et team kan sette opp mange kilder som skal prosesseres med ulike skript. Men *Kildomaten* tillater bare et nivå under `automation/source-data-<teamnavn>-<miljø>/`. Det vil si at du ikke kan ha undermapper under en kilde. Det er også slik at man alltid må opprette en mappe for en kilde, selv om du kun har en kilde. F.eks. kan man ikke droppe mappen `altinn` i eksempelet over.  
 :::
 
 ### Konfigurasjon og skript
 
-Neste steg er å legge til filene som beskriver hvilke filer som skal prosesseres og hvordan de skal prosesseres. Det er to filer som må eksistere for at tjenesten skal fungere:
+Når mappestrukturen er opprettet kan man legge til filene som beskriver hvilke filer som skal prosesseres, og python-skriptet med koden som skal prosessere filene. Det er to filer som må eksistere for at tjenesten skal fungere:
 
 1. En konfigurasjonsfil
 2. Et Python-skript
 
+Når du har opprettet de skal de ligge på denne måten i IaC-repoet:
+
+```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
+dapla-example-iac
+├── automation/
+│   └── source-data/
+│       ├── dapla-example-prod/
+│           └── altinn/
+│               ├── config.yaml
+│               └── process_source_data.py
+│...           
+```
+Under forklares hvordan skriver innholdet i de to filene. 
+
 #### Konfigurasjonsfil
 
-For å konfigurere tjenesten i Kildomaten i eksempelet vårt så må vi legge til en fil som heter `config.yaml` under `automation/source-data/dapla-example-prod/altinn/` og `automation/source-data/dapla-example-prod/altinn/`. Denne filen skal inneholde informasjon om hvilken mappe i kildebøtta som skal trigge tjenesten, og hvor mye ram du ønsker på maskinene som kjører. 
+*Kildomaten* trigges ved at det oppstår nye filer i kildebøtta til teamet. Hvorvidt den skal trigges på alle filer, eller kun filer i en gitt undermappe, bestemmer brukeren ved å konfigurere tjenesten i `config.yaml`. Her kan du også angi hvor mye ressurser prosesseringen skal få.
 
-La oss se på hvordan `config.yaml` skal se ut i **prod** for eksempelet vårt:    
+Hvis vi fortsetter eksempelet vårt fra tidligere med `dapla-example`, så kan vi tenkes oss at teamet ønsker å Kildomaten skal trigges på alle filer som oppstår i kildebøtta under filstien:  
+`ssb-dapla-example-data-kilde-prod/ledstill/altinn/`.
+
+For å konfigurere tjenesten i Kildomaten må vi legge til en fil som heter `config.yaml` under `automation/source-data/dapla-example-prod/altinn/`, slik som vist i forrige kapitel. I dette tilfellet vil den ha innholdet som vist til venstre under:  
 
 :::: {.columns}
 
@@ -98,8 +121,12 @@ memory_size: 1  # GiB
 ::::
 
 
-I mappestrukturen til høyre over, så ser vi at Dapla-teamet **dapla-example** har en kildebøtte som heter `ssb-dapla-example-data-kilde-prod`. Anta at teamet ønsker å prosessere alle filene som kommer inn i undermappen `ledstill/altinn/` med Kildomaten. I `config.yaml` som vises over til venstre, kan vi da fortelle Kildomaten hvor den skal *lytte* etter filer, ved å legge til stien etter bøttenavnet med variabelen `folder_prefix`. I dette tilfellet får den verdien  `folder_prefix: ledstill/altinn`, siden vi ønsker at den skal trigges på filer som kommer inn i  
-`ssb-dapla-example-data-kilde-prod/ledstill/altinn/` og alle undermapper under denne stien.
+Mappestrukturen til høyre over viser hvordan vi mappestrukturen ser ut i kildebøtta, mens `config.yaml`-fila til venstre viser hvordan vi angir at *Kildomaten* kun skal trigges på nye filer som oppstår i undermappen `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Vi bruker nøkkelen `folder_prefix` for å angi hvilken sti i kildebøtta som tjenesten skal trigges på. Nøkkelen `memory_size` lar brukeren angi hvor mye minne og CPU hver prosessering skal få.   
+
+::: {.callout-note}
+# Hvor mye minne og CPU er mulig?
+Som standard så får hver prosessering med *Kildomaten* 1 CPU-kjerne og 512MB minne/RAM. Hvis man skal gjøre mye prossesering, eller filene som prosesseres er veldig store, kan man sette `memory_size` opp til max 32GB minne. Antall CPU-kjerner blir satt implisitt ut i fra valg av `memory_size` iht til [begrensningene som Google setter for Cloud Run](https://cloud.google.com/run/docs/configuring/services/memory-limits#cpu-minimum). Se de [nøyaktige verdiene](https://github.com/statisticsnorway/terraform-dapla-source-data-processor/blob/b7655776258c79a91e97dd0da4c5c1e6f3631796/modules/processor-instance/locals.tf#L2) som blir satt her. 
+:::
 
 #### Python-skript
 
@@ -109,14 +136,18 @@ Når du skal skrive et Python-skript for Kildomaten er det spesielt viktig å hu
 
 1. Skriptet ditt kommer til å bli kjørt på en-og-en fil. 
 2. Skriptet ditt må skrive ut et unikt navn på filen som skal skrives til produktbøtta, ellers risikerer du at filer blir overskrevet.
+3. Python-pakkene som kan benyttes [er definert her](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/requirements.txt). Ved behov for andre pakker, [ta kontakt med Kundeservice](https://ssb.pureservice.com/#/categories/14/new).  
 :::
 
-Python-skriptet er der brukeren kan angi hva slags kode som skal kjøre på hver fil som dukker opp i den angitte mappen i kildebøtta. For at dette skal være mulig må koden følge disse reglene:
+Python-skriptet er der teamet kan angi hva slags kode som skal kjøre på hver fil som dukker opp i den angitte mappen i kildebøtta. For at dette skal være mulig må koden følge disse reglene:
 
 1. Koden må ligge i en fil som heter `process_source_data.py`. 
 2. Koden må pakkes inn i en funksjon som heter `main()`. 
 
-`main()` er funksjon med et parameter som heter `source_file`. Parameteret gir main en ferdig definert filsti til filen som skal prosesseres. For eksempel så vil `source_file` ha verdien `gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv` hvis filen `test20231010.csv` dukker opp i `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Når du skriver koden din så trenger du derfor ikke å definere `source_file` selv, den blir gitt til deg av tjenesten.
+`main()` er en funksjon med ett parameter som heter `source_file` som du alltid får av *Kildomaten* når en fil blir prosessert. Når du skriver koden kan man derfor anta at dette parameteret blir gitt til funksjonen, og du kan benytte det inne i `main`-funksjonen. 
+
+`source_file`-parameteret gir `main()` en ferdig definert filsti til filen som skal prosesseres. For eksempel så kan `source_file` ha verdien  
+`gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv` hvis filen `test20231010.csv` dukker opp i `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. 
 
 Hvis vi fortsetter eksempelet fra tidligere så ser mappen i IaC-repoet vårt slik ut nå: 
 
@@ -124,15 +155,15 @@ Hvis vi fortsetter eksempelet fra tidligere så ser mappen i IaC-repoet vårt sl
 ├── automation/
 │   └── source-data/
 │       ├── dapla-example-prod/
-│       │   └── altinn/
-│       │       ├── config.yaml
-│       │       └── process_source_data.py
-│       └── dapla-example-test/
 │           └── altinn/
+│               ├── config.yaml
+│               └── process_source_data.py
+│
 │...         
 ```
 
-Vi ser nå at filene `config.yaml` og `process_source_data.py` ligger i mappen `automation/source-data/dapla-example-prod/ledstill/altinn/`. Senere, når vi har rullet ut tjenesten, vil en ny fil i `gs://ssb-dapla-exmaple-data-kilde-prod/ledstill/altinn/` trigge *Kildomaten* og kjøre koden i `process_source_data.py` på filen. 
+Vi ser nå at filene `config.yaml` og `process_source_data.py` ligger i mappen  
+`automation/source-data/dapla-example-prod/ledstill/altinn/`. Senere, når vi har rullet ut tjenesten, vil en ny fil i `gs://ssb-dapla-exmaple-data-kilde-prod/ledstill/altinn/` trigge *Kildomaten* og kjøre koden i `process_source_data.py` på filen. 
 
 Under ser du et eksempel på hvordan en vanlig kodesnutt kan konverteres til å kjøre i *Kildomaten*:
 
@@ -188,14 +219,21 @@ def main(source_file):
 
 ::::
 
-De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i *Kildomaten*. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta. Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier så kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.
+De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i *Kildomaten*. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta. 
+
+Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier så kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.
 
 ::: {.callout-note}
 # Hvilke Python-biblioteker kan jeg bruke?
-Du kan kun bruke biblioteker som er forhåndsinstallert i Kildomaten. Du kan se en liste over disse bibliotekene [her](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/requirements.txt). Ønsker du andre biblioteker så må du ta kontakt med Kunderservice.
+Du kan kun bruke biblioteker som er forhåndsinstallert i Kildomaten. Du kan se en [liste over disse bibliotekene her](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/requirements.txt). Ønsker du andre biblioteker så må du ta kontakt med Kunderservice.
 :::
 
 ### Test koden
+
+::: {.callout-note}
+# Tilgang til kildedata
+Tilgang til kildedata i prod-miljøet er det kun gruppen **data-admins** som kan aktivere ved å bruke tilgangsstyringsløsningen [Just-in-Time Access (JIT)](https://jitaccess.dapla.ssb.no/). Les mer om hvordan [JIT-løsningen fungerer her](./jit.html). Ønsker man å kunne liste ut innhold fra bøtta må man aktivere rollen `ssb.buckets.list`. Ønsker man i tillegg å lese/skrive til bøtta må man også aktivere `ssb.bucket.write`. Tilgang til kildebøtta i test-miljøet krever ikke JIT-tilgang. 
+:::
 
 Før man ruller ut koden i tjenesten er det greit å teste at alt fungerer som det skal i Jupyterlab. Hvis vi tar utgangspunkt i eksempelet over så kan vi teste koden ved å kjøre følgende nederst i skriptet:
 
@@ -217,7 +255,7 @@ Du kan teste kode fra Jupyter og andre IDE-er i prod-miljøet på Dapla. Men hvi
 For å rulle ut tjenesten gjør du følgende;
 
 1. *Push branchen* til GitHub og opprette en *pull request*. 
-2. *Pull request* må godkjennes av en **data-admins**.
+2. *Pull request* må godkjennes av en **data-admins** på teamet.
 
 ::: {.grid}
 
@@ -237,10 +275,131 @@ For å rulle ut tjenesten gjør du følgende;
 
 Etter at du har *merget* inn i *main* kan du følge med på utrullingen under *Actions*-fanen i repoet. Når den siste jobben lyser grønt er Kildomaten rullet ut og klar til bruk.
 
+::: {.callout-note}
+# Vanlige feil ved utrulling
+For å gi raskt tilbakemelding på noen mulige feilsituasjoner, så kjøres det enkel validering på `config.yaml` og `process_source_data.py` når en *Pull request* er opprettet. Følgende validering gjennomføres:
+
+- Er det et python-script kalt `process_source_data.py`?
+- Er det en `config.yaml` med en gyldig `folder_prefix:` definert?
+- Bruker `process_source_data.py` biblioteker som ikke [er installert i Kildomaten](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/requirements.txt)?
+- Har koden i `process_source_data.py` feil iht [Pyflakes](https://pypi.org/project/pyflakes/)?
+
+Hvis utrullingen feiler kan du trykke på `Details` i sjekkene som feilet, og se om noen feilene over har forekommet. Hvis ikke kan Kundeservice kontaktes for hjelp. 
+:::
+
+### Test tjenesten
+
+Når du har rullet ut tjenesten kan *teste* tjenesten ved at **data-admins** flytter en fil til en den filstien *Kildomaten* er satt opp for. I eksempelet vi har brukt tidligere, gjør du følgende:
+1. Aktiverer JIT-tilgangen til kildedata (som beskrevet over).
+2. Kopier en fil over til filstien:  
+`gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/`
+3. Sjekk om filen ble skrevet til ønsket mappe i produktbøtta.
+
+Du kan også sjekke logger og monitorere *Kildomaten*. Les mer i neste avsnitt.
+
+### Monitorering og logging
+
+Når en kilde i *Kildomaten* er satt opp og ruller ut, kan du monitere tjenesten i Google Cloud Console (GCC) ved å gjøre følgende:
+
+1. [Logg deg inn](https://console.cloud.google.com/) med SSB-bruker på GCC.
+2. Velg standardprosjektet i prosjektvelgeren^[Standardprosjektet har navnestrukturen `<teamnavn>-p`].
+3. Søk opp **Cloud Run** i søkefeltet på toppen av siden og gå inn på siden. 
+
+På siden til **Cloud Run** vil du se en oversikt over alle kilder teamet har kjørende i *Kildomaten*. De har formen `source-<kildenavn>-processor`. I eksempelet med team **dapla-example** tidligere, vil man da se en kilde som heter `source-altinn-processor`, siden mappen de opprettet under  
+`automation/source-data-dapla-example-prod/` i IaC-repoet heter `altinn`. 
+
+Trykker man seg inn på Kilden vil man kunne monitorere aktiviteten i kilden, og man kan trykke seg videre for å se loggene.
+
+### Skalering
+
+*Kildomaten* er satt opp for å kunne prosessere hver kilde i 5 parallelle intanser samtidig. F.eks. hvis det oppstår 10 nye filer i en mappe som trigger en *Kildomaten*-kilde, så kan det prosesseres 5 filer samtidig. [Ta kontakt med Kundeservice](https://ssb.pureservice.com/#/categories/14/new) hvis man har behov for ytterlige skalering.  
+
 ### Varsling på e-post
 
 Kildomaten tilbyr e-postvarsling til teamet når tjenesten feiler. Opprett en Kundeservice-sak for å få satt opp e-postvarsling for teamet ditt.
 
+### Flere kilder
+
+Man kan sette opp så mange kilder man ønsker. Men når man setter det opp er det viktig å huske at alle kildene må spesifiseres rett under `automation/source-data/<teamnavn>-<miljø>/`. Her er et eksempel på hvordan team **dapla-example** har to kilder i *Kildomaten*:
+
+```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
+dapla-example-iac
+├── automation/
+│   └── source-data/
+│       ├── dapla-example-prod/
+│           └── altinn/
+│               ├── config.yaml
+│               └── process_source_data.py
+│           └── ledstill/
+│               ├── config.yaml
+│               └── process_source_data.py
+│...           
+```
+
+I eksempelet over ser vi det er to kilder: `altinn` og `ledstill`. Hver kilde trigges på ulike filstier i kildebøtta, og python-koden som kjøres kan være ulik mellom kilder. 
+
+### Test-miljø
+
+I eksempelet som er brukt i dette kapitlet er Kildomaten satt opp i prodmiljøet til teamet. Mens egentlig burde man teste ut nye kilder i teamets test-miljø. Kildomaten er ikke satt opp i test-miljøet som standard, og derfor må det skrus på før man kan anvende det. Teamet kan gjøre det selv [ved å følge denne beskrivelsen](./features.html), eller de kan ta kontakt med Kundeservice og få hjelp til dette. 
+
+En av de store fordelene med å sette opp *Kildomaten*-kilder i test-miljøet før man gjør det i prod-miljøet, er at tilgangsstyringen til data er mye mindre streng. Det gjør det lettere for alle i teamet å utvikle koden som skal benyttes. 
+
+Når man skal sette opp *Kildomaten* i test-miljøet så følger det samme oppskrift som vi har vist for prod-miljøet over. Den store forskjellen er at test-kilder skal legges under en egen mappe under  `automation/source-data/` i teamets IaC-repo. Eksempelet under med team **dapla-example** viser hvordan man kan sette opp kildene `altinn` og `ledstill` for både prod- og test-testmiljøet:
+
+```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
+dapla-example-iac
+├── automation/
+│   └── source-data/
+│       ├── dapla-example-prod/
+│       │       ├── altinn/
+│       │       │       ├── config.yaml
+│       │       │       └── process_source_data.py
+│       │       └── ledstill/
+│       │               ├── config.yaml
+│       │               └── process_source_data.py
+│       ├── dapla-example-test/
+│               ├── altinn/
+│               │       ├── config.yaml
+│               │       └── process_source_data.py
+│               └── ledstill/
+│                       ├── config.yaml
+│                       └── process_source_data.py
+│...           
+```
+
+Som vi ser av mappestrukturen over så er det to mapper under  
+`automation/source-data`:
+
+- dapla-example-prod
+- dapla-example-test
+
+Disse to mappene angir om det er henholdsvis prod- eller test-miljøet vi setter opp kilder for. 
+
+
+### Trigge kilde manuelt
+
+Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. Men noen ganger er det nødvendig å trigge kjøring av alle filer på nytt. Noen ganger ønsker man kanskje å kun trigge noen filer for en gitt kilde. Dette kan gjøres med en funksjon i Python-pakken [dapla-toolbelt](https://github.com/statisticsnorway/dapla-toolbelt).
+
+Før du kan gjøre dette trenger du følgende informasjon:
+
+1. **project-id** for kildeprosjektet. [Slik finner du det](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id).
+2. **folder_prefix** som du ønsker at koden skal trigges på. Dette fungerer likt som tidligere forklart for `config.yaml`, men her har du også mulighet til å kunne trigge prosesseringen på et undermappe av stien som var satt i kildens config.yaml.
+3. **source_name** er navnet på kilden. Navnet på kilden i eksempelet med team **dapla-example** var  `altinn`. 
+
+Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle filer for kilde
+
+```{.python filename="notebook"}
+from dapla import trigger_source_data_processing
+
+project_id = "dapla-example-kilde-p-xx"
+source_name = "altinn"
+folder_prefix = "ledstill/altinn/ra0678"
+
+trigger_source_data_processing(project_id, source_name, folder_prefix)          
+```
+
+I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på alle undermapper av  
+`ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/`. 
 
 ## Vedlikehold
 
