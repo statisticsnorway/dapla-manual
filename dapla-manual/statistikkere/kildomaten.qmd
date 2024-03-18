@@ -284,7 +284,7 @@ For å gi raskt tilbakemelding på noen mulige feilsituasjoner, så kjøres det 
 - Bruker `process_source_data.py` biblioteker som ikke [er installert i Kildomaten](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/requirements.txt)?
 - Har koden i `process_source_data.py` feil iht [Pyflakes](https://pypi.org/project/pyflakes/)?
 
-Hvis utrullingen feiler kan du trykke på `Details` i sjekkene som feilet, og se om noen feilene over har forekommet. Hvis ikke kan Kundeservice kontaktes for hjelp. 
+Det kan også forekomme at **Atlantis**, verktøyet for å rulle ut endringer fra IaC-repoet til GCP, feiler. Da kan du prøve å skrive `atlantis plan` i kommentarfeltet til *pull request*'en, og testene vil kjøre på nytt. Hvis det fortsatt ikke fungerer så kontakter man Dapla kundeservice. 
 :::
 
 ### Test tjenesten
@@ -382,7 +382,7 @@ Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. 
 
 Før du kan gjøre dette trenger du følgende informasjon:
 
-1. **project-id** for kildeprosjektet. [Slik finner du det](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id).
+1. **project-id** for standardprosjektet. [Slik finner du prosjekt-id](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id).
 2. **folder_prefix** som du ønsker at koden skal trigges på. Dette fungerer likt som tidligere forklart for `config.yaml`, men her har du også mulighet til å kunne trigge prosesseringen på et undermappe av stien som var satt i kildens config.yaml.
 3. **source_name** er navnet på kilden. Navnet på kilden i eksempelet med team **dapla-example** var  `altinn`. 
 
@@ -391,7 +391,7 @@ Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle fil
 ```{.python filename="notebook"}
 from dapla import trigger_source_data_processing
 
-project_id = "dapla-example-kilde-p-xx"
+project_id = "dapla-example-p"
 source_name = "altinn"
 folder_prefix = "ledstill/altinn/ra0678"
 
