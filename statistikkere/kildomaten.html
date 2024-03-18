@@ -876,7 +876,7 @@ Vanlige feil ved utrulling
 <li>Bruker <code>process_source_data.py</code> biblioteker som ikke <a href="https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/requirements.txt">er installert i Kildomaten</a>?</li>
 <li>Har koden i <code>process_source_data.py</code> feil iht <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>?</li>
 </ul>
-<p>Hvis utrullingen feiler kan du trykke på <code>Details</code> i sjekkene som feilet, og se om noen feilene over har forekommet. Hvis ikke kan Kundeservice kontaktes for hjelp.</p>
+<p>Det kan også forekomme at <strong>Atlantis</strong>, verktøyet for å rulle ut endringer fra IaC-repoet til GCP, feiler. Da kan du prøve å skrive <code>atlantis plan</code> i kommentarfeltet til <em>pull request</em>’en, og testene vil kjøre på nytt. Hvis det fortsatt ikke fungerer så kontakter man Dapla kundeservice.</p>
 </div>
 </div>
 </section>
@@ -968,7 +968,7 @@ Vanlige feil ved utrulling
 <p>Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. Men noen ganger er det nødvendig å trigge kjøring av alle filer på nytt. Noen ganger ønsker man kanskje å kun trigge noen filer for en gitt kilde. Dette kan gjøres med en funksjon i Python-pakken <a href="https://github.com/statisticsnorway/dapla-toolbelt">dapla-toolbelt</a>.</p>
 <p>Før du kan gjøre dette trenger du følgende informasjon:</p>
 <ol type="1">
-<li><strong>project-id</strong> for kildeprosjektet. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du det</a>.</li>
+<li><strong>project-id</strong> for standardprosjektet. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>.</li>
 <li><strong>folder_prefix</strong> som du ønsker at koden skal trigges på. Dette fungerer likt som tidligere forklart for <code>config.yaml</code>, men her har du også mulighet til å kunne trigge prosesseringen på et undermappe av stien som var satt i kildens config.yaml.</li>
 <li><strong>source_name</strong> er navnet på kilden. Navnet på kilden i eksempelet med team <strong>dapla-example</strong> var <code>altinn</code>.</li>
 </ol>
@@ -979,7 +979,7 @@ Vanlige feil ved utrulling
 </div>
 <div class="sourceCode" id="cb11" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> trigger_source_data_processing</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-kilde-p-xx"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>folder_prefix <span class="op">=</span> <span class="st">"ledstill/altinn/ra0678"</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
