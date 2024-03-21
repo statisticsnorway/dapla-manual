@@ -57,6 +57,17 @@ I denne delen viser vi hvilken funksjonalitet som tilbys gjennom dapla-toolbelt-
 poetry add dapla-toolbelt-pseudo
 ```
 
+### Dataformater
+
+*dapla-toolbelt-pseudo* støtter innlesing av følgende dataformater: 
+
+- CSV
+- JSON
+- [Pandas dataframes](https://pandas.pydata.org/docs/index.html)
+- [Polars dataframes](https://docs.pola.rs/py-polars/html/reference/index.html)
+
+Eksemplene under viser hovedskelig innlesing av dataframes fra minnet^[Pandas og Polars dataframes er eksempler på dataformater som lever i minnet, og må konverteres før de skrives til et lagringsommråde. I praksis vil det ofte si at man jobber med dataframes når man jobber i verktøy som Jupyterlab, mens man skriver til lagringsområde når man er ferdig i Jupyterlab.], men du kan [lese mer om filbasert prosessering lenger ned i kapitlet](./dapla-pseudo.html#filbasert-prosessering).   
+
 ### Pseudonymisering
 
 Pseudonymisering tilbys via `Pseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en dataframe i minnet som heter `df` hvor kolonnen `fnr` skal pseudonymiseres. Da vil koden se slik ut:
@@ -78,7 +89,7 @@ Se flere [eksempler i dokumentasjonen](https://statisticsnorway.github.io/dapla-
 
 ### De-pseudonymisering
 
-Pseudonymisering tilbys via `Depseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal de-pseudonymiseres. Da vil koden se slik ut:
+De-pseudonymisering tilbys via `Depseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal de-pseudonymiseres. Da vil koden se slik ut:
 
 ```{.python filename="Notebook"}
 result_df = (
@@ -91,9 +102,11 @@ result_df = (
 ```
 Oppbygningen av koden med `Depseudonymize()` er helt lik som for `Pseudonomize()`. Les beskrivelsen der for å se hva de ulike funksjonskallene gjør. Se flere [eksempler i dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#depseudonymize).
 
+::: {.callout-important}
+# De-pseudonymisering ikke tilgjengelig i prod-miljø
+
 Foreløpig er det kun tilgang til å pseudonymisere i test-miljøet med test-data. Ta kontakt med Dapla-teamene dersom det dukker opp behov for å kunne de-pseudonymisere i prod-miljøet. 
-
-
+:::
 
 
 ### Re-pseudonymisering
@@ -127,20 +140,20 @@ result.metadata
 result.to_polars()
 ```
 
-### Dataformater
+### Filbasert prosessering
 
-**dapla-toolbelt-pseudo** støtter følgende dataformater:
+Selv om mange av eksemplene i dette kapitlet viser hvordan man bruker *dapla-toolbelt-pseudo* ved å gi funksjonene et datasett fra minnet, så støtter den også å prosessere filer som er lagret på disk/bøtter. Dette kan være en fordel i følgende situasjoner. Dette kan være en fordel hvis dataene er for store for Kildomaten (>32GB RAM) eller de har en dyp hierarkisk struktur (f.eks. json-filer). 
 
-- csv (filformat)
-- json (filformat)
-- Polars dataframe (minnet)
-- Pandas dataframe (minnet)
+*dapla-toolbelt-pseudo* støtter følgende filtyper:
 
-Over har vi vist hvordan vi leser data fra minnet, men det støttes også å lese direkte fra filformatene csv og json. Under er et eksempel med en csv-fil:
+- csv
+- json
+
+
+Her er et eksempel på hvordan man pseudonymiserer en fil som ligger lagret på disk:
 
 ```{.python filename="Notebook"}
 from dapla_pseudo import Pseudonymize
-from dapla import AuthClient
 
 
 file_path="data/personer.csv"
@@ -160,14 +173,90 @@ result_df = (
 
 Se flere [eksempler i dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#read-from-file-systems).
 
+#### Wildcards
+
+Kommer snart. 
+
+### Dataminimering
+
+Kommer snart.
 
 ### Algoritmer
 
-**dapla-toolbelt-pseudo** støtter mange forskjellige krypteringsalgoritmer. Les mer i [dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#pseudonymize-using-custom-keyskeysets).
+Kommer snart. 
 
 ### Metadata
 
-Kommer snart. 
+:::: {.columns}
+
+::: {.column width="35%"}
+Det genereres metadata når man pseudonymiserer. Metadataene er på et format som senere skal integreres i Datadoc^[Datadoc er det nye systemet for dokumentasjon av datasett i SSB. Systemet er fortsatt under utvikling.].
+
+I koden til høyre så printes metadataene fra et kall til `Pseudonomize` ved å skrive `print(result.datadoc)`. Da printer man objektet interaktivt i f.eks. Jupyterlab, noe som kun er mulig i test-miljøet. 
+ 
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="60%"}
+```{.python filename="Notebook"}
+result = (
+    Pseudonymize.from_polars(df)    
+    .on_fields("fornavn")           
+    .with_stable_id()
+    .run()                      
+)
+
+print(result.datadoc)           # <1>
+result.to_file("gs://bucket/test.parquet")  # <2>
+```
+1. Printer metadata i en Notebook.
+2. Skriver metadata direkte til bøtte.
+:::
+
+::::
+
+Skal man kjøre dette i Kildomaten så er det lettere å skrive filen direkte til riktig json-format med `to_file`-funksjonen. Da får får filen endelsen `__DOC` på slutten av filnavnet, og man slipper å tenke på om filen skrives med riktig formattering, osv. Dette igjen krever at pseudonymisering man ikke endrer datasettet som returneres fra pseudonymiseringen. 
+
+Under ser man hvilken informasjon som genereres fra pseudonymiseringen. 
+
+```{.json filename=Metadata code-line-numbers="true"}
+{
+  "document_version": "0.0.1",
+  "datadoc": null,
+  "pseudonymization": {
+    "document_version": "0.1.0",
+    "pseudo_dataset": null,
+    "pseudo_variables": [
+      {
+        "short_name": "fnr",   
+        "data_element_path": "fnr",
+        "data_element_pattern": "**",
+        "stable_identifier_type": "FREG_SNR",
+        "stable_identifier_version": "2023-08-31",
+        "encryption_algorithm": "TINK-FPE",
+        "encryption_key_reference": "papis-common-key-1",
+        "encryption_algorithm_parameters": [
+          {
+            "keyId": "papis-common-key-1"
+          },
+          {
+            "strategy": "SKIP"
+          }
+        ],
+        "source_variable": null,
+        "source_variable_datatype": null
+      }
+    ]
+  }
+}
+```
+
+Av metadatene kan vi se fra `pseudo_variables` at det bare var feltet `fnr` som ble pseudonymisert. Vi ser også av `stable_identifier_type` ser vi at `fnr` ble oversatt til `snr`, og at versjonen av SNR-katalogen var fra `2023-08-31`. `encryption_algorithm` angir at det var det var den formatpreserverende algoritmen `TINK-FPE` som ble benyttet. `keyID: "papis-common-key-1"` angir hvilken nøkkel-id som ble benyttet. `strategy: "SKIP"` refererer til at den format-preserverende algoritmen skal "hoppe over" ugyldige karakterer og la de være som de er. 
+
+Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data. 
 
 ## Brukerveiledning
 
