@@ -43,23 +43,34 @@ Tilgang til å funksjonalitet i dapla-toolbelt-pseudo kan regnes som sensitivt i
 Tilgangsstyring til dapla-pseudo-toolbelt
 :::
 
-I @tbl-pseudo-panel ser vi fra @tbl-pseudo-first at test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-pseudo. Både fra Kildomaten og når man sitter og jobber interaktivt i Jupyterlab. @tbl-pseudo-second viser at det kun er tilgang til *pseudonymize()* og *validator()* fra Kildomaten i prod-miljøet, og man kan aldri interaktivt kalle på funksjoner som potensielt avslører et pseudonym. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.
+I @tbl-pseudo-panel ser vi fra @tbl-pseudo-first at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-pseudo, både fra Kildomaten og når man jobber interaktivt^[Med interaktiv jobbing menes at man skriver og kode og får tilbake output i samme verktøy. F.eks. er Jupyterlab et eksempel på et verktøy som lar deg jobbe interaktivt med data.] i Jupyterlab. @tbl-pseudo-second viser at det kun er tilgang til *pseudonymize()* og *validator()* fra Kildomaten i prod-miljøet, og man kan aldri interaktivt kan kalle på funksjoner som potensielt avslører et pseudonym. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.
 
 ## Funksjonalitet
 
-I denne delen viser vi hvilken funksjonalitet som tilbys gjennom dapla-toolbelt-pseudo. Eksempelkoden under viser hvordan man ville kjørt det fra en notebook i Jupyterlab og ikke hvordan koden må skrives når det skal kjøres i [Kildomaten](./kildomaten.html)^[I Kildomaten må koden blant annet pakke inn i `main()`-funksjon.].
+I denne delen viser vi hvilken funksjonalitet som tilbys gjennom dapla-toolbelt-pseudo. Eksempelkoden under viser hvordan man ville kjørt det fra en notebook i test-miljøet til teamet, og ikke hvordan koden må skrives når det skal kjøres i [Kildomaten](./kildomaten.html)^[I Kildomaten må koden blant annet pakke inn i `main()`-funksjon.].
 
 ### Installering
 
-[dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/) er ferdig installert i Kildomaten. Men ønsker du å bruke det i test-miljøet til teamet så kan du installere det i et `ssb-project` fra [PyPI](https://pypi.org/) med denne kommandoen: 
+[dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/) er ferdig installert i Kildomaten. Men ønsker du å bruke den i test-miljøet til teamet så kan du installere det i et [ssb-project](./jobbe-med-kode.html) fra [PyPI](https://pypi.org/) med denne kommandoen: 
 
 ```{.bash filename="Terminal"}
 poetry add dapla-toolbelt-pseudo
 ```
 
+### Dataformater
+
+*dapla-toolbelt-pseudo* støtter innlesing av følgende dataformater: 
+
+- CSV
+- JSON
+- [Pandas dataframes](https://pandas.pydata.org/docs/index.html)
+- [Polars dataframes](https://docs.pola.rs/py-polars/html/reference/index.html)
+
+Eksemplene under viser hovedskelig innlesing av dataframes fra minnet^[Pandas og Polars dataframes er eksempler på dataformater som lever i minnet, og må konverteres før de skrives til et lagringsommråde. I praksis vil det ofte si at man jobber med dataframes når man jobber i verktøy som Jupyterlab, mens man skriver til lagringsområde når man er ferdig i Jupyterlab.], men du kan [lese mer om filbasert prosessering lenger ned i kapitlet](./dapla-pseudo.html#filbasert-prosessering).   
+
 ### Pseudonymisering
 
-Pseudonymisering tilbys via `Pseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en dataframe i minnet som heter `df` hvor kolonnen `fnr` skal pseudonymiseres. Da vil koden se slik ut:
+Pseudonymisering tilbys via `Pseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal pseudonymiseres. Da vil koden se slik ut:
 
 ```{.python filename="Notebook"}
 from dapla_pseudo import Pseudonymize
@@ -78,7 +89,7 @@ Se flere [eksempler i dokumentasjonen](https://statisticsnorway.github.io/dapla-
 
 ### De-pseudonymisering
 
-Pseudonymisering tilbys via `Depseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal de-pseudonymiseres. Da vil koden se slik ut:
+De-pseudonymisering tilbys via `Depseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal de-pseudonymiseres. Da vil koden se slik ut:
 
 ```{.python filename="Notebook"}
 result_df = (
@@ -91,9 +102,29 @@ result_df = (
 ```
 Oppbygningen av koden med `Depseudonymize()` er helt lik som for `Pseudonomize()`. Les beskrivelsen der for å se hva de ulike funksjonskallene gjør. Se flere [eksempler i dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#depseudonymize).
 
+De-pseudonymisering er også støttet for informasjon som først er transformert til stabil ID og deretter pseudonymisert med Papis-nøkkelen. I disse tilfellene kan det også være behov for å spesifisere hvilken versjon av snr-katalogen man ønsker å benytte for å erstatte snr med fødselsnummer:
+
+```{.python filename="Notebook"}
+from dapla_pseudo import Depseudonymize
+from dapla_pseudo.utils import convert_to_date
+
+result_df = (
+    Depseudonymize.from_pandas(df)            
+    .on_fields("fnr")                          
+    .with_stable_id(
+      sid_snapshot_date=convert_to_date("2023-05-29"))                    
+    .run()                                         
+    .to_pandas()                                   
+)
+```
+
+I eksempelet over spesifiserer vi datoen `2023-05-29` og da benyttes snr-katalogen som ligger nærmest i tid til denne datoen. Hvis `sid_snapshot_date` ikke oppgis benyttes siste tilgjengelige versjon av katalogen. 
+
+::: {.callout-important}
+# De-pseudonymisering ikke tilgjengelig i prod-miljø
+
 Foreløpig er det kun tilgang til å pseudonymisere i test-miljøet med test-data. Ta kontakt med Dapla-teamene dersom det dukker opp behov for å kunne de-pseudonymisere i prod-miljøet. 
-
-
+:::
 
 
 ### Re-pseudonymisering
@@ -104,11 +135,46 @@ Under utvikling.
 
 I statistikkproduksjon og forskning er det viktig å kunne følge de samme personene over tid. Derfor har fødselsnummer ofte blitt oversatt til en mer stabilt identifikator, ofte kalt SNR eller stabil ID^[SNR-katalogen eies og tilbys av Team Register på Dapla.]. Funksjonene `with_stable_id()` og `validator()` bruker stabilID-katalogen til å henholdsvis bytte ut fødselsnummer med stabil ID, og for å validere om fødselsnummer er gyldige(se under).
 
-Du kan selv spesifisere hvilken versjon av SNR-katalogen du ønsker å bruke. Det gjør du ved å oppgi en gyldighetsdato og så finner dapla-toolbelt-pseudo hvilken versjon av katalogen som ligger nærmest i tid. 
+Du kan selv spesifisere hvilken versjon av SNR-katalogen du ønsker å bruke. Det gjør du ved å oppgi en gyldighetsdato og så finner dapla-toolbelt-pseudo hvilken versjon av katalogen som ligger nærmest i tid.
+
+### Papis-pseudonym
+
+Dapla tilbyr samme pseudonym som Papis-prosjektet^[Papis var et prosjekt med fokus på bakkesystemene i SSB som skulle bringe SSBs behandling av personopplysninger, som brukes i statistikkproduksjon, i samsvar med GDPR gjennom en enhetlig pseudonymiseringsløsning.]. Denne kan benyttes på 2 måter:
+
+1. Pseudonymisere hvilken som helst informasjon med samme nøkkel som Papis.
+2. Transformere fødselsnummer til snr-nummer og deretter pseudonymisere med samme nøkkel som Papis.
+
+Punkt 1 er nyttig for de som har pseudonymisert informasjon på bakken tidligere og vil ha samme pseudonym på Dapla^[Generelt sett er det ikke å anbefale å benytte denne nøkkelen på annen informasjon enn fødselsnummer. Grunnen er at den er svakere enn andre algoritmer, der blant annet tekst som er kortere enn 4 karakter lang ikke blir pseudonymisert.]. Dette kan gjelde hvilken som helst informasjon, også direkte pseudonymisering av fødselsnummer, uten at det er gått via snr-nummer. Her er et eksempel på hvordan man pseudonymiserer på denne måten:
+
+```{.python filename="Notebook"}
+result = (
+    Pseudonymize.from_pandas(df)
+    .on_fields("fornavn")                      
+    .with_papis_compatible_encryption()         
+    .run()                               
+    .to_pandas()                                  
+)
+```
+
+Punkt 2 over er nok den som benyttes mest i SSB siden den sikrer at pseudonymisert fødselsnummer kan kobles med data som er pseudonymisert på bakken. Her er et eksempel på hvordan man pseudonymiserer snr med Papis-nøkkelen:
+
+```{.python filename="Notebook"}
+result = (
+    Pseudonymize.from_pandas(df)
+    .on_fields("fnr")                      
+    .with_stable_id()         
+    .run()                               
+    .to_pandas()                                  
+)
+```
+::: {.callout-note}
+# Hva betyr det å tilby samme pseudonym?
+At Papis og Dapla tilbyr samme pseudonum betyr egentlig at vi bruker samme krypteringsalgoritme, og en felles krypteringsnøkkel. Krypteringsalgoritmen som benyttes er formatpreserverende (FPE) og biblioteket som brukes er [Tink FPE Python](https://pypi.org/project/tink-fpe/). En svakhet med algoritmen er at den ikke håndterer tekst som kortere enn 4 karakterer lang, og strategien som benyttes for å håndtere dette er `SKIP`, noe som betyr den originale verdien blir returnert som den var.  
+:::
 
 ### Validere fødselsnummer
 
-`Validator`-metoden kan benyttes til å sjekke om fødselsnummer finnes i SNR-katalogen (se over). Her kan man også spesifisere hvilken versjon av SNR-katalogen man ønsker å bruke. Standard, hvis ingenting velges, er at siste tilgjengelige versjon velges. Under er et eksempel på hvordan man validerer fødselsnummer for en gitt gyldighetsdato:
+`Validator`-metoden kan benyttes til å sjekke om fødselsnummer finnes i SNR-katalogen (se over), og returnerer de ugyldige fødselsnummerne tilbake. Her kan man også spesifisere hvilken versjon av SNR-katalogen man ønsker å bruke. Standard, hvis ingenting velges, er at siste tilgjengelige versjon velges. Under er et eksempel på hvordan man validerer fødselsnummer for en gitt gyldighetsdato:
 
 ```{.python filename="Notebook"}
 from dapla_pseudo import Validator
@@ -127,23 +193,24 @@ result.metadata
 result.to_polars()
 ```
 
-### Dataformater
+### Filbasert prosessering
 
-**dapla-toolbelt-pseudo** støtter følgende dataformater:
+Selv om mange av eksemplene i dette kapitlet viser hvordan man bruker *dapla-toolbelt-pseudo* ved å gi funksjonene et datasett fra minnet, så støtter den også å prosessere filer som er lagret på disk/bøtter. Dette kan være en fordel hvis dataene er for store for Kildomaten (>32GB RAM) eller de har en dyp hierarkisk struktur (f.eks. json-filer). 
 
-- csv (filformat)
-- json (filformat)
-- Polars dataframe (minnet)
-- Pandas dataframe (minnet)
+*dapla-toolbelt-pseudo* støtter følgende filtyper:
 
-Over har vi vist hvordan vi leser data fra minnet, men det støttes også å lese direkte fra filformatene csv og json. Under er et eksempel med en csv-fil:
+- csv
+- json
+
+
+Her er et eksempel på hvordan man pseudonymiserer en fil som ligger lagret på disk:
 
 ```{.python filename="Notebook"}
 from dapla_pseudo import Pseudonymize
 from dapla import AuthClient
 
 
-file_path="data/personer.csv"
+file_path = "gs://bucket/pseudo-examples/andeby_personer.csv"
 
 options = {
     "dtypes": {"fnr": pl.Utf8, "fornavn": pl.Utf8, "etternavn": pl.Utf8, "kjonn": pl.Categorical, "fodselsdato": pl.Utf8}
@@ -160,22 +227,129 @@ result_df = (
 
 Se flere [eksempler i dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#read-from-file-systems).
 
-
-### Algoritmer
-
-**dapla-toolbelt-pseudo** støtter mange forskjellige krypteringsalgoritmer. Les mer i [dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#pseudonymize-using-custom-keyskeysets).
-
-### Metadata
+#### Wildcards
 
 Kommer snart. 
 
+### Dataminimering
+
+Kommer snart.
+
+### Algoritmer
+
+Kommer snart. 
+
+### Metadata
+
+Det genereres to typer av metadata når man pseudonymiserer:
+
+1. Datadoc
+2. Metadata
+
+De to typene av metadata returneres til brukeren i to forskjellige objekter. 
+
+#### Datadoc
+
+:::: {.columns}
+
+::: {.column width="35%"}
+Datadoc-metadata er på et format som er planlagt integrert i Datadoc^[Datadoc er det nye systemet for dokumentasjon av datasett i SSB. Systemet er fortsatt under utvikling.] på et senere tidspunkt.
+I koden til høyre så printes metadataene fra et kall til `Pseudonomize` ved å skrive `print(result.datadoc)`. Da printer man objektet interaktivt i f.eks. Jupyterlab, noe som kun er mulig i test-miljøet. Skal man kjøre dette i Kildomaten så er det lettere å skrive filen direkte til riktig json-format med `to_file`-funksjonen. Da får får filen endelsen `__DOC` på slutten av filnavnet, og man slipper å tenke på om filen skrives med riktig formattering, osv..
+ 
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="60%"}
+```{.python filename="Notebook"}
+result = (
+    Pseudonymize.from_polars(df)    
+    .on_fields("fnr")           
+    .with_stable_id()
+    .run()                      
+)
+
+print(result.datadoc)           # <1>
+result.to_file("gs://bucket/test.parquet")  # <2>
+```
+1. Printer metadata i en Notebook.
+2. Skriver metadata direkte til bøtte.
+:::
+
+::::
+
+Når man kjører pseudonymisering fra Kildomaten er det viktig å tenke på at felter som er pseudonymisert ikke må endres uten at metadataene også endrer. Da kan man risikere at metadatene ikke lenger beskriver riktig informasjon. 
+
+Under ser man hvilken informasjon som genereres fra pseudonymiseringen. 
+
+```{.json filename=Datadoc code-line-numbers="true"}
+{
+  "document_version": "0.0.1",
+  "datadoc": null,
+  "pseudonymization": {
+    "document_version": "0.1.0",
+    "pseudo_dataset": null,
+    "pseudo_variables": [
+      {
+        "short_name": "fnr",   
+        "data_element_path": "fnr",
+        "data_element_pattern": "**",
+        "stable_identifier_type": "FREG_SNR",
+        "stable_identifier_version": "2023-08-31",
+        "encryption_algorithm": "TINK-FPE",
+        "encryption_key_reference": "papis-common-key-1",
+        "encryption_algorithm_parameters": [
+          {
+            "keyId": "papis-common-key-1"
+          },
+          {
+            "strategy": "SKIP"
+          }
+        ],
+        "source_variable": null,
+        "source_variable_datatype": null
+      }
+    ]
+  }
+}
+```
+
+Av metadatene kan vi se fra `pseudo_variables` at det bare var feltet `fnr` som ble pseudonymisert. Vi ser også av `stable_identifier_type` ser vi at `fnr` ble oversatt til `snr`, og at versjonen av SNR-katalogen var fra `2023-08-31`. `encryption_algorithm` angir at det var det var den formatpreserverende algoritmen `TINK-FPE` som ble benyttet. `keyID: "papis-common-key-1"` angir hvilken nøkkel-id som ble benyttet. `strategy: "SKIP"` refererer til at den format-preserverende algoritmen skal "hoppe over" ugyldige karakterer og la de være som de er. 
+
+Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data.
+
+#### Metadata
+
+Den andre typen av metadata kan hentes ut etter et kall til `Pseudonymize ` med kommandoen `result.metadata`. Den returnerer en *python dictionary*. Den inneholder hovedsaklig logginformasjon og metrikker foreløpig. For de som pseudonymiserer med `with_stable_id()` kan output se slik ut: 
+
+```{.json filename="Metadata"}
+{
+    'fnr': {
+        'logs': [
+            'No SID-mapping found for fnr 999999*****',
+            'No SID-mapping found for fnr XX',
+            'No SID-mapping found for fnr X8b7k2*'
+        ],
+        'metrics': [
+            {'MAPPED_SID': 10},
+            {'MISSING_SID': 3}
+        ]
+    }
+}
+```
+
+I Kildomaten kan det vært nyttig å printe denne informasjonen til loggene. Av eksempelet over ser vi at verdier som er over 6 karakterer lange blir maskert. 
+
+
 ## Brukerveiledning
 
-På grunn av den strenge tilgangsstyringen til dapla-pseudo-toolbelt og kildedata er det anbefalt å utvikle kode for overgangen fra kildedata til inndata i test-miljøet til teamet.
+På grunn av den strenge tilgangsstyringen til dapla-pseudo-toolbelt og kildedata er det anbefalt å utvikle kode for overgangen fra kildedata til inndata i test-miljøet til teamet. I denne delen viser vi hvordan denne arbeidsflyten kan se ut, fra testing til en automatisert produksjon med ekte data, med et helt konkret eksempel. 
 
 ### Interaktiv utvikling
 
-Kommer snart.
+For å kunne kjøre pseudonymiseringen interaktivt i f.eks. en notebook i Jupyter, så må man jobbe i test-miljøet til teamet. 
 
 ### Kildomaten i test
 
