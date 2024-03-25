@@ -518,12 +518,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
   <ul class="collapse">
   <li><a href="#installering" id="toc-installering" class="nav-link" data-scroll-target="#installering">Installering</a></li>
+  <li><a href="#dataformater" id="toc-dataformater" class="nav-link" data-scroll-target="#dataformater">Dataformater</a></li>
   <li><a href="#pseudonymisering" id="toc-pseudonymisering" class="nav-link" data-scroll-target="#pseudonymisering">Pseudonymisering</a></li>
   <li><a href="#de-pseudonymisering" id="toc-de-pseudonymisering" class="nav-link" data-scroll-target="#de-pseudonymisering">De-pseudonymisering</a></li>
   <li><a href="#re-pseudonymisering" id="toc-re-pseudonymisering" class="nav-link" data-scroll-target="#re-pseudonymisering">Re-pseudonymisering</a></li>
   <li><a href="#stabil-id" id="toc-stabil-id" class="nav-link" data-scroll-target="#stabil-id">Stabil ID</a></li>
+  <li><a href="#papis-pseudonym" id="toc-papis-pseudonym" class="nav-link" data-scroll-target="#papis-pseudonym">Papis-pseudonym</a></li>
   <li><a href="#validere-fødselsnummer" id="toc-validere-fødselsnummer" class="nav-link" data-scroll-target="#validere-fødselsnummer">Validere fødselsnummer</a></li>
-  <li><a href="#dataformater" id="toc-dataformater" class="nav-link" data-scroll-target="#dataformater">Dataformater</a></li>
+  <li><a href="#filbasert-prosessering" id="toc-filbasert-prosessering" class="nav-link" data-scroll-target="#filbasert-prosessering">Filbasert prosessering</a></li>
+  <li><a href="#dataminimering" id="toc-dataminimering" class="nav-link" data-scroll-target="#dataminimering">Dataminimering</a></li>
   <li><a href="#algoritmer" id="toc-algoritmer" class="nav-link" data-scroll-target="#algoritmer">Algoritmer</a></li>
   <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
   </ul></li>
@@ -678,14 +681,14 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 </div>
 </figure>
 </div>
-<p>I <a href="#tbl-pseudo-panel" class="quarto-xref">Tabell&nbsp;1</a> ser vi fra <a href="#tbl-pseudo-first" class="quarto-xref">Tabell&nbsp;1 (a)</a> at test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-pseudo. Både fra Kildomaten og når man sitter og jobber interaktivt i Jupyterlab. <a href="#tbl-pseudo-second" class="quarto-xref">Tabell&nbsp;1 (b)</a> viser at det kun er tilgang til <em>pseudonymize()</em> og <em>validator()</em> fra Kildomaten i prod-miljøet, og man kan aldri interaktivt kalle på funksjoner som potensielt avslører et pseudonym. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.</p>
+<p>I <a href="#tbl-pseudo-panel" class="quarto-xref">Tabell&nbsp;1</a> ser vi fra <a href="#tbl-pseudo-first" class="quarto-xref">Tabell&nbsp;1 (a)</a> at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-pseudo, både fra Kildomaten og når man jobber interaktivt<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> i Jupyterlab. <a href="#tbl-pseudo-second" class="quarto-xref">Tabell&nbsp;1 (b)</a> viser at det kun er tilgang til <em>pseudonymize()</em> og <em>validator()</em> fra Kildomaten i prod-miljøet, og man kan aldri interaktivt kan kalle på funksjoner som potensielt avslører et pseudonym. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.</p>
 </section>
 <section id="funksjonalitet" class="level2">
 <h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
-<p>I denne delen viser vi hvilken funksjonalitet som tilbys gjennom dapla-toolbelt-pseudo. Eksempelkoden under viser hvordan man ville kjørt det fra en notebook i Jupyterlab og ikke hvordan koden må skrives når det skal kjøres i <a href="./kildomaten.html">Kildomaten</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>I denne delen viser vi hvilken funksjonalitet som tilbys gjennom dapla-toolbelt-pseudo. Eksempelkoden under viser hvordan man ville kjørt det fra en notebook i test-miljøet til teamet, og ikke hvordan koden må skrives når det skal kjøres i <a href="./kildomaten.html">Kildomaten</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <section id="installering" class="level3">
 <h3 class="anchored" data-anchor-id="installering">Installering</h3>
-<p><a href="https://pypi.org/project/dapla-toolbelt-pseudo/">dapla-toolbelt-pseudo</a> er ferdig installert i Kildomaten. Men ønsker du å bruke det i test-miljøet til teamet så kan du installere det i et <code>ssb-project</code> fra <a href="https://pypi.org/">PyPI</a> med denne kommandoen:</p>
+<p><a href="https://pypi.org/project/dapla-toolbelt-pseudo/">dapla-toolbelt-pseudo</a> er ferdig installert i Kildomaten. Men ønsker du å bruke den i test-miljøet til teamet så kan du installere det i et <a href="./jobbe-med-kode.html">ssb-project</a> fra <a href="https://pypi.org/">PyPI</a> med denne kommandoen:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
@@ -693,9 +696,20 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 <div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add dapla-toolbelt-pseudo</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="dataformater" class="level3">
+<h3 class="anchored" data-anchor-id="dataformater">Dataformater</h3>
+<p><em>dapla-toolbelt-pseudo</em> støtter innlesing av følgende dataformater:</p>
+<ul>
+<li>CSV</li>
+<li>JSON</li>
+<li><a href="https://pandas.pydata.org/docs/index.html">Pandas dataframes</a></li>
+<li><a href="https://docs.pola.rs/py-polars/html/reference/index.html">Polars dataframes</a></li>
+</ul>
+<p>Eksemplene under viser hovedskelig innlesing av dataframes fra minnet<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, men du kan <a href="./dapla-pseudo.html#filbasert-prosessering">lese mer om filbasert prosessering lenger ned i kapitlet</a>.</p>
+</section>
 <section id="pseudonymisering" class="level3">
 <h3 class="anchored" data-anchor-id="pseudonymisering">Pseudonymisering</h3>
-<p>Pseudonymisering tilbys via <code>Pseudonymize</code>-metoden i <strong>dapla-toolbelt-pseudo</strong>. Den følger et <em>builder-pattern</em> der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en dataframe i minnet som heter <code>df</code> hvor kolonnen <code>fnr</code> skal pseudonymiseres. Da vil koden se slik ut:</p>
+<p>Pseudonymisering tilbys via <code>Pseudonymize</code>-metoden i <strong>dapla-toolbelt-pseudo</strong>. Den følger et <em>builder-pattern</em> der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes en Polars dataframe i minnet som heter <code>df</code> hvor kolonnen <code>fnr</code> skal pseudonymiseres. Da vil koden se slik ut:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
@@ -710,12 +724,12 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    .to_polars()                                   </span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>I koden over så angir <code>from_polars(df)</code> at kolonnen vi ønsker å pseudonymisere ligger i en <a href="https://docs.pola.rs/">Polars</a> dataframe i minnet og heter <code>df</code>. Deretter spesifiserer vi at kolonnen <code>fnr</code> er den som skal behandles med funksjonen <code>on_fields("fnr")</code>. Videre angir <code>with_default_encryption()</code> at <code>fnr</code> skal pseudonymiseres med dapla-toolbelt-speudo sin standard-algoritme<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Til slutt ber vi om at det ovennevnte blir kjørt med funksjonen <code>run()</code>, og at dataene skal returneres som en Polars dataframe med funksjonen <code>to_polars()</code>.</p>
+<p>I koden over så angir <code>from_polars(df)</code> at kolonnen vi ønsker å pseudonymisere ligger i en <a href="https://docs.pola.rs/">Polars</a> dataframe i minnet og heter <code>df</code>. Deretter spesifiserer vi at kolonnen <code>fnr</code> er den som skal behandles med funksjonen <code>on_fields("fnr")</code>. Videre angir <code>with_default_encryption()</code> at <code>fnr</code> skal pseudonymiseres med dapla-toolbelt-speudo sin standard-algoritme<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Til slutt ber vi om at det ovennevnte blir kjørt med funksjonen <code>run()</code>, og at dataene skal returneres som en Polars dataframe med funksjonen <code>to_polars()</code>.</p>
 <p>Se flere <a href="https://statisticsnorway.github.io/dapla-toolbelt-pseudo/index.html#pseudonymize">eksempler i dokumentasjonen</a>.</p>
 </section>
 <section id="de-pseudonymisering" class="level3">
 <h3 class="anchored" data-anchor-id="de-pseudonymisering">De-pseudonymisering</h3>
-<p>Pseudonymisering tilbys via <code>Depseudonymize</code>-metoden i <strong>dapla-toolbelt-pseudo</strong>. Den følger et <em>builder-pattern</em> der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter <code>df</code> hvor kolonnen <code>fnr</code> skal de-pseudonymiseres. Da vil koden se slik ut:</p>
+<p>De-pseudonymisering tilbys via <code>Depseudonymize</code>-metoden i <strong>dapla-toolbelt-pseudo</strong>. Den følger et <em>builder-pattern</em> der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter <code>df</code> hvor kolonnen <code>fnr</code> skal de-pseudonymiseres. Da vil koden se slik ut:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
@@ -729,7 +743,37 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Oppbygningen av koden med <code>Depseudonymize()</code> er helt lik som for <code>Pseudonomize()</code>. Les beskrivelsen der for å se hva de ulike funksjonskallene gjør. Se flere <a href="https://github.com/statisticsnorway/dapla-toolbelt-pseudo#depseudonymize">eksempler i dokumentasjonen</a>.</p>
+<p>De-pseudonymisering er også støttet for informasjon som først er transformert til stabil ID og deretter pseudonymisert med Papis-nøkkelen. I disse tilfellene kan det også være behov for å spesifisere hvilken versjon av snr-katalogen man ønsker å benytte for å erstatte snr med fødselsnummer:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Depseudonymize</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.utils <span class="im">import</span> convert_to_date</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>result_df <span class="op">=</span> (</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    Depseudonymize.from_pandas(df)            </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)                          </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    .with_stable_id(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      sid_snapshot_date<span class="op">=</span>convert_to_date(<span class="st">"2023-05-29"</span>))                    </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    .run()                                         </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    .to_pandas()                                   </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I eksempelet over spesifiserer vi datoen <code>2023-05-29</code> og da benyttes snr-katalogen som ligger nærmest i tid til denne datoen. Hvis <code>sid_snapshot_date</code> ikke oppgis benyttes siste tilgjengelige versjon av katalogen.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+De-pseudonymisering ikke tilgjengelig i prod-miljø
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Foreløpig er det kun tilgang til å pseudonymisere i test-miljøet med test-data. Ta kontakt med Dapla-teamene dersom det dukker opp behov for å kunne de-pseudonymisere i prod-miljøet.</p>
+</div>
+</div>
 </section>
 <section id="re-pseudonymisering" class="level3">
 <h3 class="anchored" data-anchor-id="re-pseudonymisering">Re-pseudonymisering</h3>
@@ -737,81 +781,236 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 </section>
 <section id="stabil-id" class="level3">
 <h3 class="anchored" data-anchor-id="stabil-id">Stabil ID</h3>
-<p>I statistikkproduksjon og forskning er det viktig å kunne følge de samme personene over tid. Derfor har fødselsnummer ofte blitt oversatt til en mer stabilt identifikator, ofte kalt SNR eller stabil ID<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Funksjonene <code>with_stable_id()</code> og <code>validator()</code> bruker stabilID-katalogen til å henholdsvis bytte ut fødselsnummer med stabil ID, og for å validere om fødselsnummer er gyldige(se under).</p>
+<p>I statistikkproduksjon og forskning er det viktig å kunne følge de samme personene over tid. Derfor har fødselsnummer ofte blitt oversatt til en mer stabilt identifikator, ofte kalt SNR eller stabil ID<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. Funksjonene <code>with_stable_id()</code> og <code>validator()</code> bruker stabilID-katalogen til å henholdsvis bytte ut fødselsnummer med stabil ID, og for å validere om fødselsnummer er gyldige(se under).</p>
 <p>Du kan selv spesifisere hvilken versjon av SNR-katalogen du ønsker å bruke. Det gjør du ved å oppgi en gyldighetsdato og så finner dapla-toolbelt-pseudo hvilken versjon av katalogen som ligger nærmest i tid.</p>
+</section>
+<section id="papis-pseudonym" class="level3">
+<h3 class="anchored" data-anchor-id="papis-pseudonym">Papis-pseudonym</h3>
+<p>Dapla tilbyr samme pseudonym som Papis-prosjektet<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. Denne kan benyttes på 2 måter:</p>
+<ol type="1">
+<li>Pseudonymisere hvilken som helst informasjon med samme nøkkel som Papis.</li>
+<li>Transformere fødselsnummer til snr-nummer og deretter pseudonymisere med samme nøkkel som Papis.</li>
+</ol>
+<p>Punkt 1 er nyttig for de som har pseudonymisert informasjon på bakken tidligere og vil ha samme pseudonym på Dapla<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. Dette kan gjelde hvilken som helst informasjon, også direkte pseudonymisering av fødselsnummer, uten at det er gått via snr-nummer. Her er et eksempel på hvordan man pseudonymiserer på denne måten:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_pandas(df)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fornavn"</span>)                      </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    .with_papis_compatible_encryption()         </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    .run()                               </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    .to_pandas()                                  </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Punkt 2 over er nok den som benyttes mest i SSB siden den sikrer at pseudonymisert fødselsnummer kan kobles med data som er pseudonymisert på bakken. Her er et eksempel på hvordan man pseudonymiserer snr med Papis-nøkkelen:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_pandas(df)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)                      </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()         </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    .run()                               </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    .to_pandas()                                  </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hva betyr det å tilby samme pseudonym?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At Papis og Dapla tilbyr samme pseudonum betyr egentlig at vi bruker samme krypteringsalgoritme, og en felles krypteringsnøkkel. Krypteringsalgoritmen som benyttes er formatpreserverende (FPE) og biblioteket som brukes er <a href="https://pypi.org/project/tink-fpe/">Tink FPE Python</a>. En svakhet med algoritmen er at den ikke håndterer tekst som kortere enn 4 karakterer lang, og strategien som benyttes for å håndtere dette er <code>SKIP</code>, noe som betyr den originale verdien blir returnert som den var.</p>
+</div>
+</div>
 </section>
 <section id="validere-fødselsnummer" class="level3">
 <h3 class="anchored" data-anchor-id="validere-fødselsnummer">Validere fødselsnummer</h3>
-<p><code>Validator</code>-metoden kan benyttes til å sjekke om fødselsnummer finnes i SNR-katalogen (se over). Her kan man også spesifisere hvilken versjon av SNR-katalogen man ønsker å bruke. Standard, hvis ingenting velges, er at siste tilgjengelige versjon velges. Under er et eksempel på hvordan man validerer fødselsnummer for en gitt gyldighetsdato:</p>
+<p><code>Validator</code>-metoden kan benyttes til å sjekke om fødselsnummer finnes i SNR-katalogen (se over), og returnerer de ugyldige fødselsnummerne tilbake. Her kan man også spesifisere hvilken versjon av SNR-katalogen man ønsker å bruke. Standard, hvis ingenting velges, er at siste tilgjengelige versjon velges. Under er et eksempel på hvordan man validerer fødselsnummer for en gitt gyldighetsdato:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb4" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Validator</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.utils <span class="im">import</span> convert_to_date</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    Validator.from_polars(df)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    .on_field(<span class="st">"fnr"</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    .validate_map_to_stable_id(</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        sid_snapshot_date<span class="op">=</span>convert_to_date(<span class="st">"2023-08-29"</span>)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis hvilken versjon av SNR-katalogen som er benyttet</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>result.metadata</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis fødselsnummer som ikke fikk treff i SNR-katalogen som en Polars dataframe</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>result.to_polars()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Validator</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.utils <span class="im">import</span> convert_to_date</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    Validator.from_polars(df)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    .on_field(<span class="st">"fnr"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    .validate_map_to_stable_id(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        sid_snapshot_date<span class="op">=</span>convert_to_date(<span class="st">"2023-08-29"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis hvilken versjon av SNR-katalogen som er benyttet</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>result.metadata</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis fødselsnummer som ikke fikk treff i SNR-katalogen som en Polars dataframe</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>result.to_polars()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="dataformater" class="level3">
-<h3 class="anchored" data-anchor-id="dataformater">Dataformater</h3>
-<p><strong>dapla-toolbelt-pseudo</strong> støtter følgende dataformater:</p>
+<section id="filbasert-prosessering" class="level3">
+<h3 class="anchored" data-anchor-id="filbasert-prosessering">Filbasert prosessering</h3>
+<p>Selv om mange av eksemplene i dette kapitlet viser hvordan man bruker <em>dapla-toolbelt-pseudo</em> ved å gi funksjonene et datasett fra minnet, så støtter den også å prosessere filer som er lagret på disk/bøtter. Dette kan være en fordel hvis dataene er for store for Kildomaten (&gt;32GB RAM) eller de har en dyp hierarkisk struktur (f.eks. json-filer).</p>
+<p><em>dapla-toolbelt-pseudo</em> støtter følgende filtyper:</p>
 <ul>
-<li>csv (filformat)</li>
-<li>json (filformat)</li>
-<li>Polars dataframe (minnet)</li>
-<li>Pandas dataframe (minnet)</li>
+<li>csv</li>
+<li>json</li>
 </ul>
-<p>Over har vi vist hvordan vi leser data fra minnet, men det støttes også å lese direkte fra filformatene csv og json. Under er et eksempel med en csv-fil:</p>
+<p>Her er et eksempel på hvordan man pseudonymiserer en fil som ligger lagret på disk:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb5" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Pseudonymize</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>file_path<span class="op">=</span><span class="st">"data/personer.csv"</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>options <span class="op">=</span> {</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtypes"</span>: {<span class="st">"fnr"</span>: pl.Utf8, <span class="st">"fornavn"</span>: pl.Utf8, <span class="st">"etternavn"</span>: pl.Utf8, <span class="st">"kjonn"</span>: pl.Categorical, <span class="st">"fodselsdato"</span>: pl.Utf8}</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>result_df <span class="op">=</span> (</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_file(file_path)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    .with_default_encryption()</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    .run()</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    .to_polars(<span class="op">**</span>options)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Pseudonymize</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://bucket/pseudo-examples/andeby_personer.csv"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>options <span class="op">=</span> {</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtypes"</span>: {<span class="st">"fnr"</span>: pl.Utf8, <span class="st">"fornavn"</span>: pl.Utf8, <span class="st">"etternavn"</span>: pl.Utf8, <span class="st">"kjonn"</span>: pl.Categorical, <span class="st">"fodselsdato"</span>: pl.Utf8}</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>result_df <span class="op">=</span> (</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_file(file_path)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    .with_default_encryption()</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    .run()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    .to_polars(<span class="op">**</span>options)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Se flere <a href="https://github.com/statisticsnorway/dapla-toolbelt-pseudo#read-from-file-systems">eksempler i dokumentasjonen</a>.</p>
+<section id="wildcards" class="level4">
+<h4 class="anchored" data-anchor-id="wildcards">Wildcards</h4>
+<p>Kommer snart.</p>
+</section>
+</section>
+<section id="dataminimering" class="level3">
+<h3 class="anchored" data-anchor-id="dataminimering">Dataminimering</h3>
+<p>Kommer snart.</p>
 </section>
 <section id="algoritmer" class="level3">
 <h3 class="anchored" data-anchor-id="algoritmer">Algoritmer</h3>
-<p><strong>dapla-toolbelt-pseudo</strong> støtter mange forskjellige krypteringsalgoritmer. Les mer i <a href="https://github.com/statisticsnorway/dapla-toolbelt-pseudo#pseudonymize-using-custom-keyskeysets">dokumentasjonen</a>.</p>
+<p>Kommer snart.</p>
 </section>
 <section id="metadata" class="level3">
 <h3 class="anchored" data-anchor-id="metadata">Metadata</h3>
-<p>Kommer snart.</p>
+<p>Det genereres to typer av metadata når man pseudonymiserer:</p>
+<ol type="1">
+<li>Datadoc</li>
+<li>Metadata</li>
+</ol>
+<p>De to typene av metadata returneres til brukeren i to forskjellige objekter.</p>
+<section id="datadoc" class="level4">
+<h4 class="anchored" data-anchor-id="datadoc">Datadoc</h4>
+<div class="columns">
+<div class="column" style="width:35%;">
+<p>Datadoc-metadata er på et format som er planlagt integrert i Datadoc<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> på et senere tidspunkt. I koden til høyre så printes metadataene fra et kall til <code>Pseudonomize</code> ved å skrive <code>print(result.datadoc)</code>. Da printer man objektet interaktivt i f.eks. Jupyterlab, noe som kun er mulig i test-miljøet. Skal man kjøre dette i Kildomaten så er det lettere å skrive filen direkte til riktig json-format med <code>to_file</code>-funksjonen. Da får får filen endelsen <code>__DOC</code> på slutten av filnavnet, og man slipper å tenke på om filen skrives med riktig formattering, osv..</p>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:60%;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="annotated-cell-19" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-19-1"><a href="#annotated-cell-19-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="annotated-cell-19-2"><a href="#annotated-cell-19-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
+<span id="annotated-cell-19-3"><a href="#annotated-cell-19-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
+<span id="annotated-cell-19-4"><a href="#annotated-cell-19-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
+<span id="annotated-cell-19-5"><a href="#annotated-cell-19-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
+<span id="annotated-cell-19-6"><a href="#annotated-cell-19-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-19-7"><a href="#annotated-cell-19-7" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-19-8" class="code-annotation-target"><a href="#annotated-cell-19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-19-9" class="code-annotation-target"><a href="#annotated-cell-19-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-19" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-19" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
+</dd>
+<dt data-target-cell="annotated-cell-19" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-19" data-code-lines="9" data-code-annotation="2">Skriver metadata direkte til bøtte.</span>
+</dd>
+</dl>
+</div>
+</div>
+<p>Når man kjører pseudonymisering fra Kildomaten er det viktig å tenke på at felter som er pseudonymisert ikke må endres uten at metadataene også endrer. Da kan man risikere at metadatene ikke lenger beskriver riktig informasjon.</p>
+<p>Under ser man hvilken informasjon som genereres fra pseudonymiseringen.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Datadoc</strong></pre>
+</div>
+<div class="sourceCode" id="cb9" data-filename="Datadoc"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.0.1"</span><span class="fu">,</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">"datadoc"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="dt">"pseudonymization"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.1.0"</span><span class="fu">,</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>    <span class="dt">"pseudo_dataset"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="dt">"pseudo_variables"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>      <span class="fu">{</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>        <span class="dt">"short_name"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span>   </span>
+<span id="cb9-10"><a href="#cb9-10"></a>        <span class="dt">"data_element_path"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a>        <span class="dt">"data_element_pattern"</span><span class="fu">:</span> <span class="st">"**"</span><span class="fu">,</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>        <span class="dt">"stable_identifier_type"</span><span class="fu">:</span> <span class="st">"FREG_SNR"</span><span class="fu">,</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>        <span class="dt">"stable_identifier_version"</span><span class="fu">:</span> <span class="st">"2023-08-31"</span><span class="fu">,</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a>        <span class="dt">"encryption_algorithm"</span><span class="fu">:</span> <span class="st">"TINK-FPE"</span><span class="fu">,</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a>        <span class="dt">"encryption_key_reference"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span><span class="fu">,</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a>        <span class="dt">"encryption_algorithm_parameters"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a>          <span class="fu">{</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>            <span class="dt">"keyId"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a>          <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a>          <span class="fu">{</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a>            <span class="dt">"strategy"</span><span class="fu">:</span> <span class="st">"SKIP"</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a>          <span class="fu">}</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a>        <span class="dt">"source_variable"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a>        <span class="dt">"source_variable_datatype"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a>      <span class="fu">}</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a>    <span class="ot">]</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a>  <span class="fu">}</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Av metadatene kan vi se fra <code>pseudo_variables</code> at det bare var feltet <code>fnr</code> som ble pseudonymisert. Vi ser også av <code>stable_identifier_type</code> ser vi at <code>fnr</code> ble oversatt til <code>snr</code>, og at versjonen av SNR-katalogen var fra <code>2023-08-31</code>. <code>encryption_algorithm</code> angir at det var det var den formatpreserverende algoritmen <code>TINK-FPE</code> som ble benyttet. <code>keyID: "papis-common-key-1"</code> angir hvilken nøkkel-id som ble benyttet. <code>strategy: "SKIP"</code> refererer til at den format-preserverende algoritmen skal “hoppe over” ugyldige karakterer og la de være som de er.</p>
+<p>Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data.</p>
+</section>
+<section id="metadata-1" class="level4">
+<h4 class="anchored" data-anchor-id="metadata-1">Metadata</h4>
+<p>Den andre typen av metadata kan hentes ut etter et kall til <code>Pseudonymize</code> med kommandoen <code>result.metadata</code>. Den returnerer en <em>python dictionary</em>. Den inneholder hovedsaklig logginformasjon og metrikker foreløpig. For de som pseudonymiserer med <code>with_stable_id()</code> kan output se slik ut:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Metadata</strong></pre>
+</div>
+<div class="sourceCode" id="cb10" data-filename="Metadata"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'fnr'</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">'logs'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="dv">999999</span><span class="er">*****'</span><span class="ot">,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">XX'</span><span class="ot">,</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">X8b7k2*'</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="er">'metrics'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MAPPED_SID'</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MISSING_SID'</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I Kildomaten kan det vært nyttig å printe denne informasjonen til loggene. Av eksempelet over ser vi at verdier som er over 6 karakterer lange blir maskert.</p>
+</section>
 </section>
 </section>
 <section id="brukerveiledning" class="level2">
 <h2 class="anchored" data-anchor-id="brukerveiledning">Brukerveiledning</h2>
-<p>På grunn av den strenge tilgangsstyringen til dapla-pseudo-toolbelt og kildedata er det anbefalt å utvikle kode for overgangen fra kildedata til inndata i test-miljøet til teamet.</p>
+<p>På grunn av den strenge tilgangsstyringen til dapla-pseudo-toolbelt og kildedata er det anbefalt å utvikle kode for overgangen fra kildedata til inndata i test-miljøet til teamet. I denne delen viser vi hvordan denne arbeidsflyten kan se ut, fra testing til en automatisert produksjon med ekte data, med et helt konkret eksempel.</p>
 <section id="interaktiv-utvikling" class="level3">
 <h3 class="anchored" data-anchor-id="interaktiv-utvikling">Interaktiv utvikling</h3>
-<p>Kommer snart.</p>
+<p>For å kunne kjøre pseudonymiseringen interaktivt i f.eks. en notebook i Jupyter, så må man jobbe i test-miljøet til teamet.</p>
 </section>
 <section id="kildomaten-i-test" class="level3">
 <h3 class="anchored" data-anchor-id="kildomaten-i-test">Kildomaten i test</h3>
@@ -831,9 +1030,14 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 
 <ol>
 <li id="fn1"><p>Et Dapla-team har både et test- og et prod-miljø. Kildomaten må være skrudd på i det miljøet du ønkser å benytte dapla-toolbelt-pseudo fra.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>I Kildomaten må koden blant annet pakke inn i <code>main()</code>-funksjon.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Standardalgoritmen i <em>dapla-toolbelt-pseudo</em> er den deterministiske krypteringsalgoritmen <em>Deterministic Authenticated Encryption with Associated Data</em>, eller DAEAD-algoritmen.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>SNR-katalogen eies og tilbys av Team Register på Dapla.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Med interaktiv jobbing menes at man skriver og kode og får tilbake output i samme verktøy. F.eks. er Jupyterlab et eksempel på et verktøy som lar deg jobbe interaktivt med data.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I Kildomaten må koden blant annet pakke inn i <code>main()</code>-funksjon.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Pandas og Polars dataframes er eksempler på dataformater som lever i minnet, og må konverteres før de skrives til et lagringsommråde. I praksis vil det ofte si at man jobber med dataframes når man jobber i verktøy som Jupyterlab, mens man skriver til lagringsområde når man er ferdig i Jupyterlab.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Standardalgoritmen i <em>dapla-toolbelt-pseudo</em> er den deterministiske krypteringsalgoritmen <em>Deterministic Authenticated Encryption with Associated Data</em>, eller DAEAD-algoritmen.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>SNR-katalogen eies og tilbys av Team Register på Dapla.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Papis var et prosjekt med fokus på bakkesystemene i SSB som skulle bringe SSBs behandling av personopplysninger, som brukes i statistikkproduksjon, i samsvar med GDPR gjennom en enhetlig pseudonymiseringsløsning.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Generelt sett er det ikke å anbefale å benytte denne nøkkelen på annen informasjon enn fødselsnummer. Grunnen er at den er svakere enn andre algoritmer, der blant annet tekst som er kortere enn 4 karakter lang ikke blir pseudonymisert.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Datadoc er det nye systemet for dokumentasjon av datasett i SSB. Systemet er fortsatt under utvikling.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
