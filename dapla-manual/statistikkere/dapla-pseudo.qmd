@@ -106,13 +106,12 @@ De-pseudonymisering er også støttet for informasjon som først er transformert
 
 ```{.python filename="Notebook"}
 from dapla_pseudo import Depseudonymize
-from dapla_pseudo.utils import convert_to_date
 
 result_df = (
     Depseudonymize.from_pandas(df)            
     .on_fields("fnr")                          
     .with_stable_id(
-      sid_snapshot_date=convert_to_date("2023-05-29"))                    
+      sid_snapshot_date="2023-05-29")                    
     .run()                                         
     .to_pandas()                                   
 )
@@ -178,13 +177,12 @@ At Papis og Dapla tilbyr samme pseudonum betyr egentlig at vi bruker samme krypt
 
 ```{.python filename="Notebook"}
 from dapla_pseudo import Validator
-from dapla_pseudo.utils import convert_to_date
 
 result = (
     Validator.from_polars(df)
     .on_field("fnr")
     .validate_map_to_stable_id(
-        sid_snapshot_date=convert_to_date("2023-08-29")
+        sid_snapshot_date="2023-08-29"
     )
 )
 # Vis hvilken versjon av SNR-katalogen som er benyttet
