@@ -32,30 +32,58 @@ Oppsett av *Kildomaten* gjøres i teamets *IaC*-repo^[*Infrastructure-as-Code* (
 1. Klon ned ditt teams Iac-repo `git clone <repo-url>`
 2. Opprett en ny branch: `git checkout -b add-kildomaten-source`
 
-### Opprett mappestruktur
+### Mappestruktur i IaC-repo
 
-::: {.callout-note}
-
-# Automatisk oppretting kommer snart
-
-Plattformteamene jobber med å automatisere opprettelsen av mappestruktur i prod-miljøet for alle statistikkteam ved opprettelse av teamet. Av den grunn vil innholdet her endre seg snart.   
-:::
-
-For at *Kildomaten* skal fungere så må vi følge en bestemt mappestruktur i IaC-repoet. Denne strukturen er nødvendig for at tjenesten skal vite hvor den skal hente kildedata fra, og hvor den skal legge inndata. Denne strukturen blir ikke laget ved opprettelsen av teamet, siden ikke alle team kommer til å bruke tjenesten. 
-
-Anta at det er Dapla-team som heter **dapla-example**, og de har et IaC-repo som heter **dapla-example-iac**. De ønsker å sette opp *Kildomaten* for en kilde som heter **altinn** i prod-miljøet til teamet. Følgende mappestruktur må da opprettes i IaC-repoet til teamet:
+For at *Kildomaten* skal fungere så må det opprettes en bestemt mappestruktur i IaC-repoet til teamet. Når et team blir opprettet vil den grunnleggende mappestrukturen i IaC-repoet allerede være opprettet for **prod**-miljøet til teamet. F.eks. vil mappestrukturen se slik ut for team **dapla-example**:
 
 ```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
 dapla-example-iac
 ├── automation/
 │   └── source-data/
 │       ├── dapla-example-prod/
-│           └── altinn/
+│           └── README.md
 │ 
 │...           
 ```
 
-I eksempelet over så har vi laget mappen `dapla-example-prod` for å legge til kilder som skal kjøre i prod-miljøet. Strukturen på denne mappen må alltid være **teamnavn** etterfulgt av **-miljø**. 
+Skal du sette opp Kildomaten i prod-miljøet så kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda. 
+
+Skal du også bruke Kildomaten i **test**-miljøet så må opprette en ny mappe og lage en PR i IaC-repoet til teamet. Da vil strukturen se slik ut:
+
+
+```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
+dapla-example-iac
+├── automation/
+│   └── source-data/
+│       ├── dapla-example-prod/
+│       │    └── README.md
+│       ├── dapla-example-test/ 
+│...           
+```
+
+I mappestrukturen over så har vi klargjort den grunnleggende mappestrukturen for å ta i bruk Kildomaten i prod- og test-miljøet. Neste steg blir å legge de ulike kildene som egne mapper under `dapla-example-prod` og `dapla-example-test`. Det viser vi i neste avsnitt. 
+
+### Flere kilder
+
+Kildomaten lar deg prosessere ulike filstier i kildebøtta med ulike python-script. Dette refereres til som at Kildomaten har flere *kilder*. For å sette opp en kilde så må man følge en definert mappestruktur i IaC-repoet der alle kildene ligger rett under `<teamnavn>-prod`- eller `<teamnavn>-test`-mappen. Du kan ikke ha undermapper under en kilde. Du velger selv navnet på kildene/mappene i IaC-repoet, og det vil være navnet på kildene i Kildomaten. Senere i kapitlet ser vi at vi må bruke navnet for trigge re-kjøring av kilder. 
+
+Under er et eksempel på hvordan det kan se ut for eksempel-teamet dapla-example:
+
+```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
+dapla-example-iac
+├── automation/
+│   └── source-data/
+│       ├── dapla-example-prod/
+│       │    └── altinn
+│       │    └── ameld
+│       ├── dapla-example-test/
+│       │    └── altinn
+│       │    └── ameld
+│       │    └── nudb
+│...           
+```
+
+I eksempelet over ser vi at det er opprettet kildene *altinn* og *ameld* for både test- og prod-miljøet. I tillegg er det i test-miljøet kjørende en annen kilde som heter *nudb*. Hver av disse kildene kan kjøre et eget Pyton-script på alle filer som skrives til en gitt filsti som man definerer selv. 
 
 ::: {.callout-important}
 # Alle kilder på samme nivå
