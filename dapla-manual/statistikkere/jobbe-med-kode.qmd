@@ -449,7 +449,7 @@ Oppretting av renv-miljø og installering av pakker må gjøres fra terminal for
 
 ### Starte renv i et eksisterende prosjekt
 
-For å installere dine egne R-pakker må du opprette et renv-miljø med **renv**. Dette kan gjøres ved å starte R i terminalen (se over) og skriver:
+For å installere dine egne R-pakker må du opprette et renv-miljø med **renv**. Dette kan gjøres ved å starte R i terminalen (se over) og skrive:
 
 ```{.r filename="terminal"}
 renv::init()
@@ -461,29 +461,29 @@ Kommandoen aktiverer et renv-miljø i mappen du står i. Rent praktisk vil det s
 -   **renv.lock**\
     En fil som inneholder versjoner av alle pakker du benytter i koden din.
 
--   **.Rprofile** En fil som inneholder informasjon om oppsetting av miljø og alternative.
+-   **.Rprofile** En fil som inneholder informasjon om oppsetting av miljø.
 
 -   **renv**\
     Mappe som inneholder alle pakkene du installerer.
 
--   **renv/activate.R** En fil som aktivere renv miljø for et prosjekt.
+-   **renv/activate.R** En fil som aktiverer renv miljøet for et prosjekt.
 
 ### Kobler en .R eller notebook fil til et renv-miljø
 
-For å ta i bruk et renv-miljø må det aktiveres ved starten av koden som skal kjøres. I JupyterLab når du åpne en .R-fil som en notebook må renv-miljø aktiveres ved:
+For å ta i bruk et renv-miljø må det aktiveres ved starten av koden som skal kjøres. I JupyterLab når du åpner en .R-fil som en notebook må renv-miljøet aktiveres ved:
 
 ```{.r filename="notebook"}
 renv::autoload()
 ```
 
-Deretter kan du benytte pakker som er installerte (se neste avsnitt) og funksjoner ved `library()` osv. Funkjsonen `renv::autoload()` vil letter etter filene i prosjektet for å aktivere miljø, både i prosjekt-mappen og i foreldre-mapper.
+Deretter kan du benytte pakker som er installerte (se neste avsnitt) og funksjoner ved `library()` osv. Funkjsonen `renv::autoload()` vil lete etter filene i prosjektet for å aktivere miljøet, både i prosjekt-mappen og i foreldre-mapper.
 
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094616?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="autoload"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 
 ### Installering av pakker
 
-Pakker kan installeres fra R på terminalen eller i en notebook/.R fil. Vi installere pakker med funksjonen `renv::install()`. For eksempel å installere pakken [PxWebApiData](https://cran.r-project.org/web/packages/PxWebApiData/vignettes/Introduction.html):
+Pakker kan installeres fra R på terminalen eller i en notebook/.R fil. Vi installerer pakker med funksjonen `renv::install()`. For eksempel, for å installere pakken [PxWebApiData](https://cran.r-project.org/web/packages/PxWebApiData/vignettes/Introduction.html):
 
 ```{.r filename="notebook"}
 renv::install("PxWebApiData")
@@ -491,7 +491,7 @@ renv::install("PxWebApiData")
 
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927097853?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-pakke"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
-For å installere R-pakker som ligger på 'statisticsnorway' område på github må det spesifiseres foran pakkenavn:
+For å installere R-pakker som ligger på 'statisticsnorway' området på github må det spesifiseres foran pakkenavnet:
 
 ```{.r filename="notebook"}
 renv::install("statisticsnorway/klassR")
@@ -499,14 +499,20 @@ renv::install("statisticsnorway/klassR")
 
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094840?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-ssb-pakke"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
-For å lagre versjonsnummer av de nye pakker som er installerte til *renv.lock* filen kjør:
+For å installere en spesifikk versjon av en pakke kan du spesifisere dette med installering med `@` og versjonsnummer. For eksempel å installere `PxWEbApiData` versjon 0.4.0:
+
+```{.r filename="terminal"}
+renv::install("PxWebApiData@0.4.0")
+```
+
+For å lagre versjonsnummer av de nye pakkene som er installerte til *renv.lock* filen, kjør:
 ```{.r filename="notebook"}
 `renv::snapshot()`
 ```
 
-### Deler prosjektet og renv-miljø med andre
+### Dele prosjektet og renv-miljøet med andre
 
-Før du deler prosjektet forsikre at *renv.lock* filen er oppdaterte. Dette kan gjøres ved å kjøre:
+Før du deler prosjektet forsikre det om at *renv.lock*-filen er oppdatert. Dette kan gjøres ved å kjøre:
 
 ```{.r filename="notebook"}
 renv::snapshot()
@@ -514,12 +520,12 @@ renv::snapshot()
 
 For at en pakke skal lagres i *renv.lock* må pakken benyttes ved `library()` et sted i prosjektet (på en .R eller .ipynb fil). 
 
-For å dele renv-miljø som en del av prosjektet skal følgende filene være på github: *renv.lock*, *.Rprofile* og *renv/activate.R*
+For å dele renv-miljøet som en del av prosjektet skal følgende filene være på github: *renv.lock*, *.Rprofile* og *renv/activate.R*
 
 
-### Ta i bruk et prosjektet og renv-miljø fra andre
+### Ta i bruk et prosjekt og renv-miljø fra andre
 
-Hvis prosjekt er opprettet av noen andre, og har blitt delt med deg, kan alle pakkene i prosjektet installeres samtidig. Clone repository og derette starter R i terminal. Kjør følgende for å installere alle nødvendige pakker:
+Hvis prosjektet er opprettet av noen andre, og har blitt delt med deg, kan alle pakkene i prosjektet installeres samtidig. Clone repository og start deretter R i terminalen. Kjør følgende for å installere alle nødvendige pakker:
 
 ```{.r filename="terminal"}
 renv:restore()
@@ -528,7 +534,7 @@ renv:restore()
 
 ### Avinstallering
 
-Individuelle pakker kan fjernes fra renv-miljø ved `renv::remove()` funksjonen. For eksempel:
+Individuelle pakker kan fjernes fra renv-miljøet ved `renv::remove()`-funksjonen. For eksempel:
 
 ```{.r filename="terminal"}
 renv::remove("PxWebApiData")
@@ -550,19 +556,13 @@ Igjen må du ta en `snapshot()` for at endringer skal lagres på *renv.lock*-fil
 
 ### Oppgradere pakker
 
-For å oppgradere en pakke kan du bruke `renv::update()`. For eksempel å oppgradere `PxWebApiData` skriv:
+For å oppgradere en pakke kan du bruke `renv::update()`. For eksempel, for å oppgradere `PxWebApiData` skriv:
 
 ```{.r filename="terminal"}
 renv::update("PxWebApiData")
 ```
 
-For å installere et spesifikk versjon av en pakke kan du spesifisere dette med installering med `@` og versjonsnummer. For eksempel å installere `PxWEbApiData` versjon 0.4.0:
-
-```{.r filename="terminal"}
-renv::install("PxWebApiData@0.4.0")
-```
-
-Husk å ta en `snapshot()` etterpå for å lagre endringer til *renv.lock*-filen. Det betyr at du og andre kan gjenskape miljø på nytt.
+Husk å ta en `snapshot()` etterpå for å lagre endringer til *renv.lock*-filen. Det betyr at du og andre kan gjenskape miljøet på nytt.
 
 ```{.r filename="terminal"}
 renv::snapshot()
@@ -570,21 +570,21 @@ renv::snapshot()
 
 ### Oppgradering av R
 
-I Jupyterlab på Dapla og i produksjonssone vil versjonen av R oppgraderes jevnlig. Dette er fordi operativssystemet og programmer som R er avhengig skal holdes oppdatert. For at R skal fungere optimalt må det oppgraderes ofte. Dette skaper noen utfordringer for renv-miljøer som er avhengig av en spesifikk versjon av R.
+I Jupyterlab på Dapla og i produksjonssone vil versjonen av R oppgraderes jevnlig. Dette er fordi operativsystemet og programmer som R er avhengig skal holdes oppdatert. For at R skal fungere optimalt må det oppgraderes ofte. Dette skaper noen utfordringer for renv-miljøer som er avhengig av en spesifikk versjon av R.
 
-Hvis du plutselig får en feilmelding ved oppstart eller når du kjøre `renv::autoload()` at R-versjonen er forskjellig fra det den som e r oppgitt lock-filen, har det trolig vært en oppgradering av R siden sist noen jobbet med koden. Følg denne oppskriften for å løse opp i problemene:
+Hvis du plutselig får en feilmelding ved oppstart eller når du kjøre `renv::autoload()`, om at R-versjonen er forskjellig fra det den som e r oppgitt lock-filen, har det trolig vært en oppgradering av R siden sist noen jobbet med koden. Følg denne oppskriften for å løse opp i problemene:
 
 Benytt prosjekt-biblioteket ved å kjøre:
 
 1. Start R i terminal.
 
-2. Oppgradere versjon av renv ved:
+2. Oppgrader versjon av renv ved:
 
 ```r{.r filename="terminal"}        
 renv::upgrade()
 ```
 
-3. Oppgradere alle pakkene ved:
+3. Oppgrader alle pakkene ved:
 
 ```{.r filename="terminal"}        
 renv::hydrate(update = "all")
