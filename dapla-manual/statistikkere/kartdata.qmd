@@ -47,7 +47,7 @@ Eksempel på lesing av kommuneflater for visualisering. Disse dataene er general
 å lage kart, men blir unøyaktige til statistikk:
 
 ```{.python filename="notebook"}
-filsti = "ssb-kart-data-delt-prod/visualisering_data/klargjorte-data/2024/parquet/N5000_kommune_flate_p2024.parquet"
+filsti = "ssb-kart-data-delt-prod/visualisering_data/klargjorte-data/2024/parquet/N5000_kommune_flate_p2024_v1.parquet"
 kommuner = sg.read_geopandas(filsti)
 ```
 
@@ -198,7 +198,7 @@ Man kan gjøre standard tidyverse-opersjoner på sf-objektene, pluss GIS-operasj
 Sindre Mikael Haugen har lagd [funksjoner for å lese og skrive](https://statisticsnorway.github.io/fellesr/articles/vignette__DAPLA_jukseark.html
 ) blant annet geodata i Dapla. For å få geodata, setter man parametret 'sf' til TRUE:
 
-```R
+```{.r filename="notebook"}
 library(fellesr)
 
 veger = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/veger_oslo.parquet", sf = TRUE)
@@ -207,14 +207,14 @@ veger = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/veger_oslo.parque
 Haugen har også lagd en [pakke for å gjøre nettverksanalyse](https://statisticsnorway.github.io/GISSB/articles/GISSB_vignette.html), 
 som også lar deg geokode adresser, altså å finne adressenes koordinater.
 
-```R
+```{.r filename="notebook"}
 library(GISSB)
 ```
 
 Lite eksempel på kobling basert geografisk sammenfall (enkle kommuner er egentlig til visualisering).
 Her får man ett bygg per kommune som overlapper (som maksimalt er én kommune siden dette er bygningspunkter):
 
-```R
+```{.r filename="notebook"}
 library(sf)
 
 boligbygg = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/noen_boligbygg_oslo.parquet", sf = TRUE)
@@ -225,7 +225,6 @@ boligbygg_med_kommuneinfo = st_join(boligbygg, enkle_kommuner)
 
 Med motsatt rekkefølge, får man én kommuneflate per bolig som overlapper:
 
-```R
+```{.r filename="notebook"}
 kommuner_med_boliginfo = st_join(enkle_kommuner, boligbygg)
 ```
-
