@@ -19,14 +19,14 @@ For lesing og skriving av geodata i Dapla, kan man bruke SSB-pakken **sgis**. Me
 
 Pakkene kan installeres i Dapla sånn her:
 
-```shell
+```{.bash filename="terminal"}
 poetry add geopandas
 poetry add ssb-sgis
 ```
 
 Og så importeres det i Python på vanlig vis.
 
-```python
+```{.python filename="notebook"}
 import geopandas as gpd
 import sgis as sg
 ```
@@ -38,7 +38,7 @@ Støttede formater er blant annet (geo)parquet, geojson og gml.
 En rekke kartdata for hele landet til analyse- og visualiseringsformål ligger i bøtta "kart". 
 For eksempel kommuneflater til analyse eller statistikk:
 
-```python
+```{.python filename="notebook"}
 filsti = "ssb-kart-data-delt-prod/analyse_data/klargjorte-data/2024/ABAS_kommune_flate_p2024_v1.parquet"
 kommuner = sg.read_geopandas(filsti)
 ```
@@ -46,20 +46,20 @@ kommuner = sg.read_geopandas(filsti)
 Eksempel på lesing av kommuneflater for visualisering. Disse dataene er generalisert slik at de egner seg for
 å lage kart, men blir unøyaktige til statistikk:
 
-```python
+```{.python filename="notebook"}
 filsti = "ssb-kart-data-delt-prod/visualisering_data/klargjorte-data/2024/parquet/N5000_kommune_flate_p2024.parquet"
 kommuner = sg.read_geopandas(filsti)
 ```
 
 Tilsvarende for skriving til parquet eller annet geodataformat:
 
-```python
+```{.python filename="notebook"}
 sg.write_geopandas(kommuner, filsti_ny) 
 ```
 
 Man kan også gjøre vanlige tabell-filer geografiske hvis man har koordinat-kolonner. For eksempel situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF):
 
-```python
+```{.python filename="notebook"}
 import dapla as dp
 
 VOFSTI = "ssb-vof-data-delt-stedfesting-prod/klargjorte-data/parquet"
@@ -82,7 +82,7 @@ vof_gdf
 I tillegg til kartdataene, ligger det testdata i fellesbøtta som man kan leke seg med. 
 Testdataene finnes for Oslo og Kongsvinger, og kan leses sånn her:
 
-```python
+```{.python filename="notebook"}
 testdatasti = "ssb-prod-dapla-felles-data-delt/GIS/testdata"
 veger = sg.read_geopandas(f"{testdatasti}/veger_oslo.parquet")
 ```
@@ -94,7 +94,7 @@ Under følger noen eksempler på GIS-prosessering med testdataene.
 Avstand i **luftlinje** finner man enkelt med sjoin_nearest. 
 Sånn her finner man avstand fra boligbygg (1000 tilfeldige) i Oslo til nærmeste butikkbygg.
 
-```python
+```{.python filename="notebook"}
 boligbygg = sg.read_geopandas(f"{testdatasti}/noen_boligbygg_oslo.parquet")
 butikkbygg = sg.read_geopandas(f"{testdatasti}/butikkbygg_oslo.parquet")
 
@@ -104,7 +104,7 @@ boligbygg_med_butikkavstand = boligbygg.sjoin_nearest(butikkbygg, distance_col="
 For å finne avstand eller reisetid langs veier, kan man gjøre **nettverksanalyse** med sgis.
 Man må først klargjøre vegnettet og bestemme regler for beregningen(e):
 
-```python
+```{.python filename="notebook"}
 veger_klargjort = (
     sg.get_connected_components(veger)
     .loc[lambda x: x["connected"] == 1]
@@ -118,19 +118,19 @@ nwa = sg.NetworkAnalysis(network=veger_klargjort, rules=regler)
 
 Så kan man beregne reisetider fra boligbygg til butikkbygg:
 
-```python
+```{.python filename="notebook"}
 avstander = nwa.od_cost_matrix(boligbygg, butikkbygg)
 ```
 
 Korteste reisetid per bolig kan kobles på som kolonne i boligdataene sånn her:
 
-```python
+```{.python filename="notebook"}
 boligbygg["minutter_til_butikk"] = avstander.groupby("origin")["minutes"].min()
 ```
 
 Undersøk resultatene i interaktivt kart:
 
-```python
+```{.python filename="notebook"}
 sg.explore(boligbygg, butikkbygg, "minutter_til_butikk")
 ```
 
@@ -146,14 +146,14 @@ Denne fungerer akkurat som pandas.merge, bare at det kobles basert på geometrie
 Kodesnutten under returnerer én kommuneflate for hvert bygg som overlapper, med kolonner fra begge datasettene. 
 Inner-join er default, men med left-join beholder man også geometriene som ikke overlapper.
 
-```python
+```{.python filename="notebook"}
 kommuner = sg.read_geopandas(f"{testdatasti}/enkle_kommuner.parquet")
 kommuner_med_boliginfo = kommuner.sjoin(boligbygg, how="left")
 ```
 
 Med motsatt rekkefølge, får man ett boligbygg per kommune den overlapper med. Siden byggene er punkter, vil hvert bygg havne i maksimalt én kommune. 
 
-```python
+```{.python filename="notebook"}
 boligbygg_med_kommuneinfo = boligbygg.sjoin(kommuner, how="left")
 ```
 
@@ -161,7 +161,7 @@ boligbygg_med_kommuneinfo = boligbygg.sjoin(kommuner, how="left")
 
 Man kan lage tematiske kart med sgis-klassen ThematicMap. Her er et enkelt eksempel på et kart over arealet i kommuner. 
 
-```python
+```{.python filename="notebook"}
 kommuner["Kvadratmeter"] = kommuner.area
 
 m = sg.ThematicMap(kommuner, column="Kvadratmeter", size=15)
@@ -175,7 +175,7 @@ m.plot()
 
 En pandas.DataFrame med koordinat-kolonner, kan konverteres til GeoDataFrame sånn her:
 
-```python
+```{.python filename="notebook"}
 import pandas as pd
 df = pd.DataFrame({"x": [10.8, 10.7, 10.9], "y": [59.9, 60, 59.85]})
 
@@ -184,7 +184,7 @@ gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.x, df.y), crs=4326)
 
 For å beregne avtand i meter og kunne koble med annen geodata i Dapla, må man ha UTM-koordinater (hvis man ikke hadde det fra før):
 
-```python
+```{.python filename="notebook"}
 gdf = gdf.to_crs(25833)
 ```
 
