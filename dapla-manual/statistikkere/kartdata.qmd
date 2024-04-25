@@ -1,12 +1,10 @@
 # Kartdata
 Det er tilrettelagt kartdata i Dapla til analyse, statistikkproduksjon og visualisering. 
-Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på **ssb-prod-kart-data-delt**.
+Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på **ssb-kart-data-delt-prod**.
 De er lagret som parquetfiler i standardprojeksjonen vi bruker i SSB (UTM sone 33N) hvis ikke annet er angitt. 
 Det er også SSBs standard-rutenett i ulike størrelser samt Eurostats rutenett over Norge.
 
-Man søker om tilgang til dataene til kundeservice (tilgangsrollen kart-consumers), men bruk gjerne standard LDA-prosedyre som for øvrige data.
-
-I tillegg ligger det noe **testdata** i fellesbøtta her: **ssb-dapla-felles-data-delt-prod/GIS/testdata**
+I tillegg ligger det noe **testdata** i fellesbøtta her: **ssb-prod-dapla-felles-data-delt/GIS/testdata**
 
 ## Python
 ### GIS-pakker og lesing/skriving av geodata
@@ -41,7 +39,7 @@ En rekke kartdata for hele landet til analyse- og visualiseringsformål ligger i
 For eksempel kommuneflater til analyse eller statistikk:
 
 ```{.python filename="notebook"}
-filsti = "ssb-prod-kart-data-delt/kartdata_analyse/klargjorte-data/2023/ABAS_kommune_flate_p2023_v1.parquet"
+filsti = "ssb-kart-data-delt-prod/analyse_data/klargjorte-data/2024/ABAS_kommune_flate_p2024_v1.parquet"
 kommuner = sg.read_geopandas(filsti)
 ```
 
@@ -49,7 +47,7 @@ Eksempel på lesing av kommuneflater for visualisering. Disse dataene er general
 å lage kart, men blir unøyaktige til statistikk:
 
 ```{.python filename="notebook"}
-filsti = "ssb-prod-kart-data-delt/kartdata_visualisering/klargjorte-data/2023/parquet/N5000_kommune_flate_p2023_v1.parquet"
+filsti = "ssb-kart-data-delt-prod/visualisering_data/klargjorte-data/2024/parquet/N5000_kommune_flate_p2024_v1.parquet"
 kommuner = sg.read_geopandas(filsti)
 ```
 
@@ -59,13 +57,33 @@ Tilsvarende for skriving til parquet eller annet geodataformat:
 sg.write_geopandas(kommuner, filsti_ny) 
 ```
 
+Man kan også gjøre vanlige tabell-filer geografiske hvis man har koordinat-kolonner. For eksempel situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF):
+
+```{.python filename="notebook"}
+import dapla as dp
+
+VOFSTI = "ssb-vof-data-delt-stedfesting-prod/klargjorte-data/parquet"
+vof_df = dp.read_pandas(
+    f"{VOFSTI}/stedfesting-situasjonsuttak_p2023-01_v1.parquet"
+)
+vof_gdf = gpd.GeoDataFrame(
+    vof_df, 
+    geometry=gpd.points_from_xy(
+        vof_df["y_koordinat"],
+        vof_df["x_koordinat"],
+    ),
+    crs=25833,
+)
+vof_gdf
+```
+
 ### geopandas-eksempler i Dapla
 
 I tillegg til kartdataene, ligger det testdata i fellesbøtta som man kan leke seg med. 
 Testdataene finnes for Oslo og Kongsvinger, og kan leses sånn her:
 
 ```{.python filename="notebook"}
-testdatasti = "ssb-dapla-felles-data-delt-prod/GIS/testdata"
+testdatasti = "ssb-prod-dapla-felles-data-delt/GIS/testdata"
 veger = sg.read_geopandas(f"{testdatasti}/veger_oslo.parquet")
 ```
 
@@ -89,8 +107,8 @@ Man må først klargjøre vegnettet og bestemme regler for beregningen(e):
 ```{.python filename="notebook"}
 veger_klargjort = (
     sg.get_connected_components(veger)
-    .query("connected == 1")
-    .pipe(sg.make_directed_network_norway)
+    .loc[lambda x: x["connected"] == 1]
+    .pipe(sg.make_directed_network_norway, dropnegative=True)
 )
 
 regler = sg.NetworkAnalysisRules(directed=True, weight="minutes")
@@ -118,7 +136,7 @@ sg.explore(boligbygg, butikkbygg, "minutter_til_butikk")
 
 Se mer informasjon og eksempler i [dokumentasjonen.](https://statisticsnorway.github.io/ssb-sgis/reference/networkanalysis/networkanalysis.html#sgis.networkanalysis.networkanalysis.NetworkAnalysis.od_cost_matrix)
 
-Og [flere nettverksanalyse-eksempler her.](https://nbviewer.org/github/statisticsnorway/intro_til_geopandas/blob/main/nettverksanalyse_lang.ipynb)
+Og [flere nettverksanalyse-eksempler her.](https://nbviewer.org/github/statisticsnorway/intro_til_geopandas/blob/main/3_nettverksanalyse_lang.ipynb)
 
 **Eksempel på geografisk kobling**
 
@@ -170,7 +188,7 @@ For å beregne avtand i meter og kunne koble med annen geodata i Dapla, må man 
 gdf = gdf.to_crs(25833)
 ```
 
-[Se også geopandas dokumentasjon for mer utfyllende informasjon.](https://geopandas.org/en/stable/docs/user_guide.html)
+[Se også geopandas' dokumentasjon for mer utfyllende informasjon.](https://geopandas.org/en/stable/docs/user_guide.html)
 
 ## R
 Den viktigste GIS-pakken i R er **sf**. Pakken er bygd opp rundt sf-objekter, 
@@ -183,7 +201,7 @@ Sindre Mikael Haugen har lagd [funksjoner for å lese og skrive](https://statist
 ```{.r filename="notebook"}
 library(fellesr)
 
-veger = read_SSB("ssb-dapla-felles-data-delt-prod/GIS/testdata/veger_oslo.parquet", sf = TRUE)
+veger = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/veger_oslo.parquet", sf = TRUE)
 ```
 
 Haugen har også lagd en [pakke for å gjøre nettverksanalyse](https://statisticsnorway.github.io/GISSB/articles/GISSB_vignette.html), 
@@ -199,8 +217,8 @@ Her får man ett bygg per kommune som overlapper (som maksimalt er én kommune s
 ```{.r filename="notebook"}
 library(sf)
 
-boligbygg = read_SSB("ssb-dapla-felles-data-delt-prod/GIS/testdata/noen_boligbygg_oslo.parquet", sf = TRUE)
-enkle_kommuner = read_SSB("ssb-dapla-felles-data-delt-prod/GIS/testdata/enkle_kommuner.parquet", sf = TRUE)
+boligbygg = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/noen_boligbygg_oslo.parquet", sf = TRUE)
+enkle_kommuner = read_SSB("ssb-prod-dapla-felles-data-delt/GIS/testdata/enkle_kommuner.parquet", sf = TRUE)
 
 boligbygg_med_kommuneinfo = st_join(boligbygg, enkle_kommuner)
 ```
