@@ -18,4 +18,8 @@ def concat_files_slow() -> pd.DataFrame:
     df_all = pd.concat(dfs)
     return df_all
 
-print(concat_files_slow())
+@timing
+def concat_files_fast() -> pd.DataFrame:
+    return dp.read_pandas(gcs_path=files, file_format="parquet")
+
+print(concat_files_fast())
