@@ -11,16 +11,18 @@ eller gjenbruke statistikk. For å kunne gjenfinne data i SSB er man helt avhen
 
 Datadoc er en tjeneste som skal forenkle arbeidet med å dokumentere datasett og variabelforekomster.
 Felt og datatyper er definert som JSON schema i [ssb-datadoc-model](https://github.com/statisticsnorway/ssb-datadoc-model).
-DataDoc har et grensesnitt bygget med [ssb-dash-components](https://pypi.org/project/ssb-dash-components/).
+
+Datadoc har et brukergrensesnitt som kan nåes fra Dapla Lab.
 
 Foreløpig støtter løsningen følgende filformater:
 
 1. parquet
 2. sas7bdat
 
-
 ## Innlogging
 
+For å starte Datadoc må du logge deg inn på Dapla Lab (**Dokumentasjon kommer**).
+Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.
 
 ## Hvordan dokumentere et datasett
 
@@ -92,11 +94,11 @@ Dokumentasjon av datasettet som helthet gjøres i datasettfanen i Datadoc.
 
 Alle felter har en ordforklaring
 ![Forklaring til feltet](../images/datadoc_ordforklaring.png){fig-alt="Trykk på denne for å få beskrivelse av feltet." fig-align="left" width="3%" #fig-ordforklaring}
-du kan trykke på. Her vil du få en kort forklaring til hva som skal stå i feltet. 
+du kan trykke på. Her vil du få en kort forklaring til hva som skal stå i feltet.
 
 Flere felter har verdilister hvor mange er hentet fra KLASS, mens noen er fritekstfelter. For noen av fritekstfeltene gjøres det en sjekk av innholdet og du vil få en feilmelding hvis kriteriene ikke er oppfylt.
 
-#### Obligatorisk 
+#### Obligatorisk
 
 Alt som står under obligatorisk må fylles inn.
 
@@ -104,29 +106,29 @@ Alt som står under obligatorisk må fylles inn.
 
 Anbefalte felter er frivillig å fylle ut.
 
-#### Maskingenerert 
+#### Maskingenerert
 
 Feltene her genereres automatisk og kan ikke redigeres. De er kun med til informasjon.
 
 ### Dokumentere variabelforekomst metadata
 
-Dokumentasjon av variabelforekomster for et datasett kan gjøres i variabelfanen i Datadoc. 
-Her vil man se en liste av alle kortnavnene til variabelforekomstene i datasettet. 
-Ved å trykke seg inn på et av kortnavnene kan man dokumentere de obligatoriske og anbefalte feltene for en variabelforekomst. 
+Dokumentasjon av variabelforekomster for et datasett kan gjøres i variabelfanen i Datadoc.
+Her vil man se en liste av alle kortnavnene til variabelforekomstene i datasettet.
+Ved å trykke seg inn på et av kortnavnene kan man dokumentere de obligatoriske og anbefalte feltene for en variabelforekomst.
 
 #### Arv mellom datasett og variabelforekomst fanen
 
-For å forenkle dokumentasjonen av variabelforekomster vil noen felt arve verdiene som blir satt i datasettfanen. 
-Dette gjelder følgende felter: 
+For å forenkle dokumentasjonen av variabelforekomster vil noen felt arve verdiene som blir satt i datasettfanen.
+Dette gjelder følgende felter:
 
 - Datakilde
 - Populasjon
 - Temporalitetstype
-- Inneholder data f.o.m 
+- Inneholder data f.o.m
 - Inneholder data t.o.m
 
-Det er mulig å redigere vediene i variabelforekomst fanen etter en verdi er satt i datasettfanen. 
-Men hvis disse feltene blir endret i datasettfanen senere, vil de alltid overskrive det som er satt i variabelforekomst fanen. 
+Det er mulig å redigere vediene i variabelforekomst fanen etter en verdi er satt i datasettfanen.
+Men hvis disse feltene blir endret i datasettfanen senere, vil de alltid overskrive det som er satt i variabelforekomst fanen.
 
 #### Søk i variabelforekomster
 
@@ -136,4 +138,37 @@ Det er mulig å søke gjennom variabelforekomstene sine kortnavn. Dette filtrere
 
 ## Lagre metadata
 
+::: {.callout-important}
+## Viktig informasjon
+
+Datadoc mellomlagrer ikke utfylt metadata.
+Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du får en bekreftelse på at metadataene er lagret.
+:::
+
+### Ved lagring
+
+Når du trykker **Lagre** knappen vil du få en bekreftelse på vellykket lagring.
+![Lagre Datadoc](../images/dapla-metadata-datadoc-lagre.png){alt="Skjermbilde av tilbakemeldinger ved lagring av metadata på Datadoc"}
+
+Hvis ikke alle obligatoriske felt er utfylt vil du få opp en advarsel for datasett og variabelforekomstene.
+Advarselen for datasett viser en liste over hvilke felt som mangler. For variabelforekomster vises både variabelens kortnavn og manglende felt.
+
+Når du fyller ut de manglende obligatoriske feltene må du lagre på nytt og advarslene vil forsvinne når alle obligatoriske felt er fylt ut.
+
+### Metadata filen
+
+Når du trykker på **Lagre**-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er
+
+`<navn på datafil uten endelse>__DOC.json`
+
+Eksempelvis hvis datafilen har navnet **skattedata_p2022_v1.parquet**, så vil Datadoc lagre metadata i filen <b>skattedata_p2022_v1__DOC.json</b>.
+
+Fordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).
+
+Se et [eksempel på JSON metadata-fil](https://github.com/statisticsnorway/datadoc/blob/master/tests/resources/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json) lagret av DataDoc.
+
+
 ## Oppdatere eksisterende metadata
+
+Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i [Dokumentere et datasett](./datadoc.qmd#hvordan-dokumentere-et-datasett).
+Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker **Lagre**.
