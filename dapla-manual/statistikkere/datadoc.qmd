@@ -1,28 +1,16 @@
 # Datadoc
 
-::: {.callout-warning}
-NB! Advarsel - Ustabilitet i Dapla Beta!
-:::
+Datadoc er et verktøy for å dokumentere datasett og variablene som utgjør datasettet. Metadataene som skapes kommer til å bli selve ryggmargen til SSBs fremtidige datakatalog og skal gjør det mulig for SSB ansatte og det norske samfunnet å finne fram til faktagrunnlaget.
 
-Statistikkmetadata er strukturert informasjon om statistikk. Dette omfatter informasjon som brukes for å produsere, formidle, forstå, finne
-eller gjenbruke statistikk. For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene.
-
-## Hva er Datadoc
-
-Datadoc er en tjeneste som skal forenkle arbeidet med å dokumentere datasett og variabelforekomster.
-Felt og datatyper er definert som JSON schema i [ssb-datadoc-model](https://github.com/statisticsnorway/ssb-datadoc-model).
-
-Datadoc har et brukergrensesnitt som kan nåes fra Dapla Lab.
-
-Foreløpig støtter løsningen følgende filformater:
-
-1. parquet
-2. sas7bdat
+Det er svært viktig for SSB at metadataene er komplette og riktige. Vi vil dermed gjøre det så lett som mulig for brukeren. Om man kommer på noen problemer, eller har forslag til forbedring, meld gjerne ifra på [Dapla samfunnet på Viva Engage](https://engage.cloud.microsoft/main/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0).
 
 ## Innlogging
 
-For å starte Datadoc må du logge deg inn på Dapla Lab (**Dokumentasjon kommer**).
-Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.
+For å starte Datadoc må du logge deg inn på [Dapla Lab](https://lab.dapla.ssb.no). Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.
+
+::: {.callout-warning}
+Innlogging i Test-miljøet til Dapla Lab er ustabilt for tiden.
+:::
 
 ## Hvordan dokumentere et datasett
 
@@ -74,19 +62,19 @@ Informasjon som kan utledes vil bli fylt inn når du åpner datasettet. Informas
 
 Datasett:
 
- - Verdivurdering
- - Status (*)
- - Datatilstand
- - Versjon
- - Statistikkområde
- - Inneholder data f.o.m.
- - Inneholder data t.o.m.
- - Geografisk dekningsområde (*)
+- Verdivurdering
+- Status (*)
+- Datatilstand
+- Versjon
+- Statistikkområde
+- Inneholder data f.o.m.
+- Inneholder data t.o.m.
+- Geografisk dekningsområde (*)
 
 Variabler:
 
- - Kortnavn
- - Datatype
+- Kortnavn
+- Datatype
 
 ### Dokumentere datasett-metadata
 
@@ -110,7 +98,7 @@ Anbefalte felter er frivillig å fylle ut.
 
 Feltene her genereres automatisk og kan ikke redigeres. De er kun med til informasjon.
 
-### Dokumentere variabelforekomst metadata
+### Dokumentere variabelforekomst-metadata
 
 Dokumentasjon av variabelforekomster for et datasett kan gjøres i variabelfanen i Datadoc.
 Her vil man se en liste av alle kortnavnene til variabelforekomstene i datasettet.
@@ -138,7 +126,7 @@ Det er mulig å søke gjennom variabelforekomstene sine kortnavn. Dette filtrere
 
 ## Lagre metadata
 
-::: {.callout-important}
+::: {.callout-warning}
 ## Viktig informasjon
 
 Datadoc mellomlagrer ikke utfylt metadata.
@@ -147,7 +135,7 @@ Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du f
 
 ### Ved lagring
 
-Når du trykker **Lagre** knappen vil du få en bekreftelse på vellykket lagring.
+Når du trykker _Lagre metadata_ knappen vil du få en bekreftelse på vellykket lagring.
 ![Lagre Datadoc](../images/dapla-metadata-datadoc-lagre.png){alt="Skjermbilde av tilbakemeldinger ved lagring av metadata på Datadoc"}
 
 Hvis ikke alle obligatoriske felt er utfylt vil du få opp en advarsel for datasett og variabelforekomstene.
@@ -157,18 +145,21 @@ Når du fyller ut de manglende obligatoriske feltene må du lagre på nytt og ad
 
 ### Metadata filen
 
-Når du trykker på **Lagre**-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er
+Når du trykker på _Lagre metadata_ knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er
 
-`<navn på datafil uten endelse>__DOC.json`
+`<navn på datasettfilen uten endelse>__DOC.json`
 
-Eksempelvis hvis datafilen har navnet **skattedata_p2022_v1.parquet**, så vil Datadoc lagre metadata i filen <b>skattedata_p2022_v1__DOC.json</b>.
+Eksempelvis hvis datafilen har navnet `skattedata_p2022_v1.parquet`, så vil Datadoc lagre metadata i filen `skattedata_p2022_v1__DOC.json`.
 
 Fordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).
 
 Se et [eksempel på JSON metadata-fil](https://github.com/statisticsnorway/datadoc/blob/master/tests/resources/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json) lagret av DataDoc.
 
-
 ## Oppdatere eksisterende metadata
 
-Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i [Dokumentere et datasett](./datadoc.qmd#hvordan-dokumentere-et-datasett).
-Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker **Lagre**.
+Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i [Åpne et datasett](./datadoc.qmd#åpne-et-datasett).
+Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker _Lagre metadata_.
+
+## Kildekode
+
+Kildekoden til Datadoc er offentlig tilgjengelig på Github: <https://github.com/statisticsnorway/datadoc>
