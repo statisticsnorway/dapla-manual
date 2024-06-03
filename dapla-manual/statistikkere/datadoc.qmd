@@ -4,8 +4,8 @@
 NB! Advarsel - Ustabilitet i Dapla Beta!
 :::
 
-Statistikkmetadata er strukturert informasjon om statistikk. Dette omfatter informasjon som brukes for å produsere, formidle, forstå, finne 
-eller gjenbruke statistikk. For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene. 
+Statistikkmetadata er strukturert informasjon om statistikk. Dette omfatter informasjon som brukes for å produsere, formidle, forstå, finne
+eller gjenbruke statistikk. For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene.
 
 ## Hva er Datadoc
 
@@ -19,7 +19,6 @@ Foreløpig støtter løsningen følgende filformater:
 1. parquet
 2. sas7bdat
 
-
 ## Innlogging
 
 For å starte Datadoc må du logge deg inn på Dapla Lab (**Dokumentasjon kommer**).
@@ -27,9 +26,115 @@ Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.
 
 ## Hvordan dokumentere et datasett
 
-### Datasett/Navnestandarden...
+### Åpne et datasett
 
-### Obligatorisk/anbefalt/maskingenerert...
+Før man kan benytte Datadoc, må man åpne et Datasett. Det gjøres enkelt ved å lime inn stien til datasettet i _Filsti_ tekstboksen (Punkt 1 i @fig-aapne-datasett) og trykke på _Åpne fil_ knappen (Punkt 2 i @fig-aapne-datasett).
+
+Datadoc benytter brukerens innloggingsopplysninger for å aksessere data. Det betyr at man i utgangspunktet har tilgang til de samme filene som ellers på Dapla.
+
+::: {.callout-warning}
+Man **må** inkludere `gs://` på begynnelsen av stien når man jobber med et datasett i en bøtte.
+:::
+
+::: {.callout-note}
+Man kan finne filstien gjennom [Google konsollet](./gcc.qmd#filutforsker) eller ved å [benytte Dapla toolbelt](./jobbe-med-data.qmd#liste-ut-innhold-i-mappe)
+:::
+
+![Åpne et datasett i Datadoc.](../images/datadoc-aapne-datasett.png){fig-alt="Slik åpnes et datasett i Datadoc." width="100%" #fig-aapne-datasett}
+
+#### Vellykket åpning
+
+Etter at man har trykket på _Åpne fil_ knappen bør man se meldingen vist i @fig-aapne-datasett-suksess
+
+![Meldingen at det var velykket å åpne datasettet.](../images/datadoc-aapne-datasett-suksess.png){fig-alt="Figur som viser meldingen at det var velykket åpning av datasettet." fig-align="left" width="30%" #fig-aapne-datasett-suksess}
+
+#### Vellykket åpning med advarsel
+
+Hvis man åpner en datasett som ikke følger navnestandarden, vil det komme en advarsel (@fig-aapne-datasett-advarsel). Det er fullt mulig å bruke Datadoc fortsatt for å dokumentere datasettet, men ikke like mye metadata kan utledes automatisk (TODO: lenke til seksjonen om utledning).
+
+::: {.callout-note}
+Dette kan være en fin anledning til å justere på navngivning og strukturen i teamets bøtter slik at alt følger [navnestandarden](./navnestandard-datalagring.qmd). Det er en lenke til navnestandarden i meldingen.
+:::
+
+![Meldingen at datasettet ikke følger navnestandarden.](../images/datadoc_warning.png){fig-alt="Figur som viser meldingen at datasettet ikke følger navnestandarden." fig-align="left" width="40%" #fig-aapne-datasett-advarsel}
+
+#### Feil ved åpning
+
+Hvis Datadoc klarer ikke åpne datasettet, vises en rød error melding (@fig-aapne-datasett-feil). Dette forårsakes oftest at filen ikke finnes (for eksempel på grunn av en typo i filstien), men kan også være på grunn av at man ikke har tilgang til filen, eller at det er et brudd i nettverket.
+
+![Meldingen at det var en feil ved åpning av datasettet.](../images/datadoc-aapne-datasett-feil.png){fig-alt="Figur som viser meldingen at det var en feil ved åpning av datasettet." fig-align="left" width="40%" #fig-aapne-datasett-feil}
+
+#### Åpne et datasett når metadatadokument eksisterer
+
+Hvis et metadatadokument eksisterer, er det denne informasjonen som lastes inn. Det utledes ingenting fra datasettet.
+
+### Utledning
+
+Informasjon som kan utledes vil bli fylt inn når du åpner datasettet. Informasjonen hentes enten fra filstien eller settes inn som en default verdi (*). Det er mulig å korrigere informasjonen i ettertid.  Følgende felter blir forsøkt utledet:
+
+Datasett:
+
+ - Verdivurdering
+ - Status (*)
+ - Datatilstand
+ - Versjon
+ - Statistikkområde
+ - Inneholder data f.o.m.
+ - Inneholder data t.o.m.
+ - Geografisk dekningsområde (*)
+
+Variabler:
+
+ - Kortnavn
+ - Datatype
+
+### Dokumentere datasett-metadata
+
+Dokumentasjon av datasettet som helthet gjøres i datasettfanen i Datadoc.
+
+Alle felter har en ordforklaring
+![Forklaring til feltet](../images/datadoc_ordforklaring.png){fig-alt="Trykk på denne for å få beskrivelse av feltet." fig-align="left" width="3%" #fig-ordforklaring}
+du kan trykke på. Her vil du få en kort forklaring til hva som skal stå i feltet.
+
+Flere felter har verdilister hvor mange er hentet fra KLASS, mens noen er fritekstfelter. For noen av fritekstfeltene gjøres det en sjekk av innholdet og du vil få en feilmelding hvis kriteriene ikke er oppfylt.
+
+#### Obligatorisk
+
+Alt som står under obligatorisk må fylles inn.
+
+#### Anbefalt
+
+Anbefalte felter er frivillig å fylle ut.
+
+#### Maskingenerert
+
+Feltene her genereres automatisk og kan ikke redigeres. De er kun med til informasjon.
+
+### Dokumentere variabelforekomst metadata
+
+Dokumentasjon av variabelforekomster for et datasett kan gjøres i variabelfanen i Datadoc.
+Her vil man se en liste av alle kortnavnene til variabelforekomstene i datasettet.
+Ved å trykke seg inn på et av kortnavnene kan man dokumentere de obligatoriske og anbefalte feltene for en variabelforekomst.
+
+#### Arv mellom datasett og variabelforekomst fanen
+
+For å forenkle dokumentasjonen av variabelforekomster vil noen felt arve verdiene som blir satt i datasettfanen.
+Dette gjelder følgende felter:
+
+- Datakilde
+- Populasjon
+- Temporalitetstype
+- Inneholder data f.o.m
+- Inneholder data t.o.m
+
+Det er mulig å redigere vediene i variabelforekomst fanen etter en verdi er satt i datasettfanen.
+Men hvis disse feltene blir endret i datasettfanen senere, vil de alltid overskrive det som er satt i variabelforekomst fanen.
+
+#### Søk i variabelforekomster
+
+Det er mulig å søke gjennom variabelforekomstene sine kortnavn. Dette filtrerer på listen over variabelforekomster.
+
+![Søk gjennom kortnavn til variabelforekomster](../images/dapla-metadata-datadoc-search.png){fig-alt="Figur som viser søk på variabelforekomster" fig-align="left" #fig-variable-search}
 
 ## Lagre metadata
 
@@ -42,7 +147,7 @@ Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du f
 
 ### Ved lagring
 
-Når du trykker **Lagre** knappen vil du få en bekreftelse på vellykket lagring. 
+Når du trykker **Lagre** knappen vil du få en bekreftelse på vellykket lagring.
 ![Lagre Datadoc](../images/dapla-metadata-datadoc-lagre.png){alt="Skjermbilde av tilbakemeldinger ved lagring av metadata på Datadoc"}
 
 Hvis ikke alle obligatoriske felt er utfylt vil du få opp en advarsel for datasett og variabelforekomstene.
@@ -52,7 +157,7 @@ Når du fyller ut de manglende obligatoriske feltene må du lagre på nytt og ad
 
 ### Metadata filen
 
-Når du trykker på **Lagre**-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er 
+Når du trykker på **Lagre**-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er
 
 `<navn på datafil uten endelse>__DOC.json`
 
@@ -63,8 +168,7 @@ Fordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan 
 Se et [eksempel på JSON metadata-fil](https://github.com/statisticsnorway/datadoc/blob/master/tests/resources/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json) lagret av DataDoc.
 
 
-
 ## Oppdatere eksisterende metadata
 
-Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i [Dokumentere et datasett](./datadoc.qmd#hvordan-dokumentere-et-datasett). 
+Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i [Dokumentere et datasett](./datadoc.qmd#hvordan-dokumentere-et-datasett).
 Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker **Lagre**.
