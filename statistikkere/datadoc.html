@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -386,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/datadoc.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">DataDoc</span></a>
+ <span class="menu-text">Datadoc</span></a>
   </div>
 </li>
       </ul>
@@ -518,11 +484,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#datadoc" id="toc-datadoc" class="nav-link active" data-scroll-target="#datadoc">DataDoc</a>
+  <li><a href="#datadoc" id="toc-datadoc" class="nav-link active" data-scroll-target="#datadoc">Datadoc</a>
   <ul class="collapse">
-  <li><a href="#hvordan-dokumentere-datasett-og-variabler-med-datadoc" id="toc-hvordan-dokumentere-datasett-og-variabler-med-datadoc" class="nav-link" data-scroll-target="#hvordan-dokumentere-datasett-og-variabler-med-datadoc">Hvordan dokumentere datasett og variabler med DataDoc</a></li>
-  <li><a href="#prøve-datadoc" id="toc-prøve-datadoc" class="nav-link" data-scroll-target="#prøve-datadoc">Prøve DataDoc</a></li>
-  <li><a href="#hvor-lagres-datadoc-dokumentasjonen-metadata" id="toc-hvor-lagres-datadoc-dokumentasjonen-metadata" class="nav-link" data-scroll-target="#hvor-lagres-datadoc-dokumentasjonen-metadata">Hvor lagres DataDoc-dokumentasjonen (metadata)</a></li>
+  <li><a href="#hva-er-datadoc" id="toc-hva-er-datadoc" class="nav-link" data-scroll-target="#hva-er-datadoc">Hva er Datadoc</a></li>
+  <li><a href="#innlogging" id="toc-innlogging" class="nav-link" data-scroll-target="#innlogging">Innlogging</a></li>
+  <li><a href="#hvordan-dokumentere-et-datasett" id="toc-hvordan-dokumentere-et-datasett" class="nav-link" data-scroll-target="#hvordan-dokumentere-et-datasett">Hvordan dokumentere et datasett</a>
+  <ul class="collapse">
+  <li><a href="#datasettnavnestandarden" id="toc-datasettnavnestandarden" class="nav-link" data-scroll-target="#datasettnavnestandarden">Datasett/Navnestandarden…</a></li>
+  <li><a href="#obligatoriskanbefaltmaskingenerert" id="toc-obligatoriskanbefaltmaskingenerert" class="nav-link" data-scroll-target="#obligatoriskanbefaltmaskingenerert">Obligatorisk/anbefalt/maskingenerert…</a></li>
+  </ul></li>
+  <li><a href="#lagre-metadata" id="toc-lagre-metadata" class="nav-link" data-scroll-target="#lagre-metadata">Lagre metadata</a>
+  <ul class="collapse">
+  <li><a href="#ved-lagring" id="toc-ved-lagring" class="nav-link" data-scroll-target="#ved-lagring">Ved lagring</a></li>
+  <li><a href="#metadata-filen" id="toc-metadata-filen" class="nav-link" data-scroll-target="#metadata-filen">Metadata filen</a></li>
+  </ul></li>
+  <li><a href="#oppdatere-eksisterende-metadata" id="toc-oppdatere-eksisterende-metadata" class="nav-link" data-scroll-target="#oppdatere-eksisterende-metadata">Oppdatere eksisterende metadata</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/edit/main/statistikkere/datadoc.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual-internal/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li></ul></div></nav>
@@ -534,14 +510,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="datadoc" class="level1">
-<h1>DataDoc</h1>
-<p>For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene. <a href="https://github.com/statisticsnorway/datadoc">DataDoc</a> er SSBs system for å dokumentere datasett på den nye dataplattformen <strong>Dapla</strong>.</p>
-<p>Det er bygget et grensesnitt i Python for å gjøre det enklest mulig å dokumentere et datasett. Foreløpig støtter løsningen følgende filformater:</p>
-<ol type="1">
-<li>parquet</li>
-<li>sas7bdat</li>
-</ol>
-<p>Under finner du beskrivelse av hvordan du kan begynne å bruke løsningen til å dokumentere datasett.</p>
+<h1>Datadoc</h1>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -552,22 +521,35 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Vi ønsker at du skal teste DataDoc-applikasjonen. Den viktigste funksjonaliteten skal være tilgjengelig, og det er fullt mulig å benytte DataDoc i SSBs Jupyter-miljøer. Det er imidlertid viktig å være klar over at applikasjonen fortsatt er i en utviklings- og testfase (beta-løsning) og kan inneholde feil og mangler.</p>
-<p>Har du spørsmål, eventuelt vil rapporterer om feil og mangler, så setter vi pris på om du gjør dette i <a href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all">Yammer-gruppa Dapla</a>.</p>
+<p>NB! Advarsel - Ustabilitet i Dapla Beta!</p>
 </div>
 </div>
-<section id="hvordan-dokumentere-datasett-og-variabler-med-datadoc" class="level2">
-<h2 class="anchored" data-anchor-id="hvordan-dokumentere-datasett-og-variabler-med-datadoc">Hvordan dokumentere datasett og variabler med DataDoc</h2>
-<p><strong>Før du tar i bruk DataDoc-applikasjonen er det viktig å forstå hvilken informasjon som skal til for å dokumentere et datasett.</strong> I DataDoc-applikasjonen skal du fylle ut flere felter om både datasettet og variablene som inngår i datasettet, eksempelvis</p>
-<ul>
-<li>kortnavn</li>
-<li>navn</li>
-<li>datatilstand</li>
-<li>populasjonsbeskrivelse</li>
-<li>++</li>
-</ul>
-<p>Det er utarbeidet en detaljert beskrivelse hva hvert felt betyr, og hvordan de skal fylles ut både for datasett og variabler: - DataDoc - <a href="https://statistics-norway.atlassian.net/l/cp/i4Wysf9Q">hvordan dokumentere et <strong>datasett</strong></a> - DataDoc - <a href="https://statistics-norway.atlassian.net/l/cp/zpX2YZwU">hvordan dokumentere <strong>variablene</strong></a> (variabelforekomstene) som inngår i datasettet</p>
-<p>DataDoc skal være installert i alle <a href="../statistikkere/innlogging.html">Jupyter-miljøene i SSB</a>, så du trenger ikke installere pakken selv.</p>
+<p>Statistikkmetadata er strukturert informasjon om statistikk. Dette omfatter informasjon som brukes for å produsere, formidle, forstå, finne eller gjenbruke statistikk.&nbsp;For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene.</p>
+<section id="hva-er-datadoc" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-datadoc">Hva er Datadoc</h2>
+<p>Datadoc er en tjeneste som skal forenkle arbeidet med å dokumentere datasett og variabelforekomster. Felt og datatyper er definert som JSON schema i <a href="https://github.com/statisticsnorway/ssb-datadoc-model">ssb-datadoc-model</a>.</p>
+<p>Datadoc har et brukergrensesnitt som kan nåes fra Dapla Lab.</p>
+<p>Foreløpig støtter løsningen følgende filformater:</p>
+<ol type="1">
+<li>parquet</li>
+<li>sas7bdat</li>
+</ol>
+</section>
+<section id="innlogging" class="level2">
+<h2 class="anchored" data-anchor-id="innlogging">Innlogging</h2>
+<p>For å starte Datadoc må du logge deg inn på Dapla Lab (<strong>Dokumentasjon kommer</strong>). Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.</p>
+</section>
+<section id="hvordan-dokumentere-et-datasett" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-dokumentere-et-datasett">Hvordan dokumentere et datasett</h2>
+<section id="datasettnavnestandarden" class="level3">
+<h3 class="anchored" data-anchor-id="datasettnavnestandarden">Datasett/Navnestandarden…</h3>
+</section>
+<section id="obligatoriskanbefaltmaskingenerert" class="level3">
+<h3 class="anchored" data-anchor-id="obligatoriskanbefaltmaskingenerert">Obligatorisk/anbefalt/maskingenerert…</h3>
+</section>
+</section>
+<section id="lagre-metadata" class="level2">
+<h2 class="anchored" data-anchor-id="lagre-metadata">Lagre metadata</h2>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -578,71 +560,27 @@ Viktig informasjon
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>DataDoc kan foreløpig ikke kjøres i Jupyter notebook med virtuelle miljøer (f.eks. et ssb-project), men må startes i den vanlige kernelen i en notebook.</p>
+<p>Datadoc mellomlagrer ikke utfylt metadata. Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du får en bekreftelse på at metadataene er lagret.</p>
 </div>
 </div>
+<section id="ved-lagring" class="level3">
+<h3 class="anchored" data-anchor-id="ved-lagring">Ved lagring</h3>
+<p>Når du trykker <strong>Lagre</strong> knappen vil du få en bekreftelse på vellykket lagring. <img src="../images/dapla-metadata-datadoc-lagre.png" class="img-fluid" alt="Skjermbilde av tilbakemeldinger ved lagring av metadata på Datadoc"></p>
+<p>Hvis ikke alle obligatoriske felt er utfylt vil du få opp en advarsel for datasett og variabelforekomstene. Advarselen for datasett viser en liste over hvilke felt som mangler. For variabelforekomster vises både variabelens kortnavn og manglende felt.</p>
+<p>Når du fyller ut de manglende obligatoriske feltene må du lagre på nytt og advarslene vil forsvinne når alle obligatoriske felt er fylt ut.</p>
 </section>
-<section id="prøve-datadoc" class="level2">
-<h2 class="anchored" data-anchor-id="prøve-datadoc">Prøve DataDoc</h2>
-<p>La oss lage et test-datasett slik at vi kan leke oss litt med DataDoc:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb1" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datadoc <span class="im">import</span> main</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create fake data</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="st">'id'</span>: [<span class="st">'9999999999'</span>, <span class="st">'8888888888'</span>, <span class="st">'7777777777'</span>, <span class="st">'6666666666'</span>],</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">'fylke'</span>: [<span class="st">"01"</span>, <span class="st">"02"</span>, <span class="st">"03"</span>, <span class="st">"03"</span>],</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">'inntekt'</span>: [<span class="dv">500000</span>, <span class="dv">250000</span>, <span class="dv">400000</span>, <span class="dv">440000</span>],</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">'rente'</span>: [<span class="fl">3.2</span>, <span class="fl">4.1</span>, <span class="fl">3.3</span>, <span class="fl">3.4</span>]}</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Creates a Pandas dataframe</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Write a Parquet-file to current folder</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>df.to_parquet(<span class="st">"./test.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Nå har vi en fil som heter <code>test.parquet</code> i mappen vi står. Da kan vi åpne DataDoc-grensesnittet for å legge inn metadataene:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb2" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>main(<span class="st">"./test.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><a href="#fig-datadoc-ux" class="quarto-xref">Figur&nbsp;1</a> viser hvordan DataDoc-grensesnittet ser ut.</p>
-<div id="fig-datadoc-ux" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Gif som viser hvordan DataDoc kan brukes.">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-datadoc-ux-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/datdoc_gif.gif" class="img-fluid figure-img" alt="Gif som viser hvordan DataDoc kan brukes.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-datadoc-ux-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1: Gif som viser hvordan DataDoc-grensesnittet ser ut.
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="hvor-lagres-datadoc-dokumentasjonen-metadata" class="level2">
-<h2 class="anchored" data-anchor-id="hvor-lagres-datadoc-dokumentasjonen-metadata">Hvor lagres DataDoc-dokumentasjonen (metadata)</h2>
-<p>Når du trykker på <strong>Lagre</strong>-knappen i DataDoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er</p>
+<section id="metadata-filen" class="level3">
+<h3 class="anchored" data-anchor-id="metadata-filen">Metadata filen</h3>
+<p>Når du trykker på <strong>Lagre</strong>-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er</p>
 <p><code>&lt;navn på datafil uten endelse&gt;__DOC.json</code></p>
-<p>Eksempelvis hvis datafilen har navnet <strong>skattedata_p2022_v1.parquet</strong>, så vil DataDoc lagre metadata i filen <b>skattedata_p2022_v1__DOC.json</b>.</p>
+<p>Eksempelvis hvis datafilen har navnet <strong>skattedata_p2022_v1.parquet</strong>, så vil Datadoc lagre metadata i filen <b>skattedata_p2022_v1__DOC.json</b>.</p>
 <p>Fordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).</p>
-<p>Se et <a href="https://github.com/statisticsnorway/datadoc/blob/master/klargjorte_data/befolkning/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json">eksempel på JSON metadata-fil</a> lagret av DataDoc.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Informasjon
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>I Dapla skal det bygges en felles datakatalog for SSB. Tanken er at alle metadata, eksempelvis datasett-dokumentasjon fra DataDoc (JSON-filene), skal inngå i SSBs datakatalog. Datakatalogen gjør det mulig å finne (søke etter), forstår og gjenbruke data både internt og ekstern.</p>
-</div>
-</div>
+<p>Se et <a href="https://github.com/statisticsnorway/datadoc/blob/master/tests/resources/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json">eksempel på JSON metadata-fil</a> lagret av DataDoc.</p>
+</section>
+</section>
+<section id="oppdatere-eksisterende-metadata" class="level2">
+<h2 class="anchored" data-anchor-id="oppdatere-eksisterende-metadata">Oppdatere eksisterende metadata</h2>
+<p>Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i <a href="../statistikkere/datadoc.html#hvordan-dokumentere-et-datasett">Dokumentere et datasett</a>. Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker <strong>Lagre</strong>.</p>
 
 
 </section>

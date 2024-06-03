@@ -938,42 +938,53 @@
   {
     "objectID": "statistikkere/datadoc.html",
     "href": "statistikkere/datadoc.html",
-    "title": "DataDoc",
+    "title": "Datadoc",
     "section": "",
-    "text": "For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene. DataDoc er SSBs system for å dokumentere datasett på den nye dataplattformen Dapla.\nDet er bygget et grensesnitt i Python for å gjøre det enklest mulig å dokumentere et datasett. Foreløpig støtter løsningen følgende filformater:\n\nparquet\nsas7bdat\n\nUnder finner du beskrivelse av hvordan du kan begynne å bruke løsningen til å dokumentere datasett.\n\n\n\n\n\n\nWarning\n\n\n\nVi ønsker at du skal teste DataDoc-applikasjonen. Den viktigste funksjonaliteten skal være tilgjengelig, og det er fullt mulig å benytte DataDoc i SSBs Jupyter-miljøer. Det er imidlertid viktig å være klar over at applikasjonen fortsatt er i en utviklings- og testfase (beta-løsning) og kan inneholde feil og mangler.\nHar du spørsmål, eventuelt vil rapporterer om feil og mangler, så setter vi pris på om du gjør dette i Yammer-gruppa Dapla.\n\n\n\n\nFør du tar i bruk DataDoc-applikasjonen er det viktig å forstå hvilken informasjon som skal til for å dokumentere et datasett. I DataDoc-applikasjonen skal du fylle ut flere felter om både datasettet og variablene som inngår i datasettet, eksempelvis\n\nkortnavn\nnavn\ndatatilstand\npopulasjonsbeskrivelse\n++\n\nDet er utarbeidet en detaljert beskrivelse hva hvert felt betyr, og hvordan de skal fylles ut både for datasett og variabler: - DataDoc - hvordan dokumentere et datasett - DataDoc - hvordan dokumentere variablene (variabelforekomstene) som inngår i datasettet\nDataDoc skal være installert i alle Jupyter-miljøene i SSB, så du trenger ikke installere pakken selv.\n\n\n\n\n\n\nViktig informasjon\n\n\n\nDataDoc kan foreløpig ikke kjøres i Jupyter notebook med virtuelle miljøer (f.eks. et ssb-project), men må startes i den vanlige kernelen i en notebook.\n\n\n\n\n\nLa oss lage et test-datasett slik at vi kan leke oss litt med DataDoc:\n\n\nnotebook\n\nimport pandas as pd\nfrom datadoc import main\n  \n# Create fake data\ndata = {'id': ['9999999999', '8888888888', '7777777777', '6666666666'],\n        'fylke': [\"01\", \"02\", \"03\", \"03\"],\n        'inntekt': [500000, 250000, 400000, 440000],\n        'rente': [3.2, 4.1, 3.3, 3.4]}\n  \n# Creates a Pandas dataframe\ndf = pd.DataFrame(data)\n\n# Write a Parquet-file to current folder\ndf.to_parquet(\"./test.parquet\")\n\nNå har vi en fil som heter test.parquet i mappen vi står. Da kan vi åpne DataDoc-grensesnittet for å legge inn metadataene:\n\n\nnotebook\n\nmain(\"./test.parquet\")\n\nFigur 1 viser hvordan DataDoc-grensesnittet ser ut.\n\n\n\n\n\n\nFigur 1: Gif som viser hvordan DataDoc-grensesnittet ser ut.\n\n\n\n\n\n\nNår du trykker på Lagre-knappen i DataDoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er\n&lt;navn på datafil uten endelse&gt;__DOC.json\nEksempelvis hvis datafilen har navnet skattedata_p2022_v1.parquet, så vil DataDoc lagre metadata i filen skattedata_p2022_v1__DOC.json.\nFordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).\nSe et eksempel på JSON metadata-fil lagret av DataDoc.\n\n\n\n\n\n\nInformasjon\n\n\n\nI Dapla skal det bygges en felles datakatalog for SSB. Tanken er at alle metadata, eksempelvis datasett-dokumentasjon fra DataDoc (JSON-filene), skal inngå i SSBs datakatalog. Datakatalogen gjør det mulig å finne (søke etter), forstår og gjenbruke data både internt og ekstern.",
+    "text": "Warning\n\n\n\nNB! Advarsel - Ustabilitet i Dapla Beta!\n\n\nStatistikkmetadata er strukturert informasjon om statistikk. Dette omfatter informasjon som brukes for å produsere, formidle, forstå, finne eller gjenbruke statistikk. For å kunne gjenfinne data i SSB er man helt avhengig av at det finnes et enhetlig system for metadata knyttet til dataene.\n\n\nDatadoc er en tjeneste som skal forenkle arbeidet med å dokumentere datasett og variabelforekomster. Felt og datatyper er definert som JSON schema i ssb-datadoc-model.\nDatadoc har et brukergrensesnitt som kan nåes fra Dapla Lab.\nForeløpig støtter løsningen følgende filformater:\n\nparquet\nsas7bdat\n\n\n\n\nFor å starte Datadoc må du logge deg inn på Dapla Lab (Dokumentasjon kommer). Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nViktig informasjon\n\n\n\nDatadoc mellomlagrer ikke utfylt metadata. Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du får en bekreftelse på at metadataene er lagret.\n\n\n\n\nNår du trykker Lagre knappen vil du få en bekreftelse på vellykket lagring. \nHvis ikke alle obligatoriske felt er utfylt vil du få opp en advarsel for datasett og variabelforekomstene. Advarselen for datasett viser en liste over hvilke felt som mangler. For variabelforekomster vises både variabelens kortnavn og manglende felt.\nNår du fyller ut de manglende obligatoriske feltene må du lagre på nytt og advarslene vil forsvinne når alle obligatoriske felt er fylt ut.\n\n\n\nNår du trykker på Lagre-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er\n&lt;navn på datafil uten endelse&gt;__DOC.json\nEksempelvis hvis datafilen har navnet skattedata_p2022_v1.parquet, så vil Datadoc lagre metadata i filen skattedata_p2022_v1__DOC.json.\nFordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).\nSe et eksempel på JSON metadata-fil lagret av DataDoc.\n\n\n\n\nØnsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i Dokumentere et datasett. Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker Lagre.",
     "crumbs": [
       "Velkommen",
       "Metadata"
     ]
   },
   {
-    "objectID": "statistikkere/datadoc.html#hvordan-dokumentere-datasett-og-variabler-med-datadoc",
-    "href": "statistikkere/datadoc.html#hvordan-dokumentere-datasett-og-variabler-med-datadoc",
-    "title": "DataDoc",
+    "objectID": "statistikkere/datadoc.html#hva-er-datadoc",
+    "href": "statistikkere/datadoc.html#hva-er-datadoc",
+    "title": "Datadoc",
     "section": "",
-    "text": "Før du tar i bruk DataDoc-applikasjonen er det viktig å forstå hvilken informasjon som skal til for å dokumentere et datasett. I DataDoc-applikasjonen skal du fylle ut flere felter om både datasettet og variablene som inngår i datasettet, eksempelvis\n\nkortnavn\nnavn\ndatatilstand\npopulasjonsbeskrivelse\n++\n\nDet er utarbeidet en detaljert beskrivelse hva hvert felt betyr, og hvordan de skal fylles ut både for datasett og variabler: - DataDoc - hvordan dokumentere et datasett - DataDoc - hvordan dokumentere variablene (variabelforekomstene) som inngår i datasettet\nDataDoc skal være installert i alle Jupyter-miljøene i SSB, så du trenger ikke installere pakken selv.\n\n\n\n\n\n\nViktig informasjon\n\n\n\nDataDoc kan foreløpig ikke kjøres i Jupyter notebook med virtuelle miljøer (f.eks. et ssb-project), men må startes i den vanlige kernelen i en notebook.",
+    "text": "Datadoc er en tjeneste som skal forenkle arbeidet med å dokumentere datasett og variabelforekomster. Felt og datatyper er definert som JSON schema i ssb-datadoc-model.\nDatadoc har et brukergrensesnitt som kan nåes fra Dapla Lab.\nForeløpig støtter løsningen følgende filformater:\n\nparquet\nsas7bdat",
     "crumbs": [
       "Velkommen",
       "Metadata"
     ]
   },
   {
-    "objectID": "statistikkere/datadoc.html#prøve-datadoc",
-    "href": "statistikkere/datadoc.html#prøve-datadoc",
-    "title": "DataDoc",
+    "objectID": "statistikkere/datadoc.html#innlogging",
+    "href": "statistikkere/datadoc.html#innlogging",
+    "title": "Datadoc",
     "section": "",
-    "text": "La oss lage et test-datasett slik at vi kan leke oss litt med DataDoc:\n\n\nnotebook\n\nimport pandas as pd\nfrom datadoc import main\n  \n# Create fake data\ndata = {'id': ['9999999999', '8888888888', '7777777777', '6666666666'],\n        'fylke': [\"01\", \"02\", \"03\", \"03\"],\n        'inntekt': [500000, 250000, 400000, 440000],\n        'rente': [3.2, 4.1, 3.3, 3.4]}\n  \n# Creates a Pandas dataframe\ndf = pd.DataFrame(data)\n\n# Write a Parquet-file to current folder\ndf.to_parquet(\"./test.parquet\")\n\nNå har vi en fil som heter test.parquet i mappen vi står. Da kan vi åpne DataDoc-grensesnittet for å legge inn metadataene:\n\n\nnotebook\n\nmain(\"./test.parquet\")\n\nFigur 1 viser hvordan DataDoc-grensesnittet ser ut.\n\n\n\n\n\n\nFigur 1: Gif som viser hvordan DataDoc-grensesnittet ser ut.",
+    "text": "For å starte Datadoc må du logge deg inn på Dapla Lab (Dokumentasjon kommer). Start Datadoc tjenesten og du er klar til å dokumentere datasettet ditt.",
     "crumbs": [
       "Velkommen",
       "Metadata"
     ]
   },
   {
-    "objectID": "statistikkere/datadoc.html#hvor-lagres-datadoc-dokumentasjonen-metadata",
-    "href": "statistikkere/datadoc.html#hvor-lagres-datadoc-dokumentasjonen-metadata",
-    "title": "DataDoc",
+    "objectID": "statistikkere/datadoc.html#lagre-metadata",
+    "href": "statistikkere/datadoc.html#lagre-metadata",
+    "title": "Datadoc",
     "section": "",
-    "text": "Når du trykker på Lagre-knappen i DataDoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er\n&lt;navn på datafil uten endelse&gt;__DOC.json\nEksempelvis hvis datafilen har navnet skattedata_p2022_v1.parquet, så vil DataDoc lagre metadata i filen skattedata_p2022_v1__DOC.json.\nFordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).\nSe et eksempel på JSON metadata-fil lagret av DataDoc.\n\n\n\n\n\n\nInformasjon\n\n\n\nI Dapla skal det bygges en felles datakatalog for SSB. Tanken er at alle metadata, eksempelvis datasett-dokumentasjon fra DataDoc (JSON-filene), skal inngå i SSBs datakatalog. Datakatalogen gjør det mulig å finne (søke etter), forstår og gjenbruke data både internt og ekstern.",
+    "text": "Viktig informasjon\n\n\n\nDatadoc mellomlagrer ikke utfylt metadata. Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du får en bekreftelse på at metadataene er lagret.\n\n\n\n\nNår du trykker Lagre knappen vil du få en bekreftelse på vellykket lagring. \nHvis ikke alle obligatoriske felt er utfylt vil du få opp en advarsel for datasett og variabelforekomstene. Advarselen for datasett viser en liste over hvilke felt som mangler. For variabelforekomster vises både variabelens kortnavn og manglende felt.\nNår du fyller ut de manglende obligatoriske feltene må du lagre på nytt og advarslene vil forsvinne når alle obligatoriske felt er fylt ut.\n\n\n\nNår du trykker på Lagre-knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er\n&lt;navn på datafil uten endelse&gt;__DOC.json\nEksempelvis hvis datafilen har navnet skattedata_p2022_v1.parquet, så vil Datadoc lagre metadata i filen skattedata_p2022_v1__DOC.json.\nFordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).\nSe et eksempel på JSON metadata-fil lagret av DataDoc.",
+    "crumbs": [
+      "Velkommen",
+      "Metadata"
+    ]
+  },
+  {
+    "objectID": "statistikkere/datadoc.html#oppdatere-eksisterende-metadata",
+    "href": "statistikkere/datadoc.html#oppdatere-eksisterende-metadata",
+    "title": "Datadoc",
+    "section": "",
+    "text": "Ønsker du å endre eller legge til metadata, åpner du et datasett slik som beskrevet i Dokumentere et datasett. Da vil innholdet fra metadata-filen leses inn i Datadoc og kan redigeres videre. Endringene blir lagret når man trykker Lagre.",
     "crumbs": [
       "Velkommen",
       "Metadata"
