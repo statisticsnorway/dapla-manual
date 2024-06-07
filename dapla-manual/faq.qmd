@@ -171,3 +171,11 @@ Meldingen om at *Account already exists* forekommer svært sjelden, og typisk sk
 :::
 
 ::::
+
+### Hvorfor viser `git status` endringer når jeg ikke har endret filene? 
+
+Dette kan noen ganger forekomme med notebooks eller `ipynb`-filer fordi de inneholder metadata som kan bli endret over tid. Siden `ipynb`-filer er et `json`-basert format, som inkluderer metadata som oppdaterer seg i bakgrunnen, så kan en endring i strukturen til metadataene føre til endringer i den underliggende `json`-fila selv om man ikke har gjort endringer i `ipynb`-fila. Endringene blir deretter plukket opp av `git` som følger med på endringer i filene. 
+
+En mulig løsning er å sjekke inn endringene i kodebasen.
+
+I noen tilfeller viser `git status` at det har skjedd endringer i filer, men `git diff` viser ingen endring. I disse tilfellene kan det være ulike problemer i bakgrunnen. [Se denne oversikten](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3211952133/Git+status+viser+endrede+filer+men+git+diff+viser+ingen+endring) over problemer og tilhørende løsninger. 
