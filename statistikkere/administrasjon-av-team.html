@@ -503,60 +503,46 @@ ul.task-list li input[type="checkbox"] {
 <h1>Administrasjon av team</h1>
 <p>I dette kapitlet viser vi hvordan du kan opprette et nytt team eller gjøre endringer i et eksisterende team. Typiske endringer er å:</p>
 <ul>
-<li>Legge til eller fjerne medlemmer i et team</li>
+<li>Legge til, fjerne eller endre medlemmer i et team</li>
 <li>Liste ut medlemmer og tilgangsgrupper i et team</li>
 </ul>
 <section id="opprette-dapla-team" class="level2">
 <h2 class="anchored" data-anchor-id="opprette-dapla-team">Opprette Dapla-team</h2>
-<p>For å komme i gang med å opprette et Dapla-team trengs det en oversikt over teamets medlemmer og hvilke tilgangsgrupper medlemmene skal være med i. Det trengs også informasjon om hvilke Dapla-tjenester som er aktuelle for teamet å ta i bruk. Derfor har det blitt opprettet en egen veileder for dette kalt <em>Dapla Start</em>.</p>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Gå til <a href="https://start.dapla.ssb.no">Dapla Start</a> for starte bestilling av et nytt Dapla-team.</p>
-</div>
-</div>
-</div>
-<p>Når teamet er opprettet får alle medlemmene tilgang til sitt eget prosjekt i Google Cloud Platform (GCP), som er SSBs leverandør av skytjenester. Videre får hvert prosjekt et sett med tjenester og tilganger som knyttes til teamet. Det opprettes også datalagringsområder (ofte kalt <em>bøtter</em>) som bare kan aksesseres av brukere som er med i teamets tilgangsgrupper.</p>
-<p>Dapla-teamet vil også få sin egen gruppe i SSBs Active Directory slik at medlemskapet i gruppen kan administreres av Kundeservice.</p>
-</section>
-<section id="legge-til-eller-fjerne-medlemmer-i-et-team" class="level2">
-<h2 class="anchored" data-anchor-id="legge-til-eller-fjerne-medlemmer-i-et-team">Legge til eller fjerne medlemmer i et team</h2>
-<p>For å legge til eller fjerne medlemmer i et team må du foreløpig opprette en <a href="https://ssb.pureservice.com/#/new/7">Kundeservice-sak</a>. Send en e-post til Kundeservice eller registrer en sak i portalen deres med følgende innhold:</p>
-<ul>
-<li>Navnet på Dapla-teamet du ønsker tilgang</li>
-<li>Hvilken tilgang du søker om. Typisk er det enten <em>data-admins</em>, <em>developers</em> eller <em>consumers</em>). <a href="./hva-er-dapla-team.html#tbl-tilgangsroller">Les mer om hva de ulike tilgangene innebærer her</a>.</li>
-<li>Beskrivelse av formålet med tilgangen.</li>
-</ul>
-<p>Endringer i team må godkjennes av søker seksjonsleder før de blir effektuert.</p>
-<p>For fjerning av tilganger kan man sende en tilsvarende henvendelse, men man trenger ikke inkludere forklaring av formål.</p>
+<p>For å opprette et Dapla-team så må en seksjonsleder gå inn i Teamoversikten i <a href="https://ctrl.dapla.ssb.no/">Dapla Ctrl</a> og trykke på ikonet <strong>Opprett team</strong>. Her blir man bedt om å fylle inn relevant informasjon.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Midlertidig løsning
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>At endringer i team må gjøres via Kundeservice er midlertidig. Det jobbes med å lage et eget verktøy for dette.</p>
+<p>Les mer om <a href="./dapla-ctrl.html">Dapla Ctrl her</a>.</p>
+</div>
+</div>
+</section>
+<section id="legge-til-eller-fjerne-medlemmer-i-et-team" class="level2">
+<h2 class="anchored" data-anchor-id="legge-til-eller-fjerne-medlemmer-i-et-team">Legge til eller fjerne medlemmer i et team</h2>
+<p>For å legge til, fjerne eller endre medlemmer i et team må kan gjøres av medlemmer i <a href="./hva-er-dapla-team.html#managers">managers</a>-gruppen i teamet. Dette gjøres i <a href="./dapla-ctrl.html">Dapla Ctrl</a>. Les mer om <a href="./dapla-ctrl.html#legge-til-medlemmer">hvordan dette gjøres her</a>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Managers i <em>semi</em>- eller <em>self-managed</em> team
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Managers i semi- eller self-managed teams kan ikke legge til, fjerne eller endre medlemmer fra Dapla Ctrl enda. Disse må foreløpig kontakte Kundeservice for å gjøre endringer.</p>
 </div>
 </div>
 </section>
 <section id="se-medlemmer-og-roller-i-et-team" class="level2">
 <h2 class="anchored" data-anchor-id="se-medlemmer-og-roller-i-et-team">Se medlemmer og roller i et team</h2>
-<p>For å se hvem som har de ulike tilgangsrollene i et team, så kan man bruke pakken <a href="https://pypi.org/project/dapla-team-cli/">dapla-team-cli</a> fra Jupyter. Pakken er installert for alle og du kan liste ut medlemmer av team ved å gjøre følgende:</p>
-<ol type="1">
-<li><a href="./innlogging.html">Logg deg inn på Dapla</a>.</li>
-<li>Åpne en ny terminal</li>
-<li>Skriv inn <code>dpteam groups list-members</code> og trykk <em>Enter</em></li>
-<li>I prompten som dukker opp skriver du inn team-navn og trykker <em>Enter</em>.</li>
-</ol>
-<p>Hvis du ikke har <a href="./git-og-github.html#personal-access-token-(pat)">lagret Personal Access Token</a> i Jupyter så blir du spurt om GitHub-bruker og passord etter punkt 4. Da oppgir du du bare din GitHub-bruker og <a href="./git-og-github.html#koble-deg-til-ssb">token som er autentisert mot statisticsnorway</a>.</p>
-<p>For de som ikke har mulighet til å bruke Jupyter så kan man også sende inn en forespørsel til <em>Kundeservice</em> om å få en oversikt.</p>
+<p><a href="https://ctrl.dapla.ssb.no/">Dapla Ctrl</a> lar alle i SSB se hvilke team som finnes, hvem som er medlemmer og hvilke tilgangsgrupper de ligger i. Man kan også få oversikt over hvilke data alle team deler. <a href="../statistikkere/dapla-ctrl.html#teammedlemmer">Les mer her</a>.</p>
 
 
 </section>
