@@ -408,10 +408,14 @@ dp.read_pandas(sti, file_format="sas7bdat", encoding="latin1")
 
 ## {{< fa brands r-project >}}
 
-I produksjon sone (på bakken) kan R-pakken [haven](http://uribo.github.io/rpkg_showcase/utility/haven.html) benyttes for å lese inn .sas7bdat filer. Dette er ikke implementert i fellesr enda for lesing fra Dapla bøtte.
+Siden innlesing av sas7bdat-filer ikke er støttet i [fellesr](https://statisticsnorway.github.io/ssb-fellesr/articles/vignette__DAPLA_jukseark.html), så kan vi bruke R-pakken reticulate for å benytte oss av funksjonaliteten i Python-pakken dapla-toolbelt. 
 
-Mer om dette kommer. 
-
+```{.r filename="notebook"}
+library(reticulate)
+dp <- import("dapla")
+sti  <- gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/sas/statbank_ledstill.sas7bdat"
+dp$read_pandas(sti, file_format="sas7bdat", encoding="latin1")
+```
 
 :::
 
