@@ -286,6 +286,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Hva er bøtter?</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/deling-av-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deling av data</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -328,8 +334,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/navnestandard-datalagring.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Navnestandard datalagring</span></a>
+  <a href="../statistikkere/navnestandard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Navnestandard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -485,6 +491,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#opprette-dapla-team" id="toc-opprette-dapla-team" class="nav-link active" data-scroll-target="#opprette-dapla-team">Opprette Dapla-team</a></li>
+  <li><a href="#autonomitetsnivå" id="toc-autonomitetsnivå" class="nav-link" data-scroll-target="#autonomitetsnivå">Autonomitetsnivå</a></li>
   <li><a href="#roller-i-teamet" id="toc-roller-i-teamet" class="nav-link" data-scroll-target="#roller-i-teamet">Roller i teamet</a>
   <ul class="collapse">
   <li><a href="#managers" id="toc-managers" class="nav-link" data-scroll-target="#managers">Managers</a></li>
@@ -539,6 +546,89 @@ Under arbeid
 </div>
 <div class="callout-body-container callout-body">
 <p>Dapla-Ctrl er under arbeid og foreløpig . I mellomtiden kan man bruke den <a href="https://start.dapla.ssb.no/">gamle portalen for å opprette Dapla-team</a>.</p>
+</div>
+</div>
+</section>
+<section id="autonomitetsnivå" class="level2">
+<h2 class="anchored" data-anchor-id="autonomitetsnivå">Autonomitetsnivå</h2>
+<p>Et team på Dapla er i en av følgende autonomitetsnivåer:</p>
+<ol type="1">
+<li>Managed</li>
+<li>Semi-Managed</li>
+<li>Self-Managed</li>
+</ol>
+<p>Nivået er definert i metadataene til teamet og vises i Teamvisningen i <a href="./dapla-ctrl.html">Dapla Ctrl</a>. Det er kun plattformteamene som kan endre nivået til et team.</p>
+<p>Formålet med å definere autonomiten til et team er å tydeliggjøre hvem som har hvilket ansvar for de produktene teamet benytter på Dapla. Nivået settes når teamet opprettes, men kan også endres senere ved behov.</p>
+<p>Et <em>Managed</em> team benytter seg kun av tjenestene/<a href="./features.html">features</a> som tilbys av plattformen, og kan være sikker på at disse er satt opp i iht de krav som gjelder i SSB. Typisk vil de fleste statistikkteam være <em>managed</em>, og eksempler på tjenester er standard lagringsbøtter, <a href="./transfer-service.html">Transfer Service</a>, <a href="./kildomaten.html">Kildomaten</a>, osv.. Et <em>Managed</em> team kan kun benytte seg av tilgangsgruppene <em>managers</em>, <em>data-admins</em> og <em>developers</em>.</p>
+<p>Et <em>Semi-Managed</em> team benytter seg av tjenestene som tilbys på plattformen, akkurat som et <em>Managed</em> team, men de ønsker også ta i bruk noe funksjonalitet som ikke tilbys enda. F.eks. kan det være et statistikkproduserende team som ønsker å ta i bruk en Google-tjeneste som ikke tilbys på Dapla. I disse tilfellene kan teamet velge å ta et større ansvar for denne tjenesten og få noe bredere tilganger på plattformen. Ansvaret fordrer at teamet har kompetansen til å ta dette ansvaret, og de spesifikke detaljene vil avhenge hvilken tjeneste det er snakk om, og om de ønsker å benytte tjenesten i prod- eller test-miljøet til teamet.</p>
+<p>Et <em>Self-Managed</em> team vil typisk være team som består IT-utviklere med god kompetanse på skyutvikling i Google Cloud Platform. Teamet har kompetanse til å ta i bruk de tjenestene de mener er best for å løse sine oppgaver.</p>
+<p>I resten av dette kapitlet beskrives hovedsakelig <em>Managed</em> teams.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Autonomitetsnivå og tilganger i IaC-repo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Siden hvert team får definert sine ressurser i et eget IaC-repo, så er det nær sammenheng mellom <em>Autonomitetsnivå</em> og hvilke tilganger teamet har til å gjøre endringer i IaC-repoet. <a href="#tbl-iac-autonomy" class="quarto-xref">Tabell&nbsp;1</a> viser hvilke tilganger de ulike nivåene gir.</p>
+<div id="tbl-iac-autonomy" class="striped quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-iac-autonomy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
+</figcaption>
+<div aria-describedby="tbl-iac-autonomy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 48%">
+<col style="width: 11%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Managed</th>
+<th>Semi-Managed</th>
+<th>Self-Managed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Kan lage PR på IaC-kode</td>
+<td>Ja</td>
+<td>Ja</td>
+<td>Ja</td>
+</tr>
+<tr class="even">
+<td>Tilgang på IaC-kode</td>
+<td>Kun yaml-“støttefiler” (team-info, iam, buckets-shared, projects) og filer de endrer (dapla-filer)</td>
+<td>Ja</td>
+<td>Ja</td>
+</tr>
+<tr class="odd">
+<td>Kan ta i bruk funksjonalitet utover dapla-features</td>
+<td>Nei</td>
+<td>Ja</td>
+<td>Ja</td>
+</tr>
+<tr class="even">
+<td>IaC-filstruktur (under infra-mappen)</td>
+<td>Predefinert</td>
+<td>Predefinert + egne filer</td>
+<td>Fritt</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><a href="https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3667787890/Team+Iac-tilgang+i+Kuben">Les mer her</a>.</p>
+</div>
 </div>
 </div>
 </section>
@@ -614,11 +704,11 @@ Figur&nbsp;1: Diagram over hvilke miljøer, Google-prosjekter og bøtter et Dapl
 </section>
 <section id="navnestruktur" class="level2">
 <h2 class="anchored" data-anchor-id="navnestruktur">Navnestruktur</h2>
-<p>Når du oppretter et Dapla-team så må du velge et navn på teamet. Teamet velger selv et navn som reflekterer <em>domene</em> og <em>subdomene</em>. For eksempel kan et team som jobber med statistikkproduksjonen skattestatistikk for næringslivet velge å kalle teamet <strong>Skatt næring</strong>. Hvis vi bruker dette teamet som et eksempel, så vil det få opprettet et teknisk navn som følger denne strukturen: <strong>skatt-naering</strong>. Dette navnet er det som brukes i tekniske sammenhenger, for eksempel som navn på GitHub-teamet, IaC-repoet, Google-prosjektene og bøttene. <a href="#tbl-navn-struktur" class="quarto-xref">Tabell&nbsp;1</a> viser en tabell over hvordan ressursene for dette teamet vil se ut:</p>
+<p>Når du oppretter et Dapla-team så må du velge et navn på teamet. Teamet velger selv et navn som reflekterer <em>domene</em> og <em>subdomene</em>. For eksempel kan et team som jobber med statistikkproduksjonen skattestatistikk for næringslivet velge å kalle teamet <strong>Skatt næring</strong>. Hvis vi bruker dette teamet som et eksempel, så vil det få opprettet et teknisk navn som følger denne strukturen: <strong>skatt-naering</strong>. Dette navnet er det som brukes i tekniske sammenhenger, for eksempel som navn på GitHub-teamet, IaC-repoet, Google-prosjektene og bøttene. <a href="#tbl-navn-struktur" class="quarto-xref">Tabell&nbsp;2</a> viser en tabell over hvordan ressursene for dette teamet vil se ut:</p>
 <div id="tbl-navn-struktur" class="quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-navn-struktur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;1: Navnestruktur for teamet <strong>Skatt næring</strong> sine ressurser
+Tabell&nbsp;2: Navnestruktur for teamet <strong>Skatt næring</strong> sine ressurser
 </figcaption>
 <div aria-describedby="tbl-navn-struktur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -670,11 +760,11 @@ Tabell&nbsp;1: Navnestruktur for teamet <strong>Skatt næring</strong> sine ress
 </div>
 </figure>
 </div>
-<p>I <a href="#tbl-navn-struktur" class="quarto-xref">Tabell&nbsp;1</a> ser vi at teamet får opprettet 3 AD-grupper og 4 Google-prosjekter. AD-gruppene brukes til å gi tilgang til ressursene på Dapla, mens Google-prosjektene brukes til å organisere ressursene. I tillegg er det en fast navnestruktur for bøttene i hvert prosjekt, slikt som vist i <a href="#tbl-navn-buckets" class="quarto-xref">Tabell&nbsp;2</a>.</p>
+<p>I <a href="#tbl-navn-struktur" class="quarto-xref">Tabell&nbsp;2</a> ser vi at teamet får opprettet 3 AD-grupper og 4 Google-prosjekter. AD-gruppene brukes til å gi tilgang til ressursene på Dapla, mens Google-prosjektene brukes til å organisere ressursene. I tillegg er det en fast navnestruktur for bøttene i hvert prosjekt, slikt som vist i <a href="#tbl-navn-buckets" class="quarto-xref">Tabell&nbsp;3</a>.</p>
 <div id="tbl-navn-buckets" class="quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-navn-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;2: Navnestruktur for teamet <strong>Skatt næring</strong> sine bøtter
+Tabell&nbsp;3: Navnestruktur for teamet <strong>Skatt næring</strong> sine bøtter
 </figcaption>
 <div aria-describedby="tbl-navn-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
