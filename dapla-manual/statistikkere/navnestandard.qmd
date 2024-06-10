@@ -2,16 +2,29 @@
 title: Navnestandard
 ---
 
-Data i de permanente [datatilstandene](./datatilstander.html) inndata, klargjorte data. statistikkdata og utdata skal lagres i Google Cloud Storage (GCS) bøtter og følge en definert navnestandard. Standarden gjelder for både statistikkprodukter^[fkdjfkdjs] og dataprodukter^[dfkjsdkfjklds]. Navnestandarden beskrevet i dette kapitlet er derfor gjeldende for alle data som lagres i bøtter i **standardprosjektet**, som f.eks. **produktbøtta** og **delt-bøttene**. 
+Data i de permanente [datatilstandene](./datatilstander.html) inndata, klargjorte data. statistikkdata og utdata skal lagres i Google Cloud Storage (GCS) bøtter og følge en definert navnestandard. Standarden gjelder for både statistikkprodukter og dataprodukter (se forklaringsboks under). Navnestandarden beskrevet i dette kapitlet er derfor gjeldende for alle data som lagres i bøtter i **standardprosjektet**, som f.eks. **produktbøtta** og **delt-bøttene**. 
 
-::: {.callout-note}
-## Gjelder navnstandarden for kildedata?
+Datatilstanden *kildedata* omfattes ikke av navnestandarden. Grunnen er at kildedata mottas av SSB i mange former/strukturer og de deles sjelden med andre team. De unike egenskapene til kildedata er også grunnen til at de ikke har samme krav til dokumentasjon i metadatasystemene heller. 
 
-Navnestandarden er obligatorisk for datatilstandene *inndata*, *klargjorte data*, *statistikkdata* og *utdata*. Datatilstanden *kildedata* omfattes ikke av navnestandarden. Grunnen er at kildedata mottas av SSB i mange former/strukturer og de deles sjelden med andre team. De unike egenskapene til kildedata er også grunnen til at de ikke har samme krav til dokumentasjon i metadatasystemene heller.  
+
+::: {.callout-note collapse="true"}
+## Hva er statistikk- og dataprodukter?
+
+**Statistikkprodukter** er alle produkter som er definert i [Statistikkregisteret](https://wiki.ssb.no/display/SSBNO/4.3.1+Statistikkregisteret)^[Les mer om hvordan man henter ut informasjon fra API-et til Statistikkregisteret [i denne blogg-artikkelen.](https://ubiquitous-doodle-n15e62e.pages.github.io/posts/Statistikkregisteret/)]. Registeret inneholder alle tidligere og nåværende statstikkprodukter i SSB. Før en statistikk kan publiseres på [ssb.no](www.ssb.no) må den være registrert i Statistikkregisteret med informasjon om navn, emneområde, eierseksjon og publiseringstidspunkt. I tillegg får statistikkene tildelt et unikt kortnavn. Eksempler på kortnavn for statistikker er `kpi`, `reise` og `ftot`. Kortnavnet er en viktig del av navnestandarden for datalagring som beskrives i dette kapitlet.
+
+**Dataprodukter** er bearbeidede data som skal benyttes til andre formål enn direkte publisering på [ssb.no](www.ssb.no). Dataprodukter vil ofte være i disse kategoriene:
+
+- klargjøring av data til forskning og utlån
+- bearbeiding av data som skal inngå som en del av andre statistikker
+- data som inngår i populasjonsregistre
+
+Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datastilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** iht navnestandarden.
+
+
+
 :::
 
-
-## Mapper
+## Mappestruktur
 
 Navnestandarden for lagring av data innfører en obligatorisk del som alle statistikk- og dataprodukter må følge, samt en valgfri del hvor teamet selv kan bestemme sin mappestruktur.
 
@@ -19,7 +32,7 @@ Navnestandarden for lagring av data innfører en obligatorisk del som alle stati
 
 Ifølge navnestandarden skal følgende mappesnivåer alltid eksistere først i en lagringsbøtte:
 
-1. Statistikkens kortnavn eller dataproduktets navn
+1. Statistikkproduktets eller dataproduktets kortnavn
 2. Datatilstand
 
 Anta at det er team som heter ***dapla-example** som har produserer statistikkproduktene **ledstill** og **sykefra**. I tillegg produserer de et dataprodukt som heter **ameld**. Deres mappestruktur i produktbøtta vil da se slik ut:
@@ -78,7 +91,7 @@ Når man oppretter en mappe for oppdrag så er det viktig å kunne knytte dataen
 :::
 
 
-## Filer
+## Filnavn
 
 Filnavn skal en fast struktur som inneholder en kort beskrivelse, periode, versjon og filtype, slik som vist i @fig-filename-breakdown. 
 
@@ -90,9 +103,9 @@ Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, da
 Det er også verdt å merke seg at at mellomrom og særnorske bokstaver som **æ**, **ø** og **å** ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:   
 
 
-- **a**-**z** og **A**-**z**^[Det er anbefalt at **æ**, **ø** og **å** erstattes med **ae**, **oe** og **aa**, f.eks. **naering**, **oekonomi** eller **levekaar**.].
+- **a**-**z** og **A**-**Z**^[Det er anbefalt at **æ**, **ø** og **å** erstattes med **ae**, **oe** og **aa**, f.eks. **naering**, **oekonomi** eller **levekaar**.].
 - **0**-**9**
-- Bruk bindestrek **-**, eller understrek _, og ikke mellomrom.
+- Bruk bindestrek **-**, eller understrek **\_**, og ikke mellomrom.
 
 @tbl-filename viser en mer inngående beskrivelse av hva som inngår i de ulike delene av et filnavn. 
 
@@ -147,7 +160,7 @@ Inneholder data for kvartalene 1, 2,3 og 4 i 2018.
 
 ## Eksempel
 
-Anta at det er team som heter **dapla-example** med statistikkproduktene ledstill og sykefra, og de har et dataprodukt med navn ameld. Teamet har følgende mappestruktur i produktbøtta:
+Anta at det er team som heter **dapla-example** med statistikkproduktene **ledstill** og **sykefra**, og de har et dataprodukt med kortnavnet **ameld**. Teamet har følgende mappestruktur i produktbøtta:
 
 ```{.yaml filename="Produktbøtta"}
 ssb-dapla-example-data-produkt-prod/
@@ -193,7 +206,7 @@ ssb-dapla-example-data-produkt-prod/
 
 ## Partisjonerte data
 
-Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **varehandel_p2018Q1_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de hatt en slik struktur:
+Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **varehandel_p2018Q1_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de iht navnestandarden opprette denne strukturen:
 
 ```{.yaml filename="Produktbøtta"}
 ssb-dapla-example-data-produkt-prod/  
