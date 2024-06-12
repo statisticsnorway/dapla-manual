@@ -527,7 +527,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#mappestruktur" id="toc-mappestruktur" class="nav-link active" data-scroll-target="#mappestruktur">Mappestruktur</a>
   <ul class="collapse">
   <li><a href="#obligatoriske-mapper" id="toc-obligatoriske-mapper" class="nav-link" data-scroll-target="#obligatoriske-mapper">Obligatoriske mapper</a></li>
-  <li><a href="#valgfri-mapper" id="toc-valgfri-mapper" class="nav-link" data-scroll-target="#valgfri-mapper">Valgfri mapper</a></li>
+  <li><a href="#valgfrie-mapper" id="toc-valgfrie-mapper" class="nav-link" data-scroll-target="#valgfrie-mapper">Valgfrie mapper</a></li>
   </ul></li>
   <li><a href="#filnavn" id="toc-filnavn" class="nav-link" data-scroll-target="#filnavn">Filnavn</a>
   <ul class="collapse">
@@ -618,15 +618,15 @@ Hva er statistikk- og dataprodukter?
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="at">   └── utdata/                    </span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="valgfri-mapper" class="level3">
-<h3 class="anchored" data-anchor-id="valgfri-mapper">Valgfri mapper</h3>
+<section id="valgfrie-mapper" class="level3">
+<h3 class="anchored" data-anchor-id="valgfrie-mapper">Valgfrie mapper</h3>
 <p>Selv om de to første mappenivåene er bestemt så kan teamene også opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:</p>
 <ul>
 <li>Teamet ønsker å organisere dataene i undermapper for hver datatilstand. Dette kan kun gjøres under hver mappe for datastiltand.</li>
-<li>Teamet trenger å midlertidig lagre temporære data. Dette kan gjøre i en temp-mappe på første nivå etter bøttenavn.</li>
+<li>Teamet trenger å midlertidig lagre temporære data. Det er anbefalt å lage en temp-mappe på første nivå etter bøttenavn, men det er også tillatt å opprette temp-mapper andre steder i mappe-hierarkiet, f.eks. <code>../inndata/temp/</code> eller <code>../klargjorte-data/temp/</code>.</li>
 <li>Teamet utfører oppdrag og ønsker et eget sted å lagre data knyttet til dette. Det kan kun gjøres i en oppdrag-mappe på første nivå etter bøttenavn.</li>
 </ul>
-<p>Under er et nytt eksempel i produktbøtta for team <strong>dapla-example</strong>, men nå har de kun statistikkproduktet <strong>ledstill</strong>, en <strong>temp</strong>-mappe og en <strong>oppdrag</strong>-mappe. I tillegg så ønsker de å skille mellom data som produsert på Dapla og data som er migrert fra tidligere plattform. De gjør det ved å opprette de egendefinerte mappene <strong>on-prem</strong> og <strong>dapla</strong> for hver datatilstand.</p>
+<p>Under er et nytt eksempel i produktbøtta for team <strong>dapla-example</strong>, men nå har de kun statistikkproduktet <strong>ledstill</strong>, en <strong>temp</strong>-mappe og en <strong>oppdrag</strong>-mappe. I tillegg så ønsker de å skille mellom data som er produsert på Dapla og data som er migrert fra tidligere plattform. De gjør det ved å opprette de egendefinerte mappene <strong>on-prem</strong> og <strong>dapla</strong> for hver datatilstand.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Produktbøtta</strong></pre>
@@ -658,7 +658,7 @@ Mappe for oppdrag
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Når man oppretter en mappe for oppdrag så er det viktig å kunne knytte dataene til et Websak-saksnummer. Det er derfor anbefalt at en undermappe med saksnummeret eller ha det med i filnavnet.</p>
+<p>Når man oppretter en mappe for oppdrag så er det viktig å kunne knytte dataene til et Websak-saksnummer. Det er derfor anbefalt at det opprettes en undermappe med saksnummeret eller at saksnummeret er med i filnavnet.</p>
 </div>
 </div>
 </section>
@@ -676,8 +676,8 @@ Figur&nbsp;1: De ulike delene av et standardisert filnavn
 </figcaption>
 </figure>
 </div>
-<p>Eksempelet i <a href="#fig-filename-breakdown" class="quarto-xref">Figur&nbsp;1</a> har <strong>varehandel</strong> som kort beskrivelse, dataene er gyldige for <strong>2018Q1</strong>, versjon er <strong>1</strong> og filtypen er <strong>parquet</strong>. I tillegg ser vi at periodeangivelse alltid skal prefixes med <strong>p</strong> og versjon med <strong>v</strong>.</p>
-<p>Det er også verdt å merke seg at at mellomrom og særnorske bokstaver som <strong>æ</strong>, <strong>ø</strong> og <strong>å</strong> ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:</p>
+<p>Eksempelet i <a href="#fig-filename-breakdown" class="quarto-xref">Figur&nbsp;1</a> har <strong>varehandel</strong> som kort beskrivelse, dataene er gyldige for <strong>2018Q1</strong>, versjon er <strong>1</strong> og filtypen er <strong>parquet</strong>. I tillegg ser vi at periodeangivelse alltid skal prefixes med <strong>p</strong> og versjon med <strong>v</strong>, Elementene i filnavnet skal skilles med **_** (understrek).</p>
+<p>Det er også verdt å merke seg at mellomrom og særnorske bokstaver som <strong>æ</strong>, <strong>ø</strong> og <strong>å</strong> ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:</p>
 <ul>
 <li><strong>a</strong>-<strong>z</strong> og <strong>A</strong>-<strong>Z</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
 <li><strong>0</strong>-<strong>9</strong></li>
@@ -700,7 +700,7 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 <tbody>
 <tr class="odd">
 <td>Kort beskrivelse</td>
-<td>Kort tekst som forklarer datasettets innhold, f.eks. **varehandel**, **personinntekt**, **grensehandel_imputert** eller **framskrevne-befolkningsendringer**</td>
+<td>Kort tekst som forklarer datasettets innhold, f.eks. “varehandel”, “personinntekt”, “grensehandel_imputert” eller “framskrevne-befolkningsendringer”</td>
 </tr>
 <tr class="even">
 <td>Periode - inneholder data f.o.m. dato</td>
@@ -712,11 +712,11 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 </tr>
 <tr class="even">
 <td>Versjon</td>
-<td>Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med **_v**, eksempel **v1**, **v2** eller **v3**.&nbsp;Se også eget kapittel om regler for versjonering av datasett.</td>
+<td>Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med “_v”, eksempel “v1”, “v2” eller “v3”.&nbsp;Se også eget kapittel om regler for versjonering av datasett.</td>
 </tr>
 <tr class="odd">
 <td>Filtype</td>
-<td>Filendelse som sier noen om filtypen, f.eks. **.json**, **.csv**, **.xml** eller **.parquet**.</td>
+<td>Filendelse som sier noen om filtypen, f.eks. “.json”, “.csv”, “.xml” eller “.parquet”.</td>
 </tr>
 </tbody>
 </table>
@@ -802,7 +802,7 @@ Inneholder data for kvartalene 1, 2,3 og 4 i 2018.</p>
 </section>
 <section id="partisjonerte-data" class="level2">
 <h2 class="anchored" data-anchor-id="partisjonerte-data">Partisjonerte data</h2>
-<p>Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at <strong>filtype</strong> ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team <strong>dapla-example</strong> partisjonerer et datasett i datatilstand inndata som heter <strong>varehandel_p2018Q1_v1</strong>. Anta også at de partisjonerer dataene med hensyn på kolonnen <strong>aar</strong>. Da vil de iht navnestandarden opprette denne strukturen:</p>
+<p>Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at <strong>filtype</strong> ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team <strong>dapla-example</strong> partisjonerer et datasett i datatilstand inndata som heter <strong>skjema_p2018_p2020_v1</strong>. Anta også at de partisjonerer dataene med hensyn på kolonnen <strong>aar</strong>. Da vil de iht navnestandarden opprette denne strukturen:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Produktbøtta</strong></pre>
@@ -810,12 +810,12 @@ Inneholder data for kvartalene 1, 2,3 og 4 i 2018.</p>
 <div class="sourceCode" id="cb4" data-filename="Produktbøtta"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">ssb-dapla-example-data-produkt-prod/  </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">└─ ledstill/  </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">   ├── inndata/</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">        └── varehandel_p2018Q1_v1</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">            └── aar=1980</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">        └── skjema_p2018_p2020_v1</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">            └── aar=2018</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">                └── data.parquet</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">            └── aar=1981</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">            └── aar=2019</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">                └── data.parquet</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">            └── aar=1982</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">            └── aar=2020</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">                └── data.parquet         </span></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">   ├── klargjorte-data/</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">   ├── statistikk/</span></span>
