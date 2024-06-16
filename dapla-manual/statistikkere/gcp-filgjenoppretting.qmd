@@ -1,0 +1,229 @@
+---
+toc-depth: 6
+---
+
+# GCS fil gjenoppretting
+
+På GCS (Google Cloud Storage) bevarer Object Versioning slettede objekter som **versioned** og **noncurrent objects**. Disse forblir tilgjengelige i bøtten din til de eksplisitt fjernes.
+
+## Live version Vs noncurrent versions
+
+**Live version** Er den siste versjonen av filen som er i bøtte.
+
+@fig-live-versions viser liste over live-versjoner av filer. 
+
+![Bilde som viser liste over live-versjoner av filer.](../images/gcs-live-objects.png){ fig-alt="Bilde som viser liste over live-versjoner av filer" #fig-live-versions}
+
+**Noncurrent version** opprettes når en fil er slettet eller den er overskrevet. Etter sletting, filen vises som ikke-gjeldende fil.
+
+Når brukeren overskriver en fil i bøtte, blir den eksisterende filen inoncurrent versjon og den siste filen vil være den aktive versjonen.
+
+@fig-noncurrent-versions shows list of noncurrent versions of files. 
+
+![Image that shows list of noncurrent versions of files.](../images/gcs-noncurrent-objects.png){ fig-alt="viser liste over noncurrent versjoner av filer." #fig-noncurrent-versions}
+
+
+**Generation number** Identifiserer versjonen av et objekt, og eksisterer for hvert objekt, uavhengig av om en bøtte bruker objekt versjonering.
+
+En objektversjons generasjonsnummer endres aldri. Et nytt objekt med samme navn kan erstatte et eksisterende objekt, men det nye objektet har alltid en nye generasjon tilordnet seg.
+
+Generationsnummer brukes ved **listing**, **accessing**, **gjenoppretting** og **sletting** **noncurrent objektversjoner**: Noncurrent objektversjoner er spesifikt relevante i buckets som bruker eller tidligere brukt Object Versioning.
+
+[dapla-toolbelt](https://github.com/statisticsnorway/dapla-toolbelt) støtter opplisting av live og noncurrent fil(er) via Jupyter Notebooks
+
+Les mer om Objekt Versjonering [her](https://cloud.google.com/storage/docs/object-versioning#example).
+
+## Liste filer med versjonshistorikk
+
+### List alle filene i en mappe i en bøtte
+
+Kode snippet returnerer en liste over alle filene fra mappen **restore** fra en bøtte **ssb-dapla-felles-data-produkt-prod**. Generasjonsnummer vises i listen for hver fil.
+
+```{.python filename="notebook"}
+import dapla as dapla
+from dapla import FileClient
+
+# Set bucket name and folder name(if any)
+bucket = "ssb-dapla-felles-data-produkt-prod"
+folder = "restore"
+
+FileClient.get_versions(bucket, folder)
+```
+**Output**
+```
+[<Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930>]
+```
+### List opp alle versjonene av en fil fra en mappe
+
+Kode returnerer en liste over alle versjonene av en fil.
+
+```{.python filename="notebook"}
+import dapla as dapla
+from dapla import FileClient
+
+# Set bucket name and folder name(if any)
+bucket = "ssb-dapla-felles-data-produkt-prod"
+file_path = "restore/data1.parquet"
+
+FileClient.get_versions(bucket, file_path)
+```
+**Output**
+````
+[<Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499>]
+````
+
+## Fil gjenoppretting
+
+Å gjenopprette en noncurrent objektversjon betyr å opprette en kopi av den. Når du gjør det, blir kopien en live versjon, og gjenoppretter versjonen. Hvis det allerede er en live-versjon og bøtten har Object Versioning aktivert, gjenoppretting av den noncurrent versjonen føre til at den eksisterende live-versjonen blir noncurrent.
+
+For å gjenopprette en fil, må brukeren sjekke hvilke noncurrent versjoner som eksisterer med siste oppdateringsdato osv.
+
+```{.python filename="notebook"}
+files = FileClient.get_versions("ssb-dapla-felles-data-produkt-prod", "restore/data1.parquet")
+
+for file in files:
+    print("Name          : ",file.name)
+    print("Generation Id : ", file.generation)
+    print("Updated on    : ", file.updated)
+    print("Deleted on    : ", file.time_deleted)
+    print("------------------------------------------")
+```
+**Output**
+````
+Name          :  restore/data1.parquet                
+Generation Id :  1717762669778835
+Updated on    :  2024-06-07 12:17:49.781000+00:00
+Deleted on    :  2024-06-07 12:56:57.586000+00:00  
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718015249969499
+Updated on    :  2024-06-10 10:27:29.972000+00:00
+Deleted on    :  2024-06-10 10:30:26.821000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet 
+Generation Id :  1718402945003656
+Updated on    :  2024-06-14 22:09:05.005000+00:00
+Deleted on    :  None ----> this the live version
+------------------------------------------
+````
+Utdata viser at det er 3 versjoner for fil "data1.parquet". 
+**Live-versjonen** har felt **file.time_deleted** er **None**
+
+Den siste file er live-versjonen, og de to andre er noncurrent. 
+
+Brukeren kan gjenopprette hvilken som helst av disse noncurrent som liveversjon.
+
+### Hvordan gjenopprette en fil
+
+**Syntax**
+
+```{.python filename="notebook"}
+import dapla as dapla
+from dapla import FileClient
+
+FileClient.restore_version(<bucket_name>, <source_path>, <destination_path>, <source_generation_number>, <destination_genration_number>)
+ ```
+````
+**bucket_name** : Bøtte hvor filen som skal gjenopprettes eksisterer.
+**source_path** : Path til filen som skal gjenopprettes
+**destination_path** : Path til destinasjonen der filen skal gjenopprette. Du kan gi samme navn til filen eller det er mulig å gi et annet navn til filen
+**source_generation_number** : Generasjon nummeret til den noncurrent versjonen som skal gjenopprettes
+**destination_genration_number** : Hvis det allerede er en live-versjon og du ønsker å erstatte den med den noncurrent versjonen, nevne generasjonsnummeret til live-versjonen her. For en destinasjonsfil som ennå ikke eksisterer, sett destination_genration_number til 0. Hvis destinasjonsobjektet allerede finnes i bøtten din, sett destination_generation_number ved hjelp av generasjonsnummeret.
+````
+
+### Example 
+
+**Restoring a deleted file**
+
+When you have to restore a file which has been deleted in past, that implies the file will appear in the list of noncurrent versions. 
+
+Example: 
+```{.python filename="notebook"}
+files = FileClient.get_versions("ssb-dapla-felles-data-produkt-prod", "restore/data1.parquet")
+
+for file in files:
+    print("Name          : ",file.name)
+    print("Generation Id : ", file.generation)
+    print("Updated on    : ", file.updated)
+    print("Deleted on    : ", file.time_deleted)
+    print("------------------------------------------")
+```
+```
+Name          :  restore/data1.parquet
+Generation Id :  1718015249969499
+Updated on    :  2024-06-10 10:27:29.972000+00:00
+Deleted on    :  2024-06-10 10:30:26.821000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718402945003656
+Updated on    :  2024-06-14 22:09:05.005000+00:00
+Deleted on    :  2024-06-15 06:57:16.053000+00:00
+```
+Dette viser at filen data1.parquet ikke har noen live-versjoner. Det er to ikke-aktuelle versjoner. Du kan gjenopprette hvilken som helst av disse.
+
+```{.python filename="notebook"}
+import dapla as dapla
+from dapla import FileClient
+
+FileClient.restore_version("ssb-dapla-felles-data-produkt-prod","restore/data1.parquet","restore/data1.parquet", 1718402945003656, 0)
+ ```
+Etter at du har kjørt restore_version(), sjekk versjonslisten for data1.parquet via
+
+```
+ Name          :  restore/data1.parquet
+Generation Id :  1718015249969499
+Updated on    :  2024-06-10 10:27:29.972000+00:00
+Deleted on    :  2024-06-10 10:30:26.821000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718402945003656 // Restore this noncurrent version
+Updated on    :  2024-06-14 22:09:05.005000+00:00
+Deleted on    :  2024-06-15 06:57:16.053000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718435761616782
+Updated on    :  2024-06-15 07:16:01.618000+00:00
+Deleted on    :  None   ----> File restored
+------------------------------------------
+```
+ Her kan du se at det nå er én live versjon tilgjengelig.
+
+**Gjenoppretter noncurrent versjon, når det allerede er en live-versjon tilgjengelig**
+
+Ovenfor utgangsvisninger er det 2 noncurrent versjoner og en live-versjon tilgjengelig for filen "data1.parquet". Slik gjenoppretter du ikke-gjeldende versjoner:
+
+```{.python filename="notebook"}
+import dapla as dapla
+from dapla import FileClient
+
+FileClient.restore_version("ssb-dapla-felles-data-produkt-prod","restore/data1.parquet","restore/data1.parquet", 1718402945003656, 1718435761616782)
+ ```
+
+ Now the pre-existing live version will become noncurrent. 
+
+ ````
+Name          :  restore/data1.parquet
+Generation Id :  1718015249969499
+Updated on    :  2024-06-10 10:27:29.972000+00:00
+Deleted on    :  2024-06-10 10:30:26.821000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718402945003656
+Updated on    :  2024-06-14 22:09:05.005000+00:00
+Deleted on    :  2024-06-15 06:57:16.053000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718435761616782
+Updated on    :  2024-06-15 07:16:01.618000+00:00
+Deleted on    :  2024-06-15 07:25:04.928000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1718436304922143
+Updated on    :  2024-06-15 07:25:04.928000+00:00
+Deleted on    :  None
+------------------------------------------
+````
