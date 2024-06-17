@@ -4,7 +4,17 @@ toc-depth: 6
 
 # GCS fil gjenoppretting
 
-På GCS (Google Cloud Storage) bevarer Object Versioning slettede objekter som **versioned** og **noncurrent objects**. Disse forblir tilgjengelige i bøtten din til de eksplisitt fjernes.
+
+Google Cloud Storage tilbyr objekt versjonering på bøttenivå.
+Når den er aktivert, beholdes en historikk med modifikasjoner (overskriv/slett) av objekter for alle objekter i bøtten.
+
+Du kan liste arkiverte versjoner av et objekt, gjenopprette et objekt til en gamle tilstand etter behov. Alle objekter har generasjonsnummer knyttet til seg for å hjelpe deg med å identifisere objektene og utføre sikre lread-modify-delete oppdateringer på dem
+
+Generasjonsnummeret er numerisk og monotont økende, noe som lar deg raskt evaluere versjonsrekkefølgen. 
+
+Når et objekt overskrives eller slettes i en bøtte som har versjonskontroll aktivert, lagres en kopi av objektet automatisk med generasjonsnummer som identifiserer det.
+
+Hvis objektversjonsstyring ikke er aktivert på en bøtte og du laster opp til et eksisterende objekt, overskrives gjeldende versjon i stedet for å opprette en ny versjon.
 
 ## Live version Vs noncurrent versions
 
@@ -107,7 +117,7 @@ Deleted on    :  2024-06-10 10:30:26.821000+00:00
 Name          :  restore/data1.parquet 
 Generation Id :  1718402945003656
 Updated on    :  2024-06-14 22:09:05.005000+00:00
-Deleted on    :  None ----> this the live version
+Deleted on    :  None ----> (Live versjon))
 ------------------------------------------
 ````
 Utdata viser at det er 3 versjoner for fil "data1.parquet". 
@@ -125,15 +135,30 @@ Brukeren kan gjenopprette hvilken som helst av disse noncurrent som liveversjon.
 import dapla as dapla
 from dapla import FileClient
 
+# bucket_name                  : Bøtte hvor filen som skal gjenopprettes 
+#                                eksisterer.
+# source_path                  : Path til filen som skal gjenopprettes
+# destination_path             : Path til destinasjonen der filen skal 
+#                                gjenopprette. Du kan gi samme navn til    
+#                                filen eller det er mulig å gi et annet 
+#                                navn til filen.
+# source_generation_number     : Generasjon nummeret til den noncurrent 
+#                                versjonen som skal gjenopprettes
+# destination_genration_number : Hvis det allerede er en live-versjon og 
+#                                du ønsker å erstatte den med den 
+#                                noncurrent versjonen, nevne 
+#                                generasjonsnummeret til live-versjonen 
+#                                her. For en destinasjonsfil som ennå ikke 
+#                                eksisterer, sett 
+#                                destination_genration_number til 0. Hvis 
+#                                destinasjonsobjektet allerede finnes i 
+#                                bøtten din, sett 
+#                                destination_generation_number ved hjelp 
+#                                av generasjonsnummeret.
+
 FileClient.restore_version(<bucket_name>, <source_path>, <destination_path>, <source_generation_number>, <destination_genration_number>)
  ```
-````
-**bucket_name** : Bøtte hvor filen som skal gjenopprettes eksisterer.
-**source_path** : Path til filen som skal gjenopprettes
-**destination_path** : Path til destinasjonen der filen skal gjenopprette. Du kan gi samme navn til filen eller det er mulig å gi et annet navn til filen
-**source_generation_number** : Generasjon nummeret til den noncurrent versjonen som skal gjenopprettes
-**destination_genration_number** : Hvis det allerede er en live-versjon og du ønsker å erstatte den med den noncurrent versjonen, nevne generasjonsnummeret til live-versjonen her. For en destinasjonsfil som ennå ikke eksisterer, sett destination_genration_number til 0. Hvis destinasjonsobjektet allerede finnes i bøtten din, sett destination_generation_number ved hjelp av generasjonsnummeret.
-````
+
 
 ### Example 
 
