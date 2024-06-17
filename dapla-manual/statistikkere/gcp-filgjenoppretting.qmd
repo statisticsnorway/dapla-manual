@@ -8,7 +8,7 @@ toc-depth: 6
 Google Cloud Storage tilbyr objekt versjonering på bøttenivå.
 Når den er aktivert, beholdes en historikk med modifikasjoner (overskriv/slett) av objekter for alle objekter i bøtten.
 
-Du kan liste arkiverte versjoner av et objekt, gjenopprette et objekt til en gamle tilstand etter behov. Alle objekter har generasjonsnummer knyttet til seg for å hjelpe deg med å identifisere objektene og utføre sikre lread-modify-delete oppdateringer på dem
+Du kan liste arkiverte versjoner av et objekt, gjenopprette et objekt til en gamle tilstand etter behov. Alle objekter har generasjonsnummer knyttet til seg for å hjelpe deg med å identifisere objektene og utføre sikre read-modify-delete oppdateringer på dem
 
 Generasjonsnummeret er numerisk og monotont økende, noe som lar deg raskt evaluere versjonsrekkefølgen. 
 
@@ -44,14 +44,13 @@ Generationsnummer brukes ved **listing**, **accessing**, **gjenoppretting** og *
 
 ![Bilde som viser generation nummer.](../images/gcs-live-and-noncurrent.png){ fig-alt="viser generation nummer av filer." #fig-noncurrent-live-versions}
 
-
 [dapla-toolbelt](https://github.com/statisticsnorway/dapla-toolbelt) støtter opplisting av live og noncurrent fil(er) via Jupyter Notebooks
 
 Les mer om Objekt Versjonering [her](https://cloud.google.com/storage/docs/object-versioning#example).
 
 ## Liste filer med versjonshistorikk
 
-### List alle filene i en mappe i en bøtte
+### List alle filene i en mappe
 
 Kode snippet returnerer en liste over alle filene fra mappen **restore** fra en bøtte **ssb-dapla-felles-data-produkt-prod**. Generasjonsnummer vises i listen for hver fil.
 
@@ -168,9 +167,9 @@ FileClient.restore_version(<bucket_name>, <source_path>, <destination_path>, <so
 
 ### Example 
 
-**Restoring a deleted file**
+**Gjenoppretter en slettet fil**
 
-When you have to restore a file which has been deleted in past, that implies the file will appear in the list of noncurrent versions. 
+Når du må gjenopprette en fil som har blitt slettet tidligere, betyr det at filen vil vises i listen over noncurrent versjoner. 
 
 Example: 
 ```{.python filename="notebook"}
@@ -194,7 +193,7 @@ Generation Id :  1718402945003656
 Updated on    :  2024-06-14 22:09:05.005000+00:00
 Deleted on    :  2024-06-15 06:57:16.053000+00:00
 ```
-Dette viser at filen data1.parquet ikke har noen live-versjoner. Det er to ikke-aktuelle versjoner. Du kan gjenopprette hvilken som helst av disse.
+Dette viser at filen data1.parquet ikke har noen live-versjoner. Det er to noncurrent versjoner. Du kan gjenopprette hvilken som helst av disse.
 
 ```{.python filename="notebook"}
 import dapla as dapla
@@ -225,7 +224,7 @@ Deleted on    :  None   ----> File restored
 
 **Gjenoppretter noncurrent versjon, når det allerede er en live-versjon tilgjengelig**
 
-Ovenfor utgangsvisninger er det 2 noncurrent versjoner og en live-versjon tilgjengelig for filen "data1.parquet". Slik gjenoppretter du ikke-gjeldende versjoner:
+Ovenfor utgangsvisninger er det 2 noncurrent versjoner og en live-versjon tilgjengelig for filen "data1.parquet". Slik gjenoppretter du noncurrent versjoner:
 
 ```{.python filename="notebook"}
 import dapla as dapla
