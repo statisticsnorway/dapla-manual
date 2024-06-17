@@ -26,11 +26,11 @@ Hvis objektversjonsstyring ikke er aktivert på en bøtte og du laster opp til e
 
 **Noncurrent version** opprettes når en fil er slettet eller den er overskrevet. Etter sletting, filen vises som ikke-gjeldende fil.
 
-Når brukeren overskriver en fil i bøtte, blir den eksisterende filen inoncurrent versjon og den siste filen vil være den aktive versjonen.
+Når brukeren overskriver en fil i bøtte, blir den eksisterende filen noncurrent versjon og den siste filen skal være den aktive versjonen.
 
-@fig-noncurrent-versions shows list of noncurrent versions of files. 
+@fig-noncurrent-versions viser liste over noncurrent filer. 
 
-![Image that shows list of noncurrent versions of files.](../images/gcs-noncurrent-objects.png){ fig-alt="viser liste over noncurrent versjoner av filer." #fig-noncurrent-versions}
+![Bilde som viser liste over noncurrent filer.](../images/gcs-noncurrent-objects.png){ fig-alt="viser liste over noncurrent versjoner av filer." #fig-noncurrent-versions}
 
 
 **Generation number** Identifiserer versjonen av et objekt, og eksisterer for hvert objekt, uavhengig av om en bøtte bruker objekt versjonering.
@@ -38,6 +38,12 @@ Når brukeren overskriver en fil i bøtte, blir den eksisterende filen inoncurre
 En objektversjons generasjonsnummer endres aldri. Et nytt objekt med samme navn kan erstatte et eksisterende objekt, men det nye objektet har alltid en nye generasjon tilordnet seg.
 
 Generationsnummer brukes ved **listing**, **accessing**, **gjenoppretting** og **sletting** **noncurrent objektversjoner**: Noncurrent objektversjoner er spesifikt relevante i buckets som bruker eller tidligere brukt Object Versioning.
+
+@fig-noncurrent-live-versions viser noncurrent og live versjon med generation nummeret. 
+
+
+![Bilde som viser generation nummer.](../images/gcs-live-and-noncurrent.png){ fig-alt="viser generation nummer av filer." #fig-noncurrent-live-versions}
+
 
 [dapla-toolbelt](https://github.com/statisticsnorway/dapla-toolbelt) støtter opplisting av live og noncurrent fil(er) via Jupyter Notebooks
 
@@ -150,8 +156,8 @@ from dapla import FileClient
 #                                generasjonsnummeret til live-versjonen 
 #                                her. For en destinasjonsfil som ennå ikke 
 #                                eksisterer, sett 
-#                                destination_genration_number til 0. Hvis 
-#                                destinasjonsobjektet allerede finnes i 
+#                                destination_generation_number til 0. Hvis 
+#                                destinasjon objektet allerede finnes i 
 #                                bøtten din, sett 
 #                                destination_generation_number ved hjelp 
 #                                av generasjonsnummeret.
