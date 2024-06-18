@@ -2,7 +2,7 @@
 title: Navnestandard
 ---
 
-Data i de permanente [datatilstandene](./datatilstander.html) inndata, klargjorte data. statistikkdata og utdata skal lagres i Google Cloud Storage (GCS) bøtter og følge en definert navnestandard. Standarden gjelder for både statistikkprodukter og dataprodukter (se forklaringsboks under). Navnestandarden beskrevet i dette kapitlet er derfor gjeldende for alle data som lagres i bøtter i **standardprosjektet**, som f.eks. **produktbøtta** og **delt-bøttene**. 
+Data i de permanente [datatilstandene](./datatilstander.html) inndata, klargjorte data, statistikkdata og utdata skal lagres i Google Cloud Storage (GCS) bøtter og følge en definert navnestandard. Standarden gjelder for både statistikkprodukter og dataprodukter (se forklaringsboks under). Navnestandarden beskrevet i dette kapitlet er derfor gjeldende for alle data som lagres i bøtter i **standardprosjektet**, som f.eks. **produktbøtta** og **delt-bøttene**. 
 
 Datatilstanden *kildedata* omfattes ikke av navnestandarden. Grunnen er at kildedata mottas av SSB i mange former/strukturer og de deles sjelden med andre team. De unike egenskapene til kildedata er også grunnen til at de ikke har samme krav til dokumentasjon i metadatasystemene heller. 
 
@@ -30,7 +30,7 @@ Navnestandarden for lagring av data innfører en obligatorisk del som alle stati
 
 ### Obligatoriske mapper
 
-Ifølge navnestandarden skal følgende mappesnivåer alltid eksistere først i en lagringsbøtte:
+Ifølge navnestandarden skal følgende mappenivåer alltid eksistere først i en lagringsbøtte:
 
 1. Statistikkproduktets eller dataproduktets kortnavn
 2. Datatilstand
@@ -58,10 +58,11 @@ ssb-dapla-example-data-produkt-prod/
 
 ### Valgfrie mapper
 
-Selv om de to første mappenivåene er bestemt så kan teamene også opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:
+De to første mappenivåene er bestemt og oblikatoriske. Teamene kan likevel opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:
 
-- Teamet ønsker å organisere dataene i undermapper for hver datatilstand. Dette kan kun gjøres under hver mappe for datastiltand.
-- Teamet trenger å midlertidig lagre temporære data. Det er anbefalt å lage en temp-mappe på første nivå etter bøttenavn, men det er også tillatt å opprette temp-mapper andre steder i mappe-hierarkiet, f.eks. `../inndata/temp/` eller `../klargjorte-data/temp/`.
+- Teamet ønsker å organisere dataene i undermapper for hver datatilstand.
+- Teamet trenger å lagre temporære data.
+    - Det er anbefalt å lage en temp-mappe på første nivå etter bøttenavn, men det er også tillatt å opprette temp-mapper andre steder i mappe-hierarkiet, f.eks. `../inndata/temp/` eller `../klargjorte-data/temp/`.
 - Teamet utfører oppdrag og ønsker et eget sted å lagre data knyttet til dette. Det kan kun gjøres i en oppdrag-mappe på første nivå etter bøttenavn. 
 
 Under er et nytt eksempel i produktbøtta for team **dapla-example**, men nå har de kun statistikkproduktet **ledstill**, en **temp**-mappe og en **oppdrag**-mappe. I tillegg så ønsker de å skille mellom data som er produsert på Dapla og data som er migrert fra tidligere plattform. De gjør det ved å opprette de egendefinerte mappene **on-prem** og **dapla** for hver datatilstand.
