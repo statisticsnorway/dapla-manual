@@ -18,7 +18,7 @@ Datatilstanden *kildedata* omfattes ikke av navnestandarden. Grunnen er at kilde
 - bearbeiding av data som skal inngå som en del av andre statistikker
 - data som inngår i populasjonsregistre
 
-Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datastilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** iht navnestandarden.
+Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datastilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** i henhold til navnestandarden.
 
 
 
@@ -35,7 +35,7 @@ Ifølge navnestandarden skal følgende mappenivåer alltid eksistere først i en
 1. Statistikkproduktets eller dataproduktets kortnavn
 2. Datatilstand
 
-Anta at det er team som heter ***dapla-example** som har produserer statistikkproduktene **ledstill** og **sykefra**. I tillegg produserer de et dataprodukt som heter **ameld**. Deres mappestruktur i produktbøtta vil da se slik ut:
+Anta at det er team som heter **dapla-example** som har produserer statistikkproduktene **ledstill** og **sykefra**. I tillegg produserer de et dataprodukt som heter **ameld**. Deres mappestruktur i produktbøtta vil da se slik ut:
 
 ```{.yaml filename="Obligatoriske mapper"}
 ssb-dapla-example-data-produkt-prod/  
@@ -115,55 +115,42 @@ Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**,
 | Kort beskrivelse                      | Kort tekst som forklarer datasettets innhold, f.eks. “varehandel”, “personinntekt”, “grensehandel_imputert” eller “framskrevne-befolkningsendringer”                                                                                                                                                                                        |
 | Periode - inneholder data f.o.m. dato | Datasettet inneholder data fra og med dato/tidspunkt. I filnavnet må perioden prefikses med “_p”, eksempel “_p2022” eller “_p2022-01-01”. “_p” er en forkortelse for “periode”. Se også [gyldige formater for periode (dato/tidspunkt)](https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#Dato--og-tidsformater-(ISO-8601)) |
 | Periode - inneholder data t.o.m. dato | Datasettet inneholder data til og med dato/tidspunkt. Denne brukes ved behov, eksempelvis for datasett som inneholder forløpsdata eller datasett med flere perioder/årganger.                                                                                                                                                                                       |
-| Versjon                               | Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med “_v”, eksempel “v1”, “v2” eller “v3”. Se også eget kapittel om regler for versjonering av datasett.                                                                                                                                                                    |
+| Versjon                               | Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med “_v”, eksempel “v1”, “v2” eller “v3”. Se også eget kapittel om [versjonering av datasett](versjonering-av-datasett.qmd).                                                                                                                                                                    |
 | Filtype                               | Filendelse som sier noen om filtypen, f.eks. “.json”, “.csv”, “.xml” eller “.parquet”.                                                                                                                                                                                                                                                      |
 : Autonomitet og tilganger i IaC-repo {#tbl-filename .striped}
 
 ### Eksempler på gyldige filnavn
 
-Under finner du et utvalg eksempler på gyldige filnavn iht standarden.
+Under finner du et utvalg eksempler på gyldige filnavn for ulike tidsspenn.
 
-**flygende_objekter_p2019_v1.parquet**  
-Inneholder en årgang med data.
+[Én årgang med data]{.underline}: *flygende_objekter_p2019_v1.parquet*  
+  
+[2 årganger med data]{.underline}: *ufo_observasjoner_p2019_p2020_v1.parquet*
 
-**ufo_observasjoner_p2019_p2020_v1.parquet**  
-Inneholder 2 årganger med data.
+[Data fra 2019 til 2050]{.underline}: *framskrevne-befolkningsendringer_p2019_p2050_v1.parquet*
 
-**framskrevne-befolkningsendringer_p2019_p2050_v1.parquet**  
-Inneholder data fra 2019 til 2050.
+[Data fra 01.01.2022 til 31.12.2022]{.underline}: *sykepenger_p2022-01-01_p2022-12-31_v1.parquet*
 
-**sykepenger_p2022-01-01_p2022-12-31_v1.parquet**  
-Inneholder data fra 01.01.2022 til 31.12.2022.
+[Tverrsnittsdata (status) per 01.10.2022]{.underline}:*utanningsnivaa_p2022-10-01_v1.parquet*  
 
-**utanningsnivaa_p2022-10-01_v1.parquet**  
-Inneholder tverrsnittsdata (status) per 01.10.2022.
+[Data for oktober, november og desember 2022]{.underline}: *grensehandel_imputert_p2022-10_p2022-12_v1.parquet*
 
-**grensehandel_imputert_p2022-10_p2022-12_v1.parquet**  
-Inneholder data for oktober, november og desember 2022.
+[Data for uke-nummer 15]{.underline}: *omsetning_p2020W15_v1.parquet*
+  
+[Data for første 2 måneders-periode i 2022 (bimester)]{.underline}: *skipsanloep_p2022B1_v1.parquet*
 
-**omsetning_p2020W15_v1.parquet**  
-Inneholder data for uke-nummer 15 (week).
+[Data for første kvartal (3-måneders-periode) i 2018 (quarter)]{.underline}: *pensjon_p2018Q1_v1.parquet*
 
-**skipsanloep_p2022B1_v1.parquet**  
-Inneholder data for første 2 måneders-periode i 2022 (bimester).
+[Data for første tertial (4 måneders-periode) i 2022]{.underline}: *nybilreg_p2022T1_v1.parquet*
 
-**pensjon_p2018Q1_v1.parquet**  
-Inneholder data for første kvartal (3-måneders-periode) i 2018 (quarter).
+[Data for første halvår (6-måneders-periode) i 2022]{.underline}: *personinntekt_p2022H1_v1.parquet*
 
-**nybilreg_p2022T1_v1.parquet**  
-Inneholder data for første tertial (4 måneders-periode) i 2022.
-
-**personinntekt_p2022H1_v1.parquet**  
-Inneholder data for første halvår (6-måneders-periode) i 2022.
-
-**varehandel_p2018Q1_p2018Q4_v1.parquet**  
-Inneholder data for kvartalene 1, 2,3 og 4 i 2018.
-
+[Data for kvartalene 1, 2,3 og 4 i 2018]{.underline}: *varehandel_p2018Q1_p2018Q4_v1.parquet*
 ## Eksempel
 
 Anta at det er team som heter **dapla-example** med statistikkproduktene **ledstill** og **sykefra**, og de har et dataprodukt med kortnavnet **ameld**. Teamet har følgende mappestruktur i produktbøtta:
 
-```{.yaml filename="Produktbøtta"}
+```{.yaml filename="Produktbøtta: ledstill, sykefra og ameld"}
 ssb-dapla-example-data-produkt-prod/
 └─ ledstill/  
     ├── inndata/
@@ -207,9 +194,9 @@ ssb-dapla-example-data-produkt-prod/
 
 ## Partisjonerte data
 
-Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **skjema_p2018_p2020_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de iht navnestandarden opprette denne strukturen:
+Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **skjema_p2018_p2020_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de i henhold til navnestandarden opprette denne strukturen:
 
-```{.yaml filename="Produktbøtta"}
+```{.yaml filename="Mappestruktur partisjonert data"}
 ssb-dapla-example-data-produkt-prod/  
 └─ ledstill/  
    ├── inndata/
