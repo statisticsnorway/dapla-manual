@@ -4,19 +4,26 @@ toc-depth: 6
 
 # GCS fil gjenoppretting
 
+Det er to måter å gjenopprette slettede filer på Google Cloud Storage.
 
-Google Cloud Storage tilbyr objekt versjonering på bøttenivå.
-Når den er aktivert, beholdes en historikk med modifikasjoner (overskriv/slett) av objekter for alle objekter i bøtten.
+Hvis object-versjonering er aktivert og brukeren sletter en fil, endres tilstanden fra **live** til **noncurrent**. Det kan være flere noncurrent versjoner av en fil. Brukeren kan liste opp og gjenopprette inoncurrent versjoner.
 
-Du kan liste arkiverte versjoner av et objekt, gjenopprette et objekt til en gamle tilstand etter behov. Alle objekter har generasjonsnummer knyttet til seg for å hjelpe deg med å identifisere objektene og utføre sikre read-modify-delete oppdateringer på dem
+Hvis objektversjonering ikke er aktivert, endres tilstanden fra live til **soft-deleted**. soft-deleted gir beskyttelse på bøttenivå mot sletting ved å beholde nylig slettede objekter i en oppbevaringsperiode som du velger – syv dager som standard, som kan økes til 90 dager eller deaktiveres helt. 
 
-Generasjonsnummeret er numerisk og monotont økende, noe som lar deg raskt evaluere versjonsrekkefølgen. 
 
-Når et objekt overskrives eller slettes i en bøtte som har versjonskontroll aktivert, lagres en kopi av objektet automatisk med generasjonsnummer som identifiserer det.
+@fig-versions viser oversikt over hvordan versjonsstyring fungerer. 
 
-Hvis objektversjonsstyring ikke er aktivert på en bøtte og du laster opp til et eksisterende objekt, overskrives gjeldende versjon i stedet for å opprette en ny versjon.
+![Bilde som viser oversikt over hvordan versjonsstyring fungerer.](../images/gcs-file-deletion-listing.png){ fig-alt="viser oversikt over hvordan versjonsstyring fungerer" #fig-versions}
 
-## Live version Vs noncurrent versions
+**Retention policy**
+
+I objektversjonering har vi lifecycle policy for produkt- og kildebøtter. Den håndteres ved å bruke **days_since_noncurrent_time** og **num_newer_versions**.
+
+Eksempel: for **produktbøtte** har vi days_since_noncurrent_time = 180 og num_newer_versions = 2. Dette innebærer, Slett objekter i bøtte hvis den ikke er aktuell i mer enn **180** dager eller hvis fil/objekt har ** 2 nyere versjoner** til stede i bøtta.
+
+**soft deleted objekter** vil bli holdt i soft deleted tilstand i **7 dager** før de slettes permanent.
+
+## Live, Noncurrent and Soft-deleted versjoner
 
 **Live version** Er den siste versjonen av filen som er i bøtte.
 
@@ -24,9 +31,9 @@ Hvis objektversjonsstyring ikke er aktivert på en bøtte og du laster opp til e
 
 ![Bilde som viser liste over live-versjoner av filer.](../images/gcs-live-objects.png){ fig-alt="Bilde som viser liste over live-versjoner av filer" #fig-live-versions}
 
-**Noncurrent version** opprettes når en fil er slettet eller den er overskrevet. Etter sletting, filen vises som ikke-gjeldende fil.
+**Noncurrent version** opprettes når en fil er slettet eller den er overskrevet. Etter sletting, filen vises som non-current fil.
 
-Når brukeren overskriver en fil i bøtte, blir den eksisterende filen noncurrent versjon og den siste filen skal være den aktive versjonen.
+Når brukeren overskriver en fil i bøtte, blir den eksisterende filen noncurrent versjon og den siste filen skal være den live versjonen.
 
 @fig-noncurrent-versions viser liste over noncurrent filer. 
 
@@ -52,7 +59,7 @@ Les mer om Objekt Versjonering [her](https://cloud.google.com/storage/docs/objec
 
 ### List alle filene i en mappe
 
-Kode snippet returnerer en liste over alle filene fra mappen **restore** fra en bøtte **ssb-dapla-felles-data-produkt-prod**. Generasjonsnummer vises i listen for hver fil.
+Kode snippet returnerer en liste over alle filene fra mappen **restore** fra en bøtte **ssb-dapla-felles-data-produkt-prod**. Generasjonsnummer vises i listen for hver fil. 
 
 ```{.python filename="notebook"}
 import dapla as dapla
