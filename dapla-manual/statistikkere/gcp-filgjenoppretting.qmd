@@ -57,16 +57,18 @@ Les mer om Objekt Versjonering [her](https://cloud.google.com/storage/docs/objec
 
 ## Liste filer med versjonshistorikk
 
-### List alle filene i en mappe
+### List alle filene i en mappe 
 
-Kode snippet returnerer en liste over alle filene fra mappen **restore** fra en bøtte **ssb-dapla-felles-data-produkt-prod**. Generasjonsnummer vises i listen for hver fil. 
+Kode snippet returnerer en liste over alle filene fra mappen **restore** fra en bøtte **ssb-dapla-felles-data-produkt-prod**. Generasjonsnummer vises i listen for hver fil.
+
+Dette resulterer i en liste over slettede filer. Hvis objektversjon er aktivert, vider den alle noncurrent og live versjoner. Hvis objektversjon ikke er aktivert, resulterer i listen over soft-deleted versjoner av filer.
 
 ```{.python filename="notebook"}
 import dapla as dapla
 from dapla import FileClient
 
 # Set bucket name and folder name(if any)
-bucket = "ssb-dapla-felles-data-produkt-prod"
+bucket = "ssb-dapla-felles-data-produkt-prod" 
 folder = "restore"
 
 FileClient.get_versions(bucket, folder)
