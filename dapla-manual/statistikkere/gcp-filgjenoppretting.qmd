@@ -8,8 +8,11 @@ Det er to måter å gjenopprette slettede filer på Google Cloud Storage.
 
 Hvis object-versjonering er aktivert og brukeren sletter en fil, endres tilstanden fra **live** til **noncurrent**. Det kan være flere noncurrent versjoner av en fil. Brukeren kan liste opp og gjenopprette inoncurrent versjoner.
 
-Hvis objektversjonering ikke er aktivert, endres tilstanden fra live til **soft-deleted**. soft-deleted gir beskyttelse på bøttenivå mot sletting ved å beholde nylig slettede objekter i en oppbevaringsperiode som du velger – syv dager som standard, som kan økes til 90 dager eller deaktiveres helt. 
+Hvis objekt versjonering ikke er aktivert på bøtten din, er soft-delete aktivert som standard på bøtten
 
+Funksjonen soft-delete gir standard beskyttelse på bøttenivå for dataene dine mot sletting eller overskrevne objekter i en spesifisert tidsperiode.Hvis du overskriver eller endrer dataene til et objekt, sletter Cloud Storage den tidligere versjonen og erstatter den med en ny. Soft-delete beholder alle disse slettede objektene, enten fra en slettekommando eller på grunn av en overskriving for den konfigurerte retention periode.
+
+I soft-delete endres tilstanden fra **live** til **soft-deleted**.
 
 @fig-versions viser oversikt over hvordan versjonsstyring fungerer. 
 
@@ -19,9 +22,10 @@ Hvis objektversjonering ikke er aktivert, endres tilstanden fra live til **soft-
 
 I objektversjonering har vi lifecycle policy for produkt- og kildebøtter. Den håndteres ved å bruke **days_since_noncurrent_time** og **num_newer_versions**.
 
-Eksempel: for **produktbøtte** har vi days_since_noncurrent_time = 180 og num_newer_versions = 2. Dette innebærer, Slett objekter i bøtte hvis den ikke er aktuell i mer enn **180** dager eller hvis fil/objekt har ** 2 nyere versjoner** til stede i bøtta.
+Eksempel: For **produktbøtte** har vi **days_since_noncurrent_time = 180** og **num_newer_versions = 2**. Dette innebærer, slett objekter i bøtte hvis den ikke er aktuell i mer enn **180** dager eller hvis fil/objekt har **2 nyere versjoner** til stede i bøtta.
 
-**soft deleted objekter** vil bli holdt i soft deleted tilstand i **7 dager** før de slettes permanent.
+**Soft-deleted** gir beskyttelse på bøttenivå mot sletting ved å beholde nylig slettede objekter i en **retention periode** – **7 dager** som standard, som kan økes til 90 dager. Ler mer [her](https://cloud.google.com/storage/docs/soft-delete). 
+
 
 ## Live, Noncurrent and Soft-deleted versjoner
 
@@ -141,6 +145,8 @@ Den siste file er live-versjonen, og de to andre er noncurrent.
 
 Brukeren kan gjenopprette hvilken som helst av disse noncurrent som liveversjon.
 
+Files which are soft deleted dont have **deleted_on** fields. In this case, check the updated_on field to see the last update data and time. And restore using the generation number.
+
 ### Hvordan gjenopprette en fil
 
 **Syntax**
@@ -151,26 +157,18 @@ from dapla import FileClient
 
 # bucket_name                  : Bøtte hvor filen som skal gjenopprettes 
 #                                eksisterer.
-# source_path                  : Path til filen som skal gjenopprettes
-# destination_path             : Path til destinasjonen der filen skal 
-#                                gjenopprette. Du kan gi samme navn til    
-#                                filen eller det er mulig å gi et annet 
-#                                navn til filen.
-# source_generation_number     : Generasjon nummeret til den noncurrent 
-#                                versjonen som skal gjenopprettes
-# destination_genration_number : Hvis det allerede er en live-versjon og 
-#                                du ønsker å erstatte den med den 
-#                                noncurrent versjonen, nevne 
-#                                generasjonsnummeret til live-versjonen 
-#                                her. For en destinasjonsfil som ennå ikke 
-#                                eksisterer, sett 
-#                                destination_generation_number til 0. Hvis 
-#                                destinasjon objektet allerede finnes i 
-#                                bøtten din, sett 
-#                                destination_generation_number ved hjelp 
-#                                av generasjonsnummeret.
+# source_file_name             : Path til filen som skal gjenopprettes
+# source_generation_id         : Generasjon nummeret til den noncurrent/soft_deleted 
+#                                versjonen som skal gjenopprettes    
+#(optional params)
+# new_name                     : Ny navn til fil som skal gjenopprettes
+#
+#ikke tillatt å endre endring i soft_delete versjon gjenoppretting
 
-FileClient.restore_version(<bucket_name>, <source_path>, <destination_path>, <source_generation_number>, <destination_genration_number>)
+ FileClient.restore_version(source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
+                            source_file_name="restore/data3.parquet",
+                            source_generation_id=1718746518862276
+                           )
  ```
 
 
@@ -208,7 +206,9 @@ Dette viser at filen data1.parquet ikke har noen live-versjoner. Det er to noncu
 import dapla as dapla
 from dapla import FileClient
 
-FileClient.restore_version("ssb-dapla-felles-data-produkt-prod","restore/data1.parquet","restore/data1.parquet", 1718402945003656, 0)
+FileClient.restore_version(source_bucket_name= "ssb-dapla-felles-data-produkt-prod",
+                           source_file_name= "restore/data1.parquet",
+                           source_generation_id=1718402945003656)
  ```
 Etter at du har kjørt restore_version(), sjekk versjonslisten for data1.parquet via
 
@@ -226,7 +226,7 @@ Deleted on    :  2024-06-15 06:57:16.053000+00:00
 Name          :  restore/data1.parquet
 Generation Id :  1718435761616782
 Updated on    :  2024-06-15 07:16:01.618000+00:00
-Deleted on    :  None   ----> File restored
+Deleted on    :  None   ----> (Live versjon)
 ------------------------------------------
 ```
  Her kan du se at det nå er én live versjon tilgjengelig.
@@ -239,7 +239,9 @@ Ovenfor utgangsvisninger er det 2 noncurrent versjoner og en live-versjon tilgje
 import dapla as dapla
 from dapla import FileClient
 
-FileClient.restore_version("ssb-dapla-felles-data-produkt-prod","restore/data1.parquet","restore/data1.parquet", 1718402945003656, 1718435761616782)
+FileClient.restore_version(source_bucket_name= "ssb-dapla-felles-data-produkt-prod",
+                           source_file_name= "restore/data1.parquet",
+                           source_generation_id=1718015249969499)
  ```
 
  Now the pre-existing live version will become noncurrent. 
