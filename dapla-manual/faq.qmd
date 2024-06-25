@@ -45,55 +45,78 @@ betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-fronten
 3. Skriv til en fil: I stedet for å skrive utdata direkte i Jupyter, kan du vurdere å skrive dataene til en fil. Dette omgår IOPub-datahastighetsgrensen, og du kan se gjennom dataene i ettertid.
 4. Unngå utskrift: Hvis du kun trenger å utføre beregninger eller operasjoner på dataene, vurder å gjøre det uten å skrive ut resultatene i Jupyter.
 
-### Hvordan kan jeg gjennopprette data fra bøtter? 
+### Hvordan kan jeg gjenopprette filer fra bøtter? 
 
-Alle bøtter har automatisk versjonering. Dette gjør det mulig å tilbakeføre filer til en tidligere versjon eller gjenopprette filer som er slettet ved et uhell. Logg inn på [Google Cloud Console](./statistikkere/gcc.qmd) og søk opp "Cloud Storage" i søkefeltet. Klikk på den bøtten hvor filen er lagret under "Buckets".
+Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode. Overskrevne filer blir såkalte *non-current versions* som lagres i 180 dager og deretter slettet. I tillegg vil *non-current* versjoner av en fil slettes hvis den har 2 nyere versjoner. 
 
-#### Gjenopprette en slettet fil
+En fil som brukeren har slettet vil bli en *soft deleted* versjon og slettes etter 7 dager. 
 
-Fra Cloud Storage skjermbildet kan man navigere seg frem til den mappen hvor filen tidligere er lagret og skru på radioknappen "Show deleted data" (@fig-show-deleted-file)
+For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](./statistikkere/jobbe-med-data.html#dapla-toolbelt). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
 
-![Skru på visning av slettede filer](./images/show-deleted-files.png){ fig-alt="Bilde som hvordan man skrur på visning av slettede filer" width=100% #fig-show-deleted-file }
+```{.python filename="notebook"}
+from dapla import FileClient
 
-Nå vil man kunne se slettede filer i kursiv med teksten *(Deleted)* på slutten. Kolonnen "Version history" vil også vise hvor mange tidligere versjoner som finnes av denne filen. Trykk på filnavnet du ønsker å gjenopprette og velg deretter fanen "Version history". I listen av versjoner til denne filen har man mulighet til å gjenopprette til en tidligere versjon ved å klikke på "Restore" (@fig-restore-deleted-file).
+# Set bucket name and folder name(if any)
+bucket = "ssb-dapla-felles-data-produkt-prod" 
+folder = "restore"
 
-![Gjenoppretting av en slettet fil](./images/restore-deleted-file.png){ fig-alt="Bilde som viser hvordan man gjenoppretter en slettet fil" width=100% #fig-restore-deleted-file }
+FileClient.get_versions(bucket, folder)
+```
 
-#### Gjenopprette en fil til en tidligere versjon
+**Output**
+```
+[<Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930>]
+```
 
-Fra Cloud Storage skjermbildet kan man navigere seg frem til den mappen hvor filen er lagret, og trykke på filnavnet. Velg deretter fanen "Version history". I listen av versjoner til denne filen har man mulighet til å gjenopprette til en tidligere versjon ved å klikke på "Restore" (@fig-restore-file-version). 
+Fra output over ser vi filen `data1.parquet` finnes i 2 versjoner. Vi kan undersøke den nærmere med følgende kode:
 
-![Versjonshistorikk til en fil](./images/object-versioning.png){ fig-alt="Bilde som viser versjonshistorikk til en fil" width=100% #fig-restore-file-version }
+```{.python filename="notebook"}
+files = FileClient.get_versions("ssb-dapla-felles-data-produkt-prod", "restore/data1.parquet")
 
-### Hvordan sletter jeg data fra bøtter?
+for file in files:
+    print("Name          : ",file.name)
+    print("Generation Id : ", file.generation)
+    print("Updated on    : ", file.updated)
+    print("Deleted on    : ", file.time_deleted)
+    print("------------------------------------------")
+```
 
-Sletting av filer og mapper fra bøtter kan gjøres fra [Google Cloud Console](./statistikkere/gcc.qmd). Søk opp "Cloud Storage" i søkefeltet og klikk på den bøtten hvor filen er lagret under "Buckets".
+**Output**  
+```
+Name          :  restore/data1.parquet
+Generation Id :  1718436304922143
+Updated on    :  2024-06-15 07:25:04.928000+00:00
+Deleted on    :  2024-06-24 11:10:10.807000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1719227410801992
+Updated on    :  2024-06-24 11:10:10.807000+00:00
+Deleted on    :  None
+------------------------------------------
+```
 
-Kryss av filen/katalogen som du ønsker å slette og trykk "Delete" (@fig-delete-file)
+Av output over ser vi at det er en fil som som har en verdi i `Deleted on` feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke `restore_version()`og referere til Generation ID:
 
-![Sletting av en fil](./images/full-delete-step-1.png){ fig-alt="Bilde som viser hvordan man sletter en fil" width=100% #fig-delete-file }
+```{.python filename="notebook"}
+FileClient.restore_version(source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
+                            source_file_name="restore/data3.parquet",
+                            source_generation_id=1718436304922143
+                           )
+```
+Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt *non-current*. Ved gjenoppretting av *non-current*-versjoner så kan man også spesifisere nytt navn på filen med parameteret `new_name=` i `restore_version()`-funksjonen. 
 
-Siden bøtter på Dapla har versjonering får man opp en dialogboks som informerer om at objektet (dvs. filen) er versjonert (@fig-delete-file-confirm). Trykk på "Delete".
+::: {.callout-note collapse="true"}
+## Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
 
-![Bekreft sletting av fil](./images/full-delete-step-2.png){ fig-alt="Bilde som en dialogboks" width=100% #fig-delete-file-confirm }
+Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i @fig-gcc-versions. Men man har ikke tilgang til *Object details* og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.   
 
-Slettingen kan ta noe tid. Når denne er ferdig vil filen være slettet, men den kan fortsatt gjenopprettes. Hvis du ønsker at filen skal slettes *permanent*, gjør følgende:
+![Hvordan liste ut versjoner fra GCC.](./images/gcc-versions.png){fig-alt="Bilde av hvordan man velger versjoner i GCC." #fig-gcc-versions}
 
-1. Skru på visning av slettede filer med å bruke radioknappen "Show deleted data" (@fig-delete-file-show-hidden)
+:::
 
-![Skru på visning av slettede filer](./images/full-delete-step-3.png){ fig-alt="Bilde som viser hvordan man skrur på visning av slettede filer" width=100% #fig-delete-file-show-hidden }
-
-2. Finn frem til den slettede filen og trykk på linken "1 noncurrent version" eller tilsvarende (@fig-delete-file-select-version-history). Dette vil ta deg direkte til en side som viser filens versjonshistorikk.
-
-![Velg versjonshistorikk](./images/full-delete-step-4.png){ fig-alt="Bilde som viser hvordan kommer seg til filens versjonshistorikk" width=100% #fig-delete-file-select-version-history }
-
-3. Velg alle versjoner som vist på @fig-delete-all-versions og trykk "Delete"
-
-![Slett alle versioner](./images/full-delete-step-5.png){ fig-alt="Bilde som viser hvordan man sletter hele filens versjonshistorikk" width=100% #fig-delete-all-versions }
-
-4. Til slutt må man bekrefte at man ønsker å slette alle versioner (@fig-confirm-delete-all-versions) med å skrive inn DELETE og trykke på den blå "Delete"-knappen:
-
-![Bekreft sletting av alle versjoner](./images/full-delete-step-6.png){ fig-alt="Bilde som viser at man må bekrefte sletting" width=100% #fig-confirm-delete-all-versions }
 
 ### Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team? 
 
