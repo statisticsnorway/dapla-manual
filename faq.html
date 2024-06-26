@@ -329,8 +329,25 @@ ServerApp.rate_limit_window=3.0 (secs)</code></pre>
 </section>
 <section id="hvordan-kan-jeg-gjenopprette-filer-fra-bøtter" class="level3">
 <h3 class="anchored" data-anchor-id="hvordan-kan-jeg-gjenopprette-filer-fra-bøtter">Hvordan kan jeg gjenopprette filer fra bøtter?</h3>
-<p>Bøttene som opprettes i <a href="./statistikkere/features.html">featuren <em>dapla-buckets</em></a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> har en <em>Retention policy</em> som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode. Overskrevne filer blir såkalte <em>non-current versions</em> som lagres i 180 dager og deretter slettet. I tillegg vil <em>non-current</em> versjoner av en fil slettes hvis den har 2 nyere versjoner.</p>
-<p>En fil som brukeren har slettet vil bli en <em>soft deleted</em> versjon og slettes etter 7 dager.</p>
+<p>Bøttene som opprettes i <a href="./statistikkere/features.html">featuren <em>dapla-buckets</em></a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> har en <em>Retention policy</em> som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode.</p>
+<p>I dapla-buckets blir overskrevne og slettede filer noncurrent. En noncurrent versjon blir slettet hvis den er mer enn <strong>180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta</strong>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Alle dapla-teamene har objektversjon aktivert som standard på alle bøtter.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ekspertteam eller Self-managed team
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Hvis bøttene ikke er opprettet gjennom featuren <em>dapla-buckets</em>, men kanskje av et ekspertteam eller ekspertteam, så må man først forhøre seg med teamet om versjonering er skrudd på for bøtta. Hvis den ikke er det så blir kun soft-deleted filer tatt vare på i 7 dager.</p>
+</div>
+</div>
+</div>
 <p>For å gjennopprette en <em>non-current</em> eller <em>soft-deleted</em> versjon så benytte funksjonalitet fra <a href="./statistikkere/jobbe-med-data.html#dapla-toolbelt">dapla-toolbelt</a>. For å gjenskape en versjon så må man først bruke funksjonen <code>get_versions()</code> liste ut ID-en til versjonen:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -379,14 +396,15 @@ Deleted on    :  None
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FileClient.restore_version(source_bucket_name<span class="op">=</span><span class="st">"ssb-dapla-kildomaten-data-delt-test"</span>,</span>
+<div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FileClient.restore_version( source_bucket_name<span class="op">=</span><span class="st">"ssb-dapla-kildomaten-data-delt-test"</span>,</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                            source_file_name<span class="op">=</span><span class="st">"restore/data3.parquet"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                            source_generation_id<span class="op">=</span><span class="dv">1718436304922143</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                           )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                            source_generation_id<span class="op">=</span><span class="dv">1718436304922143</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                            new_name<span class="op">=</span><span class="st">""</span> (optional)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                           )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt <em>non-current</em>. Ved gjenoppretting av <em>non-current</em>-versjoner så kan man også spesifisere nytt navn på filen med parameteret <code>new_name=</code> i <code>restore_version()</code>-funksjonen.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -395,7 +413,7 @@ Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i <a href="#fig-gcc-versions" class="quarto-xref">Figur&nbsp;2</a>. Men man har ikke tilgang til <em>Object details</em> og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.</p>
 <div id="fig-gcc-versions" class="quarto-figure quarto-figure-center quarto-float anchored" alt="Bilde av hvordan man velger versjoner i GCC.">
@@ -503,6 +521,7 @@ Figur&nbsp;4
 
 <ol>
 <li id="fn1"><p>Featuren <em>dapla-buckets</em> inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I produktbøtta blir noncurrent versjoner slettet hvis det er mer enn 2 nyere versjoner, mens for kildebøtta er grensen på 3 nyere versjoner<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
