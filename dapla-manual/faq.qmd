@@ -47,9 +47,16 @@ betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-fronten
 
 ### Hvordan kan jeg gjenopprette filer fra bøtter? 
 
-Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode. Overskrevne filer blir såkalte *non-current versions* som lagres i 180 dager og deretter slettet. I tillegg vil *non-current* versjoner av en fil slettes hvis den har 2 nyere versjoner. 
+Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode.
 
-En fil som brukeren har slettet vil bli en *soft deleted* versjon og slettes etter 7 dager. 
+I dapla-buckets blir overskrevne og slettede filer noncurrent. En noncurrent versjon blir slettet hvis den er mer enn **180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta**.^[I produktbøtta blir noncurrent versjoner slettet hvis det er mer enn 2 nyere versjoner, mens for kildebøtta er grensen på 3 nyere versjoner]
+
+Alle dapla-teamene har objektversjon aktivert som standard på alle bøtter. 
+
+::: {.callout-note collapse="true"}
+# Ekspertteam eller Self-managed team
+Hvis bøttene ikke er opprettet gjennom featuren *dapla-buckets*, men kanskje av et ekspertteam eller ekspertteam, så må man først forhøre seg med teamet om versjonering er skrudd på for bøtta. Hvis den ikke er det så blir kun soft-deleted filer tatt vare på i 7 dager.   
+:::
 
 For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](./statistikkere/jobbe-med-data.html#dapla-toolbelt). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
 
@@ -101,12 +108,14 @@ Deleted on    :  None
 Av output over ser vi at det er en fil som som har en verdi i `Deleted on` feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke `restore_version()`og referere til Generation ID:
 
 ```{.python filename="notebook"}
-FileClient.restore_version(source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
+FileClient.restore_version( source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
                             source_file_name="restore/data3.parquet",
-                            source_generation_id=1718436304922143
+                            source_generation_id=1718436304922143,
+                            new_name="" (optional)
                            )
 ```
 Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt *non-current*. Ved gjenoppretting av *non-current*-versjoner så kan man også spesifisere nytt navn på filen med parameteret `new_name=` i `restore_version()`-funksjonen. 
+
 
 ::: {.callout-note collapse="true"}
 ## Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
