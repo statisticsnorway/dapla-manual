@@ -47,9 +47,15 @@ betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-fronten
 
 ### Hvordan kan jeg gjenopprette filer fra bøtter? 
 
-Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode. Overskrevne filer blir såkalte *non-current versions* som lagres i 180 dager og deretter slettet. I tillegg vil *non-current* versjoner av en fil slettes hvis den har 2 nyere versjoner. 
+Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode.
 
-En fil som brukeren har slettet vil bli en *soft deleted* versjon og slettes etter 7 dager. 
+I dapla-buckets med objektversjoneringaktivert, blir overskrevne og slettede filer noncurrent.
+
+En noncurrent versjon blir slettet hvis den er mer enn 180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta.
+
+(2+ for produktbøtte og 3+ for kildebøtte)
+
+Non-dapla bøtter eller i managed team, bøtte er ikke versjonert. I så fall endres slettede/overskrevne filer fra live til soft-deleted. soft-deleted filer har en retention-duration på 7 dager. Etter 7 dager vil alle soft-deleted versjoner av en fil som er mer enn 7 dager gammel, bli slettet.
 
 For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](./statistikkere/jobbe-med-data.html#dapla-toolbelt). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
 
@@ -107,6 +113,14 @@ FileClient.restore_version(source_bucket_name="ssb-dapla-kildomaten-data-delt-te
                            )
 ```
 Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt *non-current*. Ved gjenoppretting av *non-current*-versjoner så kan man også spesifisere nytt navn på filen med parameteret `new_name=` i `restore_version()`-funksjonen. 
+
+```{.python filename="notebook"}
+FileClient.restore_version(source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
+                            source_file_name="restore/data3.parquet",
+                            source_generation_id=1718436304922143,
+                            new_name="sample.parquet"
+                           )
+```
 
 ::: {.callout-note collapse="true"}
 ## Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
