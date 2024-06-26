@@ -49,13 +49,14 @@ betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-fronten
 
 Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode.
 
-I dapla-buckets med objektversjonering aktivert, blir overskrevne og slettede filer noncurrent.
+I dapla-buckets blir overskrevne og slettede filer noncurrent. En noncurrent versjon blir slettet hvis den er mer enn **180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta**.^[I produktbøtta blir noncurrent versjoner slettet hvis det er mer enn 2 nyere versjoner, mens for kildebøtta er grensen på 3 nyere versjoner]
 
-En noncurrent versjon blir slettet hvis den er mer enn **180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta**.
+Alle dapla-teamene har objektversjon aktivert som standard på alle bøtter. 
 
-(2+ for produktbøtte og 3+ for kildebøtte)
-
-Non-dapla bøtter eller i managed team, bøtter er ikke versjonert. I så fall endres slettede/overskrevne filer fra live til soft-deleted. soft-deleted filer har en retention-duration på 7 dager. Etter 7 dager vil alle soft-deleted versjoner av en fil som er mer enn 7 dager gammel, bli slettet.
+::: {.callout-warning}
+## i *semi*- eller *self-managed* team
+Bøtter er ikke versjonert som standard. I så fall endres slettede/overskrevne filer fra live til soft-deleted. Soft-deleted filer har en retention-duration på 7 dager. Etter 7 dager skal alle soft-deleted versjoner av en fil som er mer enn 7 dager gammel, bli slettet permanent.
+:::
 
 For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](./statistikkere/jobbe-med-data.html#dapla-toolbelt). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
 
