@@ -1,46 +1,10 @@
 # Versjonering av datasett
 
-Versjonering av data(sett) er viktig for å dekke kravet om uforanderlighet og
-etterprøvbarhet. Hovedpoenget med versjonering er at data-konsumenter
-(menneske eller maskin) skal ha kontroll på endringer, dvs. tilgang både til
-en stabil versjon (uforanderlighet), men også tilgang til eventuelle nye data-
-versjoner som oppstår. Se mer om dette i SSBs produksjonsarkitektur og
-prinsippet om [uforanderlighet av data](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
+Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å ha kontroll på endringer.
 
-::: {.callout-note}
-Det finnes i dag ingen internasjonale standarder eller spesifikasjoner for
-hvordan endringer av data skal versjoneres. Dette påpekes også av
-[w3.org](http://w3.org) (<https://www.w3.org/TR/dwbp/#dataVersioning>) :
+Kort fortalt innebærer versjonering av data at datasettene lagret i skyen har en versjonssuffiks tilsvarende '_v{tall}' før filendelsen. For eksempel: *“framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet”*
+Ett unntak er siste fil. Den bør alltid lagres uten og med versjonssufiks, slik at filstien uten '_v' alltid vil være siste versjon.
 
-*Datasets published on the Web may change over time. Some datasets are
-updated on a scheduled basis, and other datasets are changed as improvements
-in collecting the data make updates worthwhile. In order to deal with these
-changes, new versions of a dataset may be created. Unfortunately, there is no
-consensus about when changes to a dataset should cause it to be considered a
-different dataset altogether rather than a new version. In the following, we
-present some scenarios where most publishers would agree that the revision
-should be considered a new version of the existing dataset.*
-
-  * *Scenario 1: a new bus stop is created and it should be added to the dataset;*
-
-  * *Scenario 2: an existing bus stop is removed and it should be deleted from the dataset;*
-
-  * *Scenario 3: an error was identified in one of the existing bus stops stored in the dataset and this error must be corrected.*
-
-Australian National Data Service (ANDS) beskriver også i sitt dokument
-<https://www.ands.org.au/working-with-data/data-management/data-versioning>
-behovet for versjonering, men også utfordringene med å implementere data-
-versjonering i praksis.
-
-Erfaringer fra [versjonering i microdata.no](https://www.microdata.no/wp-
-content/uploads/2022/02/FAIR_Data_Versioning_in_Microdata.pdf) viser at data-
-versjoneringen i SSB bør baseres på prinsippet om “breaking changes” ( _major
-changes_ ) fra [Semantic Versioning
-(SemVer)](https://en.wikipedia.org/wiki/Software_versioning#Semantic_versioning),
-dvs. at alle endringer som gjør at vi ikke kan gjenskape samme resultat vil
-medføre at det opprettes en ny versjon av datasettet (en ny versjon i tillegg
-til gammel/forrige versjon av datasettet).
-:::
 
 ## Regler for hva som skaper en ny versjon av et datasett (“breaking changes”)
 
