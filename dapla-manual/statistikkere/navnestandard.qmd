@@ -1,5 +1,5 @@
 ---
-title: Navnestandard og versjonering
+title: Navnestandard
 ---
 
 Data i de permanente [datatilstandene](./datatilstander.html) inndata, klargjorte data, statistikkdata og utdata skal lagres i Google Cloud Storage (GCS) bøtter og følge en definert navnestandard. Standarden gjelder for både statistikkprodukter og dataprodukter (se forklaringsboks under). Navnestandarden beskrevet i dette kapitlet er derfor gjeldende for alle data som lagres i bøtter i **standardprosjektet**, som f.eks. **produktbøtta** og **delt-bøttene**. 
@@ -97,7 +97,7 @@ Når man oppretter en mappe for oppdrag så er det viktig å kunne knytte dataen
 Filnavn skal ha en fast struktur som inneholder: en *kort beskrivelse*, *periode*, *versjon* og *filtype*, slik som vist i @fig-filename-breakdown. 
 
 
-![De ulike delene av et standardisert filnavn](../images/filename-breakdown.png){#fig-filename-breakdown width=600px}
+![De ulike delene av et standardisert filnavn](../images/filename-breakdown.png){#fig-filename-breakdown width=450px}
 
 Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**. Elementene i filnavnet skal skilles med understrek. 
 
@@ -215,10 +215,15 @@ ssb-dapla-example-data-produkt-prod/
 
 ## Versjonering av datasett
 
-Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
+Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Med andre ord versjonerer vi for å ikke slette data. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
 
 Kort fortalt innebærer versjonering av data at datasettene har versjonsnummer før filendelsen.
 For eksempel: *framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet*
+
+::: {.callout-note}
+## Unntak til versjonering: nyeste versjon og temporære data
+Nyeste versjon bør også lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tilegg trenger man ikke versjonere temporære data. 
+:::
 
 **Det finnes unntak til versjonsering:** nyeste versjon bør også lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tillegg trenger en ikke å versjonere temporære data.
 
