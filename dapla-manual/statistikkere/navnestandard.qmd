@@ -211,3 +211,79 @@ ssb-dapla-example-data-produkt-prod/
    ├── statistikk/
    └── utdata/                 
 ```
+
+# Versjonering av datasett
+
+Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
+
+Kort fortalt innebærer versjonering av data at datasettene har versjonsnummer før filendelsen.
+For eksempel: *framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet*
+
+**Det finnes unntak til versjonsering:** nyeste versjon bør også lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tillegg trenger en ikke å versjonere temporære data.
+
+### Når skal man lagre ny versjon?
+
+Følgende hendelser skaper ny versjon av et datasett:
+
+  * Reberegninger av data med nye metoder.
+
+  * Korrigeringer av verdier.
+
+  * Oservasjoner legges til eller fjernes.
+
+  * Oppdatert eller erstattet kodeverk.
+
+  * Variabler fjernes eller legges til.
+
+    * Hvis det gjøres vesentlige endringer (mange variabler) så bør det vurderes om dette er et helt nytt datasett.
+
+  * Andre strukturendringer, f.eks. bytte av datatyper eller formater.
+  
+Med andre ord: enhver endring skaper en ny versjon!
+
+###  **Versjonering i praksis**
+
+For hver versjon som oppstår av datasettet opprettes det en ny fysisk fil hvor
+versjonsnummeret økes med en. Alle gamle versjoner av et datasett skal også
+eksistere i mappen.
+
+Etterhvert som man får flere versjoner av et datasett kan det se slik ut:
+
+```{.yaml filename="Mappe med flere versjoner av et datasett"}
+ssb-prod-team-personstatistikk-data-produkt-prod/  
+└── befolkningsframskrivinger/  
+    └── klargjorte_data/  
+        ├── framskrevne-befolkningsendringer_p2019_p2050.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v2.parquet  
+        └── framskrevne-befolkningsendringer_p2019_p2050_v3.parquet
+```
+
+#### Deling av data som ikke har oppnådd stabil tilstand - versjon 0
+
+Hvis det er behov for å dele data som er som er i “fart”, dvs. data som
+fortsatt er under innsamling eller pågående klargjøring, gjøres dette ved å
+bruke *versjonsnummer 0* i filnavnet. Versjonsnummer 0 skal kun brukes
+midlertidig fram til datasettet oppnår stabil tilstand. Ved stabil tilstand
+byttes versjonsnummer for datasettet til 1 eller høyere.
+
+#### Eksempelkode: Finne neste versjonsnummer med python-kode
+
+```python{.yaml filename="Python kode fra SSB-fagfunksjoner for finne neste versjonsnummer"}
+
+# importer funksjonen get_next_version_number() fra ssb-fagfunksjoner
+from fagfunksjoner import get_next_version_number
+
+filsti = 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte_data/framskrevne-befolkningsendringer_p2019_p2050.parquet'
+
+neste_versjon = get_next_version_number(filsti)
+
+print(neste_versjon) # vil i dette tilfellet skrive ut 4
+```
+
+::: {.callout-important}
+## Permanente data skal ikke endres eller slettes 
+
+**Tidligere delte/publiserte data skal ikke slettes eller overskrives!**  
+*Det må derfor lagres fysiske filer for hver versjon av datasettet. Dette er viktig for at SSB skal oppfylle krav om etterprøvbarhet av statistikkene.*
+:::
