@@ -1,5 +1,5 @@
 ---
-title: Navnestandard
+title: Navnestandard og versjonering
 ---
 
 Data i de permanente [datatilstandene](./datatilstander.html) inndata, klargjorte data, statistikkdata og utdata skal lagres i Google Cloud Storage (GCS) bøtter og følge en definert navnestandard. Standarden gjelder for både statistikkprodukter og dataprodukter (se forklaringsboks under). Navnestandarden beskrevet i dette kapitlet er derfor gjeldende for alle data som lagres i bøtter i **standardprosjektet**, som f.eks. **produktbøtta** og **delt-bøttene**. 
@@ -18,7 +18,7 @@ Datatilstanden *kildedata* omfattes ikke av navnestandarden. Grunnen er at kilde
 - bearbeiding av data som skal inngå som en del av andre statistikker
 - data som inngår i populasjonsregistre
 
-Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datastilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** i henhold til navnestandarden.
+Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datatilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** i henhold til navnestandarden.
 
 
 
@@ -26,7 +26,7 @@ Det eksisterer ikke et register for dataprodukter, så hvert team må lage et pa
 
 ## Mappestruktur
 
-Navnestandarden for lagring av data innfører en obligatorisk del som alle statistikk- og dataprodukter må følge, samt en valgfri del hvor teamet selv kan bestemme sin mappestruktur.
+Navnestandarden for lagring av data innfører obligatoriske mapper som alle statistikk- og dataprodukter må følge, samt valgfrie deler hvor teamet selv kan bestemme sin mappestruktur.
 
 ### Obligatoriske mapper
 
@@ -58,7 +58,7 @@ ssb-dapla-example-data-produkt-prod/
 
 ### Valgfrie mapper
 
-De to første mappenivåene er bestemt og oblikatoriske. Teamene kan likevel opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:
+De to første mappenivåene er bestemt og obligatoriske. Teamene kan likevel opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:
 
 - Teamet ønsker å organisere dataene i undermapper for hver datatilstand.
 - Teamet trenger å lagre temporære data.
@@ -99,7 +99,7 @@ Filnavn skal ha en fast struktur som inneholder: en *kort beskrivelse*, *periode
 
 ![De ulike delene av et standardisert filnavn](../images/filename-breakdown.png){#fig-filename-breakdown width=600px}
 
-Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**, Elementene i filnavnet skal skilles med **_** (understrek). 
+Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**. Elementene i filnavnet skal skilles med understrek. 
 
 Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**, **ø** og **å** ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:   
 
@@ -146,7 +146,28 @@ Under finner du et utvalg eksempler på gyldige filnavn for ulike tidsspenn.
 [Data for første halvår (6-måneders-periode) i 2022]{.underline}: *personinntekt_p2022H1_v1.parquet*
 
 [Data for kvartalene 1, 2,3 og 4 i 2018]{.underline}: *varehandel_p2018Q1_p2018Q4_v1.parquet*
-## Eksempel
+
+## Partisjonerte data
+
+Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **skjema_p2018_p2020_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de i henhold til navnestandarden opprette denne strukturen:
+
+```{.yaml filename="Mappestruktur partisjonert data"}
+ssb-dapla-example-data-produkt-prod/  
+└─ ledstill/  
+   ├── inndata/
+        └── skjema_p2018_p2020_v1
+            └── aar=2018
+                └── data.parquet
+            └── aar=2019
+                └── data.parquet
+            └── aar=2020
+                └── data.parquet         
+   ├── klargjorte-data/
+   ├── statistikk/
+   └── utdata/                 
+```
+
+### Eksempel: Produktbøtte for team dapla-example
 
 Anta at det er team som heter **dapla-example** med statistikkproduktene **ledstill** og **sykefra**, og de har et dataprodukt med kortnavnet **ameld**. Teamet har følgende mappestruktur i produktbøtta:
 
@@ -192,27 +213,7 @@ ssb-dapla-example-data-produkt-prod/
     │   └── ameldingen_p2024-12_v1.parquet
 ```
 
-## Partisjonerte data
-
-Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **skjema_p2018_p2020_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de i henhold til navnestandarden opprette denne strukturen:
-
-```{.yaml filename="Mappestruktur partisjonert data"}
-ssb-dapla-example-data-produkt-prod/  
-└─ ledstill/  
-   ├── inndata/
-        └── skjema_p2018_p2020_v1
-            └── aar=2018
-                └── data.parquet
-            └── aar=2019
-                └── data.parquet
-            └── aar=2020
-                └── data.parquet         
-   ├── klargjorte-data/
-   ├── statistikk/
-   └── utdata/                 
-```
-
-# Versjonering av datasett
+## Versjonering av datasett
 
 Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
 
