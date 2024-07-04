@@ -18,7 +18,7 @@ Datatilstanden *kildedata* omfattes ikke av navnestandarden. Grunnen er at kilde
 - bearbeiding av data som skal inngå som en del av andre statistikker
 - data som inngår i populasjonsregistre
 
-Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datastilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** i henhold til navnestandarden.
+Det eksisterer ikke et register for dataprodukter, så hvert team må lage et passende kortnavn for hvert produkt. Eksempler på dataprodukt-kortnavn er **nudb** (utdanningsdatabasen) og **fd_trygd** (forløpsdatabasen for trygdedata). Kortnavnet til dataprodukter er en viktig del av navnestandarden for datalagring, og skal alltid ha endelsen **\_data** når den lagres i de permanente datatilstandene. F.eks. vil dataproduktet **nudb** lagres som **nudb_data** i henhold til navnestandarden.
 
 
 
@@ -26,7 +26,7 @@ Det eksisterer ikke et register for dataprodukter, så hvert team må lage et pa
 
 ## Mappestruktur
 
-Navnestandarden for lagring av data innfører en obligatorisk del som alle statistikk- og dataprodukter må følge, samt en valgfri del hvor teamet selv kan bestemme sin mappestruktur.
+Navnestandarden for lagring av data innfører obligatoriske mapper som alle statistikk- og dataprodukter må følge, samt valgfrie deler hvor teamet selv kan bestemme sin mappestruktur.
 
 ### Obligatoriske mapper
 
@@ -58,7 +58,7 @@ ssb-dapla-example-data-produkt-prod/
 
 ### Valgfrie mapper
 
-De to første mappenivåene er bestemt og oblikatoriske. Teamene kan likevel opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:
+De to første mappenivåene er bestemt og obligatoriske. Teamene kan likevel opprette egendefinerte mapper der det er behov. Det kan gjøres i følgende tilfeller:
 
 - Teamet ønsker å organisere dataene i undermapper for hver datatilstand.
 - Teamet trenger å lagre temporære data.
@@ -97,9 +97,9 @@ Når man oppretter en mappe for oppdrag så er det viktig å kunne knytte dataen
 Filnavn skal ha en fast struktur som inneholder: en *kort beskrivelse*, *periode*, *versjon* og *filtype*, slik som vist i @fig-filename-breakdown. 
 
 
-![De ulike delene av et standardisert filnavn](../images/filename-breakdown.png){#fig-filename-breakdown width=600px}
+![De ulike delene av et standardisert filnavn](../images/filename-breakdown.png){#fig-filename-breakdown width=450px}
 
-Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**, Elementene i filnavnet skal skilles med **_** (understrek). 
+Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**. Elementene i filnavnet skal skilles med understrek. 
 
 Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**, **ø** og **å** ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:   
 
@@ -115,7 +115,7 @@ Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**,
 | Kort beskrivelse                      | Kort tekst som forklarer datasettets innhold, f.eks. “varehandel”, “personinntekt”, “grensehandel_imputert” eller “framskrevne-befolkningsendringer”                                                                                                                                                                                        |
 | Periode - inneholder data f.o.m. dato | Datasettet inneholder data fra og med dato/tidspunkt. I filnavnet må perioden prefikses med “_p”, eksempel “_p2022” eller “_p2022-01-01”. “_p” er en forkortelse for “periode”. Se også [gyldige formater for periode (dato/tidspunkt)](https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#Dato--og-tidsformater-(ISO-8601)) |
 | Periode - inneholder data t.o.m. dato | Datasettet inneholder data til og med dato/tidspunkt. Denne brukes ved behov, eksempelvis for datasett som inneholder forløpsdata eller datasett med flere perioder/årganger.                                                                                                                                                                                       |
-| Versjon                               | Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med “_v”, eksempel “v1”, “v2” eller “v3”. Se også eget kapittel om [versjonering av datasett](versjonering-av-datasett.qmd).                                                                                                                                                                    |
+| Versjon                               | Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med “_v”, eksempel “v1”, “v2” eller “v3”.                                                                                                                                                                    |
 | Filtype                               | Filendelse som sier noen om filtypen, f.eks. “.json”, “.csv”, “.xml” eller “.parquet”.                                                                                                                                                                                                                                                      |
 : Autonomitet og tilganger i IaC-repo {#tbl-filename .striped}
 
@@ -123,30 +123,43 @@ Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**,
 
 Under finner du et utvalg eksempler på gyldige filnavn for ulike tidsspenn.
 
-[Én årgang med data]{.underline}: *flygende_objekter_p2019_v1.parquet*  
-  
-[2 årganger med data]{.underline}: *ufo_observasjoner_p2019_p2020_v1.parquet*
+| Tidsspenn                | Eksempel på gyldige filnavn             |
+|--------------------------|-----------------------------------------|
+| Én årgang med data | *flygende_objekter_p2019_v1.parquet* |
+| To årganger med data | *ufo_observasjoner_p2019_p2020_v1.parquet* |
+| Fra 2019 til 2050 | *framskrevne-befolkningsendringer_p2019_p2050_v1.parquet* |
+| Fra 01.01.2022 til 31.12.2022 | *sykepenger_p2022-01-01_p2022-12-31_v1.parquet* |
+| Tverrsnittsdata (status) per 01.10.2022 | *utanningsnivaa_p2022-10-01_v1.parquet* |
+| Oktober, november og desember 2022 | *grensehandel_imputert_p2022-10_p2022-12_v1.parquet* |
+| Uke-nummer 15 | *omsetning_p2020W15_v1.parquet* |
+| Første bimester i 2022 | *skipsanloep_p2022B1_v1.parquet* |
+| Første kvartal  i 2018 (quarter) | *pensjon_p2018Q1_v1.parquet* |
+| Første tertial i 2022 | *nybilreg_p2022T1_v1.parquet* |
+| Første halvår i 2022 | *personinntekt_p2022H1_v1.parquet* |
+| Kvartalene 1, 2, 3 og 4 i 2018 | *varehandel_p2018Q1_p2018Q4_v1.parquet* |
 
-[Data fra 2019 til 2050]{.underline}: *framskrevne-befolkningsendringer_p2019_p2050_v1.parquet*
 
-[Data fra 01.01.2022 til 31.12.2022]{.underline}: *sykepenger_p2022-01-01_p2022-12-31_v1.parquet*
+## Partisjonerte data
 
-[Tverrsnittsdata (status) per 01.10.2022]{.underline}:*utanningsnivaa_p2022-10-01_v1.parquet*  
+Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **skjema_p2018_p2020_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de i henhold til navnestandarden opprette denne strukturen:
 
-[Data for oktober, november og desember 2022]{.underline}: *grensehandel_imputert_p2022-10_p2022-12_v1.parquet*
+```{.yaml filename="Mappestruktur partisjonert data"}
+ssb-dapla-example-data-produkt-prod/  
+└─ ledstill/  
+   ├── inndata/
+        └── skjema_p2018_p2020_v1
+            └── aar=2018
+                └── data.parquet
+            └── aar=2019
+                └── data.parquet
+            └── aar=2020
+                └── data.parquet         
+   ├── klargjorte-data/
+   ├── statistikk/
+   └── utdata/                 
+```
 
-[Data for uke-nummer 15]{.underline}: *omsetning_p2020W15_v1.parquet*
-  
-[Data for første 2 måneders-periode i 2022 (bimester)]{.underline}: *skipsanloep_p2022B1_v1.parquet*
-
-[Data for første kvartal (3-måneders-periode) i 2018 (quarter)]{.underline}: *pensjon_p2018Q1_v1.parquet*
-
-[Data for første tertial (4 måneders-periode) i 2022]{.underline}: *nybilreg_p2022T1_v1.parquet*
-
-[Data for første halvår (6-måneders-periode) i 2022]{.underline}: *personinntekt_p2022H1_v1.parquet*
-
-[Data for kvartalene 1, 2,3 og 4 i 2018]{.underline}: *varehandel_p2018Q1_p2018Q4_v1.parquet*
-## Eksempel
+### Eksempel: Produktbøtte for team dapla-example
 
 Anta at det er team som heter **dapla-example** med statistikkproduktene **ledstill** og **sykefra**, og de har et dataprodukt med kortnavnet **ameld**. Teamet har følgende mappestruktur i produktbøtta:
 
@@ -192,22 +205,84 @@ ssb-dapla-example-data-produkt-prod/
     │   └── ameldingen_p2024-12_v1.parquet
 ```
 
-## Partisjonerte data
+## Versjonering av datasett
 
-Team som partisjonerer sine filer ved lagring skal fortsatt følge navnestandarden. Det som endrer seg er at **filtype** ikke blir en del av filnavnet, men heller kommer inn under partisjoneringen. Anta at team **dapla-example** partisjonerer et datasett i datatilstand inndata som heter **skjema_p2018_p2020_v1**. Anta også at de partisjonerer dataene med hensyn på kolonnen **aar**. Da vil de i henhold til navnestandarden opprette denne strukturen:
+Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Derfor skal et datasett som er brukt i statistikkproduksjon aldri slettes - det skal opprettes en ny versjon av datasettet. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
 
-```{.yaml filename="Mappestruktur partisjonert data"}
-ssb-dapla-example-data-produkt-prod/  
-└─ ledstill/  
-   ├── inndata/
-        └── skjema_p2018_p2020_v1
-            └── aar=2018
-                └── data.parquet
-            └── aar=2019
-                └── data.parquet
-            └── aar=2020
-                └── data.parquet         
-   ├── klargjorte-data/
-   ├── statistikk/
-   └── utdata/                 
+Kort fortalt innebærer versjonering av data at datasettene har versjonsnummer før filendelsen.
+For eksempel: *framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet*
+
+::: {.callout-note}
+## Unntak til versjonering: nyeste versjon og temporære data
+Nyeste versjon bør også lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tilegg trenger man ikke versjonere temporære data. 
+:::
+
+### Når skal man lagre ny versjon?
+
+Følgende hendelser skaper ny versjon av et datasett:
+
+  * Reberegninger av data med nye metoder.
+
+  * Korrigeringer av verdier.
+
+  * Oservasjoner legges til eller fjernes.
+
+  * Oppdatert eller erstattet kodeverk.
+
+  * Variabler fjernes eller legges til.
+
+    * Hvis det gjøres vesentlige endringer (mange variabler) så bør det vurderes om dette er et helt nytt datasett.
+
+  * Andre strukturendringer, f.eks. bytte av datatyper eller formater.
+  
+Med andre ord: enhver endring skaper en ny versjon!
+
+###  Versjonering i praksis
+
+For hver versjon som oppstår av datasettet opprettes det en ny fysisk fil hvor
+versjonsnummeret økes med en. Alle gamle versjoner av et datasett skal også
+eksistere i mappen.
+
+Etterhvert som man får flere versjoner av et datasett kan det se slik ut:
+
+```{.yaml filename="Mappe med flere versjoner av et datasett"}
+ssb-prod-team-personstatistikk-data-produkt-prod/  
+└── befolkningsframskrivinger/  
+    └── klargjorte_data/  
+        ├── framskrevne-befolkningsendringer_p2019_p2050.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  
+        ├── framskrevne-befolkningsendringer_p2019_p2050_v2.parquet  
+        └── framskrevne-befolkningsendringer_p2019_p2050_v3.parquet
 ```
+
+Eksempelet over viser at siste versjon av en fil kan lagres med og uten versjonsnummer for å gjøre det lettere å lese inn nyeste versjon.
+
+#### Versjon 0: Deling av data som ikke har oppnådd stabil tilstand 
+
+Hvis det er behov for å dele data som
+fortsatt er under innsamling eller pågående klargjøring gjøres dette ved å
+bruke *versjonsnummer 0* i filnavnet. 
+
+Dette versjonsnummeret skal kun brukes
+midlertidig fram til datasettet oppnår stabil tilstand. Ved stabil tilstand
+byttes versjonsnummer for datasettet til 1 eller høyere.
+
+#### Eksempelkode: Finne neste versjonsnummer med python-kode
+
+```python{.yaml filename="Python kode fra SSB-fagfunksjoner for finne neste versjonsnummer"}
+# importer funksjonen get_next_version_number() fra ssb-fagfunksjoner
+from fagfunksjoner import get_next_version_number
+
+filsti = 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte_data/framskrevne-befolkningsendringer_p2019_p2050.parquet'
+
+neste_versjon = get_next_version_number(filsti)
+
+print(neste_versjon) # vil i dette tilfellet skrive ut 4
+```
+
+::: {.callout-important}
+## Permanente data skal ikke endres eller slettes 
+
+**Tidligere delte/publiserte data skal ikke slettes eller overskrives!**  
+*Det må derfor lagres fysiske filer for hver versjon av datasettet. Dette er viktig for at SSB skal oppfylle krav om etterprøvbarhet av statistikkene.*
+:::
