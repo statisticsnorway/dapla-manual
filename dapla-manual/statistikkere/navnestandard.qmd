@@ -207,7 +207,7 @@ ssb-dapla-example-data-produkt-prod/
 
 ## Versjonering av datasett
 
-Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Med andre ord versjonerer vi for å ikke slette data. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
+Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Derfor skal et datasett som er brukt i statistikkproduksjon aldri slettes - det skal opprettes en ny versjon av datasettet. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
 
 Kort fortalt innebærer versjonering av data at datasettene har versjonsnummer før filendelsen.
 For eksempel: *framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet*
@@ -216,8 +216,6 @@ For eksempel: *framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet*
 ## Unntak til versjonering: nyeste versjon og temporære data
 Nyeste versjon bør også lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tilegg trenger man ikke versjonere temporære data. 
 :::
-
-**Det finnes unntak til versjonsering:** nyeste versjon bør også lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tillegg trenger en ikke å versjonere temporære data.
 
 ### Når skal man lagre ny versjon?
 
@@ -239,7 +237,7 @@ Følgende hendelser skaper ny versjon av et datasett:
   
 Med andre ord: enhver endring skaper en ny versjon!
 
-###  **Versjonering i praksis**
+###  Versjonering i praksis
 
 For hver versjon som oppstår av datasettet opprettes det en ny fysisk fil hvor
 versjonsnummeret økes med en. Alle gamle versjoner av et datasett skal også
@@ -257,11 +255,15 @@ ssb-prod-team-personstatistikk-data-produkt-prod/
         └── framskrevne-befolkningsendringer_p2019_p2050_v3.parquet
 ```
 
+Eksempelet over viser at siste versjon av en fil kan lagres med og uten versjonsnummer for å gjrøe det lettere å lese inn nyeste versjon.
+
 #### Versjon 0: Deling av data som ikke har oppnådd stabil tilstand 
 
 Hvis det er behov for å dele data som
 fortsatt er under innsamling eller pågående klargjøring gjøres dette ved å
-bruke *versjonsnummer 0* i filnavnet. Versjonsnummer 0 skal kun brukes
+bruke *versjonsnummer 0* i filnavnet. 
+
+Dette versjonsnummeret skal kun brukes
 midlertidig fram til datasettet oppnår stabil tilstand. Ved stabil tilstand
 byttes versjonsnummer for datasettet til 1 eller høyere.
 
