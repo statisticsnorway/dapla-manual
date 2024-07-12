@@ -1,0 +1,215 @@
+---
+title: Pseudonymisering med testdata
+subtitle: Bruk testdata for å bli kjent med pseudonymisering.
+categories:
+  - Pseudonymisering
+  - Python
+  - dapla-toolbelt-pseudo
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "11/07/2024"
+jupyter: test-pseudo
+freeze: true
+draft: false
+---
+
+Den strenge tilgangsstyringen til pseudonymiseringsfunksjonaliteten på Dapla gjør at det er vanskelig for brukere å bli kjent med funksjonaliteten ved bruk av produksjonsdata. Derfor bør alle som jobber med dette starte med å bruke testdata og jobbe i [test-miljøet på Dapla](https://jupyter.dapla-staging.ssb.no/).
+
+## Importer data
+
+Først så importerer vi noen biblioteker som vi skal benytte. Versjonen 
+
+```{python}
+import json
+
+import dapla as dp
+import pandas as pd
+import polars as pl
+from dapla_pseudo import Depseudonymize, Pseudonymize
+from dapla_pseudo.constants import MapFailureStrategy
+from dapla_pseudo.utils import convert_to_date
+from IPython.display import JSON
+```
+
+Versjonen av [dapla-toolbelt-pseudo](../../../statistikkere/dapla-toolbelt-pseudo.html) er **2.1.2**.
+
+Dataene vi skal bruke syntetiske fødselsnummer fra testversjonen SNR-katalogen. På den måten får vi også testet pseudonymiseringen via SNR-katalogen som er veldig vanlig i SSB. Denne SNR-katalogen ligger som en fil i en bøtte som alle i SSB har tilgang til. 
+
+```{python}
+#| tbl-cap: "Syntetisk versjon av SNR-katalogen"
+#| label: tbl-snr
+path = "gs://ssb-staging-dapla-felles-data-delt/test/data/freg/kilde/snr_kat_latest/snr_kat.csv"
+
+df = dp.read_pandas(path, file_format="csv", dtype={"fnr": str, "fnr_date": str})
+
+df.head(n=5).style.set_table_styles([
+    {'selector': 'th', 'props': [('text-align', 'left')]}
+])
+```
+
+Fra @tbl-snr ser vi at datasettet inkluderer en del kolonner. For utforsking av pseudonymiseringsfunksjonalitet så trenger vi kun `fnr`-kolonnen.
+
+## Forberedelse av datasettet
+
+La oss kun beholde `fnr`-kolonnen og kopiere den en ny kolonne slik at vi enklere kan sammenligne før og etter pseudonymisering. I tillegg kutter jeg antall rader til 10, siden vi ikke trenger noe mer for formålet her. 
+
+```{python}
+#| tbl-cap: "Nedstrippet versjon av SNR-katalogen"
+#| label: tbl-snr-new
+df2 = df.head(n=10)
+df3 = df2[["fnr"]]
+df4 = df3.copy()
+df4['fnr_original'] = df4['fnr']
+
+df4.head(n=5).style.set_table_styles([
+    {'selector': 'th', 'props': [('text-align', 'left')]}
+])
+```
+
+Hvis du ønsker å teste hvordan krypteringsalgoritmene fungerer med kolonner som inneholder navn, så kan vi generere noe data med et også.
+
+```{python}
+fornavn = [
+    "Jo",
+    "Hans-August",
+    "Nils",
+    "Eva",
+    "Lars",
+    "Øyvind",
+    "Kenneth",
+    "Johnny",
+    "Rupinder",
+    "Nicolas",
+]
+etternavn = [
+    "Nordman",
+    "Karlsen",
+    "Nordmann",
+    "Karlsen",
+    "Carlsen",
+    "Nordmann",
+    "Carlsen",
+    "Nordmann",
+    "Karlsen",
+    "Normann",
+]
+
+df4['fornavn'] = fornavn
+df4['etternavn'] = etternavn
+df5 = df4.copy()
+```
+
+Til slutt legger vi på noen ugyldige fødselsnummer slik at vi får testet hvordan algoritmene håndterer dette. 
+
+```{python}
+#| tbl-cap: "Datasett for å teste pseudonymiseringsfunksjonalitet"
+#| label: tbl-pseudo
+new_row1 = pd.DataFrame(
+    [
+        {
+            "fnr": "99999999999",
+            "fnr_original": "99999999999",
+            "fornavn": "Michael",
+            "etternavn": "Norman",
+        }
+    ]
+)
+df6 = pd.concat([df5, new_row1], ignore_index=True)
+
+new_row2 = pd.DataFrame(
+    [{"fnr": "XX", "fnr_original": "XX", "fornavn": "Ola Glenn", "etternavn": "Gåås"}]
+)
+df7 = pd.concat([df6, new_row2], ignore_index=True)
+
+new_row3 = pd.DataFrame(
+    [
+        {
+            "fnr": "X8b7k28",
+            "fnr_original": "X8b7k28",
+            "fornavn": "Lars",
+            "etternavn": "Gaas",
+        }
+    ]
+)
+df8 = pd.concat([df7, new_row3], ignore_index=True)
+
+df8.head(n=5).style.set_table_styles([
+    {'selector': 'th', 'props': [('text-align', 'left')]}
+])
+```
+
+@tbl-pseudo viser datasettet vi skal bruke til å teste med. 
+
+## Pseudonymisering
+
+Nå kan vi begynne å leke med dataene. Det første vi kan gjøre er å pseudonymisere med den mest vanlige algoritmen som benyttes i produksjon: Papis-nøkkelen.
+
+```{python}
+#| tbl-cap: "Pseudonymiserer med Papis-algoritmen"
+#| label: tbl-pseudo-papis
+result = (
+    Pseudonymize.from_pandas(df8)
+    .on_fields("fnr")
+    .with_stable_id()
+    .run()
+)
+result.to_pandas()
+```
+
+I @tbl-pseudo-papis ser vi at kolonnen `fnr` har blitt pseudonymisert. Det er også verdt å legge merke til at kolonnen ikke endrer navn. Grunnen til at lengden på verdiene som er pseudonymiserte er på 7 tegn for de opprinnelige fødselsnummerne, er at det først skjer en oversetting fra fnr til snr før det pseudonymiseres, og snr-nummerserien er på 7 tegn. Med andre ord så preserverer algoritmen lengden på snr-nummeret siden det er dette som pseudonymiseres. 
+
+Det er også verdt å merke seg at verdier som er kortere enn 4 i lengde, f.eks. `XX` i rad 11, ikke blir pseudonymisert i det hele tatt. Verdier som er 4 eller lengre, vil bli pseudonymisert selv om de ikke fikk treff i SNR-katalogen. 
+
+### Metadata
+
+Det genereres også 2 metadata-objekter ved pseudonymisering. Disse er:
+
+1. result.datadoc
+2. result.metadata
+
+La oss se nærmere på de:
+
+```{python}
+data = json.loads(result.datadoc)
+display(data)
+```
+
+Dette er metadata som skal integreres i Datadoc etter hvert. 
+
+La oss se på den andre typen metadata:
+
+```{python}
+display(result.metadata)
+```
+
+Her ser vo at 10 felt fikk treff i SNR-katalogen, 1 felt var for kort for algoritmen, og 2 felt fikk ikke treff SNR-katalogen. Vi får også se litt fødselsnummeret til de 2 som ikke fikk treff. 
+
+## Depseudonymisering
+
+La oss ta vare på den pseudonymiserte kolonnen og så depseudonymisere og se om resultatet blir riktig:
+
+```{python}
+#| tbl-cap: "Depseudonymisering av fødselsnummer"
+#| label: tbl-depseudo
+result2 = result.to_pandas()
+result2['pseudo_fnr'] = result2['fnr']
+
+result_df = (
+    Depseudonymize.from_pandas(result2)         
+    .on_fields("fnr")                              
+    .with_stable_id()                              
+    .run()                                         
+    .to_pandas() 
+)
+
+result_df.style.set_table_styles([
+    {'selector': 'th', 'props': [('text-align', 'left')]}
+])
+```
+
+@tbl-depseudo viser at depseudonymiseringen returnerer de opprinnelige fødselsnummerne.
+
+Videre kan man utforske å pseudonymisere navn ved bruk av ulike algoritmer. 
