@@ -833,7 +833,7 @@ Hva betyr det å tilby samme pseudonym?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>At Papis og Dapla tilbyr samme pseudonum betyr egentlig at vi bruker samme krypteringsalgoritme, og en felles krypteringsnøkkel. Krypteringsalgoritmen som benyttes er formatpreserverende (FPE) og biblioteket som brukes er <a href="https://pypi.org/project/tink-fpe/">Tink FPE Python</a>. En svakhet med algoritmen er at den ikke håndterer tekst som kortere enn 4 karakterer lang, og strategien som benyttes for å håndtere dette er <code>SKIP</code>, noe som betyr den originale verdien blir returnert som den var.</p>
+<p>At Papis og Dapla tilbyr samme pseudonum betyr egentlig at vi bruker samme krypteringsalgoritme, og en felles krypteringsnøkkel. Krypteringsalgoritmen som benyttes er formatpreserverende (FPE) og biblioteket som brukes er <a href="https://pypi.org/project/tink-fpe/">Tink FPE Python</a>. En begrensning med algorimen er at kun karakterer som finnes i et forhåndsdefinert karaktersett (tall, store og små bokstaver fra a-z) blir vurdert. Andre karakterer f.&nbsp;eks <code>æøå</code> blir ikke kryptert. Papis-nøkkelen (som brukes f.&nbsp;eks for fnr og snr) benytter en <code>SKIP</code>-strategi for karakterer som faller utenom, som betyr at algoritmen simpelthen “hopper over” disse. FPE-algoritmen er også avhengig av størrelsen på det predefinterte karaktersettet for å avgjøre minimumslengden på teksten som pseudonymiseres. For Papis-nøkkelen betyr det at teksten minst må være 4 karakterer lang. Kortere tekster blir ikke kryptert.</p>
 </div>
 </div>
 </section>
