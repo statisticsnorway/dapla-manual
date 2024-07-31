@@ -1,0 +1,269 @@
+# Maskinporten Guardian
+
+## Maskinporten
+
+Maskinporten er en tjeneste fra Digdir for sikker autentisering og tilgangskontroll for datautveksling mellom virksomheter.
+
+Tilgangsstyring for data administeres via et webgrensesnitt ([Samarbeidsportalen](https://samarbeid.digdir.no/))
+En virksomhet som deler data (API-tilbyder) definerer såkalte _data scopes_, og velger hvilke andre virksomheter
+(API-konsumenter) som skal ha tilgang til disse. API-konsumenter kan på sin side selv opprette en eller flere
+_Maskinporten-klienter_ og gir de tilgang til data scopes som er delt med virksomheten.
+
+![Datauveksling mellom virksomheter](../images/maskinporten-utveksling.png){fig-alt="Maskinportens rolle er å være et tillitsanker - en sikringsmekanisme for trygg deling av data som sikrer at data bare flyter dit de skal." fig-align="left" #fig-maskinporten-utveksling}
+
+Les mer om Maskinporten [her](https://samarbeid.digdir.no/maskinporten/dette-er-maskinporten/96).
+
+
+## Hva gjør Maskinporten Guardian?
+
+Utveksling av data fra en API-tilbyder gjøres ved å inkludere et _sikkerhetstoken_ som hentes fra Maskinporten
+på vegne av virksomheten man representerer (f. eks SSB). Hvilke data (såkalte _data scopes_) et sikkerhetstoken har
+tilgang til er knyttet til Maskinporten-klienten. For å hente et sikkerhetstoken for en klient, kreves det at man
+autentiserer seg som virksomhet. Dette gjøres ved å signere forespørsler til Maskinporten ved bruk av et
+virksomhetssertifikat. Det er her [Maskinporten Guardian](https://github.com/statisticsnorway/maskinporten-guardian)
+kommer inn i bildet.
+
+Maskinporten Guardian har tilgang til SSBs virksomhetssertifikat og kan dermed signere forespørsler mot Maskinporten
+for å hente ut sikkerhetstokens. Maskinporten Guardian sine endepunkter er selv beskyttet av Keycloak. To typer brukere støttes:
+
+* _Maskin-til-maskin (M2M)_ - Systembruker knyttet til en gitt Maskinporten-klient. For å opptre på vegne av en
+   M2M-bruker autentiserer man seg med en _Keycloak client secret_. Denne hemmeligheten er lagret i Google Secret Manager
+   og kun Service Accounts eller Dapla-grupper med tilgang kan hente den ut.
+* _Personlig_ - Din egen SSB-bruker. Man kan f. eks bruke [dapla-toolbelt](https://github.com/statisticsnorway/dapla-toolbelt/blob/main/src/dapla/auth.py#L143)
+  for å hente ut sitt personlige Keycloak-token. I tillegg til å autentisere deg må din bruker være autorisert til å gjøre
+  oppslag på vegne av en Maskinporten-klient. Dette styres i konfigurasjonen til Maskinporten Guardian.
+
+::: {.callout-note appearance="simple"}
+Man skal i hovedsak kun anvende M2M-brukere for datautveksling mot API-er som er beskyttet av Maskinporten. Personlige brukere
+skal kun brukes unntaksvis for enkeltoppslag (f. eks ved feilsøking) mot API-er eller for utvikling og test.
+:::
+
+## Systemskisse
+
+Følgende gir en oversikt over hvordan systemer henger sammen. En API-konsument kan f. eks være et Dapla-team som ønsker å hente data,
+mens en API-tilbyder er en ekstern virksomhet som tilbyr data via Maskinporten. Det er noen forskjeller i flyt avhengig av om
+Maskinporten Guardian aksesseres med systembruker (M2M) eller personlig bruker.
+
+![](../images/maskinporten-guardian-flyt.svg){fig-alt="Maskinporten Guardian flyt" fig-align="left" #fig-maskinporten-flyt}
+
+### Flyt: M2M
+
+1) API-konsumenten henter sin _Keycloak client secret_ for en gitt Maskinporten-klient fra Secret Manager. 
+2) API-konsumenten henter et Keycloak sikkerhetstoken ved å bruke _client secret_ fra steg 1.
+3) API-konsumenten henter et Maskinporten sikkerhetstoken fra Maskinporten Guardian ved å bruke Keycloak sikkerhetstoken fra steg 2. En kan alternativt angi
+   andre data scopes enn det som er standard for maskinporten-klienten, men dette er vanligvis ikke nødvendig.
+4) Maskinporten Guardian bruker SSB sitt virksomhetssertifikat til å signere en forespørsel om å hente et sikkerhetstoken fra Maskinporten (ref steg 3)
+5) API-konsumenten henter data fra den eksterne API-tilbyderen ved å bruke sikkerhetstoken fra Maskinporten.
+
+### Flyt: Personlig bruker
+
+::: {.callout-note appearance="simple"}
+Steg 1 og 2 gjelder kun for M2M-brukere. Dersom man aksesserer Maskinporten Guardian med personlig bruker så hentes Keycloak-tokenet f. eks
+ved hjelp av AuthClient i dapla-toolbelt.
+:::
+
+3) API-konsumenten henter et Maskinporten sikkerhetstoken fra Maskinporten Guardian ved å bruke sitt personlige Keycloak sikkerhetstoken.
+   Det må angis hvilken Maskinporten-klient og hvilke data scopes Maskinporten sikkerhetstokenet skal gjelde for. Den personlige brukeren
+   må på forhånd være autorisert (ref Maskinporten Guardian sin tilgangskonfigurasjon) til å kunne hente sikkerthetstokens for Maskinporten-klienten.
+4) Maskinporten Guardian bruker SSB sitt virksomhetssertifikat til å signere en forespørsel om å hente et sikkerhetstoken fra Maskinporten (ref steg 3)
+5) API-konsumenten henter data fra den eksterne API-tilbyderen ved å bruke sikkerhetstoken fra Maskinporten.
+
+
+## Opprette en Maskinporten Guardian M2M-bruker
+
+Som nevnt kan man opprette en Maskinporten-klient med tilgang til ett eller flere data scopes i [Samarbeidsportalen](https://samarbeid.digdir.no/).
+For å administrere integrasjoner og API-er i produksjon, må man få tildelt rettighet til dette på vegne av virksomheten i Altinn.
+Fremgangsmåten er beskrevet på [Digdir Docs](https://docs.digdir.no/docs/Maskinporten/maskinporten_sjolvbetjening_web.html).
+Du finner en oversikt over SSB sine kontakter i Samarbeidsportalen
+
+::: {.callout-tip appearance="simple"}
+En Maskinporten-klient er identifisert med en UUID, f. eks `12345678-9abc-def0-1234-567890abcdef`.
+:::
+
+For å kunne opptre på vegne av Maskinporten-klienten uten din personlige bruker, må man opprette en Keycloak systembruker. Det gjøres ved å åpne en
+Pull Request (konfigurasjon som gjennomgås av en tekniker) til [keycloak-iac](https://github.com/statisticsnorway/keycloak-iac) der man legger inn
+informasjon som Maskinporten klient-ID, data scopes og hvem som skal ha tilgang. Legg merke til at du må opprette en klient pr miljø (test og prod)
+Du kan se bort fra _play_-miljøet.
+
+### Eksempelkonfigurasjon
+
+```text
+amends ".../pkl/MaskinportenGuardianClient.pkl"
+
+api_shortname = "Kort API-beskrivelse (maks 32 tegn)"
+maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
+maskinporten_audience = "https://maskinporten.no/"
+maskinporten_default_scopes {
+  "foo:data1"
+  "foo:data2"
+}
+credentials_access {
+  "group:play-foeniks-data-admins@groups.ssb.no"
+  "serviceaccount:foo-sa@play-foeniks-p-ab.iam.gserviceaccount.com"
+}
+```
+
+::: {.callout-note}
+I test skal `maskinporten_audience` ha verdien `https://test.maskinporten.no/`.
+I prod skal det være `https://maskinporten.no/` (merk: skråstrek på slutten er viktig)
+:::
+
+Pull Requesten må godkjennes og behandles av en Dapla platformutvikler. Når dette er gjort blir det opprettet en Keycloak-klient, og hemmeligheten
+som kan brukes for å hente ut sikkerhetstokens for denne klienten er tilgjengelig i Secret Manager.
+
+Se følgende dokumentasjon for mer informasjon:
+
+
+* [Detaljert beskrivelse av konfigurasjonsmuligeter](https://github.com/statisticsnorway/keycloak-iac?tab=readme-ov-file#maskinporten-guardian).
+* [Generell beskrivelse av hvordan man oppretter en Keycloak-klient](https://github.com/statisticsnorway/keycloak-iac?tab=readme-ov-file#adding-a-new-keycloak-client)
+* [Keycloak client credentials](https://github.com/statisticsnorway/keycloak-iac?tab=readme-ov-file#client-credentials)
+
+Ta kontakt med [Kundeservice](https://ssb.pureservice.com/#/new) hvis du har spørsmål eller trenger ei hand å halde i.
+
+
+## Kodeeksempler
+
+Følgende viser Python kodeeksempler for hvordan man kan hente ut et Maskinporten sikkerhetstoken.
+
+### Flyt: M2M
+
+```python
+"""
+Retrieve maskinporten M2M access token for querying an external API.
+
+The following code example expects a toml config file to exist called
+<team_uniform_name>-config-<env>.toml
+
+with contents such as:
+
+keycloak_url = "https://auth.test.ssb.no"
+keycloak_clients_gcp_project_id = "keycloak-clients-<p|t>-??"
+guardian_url = "http://maskinporten-guardian.dapla.svc.cluster.local"
+
+[my-api]
+    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
+"""
+import os
+import re
+import requests
+import toml
+
+
+team_uniform_name = "play-foeniks"
+api_name = "my-api" # identifies the API in the config.toml file
+
+# Check which environment we're running and load corresponding config
+dapla_env = os.getenv("DAPLA_ENVIRONMENT").lower()
+config = toml.load(f"{team_uniform_name}-config-{dapla_env}.toml")
+
+# Get Maskinporten Guardian M2M Keycloak client credentials from Google Secret Manager
+# The secret's name is deduced from the team name and maskinporten client id
+name = f"{team_uniform_name}-ssb-maskinporten-{config[api_name]['maskinporten_client_id']}-credentials"
+secret = get_secret_version(project_id=config['keycloak_clients_gcp_project_id'],
+                            shortname=name)
+
+# The credentials are stored as yaml. Here we simply use a regex to parse. 
+keycloak_client_id = re.search(r'"client_id": "(.*)"', secret).group(1)
+keycloak_client_secret = re.search(r'"client_secret": "(.*)"', secret).group(1)
+
+# Get Keycloak access token
+# This token includes custom claims with values such as maskinporten_default_scopes
+response = requests.post(f"{config['keycloak_url']}/realms/ssb/protocol/openid-connect/token",
+    headers={
+        "Content-type": "application/x-www-form-urlencoded",
+    },
+    auth=(keycloak_client_id, keycloak_client_secret),
+    data={"grant_type": "client_credentials"}
+)
+keycloak_access_token = response.json()['access_token']
+
+# Get Maskinporten access token from Maskinporten Guardian (using the Keycloak token from above)
+# Note that you can specify custom scopes in the request body if you need to. Using defaults defined in the client config if not specified.
+request_body={}
+response = requests.post(f"{config['guardian_url']}/maskinporten/access-token",
+            headers={
+                "Authorization": f"Bearer {keycloak_access_token}",
+                "Content-type": "application/json",
+            },
+            json=request_body,
+        )
+maskinporten_access_token = response.json()['accessToken']
+
+# Then use the maskinporten access token to query the external API...
+```
+
+Støttefunksjon for å hente ut secrets fra Secret Manager
+
+```python
+from dapla import AuthClient
+from google.cloud import secretmanager
+
+def get_secret_version(project_id, shortname, version_id='latest'):
+    """
+    Access the payload for a given secret version.
+    The user's google credentials are used to authorize that the user have permission
+    to access the secret_id.
+    
+    Args:
+    - project_id (str): ID of the Google Cloud project where the secret is stored.
+    - shortname (str): Name (not full path) of the secret in Secret Manager.
+    - version_id (str, optional): The version of the secret to access. Defaults to 'latest'.
+
+    Returns:
+    - str: The payload of the secret version as a UTF-8 decoded string.
+    """
+    client = secretmanager.SecretManagerServiceClient(credentials=AuthClient.fetch_google_credentials())
+    secret_name = f"projects/{project_id}/secrets/{shortname}/versions/{version_id}"
+    response = client.access_secret_version(name=secret_name)
+    return response.payload.data.decode("UTF-8")
+```
+
+### Flyt: Personlig bruker
+
+```python
+"""
+Retrieve maskinporten personal access token for querying an external API.
+
+The following code example expects a toml config file to exist called
+<team_uniform_name>-config-<env>.toml
+
+with contents such as:
+
+guardian_url = "http://maskinporten-guardian.dapla.svc.cluster.local"
+
+[my-api]
+    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
+    scopes = ["some:scope1", "some:scope2"]
+"""
+import requests
+import toml
+from dapla import AuthClient
+
+team_uniform_name = "play-foeniks"
+api_name = "my-api" # identifies the API in the config.toml file
+
+# Check which environment we're running and load corresponding config
+dapla_env = os.getenv("DAPLA_ENVIRONMENT").lower()
+config = toml.load(f"{team_uniform_name}-config-{dapla_env}.toml")
+
+# Get Keycloak access token
+keycloak_access_token = AuthClient.fetch_personal_token()
+
+# Get Maskinporten access token from Maskinporten Guardian (using the personal Keycloak token from above)
+request_body = {
+  "maskinportenClientId": config[api_name]['maskinporten_client_id'],
+  "scopes": config[api_name]['scopes']
+}
+response = requests.post(f"{config['guardian_url']}/maskinporten/access-token",
+            headers={
+                "Authorization": f"Bearer {keycloak_access_token}",
+                "Content-type": "application/json",
+            },
+            json=request_body
+        )
+
+maskinporten_access_token = response.json()['accessToken']
+
+# Finally, use the maskinporten access token to query the external API
+print(maskinporten_access_token)
+```
