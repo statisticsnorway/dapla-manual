@@ -6,11 +6,15 @@
 
 #### Pip
 
-`pip install dapla-toolbelt-metadata`
+```{.bash filename="Terminal"}
+pip install dapla-toolbelt-metadata
+```
 
 #### Poetry
 
-`poetry add dapla-toolbelt-metadata`
+```{.bash filename="Terminal"}
+poetry add dapla-toolbelt-metadata
+```
 
 ## Datasett
 
@@ -23,3 +27,19 @@ Det primære brukstilfelle er å skape metadata for datasett skapt for nye tidsp
 I dette tilfelle har brukt Datadoc brukergrensesnittet for å skape det første metadatadokumentet. Man så bruker metadatadokumentet som en utgangspunkt for nye tidsperioder. `Datadoc` klassen utleder oppdatert informasjon fra filstien til datasettene for nye tidsperioder og oppdaterer metadataen til å stemme.
 
 Dette forutsetter at strukturen av datasettet og betydningen av variablene er lik gjennom tidsperiodene.
+
+### Kodeeksempel
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="gs://ssb-staging-dapla-felles-data-delt/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1.parquet",             # <1>
+    metadata_document_path="gs://ssb-staging-dapla-felles-data-delt/datadoc/sykefratot/klargjorte_data/person_testdata_p2021_v1__DOC.json", # <2>
+)
+meta.write_metadata_document() # <3>
+```
+
+1. En ny tidsperiode av et datasett
+2. Eksisterende metadatadokument
+3. Skaper et nytt metadatadokument med filsti som stemmer med datasettet, i dett tilfellet `gs://ssb-staging-dapla-felles-data-delt/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`
