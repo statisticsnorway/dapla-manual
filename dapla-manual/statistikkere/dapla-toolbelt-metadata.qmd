@@ -20,15 +20,19 @@ poetry add dapla-toolbelt-metadata
 
 Den anbefalte måten å skape metadata for et nytt datasett er med [Datadoc brukergrensesnittet](./datadoc.qmd). Men det finnes tilfeller hvor det er tungvint å bruke det og man ønsker å jobbe med metadata ved hjelp av kodespråk. Det kan man gjøre med `Datadoc` klassen i `dapla-toolbelt-metadata` pakken.
 
-### Brukstilfelle
+### Brukstilfeller
+
+#### Nye tidsperioder
 
 Det primære brukstilfelle er å skape metadata for datasett skapt for nye tidsperioder som en del av produksjonsløp.
 
 I dette tilfelle har brukt Datadoc brukergrensesnittet for å skape det første metadatadokumentet. Man så bruker metadatadokumentet som en utgangspunkt for nye tidsperioder. `Datadoc` klassen utleder oppdatert informasjon fra filstien til datasettene for nye tidsperioder og oppdaterer metadataen til å stemme.
 
-Dette forutsetter at strukturen av datasettet og betydningen av variablene er lik gjennom tidsperiodene.
+::: {.callout-note}
+Dette forutsetter at strukturen av datasettet og betydningen av variablene er lik mellom tidsperiodene. Om det finnes uforventede avvik så kastes en `InconsistentDatasetsError` med detaljer om avviket.
+:::
 
-### Kodeeksempel
+##### Kodeeksempel
 
 ```{.python filename="Notebook"}
 from dapla_metadata.datasets import Datadoc
@@ -42,4 +46,4 @@ meta.write_metadata_document() # <3>
 
 1. En ny tidsperiode av et datasett
 2. Eksisterende metadatadokument
-3. Skaper et nytt metadatadokument med filsti som stemmer med datasettet, i dett tilfellet `gs://ssb-staging-dapla-felles-data-delt/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`
+3. Skaper et nytt metadatadokument med filsti som stemmer med datasettet, i dette tilfellet `gs://ssb-staging-dapla-felles-data-delt/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`
