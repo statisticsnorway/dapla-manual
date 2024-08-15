@@ -2,12 +2,12 @@
 
 ## Maskinporten
 
-Maskinporten er en tjeneste fra Digdir for sikker autentisering og tilgangskontroll for datautveksling mellom virksomheter.
+Maskinporten er en tjeneste fra Digdir som gir sikker autentisering og tilgangskontroll for datautveksling mellom virksomheter.
 
 Tilgangsstyring for data administeres via et webgrensesnitt ([Samarbeidsportalen](https://samarbeid.digdir.no/))
-En virksomhet som deler data (API-tilbyder) definerer såkalte _data scopes_, og velger hvilke andre virksomheter
+En virksomhet som deler data (API-tilbyder) definerer såkalte _API scopes_, og velger hvilke andre virksomheter
 (API-konsumenter) som skal ha tilgang til disse. API-konsumenter kan på sin side selv opprette en eller flere
-_Maskinporten-klienter_ og gir de tilgang til data scopes som er delt med virksomheten.
+_Maskinporten-klienter_ og gir de tilgang til API scopes som er delt med virksomheten.
 
 ![Datauveksling mellom virksomheter](../images/maskinporten-utveksling.png){fig-alt="Maskinportens rolle er å være et tillitsanker - en sikringsmekanisme for trygg deling av data som sikrer at data bare flyter dit de skal." fig-align="left" #fig-maskinporten-utveksling}
 
@@ -17,14 +17,73 @@ Les mer om Maskinporten [her](https://samarbeid.digdir.no/maskinporten/dette-er-
 ## Hva gjør Maskinporten Guardian?
 
 Utveksling av data fra en API-tilbyder gjøres ved å inkludere et _sikkerhetstoken_ som hentes fra Maskinporten
-på vegne av virksomheten man representerer (f. eks SSB). Hvilke data (såkalte _data scopes_) et sikkerhetstoken har
+på vegne av virksomheten man representerer (f. eks SSB). Hvilke data (_API scopes_) et sikkerhetstoken har
 tilgang til er knyttet til Maskinporten-klienten. For å hente et sikkerhetstoken for en klient, kreves det at man
 autentiserer seg som virksomhet. Dette gjøres ved å signere forespørsler til Maskinporten ved bruk av et
 virksomhetssertifikat. Det er her [Maskinporten Guardian](https://github.com/statisticsnorway/maskinporten-guardian)
 kommer inn i bildet.
 
 Maskinporten Guardian har tilgang til SSBs virksomhetssertifikat og kan dermed signere forespørsler mot Maskinporten
-for å hente ut sikkerhetstokens. Maskinporten Guardian sine endepunkter er selv beskyttet av Keycloak. To typer brukere støttes:
+for å hente ut sikkerhetstokens. 
+
+
+## Komme igang
+
+Hvis en skal ta i bruk et API som er beskyttet av Maskinporten er det noen steg som må gjøres i forkant:
+
+```{mermaid}
+flowchart TD
+    A[API-tilbyder gir SSB tilgang til API via Samarbeidsportalen]
+    A --> B[M2M-teamet hos SSB oppretter Maskinporten-klienter]
+    B --> C[Keycloak-klienter for Maskinporten Guardian opprettes]
+```
+
+1) API-tilbyderen må gi SSB tilgang til et _API scope_. API-tilbydere kan gjøre dette via
+[Samarbeidsportalen hos Digdir](https://samarbeid.digdir.no/). Fra API-tilbyderen får du også annen informasjon om API-ene, som:
+
+* URL-er som skal benyttes for å snakke med API-et
+* Navn på API scopes
+* Om det finnes testadata
+* Dokumentasjon for API-endepunktene
+ 
+2) Når data er delt av en API-tilbyder, og en har navnet på API scopes, kan [M2M-teamet hos SSB](mailto:arild.langseth@ssb.no) kontaktes
+for å få opprettet _Maskinporten-klienter_, én pr miljø (f. eks `prod` og `test`). De må vite hvilke API scopes og miljøer (test/prod) som skal benyttes.
+M2M-teamet vil gi deg ID-er (f. eks `12345678-9abc-def0-1234-567890abcdef`) for klientene som er blitt opprettet.
+
+::: {.callout-tip appearance="simple"}
+Du kan anse ID for en Maskinporten-klient som et slags brukernavn, og behandle dette deretter. Slike ID-er er ikke sensitive i seg selv,
+men de bør allikevel ikke ligge i åpne git-repoer (SSB-private repoer er OK). Det er heller ingen grunn til å behandle disse som hemmeligheter.
+Det anbefales at man opererer med Maskinporten-klienter som ekstern konfigurasjon til koden, f. eks på samme måte som man behandler URL-er til API-ene. 
+:::
+
+3) Når du har ID for Maskinporten-klienten(e), er neste steg å få opprettet en Keycloak-bruker for Maskinporten Guardian. Se [Opprette en Maskinporten Guardian M2M-bruker].
+Ta kontakt med oss på Dapla via [Pureservice](https://ssb.pureservice.com/#/new) dersom du trenger hjelp til dette. _Client ID_ og _client secret_ for Keycloak-brukeren
+kan hentes fra Secret Manager (mer om det lenger ned). Medlemmer av Dapla-teamet har tilgang til å hente disse.
+
+Om noen på teamet trenger personlig tilgang til API-ene så må det konfigureres i Maskinporten Guardian. Da må vi vite hvilke personer som skal ha denne tilgangen. Les mer om forskjellen på M2M og personlig tilgang
+[lenger ned](#hvordan-maskinporten-guardian).
+
+
+## Administrasjon av API-integrasjoner i SSB
+
+Det er M2M-teamet i SSB som administrerer det formelle i forbindelse med integrasjoner mot eksterne API-er.
+For å få opprettet nye Maskinporten-klienter er det dette teamet man [kontakter](mailto:arild.langseth@ssb.no).
+De må vite hvilke miljøer (`test` og/eller `prod`) og hvilke API scopes som skal benyttes. Hver Maskinporten-klient som opprettes
+identifiseres av en ID (f. eks `12345678-9abc-def0-1234-567890abcdef`), som du vil få tilsendt.
+
+Legg merke til at det er SSB selv som oppretter og administrerer Maskinporten-klienter. Det gjøres i [Samarbeidsportalen hos Difi](https://samarbeid.digdir.no/). 
+Klientene knyttes til API scope(s) (som er delt med SSB av API-tilbyderen). Du kan lese mer om hvordan M2M-teamet administrerer Maskinporten-klienter
+[her]((https://docs.digdir.no/docs/Maskinporten/maskinporten_sjolvbetjening_web.html)).
+
+::: {.callout-tip appearance="simple"}
+Alle med en SSB-epostadresse kan [registerere]((https://user.difi.no/auth/realms/difi/login-actions/registration?client_id=samarbeid-lukket&tab_id=9q0RtrwC2Vo))
+en personlig bruker i [Digdir Samarbeidsportalen](https://samarbeid.digdir.no/) for å få innsyn i hvilke API-integrasjoner som finnes.
+:::
+
+
+## Hvordan bruker jeg Maskinporten Guardian? {#hvordan-maskinporten-guardian}
+
+Maskinporten Guardian sine endepunkter er selv beskyttet av Keycloak. To typer brukere støttes:
 
 * _Maskin-til-maskin (M2M)_ - Systembruker knyttet til en gitt Maskinporten-klient. For å opptre på vegne av en
    M2M-bruker autentiserer man seg med en _Keycloak client secret_. Denne hemmeligheten er lagret i Google Secret Manager
@@ -46,16 +105,16 @@ Maskinporten Guardian aksesseres med systembruker (M2M) eller personlig bruker.
 
 ![](../images/maskinporten-guardian-flyt.svg){fig-alt="Maskinporten Guardian flyt" fig-align="left" #fig-maskinporten-flyt}
 
-### Flyt: M2M
+### Flyt: M2M {#m2m-flow}
 
 1) API-konsumenten henter sin _Keycloak client secret_ for en gitt Maskinporten-klient fra Secret Manager. 
 2) API-konsumenten henter et Keycloak sikkerhetstoken ved å bruke _client secret_ fra steg 1.
 3) API-konsumenten henter et Maskinporten sikkerhetstoken fra Maskinporten Guardian ved å bruke Keycloak sikkerhetstoken fra steg 2. En kan alternativt angi
-   andre data scopes enn det som er standard for maskinporten-klienten, men dette er vanligvis ikke nødvendig.
+   andre API scopes enn det som er standard for Maskinporten-klienten, men dette er vanligvis ikke nødvendig.
 4) Maskinporten Guardian bruker SSB sitt virksomhetssertifikat til å signere en forespørsel om å hente et sikkerhetstoken fra Maskinporten (ref steg 3)
 5) API-konsumenten henter data fra den eksterne API-tilbyderen ved å bruke sikkerhetstoken fra Maskinporten.
 
-### Flyt: Personlig bruker
+### Flyt: Personlig bruker {#personal-flow}
 
 ::: {.callout-note appearance="simple"}
 Steg 1 og 2 gjelder kun for M2M-brukere. Dersom man aksesserer Maskinporten Guardian med personlig bruker så hentes Keycloak-tokenet f. eks
@@ -63,7 +122,7 @@ ved hjelp av AuthClient i dapla-toolbelt.
 :::
 
 3) API-konsumenten henter et Maskinporten sikkerhetstoken fra Maskinporten Guardian ved å bruke sitt personlige Keycloak sikkerhetstoken.
-   Det må angis hvilken Maskinporten-klient og hvilke data scopes Maskinporten sikkerhetstokenet skal gjelde for. Den personlige brukeren
+   Det må angis hvilken Maskinporten-klient og hvilke API scopes Maskinporten sikkerhetstokenet skal gjelde for. Den personlige brukeren
    må på forhånd være autorisert (ref Maskinporten Guardian sin tilgangskonfigurasjon) til å kunne hente sikkerthetstokens for Maskinporten-klienten.
 4) Maskinporten Guardian bruker SSB sitt virksomhetssertifikat til å signere en forespørsel om å hente et sikkerhetstoken fra Maskinporten (ref steg 3)
 5) API-konsumenten henter data fra den eksterne API-tilbyderen ved å bruke sikkerhetstoken fra Maskinporten.
@@ -71,19 +130,15 @@ ved hjelp av AuthClient i dapla-toolbelt.
 
 ## Opprette en Maskinporten Guardian M2M-bruker
 
-Som nevnt kan man opprette en Maskinporten-klient med tilgang til ett eller flere data scopes i [Samarbeidsportalen](https://samarbeid.digdir.no/).
-For å administrere integrasjoner og API-er i produksjon, må man få tildelt rettighet til dette på vegne av virksomheten i Altinn.
-Fremgangsmåten er beskrevet på [Digdir Docs](https://docs.digdir.no/docs/Maskinporten/maskinporten_sjolvbetjening_web.html).
-Du finner en oversikt over SSB sine kontakter i Samarbeidsportalen
-
-::: {.callout-tip appearance="simple"}
-En Maskinporten-klient er identifisert med en UUID, f. eks `12345678-9abc-def0-1234-567890abcdef`.
+::: {.callout-note}
+Dette avsnittet inneholder tekniske instrukser ment for deg som er kjent med Git og som f. eks jobber i et Self-managed Dapla-team. Ta kontakt med oss
+via [Pureservice](https://ssb.pureservice.com/#/new) så hjelper vi deg gjerne med dette. 
 :::
 
-For å kunne opptre på vegne av Maskinporten-klienten uten din personlige bruker, må man opprette en Keycloak systembruker. Det gjøres ved å åpne en
-Pull Request (konfigurasjon som gjennomgås av en tekniker) til [keycloak-iac](https://github.com/statisticsnorway/keycloak-iac) der man legger inn
-informasjon som Maskinporten klient-ID, data scopes og hvem som skal ha tilgang. Legg merke til at du må opprette en klient pr miljø (test og prod)
-Du kan se bort fra _play_-miljøet.
+For å kunne opptre på vegne av Maskinporten-klienten uavhengig av din personlige bruker, må man opprette en Keycloak systembruker. Det gjøres ved å 
+åpne en Pull Request (konfigurasjon som gjennomgås av en tekniker) til [keycloak-iac](https://github.com/statisticsnorway/keycloak-iac) der 
+du angir informasjon som ID for Maskinporten-klient, API scopes og hvem som skal ha tilgang. Legg merke til at du må opprette en klient pr miljø
+(test og prod). Du kan se bort fra _play_-miljøet.
 
 ### Eksempelkonfigurasjon
 
