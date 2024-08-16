@@ -186,8 +186,8 @@ Følgende viser Python kodeeksempler for hvordan man kan hente ut et Maskinporte
 """
 Retrieve maskinporten M2M access token for querying an external API.
 
-The following code example expects a toml config file to exist called
-<team_uniform_name>-config-<env>.toml
+The following code example expects a toml config file to exist named
+<team_uniform_name>-<env>-maskinporten-m2m.toml (e.g. play-foeniks-prod-maskinporten-m2m.toml)
 
 with contents such as:
 
@@ -209,7 +209,7 @@ api_name = "my-api" # identifies the API in the config.toml file
 
 # Check which environment we're running and load corresponding config
 dapla_env = os.getenv("DAPLA_ENVIRONMENT").lower()
-config = toml.load(f"{team_uniform_name}-config-{dapla_env}.toml")
+config = toml.load(f"{team_uniform_name}-{dapla_env}-maskinporten-m2m.toml")
 
 # Get Maskinporten Guardian M2M Keycloak client credentials from Google Secret Manager
 # The secret's name is deduced from the team name and maskinporten client id
@@ -279,8 +279,8 @@ def get_secret_version(project_id, shortname, version_id='latest'):
 """
 Retrieve maskinporten personal access token for querying an external API.
 
-The following code example expects a toml config file to exist called
-<team_uniform_name>-config-<env>.toml
+The following code example expects a toml config file to exist named
+<team_uniform_name>-<env>-maskinporten-personal.toml (e.g. play-foeniks-prod-maskinporten-personal.toml)
 
 with contents such as:
 
@@ -299,7 +299,7 @@ api_name = "my-api" # identifies the API in the config.toml file
 
 # Check which environment we're running and load corresponding config
 dapla_env = os.getenv("DAPLA_ENVIRONMENT").lower()
-config = toml.load(f"{team_uniform_name}-config-{dapla_env}.toml")
+config = toml.load(f"{team_uniform_name}-{dapla_env}-maskinporten-personal.toml")
 
 # Get Keycloak access token
 keycloak_access_token = AuthClient.fetch_personal_token()
