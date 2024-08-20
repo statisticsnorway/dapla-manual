@@ -26,6 +26,10 @@ kommer inn i bildet.
 Maskinporten Guardian har tilgang til SSBs virksomhetssertifikat og kan dermed signere forespørsler mot Maskinporten
 for å hente ut sikkerhetstokens. 
 
+Maskinporten Guardian er tilgjengelig fra alle SSB og NAIS sine IP-adresser, og kan nås på:
+
+* Prod: https://guardian.dapla.ssb.no
+* Test: https://guardian.dapla-staging.ssb.no
 
 ## Komme igang
 
@@ -193,7 +197,7 @@ with contents such as:
 
 keycloak_url = "https://auth.test.ssb.no"
 keycloak_clients_gcp_project_id = "keycloak-clients-<p|t>-??"
-guardian_url = "http://maskinporten-guardian.dapla.svc.cluster.local"
+guardian_url = "https://guardian.dapla-staging.ssb.no"
 
 [my-api]
     maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
@@ -284,12 +288,13 @@ The following code example expects a toml config file to exist named
 
 with contents such as:
 
-guardian_url = "http://maskinporten-guardian.dapla.svc.cluster.local"
+guardian_url = "https://guardian.dapla-staging.ssb.no"
 
 [my-api]
     maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
     scopes = ["some:scope1", "some:scope2"]
 """
+import os
 import requests
 import toml
 from dapla import AuthClient
