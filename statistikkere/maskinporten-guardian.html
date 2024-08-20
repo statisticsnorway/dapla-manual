@@ -584,6 +584,11 @@ Figur&nbsp;1: Datauveksling mellom virksomheter
 <h2 class="anchored" data-anchor-id="hva-gjør-maskinporten-guardian">Hva gjør Maskinporten Guardian?</h2>
 <p>Utveksling av data fra en API-tilbyder gjøres ved å inkludere et <em>sikkerhetstoken</em> som hentes fra Maskinporten på vegne av virksomheten man representerer (f.&nbsp;eks SSB). Hvilke data (<em>API scopes</em>) et sikkerhetstoken har tilgang til er knyttet til Maskinporten-klienten. For å hente et sikkerhetstoken for en klient, kreves det at man autentiserer seg som virksomhet. Dette gjøres ved å signere forespørsler til Maskinporten ved bruk av et virksomhetssertifikat. Det er her <a href="https://github.com/statisticsnorway/maskinporten-guardian">Maskinporten Guardian</a> kommer inn i bildet.</p>
 <p>Maskinporten Guardian har tilgang til SSBs virksomhetssertifikat og kan dermed signere forespørsler mot Maskinporten for å hente ut sikkerhetstokens.</p>
+<p>Maskinporten Guardian er tilgjengelig fra alle SSB og NAIS sine IP-adresser, og kan nås på:</p>
+<ul>
+<li>Prod: https://guardian.dapla.ssb.no</li>
+<li>Test: https://guardian.dapla-staging.ssb.no</li>
+</ul>
 </section>
 <section id="komme-igang" class="level2">
 <h2 class="anchored" data-anchor-id="komme-igang">Komme igang</h2>
@@ -774,7 +779,7 @@ Note
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">keycloak_url = "https://auth.test.ssb.no"</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">keycloak_clients_gcp_project_id = "keycloak-clients-&lt;p|t&gt;-??"</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "http://maskinporten-guardian.dapla.svc.cluster.local"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "https://guardian.dapla-staging.ssb.no"</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">[my-api]</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"</span></span>
@@ -859,43 +864,44 @@ Note
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">with contents such as:</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "http://maskinporten-guardian.dapla.svc.cluster.local"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "https://guardian.dapla-staging.ssb.no"</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">[my-api]</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">    scopes = ["some:scope1", "some:scope2"]</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> toml</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>team_uniform_name <span class="op">=</span> <span class="st">"play-foeniks"</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>api_name <span class="op">=</span> <span class="st">"my-api"</span> <span class="co"># identifies the API in the config.toml file</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which environment we're running and load corresponding config</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>dapla_env <span class="op">=</span> os.getenv(<span class="st">"DAPLA_ENVIRONMENT"</span>).lower()</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> toml.load(<span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>dapla_env<span class="sc">}</span><span class="ss">-maskinporten-pers.toml"</span>)</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Keycloak access token</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>keycloak_access_token <span class="op">=</span> AuthClient.fetch_personal_token()</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten access token from Maskinporten Guardian (using the personal Keycloak token from above)</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>request_body <span class="op">=</span> {</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">"maskinportenClientId"</span>: config[api_name][<span class="st">'maskinporten_client_id'</span>],</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scopes"</span>: config[api_name][<span class="st">'scopes'</span>]</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'guardian_url'</span>]<span class="sc">}</span><span class="ss">/maskinporten/access-token"</span>,</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>            headers<span class="op">=</span>{</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>keycloak_access_token<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Content-type"</span>: <span class="st">"application/json"</span>,</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>            },</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>request_body</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>maskinporten_access_token <span class="op">=</span> response.json()[<span class="st">'accessToken'</span>]</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, use the maskinporten access token to query the external API</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(maskinporten_access_token)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> toml</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>team_uniform_name <span class="op">=</span> <span class="st">"play-foeniks"</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>api_name <span class="op">=</span> <span class="st">"my-api"</span> <span class="co"># identifies the API in the config.toml file</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which environment we're running and load corresponding config</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>dapla_env <span class="op">=</span> os.getenv(<span class="st">"DAPLA_ENVIRONMENT"</span>).lower()</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> toml.load(<span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>dapla_env<span class="sc">}</span><span class="ss">-maskinporten-pers.toml"</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Keycloak access token</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>keycloak_access_token <span class="op">=</span> AuthClient.fetch_personal_token()</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten access token from Maskinporten Guardian (using the personal Keycloak token from above)</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>request_body <span class="op">=</span> {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"maskinportenClientId"</span>: config[api_name][<span class="st">'maskinporten_client_id'</span>],</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scopes"</span>: config[api_name][<span class="st">'scopes'</span>]</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'guardian_url'</span>]<span class="sc">}</span><span class="ss">/maskinporten/access-token"</span>,</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>            headers<span class="op">=</span>{</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>keycloak_access_token<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Content-type"</span>: <span class="st">"application/json"</span>,</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>request_body</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>maskinporten_access_token <span class="op">=</span> response.json()[<span class="st">'accessToken'</span>]</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, use the maskinporten access token to query the external API</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(maskinporten_access_token)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
