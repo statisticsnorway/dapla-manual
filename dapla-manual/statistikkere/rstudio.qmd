@@ -2,4 +2,99 @@
 title: Rstudio
 ---
 
-Kommer snart
+![](../images/dapla-lab-rstudio.png){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
+
+**Rstudio** er en tjeneste på [Dapla Lab](./dapla-lab.html) for utvikling av kode i R^[**Rstudio** er [web-versjonen av Rstudio](https://posit.co/products/open-source/rstudio-server/) og er ikke helt identisk med desktop-versjonen som mange er kjent med.]. Målgruppen for tjenesten er brukere som skal skrive produksjonskode i R^[Python er ikke installert i Rstudio-tjenesten.].
+
+Siden tjenesten er ment for produksjonskode så er det veldig få forhåndsinstallerte R-pakker. Antagelsen er at brukerene/teamet heller bør installere de pakkene de trenger, framfor at alle pakker som alle brukere/team er forhåndsinstallert og skal dekke behovet til alle. Det reduserer kompleksitet i tjenesten og dermed sannsynligheten for feilsituasjoner.
+
+## Forberedelser
+
+Før man starter **Rstudio** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab.html) og satt opp Git- og GitHub-konfigurasjonen under **Min konto**. Deretter gjør du følgende:
+
+1. Logg deg inn på [Dapla Lab](https://lab.dapla.ssb.no/)
+2. Under **Tjenestekatalog** trykker du på **Start**-knappen for **Rstudio**
+3. Gi tjenesten et navn
+4. Åpne **Rstudio konfigurasjoner**
+
+## Konfigurasjon
+
+Før man åpner en tjeneste kan man konfigurere hvor mye ressurser man ønsker, hvilket team man skal representere, om et GitHub-repo skal klones ved oppstart, og mange andre ting. Valgene man gjør kan også lagres slik at man å slipper å gjøre samme jobb senere. @fig-dapla-lab-rstudio-service viser første fane i tjenestekonfigurasjonen for Rstudio.
+
+![Detaljert tjenestekonfigurasjon i Dapla Lab](../images/dalpa-lab-rstudio-service.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-rstudio-service}
+
+### Service
+
+I fanen **Service** kan man velge hvilke **PullPolicy** som skal gjelde ved oppstart av, samt **Version** av tjenesten. *PullPolicy* trenger brukerne sjelden å endre på, mens *Version* lar brukeren velge hvilken versjon av tjenesten som skal benyttes. 
+
+Siden Jupyter-tjenesten kommer installert med både R- og Python så er det her man velger hvilke versjoner av disse man ønsker. Man kan velge mellom alle tidligere tilbudte kombinasjoner av R og Python. I @fig-dapla-lab-rstudio-service ser vi av navnet `rstudio:r4.4.0` at tjenesten som default vil startes med versjon 4.4.0 av R. Etter hvert som nye versjoner av R kommer kan disse tilgjengeliggjøres i tjenesten, men brukeren kan velge å starte en eldre versjon av tjenesten og R.
+
+### Buckets
+
+Under **Buckets** kan man velge **Enable** for å få tilgang til data fra bøtter i tjenesten. I tillegg må man velge hvilket team og tilgangsgruppe man skal representere. 
+
+![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
+
+@fig-dapla-lab-konf-buckets viser at man kan velge blant alle **developers**-gruppene i alle team man er medlem i. Velger man f.eks. å representere *Dapla group* teama-developers så kan man få alle standard-bøtter (produkt, frasky, tilsky og egne delt-bøtter) for det teamet. Men man får ikke tilgang til bøtter som man har tilgang til gjennom andre team. 
+
+Man kan også spesifisere andre bøtter som skal tilgjengliggjøres i tjenesten teamet og tilgangsgruppen har tilgang til. Typisk vil dette være andre sine delt-bøtter som teamet har fått tilgang til.
+
+### Resources
+
+Under fanen **Resources** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite som trengs for å gjøre jobben du skal gjøre. 
+
+![Konfigurasjon av ressurser for Rstudio-tjenesten i Dapla Lab](../images/dapla-lab-resources.png){fig-alt="Viser Resources-fanen i Rstudio-konfigurasjonen i Dapla Lab." #fig-dapla-lab-resources}
+
+### Persistence
+
+Som default får alle som starter en instans av Rstudio-tjenesten en lokal disk på 10GB inne i tjenesten. Under *Persistence*-fanen kan man velge å øke størrelsen på disken eller ikke noe disk i det hele tatt. Siden lokal disk i tjenesten hovedsakelig skal benyttes til å lagre en lokal kopi av koden som lagres på GitHub mens man gjør endringer, så bør ikke størrelsen på disken være større enn nødvendig.@fig-dapla-lab-resources viser valgene som kan gjøres under Resource-fanen. 
+
+![Konfigurasjon av lokal disk for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-persistence.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-persistence}
+
+### Git
+
+Under fanen **Git** kan man konfigurere Git og GitHub slik at det blir lettere å jobbe med inne i tjenesten. Som default arves informasjonen som er lagret under [*Min konto*-*Git* i Dapla Lab](./dapla-lab.html#git). Informasjonen under tjenestekonfigurasjonen blir tilgjengeliggjort som miljøvariabler i tjenesten. Informasjonen blir også lagt i `$HOME/.netrc` slik at man kan benytte ikke trenger å gjøre noe mer for å jobbe mot GitHub fra tjenesten.  
+
+![Konfigurasjon av Git for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-konf-git.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-git}
+
+## Datatilgang
+
+Hvis man har valgt å tilgjengeliggjøre data fra et team sitt bøtter i tjenesten, så kan man inspisere dataene fra en terminal inne i tjenesten: 
+
+1. Åpne en instans av Rstudio med data fra bøtter 
+2. Åpne en terminal inne i Rstudio
+3. Gå til mappen med bøttene ved å kjøre dette fra terminalen `cd /buckets`
+3. Kjør `ls -ahl` i teminalen for å se på hvilke bøtter som er montert.
+
+## Installere pakker
+
+Siden det nesten ikke er installert noen pakker i tjenesten så kan brukeren opprette et [renv](./jobbe-med-kode.qmd#r-og-renv) og installere pakker som ønsker. 
+
+## Slette tjenesten
+
+For å slette tjenesten kan man trykke på Slette-knappen i Dapla Lab under **Mine tjenester**. Når man sletter en tjeneste så sletter man hele disken inne i tjenesten og frigjør alle ressurser som er reservert. Siden pakkene som er installert også ligger lagret på disken, betyr dette at pakkene må installeres på nytt etter at en tjeneste er slettet. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.
+
+## Pause tjenesten
+
+Man kan pause tjenesten ved å trykke på Pause-knappen i Dapla Lab under **Mine tjenester**. Når man pauser så slettes alt påden lokale disken som ikke er lagret under `$HOME/work`. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.
+
+## Monitorering
+
+:::: {.columns}
+
+::: {.column width="70%"}
+Man kan moniterere en instans av Rstudio ved å trykke på Rstudio-teksten under Mine tjenester i Dapla Lab, slik som vist i @fig-dapla-lab-monitoring.
+
+Denne funksjonaliteten er under arbeid og mer informasjon kommer snart. 
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="25%"}
+![Monitorering av Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-monitoring.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-monitoring}
+:::
+
+::::
+
