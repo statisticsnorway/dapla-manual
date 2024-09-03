@@ -100,16 +100,42 @@ En bruker kan trykke på navnet til tjenesten under **Mine tjenester** for å mo
 
 ## Datatilgang
 
-Alle tjenester som tilbys i Dapla Lab skal håndheve at man kun representere et team i en instans av tjenesten. Dvs. at man må bestemme seg for hvilket team sine data man skal jobbe med, hvis man er medlem av flere team, før man åpner en tjeneste. Grunnen til regelen er at brukerne ofte er medlem av flere team, med tilgang til forskjellig data, som ikke skal behandles samtidig. Tilgangsstyring til data skjer på teamnivå, og medlemskap i et team skal gi brukeren de tilgangene de trenger for å produsere den statistikken eller forskningen. 
+For å få tilgang til data i en tjeneste på Dapla Lab, så må brukeren oppgi hvilket team brukeren skal representere i tjenestekonfigurasjonen, samt om de skal fungere som [developers](./hva-er-dapla-team.ipynb#developers) eller [data-admins](./hva-er-dapla-team.ipynb#data-admins) i teamet^[Foreløpig er det kun mulig å aksessere data som *developers*. *data-admins* kommer til å bli støttet om kort tid.]. Hvis man ikke spesifiserer at man skal representere et team, så åpnes tjenesten uten tilgang til data i bøtter. 
+
+For å få tilgang til lagringsbøttene i prod-prosjektet til et team, så må man logge seg inn i prod-miljøet til Dapla Lab (<https://lab.dapla.ssb.no/>). Skal man ha tilgang til lagringsbøttene i test-prosjektet til et team må man logge seg inn i test-miljøet til Dapla Lab (<https://lab.dapla-test.ssb.no/>). For team som har er et dev-miljø så gjelder følgende dev-miljøet til Dapla Lab (<https://lab.dapla-test.ssb.no/>). 
 
 ### Bøtter som filsystem
 
 Tjenestetilbyderne i Dapla Lab kan tilby datatilgang til bøtter gjennom å tilgjengeliggjøring av data i bøtter som filsystem inne i tjenesten. Det vil si at man kan referere til data som man er vant til på vanlige filsystem, og man kan bruke biblioteker uten å autentisere seg mot bøtter. 
 
-Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien `/buckets/`. Hvis man åpner en tjeneste med denne løsningen så kan liste ut hvilke bøtter som ble tilgjengeliggjort.  
+Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien `/buckets/`. Hvis man åpner en tjeneste med denne løsningen så kan liste ut hvilke bøtter som ble tilgjengeliggjort.
+
+### Jobbe med data
+
+Siden Dapla Lab tilbyr å tilgjengliggjøre lagringsbøtter som filsystem inne i tjenesten, så finnes det nå to måter å aksessere data på: 
+
+1. dapla-toolbelt direkte mot bøttene
+2. bruke "vanlige pakker" og referere til filstien som starter med `/buckets/`
+
+::: {.callout-warning}
+## Tilgang til andre sine delt data
+
+Tilgang til andre team sine delte-data kan foreløpig ikke aksesseres som en vanlig filsti under `/buckets/`. Da må man bruke `dapla-toolbelt` for lese og skrive til bøttene. Om kort tid vil dette også være tilgjengelig i filsystemet som resten av teamets data. 
+:::
 
 
+## Miljøer
 
+Det finnes 3 adskilte miljøer for Dapla Lab: prod, test og dev. @tbl-env-daplalab viser hvilke url-er som gjelder for de ulike miljøene.
+
+| Miljø | Url                                                            |
+| ----- | -------------------------------------------------------------- |
+| Prod  | <https://lab.dapla.ssb.no/>                                    |
+| Test  | <https://lab.dapla-test.ssb.no/>                               |
+| Dev   | <https://lab.dapla-dev.ssb.no/>                                |
+: Oversikt over miljøer og tilhørende url-er for Dapla Lab. {#tbl-env-daplalab .striped}
+
+Miljøene er knyttet til datatilgang for [prosjektene til Dapla-team](./hva-er-dapla-team.ipynb#ressurser). Hvert Dapla-team kan ha ressurser i prod-, test, eller dev-miljøet sitt. For å få tilgang til ressursene i et av miljøene må de logge seg inn på tilsvarende miljø i Dapla Lab. Det er f.eks. ikke mulig å aksessere prod-data fra test-miljøet i Dapla Lab og omvendt.  
 
 
 
