@@ -24,6 +24,8 @@ Selv om Dapla Lab en løsning for å tilby tjenester så er det også en del nyt
 - få oversikt over hvilke tjenester man har kjørende
 - pause en tjeneste
 
+Menyen i @fig-dapla-lab-menu inkluderer også lenker til andre nettsteder som er nyttig når man jobber med data på Dapla. Meny-innslagene **Dapla Manualen**, **Dapla Ctrl**, **Google Cloud Console** og **FAQ** er alle lenker til eksterne ressurser.  
+
 :::
 
 ::: {.column width="5%"}
@@ -72,13 +74,32 @@ Under **Tjenestekatalogen** ligger alle tjenestene som brukeren kan velge å sta
 
 @fig-dapla-lab-tjenestekat viser hvilke tjenester som nå er tilgjengelig i Dapla Lab, inkludert en kort beskrivelse av bruksområdet for hver tjeneste. @fig-dapla-lab-tjenestekonf viser hva som møter når de starter **Jupyter**-tjenesten.
 
+### Tjenestekonfigurasjon
+
+Alle tjenester på Dapla Lab kan konfigureres før de startes opp. Trykker man på **Start** på en av tjenestene i [tjenestekatalogen](./dapla-lab.qmd#tjenestekatalog) kommer man inn tjenestekonfigurasjon for akkurat den tjenesten. Felles for alle tjenester er at man kan navngi hver tjeneste og velge versjon^[Det er sjelden behov for å brukere å endre versjon her.], slik som vist under **Vennlig navn** og **Versjon** i @fig-dapla-lab-tjenestekonf.
+
 ![Tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-tjenestekonf.png){fig-alt="Viser tjenestekatalogen i Dapla Lab." #fig-dapla-lab-tjenestekonf}
 
-Under **Vennlig navn** kan man velge å gi instansen et eget navn. Dette er nyttig siden man kan ønske å starte flere instanser av Jupyter samtidig. I tillegg er det nyttig hvis man ønsker å lagre konfigurasjonen for tjenester i tilfeller der man alltid konfigurerer en tjeneste på samme måte. Man kan lagre en tjenestekonfigurasjon ved å trykke på Lagre-ikonet øverst til høyre. 
+Ekspanderer man **Jupyter konfigurasjoner** vist i @fig-dapla-lab-tjenestekonf, så får man opp konfigurasjon som er spesifikk for akkurat den tjeneste. HVer tjenestetilbyder vurderer hvilken konfigurasjon som gir mening for den tjenesten de tilbyr. For programmeringsmiljøer som [Jupyter](./jupyter.qmd) og [VS Code](./vscode-python.qmd) velger man å gi brukeren mulighet til å velge hvilket team de skal representere, hvor mye ram og gpu de ønsker, hvor stor diskplass de ønsker, Git/GitHub-oppsett, etc.. For en tjeneste som [Datadoc](./datadoc.qmd) har tilbyderen kun valgt å la brukeren velge hvilket team de representerer og versjon av tjenesten. Les mer om tjenestekonfigurasjonen til en tjeneste i dokumentasjonen til tjenesten.  
 
-Videre kan man velge **Versjon** av tjenesten. Dette er noe brukeren sjelden vil trenge å forholde seg til. 
+#### Lagre tjenestekonfigurasjon
 
-Etter dette kan man velge å starte tjenesten ved å trykke på **Start**-knappen. Men teamet i SSB som tilbyr tjenesten kan også tilby ytterlige tjenestekonfigurasjon som kan være svært nyttig. Siden disse kan variere mellom tjenester så er de forklart i dokumentasjonen til tjenesten. 
+Som regel vil ønske å starte den samme tjenesten med samme konfigurasjon i mange tilfeller. Dapla Lab tilbyr derfor at du kan lagre en tjenestekonfigurasjon med egenvalgt navn. Etter at du har valgt verdiene du ønsker i tjenestekonfigurasjonen så trykker du på **Lagre**-ikonet vist i @fig-dapla-lab-tjenestekonf. Deretter kan du se dine lagrede konfigurasjoner under **Mine tjenester**, slik som vist i @fig-dapla-lab-tjenestekonf-lagret.
+
+![Tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-tjenestekonf-lagret.png){fig-alt="Lagrede tjenestekonfigurasjoner i Dapla Lab." #fig-dapla-lab-tjenestekonf-lagret}
+
+#### Dele tjenestekonfigurasjon
+
+Man kan også dele sin tjenestekonfigurasjon med andre i SSB. Det forutsetter at de man deler med har de samme datatilgangene som den som deler. Man kan dele lagrede tjenestekonfigurasjoner ved å gå til **Mine tjenester**, trykke på de tre prikkene til høyre i tjenesten i ikonet, og deretter **Kopier URL-lenke**, slik som vist i @fig-dapla-lab-tjenestekonf-share. Deretter er det bare å sende lenken til en kollega, og de kan åpne en likt konfigurert tjeneste med sine tilganger.  
+
+![Dele lagret tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-tjenestekonf-share.png){fig-alt="Lagrede tjenestekonfigurasjoner i Dapla Lab." #fig-dapla-lab-tjenestekonf-share}
+
+::: {.callout-warning}
+## Noe konfigurasjon kan ikke deles
+
+Konfigurasjon som er knyttet [brukerkonfigurasjon](./dapla-lab.qmd#min-konto) fra Dapla Lab, f.eks. GitHub-token, må settes manuelt av den man deler konfigurasjon med. Dette vil forhåpentligvis forbedres etter hvert.  
+:::
+
 
 ### Mine tjenester
 
@@ -94,9 +115,31 @@ Hvis man trykker på søppelkasse-ikonet så avsluttes tjenesten og alt som er l
 En tjeneste som står som aktiv vil reservere ressursene (CPU, GPU, RAM, etc.) som brukeren valgte ved oppstart. Hvis tjenesten ikke benyttes bør derfor brukeren enten avslutte eller pause tjenesten, slik at SSB ikke må betale for ubrukte ressurser.
 :::
 
-#### Monitorering (kommer snart)
+### Monitorering
 
-En bruker kan trykke på navnet til tjenesten under **Mine tjenester** for å monitorere tjenesten.   
+::: {.callout-warning}
+## All monitorering er ikke på plass enda
+
+Innholdet på Overvåkningssiden til tjenestene er fullstendig enda. Når du kommer inn på siden så skal loggene fra tjenesten viser, men dette er ikke på plass enda. Dette jobbes det med å få på plass. 
+
+Derimot fungerer **Ekstern overvåkning**-lenken (se beskrivelse under) og den tar deg til et Grafana-dashboard som viser vanlige metrikker for tjenesten. I tillegg kan man trykke på lenken **Helm-verdier** som teknisk informasjon om hvilke verdier som ble satt når tjenesten ble startet.     
+:::
+
+
+Under **Mine tjenester** får du oversikt over hvilke kjørende tjenester. Hvis du ønsker å monitorere hvor mye ram, cpu diskplass eller gpu tjenester bruker, så kan du inspisere et ferdig oppsatt Grafana-dashboard. For åpne dashboardet trykker du først på navnet på tjenesten du ønsker å monitorere, slik som vist i @fig-monitoring-button. Det åpner en side for Overvåkning av tjenesten. På denne siden er det en lenke til et Grafana-dashboard, slik som vist i @fig-monitoring-button2.  
+
+::: {#fig-elephants layout-ncol=2}
+
+![Åpne Overvåkningssiden](../images/dapla-lab-monitoring.png){#fig-monitoring-button}
+
+![Åpne Grafana-dashboard](../images/dapla-lab-grafana-button.png){#fig-monitoring-button2}
+
+Åpne Grafana-dashboard for for kjørende tjenester
+:::
+
+@fig-dapla-lab-grafana-dashboard viser hvordan et Grafana-dashboard ser ut.
+
+![Grafana dashbaordet for en spesifikk tjeneste på Dapla Lab](../images/dapla-lab-grafana-dashboard.png){fig-alt="Alternativtekst" #fig-dapla-lab-grafana-dashboard}
 
 ## Datatilgang
 
