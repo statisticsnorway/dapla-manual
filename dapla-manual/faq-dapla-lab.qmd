@@ -41,10 +41,65 @@ For å jobbe med notebooks i VS Code kan du gjøre følgende:
 4. Gå inn i mappen med `cd <prosjektnavn>`
 5. Installer ønskede pakker `poetry add pandas`, f.eks. Pandas. 
 6. Velg prosjektmappen i filutforskeren ved å gå til **File/Open folder/** og åpne prosjektmappen i boksen som vises. 
-7. Opprett en notebook-fil og åpne den. 
-8. Øverst til høyre i Notebooken kan du trykke på **Select kernel** og utforskeren velger du **Python environments** og deretter Python-installasjonen som starter med **.venv**. 
+7. Opprett en notebook-fil og åpne den.
+8. Trykk **Refresh** på hele nettsiden for å få opp visningen av den nyopprettede kernels. 
+8. Øverst til høyre i Notebooken kan du trykke på **Select kernel** og utforskeren velger du **Jupyter kernels** og deretter den som har samme navn som prosjektet ditt. 
 9. Til slutt kan du teste at riktig Python-installasjon er valgt ved å importere pakken du akkurat installerte. 
 
-Grunnen til at navnet på Jupyter-kernels ikke vises selv om den eksisterer, er en feil i hvor VS Code leter etter tilgjengelige kernels. Derfor må man inntil denne feilen er fikset må man derfor bruke `.venv`-installasjonen for å bruke pakkene i ditt ssb-project.
+Du må kjøre en `ssb-project build`, som beskrevet over, hver gang en instans av Jupyter, eller VSCode blir startet. Hvis du isteden åpner en pauset (suspendert) instans, vil du kunne fortsette arbeidet fra forrige kjøring uten å måtte kjøre `ssb-project build`.
 
-Du må kjøre en `ssb-project build`, som beskrevet over, hver gang en instans av Jupyter, eller VSCode blir startet. Hvis du isteden åpner en pauset (suspendert) instans, vil du kunne fortsette arbeidet fra forrige kjøring uten å måtte kjøre `ssb-project build`. 
+### Hvordan kjører man en Dash-app fra Vscode-python? 
+
+Det fungerer best å kjøre Dash-apper i en egen fane i nettleseren. Inline-visning av figurer fungerer ikke enda. 
+
+Her er et eksempel på hvordan man lager en Dash-app:
+
+1. Installer `pandas` og `dash` i et [ssb-project](./statistikkere/jobbe-med-kode.qmd#ssb-project). 
+2. Opprett et python-script i prosjektet som f.eks. heter `app.py`. 
+3. Kjør scriptet ved å kjøre følgende kommando fra terminalen: `poetry run python ./app.py`
+4. Deretter kommer det opp et dialog-vinduet hvor du velger `Open in browser`. 
+
+Her er et eksempel på script som fungerer i Vscode-python:
+
+```{.python filename="app.py"}
+from dash import Dash, html, dcc, callback, Output, Input
+import plotly.express as px
+import pandas as pd
+
+# Creating a sample dataset similar to the Gapminder dataset
+data = {
+    'country': ['Afghanistan', 'Afghanistan', 'Afghanistan', 'Brazil', 'Brazil', 'Brazil', 'China', 'China', 'China'],
+    'continent': ['Asia', 'Asia', 'Asia', 'South America', 'South America', 'South America', 'Asia', 'Asia', 'Asia'],
+    'year': [1952, 1977, 2007, 1952, 1977, 2007, 1952, 1977, 2007],
+    'lifeExp': [28.801, 39.877, 43.828, 50.917, 59.504, 72.390, 44.000, 63.739, 72.961],
+    'pop': [8425333, 12412311, 31889923, 56602560, 80461570, 190010647, 556263527, 862030000, 1318683096],
+    'gdpPercap': [779.4453145, 786.11336, 974.5803384, 2108.944355, 5718.766744, 9065.800825, 400.448611, 1488.041713, 4959.114854]
+}
+
+# Creating DataFrame
+df = pd.DataFrame(data)
+
+# Creating the app
+app = Dash(
+    __name__,
+    requests_pathname_prefix='/proxy/8050/', 
+    serve_locally=True
+)
+
+app.layout = [
+    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
+    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
+    dcc.Graph(id='graph-content')
+]
+
+@callback(
+    Output('graph-content', 'figure'),
+    Input('dropdown-selection', 'value')
+)
+def update_graph(value):
+    dff = df[df.country==value]
+    return px.line(dff, x='year', y='pop')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
