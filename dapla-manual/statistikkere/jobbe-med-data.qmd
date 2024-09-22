@@ -1,10 +1,8 @@
 ---
-toc-depth: 4
+title: Jobbe med data
 ---
 
-# Jobbe med data
-
-Når vi oppretter et **dapla-team** så får vi tildelt et eget området for lagring av data. For å kunne lese og skrive data fra Jupyter til disse områdene må vi autentisere oss, siden Jupyter og lagringsområdet er to separate sikkerhetsoner. 
+Når man oppretter et **dapla-team** så får vi tildelt et eget området for lagring av data. For å kunne lese og skrive data fra Jupyter til disse områdene må vi autentisere oss, siden Jupyter og lagringsområdet er to separate sikkerhetsoner. 
 
 @fig-storage viser dette klarer skillet mellom hvor vi koder og hvor dataene ligger på Dapla^[I de tidligere systemene på bakken så var det ikke nødvendig med autentisering mellom kodemiljø og datalagringen]. I dette kapitlet beskriver vi nærmere hvordan du kan jobbe med dataene dine på Dapla. 
 
@@ -57,18 +55,18 @@ I denne delen viser vi hvordan man gjør veldig vanlige operasjoner når man kod
 ### Liste ut innhold i mappe
 
 ::: {.callout-tip}
-## Eksempeldata
+## Eksempeldata i Dapla Felles
 
-Det finnes et område som alle SSB-ansatte har lese- og skrivetilgang til. Det er  
-**gs://ssb-dapla-felles-data-delt-prod/** i prod-miljøet på Dapla, og  
-**gs://ssb-dapla-felles-data-delt-test/** i staging-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv. 
+Dapla Felles er et team der alle i SSB er med i *developers*-gruppa. Dvs. at alle har lese- og skrivetilgang til følgende områder:  
+**gs://ssb-dapla-felles-data-produkt-prod/** i prod-miljøet på Dapla, og  
+**gs://ssb-dapla-felles-data-produkt-test/** i test-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv. 
 
 Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.
 :::
 
 Å liste ut innhold i et gitt mappe på Dapla er ganske enkelt. Under ser du hvordan du kan liste ut innholdet i følgende mappe:
 
-`gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/python/eksempler/purchases`
+`gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte_data`
 
 
 ::: {.panel-tabset}
@@ -81,16 +79,15 @@ Vi bruker modulen `FileClient` fra **dapla-toolbelt** for å liste ut innholdet 
 from dapla import FileClient
 
 # Set path to folder
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte_data"
 
-FileClient.ls(f"{bucket}/{folder}")
+FileClient.ls(file_path)
 ```
 
 Med kommandoen over får du listet ut alle filnavn i mappen. Hvis du vil ha mer informasjon om filene så kan du bruke `ls`-kommandoen med `detail = True`, som under:
 
 ```{.python filename="notebook"}
-FileClient.ls(f"{bucket}/{folder}", detail = True)
+FileClient.ls(file_path, detail = True)
 ```
 
 Syntaksen med `ls` er veldig lik det man kjenner fra en Linux-terminal. Men når vi bruker `detail = True` blir metadata om filene returnert som en Python-liste med dictionaries. Det kan være svært nyttig når du f.eks. trenger å vite dato og tidspunkt for når en fil ble opprettet, eller når den sist ble oppdatert.
@@ -102,11 +99,10 @@ Syntaksen med `ls` er veldig lik det man kjenner fra en Linux-terminal. Men når
 library(fellesr)
 
 # Path to folder
-bucket <- "ssb-dapla-felles-data-delt-prod/"
-folder <- "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte_data"
 
 # List files in folder 
-list.files(paste0(bucket, folder))
+list.files(file_path)
 ```
 Merknad: Når du spesifisere bøtter i R, trenger du ikke "gs://" foran. 
 
@@ -133,8 +129,7 @@ import pandas as pd
 import numpy as np
 
 # Set path to folder
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"
 
 # Create pandas dataframe
 purchases = pd.DataFrame(np.random.randn(10, 5),
@@ -142,14 +137,14 @@ purchases = pd.DataFrame(np.random.randn(10, 5),
 
 # Write pandas dataframe as parquet to GCS bucket
 dp.write_pandas(df = purchases,
-                gcs_path = f"{bucket}/{folder}/data.parquet",
+                gcs_path = f"{file_path}/data.parquet",
                 file_format = "parquet",)
 ```
 Når vi kalte `write_pandas` over så spesifiserte vi at filformatet skulle være `parquet`. Dette er default, så vi kunne også ha skrevet det slik:
 
 ```{.python filename="notebook"}
 dp.write_pandas(df = purchases,
-                gcs_path = f"{bucket}/{folder}/data.parquet")
+                gcs_path = f"{file_path}/data.parquet")
 ```
 Men for de andre filformatene må vi altså spesifisere dette.
 
@@ -161,14 +156,13 @@ Når vi jobber med Parquet-fil i R, bruker vi pakken [arrow](https://arrow.apach
 library(fellesr)
 
 # Set stien til hvor data skal lagres
-bucket <- "ssb-dapla-felles-data-delt-prod"
-folder <- "felles/veiledning/r/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"
 
 # Lage en eksempel dataframe
 purchases = data.frame(A = runif(10), B= runif(10), C=runif(10))
 
 # Skrive data til bøttet som en parquet
-write_SSB(purchases, file.path(bucket, folder, "purchases.parquet"))
+write_SSB(purchases, file.path(file_path, "purchases.parquet"))
 ```
 Merknad: Når du spesifisere bøtter i R, trenger du ikke "gs://" foran. 
 
@@ -192,15 +186,14 @@ import pandas as pd
 from dapla import FileClient
 
 # Set path to folder
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"
 
 # Create a dataframe with Pandas
 df = pd.DataFrame(np.random.randn(10, 5), columns=["A", "B", "C", "D", "E"])
 
 # Save dataframe as json with dapla-toolbelt
 dp.write_pandas(df = df,
-                gcs_path = f"{bucket}/{folder}/test.json",
+                gcs_path = f"{file_path}/test.json",
                 file_format = "json")
 ```	
 
@@ -216,14 +209,13 @@ Først kaller vi biblioteket og lage noe test data ved:
 library(fellesr)
 
 # Set stien til hvor data skal lagres
-bucket <- "ssb-dapla-felles-data-delt-prod"
-folder <- "felles/veiledning/r/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"
 
 # Lage en eksempel dataframe
 purchases = data.frame(A = runif(10), B= runif(10), C=runif(10))
 
 # Skrive til csv
-write_SSB(purchases, file.path(bucket, folder, "purchases.csv")
+write_SSB(purchases, file.path(file_path, "purchases.csv")
 ```
 
 :::
@@ -244,10 +236,9 @@ from dapla import AuthClient
 token = AuthClient.fetch_google_credentials()
 
 # Filsti
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"
 
-df.to_excel(f"{bucket}/{folder}/test.xlsx",
+df.to_excel(f"{file_path}/test.xlsx",
            storage_options={"token": token})
 ```
 
@@ -273,11 +264,10 @@ Under finner du eksempler på hvordan du kan lese inn data til en Jupyter Notebo
 import dapla as dp
 
 # Set path to folder
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021_v1.parquet"
 
 # Read path into pandas dataframe 
-dp.read_pandas(gcs_path= f"{bucket}/{folder}/data.parquet",
+dp.read_pandas(gcs_path= file_path,
                file_format = "parquet",
                columns = None,)
 ```
@@ -285,7 +275,7 @@ dp.read_pandas(gcs_path= f"{bucket}/{folder}/data.parquet",
 Som vi så med `write_pandas` så er `file_format` default satt til `parquet`, og default for `columns = None`, så vi kunne også ha skrevet det slik:
 
 ```python
-dp.read_pandas(gcs_path= f"{bucket}/{folder}/data.parquet")
+dp.read_pandas(gcs_path= file_path)
 ```
 `columns`-argumentet er en liste med kolonnenavn som vi ønsker å lese inn. Hvis vi ikke spesifiserer noen kolonner så vil alle kolonnene leses inn.
 
@@ -297,18 +287,16 @@ Her er et eksempel av å lese inn parquet fil "1987".
 ```{.r filename="notebook"}
 library(fellesr)
 
-bucket <- "ssb-dapla-felles-data-delt-prod"
-folder <- "R_smoke_test"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021_v1.parquet"
 
-dt_1987 <- read_SSB(file.path(bucket, folder, "1987.parquet"))
-
+dt_1987 <- read_SSB(file.path(file_path))
 ```
 
 Vi kan også filtrere hvilke variabel vi ønsker å lese inn ved å spesifisere parameter `col_select`. For eksempel:
 
 ```r
-dt_1987 <- read_SSB(file.path(bucket, folder, "1987.parquet"),
-                    col_select = c("Year", "Month"))
+dt_1987 <- read_SSB(file.path(file_path),
+                    col_select = c("fnr", "sivilstand"))
 
 ```
 
@@ -330,11 +318,10 @@ Kommer mer snart. Python-koden under bygger på eksempelet over.
 import dapla as dp
 
 # Path to write to
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.json"
 
 # Read in json-file from dapla-storage
-df = dp.read_pandas(gcs_path = f"{bucket}/{folder}/test3.json",
+df = dp.read_pandas(gcs_path = file_path,
                file_format = "json")
 ```
 
@@ -349,18 +336,17 @@ Først kaller vi inn biblioteket [fellesr](https://statisticsnorway.github.io/fe
 library(fellesr)
 
 # Filsti
-bucket <- "ssb-dapla-felles-data-delt-prod"
-folder <- "R_smoke_test"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/purchases.csv"
 
 # Lese inn CSV-fil
-dt_1987 <- read_SSB(file.path(bucket, folder, "1987.csv"))
+dt_1987 <- read_SSB(file.path(file_path))
 
 ```
 
 For å lese inn en json-fil kan skrive følgende:
 
 ```{.r filename="notebook"}
-dt_1987 <- read_SSB(file.path(bucket, folder, "1987.json"))
+dt_1987 <- read_SSB(file.path("ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.json"))
 ```
 
 :::
@@ -379,7 +365,7 @@ from dapla import AuthClient
 token = AuthClient.fetch_google_credentials()
 
 # Les inn fil
-df = pd.read_excel("gs://ssb-prod-arbmark-skjema-data-produkt/test_gcp.xlsx",
+df = pd.read_excel("gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.xlsx",
     storage_options={"token": token})
 
 ```
@@ -401,9 +387,9 @@ Her er et eksempel på hvordan man leser inn en sas7bdat-fil på Dapla som har b
 ```{.python filename="notebook"}
 import dapla as dp
 
-sti = "gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/sas/statbank_ledstill.sas7bdat"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/statbank_ledstill.sas7bdat"
 
-dp.read_pandas(sti, file_format="sas7bdat", encoding="latin1")
+dp.read_pandas(file_path, file_format="sas7bdat", encoding="latin1")
 ```
 
 ## {{< fa brands r-project >}}
@@ -413,8 +399,8 @@ Siden innlesing av sas7bdat-filer ikke er støttet i [fellesr](https://statistic
 ```{.r filename="notebook"}
 library(reticulate)
 dp <- import("dapla")
-sti  <- gs://ssb-dapla-felles-data-delt-prod/felles/veiledning/sas/statbank_ledstill.sas7bdat"
-dp$read_pandas(sti, file_format="sas7bdat", encoding="latin1")
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/statbank_ledstill.sas7bdat"
+dp$read_pandas(file_path, file_format="sas7bdat", encoding="latin1")
 ```
 
 :::
@@ -431,10 +417,10 @@ dp$read_pandas(sti, file_format="sas7bdat", encoding="latin1")
 from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
-folder = "felles/veiledning/python/eksempler/purchases"
+# Skriv inn full filsti til filen som skal slettes
+file_path = ""
 
-fs.rm(f"{bucket}/{from_folder}/df.json")
+fs.rm(file_path)
 
 ```
 
@@ -444,10 +430,10 @@ Funksjonen `gc_delete_object` kan brukes til å slette data på lagringsområdet
 ```{.r filename="notebook"}
 library(fellesr)
 
-bucket <- "ssb-dapla-felles-data-delt-prod"
-folder <- "felles/veiledning/r/eksempler/purchases"
+# Skriv inn full filsti til filen som skal slettes
+file_path = ""
 
-gcs_delete_object(file.path(bucket, folder, "purchases.parquet"))
+gcs_delete_object(file.path(file_path))
 ```
 
 :::
@@ -467,7 +453,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 # Path to folders
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
+bucket = "gs://ssb-dapla-felles-data-produkt-prod"
 from_folder = "felles/veiledning/python/eksempler/purchases"
 to_folder = "felles/veiledning/python/eksempler"
 
@@ -476,7 +462,7 @@ fs.cp(f"{bucket}/{from_folder}/data.parquet",
       f"{bucket}/{to_folder}/data_copy.parquet")
 
 ```
-Det også fungere for å kopiere filer mellom bøtter. 
+Det fungerer også for å kopiere filer mellom bøtter. 
 
 Et annet scenario vi ofte vil støte på er at vi ønsker å kopiere en fil fra vårt Jupyter-filsystem til en mappe på lagringsområdet. Her kan vi bruke `fs.put`-metoden. 
 
@@ -489,7 +475,7 @@ with open('/home/jovyan/test.txt', 'w') as f:
     f.write('Create a new text file!')
 
 #Path to folder
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
+bucket = "gs://ssb-dapla-felles-data-produkt-prod"
 folder = "felles/veiledning/python/eksempler"
 
 # Copy file from local to remote file system
@@ -525,7 +511,7 @@ Kommer snart
 from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
+bucket = "gs://ssb-dapla-felles-data-produkt-prod"
 from_folder = "felles/veiledning/python/eksempler/purchases"
 to_folder = "felles/veiledning/python/eksempler"
 
@@ -552,7 +538,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 #Path to folder
-bucket = "gs://ssb-dapla-felles-data-delt-prod"
+bucket = "gs://ssb-dapla-felles-data-produkt-prod"
 folder = "felles/veiledning/python/eksempler"
 
 # Create folder
