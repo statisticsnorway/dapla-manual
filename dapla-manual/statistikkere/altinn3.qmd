@@ -100,7 +100,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 # Sett inn filstien din her
-file = "gs://ssb-dapla-felles-data-delt-prod/altinn3/form_dc551844cd74.xml"
+file = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/form_dc551844cd74.xml"
 
 dom = parseString(fs.cat_file(file))
 pretty_xml = dom.toprettyxml(indent="  ")
@@ -216,8 +216,6 @@ Funksjonen `single_xml_to_dataframe()` kan brukes til å loope over en liste med
 
 ### Kopiere filer manuelt
 
-
-
 Hvis vi ønsker å kopiere filer manuelt (dvs. ikke med Transfer Service) fra Team SUV sine bøtter til egen kildebøtte, kan vi gjøre det fra Jupyter. Vi har tidligere sett hvordan vi kan [kopiere enkeltfiler](./jobbe-med-data.html#kopiere-filer) mellom to bøtter. Under viser vi hvordan man kan kopiere alle filer under en viss filsti med kommandoen `fs.copy()`:
 
 ```python	
@@ -227,7 +225,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 from_path = "gs://ssb-prod-arbmark-skjema-data-kilde/ledstill/altinn/2022/11/21/"
-to_path = "gs://ssb-dapla-felles-data-delt-prod/altinn3/"
+to_path = "gs://ssb-prod-arbmark-skjema-data-kilde/ledstill/altinn/test/"
 fs.copy(from_path, to_path, recursive=True)
 
 ```
@@ -247,7 +245,7 @@ xml_files = fs.glob("gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/10/*
 
 # Stien du ønsker å kopiere til.
 # Koden under foutsetter at du har med gs:// først
-to_folder = "gs://ssb-dapla-felles-data-delt-prod/"
+to_folder = "<bøttenavn>/**.xml"
 
 # Kopierer over filene
 for file in xml_files:
