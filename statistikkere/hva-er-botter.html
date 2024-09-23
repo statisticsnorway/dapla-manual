@@ -677,15 +677,15 @@ Warning
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/*"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/*"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Når vi legger til <code>*</code> på slutten av filstien så returnerer den alle filer i den eksakte undermappen. Men hvis vi ønsker å å få alle filer i alle undermapper, så kan vi bruke <code>**</code> på denne måten:<br>
-<code>fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**")</code>.</p>
+<code>fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**")</code>.</p>
 <p>Vi kan også søke mer avansert ved ved å bruke <code>?</code>. <code>?</code>-tegnet sier at en enkeltkarakter kan være hva som helst. F.eks. kunne vi skrevet<br>
-<code>fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**/R_smoke_test_??.csv")</code><br>
+<code>fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**/R_smoke_test_??.csv")</code><br>
 for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>, etterfulgt av to karakterer av hvilken som helst type, og slutter med <code>.csv</code>.</p>
 <p>Hvis vi viste at de to karakterene ikke skulle være av hvilken som helst karakterer, men det var en liten bokstav, etterfulgt av et tall mellom 2-6, så kunne vi brukt <code>[a-z]</code> og <code>[2-6]</code> for å spesifisere dette. F.eks. kunne vi skrevet:</p>
-<p><code>fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**/R_smoke_test_[a-z][2-6].csv")</code></p>
+<p><code>fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**/R_smoke_test_[a-z][2-6].csv")</code></p>
 <p>Som vi ser er <code>fs.glob()</code> et verktøy som git oss mye den funksjonaliteten vi er vant til fra Linux-terminalen. Men i tillegg kan vi bruke den til å hente inn metadataene til de filene/objektene vi får treff på, ved å bruke argumentet <code>detail=True</code>. Her er et eksempel:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -696,7 +696,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fs.glob(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**/R_smoke_test_/[a-z][2-6].csv"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**/R_smoke_test_/[a-z][2-6].csv"</span>,</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    detail<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -713,7 +713,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fs.exists(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/form_dc551844cd74.xml"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fs.exists(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/form_dc551844cd74.xml"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Koden returnerer enten <code>True</code> eller <code>False</code> avhengig av om filen eksisterer eller ikke.</p>
 </section>
@@ -749,7 +749,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler oss på bøttene</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/form_dc551844cd74.xml"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/form_dc551844cd74.xml"</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>fs.info(<span class="bu">file</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -766,7 +766,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>fs.ls(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>fs.ls(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Koden returnerer en liste.</p>
 </section>
@@ -783,7 +783,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler oss på bøttene</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/number-of-teams.csv"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/number-of-teams.csv"</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Bruker fs.open() til å åpne fil, og deretter leses den med Pandas</span></span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> fs.<span class="bu">open</span>(file_path, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
@@ -800,7 +800,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.parquet <span class="im">as</span> pq</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/test.parquet"</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet"</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Oppretter filsystem-instans</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
@@ -827,7 +827,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Oppretter filsystem-instans</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>fs.touch(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/test.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>fs.touch(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="fs.put" class="level3">
@@ -843,7 +843,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"/home/jovyan/custom.scss"</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/test2.csv"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/test2.csv"</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>fs.put(source, destination)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -858,7 +858,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"/home/jovyan/sesongjustering/"</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/sesongjustering/"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/sesongjustering/"</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>fs.put(source, destination, recursive<span class="op">=</span><span class="va">True</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -876,7 +876,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Oppretter filsystem-instans</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/sesongjustering/"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/sesongjustering/"</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"/home/jovyan/sesongjustering/"</span></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>placeholder <span class="op">=</span> fs.get(source, destination, recursive<span class="op">=</span><span class="va">True</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -895,8 +895,8 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler oss på bøttene</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/number-of-teams.csv"</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/number-of-teams.csv"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/number-of-teams.csv"</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>destination <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/number-of-teams.csv"</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>fs.mv(source, destination)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -912,8 +912,8 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Setter opp en filsystem-instans mot GCS</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>from_path <span class="op">=</span> <span class="st">"gs://ssb-prod-arbmark-skjema-data-kilde/ledstill/altinn/2022/11/21/"</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>to_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>from_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/ledstill/altinn/2022/11/21/"</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>to_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/"</span></span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>fs.copy(from_path, to_path, recursive<span class="op">=</span><span class="va">True</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -929,7 +929,7 @@ for å rekursivt liste ut alle filer som starter med <code>R_smoke_test_</code>,
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Setter opp en filsystem-instans mot GCS</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>fs.rm(<span class="st">"gs://ssb-dapla-felles-data-delt-prod/altinn3/number-of-teams.csv"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>fs.rm(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/altinn3/number-of-teams.csv"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Også denne funksjonen tar et <code>recursive</code>-argument hvis du ønsker å slette en hel mappe.</p>
 
