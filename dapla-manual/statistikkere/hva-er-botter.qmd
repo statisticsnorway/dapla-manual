@@ -66,19 +66,19 @@ from dapla import FileClient
 
 fs = FileClient.get_gcs_file_system()
 
-fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/*")
+fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/*")
 ```
 
 Når vi legger til `*` på slutten av filstien så returnerer den alle filer i den eksakte undermappen. Men hvis vi ønsker å å få alle filer i alle undermapper, så kan vi bruke `**`  på denne måten:  
-`fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**")`.
+`fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**")`.
 
 Vi kan også søke mer avansert ved ved å bruke `?`. `?`-tegnet sier at en enkeltkarakter kan være hva som helst. F.eks. kunne vi skrevet  
-`fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**/R_smoke_test_??.csv")`  
+`fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**/R_smoke_test_??.csv")`  
 for å rekursivt liste ut alle filer som starter med `R_smoke_test_`, etterfulgt av to karakterer av hvilken som helst type, og slutter med `.csv`. 
 
 Hvis vi viste at de to karakterene ikke skulle være av hvilken som helst karakterer, men det var en liten bokstav, etterfulgt av et tall mellom 2-6, så kunne vi brukt `[a-z]` og `[2-6]` for å spesifisere dette. F.eks. kunne vi skrevet:
 
-`fs.glob("gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**/R_smoke_test_[a-z][2-6].csv")`
+`fs.glob("gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**/R_smoke_test_[a-z][2-6].csv")`
 
 Som vi ser er `fs.glob()` et verktøy som git oss mye den funksjonaliteten vi er vant til fra Linux-terminalen. Men i tillegg kan vi bruke den til å hente inn metadataene til de filene/objektene vi får treff på, ved å bruke argumentet `detail=True`. Her er et eksempel: 
 
@@ -88,7 +88,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 fs.glob(
-    "gs://ssb-dapla-felles-data-delt-prod/R_smoke_test/**/R_smoke_test_/[a-z][2-6].csv",
+    "gs://ssb-dapla-felles-data-produkt-prod/R_smoke_test/**/R_smoke_test_/[a-z][2-6].csv",
     detail=True,
 )
 
@@ -106,7 +106,7 @@ from dapla import FileClient
 
 fs = FileClient.get_gcs_file_system()
 
-fs.exists("gs://ssb-dapla-felles-data-delt-prod/altinn3/form_dc551844cd74.xml")
+fs.exists("gs://ssb-dapla-felles-data-produkt-prod/altinn3/form_dc551844cd74.xml")
 ```
 
 Koden returnerer enten `True` eller `False` avhengig av om filen eksisterer eller ikke.
@@ -139,7 +139,7 @@ from dapla import FileClient
 # Kobler oss på bøttene
 fs = FileClient.get_gcs_file_system()
 
-file = "gs://ssb-dapla-felles-data-delt-prod/altinn3/form_dc551844cd74.xml"
+file = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/form_dc551844cd74.xml"
 
 fs.info(file)
 ```
@@ -155,7 +155,7 @@ from dapla import FileClient
 
 fs = FileClient.get_gcs_file_system()
 
-fs.ls("gs://ssb-dapla-felles-data-delt-prod/altinn3")
+fs.ls("gs://ssb-dapla-felles-data-produkt-prod/altinn3")
 ```
 Koden returnerer en liste.
 
@@ -170,7 +170,7 @@ from dapla import FileClient
 # Kobler oss på bøttene
 fs = FileClient.get_gcs_file_system()
 
-file_path = "gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/number-of-teams.csv"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/number-of-teams.csv"
 
 # Bruker fs.open() til å åpne fil, og deretter leses den med Pandas
 with fs.open(file_path, "r") as file:
@@ -186,7 +186,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from dapla import FileClient
 
-file_path = "gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/test.parquet"
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet"
 
 # Oppretter filsystem-instans
 fs = FileClient.get_gcs_file_system()
@@ -212,7 +212,7 @@ from dapla import FileClient
 # Oppretter filsystem-instans
 fs = FileClient.get_gcs_file_system()
 
-fs.touch("gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/test.parquet")
+fs.touch("gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet")
 ```
 
 ### fs.put()
@@ -226,7 +226,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 source = "/home/jovyan/custom.scss"
-destination = "gs://ssb-dapla-felles-data-delt-prod/altinn3/test2.csv"
+destination = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/test2.csv"
 
 fs.put(source, destination)
 
@@ -241,7 +241,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 source = "/home/jovyan/sesongjustering/"
-destination = "gs://ssb-dapla-felles-data-delt-prod/altinn3/sesongjustering/"
+destination = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/sesongjustering/"
 
 fs.put(source, destination, recursive=True)
 
@@ -259,7 +259,7 @@ from dapla import FileClient
 # Oppretter filsystem-instans
 fs = FileClient.get_gcs_file_system()
 
-source = "gs://ssb-dapla-felles-data-delt-prod/altinn3/sesongjustering/"
+source = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/sesongjustering/"
 destination = "/home/jovyan/sesongjustering/"
 
 placeholder = fs.get(source, destination, recursive=True)
@@ -278,8 +278,8 @@ from dapla import FileClient
 # Kobler oss på bøttene
 fs = FileClient.get_gcs_file_system()
 
-source = "gs://ssb-dapla-felles-data-delt-prod/dapla-metrics/number-of-teams.csv"
-destination = "gs://ssb-dapla-felles-data-delt-prod/altinn3/number-of-teams.csv"
+source = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/number-of-teams.csv"
+destination = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/number-of-teams.csv"
 fs.mv(source, destination)
 ```	
 
@@ -293,8 +293,8 @@ from dapla import FileClient
 # Setter opp en filsystem-instans mot GCS
 fs = FileClient.get_gcs_file_system()
 
-from_path = "gs://ssb-prod-arbmark-skjema-data-kilde/ledstill/altinn/2022/11/21/"
-to_path = "gs://ssb-dapla-felles-data-delt-prod/altinn3/"
+from_path = "gs://ssb-dapla-felles-data-produkt-prod/ledstill/altinn/2022/11/21/"
+to_path = "gs://ssb-dapla-felles-data-produkt-prod/altinn3/"
 fs.copy(from_path, to_path, recursive=True)
 ```
 
@@ -308,7 +308,7 @@ from dapla import FileClient
 # Setter opp en filsystem-instans mot GCS
 fs = FileClient.get_gcs_file_system()
 
-fs.rm("gs://ssb-dapla-felles-data-delt-prod/altinn3/number-of-teams.csv")
+fs.rm("gs://ssb-dapla-felles-data-produkt-prod/altinn3/number-of-teams.csv")
 
 ```
 
