@@ -7,13 +7,20 @@ categories:
   - dapla-toolbelt-pseudo
 author:
   - name: Øyvind Bruer-Skarsbø
-    affiliation: 
+    affiliation:
       - name: Seksjon for dataplattform (724)
         email: obr@ssb.no
-date: "11/07/2024"
-date-modified: "23/09/2024"
+date: 07/11/2024
+date-modified: 09/23/2024
 freeze: true
 draft: false
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.15.2
 ---
 
 Den strenge tilgangsstyringen til pseudonymiseringsfunksjonaliteten på Dapla gjør at det er vanskelig for brukere å bli kjent med funksjonaliteten ved bruk av produksjonsdata. Derfor bør alle som jobber med dette starte med å bruke testdata og jobbe i [test-miljøet på Dapla](https://jupyter.dapla-staging.ssb.no/).
@@ -29,7 +36,6 @@ import json
 
 import dapla as dp
 import pandas as pd
-import polars as pl
 from dapla_pseudo import Depseudonymize, Pseudonymize
 from dapla_pseudo.constants import MapFailureStrategy
 from dapla_pseudo.utils import convert_to_date
@@ -41,7 +47,7 @@ Versjonen av [dapla-toolbelt-pseudo](../../../statistikkere/dapla-toolbelt-pseud
 Dataene vi skal bruke syntetiske fødselsnummer fra testversjonen SNR-katalogen. På den måten får vi også testet pseudonymiseringen via SNR-katalogen som er veldig vanlig i SSB. Denne SNR-katalogen ligger som en fil i en bøtte som alle i SSB har tilgang til. 
 
 ```{python}
-#| tbl-cap: "Syntetisk versjon av SNR-katalogen"
+#| tbl-cap: Syntetisk versjon av SNR-katalogen
 #| label: tbl-snr
 path = "gs://ssb-dapla-felles-data-produkt-test/freg/snr_kat.csv"
 
@@ -59,7 +65,7 @@ Fra @tbl-snr ser vi at datasettet inkluderer en del kolonner. For utforsking av 
 La oss kun beholde `fnr`-kolonnen og kopiere den en ny kolonne slik at vi enklere kan sammenligne før og etter pseudonymisering. I tillegg kutter jeg antall rader til 10, siden vi ikke trenger noe mer for formålet her. 
 
 ```{python}
-#| tbl-cap: "Nedstrippet versjon av SNR-katalogen"
+#| tbl-cap: Nedstrippet versjon av SNR-katalogen
 #| label: tbl-snr-new
 df2 = df.head(n=10)
 df3 = df2[["fnr"]]
@@ -107,7 +113,7 @@ df5 = df4.copy()
 Til slutt legger vi på noen ugyldige fødselsnummer slik at vi får testet hvordan algoritmene håndterer dette. 
 
 ```{python}
-#| tbl-cap: "Datasett for å teste pseudonymiseringsfunksjonalitet"
+#| tbl-cap: Datasett for å teste pseudonymiseringsfunksjonalitet
 #| label: tbl-pseudo
 new_row1 = pd.DataFrame(
     [
@@ -150,7 +156,7 @@ df8.head(n=5).style.set_table_styles([
 Nå kan vi begynne å leke med dataene. Det første vi kan gjøre er å pseudonymisere med den mest vanlige algoritmen som benyttes i produksjon: Papis-nøkkelen.
 
 ```{python}
-#| tbl-cap: "Pseudonymiserer med Papis-algoritmen"
+#| tbl-cap: Pseudonymiserer med Papis-algoritmen
 #| label: tbl-pseudo-papis
 result = (
     Pseudonymize.from_pandas(df8)
@@ -194,7 +200,7 @@ Her ser vo at 10 felt fikk treff i SNR-katalogen, 1 felt var for kort for algori
 La oss ta vare på den pseudonymiserte kolonnen og så depseudonymisere og se om resultatet blir riktig:
 
 ```{python}
-#| tbl-cap: "Depseudonymisering av fødselsnummer"
+#| tbl-cap: Depseudonymisering av fødselsnummer
 #| label: tbl-depseudo
 result2 = result.to_pandas()
 result2['pseudo_fnr'] = result2['fnr']
