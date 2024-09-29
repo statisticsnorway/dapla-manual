@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Øyvind Bruer-Skarsbø">
-<meta name="dcterms.date" content="2024-11-07">
+<meta name="dcterms.date" content="2024-07-11">
 
 <title>Pseudonymisering med testdata – Dapla-manualen</title>
 <style>
@@ -288,14 +288,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Opprettet</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 7, 2024</p>
+        <p class="date">July 11, 2024</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Endret</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">November 9, 2025</p>
+        <p class="date-modified">September 23, 2024</p>
       </div>
     </div>
       
@@ -309,7 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#importer-data" id="toc-importer-data" class="nav-link active" data-scroll-target="#importer-data">Importer data</a></li>
+  <li><a href="#importere" id="toc-importere" class="nav-link active" data-scroll-target="#importere">Importere</a></li>
   <li><a href="#forberedelse-av-datasettet" id="toc-forberedelse-av-datasettet" class="nav-link" data-scroll-target="#forberedelse-av-datasettet">Forberedelse av datasettet</a></li>
   <li><a href="#pseudonymisering" id="toc-pseudonymisering" class="nav-link" data-scroll-target="#pseudonymisering">Pseudonymisering</a>
   <ul class="collapse">
@@ -331,24 +331,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Den strenge tilgangsstyringen til pseudonymiseringsfunksjonaliteten på Dapla gjør at det er vanskelig for brukere å bli kjent med funksjonaliteten ved bruk av produksjonsdata. Derfor bør alle som jobber med dette starte med å bruke testdata og jobbe i <a href="https://jupyter.dapla-staging.ssb.no/">test-miljøet på Dapla</a>.</p>
-<section id="importer-data" class="level2">
-<h2 class="anchored" data-anchor-id="importer-data">Importer data</h2>
-<p>Først så importerer vi noen biblioteker som vi skal benytte. Versjonen</p>
+<section id="importere" class="level2">
+<h2 class="anchored" data-anchor-id="importere">Importere</h2>
+<p>Først så importerer vi noen biblioteker som vi skal benytte. Du kan benytte standard-kernelen som heter <code>python3</code>, for der er biblioteket som pseudonymiserer, <a href="https://pypi.org/project/dapla-toolbelt-pseudo/">dapla-toolbelt-pseudo</a>, tilgjengelig.</p>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Depseudonymize, Pseudonymize</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.constants <span class="im">import</span> MapFailureStrategy</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.utils <span class="im">import</span> convert_to_date</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> JSON</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Depseudonymize, Pseudonymize</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.constants <span class="im">import</span> MapFailureStrategy</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.utils <span class="im">import</span> convert_to_date</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> JSON</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Versjonen av <a href="../../../statistikkere/dapla-toolbelt-pseudo.html">dapla-toolbelt-pseudo</a> er <strong>2.1.2</strong>.</p>
 <p>Dataene vi skal bruke syntetiske fødselsnummer fra testversjonen SNR-katalogen. På den måten får vi også testet pseudonymiseringen via SNR-katalogen som er veldig vanlig i SSB. Denne SNR-katalogen ligger som en fil i en bøtte som alle i SSB har tilgang til.</p>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-staging-dapla-felles-data-delt/test/data/freg/kilde/snr_kat_latest/snr_kat.csv"</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/freg/snr_kat.csv"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> dp.read_pandas(path, file_format<span class="op">=</span><span class="st">"csv"</span>, dtype<span class="op">=</span>{<span class="st">"fnr"</span>: <span class="bu">str</span>, <span class="st">"fnr_date"</span>: <span class="bu">str</span>})</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -361,70 +360,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 Tabell&nbsp;1: Syntetisk versjon av SNR-katalogen
 </figcaption>
 <div aria-describedby="tbl-snr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <style type="text/css">
-#T_229ef th {
+#T_46f43 th {
   text-align: left;
 }
 </style>
 
-<table id="T_229ef" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_46f43" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_229ef_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
-<th id="T_229ef_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">current_fnr</th>
-<th id="T_229ef_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">snr</th>
-<th id="T_229ef_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">current_snr</th>
-<th id="T_229ef_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">fnr_date</th>
-<th id="T_229ef_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">current_fnr_date</th>
+<th id="T_46f43_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_46f43_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">current_fnr</th>
+<th id="T_46f43_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">snr</th>
+<th id="T_46f43_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">current_snr</th>
+<th id="T_46f43_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">fnr_date</th>
+<th id="T_46f43_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">current_fnr_date</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_229ef_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
-<td id="T_229ef_row0_col0" class="data row0 col0">16890249063</td>
-<td id="T_229ef_row0_col1" class="data row0 col1">16890249063</td>
-<td id="T_229ef_row0_col2" class="data row0 col2">026mxd3</td>
-<td id="T_229ef_row0_col3" class="data row0 col3">026mxd3</td>
-<td id="T_229ef_row0_col4" class="data row0 col4">20201222</td>
-<td id="T_229ef_row0_col5" class="data row0 col5">20201222</td>
+<td id="T_46f43_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
+<td id="T_46f43_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_46f43_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_46f43_row0_col2" class="data row0 col2">026mxd3</td>
+<td id="T_46f43_row0_col3" class="data row0 col3">026mxd3</td>
+<td id="T_46f43_row0_col4" class="data row0 col4">20201222</td>
+<td id="T_46f43_row0_col5" class="data row0 col5">20201222</td>
 </tr>
 <tr class="even">
-<td id="T_229ef_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
-<td id="T_229ef_row1_col0" class="data row1 col0">15854996565</td>
-<td id="T_229ef_row1_col1" class="data row1 col1">15854996565</td>
-<td id="T_229ef_row1_col2" class="data row1 col2">34qm7pt</td>
-<td id="T_229ef_row1_col3" class="data row1 col3">34qm7pt</td>
-<td id="T_229ef_row1_col4" class="data row1 col4">20201222</td>
-<td id="T_229ef_row1_col5" class="data row1 col5">20201222</td>
+<td id="T_46f43_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
+<td id="T_46f43_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_46f43_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_46f43_row1_col2" class="data row1 col2">34qm7pt</td>
+<td id="T_46f43_row1_col3" class="data row1 col3">34qm7pt</td>
+<td id="T_46f43_row1_col4" class="data row1 col4">20201222</td>
+<td id="T_46f43_row1_col5" class="data row1 col5">20201222</td>
 </tr>
 <tr class="odd">
-<td id="T_229ef_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
-<td id="T_229ef_row2_col0" class="data row2 col0">27871547810</td>
-<td id="T_229ef_row2_col1" class="data row2 col1">27871547810</td>
-<td id="T_229ef_row2_col2" class="data row2 col2">53uxelp</td>
-<td id="T_229ef_row2_col3" class="data row2 col3">53uxelp</td>
-<td id="T_229ef_row2_col4" class="data row2 col4">20201222</td>
-<td id="T_229ef_row2_col5" class="data row2 col5">20201222</td>
+<td id="T_46f43_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
+<td id="T_46f43_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_46f43_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_46f43_row2_col2" class="data row2 col2">53uxelp</td>
+<td id="T_46f43_row2_col3" class="data row2 col3">53uxelp</td>
+<td id="T_46f43_row2_col4" class="data row2 col4">20201222</td>
+<td id="T_46f43_row2_col5" class="data row2 col5">20201222</td>
 </tr>
 <tr class="even">
-<td id="T_229ef_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
-<td id="T_229ef_row3_col0" class="data row3 col0">50889200399</td>
-<td id="T_229ef_row3_col1" class="data row3 col1">50889200399</td>
-<td id="T_229ef_row3_col2" class="data row3 col2">f35lbnf</td>
-<td id="T_229ef_row3_col3" class="data row3 col3">f35lbnf</td>
-<td id="T_229ef_row3_col4" class="data row3 col4">20201222</td>
-<td id="T_229ef_row3_col5" class="data row3 col5">20201222</td>
+<td id="T_46f43_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
+<td id="T_46f43_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_46f43_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_46f43_row3_col2" class="data row3 col2">f35lbnf</td>
+<td id="T_46f43_row3_col3" class="data row3 col3">f35lbnf</td>
+<td id="T_46f43_row3_col4" class="data row3 col4">20201222</td>
+<td id="T_46f43_row3_col5" class="data row3 col5">20201222</td>
 </tr>
 <tr class="odd">
-<td id="T_229ef_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
-<td id="T_229ef_row4_col0" class="data row4 col0">22919199052</td>
-<td id="T_229ef_row4_col1" class="data row4 col1">22919199052</td>
-<td id="T_229ef_row4_col2" class="data row4 col2">c2hxvdv</td>
-<td id="T_229ef_row4_col3" class="data row4 col3">c2hxvdv</td>
-<td id="T_229ef_row4_col4" class="data row4 col4">20201222</td>
-<td id="T_229ef_row4_col5" class="data row4 col5">20201222</td>
+<td id="T_46f43_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
+<td id="T_46f43_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_46f43_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_46f43_row4_col2" class="data row4 col2">c2hxvdv</td>
+<td id="T_46f43_row4_col3" class="data row4 col3">c2hxvdv</td>
+<td id="T_46f43_row4_col4" class="data row4 col4">20201222</td>
+<td id="T_46f43_row4_col5" class="data row4 col5">20201222</td>
 </tr>
 </tbody>
 </table>
@@ -453,46 +452,46 @@ Tabell&nbsp;1: Syntetisk versjon av SNR-katalogen
 Tabell&nbsp;2: Nedstrippet versjon av SNR-katalogen
 </figcaption>
 <div aria-describedby="tbl-snr-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <style type="text/css">
-#T_8aa1f th {
+#T_9a20e th {
   text-align: left;
 }
 </style>
 
-<table id="T_8aa1f" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_9a20e" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_8aa1f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
-<th id="T_8aa1f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
+<th id="T_9a20e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_9a20e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_8aa1f_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
-<td id="T_8aa1f_row0_col0" class="data row0 col0">16890249063</td>
-<td id="T_8aa1f_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_9a20e_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
+<td id="T_9a20e_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_9a20e_row0_col1" class="data row0 col1">16890249063</td>
 </tr>
 <tr class="even">
-<td id="T_8aa1f_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
-<td id="T_8aa1f_row1_col0" class="data row1 col0">15854996565</td>
-<td id="T_8aa1f_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_9a20e_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
+<td id="T_9a20e_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_9a20e_row1_col1" class="data row1 col1">15854996565</td>
 </tr>
 <tr class="odd">
-<td id="T_8aa1f_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
-<td id="T_8aa1f_row2_col0" class="data row2 col0">27871547810</td>
-<td id="T_8aa1f_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_9a20e_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
+<td id="T_9a20e_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_9a20e_row2_col1" class="data row2 col1">27871547810</td>
 </tr>
 <tr class="even">
-<td id="T_8aa1f_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
-<td id="T_8aa1f_row3_col0" class="data row3 col0">50889200399</td>
-<td id="T_8aa1f_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_9a20e_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
+<td id="T_9a20e_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_9a20e_row3_col1" class="data row3 col1">50889200399</td>
 </tr>
 <tr class="odd">
-<td id="T_8aa1f_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
-<td id="T_8aa1f_row4_col0" class="data row4 col0">22919199052</td>
-<td id="T_8aa1f_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_9a20e_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
+<td id="T_9a20e_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_9a20e_row4_col1" class="data row4 col1">22919199052</td>
 </tr>
 </tbody>
 </table>
@@ -572,58 +571,58 @@ Tabell&nbsp;2: Nedstrippet versjon av SNR-katalogen
 Tabell&nbsp;3: Datasett for å teste pseudonymiseringsfunksjonalitet
 </figcaption>
 <div aria-describedby="tbl-pseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <style type="text/css">
-#T_bf9bb th {
+#T_0a1be th {
   text-align: left;
 }
 </style>
 
-<table id="T_bf9bb" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_0a1be" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_bf9bb_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
-<th id="T_bf9bb_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
-<th id="T_bf9bb_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">fornavn</th>
-<th id="T_bf9bb_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">etternavn</th>
+<th id="T_0a1be_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_0a1be_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
+<th id="T_0a1be_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">fornavn</th>
+<th id="T_0a1be_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">etternavn</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_bf9bb_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
-<td id="T_bf9bb_row0_col0" class="data row0 col0">16890249063</td>
-<td id="T_bf9bb_row0_col1" class="data row0 col1">16890249063</td>
-<td id="T_bf9bb_row0_col2" class="data row0 col2">Jo</td>
-<td id="T_bf9bb_row0_col3" class="data row0 col3">Nordman</td>
+<td id="T_0a1be_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
+<td id="T_0a1be_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_0a1be_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_0a1be_row0_col2" class="data row0 col2">Jo</td>
+<td id="T_0a1be_row0_col3" class="data row0 col3">Nordman</td>
 </tr>
 <tr class="even">
-<td id="T_bf9bb_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
-<td id="T_bf9bb_row1_col0" class="data row1 col0">15854996565</td>
-<td id="T_bf9bb_row1_col1" class="data row1 col1">15854996565</td>
-<td id="T_bf9bb_row1_col2" class="data row1 col2">Hans-August</td>
-<td id="T_bf9bb_row1_col3" class="data row1 col3">Karlsen</td>
+<td id="T_0a1be_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
+<td id="T_0a1be_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_0a1be_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_0a1be_row1_col2" class="data row1 col2">Hans-August</td>
+<td id="T_0a1be_row1_col3" class="data row1 col3">Karlsen</td>
 </tr>
 <tr class="odd">
-<td id="T_bf9bb_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
-<td id="T_bf9bb_row2_col0" class="data row2 col0">27871547810</td>
-<td id="T_bf9bb_row2_col1" class="data row2 col1">27871547810</td>
-<td id="T_bf9bb_row2_col2" class="data row2 col2">Nils</td>
-<td id="T_bf9bb_row2_col3" class="data row2 col3">Nordmann</td>
+<td id="T_0a1be_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
+<td id="T_0a1be_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_0a1be_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_0a1be_row2_col2" class="data row2 col2">Nils</td>
+<td id="T_0a1be_row2_col3" class="data row2 col3">Nordmann</td>
 </tr>
 <tr class="even">
-<td id="T_bf9bb_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
-<td id="T_bf9bb_row3_col0" class="data row3 col0">50889200399</td>
-<td id="T_bf9bb_row3_col1" class="data row3 col1">50889200399</td>
-<td id="T_bf9bb_row3_col2" class="data row3 col2">Eva</td>
-<td id="T_bf9bb_row3_col3" class="data row3 col3">Karlsen</td>
+<td id="T_0a1be_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
+<td id="T_0a1be_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_0a1be_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_0a1be_row3_col2" class="data row3 col2">Eva</td>
+<td id="T_0a1be_row3_col3" class="data row3 col3">Karlsen</td>
 </tr>
 <tr class="odd">
-<td id="T_bf9bb_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
-<td id="T_bf9bb_row4_col0" class="data row4 col0">22919199052</td>
-<td id="T_bf9bb_row4_col1" class="data row4 col1">22919199052</td>
-<td id="T_bf9bb_row4_col2" class="data row4 col2">Lars</td>
-<td id="T_bf9bb_row4_col3" class="data row4 col3">Carlsen</td>
+<td id="T_0a1be_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
+<td id="T_0a1be_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_0a1be_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_0a1be_row4_col2" class="data row4 col2">Lars</td>
+<td id="T_0a1be_row4_col3" class="data row4 col3">Carlsen</td>
 </tr>
 </tbody>
 </table>
@@ -654,7 +653,7 @@ Tabell&nbsp;3: Datasett for å teste pseudonymiseringsfunksjonalitet
 Tabell&nbsp;4: Pseudonymiserer med Papis-algoritmen
 </figcaption>
 <div aria-describedby="tbl-pseudo-papis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 
 
@@ -833,128 +832,128 @@ Tabell&nbsp;4: Pseudonymiserer med Papis-algoritmen
 Tabell&nbsp;5: Depseudonymisering av fødselsnummer
 </figcaption>
 <div aria-describedby="tbl-depseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <style type="text/css">
-#T_2ae2a th {
+#T_f8d83 th {
   text-align: left;
 }
 </style>
 
-<table id="T_2ae2a" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_f8d83" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_2ae2a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
-<th id="T_2ae2a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
-<th id="T_2ae2a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">fornavn</th>
-<th id="T_2ae2a_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">etternavn</th>
-<th id="T_2ae2a_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">pseudo_fnr</th>
+<th id="T_f8d83_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_f8d83_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
+<th id="T_f8d83_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">fornavn</th>
+<th id="T_f8d83_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">etternavn</th>
+<th id="T_f8d83_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">pseudo_fnr</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_2ae2a_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
-<td id="T_2ae2a_row0_col0" class="data row0 col0">16890249063</td>
-<td id="T_2ae2a_row0_col1" class="data row0 col1">16890249063</td>
-<td id="T_2ae2a_row0_col2" class="data row0 col2">Jo</td>
-<td id="T_2ae2a_row0_col3" class="data row0 col3">Nordman</td>
-<td id="T_2ae2a_row0_col4" class="data row0 col4">BnQe23u</td>
+<td id="T_f8d83_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
+<td id="T_f8d83_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_f8d83_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_f8d83_row0_col2" class="data row0 col2">Jo</td>
+<td id="T_f8d83_row0_col3" class="data row0 col3">Nordman</td>
+<td id="T_f8d83_row0_col4" class="data row0 col4">BnQe23u</td>
 </tr>
 <tr class="even">
-<td id="T_2ae2a_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
-<td id="T_2ae2a_row1_col0" class="data row1 col0">15854996565</td>
-<td id="T_2ae2a_row1_col1" class="data row1 col1">15854996565</td>
-<td id="T_2ae2a_row1_col2" class="data row1 col2">Hans-August</td>
-<td id="T_2ae2a_row1_col3" class="data row1 col3">Karlsen</td>
-<td id="T_2ae2a_row1_col4" class="data row1 col4">I1mQmBP</td>
+<td id="T_f8d83_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
+<td id="T_f8d83_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_f8d83_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_f8d83_row1_col2" class="data row1 col2">Hans-August</td>
+<td id="T_f8d83_row1_col3" class="data row1 col3">Karlsen</td>
+<td id="T_f8d83_row1_col4" class="data row1 col4">I1mQmBP</td>
 </tr>
 <tr class="odd">
-<td id="T_2ae2a_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
-<td id="T_2ae2a_row2_col0" class="data row2 col0">27871547810</td>
-<td id="T_2ae2a_row2_col1" class="data row2 col1">27871547810</td>
-<td id="T_2ae2a_row2_col2" class="data row2 col2">Nils</td>
-<td id="T_2ae2a_row2_col3" class="data row2 col3">Nordmann</td>
-<td id="T_2ae2a_row2_col4" class="data row2 col4">eVbGYLy</td>
+<td id="T_f8d83_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
+<td id="T_f8d83_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_f8d83_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_f8d83_row2_col2" class="data row2 col2">Nils</td>
+<td id="T_f8d83_row2_col3" class="data row2 col3">Nordmann</td>
+<td id="T_f8d83_row2_col4" class="data row2 col4">eVbGYLy</td>
 </tr>
 <tr class="even">
-<td id="T_2ae2a_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
-<td id="T_2ae2a_row3_col0" class="data row3 col0">50889200399</td>
-<td id="T_2ae2a_row3_col1" class="data row3 col1">50889200399</td>
-<td id="T_2ae2a_row3_col2" class="data row3 col2">Eva</td>
-<td id="T_2ae2a_row3_col3" class="data row3 col3">Karlsen</td>
-<td id="T_2ae2a_row3_col4" class="data row3 col4">O4jegSM</td>
+<td id="T_f8d83_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
+<td id="T_f8d83_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_f8d83_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_f8d83_row3_col2" class="data row3 col2">Eva</td>
+<td id="T_f8d83_row3_col3" class="data row3 col3">Karlsen</td>
+<td id="T_f8d83_row3_col4" class="data row3 col4">O4jegSM</td>
 </tr>
 <tr class="odd">
-<td id="T_2ae2a_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
-<td id="T_2ae2a_row4_col0" class="data row4 col0">22919199052</td>
-<td id="T_2ae2a_row4_col1" class="data row4 col1">22919199052</td>
-<td id="T_2ae2a_row4_col2" class="data row4 col2">Lars</td>
-<td id="T_2ae2a_row4_col3" class="data row4 col3">Carlsen</td>
-<td id="T_2ae2a_row4_col4" class="data row4 col4">6JhhRKi</td>
+<td id="T_f8d83_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
+<td id="T_f8d83_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_f8d83_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_f8d83_row4_col2" class="data row4 col2">Lars</td>
+<td id="T_f8d83_row4_col3" class="data row4 col3">Carlsen</td>
+<td id="T_f8d83_row4_col4" class="data row4 col4">6JhhRKi</td>
 </tr>
 <tr class="even">
-<td id="T_2ae2a_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</td>
-<td id="T_2ae2a_row5_col0" class="data row5 col0">66821775168</td>
-<td id="T_2ae2a_row5_col1" class="data row5 col1">66821775168</td>
-<td id="T_2ae2a_row5_col2" class="data row5 col2">Øyvind</td>
-<td id="T_2ae2a_row5_col3" class="data row5 col3">Nordmann</td>
-<td id="T_2ae2a_row5_col4" class="data row5 col4">vygqpLq</td>
+<td id="T_f8d83_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</td>
+<td id="T_f8d83_row5_col0" class="data row5 col0">66821775168</td>
+<td id="T_f8d83_row5_col1" class="data row5 col1">66821775168</td>
+<td id="T_f8d83_row5_col2" class="data row5 col2">Øyvind</td>
+<td id="T_f8d83_row5_col3" class="data row5 col3">Nordmann</td>
+<td id="T_f8d83_row5_col4" class="data row5 col4">vygqpLq</td>
 </tr>
 <tr class="odd">
-<td id="T_2ae2a_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</td>
-<td id="T_2ae2a_row6_col0" class="data row6 col0">13824498614</td>
-<td id="T_2ae2a_row6_col1" class="data row6 col1">13824498614</td>
-<td id="T_2ae2a_row6_col2" class="data row6 col2">Kenneth</td>
-<td id="T_2ae2a_row6_col3" class="data row6 col3">Carlsen</td>
-<td id="T_2ae2a_row6_col4" class="data row6 col4">JWzitL8</td>
+<td id="T_f8d83_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</td>
+<td id="T_f8d83_row6_col0" class="data row6 col0">13824498614</td>
+<td id="T_f8d83_row6_col1" class="data row6 col1">13824498614</td>
+<td id="T_f8d83_row6_col2" class="data row6 col2">Kenneth</td>
+<td id="T_f8d83_row6_col3" class="data row6 col3">Carlsen</td>
+<td id="T_f8d83_row6_col4" class="data row6 col4">JWzitL8</td>
 </tr>
 <tr class="even">
-<td id="T_2ae2a_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</td>
-<td id="T_2ae2a_row7_col0" class="data row7 col0">46927100797</td>
-<td id="T_2ae2a_row7_col1" class="data row7 col1">46927100797</td>
-<td id="T_2ae2a_row7_col2" class="data row7 col2">Johnny</td>
-<td id="T_2ae2a_row7_col3" class="data row7 col3">Nordmann</td>
-<td id="T_2ae2a_row7_col4" class="data row7 col4">oIhVngD</td>
+<td id="T_f8d83_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</td>
+<td id="T_f8d83_row7_col0" class="data row7 col0">46927100797</td>
+<td id="T_f8d83_row7_col1" class="data row7 col1">46927100797</td>
+<td id="T_f8d83_row7_col2" class="data row7 col2">Johnny</td>
+<td id="T_f8d83_row7_col3" class="data row7 col3">Nordmann</td>
+<td id="T_f8d83_row7_col4" class="data row7 col4">oIhVngD</td>
 </tr>
 <tr class="odd">
-<td id="T_2ae2a_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</td>
-<td id="T_2ae2a_row8_col0" class="data row8 col0">16907699157</td>
-<td id="T_2ae2a_row8_col1" class="data row8 col1">16907699157</td>
-<td id="T_2ae2a_row8_col2" class="data row8 col2">Rupinder</td>
-<td id="T_2ae2a_row8_col3" class="data row8 col3">Karlsen</td>
-<td id="T_2ae2a_row8_col4" class="data row8 col4">0y8qqUZ</td>
+<td id="T_f8d83_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</td>
+<td id="T_f8d83_row8_col0" class="data row8 col0">16907699157</td>
+<td id="T_f8d83_row8_col1" class="data row8 col1">16907699157</td>
+<td id="T_f8d83_row8_col2" class="data row8 col2">Rupinder</td>
+<td id="T_f8d83_row8_col3" class="data row8 col3">Karlsen</td>
+<td id="T_f8d83_row8_col4" class="data row8 col4">0y8qqUZ</td>
 </tr>
 <tr class="even">
-<td id="T_2ae2a_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</td>
-<td id="T_2ae2a_row9_col0" class="data row9 col0">10920998203</td>
-<td id="T_2ae2a_row9_col1" class="data row9 col1">10920998203</td>
-<td id="T_2ae2a_row9_col2" class="data row9 col2">Nicolas</td>
-<td id="T_2ae2a_row9_col3" class="data row9 col3">Normann</td>
-<td id="T_2ae2a_row9_col4" class="data row9 col4">FNnp5AL</td>
+<td id="T_f8d83_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</td>
+<td id="T_f8d83_row9_col0" class="data row9 col0">10920998203</td>
+<td id="T_f8d83_row9_col1" class="data row9 col1">10920998203</td>
+<td id="T_f8d83_row9_col2" class="data row9 col2">Nicolas</td>
+<td id="T_f8d83_row9_col3" class="data row9 col3">Normann</td>
+<td id="T_f8d83_row9_col4" class="data row9 col4">FNnp5AL</td>
 </tr>
 <tr class="odd">
-<td id="T_2ae2a_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</td>
-<td id="T_2ae2a_row10_col0" class="data row10 col0">99999999999</td>
-<td id="T_2ae2a_row10_col1" class="data row10 col1">99999999999</td>
-<td id="T_2ae2a_row10_col2" class="data row10 col2">Michael</td>
-<td id="T_2ae2a_row10_col3" class="data row10 col3">Norman</td>
-<td id="T_2ae2a_row10_col4" class="data row10 col4">4yI2BlkviaI</td>
+<td id="T_f8d83_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</td>
+<td id="T_f8d83_row10_col0" class="data row10 col0">99999999999</td>
+<td id="T_f8d83_row10_col1" class="data row10 col1">99999999999</td>
+<td id="T_f8d83_row10_col2" class="data row10 col2">Michael</td>
+<td id="T_f8d83_row10_col3" class="data row10 col3">Norman</td>
+<td id="T_f8d83_row10_col4" class="data row10 col4">4yI2BlkviaI</td>
 </tr>
 <tr class="even">
-<td id="T_2ae2a_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</td>
-<td id="T_2ae2a_row11_col0" class="data row11 col0">XX</td>
-<td id="T_2ae2a_row11_col1" class="data row11 col1">XX</td>
-<td id="T_2ae2a_row11_col2" class="data row11 col2">Ola Glenn</td>
-<td id="T_2ae2a_row11_col3" class="data row11 col3">Gåås</td>
-<td id="T_2ae2a_row11_col4" class="data row11 col4">XX</td>
+<td id="T_f8d83_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</td>
+<td id="T_f8d83_row11_col0" class="data row11 col0">XX</td>
+<td id="T_f8d83_row11_col1" class="data row11 col1">XX</td>
+<td id="T_f8d83_row11_col2" class="data row11 col2">Ola Glenn</td>
+<td id="T_f8d83_row11_col3" class="data row11 col3">Gåås</td>
+<td id="T_f8d83_row11_col4" class="data row11 col4">XX</td>
 </tr>
 <tr class="odd">
-<td id="T_2ae2a_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</td>
-<td id="T_2ae2a_row12_col0" class="data row12 col0">X8b7k28</td>
-<td id="T_2ae2a_row12_col1" class="data row12 col1">X8b7k28</td>
-<td id="T_2ae2a_row12_col2" class="data row12 col2">Lars</td>
-<td id="T_2ae2a_row12_col3" class="data row12 col3">Gaas</td>
-<td id="T_2ae2a_row12_col4" class="data row12 col4">tKHXmUl</td>
+<td id="T_f8d83_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</td>
+<td id="T_f8d83_row12_col0" class="data row12 col0">X8b7k28</td>
+<td id="T_f8d83_row12_col1" class="data row12 col1">X8b7k28</td>
+<td id="T_f8d83_row12_col2" class="data row12 col2">Lars</td>
+<td id="T_f8d83_row12_col3" class="data row12 col3">Gaas</td>
+<td id="T_f8d83_row12_col4" class="data row12 col4">tKHXmUl</td>
 </tr>
 </tbody>
 </table>
