@@ -46,7 +46,6 @@ Opprettelse av delt-bøtter gjøres i teamets IaC-repo. For å opprette en delt-
 # Simply add a line with a dash and your new shared bucket's name:
 # - my-shared-data
 # This will create a bucket with the name ssb-arbmark-register-data-delt-my-shared-data-prod
-# The following line creates the standard shared bucket:
 - freg
 ```
 De 5 første linjene er bare kommentarer som forteller hvordan man oppretter bøttene. På linje 6 ser vi hva som måtte fylles ut for å opprette en bøtte med kortnavn `freg`, som igjen får bøttenavnet:
@@ -57,7 +56,19 @@ Etter at endringen er gjort i `buckets-shared.yaml`, så gjør du følgende:
 
 1. Opprette en PR på repoet med endringen.
 2. Få en i gruppen **data-admins** til å gå gjennom og godkjenne. 
-3. Kjør `atlantis plan` og `atlantis apply` som [beskrevet her](./features.html#aktivere-feature). 
+3. Kjør `atlantis plan` og `atlantis apply` som [beskrevet her](./features.html#aktivere-feature).
+
+
+::: {.callout-warning}
+## Navngivning av bøtter
+
+Navngivning av bøtter følger [RFC 1123](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names). Dvs. at navnet må følge disse reglene:  
+
+- Max 63 tegn i navnet (gjelder fullt navn på bøtta)
+- kun små bokstaver `a-z` og sifre `0-9`
+- tillatt med `-`
+:::
+
 
 ## Tilgangsstyring
 
