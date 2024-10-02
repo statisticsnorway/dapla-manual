@@ -726,7 +726,7 @@ Figur&nbsp;1: De ulike delene av et standardisert filnavn
 </figcaption>
 </figure>
 </div>
-<p>Eksempelet i <a href="#fig-filename-breakdown" class="quarto-xref">Figur&nbsp;1</a> har <strong>varehandel</strong> som kort beskrivelse, dataene er gyldige for <strong>2018Q1</strong>, versjon er <strong>1</strong> og filtypen er <strong>parquet</strong>. I tillegg ser vi at periodeangivelse alltid skal prefixes med <strong>p</strong> og versjon med <strong>v</strong>. Elementene i filnavnet skal skilles med understrek.</p>
+<p>Eksempelet i <a href="#fig-filename-breakdown" class="quarto-xref">Figur&nbsp;1</a> har <strong>varehandel</strong> som kort beskrivelse, dataene er gyldige for <strong>2018-Q1</strong>, versjon er <strong>1</strong> og filtypen er <strong>parquet</strong>. I tillegg ser vi at periodeangivelse alltid skal prefixes med <strong>p</strong> og versjon med <strong>v</strong>. Elementene i filnavnet skal skilles med understrek.</p>
 <p>Det er også verdt å merke seg at mellomrom og særnorske bokstaver som <strong>æ</strong>, <strong>ø</strong> og <strong>å</strong> ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:</p>
 <ul>
 <li><strong>a</strong>-<strong>z</strong> og <strong>A</strong>-<strong>Z</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
@@ -750,11 +750,11 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 <tbody>
 <tr class="odd">
 <td>Kort beskrivelse</td>
-<td>Kort tekst som forklarer datasettets innhold, f.eks. “varehandel”, “personinntekt”, “grensehandel_imputert” eller “framskrevne-befolkningsendringer”</td>
+<td>Kort tekst som forklarer datasettets innhold, f.eks. “varehandel” eller “personinntekt”. Bruk bindestrek hvis beskrivelsen består av flere ord, f.eks. “grensehandel-imputert” eller “framskrevne-befolkningsendringer”.</td>
 </tr>
 <tr class="even">
 <td>Periode - inneholder data f.o.m. dato</td>
-<td>Datasettet inneholder data fra og med dato/tidspunkt. I filnavnet må perioden prefikses med “_p”, eksempel “_p2022” eller “_p2022-01-01”.&nbsp;“_p”&nbsp;er en forkortelse for “periode”.&nbsp;Se også <a href="https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#Dato--og-tidsformater-(ISO-8601)">gyldige&nbsp;formater for periode (dato/tidspunkt)</a></td>
+<td>Datasettet inneholder data fra og med dato/tidspunkt. I filnavnet må perioden prefikses med “_p”, eksempel “_p2022” eller “_p2022-01-01”.&nbsp;Se også <a href="https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#Dato--og-tidsformater-(ISO-8601)">gyldige&nbsp;formater for periode (dato/tidspunkt)</a></td>
 </tr>
 <tr class="odd">
 <td>Periode - inneholder data t.o.m. dato</td>
@@ -790,11 +790,11 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 <tbody>
 <tr class="odd">
 <td>Én årgang med data</td>
-<td><em>flygende_objekter_p2019_v1.parquet</em></td>
+<td><em>flygende-objekter_p2019_v1.parquet</em></td>
 </tr>
 <tr class="even">
 <td>To årganger med data</td>
-<td><em>ufo_observasjoner_p2019_p2020_v1.parquet</em></td>
+<td><em>ufo-observasjoner_p2019_p2020_v1.parquet</em></td>
 </tr>
 <tr class="odd">
 <td>Fra 2019 til 2050</td>
@@ -810,31 +810,39 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 </tr>
 <tr class="even">
 <td>Oktober, november og desember 2022</td>
-<td><em>grensehandel_imputert_p2022-10_p2022-12_v1.parquet</em></td>
+<td><em>grensehandel-imputert_p2022-10_p2022-12_v1.parquet</em></td>
 </tr>
 <tr class="odd">
+<td>Uke-nummer 1</td>
+<td><em>omsetning_p2020-W01_v1.parquet</em></td>
+</tr>
+<tr class="even">
 <td>Uke-nummer 15</td>
-<td><em>omsetning_p2020W15_v1.parquet</em></td>
+<td><em>omsetning_p2020-W15_v1.parquet</em></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Første bimester i 2022</td>
-<td><em>skipsanloep_p2022B1_v1.parquet</em></td>
+<td><em>skipsanloep_p2022-B1_v1.parquet</em></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Første kvartal i 2018 (quarter)</td>
-<td><em>pensjon_p2018Q1_v1.parquet</em></td>
-</tr>
-<tr class="even">
-<td>Første tertial i 2022</td>
-<td><em>nybilreg_p2022T1_v1.parquet</em></td>
+<td><em>pensjon_p2018-Q1_v1.parquet</em></td>
 </tr>
 <tr class="odd">
-<td>Første halvår i 2022</td>
-<td><em>personinntekt_p2022H1_v1.parquet</em></td>
+<td>Første tertial i 2022</td>
+<td><em>nybilreg_p2022-T1_v1.parquet</em></td>
 </tr>
 <tr class="even">
+<td>Første halvår i 2022</td>
+<td><em>personinntekt_p2022-H1_v1.parquet</em></td>
+</tr>
+<tr class="odd">
 <td>Kvartalene 1, 2, 3 og 4 i 2018</td>
-<td><em>varehandel_p2018Q1_p2018Q4_v1.parquet</em></td>
+<td><em>varehandel_p2018-Q1_p2018-Q4_v1.parquet</em></td>
+</tr>
+<tr class="even">
+<td>Dato 31.12.2024 og tid 23:59:30.000</td>
+<td><em>skjema_p2024-12-31T23-59-30.000_v1.parquet</em></td>
 </tr>
 </tbody>
 </table>
@@ -871,34 +879,34 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 <div class="sourceCode" id="cb4" data-filename="Produktbøtta: ledstill, sykefra og ameld"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">ssb-dapla-example-data-produkt-prod/</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">└─ ledstill/  </span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── inndata/</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── skjema_p2024Q1_v1.parquet</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── skjema_p2024Q2_v1.parquet</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── skjema_p2024Q2_v2.parquet</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── skjema_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── skjema_p2024-Q2_v1.parquet</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── skjema_p2024-Q2_v2.parquet</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── klargjorte-data/</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── editert_p2024Q1_v1.parquet</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── editert_p2024Q2_v1.parquet</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── editert_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── editert_p2024-Q2_v1.parquet</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── statistikk/</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── aggregert_p2024Q1_v1.parquet</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── aggregert_p2024Q2_v1.parquet        </span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── aggregert_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── aggregert_p2024-Q2_v1.parquet        </span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">    └── utdata/</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── statbank_p2024Q1_v1.parquet</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── statbank_p2024Q2_v1.parquet   </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── statbank_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── statbank_p2024-Q2_v1.parquet   </span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">    │</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">└─ sykefra/  </span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── inndata/</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── egenmeldt_p2024Q1_v1.parquet</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── egenmeldt_p2024Q2_v1.parquet</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── legemeldt_p2024Q1_v1.parquet</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── legemeldt_p2024Q2_v1.parquet</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── egenmeldt_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── egenmeldt_p2024-Q2_v1.parquet</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── legemeldt_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── legemeldt_p2024-Q2_v1.parquet</span></span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── klargjorte-data/</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── sykefravaer_p2024Q1_v1.parquet</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── sykefravaer_p2024Q2_v1.parquet</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── sykefravaer_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── sykefravaer_p2024-Q2_v1.parquet</span></span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── statistikk/</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── aggregert_p2024Q1_v1.parquet</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── aggregert_p2024Q2_v1.parquet</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── aggregert_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── aggregert_p2024-Q2_v1.parquet</span></span>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="at">    └── utdata/</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── statbank_p2024Q1_v1.parquet</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── statbank_p2024Q2_v1.parquet</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">    │   ├── statbank_p2024-Q1_v1.parquet</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">    │   └── statbank_p2024-Q2_v1.parquet</span></span>
 <span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="at">    │</span></span>
 <span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">└─ ameld_data/  </span></span>
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">    ├── inndata/</span></span>
@@ -953,7 +961,7 @@ Unntak til versjonering: nyeste versjon og temporære data
 </div>
 <div class="sourceCode" id="cb5" data-filename="Mappe med flere versjoner av et datasett"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">ssb-prod-team-personstatistikk-data-produkt-prod/  </span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">└── befolkningsframskrivinger/  </span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">    └── klargjorte_data/  </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">    └── klargjorte-data/  </span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">        ├── framskrevne-befolkningsendringer_p2019_p2050.parquet  </span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">        ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  </span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">        ├── framskrevne-befolkningsendringer_p2019_p2050_v2.parquet  </span></span>
@@ -974,7 +982,7 @@ Unntak til versjonering: nyeste versjon og temporære data
 <div class="sourceCode" id="cb6" data-filename="Python kode fra SSB-fagfunksjoner for finne neste versjonsnummer"><pre class="sourceCode python yaml code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># importer funksjonen get_next_version_number() fra ssb-fagfunksjoner</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> get_next_version_number</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>filsti <span class="op">=</span> <span class="st">'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte_data/framskrevne-befolkningsendringer_p2019_p2050.parquet'</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>filsti <span class="op">=</span> <span class="st">'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050.parquet'</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>neste_versjon <span class="op">=</span> get_next_version_number(filsti)</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
