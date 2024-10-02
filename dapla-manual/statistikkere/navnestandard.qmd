@@ -99,7 +99,7 @@ Filnavn skal ha en fast struktur som inneholder: en *kort beskrivelse*, *periode
 
 ![De ulike delene av et standardisert filnavn](../images/filename-breakdown.png){#fig-filename-breakdown width=450px}
 
-Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**. Elementene i filnavnet skal skilles med understrek. 
+Eksempelet i @fig-filename-breakdown har **varehandel** som kort beskrivelse, dataene er gyldige for **2018-Q1**, versjon er **1** og filtypen er **parquet**. I tillegg ser vi at periodeangivelse alltid skal prefixes med **p** og versjon med **v**. Elementene i filnavnet skal skilles med understrek. 
 
 Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**, **ø** og **å** ikke forekommer i filnavnet. Følgende alfanumeriske tegn kan benyttes i fil- og mappenavn:   
 
@@ -112,8 +112,8 @@ Det er også verdt å merke seg at mellomrom og særnorske bokstaver som **æ**,
 
 | Element                               | Forklaring                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Kort beskrivelse                      | Kort tekst som forklarer datasettets innhold, f.eks. “varehandel”, “personinntekt”, “grensehandel_imputert” eller “framskrevne-befolkningsendringer”                                                                                                                                                                                        |
-| Periode - inneholder data f.o.m. dato | Datasettet inneholder data fra og med dato/tidspunkt. I filnavnet må perioden prefikses med “_p”, eksempel “_p2022” eller “_p2022-01-01”. “_p” er en forkortelse for “periode”. Se også [gyldige formater for periode (dato/tidspunkt)](https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#Dato--og-tidsformater-(ISO-8601)) |
+| Kort beskrivelse                      | Kort tekst som forklarer datasettets innhold, f.eks. “varehandel” eller “personinntekt”. Bruk bindestrek hvis beskrivelsen består av flere ord, f.eks. “grensehandel-imputert” eller “framskrevne-befolkningsendringer”.                                                                                                                                                                                        |
+| Periode - inneholder data f.o.m. dato | Datasettet inneholder data fra og med dato/tidspunkt. I filnavnet må perioden prefikses med “_p”, eksempel “_p2022” eller “_p2022-01-01”. Se også [gyldige formater for periode (dato/tidspunkt)](https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#Dato--og-tidsformater-(ISO-8601)) |
 | Periode - inneholder data t.o.m. dato | Datasettet inneholder data til og med dato/tidspunkt. Denne brukes ved behov, eksempelvis for datasett som inneholder forløpsdata eller datasett med flere perioder/årganger.                                                                                                                                                                                       |
 | Versjon                               | Versjon av datasettet. I filnavnet må versjonsnummeret prefikses med “_v”, eksempel “v1”, “v2” eller “v3”.                                                                                                                                                                    |
 | Filtype                               | Filendelse som sier noen om filtypen, f.eks. “.json”, “.csv”, “.xml” eller “.parquet”.                                                                                                                                                                                                                                                      |
@@ -125,18 +125,20 @@ Under finner du et utvalg eksempler på gyldige filnavn for ulike tidsspenn.
 
 | Tidsspenn                | Eksempel på gyldige filnavn             |
 |--------------------------|-----------------------------------------|
-| Én årgang med data | *flygende_objekter_p2019_v1.parquet* |
-| To årganger med data | *ufo_observasjoner_p2019_p2020_v1.parquet* |
+| Én årgang med data | *flygende-objekter_p2019_v1.parquet* |
+| To årganger med data | *ufo-observasjoner_p2019_p2020_v1.parquet* |
 | Fra 2019 til 2050 | *framskrevne-befolkningsendringer_p2019_p2050_v1.parquet* |
 | Fra 01.01.2022 til 31.12.2022 | *sykepenger_p2022-01-01_p2022-12-31_v1.parquet* |
 | Tverrsnittsdata (status) per 01.10.2022 | *utanningsnivaa_p2022-10-01_v1.parquet* |
-| Oktober, november og desember 2022 | *grensehandel_imputert_p2022-10_p2022-12_v1.parquet* |
-| Uke-nummer 15 | *omsetning_p2020W15_v1.parquet* |
-| Første bimester i 2022 | *skipsanloep_p2022B1_v1.parquet* |
-| Første kvartal  i 2018 (quarter) | *pensjon_p2018Q1_v1.parquet* |
-| Første tertial i 2022 | *nybilreg_p2022T1_v1.parquet* |
-| Første halvår i 2022 | *personinntekt_p2022H1_v1.parquet* |
-| Kvartalene 1, 2, 3 og 4 i 2018 | *varehandel_p2018Q1_p2018Q4_v1.parquet* |
+| Oktober, november og desember 2022 | *grensehandel-imputert_p2022-10_p2022-12_v1.parquet* |
+| Uke-nummer 1 | *omsetning_p2020-W01_v1.parquet* |
+| Uke-nummer 15 | *omsetning_p2020-W15_v1.parquet* |
+| Første bimester i 2022 | *skipsanloep_p2022-B1_v1.parquet* |
+| Første kvartal  i 2018 (quarter) | *pensjon_p2018-Q1_v1.parquet* |
+| Første tertial i 2022 | *nybilreg_p2022-T1_v1.parquet* |
+| Første halvår i 2022 | *personinntekt_p2022-H1_v1.parquet* |
+| Kvartalene 1, 2, 3 og 4 i 2018 | *varehandel_p2018-Q1_p2018-Q4_v1.parquet* |
+| Dato 31.12.2024 og tid 23:59:30.000 | *skjema_p2024-12-31T23-59-30.000_v1.parquet* |
 
 
 ## Partisjonerte data
@@ -167,34 +169,34 @@ Anta at det er team som heter **dapla-example** med statistikkproduktene **ledst
 ssb-dapla-example-data-produkt-prod/
 └─ ledstill/  
     ├── inndata/
-    │   ├── skjema_p2024Q1_v1.parquet
-    │   ├── skjema_p2024Q2_v1.parquet
-    │   └── skjema_p2024Q2_v2.parquet
+    │   ├── skjema_p2024-Q1_v1.parquet
+    │   ├── skjema_p2024-Q2_v1.parquet
+    │   └── skjema_p2024-Q2_v2.parquet
     ├── klargjorte-data/
-    │   ├── editert_p2024Q1_v1.parquet
-    │   └── editert_p2024Q2_v1.parquet
+    │   ├── editert_p2024-Q1_v1.parquet
+    │   └── editert_p2024-Q2_v1.parquet
     ├── statistikk/
-    │   ├── aggregert_p2024Q1_v1.parquet
-    │   └── aggregert_p2024Q2_v1.parquet        
+    │   ├── aggregert_p2024-Q1_v1.parquet
+    │   └── aggregert_p2024-Q2_v1.parquet        
     └── utdata/
-    │   ├── statbank_p2024Q1_v1.parquet
-    │   └── statbank_p2024Q2_v1.parquet   
+    │   ├── statbank_p2024-Q1_v1.parquet
+    │   └── statbank_p2024-Q2_v1.parquet   
     │
 └─ sykefra/  
     ├── inndata/
-    │   ├── egenmeldt_p2024Q1_v1.parquet
-    │   ├── egenmeldt_p2024Q2_v1.parquet
-    │   ├── legemeldt_p2024Q1_v1.parquet
-    │   └── legemeldt_p2024Q2_v1.parquet
+    │   ├── egenmeldt_p2024-Q1_v1.parquet
+    │   ├── egenmeldt_p2024-Q2_v1.parquet
+    │   ├── legemeldt_p2024-Q1_v1.parquet
+    │   └── legemeldt_p2024-Q2_v1.parquet
     ├── klargjorte-data/
-    │   ├── sykefravaer_p2024Q1_v1.parquet
-    │   └── sykefravaer_p2024Q2_v1.parquet
+    │   ├── sykefravaer_p2024-Q1_v1.parquet
+    │   └── sykefravaer_p2024-Q2_v1.parquet
     ├── statistikk/
-    │   ├── aggregert_p2024Q1_v1.parquet
-    │   └── aggregert_p2024Q2_v1.parquet
+    │   ├── aggregert_p2024-Q1_v1.parquet
+    │   └── aggregert_p2024-Q2_v1.parquet
     └── utdata/
-    │   ├── statbank_p2024Q1_v1.parquet
-    │   └── statbank_p2024Q2_v1.parquet
+    │   ├── statbank_p2024-Q1_v1.parquet
+    │   └── statbank_p2024-Q2_v1.parquet
     │
 └─ ameld_data/  
     ├── inndata/
@@ -248,7 +250,7 @@ Etterhvert som man får flere versjoner av et datasett kan det se slik ut:
 ```{.yaml filename="Mappe med flere versjoner av et datasett"}
 ssb-prod-team-personstatistikk-data-produkt-prod/  
 └── befolkningsframskrivinger/  
-    └── klargjorte_data/  
+    └── klargjorte-data/  
         ├── framskrevne-befolkningsendringer_p2019_p2050.parquet  
         ├── framskrevne-befolkningsendringer_p2019_p2050_v1.parquet  
         ├── framskrevne-befolkningsendringer_p2019_p2050_v2.parquet  
@@ -273,7 +275,7 @@ byttes versjonsnummer for datasettet til 1 eller høyere.
 # importer funksjonen get_next_version_number() fra ssb-fagfunksjoner
 from fagfunksjoner import get_next_version_number
 
-filsti = 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte_data/framskrevne-befolkningsendringer_p2019_p2050.parquet'
+filsti = 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050.parquet'
 
 neste_versjon = get_next_version_number(filsti)
 
