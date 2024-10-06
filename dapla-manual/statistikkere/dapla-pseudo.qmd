@@ -45,6 +45,13 @@ Tilgangsstyring til dapla-pseudo-toolbelt
 
 I @tbl-pseudo-panel ser vi fra @tbl-pseudo-first at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-pseudo, både fra Kildomaten og når man jobber interaktivt^[Med interaktiv jobbing menes at man skriver og kode og får tilbake output i samme verktøy. F.eks. er Jupyterlab et eksempel på et verktøy som lar deg jobbe interaktivt med data.] i Jupyterlab. @tbl-pseudo-second viser at det kun er tilgang til *pseudonymize()* og *validator()* fra Kildomaten i prod-miljøet, og man kan aldri interaktivt kan kalle på funksjoner som potensielt avslører et pseudonym. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.
 
+::: {.callout-caution}
+## Ulike pseudonymer i prod og test
+
+Selv om man har videre rettigheter til å bruke funksjonaliteten i dapla-toolbelt-pseudo fra test-miljøet sammenlignet med prod-miljøet, så betyr ikke det at samme input i de to miljøene vil samme output. Når funksjonaliteten kalles fra test-miljøet så benyttes det automatisk en annen krypteringsnøkkel enn den som benyttes i prod. På den måten vil et pseudonym produsert fra prod-miljøet aldri være likt det som produseres fra prod-miljøet selv om input skulle være den samme.
+:::
+
+
 ## Funksjonalitet
 
 I denne delen viser vi hvilken funksjonalitet som tilbys gjennom dapla-toolbelt-pseudo. Eksempelkoden under viser hvordan man ville kjørt det fra en notebook i test-miljøet til teamet, og ikke hvordan koden må skrives når det skal kjøres i [Kildomaten](./kildomaten.html)^[I Kildomaten må koden blant annet pakke inn i `main()`-funksjon.].
