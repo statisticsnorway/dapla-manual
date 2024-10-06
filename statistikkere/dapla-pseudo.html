@@ -739,6 +739,19 @@ Tabell&nbsp;1: Tilgangsstyring til dapla-pseudo-toolbelt
 </figure>
 </div>
 <p>I <a href="#tbl-pseudo-panel" class="quarto-xref">Tabell&nbsp;1</a> ser vi fra <a href="#tbl-pseudo-first" class="quarto-xref">Tabell&nbsp;1 (a)</a> at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-pseudo, både fra Kildomaten og når man jobber interaktivt<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> i Jupyterlab. <a href="#tbl-pseudo-second" class="quarto-xref">Tabell&nbsp;1 (b)</a> viser at det kun er tilgang til <em>pseudonymize()</em> og <em>validator()</em> fra Kildomaten i prod-miljøet, og man kan aldri interaktivt kan kalle på funksjoner som potensielt avslører et pseudonym. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ulike pseudonymer i prod og test
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Selv om man har videre rettigheter til å bruke funksjonaliteten i dapla-toolbelt-pseudo fra test-miljøet sammenlignet med prod-miljøet, så betyr ikke det at samme input i de to miljøene vil samme output. Når funksjonaliteten kalles fra test-miljøet så benyttes det automatisk en annen krypteringsnøkkel enn den som benyttes i prod. På den måten vil et pseudonym produsert fra prod-miljøet aldri være likt det som produseres fra prod-miljøet selv om input skulle være den samme.</p>
+</div>
+</div>
 </section>
 <section id="funksjonalitet" class="level2">
 <h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
