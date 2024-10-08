@@ -2,67 +2,135 @@
 
 Hvis en ønsker å lage ett dashbord som et brukergrensesnitt, så kan pakken Dash være et godt alternativ. Dash er ett rammeverk hvor man selv kan bygge opp applikasjoner i form av dashbord på en enklere måte, og det bygges oppå javascript pakker som plotly.js og react.js. Det er et produkt ved siden av og helintegrert med plotly, som også er en annen pakke i Python som gir oss interaktive grafer. Dash er et godt verktøy hvis en ønsker et dashbord som brukergrensesnitt for interaktiv visualisering av data. Dash kan kodes i Python og R, men også Julia og F#.
 
-## Anbefalte nødvendige pakker
+I SSB kan man lage dashbord i virtuelle miljøer satt opp med [ssb-project](./jobbe-med-kode.html). 
+For mer om håndtering av pakker i ett virtuelt miljø satt opp med ssb-project kan man se nærmere [her](./jobbe-med-kode#installere-pakker).
 
-I SSB kan man lage dashbord i virtuelle miljøer, gjerne satt opp med [ssb-project](./jobbe-med-kode.html), men man trenger helt spesifikke pakker for å få det oppe å gå. Mer info om å sette opp et eget miljø med ssb-project finner du [her](./jobbe-med-kode.html). Tabell under viser navn på pakkene, og gjeldende versjoner som er benyttet i skrivende stund av eksempel i neste avsnitt. Vel og merke kan nyere versjoner også fungere fint, noe man må prøve ut selv, men følgende versjoner fungerer fint.
+## Eksempel kode i DaplaLab
 
-| Pakke                     | Versjon (i skrivende stund) |
-| ------------------------- | --------------------------- |
-| dash                      | 2.8.1                       |
-| jupyter-dash              | 0.4.2                       |
-| jupyter-server-proxy      | 3.2.2                       |
-| jupyterlab-dash           | 0.1.0a3                     |
-| ipykernel                 | 6.21.3                      |
-| dash-bootstrap-components | 1.3.0 (hvis ønskelig)       |
+I DaplaLab kan du starte opp ett dashbord ved hjelp av dash pakken enten i vscode-python tjenesten, eller i en notebook i jupyter tjenesten. Det fungerer best å kjøre Dash-apper i en egen fane i nettleseren.
 
-For mer om håndtering av pakker i ett virtuelt miljø satt opp med ssb-project kan man se nærmere [her](./jobbe-med-kode#installere-pakker). For å legge til disse pakkene kan man gjøre følgende i terminalen:
+::: {.panel-tabset}
 
-```{.python filename="terminal"} 
-poetry add dash jupyter-dash jupyter-server-proxy jupyterlab-dash ipykernel
+### vscode-python
+
+Her er et eksempel på hvordan man lager en Dash-app i DaplaLab i en vscode tjeneste:
+
+1. Installer `pandas` og `dash` i et [ssb-project](./statistikkere/jobbe-med-kode.qmd#ssb-project). 
+2. Opprett et python-script i prosjektet som f.eks. heter `app.py`. 
+3. Kjør scriptet ved å kjøre følgende kommando fra terminalen: `poetry run python ./app.py`
+4. Deretter kommer det opp et dialog-vinduet hvor du velger `Open in browser`. 
+
+Her er et eksempel på script som fungerer i Vscode-python:
+
+```{.python filename="app.py"}
+from dash import Dash, html, dcc, callback, Output, Input
+import plotly.express as px
+import pandas as pd
+
+# Creating a sample dataset similar to the Gapminder dataset
+data = {
+    'country': ['Afghanistan', 'Afghanistan', 'Afghanistan', 'Brazil', 'Brazil', 'Brazil', 'China', 'China', 'China'],
+    'continent': ['Asia', 'Asia', 'Asia', 'South America', 'South America', 'South America', 'Asia', 'Asia', 'Asia'],
+    'year': [1952, 1977, 2007, 1952, 1977, 2007, 1952, 1977, 2007],
+    'lifeExp': [28.801, 39.877, 43.828, 50.917, 59.504, 72.390, 44.000, 63.739, 72.961],
+    'pop': [8425333, 12412311, 31889923, 56602560, 80461570, 190010647, 556263527, 862030000, 1318683096],
+    'gdpPercap': [779.4453145, 786.11336, 974.5803384, 2108.944355, 5718.766744, 9065.800825, 400.448611, 1488.041713, 4959.114854]
+}
+
+# Creating DataFrame
+df = pd.DataFrame(data)
+
+# Creating the app
+app = Dash(
+    __name__,
+    requests_pathname_prefix='/proxy/8050/', 
+    serve_locally=True
+)
+
+app.layout = [
+    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
+    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
+    dcc.Graph(id='graph-content')
+]
+
+@callback(
+    Output('graph-content', 'figure'),
+    Input('dropdown-selection', 'value')
+)
+def update_graph(value):
+    dff = df[df.country==value]
+    return px.line(dff, x='year', y='pop')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 ```
 
-Og hvis en ønsker Dash-Bootstrap-Components:
+### jupyter
 
-```{.python filename="terminal"}
-poetry add dash-bootstrap-components
-``` 
+Her er et eksempel på hvordan man lager en Dash-app i DaplaLab i en jupyter tjeneste:
 
-Vel og merke så vil ikke denne pakken fungere uten at tilhørende filer er med i selve repoet. Dette fordi i hovedsak leter denne etter filer den trenger på internett. Pakken i seg selv har en fordel i at det er lettere å bygge opp utseende(layout) i dashbordet ditt, samt andre komponenter som ikke ligger i standard dash pakken.
+1. Installer `pandas` og `dash` i et [ssb-project](./statistikkere/jobbe-med-kode.qmd#ssb-project). 
+2. Opprett en notebook i prosjektet som f.eks. heter `app.ipynb`.
+3. Åpne notebooken og kjør kodecellene på vanlig måte.
 
-## Eksempel kode i JupyterLab
+Her er et eksempel på kode som fungerer i jupyter:
 
-Noen ting er viktig å huske på at kommer i korrekt rekkefølge når en koder opp i JupyterLab. Her kommer ett veldig enkelt eksempel.
+```{.python filename="app.ipynb"}
+# %%
+# Notebook cell 1
+from dash import Dash, html, dcc, callback, Output, Input
+import plotly.express as px
+import pandas as pd
 
-*Første celle* importerer vi alle nødvendige pakker
+# %%
+# Notebook cell 2
+# Creating a sample dataset similar to the Gapminder dataset
+data = {
+    'country': ['Afghanistan', 'Afghanistan', 'Afghanistan', 'Brazil', 'Brazil', 'Brazil', 'China', 'China', 'China'],
+    'continent': ['Asia', 'Asia', 'Asia', 'South America', 'South America', 'South America', 'Asia', 'Asia', 'Asia'],
+    'year': [1952, 1977, 2007, 1952, 1977, 2007, 1952, 1977, 2007],
+    'lifeExp': [28.801, 39.877, 43.828, 50.917, 59.504, 72.390, 44.000, 63.739, 72.961],
+    'pop': [8425333, 12412311, 31889923, 56602560, 80461570, 190010647, 556263527, 862030000, 1318683096],
+    'gdpPercap': [779.4453145, 786.11336, 974.5803384, 2108.944355, 5718.766744, 9065.800825, 400.448611, 1488.041713, 4959.114854]
+}
 
-```{.python filename="notebook"}
-from dash import html
-from jupyter_dash import JupyterDash
-from jupyter_dash.comms import _send_jupyter_config_comm_request
-_send_jupyter_config_comm_request()
+# Creating DataFrame
+df = pd.DataFrame(data)
+
+# Creating the app
+port = 8050 # must be between 1024 and 9999
+service_prefix = os.getenv('JUPYTERHUB_SERVICE_PREFIX', '/')
+domain = os.getenv('JUPYTERHUB_HTTP_REFERER', None)
+
+app = Dash(
+    __name__,
+    requests_pathname_prefix=f"{service_prefix}proxy/{port}/", 
+    serve_locally=True
+)
+
+app.layout = [
+    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
+    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
+    dcc.Graph(id='graph-content')
+]
+
+@callback(
+    Output('graph-content', 'figure'),
+    Input('dropdown-selection', 'value')
+)
+def update_graph(value):
+    dff = df[df.country==value]
+    return px.line(dff, x='year', y='pop')
+
+if __name__ == '__main__':
+    # For jupyter_mode, choose between 'external' or 'inline'.
+    # 'jupyterlab' should also be poosible, but doesn't seem to work...
+    app.run(debug=True, jupyter_mode="external", jupyter_server_url=domain, port=port)
 ```
 
-I *Andre celle* må følgende kjøres, men her er det **VELDIG VIKTIG** at man avventer 2-3 sekunder etter at forrige celle ble kjørt.
+Det er fortsatt ikke funnet noen løsning å starte opp dashbord med dash i terminalen med vanlige python filer (slik som i vscode-python tjenesten) i jupyter tjenesten.
 
-```{.python filename="notebook"}
-JupyterDash.infer_jupyter_proxy_config()
-```
-
-Deretter så er vi klare for å bygge opp selve dashbordet. så i *Tredje celle* kan en enkel kode for eksempel se slik ut:
-
-```{.python filename="notebook"}
-app = JupyterDash(__name__)
-porten = 8642 # Valgfritt fire sifret nummer
-
-app.layout = html.Div([
-    html.H1("Eget dashbord med Dash i SSB")
-])
-
-if __name__ == "__main__":
-    app.run_server(debug=True, port=porten, mode="external")
-```
-
-Denne koden vil starte opp dashbordet i eget vindu i browseren ettersom mode="external". Dersom man vil ha et eget vindu i JupyterLab kan man sette denne til "jupyterlab", eller hvis du vil at dashbordet skal dukke opp under cellen i notebooken din, så kan man sette denne til "inline".
+:::
 
 ## Aktuell dokumentasjon
 
@@ -74,3 +142,6 @@ Diverse som er verdt å se nærmere på når en bygger dashbord applikasjon med 
 - [Dash HTML Components](https://dash.plotly.com/dash-html-components)
 - [Dash Bootstrap Components](https://dash-bootstrap-components.opensource.faculty.ai/docs/components/)
     - Vel og merke henter denne diverse materialer fra internett, og vil ikke fungere uten tilgang. Det er heller anbefalt å ha de nødvendige filene lagret lokalt for bruk av denne pakken.
+    - Pakken i seg selv har en fordel i at det er lettere å bygge opp utseende(layout) i dashbordet ditt, samt andre komponenter som ikke ligger i standard dash pakken.
+- [Dash SSB Components](https://github.com/statisticsnorway/ssb-dash-components)
+    - Team Metadata lager SSB komponenter i Dash, noe Datadoc er lagd med. Dette gir deg muligheten til å bruke SSB komponentene i dine egne dashbord. Vel og merke er denne pakken fortsatt under utvikling, og ikke alle komponenter er på plass.
