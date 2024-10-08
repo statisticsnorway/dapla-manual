@@ -48,11 +48,13 @@ For å jobbe med notebooks i VS Code kan du gjøre følgende:
 
 Du må kjøre en `ssb-project build`, som beskrevet over, hver gang en instans av Jupyter, eller VSCode blir startet. Hvis du isteden åpner en pauset (suspendert) instans, vil du kunne fortsette arbeidet fra forrige kjøring uten å måtte kjøre `ssb-project build`.
 
-### Hvordan kjører man en Dash-app fra Vscode-python? 
+### Hvordan kjører man en Dash-app?
+
+#### Fra vscode-python tjenesten
 
 Det fungerer best å kjøre Dash-apper i en egen fane i nettleseren. Inline-visning av figurer fungerer ikke enda. 
 
-Her er et eksempel på hvordan man lager en Dash-app:
+Her er et eksempel på hvordan man lager en Dash-app i DaplaLab i en vscode tjeneste:
 
 1. Installer `pandas` og `dash` i et [ssb-project](./statistikkere/jobbe-med-kode.qmd#ssb-project). 
 2. Opprett et python-script i prosjektet som f.eks. heter `app.py`. 
@@ -102,4 +104,67 @@ def update_graph(value):
 
 if __name__ == '__main__':
     app.run(debug=True)
+```
+
+#### Fra jupyter tjenesten
+
+Det fungerer best å kjøre Dash-apper i en egen fane i nettleseren, men inline-visning skal også være mulig i notebook. 
+
+Her er et eksempel på hvordan man lager en Dash-app i DaplaLab i en jupyter tjeneste:
+
+1. Installer `pandas` og `dash` i et [ssb-project](./statistikkere/jobbe-med-kode.qmd#ssb-project). 
+2. Opprett en notebook i prosjektet som f.eks. heter `app.ipynb`.
+
+
+Her er et eksempel på kode som fungerer i jupyter:
+
+```{.python filename="app.ipynb"}
+# %%
+# Notebook cell 1
+from dash import Dash, html, dcc, callback, Output, Input
+import plotly.express as px
+import pandas as pd
+
+# %%
+# Notebook cell 2
+# Creating a sample dataset similar to the Gapminder dataset
+data = {
+    'country': ['Afghanistan', 'Afghanistan', 'Afghanistan', 'Brazil', 'Brazil', 'Brazil', 'China', 'China', 'China'],
+    'continent': ['Asia', 'Asia', 'Asia', 'South America', 'South America', 'South America', 'Asia', 'Asia', 'Asia'],
+    'year': [1952, 1977, 2007, 1952, 1977, 2007, 1952, 1977, 2007],
+    'lifeExp': [28.801, 39.877, 43.828, 50.917, 59.504, 72.390, 44.000, 63.739, 72.961],
+    'pop': [8425333, 12412311, 31889923, 56602560, 80461570, 190010647, 556263527, 862030000, 1318683096],
+    'gdpPercap': [779.4453145, 786.11336, 974.5803384, 2108.944355, 5718.766744, 9065.800825, 400.448611, 1488.041713, 4959.114854]
+}
+
+# Creating DataFrame
+df = pd.DataFrame(data)
+
+# Creating the app
+port = 8050
+service_prefix = os.getenv('JUPYTERHUB_SERVICE_PREFIX', '/')
+domain = os.getenv('JUPYTERHUB_HTTP_REFERER', None)
+
+app = Dash(
+    __name__,
+    requests_pathname_prefix=f"{service_prefix}proxy/{port}/", 
+    serve_locally=True
+)
+
+app.layout = [
+    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
+    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
+    dcc.Graph(id='graph-content')
+]
+
+@callback(
+    Output('graph-content', 'figure'),
+    Input('dropdown-selection', 'value')
+)
+def update_graph(value):
+    dff = df[df.country==value]
+    return px.line(dff, x='year', y='pop')
+
+if __name__ == '__main__':
+    app.run(jupyter_mode="jupyterlab", jupyter_server_url=domain, port=port)
 ```
