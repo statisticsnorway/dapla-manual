@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -529,8 +563,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link active" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#konfigurasjon" id="toc-konfigurasjon" class="nav-link" data-scroll-target="#konfigurasjon">Konfigurasjon</a></li>
+  <li><a href="#datatilgang-og-lagring" id="toc-datatilgang-og-lagring" class="nav-link" data-scroll-target="#datatilgang-og-lagring">Datatilgang og lagring</a>
+  <ul class="collapse">
+  <li><a href="#åpne-eksisterende-workspace" id="toc-åpne-eksisterende-workspace" class="nav-link" data-scroll-target="#åpne-eksisterende-workspace">Åpne eksisterende workspace</a></li>
+  <li><a href="#opprette-nytt-workspace" id="toc-opprette-nytt-workspace" class="nav-link" data-scroll-target="#opprette-nytt-workspace">Opprette nytt workspace</a></li>
+  </ul></li>
+  <li><a href="#slette-tjenesten" id="toc-slette-tjenesten" class="nav-link" data-scroll-target="#slette-tjenesten">Slette tjenesten</a></li>
+  <li><a href="#pause-tjenesten" id="toc-pause-tjenesten" class="nav-link" data-scroll-target="#pause-tjenesten">Pause tjenesten</a></li>
+  <li><a href="#monitorering" id="toc-monitorering" class="nav-link" data-scroll-target="#monitorering">Monitorering</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/jdemetra.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/jdemetra.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -554,9 +603,108 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Kommer snart.</p>
+<p><img src="../images/dapla-lab-jdemetra-service.png" class="img-fluid" style="max-width: 350%; float: right;" alt="Jupyter Service"></p>
+<p>Jdemetra er en tjeneste som tilbyr et grafisk grensesnitt (GUI) for sesongjustering og tidsserie-analyse. Formålet med tjenesten er å tilby statistikere i SSB et velkjent verktøy for opprette nye Jdemetra-<em>workspaces</em>, visuelt inspisere mange tidsserier samtidig, og benytte funksjonalitet som finnes for årlige evalueringer av modellene som benyttes.</p>
+<p><a href="https://jdemetra-new-documentation.netlify.app/">Jdemetra+</a> er navnet på en samling programvare for tidsserie-analyse og sesongjustering som er utviklet av <a href="https://www.nbb.be/en">Belgias nasjonalbank</a> i samarbeid med <a href="https://ec.europa.eu/eurostat">Eurostat</a>, <a href="https://www.insee.fr/en/accueil">Insee</a> og <a href="https://www.bundesbank.de/de">Deutche Bundesbank</a>. I tillegg til GUI-et som tilbys på Dapla Lab, finnes det også et CLI for batch-prosessering som heter <a href="https://github.com/jdemetra/jwsacruncher/wiki">jwsacruncher</a>, og en R-pakke ved navn <a href="https://rjdverse.github.io/rjdemetra/">RJDemetra</a>. Alle bygger på de samme grunnleggende komponentene. Jwsacruncher er installert i <a href="../statistikkere/jupyter.html">Jupyter</a> og <a href="../statistikkere/rstudio.html">Rstudio</a> på Dapla Lab, mens RJdemetra kan installeres av brukeren selv i de samme tjenestene.</p>
+<section id="forberedelser" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
+<p>Før man starter <strong>Jdemetra-tjenesten</strong> bør man ha lest <a href="./dapla-lab.html">kapitlet om Dapla Lab</a>. Deretter gjør du følgende:</p>
+<ol type="1">
+<li>Logg deg inn på <a href="https://lab.dapla.ssb.no/">Dapla Lab</a></li>
+<li>Under <strong>Tjenestekatalog</strong> trykker du på <strong>Start</strong>-knappen for <strong>Jdemetra</strong></li>
+<li>Gi tjenesten et navn</li>
+<li>Åpne <strong>Jdemetra konfigurasjoner</strong></li>
+</ol>
+</section>
+<section id="konfigurasjon" class="level2">
+<h2 class="anchored" data-anchor-id="konfigurasjon">Konfigurasjon</h2>
+<p>Før man åpner en tjeneste kan man konfigurere hvilket team og tilgangsgruppe man skal representere og dermed hvilke bøtter man får tilgang til i Jdemetra. Man kan også velge hvilken versjon av Jdemetra man ønsker å kjøre, der default er siste versjon.</p>
+<div id="fig-dapla-lab-jdemetra-konf-dapla" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser tjenestekonfigurasjonen i Dapla Lab.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-jdemetra-konf-dapla-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/dapla-lab-jdemetra-konf-dapla.png" class="img-fluid figure-img" alt="Viser tjenestekonfigurasjonen i Dapla Lab.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-jdemetra-konf-dapla-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Detaljert tjenestekonfigurasjon i Jdemetra-tjenesten i Dapla Lab.
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-dapla-lab-jdemetra-konf-dapla" class="quarto-xref">Figur&nbsp;1</a> viser hvilke valg man gjøre under fanen <strong>Dapla</strong>. Først kan man velge om ønsker å aktivere datatilgang. Det vil si om man vil ha tilgang til bøtter fra tjenesten. I de aller fleste tilfeller er dette ønskelig, siden man ikke får lagret noe permanent uten dette. Hvis man velger datatilgang, så må man deretter spesifisere hvilket team og tilgangsgruppe man ønsker å representere. Alle i SSB er medlem av <em>developers</em>-gruppa i teamet<a href="../statistikkere/hva-er-dapla-team.html#dapla-felles">Dapla Felles</a>, derfor kan man velge dette teamet hvis man ønsker teste ut tjenesten.</p>
+<p><a href="#fig-dapla-lab-jdemetra-konf-service" class="quarto-xref">Figur&nbsp;2</a> viser valget man kan gjøre under fanen <em>Tjeneste</em>. Her kan man velge versjon av Jdemetra-programvaren. Default er siste versjon som er tilgjengelig.</p>
+<div id="fig-dapla-lab-jdemetra-konf-service" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser tjenestekonfigurasjonen i Dapla Lab.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-jdemetra-konf-service-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/dapla-lab-jdemetra-konf-service.png" class="img-fluid figure-img" alt="Viser tjenestekonfigurasjonen i Dapla Lab.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-jdemetra-konf-service-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;2: Detaljert tjenestekonfigurasjon i Dapla Lab
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="datatilgang-og-lagring" class="level2">
+<h2 class="anchored" data-anchor-id="datatilgang-og-lagring">Datatilgang og lagring</h2>
+<p>Når man åpner Jdemetra, og velger å representere team og tilgangsgruppe, så blir bøttene som den tilgangsgruppa har tilgang til, tilgjengeliggjort som et filsystem under <code>/buckets/</code>. Som bruker kan du da lese og skrive til bøttene ved benytte denne filstien. F.eks. vil et statistikkteam som åpner Jdemetra som <em>developers</em>-gruppa ha et filsystem som typisk ser slik ut:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>/buckets/</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="/buckets/"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">/buckets/  </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">└─ produkt/  </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">   ├── inndata/</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">   ├── klargjorte-data/</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">   ├── statistikk/</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">   └── utdata/</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">└─ frasky/  </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">└─ tilsky/                     </span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I eksempelet over ser vi at bøttene <strong>produkt</strong>, <strong>frasky</strong> og <strong>tilsky</strong> ligger under <code>/buckets/</code>.</p>
+<section id="åpne-eksisterende-workspace" class="level3">
+<h3 class="anchored" data-anchor-id="åpne-eksisterende-workspace">Åpne eksisterende workspace</h3>
+<p>Hvis jeg velger å representere gruppen <strong>dapla-felles-developers</strong>, så kan jeg åpne et Jdemetra-workspace som ligger i produktbøtta til team Dapla Felles ved å gjøre følgende:</p>
+<ol type="1">
+<li>Velg <strong>File/Open workspace</strong> i menyen.</li>
+<li>Finn roten av filsystemet og åpne mappen <code>/buckets/</code></li>
+<li>Velg xml-filen som definerer workspacet trykk <strong>Open</strong></li>
+</ol>
+</section>
+<section id="opprette-nytt-workspace" class="level3">
+<h3 class="anchored" data-anchor-id="opprette-nytt-workspace">Opprette nytt workspace</h3>
+<p>For å opprette et nytt workspace så importerer du input-filene på vanlig måte under <strong>Providers</strong>, legger de til i en workspace, og velger <strong>/File/Save Workspace As</strong> i menyen. Velg en filsti under <code>/buckets/produkt/</code> for å lagre workspacet permanent i en bøtte.</p>
+</section>
+</section>
+<section id="slette-tjenesten" class="level2">
+<h2 class="anchored" data-anchor-id="slette-tjenesten">Slette tjenesten</h2>
+<p>For å slette tjenesten kan man trykke på Slette-knappen i Dapla Lab under <strong>Mine tjenester</strong>. Når man sletter en tjeneste så sletter man hele disken inne i tjenesten og frigjør alle ressurser som er reservert. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.</p>
+</section>
+<section id="pause-tjenesten" class="level2">
+<h2 class="anchored" data-anchor-id="pause-tjenesten">Pause tjenesten</h2>
+<p>Man kan pause tjenesten ved å trykke på Pause-knappen i Dapla Lab under <strong>Mine tjenester</strong>. Når man pauser så slettes alt påden lokale disken som ikke er lagret under <code>$HOME/work</code>. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.</p>
+</section>
+<section id="monitorering" class="level2">
+<h2 class="anchored" data-anchor-id="monitorering">Monitorering</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>Man kan moniterere en instans av Jupyter ved å trykke på Jupyter-teksten under Mine tjenester i Dapla Lab, slik som vist i <a href="#fig-dapla-lab-monitoring" class="quarto-xref">Figur&nbsp;3</a>.</p>
+<p>Denne funksjonaliteten er under arbeid og mer informasjon kommer snart.</p>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:25%;">
+<div id="fig-dapla-lab-monitoring" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-monitoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/dapla-lab-monitoring.png" class="img-fluid figure-img" alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-monitoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;3: Monitorering av Jupyter-tjenesten i Dapla Lab
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -999,7 +1147,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/jdemetra.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/jdemetra.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/jdemetra.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/jdemetra.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
