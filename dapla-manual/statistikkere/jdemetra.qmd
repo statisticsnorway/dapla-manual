@@ -2,4 +2,86 @@
 title: Jdemetra
 ---
 
-Kommer snart. 
+![](../images/dapla-lab-jdemetra-service.png){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
+
+Jdemetra er en tjeneste som tilbyr et grafisk grensesnitt (GUI) for sesongjustering og tidsserie-analyse. Formålet med tjenesten er å tilby statistikere i SSB et velkjent verktøy for opprette nye Jdemetra-*workspaces*, visuelt inspisere mange tidsserier samtidig, og benytte funksjonalitet som finnes for årlige evalueringer av modellene som benyttes.   
+
+[Jdemetra+](https://jdemetra-new-documentation.netlify.app/) er navnet på en samling programvare for tidsserie-analyse og sesongjustering som er utviklet av [Belgias nasjonalbank](https://www.nbb.be/en) i samarbeid med [Eurostat](https://ec.europa.eu/eurostat), [Insee](https://www.insee.fr/en/accueil) og [Deutche Bundesbank](https://www.bundesbank.de/de). I tillegg til GUI-et som tilbys på Dapla Lab, finnes det også et CLI for batch-prosessering som heter [jwsacruncher](https://github.com/jdemetra/jwsacruncher/wiki), og en R-pakke ved navn [RJDemetra](https://rjdverse.github.io/rjdemetra/). Alle bygger på de samme grunnleggende komponentene. Jwsacruncher er installert i [Jupyter](./jupyter.qmd) og [Rstudio](./rstudio.qmd) på Dapla Lab, mens RJdemetra kan installeres av brukeren selv i de samme tjenestene. 
+
+## Forberedelser
+
+Før man starter **Jdemetra-tjenesten** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab.html). Deretter gjør du følgende:
+
+1. Logg deg inn på [Dapla Lab](https://lab.dapla.ssb.no/)
+2. Under **Tjenestekatalog** trykker du på **Start**-knappen for **Jdemetra**
+3. Gi tjenesten et navn
+4. Åpne **Jdemetra konfigurasjoner**
+
+## Konfigurasjon
+
+Før man åpner en tjeneste kan man konfigurere hvilket team og tilgangsgruppe man skal representere og dermed hvilke bøtter man får tilgang til i Jdemetra. Man kan også velge hvilken versjon av Jdemetra man ønsker å kjøre, der default er siste versjon.  
+
+![Detaljert tjenestekonfigurasjon i Jdemetra-tjenesten i Dapla Lab.](../images/dapla-lab-jdemetra-konf-dapla.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-jdemetra-konf-dapla}
+
+@fig-dapla-lab-jdemetra-konf-dapla viser hvilke valg man gjøre under fanen **Dapla**. Først kan man velge om ønsker å aktivere datatilgang. Det vil si om man vil ha tilgang til bøtter fra tjenesten. I de aller fleste tilfeller er dette ønskelig, siden man ikke får lagret noe permanent uten dette. Hvis man velger datatilgang, så må man deretter spesifisere hvilket team og tilgangsgruppe man ønsker å representere. Alle i SSB er medlem av *developers*-gruppa i teamet[Dapla Felles](./hva-er-dapla-team.ipynb#dapla-felles), derfor kan man velge dette teamet hvis man ønsker teste ut tjenesten.
+
+@fig-dapla-lab-jdemetra-konf-service viser valget man kan gjøre under fanen *Tjeneste*. Her kan man velge versjon av Jdemetra-programvaren. Default er siste versjon som er tilgjengelig. 
+
+![Detaljert tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-jdemetra-konf-service.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-jdemetra-konf-service}
+
+## Datatilgang og lagring
+
+Når man åpner Jdemetra, og velger å representere team og tilgangsgruppe, så blir bøttene som den tilgangsgruppa har tilgang til, tilgjengeliggjort som et filsystem under `/buckets/`. Som bruker kan du da lese og skrive til bøttene ved benytte denne filstien. F.eks. vil et statistikkteam som åpner Jdemetra som *developers*-gruppa ha et filsystem som typisk ser slik ut:
+
+```{.yaml filename="/buckets/"}
+/buckets/  
+└─ produkt/  
+   ├── inndata/
+   ├── klargjorte-data/
+   ├── statistikk/
+   └── utdata/
+└─ frasky/  
+└─ tilsky/                     
+```
+
+I eksempelet over ser vi at bøttene **produkt**, **frasky** og **tilsky** ligger under `/buckets/`. 
+
+
+### Åpne eksisterende workspace
+Hvis jeg velger å representere gruppen **dapla-felles-developers**, så kan jeg åpne et Jdemetra-workspace som ligger i produktbøtta til team Dapla Felles ved å gjøre følgende:
+
+1. Velg **File/Open workspace** i menyen.
+2. Finn roten av filsystemet og åpne mappen `/buckets/`
+3. Velg xml-filen som definerer workspacet trykk **Open**
+
+### Opprette nytt workspace
+
+For å opprette et nytt workspace så importerer du input-filene på vanlig måte under **Providers**, legger de til i en workspace, og velger **/File/Save Workspace As** i menyen. Velg en filsti under `/buckets/produkt/` for å lagre workspacet permanent i en bøtte.  
+
+## Slette tjenesten
+
+For å slette tjenesten kan man trykke på Slette-knappen i Dapla Lab under **Mine tjenester**. Når man sletter en tjeneste så sletter man hele disken inne i tjenesten og frigjør alle ressurser som er reservert. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes. 
+
+## Pause tjenesten
+
+Man kan pause tjenesten ved å trykke på Pause-knappen i Dapla Lab under **Mine tjenester**. Når man pauser så slettes alt påden lokale disken som ikke er lagret under `$HOME/work`. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.
+
+## Monitorering
+
+:::: {.columns}
+
+::: {.column width="70%"}
+Man kan moniterere en instans av Jupyter ved å trykke på Jupyter-teksten under Mine tjenester i Dapla Lab, slik som vist i @fig-dapla-lab-monitoring.
+
+Denne funksjonaliteten er under arbeid og mer informasjon kommer snart. 
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="25%"}
+![Monitorering av Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-monitoring.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-monitoring}
+:::
+
+::::
