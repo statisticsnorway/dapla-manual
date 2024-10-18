@@ -1,6 +1,6 @@
 ---
 title: Lonboard
-subtitle: Hvorfor vi har opprettet denne bloggen?
+subtitle: Et raksere kartvisualiseringsbibliotek
 categories:
   - Kart
   - Python
@@ -14,8 +14,7 @@ date-modified: 10/17/2024
 image: 'https://github.com/developmentseed/lonboard/blob/main/assets/dalle-lonboard.jpg'
 image-alt: Bilde av skateboard med et kart
 draft: true
-execute: 
-  enabled: false
+freeze: true
 ---
 
 Lonboard er et bibliotek for å vise kart i Jupyter notebooks. 
@@ -23,28 +22,28 @@ De som har jobbet med kartdata tidligere vet at det er mulig å vise frem kart i
 
 Lonboard er bygget på [Deck.gl](https://deck.gl), et GPU akselerert, høytytende, kartvisualiseringsbibliotek for store data. 
 Navnet er et ordspill. Et «longboard», er en type raskt skateboard, et «deck» er den delen av skateboardet du står på. «Lon» en mye brukt forkortelse for «longitude», lengdegrad. 
-Lonboard er også bygget på Anywidget.
+Lonboard er også bygget med [Anywidget](https://anywidget.dev).
 
 Geopandas explore metode, og explore funksjonen i ssb-sgis pakken bruker et annet kartvisningsbiblotek, [Folium](https://python-visualization.github.io/folium/latest/). 
-Hver gang du skal vise frem et kart med Folium konverteres kartdataene til et format som kalles Geojson, som så sendes ukomprimert fra Jupyter-serven til nettleseren. Dette gjør at selve overføringen tar lang tid, og at du fort går tom for minne i nettleseren om du forsøker å vise et landsdekkene datasett, slik som grunnkretser, tettsteder, eller postnummerområder. 
+Hver gang du skal vise frem et kart med Folium konverteres kartdataene til et format som kalles Geojson, som så sendes ukomprimert fra Jupyter-serven til nettleseren. 
+Dette gjør at selve overføringen tar lang tid, og at du fort går tom for minne i nettleseren om du forsøker å vise et landsdekkende datasett, slik som grunnkretser, tettsteder, eller postnummerområder. 
 Lonboard takler større mengder data ved å overføre data mellom serveren og nettleseren på Parquet istedenfor Geojson-formatet, som Deck.gl så kan lese.
 Siden Parquet tilfeldigvis er SSBs standard lagringsformat kan denne overføringen skje med minimalt med datakonvertering. 
 Ikke alle i SSB jobber i Pandas. For de så kan Lonboard visualisere DuckDB- og Pyarrow-tabeller, ikke bare Geopandas-tabeller.
 
 Hvor kommer Anywidget inn? Anywidget er et rammeverk for å lage widgets. 
-En widgets lar ta med interaktive komponenter inn i en Jupyter notebook, slik som en datovelger eller en filterbar og sorterbar tabell. 
-Litt slik som som Dash lar deg gjøre, men rett i Jupyter notebook.
+En widgets lar ta med interaktive komponenter inn i en Jupyter notebook, slik som en datovelger eller en filtrerbar og sorterbar tabell. 
+Litt slik som Dash lar deg gjøre, men rett i Jupyter notebook.
 Å lage sin egen widget til Juypter er en ganske komplisert afære. 
 Det krever at du pakker både Python kode og Javascript kode.
 Det krever at du må skrive kode for å støtte alle miljøer som kan kjøre Jupyter notbooks, slik som VScode, Jupyterlab eller Google Colab. 
-Anywidget forenkler prossesen veldig. 
-Anywidget sørger for at widget din virker i på alle platformer.
-Den forenkler kominikasjonen mellom Python og Javascript siden, så det blir enklere å lage interaktivitet.
+Anywidget forenkler prosessen veldig, og sørger for at widget din virker på alle plattformer.
+Den forenkler kommunikasjonen mellom Python og Javascript siden, så det blir enklere å lage interaktivitet.
  
-Anywidget er nå innstallert i Jupyter på Dapla Lab, slik at alle kan kan prøve ut både Lonboard, samt andre pakker som bygger på Anywidget.
-Et ekemepel på en slik annen pakke er [Vega-altair](https://altair-viz.github.io)
+Anywidget er nå installert i Jupyter på Dapla Lab, slik at alle kan prøve ut både Lonboard, samt andre pakker som bygger på Anywidget.
+Et eksempel på en slik annen pakke er [Vega-altair](https://altair-viz.github.io)
 
-For det som har lyst å prøve ut Longboard på Dapla Lab følger et eksempel med grunnkrettser i Innlandet fylke.
+For det som har lyst å prøve ut Longboard på Dapla Lab følger et eksempel med grunnkretser i Innlandet fylke.
 
 ``` {python}
 #| output: false
@@ -98,7 +97,7 @@ kart
 kart.as_html()
 ```
 
-Lonboard har i mottsetning til Folium muligheter for interaktivitet. 
+Lonboard har i motsetning til Folium muligheten for interaktivitet. 
 Hvis du velger en avgrensningsboks i kartet over, men knappen oppe i høyre hjørne, så blir det utvalet tilgjengleig i Python som `kart.selected_bounds`
 
 ``` python
