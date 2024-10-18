@@ -1,0 +1,113 @@
+---
+title: Lonboard
+subtitle: Hvorfor vi har opprettet denne bloggen?
+categories:
+  - Kart
+  - Python
+author:
+  - name: Bjørn Lie Rapp
+    affiliation:
+      - name: Seksjon for befolkningsstatistikk (320)
+        email: bjorn.rapp@ssb.no
+date: 10/17/2024
+date-modified: 10/17/2024
+image: 'https://github.com/developmentseed/lonboard/blob/main/assets/dalle-lonboard.jpg'
+image-alt: Bilde av skateboard med et kart
+draft: true
+execute: 
+  enabled: false
+---
+
+Lonboard er et bibliotek for å vise kart i Jupyter notebooks. 
+De som har jobbet med kartdata tidligere vet at det er mulig å vise frem kart i Jupyter med explore metoden på en Geopandas GeoDataFrame, så hva er da spesielt med Lonboard?
+
+Lonboard er bygget på [Deck.gl](https://deck.gl), et GPU akselerert, høytytende, kartvisualiseringsbibliotek for store data. 
+Navnet er et ordspill. Et «longboard», er en type raskt skateboard, et «deck» er den delen av skateboardet du står på. «Lon» en mye brukt forkortelse for «longitude», lengdegrad. 
+Lonboard er også bygget på Anywidget.
+
+Geopandas explore metode, og explore funksjonen i ssb-sgis pakken bruker et annet kartvisningsbiblotek, [Folium](https://python-visualization.github.io/folium/latest/). 
+Hver gang du skal vise frem et kart med Folium konverteres kartdataene til et format som kalles Geojson, som så sendes ukomprimert fra Jupyter-serven til nettleseren. Dette gjør at selve overføringen tar lang tid, og at du fort går tom for minne i nettleseren om du forsøker å vise et landsdekkene datasett, slik som grunnkretser, tettsteder, eller postnummerområder. 
+Lonboard takler større mengder data ved å overføre data mellom serveren og nettleseren på Parquet istedenfor Geojson-formatet, som Deck.gl så kan lese.
+Siden Parquet tilfeldigvis er SSBs standard lagringsformat kan denne overføringen skje med minimalt med datakonvertering. 
+Ikke alle i SSB jobber i Pandas. For de så kan Lonboard visualisere DuckDB- og Pyarrow-tabeller, ikke bare Geopandas-tabeller.
+
+Hvor kommer Anywidget inn? Anywidget er et rammeverk for å lage widgets. 
+En widgets lar ta med interaktive komponenter inn i en Jupyter notebook, slik som en datovelger eller en filterbar og sorterbar tabell. 
+Litt slik som som Dash lar deg gjøre, men rett i Jupyter notebook.
+Å lage sin egen widget til Juypter er en ganske komplisert afære. 
+Det krever at du pakker både Python kode og Javascript kode.
+Det krever at du må skrive kode for å støtte alle miljøer som kan kjøre Jupyter notbooks, slik som VScode, Jupyterlab eller Google Colab. 
+Anywidget forenkler prossesen veldig. 
+Anywidget sørger for at widget din virker i på alle platformer.
+Den forenkler kominikasjonen mellom Python og Javascript siden, så det blir enklere å lage interaktivitet.
+ 
+Anywidget er nå innstallert i Jupyter på Dapla Lab, slik at alle kan kan prøve ut både Lonboard, samt andre pakker som bygger på Anywidget.
+Et ekemepel på en slik annen pakke er [Vega-altair](https://altair-viz.github.io)
+
+For det som har lyst å prøve ut Longboard på Dapla Lab følger et eksempel med grunnkrettser i Innlandet fylke.
+
+``` {python}
+#| output: false
+#| warnings: false
+import geopandas as gpd
+import lonboard
+from lonboard import basemap
+from mapclassify import greedy
+from matplotlib import colormaps
+import numpy as np
+
+grunnkretser = gpd.read_file(
+    "https://nedlasting.geonorge.no/geonorge/Basisdata/Grunnkretser/GML/Basisdata_34_Innlandet_25833_Grunnkretser_GML.zip",
+    layer="Grunnkrets",
+    engine="pyogrio",
+    columns=["grunnkretsnummer", "grunnkretsnavn", "kommunenummer"],
+)
+
+grunnkretser.head()
+
+color = greedy(grunnkretser, strategy="balanced", balance="centroid").map(
+    colormaps["Set2"].colors.__getitem__
+)
+color = (np.stack(color.to_numpy()) * 255).astype(np.uint8)
+
+grunnkretser_wgs84 = grunnkretser.to_crs(4326)
+layer = lonboard.PolygonLayer.from_geopandas(
+    grunnkretser_wgs84,
+    opacity=0.2,
+    line_miter_limit=1,
+    line_width_units = "pixels",
+    get_fill_color=color,
+    get_line_color=[255,255,255],
+    auto_highlight=True,
+)
+
+kart = lonboard.Map(
+    [layer],
+    basemap_style=basemap.CartoBasemap.DarkMatterNoLabels,
+    _height=500,
+)
+
+kart
+```
+
+``` {python}
+#| echo: false
+# Qaurto støtter selvfølgelig ikke Anywidget, 
+# men vi kan bruke kompabilitetsfunksjonen as_html, 
+# og late som om resultatet kommer fra forrige celle.
+kart.as_html()
+```
+
+Lonboard har i mottsetning til Folium muligheter for interaktivitet. 
+Hvis du velger en avgrensningsboks i kartet over, men knappen oppe i høyre hjørne, så blir det utvalet tilgjengleig i Python som `kart.selected_bounds`
+
+``` python
+if kart.selected_bounds:
+    xmin, ymin, xmax, ymax = kart.selected_bounds
+    utvalg = grunnkretser_wgs84.cx[xmin:xmax, ymin:ymax]
+    print(f"Det er {len(utvalg)} grunnkretser i utvalget")
+else:
+  print("Du har ikke gjort et utvalg.")
+```
+
+Du kan også utvikle din egen widget, men selvom Anywidget forenkler prossesen mye, krever dette fremdeles ferdigheter i både Python og Javascript, så det er kansje ikke for alle.
