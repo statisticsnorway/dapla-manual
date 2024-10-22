@@ -1,9 +1,10 @@
 ---
 title: Lonboard
-subtitle: Et raksere kartvisualiseringsbibliotek
+subtitle: Et raskere kartvisualiseringsbibliotek
 categories:
   - Kart
   - Python
+  - Jupyter 
 author:
   - name: Bjørn Lie Rapp
     affiliation:
@@ -11,25 +12,22 @@ author:
         email: bjorn.rapp@ssb.no
 date: 10/17/2024
 date-modified: 10/17/2024
-image: 'https://github.com/developmentseed/lonboard/blob/main/assets/dalle-lonboard.jpg'
+image: dalle-lonboard.jpg
 image-alt: Bilde av skateboard med et kart
-draft: true
+draft: false
 freeze: true
 ---
 
-Lonboard er et bibliotek for å vise kart i Jupyter notebooks. 
-De som har jobbet med kartdata tidligere vet at det er mulig å vise frem kart i Jupyter med explore metoden på en Geopandas GeoDataFrame, så hva er da spesielt med Lonboard?
+Lonboard^[Navnet er et ordspill. Et «longboard», er en type raskt skateboard, et «deck» er den delen av skateboardet du står på. «Lon» en mye brukt forkortelse for «longitude», lengdegrad.] er et bibliotek for å vise kart i Jupyter notebooks. Lonboard er bygget på [Deck.gl](https://deck.gl), et GPU akselerert, høytytende, kartvisualiseringsbibliotek for store data. Lonboard er bygget med [Anywidget](https://anywidget.dev).
 
-Lonboard er bygget på [Deck.gl](https://deck.gl), et GPU akselerert, høytytende, kartvisualiseringsbibliotek for store data. 
-Navnet er et ordspill. Et «longboard», er en type raskt skateboard, et «deck» er den delen av skateboardet du står på. «Lon» en mye brukt forkortelse for «longitude», lengdegrad. 
-Lonboard er også bygget med [Anywidget](https://anywidget.dev).
+## Hvorfor Lonboard?
 
-Geopandas explore metode, og explore funksjonen i ssb-sgis pakken bruker et annet kartvisningsbiblotek, [Folium](https://python-visualization.github.io/folium/latest/). 
-Hver gang du skal vise frem et kart med Folium konverteres kartdataene til et format som kalles Geojson, som så sendes ukomprimert fra Jupyter-serven til nettleseren. 
-Dette gjør at selve overføringen tar lang tid, og at du fort går tom for minne i nettleseren om du forsøker å vise et landsdekkende datasett, slik som grunnkretser, tettsteder, eller postnummerområder. 
-Lonboard takler større mengder data ved å overføre data mellom serveren og nettleseren på Parquet istedenfor Geojson-formatet, som Deck.gl så kan lese.
-Siden Parquet tilfeldigvis er SSBs standard lagringsformat kan denne overføringen skje med minimalt med datakonvertering. 
-Ikke alle i SSB jobber i Pandas. For de så kan Lonboard visualisere DuckDB- og Pyarrow-tabeller, ikke bare Geopandas-tabeller.
+Geopandas' `explore`-metode og `explore`-funksjonen i [ssb-sgis](https://manual.dapla.ssb.no/statistikkere/kartdata.html)-pakken bruker kartvisningsbiblioteket [Folium](https://python-visualization.github.io/folium/latest/). Hver gang et kart skal vises med Folium, blir kartdataene konvertert til GeoJSON-formatet, som deretter sendes ukomprimert fra Jupyter-serveren til nettleseren. Dette kan føre til lang overføringstid og potensielt høyt minneforbruk i nettleseren, spesielt når man forsøker å vise store datasett, som landsdekkende grunnkretser, tettsteder eller postnummerområder.
+
+`Lonboard` håndterer store datamengder bedre ved å overføre data mellom serveren og nettleseren i Parquet-format i stedet for GeoJSON, som så leses av Deck.gl. Siden Parquet tilfeldigvis er SSBs standard lagringsformat, kan denne overføringen skje med minimal datakonvertering.
+
+Ikke alle i SSB jobber med Pandas, og for disse brukerne kan `Lonboard` visualisere tabeller fra DuckDB og PyArrow, i tillegg til Geopandas-tabeller.
+
 
 Hvor kommer Anywidget inn? Anywidget er et rammeverk for å lage widgets. 
 En widgets lar ta med interaktive komponenter inn i en Jupyter notebook, slik som en datovelger eller en filtrerbar og sorterbar tabell. 
@@ -40,10 +38,19 @@ Det krever at du må skrive kode for å støtte alle miljøer som kan kjøre Jup
 Anywidget forenkler prosessen veldig, og sørger for at widget din virker på alle plattformer.
 Den forenkler kommunikasjonen mellom Python og Javascript siden, så det blir enklere å lage interaktivitet.
  
-Anywidget er nå installert i Jupyter på Dapla Lab, slik at alle kan prøve ut både Lonboard, samt andre pakker som bygger på Anywidget.
+Anywidget er nå installert i [Jupyter](../../../../dapla-manual/statistikkere/jupyter.qmd) på Dapla Lab, slik at alle kan prøve ut både Lonboard, samt andre pakker som bygger på Anywidget.
 Et eksempel på en slik annen pakke er [Vega-altair](https://altair-viz.github.io)
 
-For det som har lyst å prøve ut Longboard på Dapla Lab følger et eksempel med grunnkretser i Innlandet fylke.
+## Eksempel med grunnkretser i Innlandet fylke
+
+Under er eksempel på hvordan man visualisere grunnkretsene i Innlandet fylke i en Jupyterlab Notebook på Dapla Lab. Gjør følgende først:
+
+1. Start en [Jupyter](../../../../dapla-manual/statistikkere/jupyter.qmd) på Dapla Lab.
+2. Opprett et [ssb-project](../../../../dapla-manual/statistikkere/jobbe-med-kode.qmd#ssb-project)
+3. Installer nødvendige pakker `poetry add geopandas lonboard numpy mapclassify matplotlib libpysal`
+4. Åpne en ny notebook med kernelen som ble opprettet av *ssb-project*.
+
+I den nyopprettede notebooken kan deretter hente inn data om grunngretser i Innlandet fylke og visualisere de med Lonboard.
 
 ``` {python}
 #| output: false
@@ -109,4 +116,4 @@ else:
   print("Du har ikke gjort et utvalg.")
 ```
 
-Du kan også utvikle din egen widget, men selvom Anywidget forenkler prossesen mye, krever dette fremdeles ferdigheter i både Python og Javascript, så det er kansje ikke for alle.
+Du kan også utvikle din egen widget, men selvom Anywidget forenkler prossessen mye, krever dette fremdeles ferdigheter i både Python og Javascript, så det er kansje ikke for alle.
