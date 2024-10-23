@@ -1,10 +1,11 @@
 ---
-title: Lonboard
-subtitle: Et raskere kartvisualiseringsbibliotek
+title: Lonboard for kartvisualisering
+subtitle: Visualiser større datamengder i Jupyter på en mer effektiv måte
 categories:
   - Kart
   - Python
-  - Jupyter 
+  - Jupyter
+  - Lonboard
 author:
   - name: Bjørn Lie Rapp
     affiliation:
@@ -16,6 +17,7 @@ image: dalle-lonboard.jpg
 image-alt: Bilde av skateboard med et kart
 draft: false
 freeze: true
+jupyter: test-kernel
 ---
 
 Lonboard^[Navnet er et ordspill. Et «longboard», er en type raskt skateboard, et «deck» er den delen av skateboardet du står på. «Lon» en mye brukt forkortelse for «longitude», lengdegrad.] er et bibliotek for å vise kart i Jupyter notebooks. Lonboard er bygget på [Deck.gl](https://deck.gl), et GPU akselerert, høytytende, kartvisualiseringsbibliotek for store data. Lonboard er bygget med [Anywidget](https://anywidget.dev).
@@ -52,7 +54,7 @@ Under er eksempel på hvordan man visualisere grunnkretsene i Innlandet fylke i 
 
 I den nyopprettede notebooken kan deretter hente inn data om grunngretser i Innlandet fylke og visualisere de med Lonboard.
 
-``` {python}
+```{python}
 #| output: false
 #| warnings: false
 import geopandas as gpd
@@ -69,7 +71,7 @@ grunnkretser = gpd.read_file(
     columns=["grunnkretsnummer", "grunnkretsnavn", "kommunenummer"],
 )
 
-grunnkretser.head()
+#grunnkretser.head()
 
 color = greedy(grunnkretser, strategy="balanced", balance="centroid").map(
     colormaps["Set2"].colors.__getitem__
@@ -107,7 +109,7 @@ kart.as_html()
 Lonboard har i motsetning til Folium muligheten for interaktivitet. 
 Hvis du velger en avgrensningsboks i kartet over, men knappen oppe i høyre hjørne, så blir det utvalet tilgjengleig i Python som `kart.selected_bounds`
 
-``` python
+```{.python}
 if kart.selected_bounds:
     xmin, ymin, xmax, ymax = kart.selected_bounds
     utvalg = grunnkretser_wgs84.cx[xmin:xmax, ymin:ymax]
@@ -116,4 +118,4 @@ else:
   print("Du har ikke gjort et utvalg.")
 ```
 
-Du kan også utvikle din egen widget, men selvom Anywidget forenkler prossessen mye, krever dette fremdeles ferdigheter i både Python og Javascript, så det er kansje ikke for alle.
+Du kan også utvikle din egen widget, men selv om Anywidget forenkler prossessen mye, krever dette fremdeles ferdigheter i både Python og Javascript, så det er kansje ikke for alle.
