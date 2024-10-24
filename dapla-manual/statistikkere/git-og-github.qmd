@@ -1,13 +1,16 @@
 # Git og Github
 
-I SSB versjonhåndterer vi koden vårmed [Git](https://git-scm.com/). Vi bruker [GitHub](https://github.com/) som brukergrensesnitt og applikasjon for versjonshåndtering med git. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og Github. Helt overordnet er forskjellen følgende:
+I SSB versjonhåndterer vi koden vårmed [Git](https://git-scm.com/). Vi bruker [GitHub](https://github.com/) som brukergrensesnitt og applikasjon for versjonshåndtering med git. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og Github.
 
-- **Git** er programvare som er installert på maskinen du jobber på og som sporer endringer i koden din.
+:::{.callout-info}
+## Git vs. GitHub: kort fotalt
+- **Git** er en programvare som er installert på maskinen du jobber på og som sporer endringer i koden din.
 - **GitHub** er et slags felles mappesystem på internett som lar deg dele og samarbeide med andre om kode.
+:::
 
 GitHub er altså en tjeneste som bruker Git. Det finnes flere slike tjenester som for eksempel BitBucket og GitLab.
 
-Bortsett fra versjonshåndtering bruker vi Git og GitHub for å samarbeide om å lage og vedlikeholde produksjonssystemene våre. Disse verktøyene gjrø det lett å spore endringer og se over/godkjenne hverandres bidrag. I praksis betyr det at man skriver kode på sitt område for så å sende disse endringene opp til GitHub.
+Bortsett fra versjonshåndtering bruker vi Git og GitHub for å samarbeide om å lage og vedlikeholde produksjonssystemene våre. Disse verktøyene gjør det lett å spore endringer og se over/godkjenne hverandres bidrag. I praksis betyr det at man skriver kode på sitt område for så å sende disse endringene opp til GitHub.
 
 I dette kapittelet ser vi nærmere på Git og Github og hvordan de er implementert i SSB. Selv om SSB har laget programmet **ssb-project** for å gjøre det lettere å bl.a. forholde seg til Git og GitHub, så vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet. Forhåpentligvis vil det gjøre det lettere å håndtere mer kompliserte situasjoner som oppstår i arbeidshverdagen som statistikker.
 
@@ -16,11 +19,11 @@ I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan
 
 ## Git {{< fa brands git-alt >}}
 
-**Git** er terminalprogram som installert på maskinen du jobber. Hvis man ikke liker å bruke terminalen finnes det mange pek-og-klikk versjoner av **Git**, blant annet i **Jupyterlab**, **SAS EG** og **RStudio**. Men typisk vil det en eller annen gang oppstå situasjoner der det ikke finnes løsninger i pek-og-klikk versjonen, og man må ordne opp i terminalen. Av den grunn velger vi her å fokusere på hvordan **Git** fungerer fra terminalen. Vi vil også fokusere på hvordan **Git** fungerer fra **terminalen** i **Jupyterlab** på **Dapla**.
-
 ### Hva er Git?
 
-Git er en programvare for distribuert versjonshåndtering av filer. Det vil si at den tar vare på historien til koden din. At Git er distribuert betyr at alle som jobber med koden har en kopi av koden hos seg selv. Når man ønsker å dele koden med andre, så laster man opp koden til et felles kodelager som GitHub. Typisk vil Git brukes til å passe på historien til rene tekstfiler, f.eks. kode-script, hvor det gir mening å se på forskjeller mellom filen på ulike tidspunkter. Men når det er sagt, så kan Git også brukes til å følge med på endringer i andre filtyper, f.eks. binære filer som bilder, PDF-filer, etc.. Men binære filer er ikke så vanlig inkludere i Git-prosjekter siden forskjellene i historikken til filene er vanskelig å forstå for mennesker.
+**Git** er en programvare for distribuert versjonshåndtering av filer. Det vil si at den tar vare på historien til koden din. At Git er distribuert betyr at alle som jobber med koden har en kopi av kode hos seg selv. Når man ønsker på dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository. Typisk vil Git brukes til å passe på historien til rene tekstfiler, f.-eks .py-filer, men kan også versjonshåndtere bilder og PDFer-
+
+Git er installert på maskinen du jobber på og brukes fra terminalen.  Det finnes pek-og-klikk versjoner av **Git**, blant annet i **Jupyterlab** og **RStudio**. Noen situasjoner vil bare kunne løses i terminalen. Av den grunn velger vi her å fokusere på hvordan **Git** fungerer fra terminalen.
 
 Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, så vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
 
