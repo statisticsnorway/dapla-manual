@@ -1,9 +1,9 @@
-# Git og Github
+# Git og GitHub
 
-I SSB versjonhåndterer vi koden vår med programvaren [Git](https://git-scm.com/) og [GitHub](https://github.com/) som brukergrensesnitt og applikasjon. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og Github.
+I SSB versjonshåndterer vi koden vår med programvaren [Git](https://git-scm.com/) og [GitHub](https://GitHub.com/) som brukergrensesnitt og applikasjon. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og GitHub.
 
 ::: callout-note
-## Git vs. GitHub: kort fotalt
+## Git vs. GitHub: Kort fortalt
 
 **Git** er en programvare som er installert på maskinen du jobber på og som sporer endringer i koden din.
 **GitHub** er et slags felles mappesystem på internett som lar deg dele og samarbeide med andre om kode.
@@ -13,11 +13,11 @@ GitHub er altså en tjeneste som bruker Git. Det finnes flere slike tjenester so
 
 Git og GitHub er viktige verktøy for å samarbeide om produksjonssystemene våre. De gjør det lett å spore endringer og se over/godkjenne hverandres endringer.
 
-I dette kapittelet ser vi nærmere på Git og Github og hvordan de er implementert i SSB. Selv om ssb-project gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
+I dette kapittelet ser vi nærmere på Git og GitHub og hvordan de er implementert i SSB. Selv om ssb-project gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
 
 ::: callout-tip
 ## Les videre med interne ressurser
-Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt) eller [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt). Se hele katalogen til KVAKK om Git og Github ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net).
+Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt) eller [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt). Se hele katalogen til KVAKK om Git og GitHub ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net).
 
 Nettsiden [learngitbranching.js.org](https://learngitbranching.js.org/) er også en veldig god ressurs for å forstå konseptene.
 :::
@@ -31,7 +31,7 @@ Git er en programvare for distribuert versjonshåndtering av filer:
 - Git tar vare på historien til koden din
 - Alle som jobber med koden har en kopi av koden hos seg selv (distribuert)
 
-Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Git versjonshåndterer filene i repoet. Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjoshåndtere bilder og PDFer.
+Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Git versjonshåndterer filene i repoet. Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjonshåndtere bilder og PDFer.
 
 Git er installert på maskinen du jobber på og brukes fra terminalen. Det finnes pek-og-klikk versjoner av Git, blant annet i Jupyterlab og RStudio, men noen situasjoner vil bare kunne løses i terminalen.
 
@@ -42,9 +42,9 @@ Men før vi kan begynne å bruke Git må vi konfigurere vår egen bruker for Git
 Les mer om Git på <https://git-scm.com/>.
 
 ::: callout-note
-## Git i praksis: kort fotalt
+## Git i praksis: Kort fortalt
 
-Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, så vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
+Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
 :::
 
 ### Oppsett av Git i gamle jupyter
@@ -75,11 +75,11 @@ Dette scriptet vil spørre deg om ditt brukernavn i SSB, og så vil det opprette
 
 ### Git og Notebooks
 
-På Dapla er **Jupyterlab** et av utviklingsmiljøene for kode. I Jupyterlab vil man ofte jobbe i notebooks, og det har noen konsekvenser for versjonshåndtering. En notebook er en **ipynb**-fil som inneholder både tekst og kode. Åpner vi disse filene i Jupyterlab så ser vi det kjente notebook-grensesnittet med kode- og markdown-celler. Men egentlig er det bare et grensesnitt bygd over en json-fil[^1]. Denne json-filen inneholder metadata og masse annet som gjør det vanskelig å se forskjellen på en fil over tid. Dette er derfor noe som å fikses før Git blir et nyttig verktøy for disse filene.
+På Dapla er **Jupyterlab** et av utviklingsmiljøene for kode. I Jupyterlab vil man ofte jobbe i notebooks, og det har noen konsekvenser for versjonshåndtering. En notebook er en **ipynb**-fil som inneholder både tekst og kode. Åpner vi disse filene i Jupyterlab så ser vi det kjente notebook-grensesnittet med kode- og markdown-celler. Men egentlig er det bare et grensesnitt bygd over en json-fil[^1]. Denne json-filen inneholder metadata og masse annet som gjør det vanskelig å se forskjellen på en fil over tid. Dette er derfor noe som må fikses før Git blir et nyttig verktøy for disse filene.
 
 [^1]: Prøv selv å åpne en ipynb som json ved høyreklikke på fila i Jupyterlab, velge *Open with*, og velg *json*. Da vil du se den underliggende json-filen
 
-I [SSB sin anbefalte konfigurasjon](./git-og-github.qmd#oppsett-av-git) setter opp [nbdime](https://jupytext.readthedocs.io/en/latest/index.html) for å få leselige differ mellom notebooks. Har du satt opp Git med `ssb-gitconfig.py` så vil dette være automatisk satt opp for deg.
+I [SSB sin anbefalte konfigurasjon](./git-og-GitHub.qmd#oppsett-av-git) setter opp [nbdime](https://jupytext.readthedocs.io/en/latest/index.html) for å få leselige differ mellom notebooks. Har du satt opp Git med `ssb-gitconfig.py` så vil dette være automatisk satt opp for deg.
 
 Det finnes også alternativer til å bruke **nbdime**. På Dapla er [Jupytext](https://jupytext.readthedocs.io/en/latest/index.html) installert for de som ikke ønsker å versjonshåndtere ipynb-filer, men heller vil bruke rene script-filer som **.py**- eller **.R**-filer. Måten Jupytext gjør dette på er konvertere f.eks. en ipynb-fil py-fil for deg, Den kan gjøre det automatisk når du lagrer, eller du kan gjøre det manuelt. Med denne tilnærmingen så kan du be Git ignorere alle ipynb-filer og bare versjonshåndtere de rene script.filene. Oppsett er Jupytext er ikke en del av SSB sin standard-konfigurasjon og er noe du må sett opp selv.
 
@@ -103,39 +103,39 @@ Når man utvikler kode så gjør man det fra såkalte *branches*[^2]. Hvis vi te
 
 Vi kan *merge* endringene fra vår *branch* inn i *main* ved å først gå inn i *main*, `git switch main`, og deretter skrive `git merge <branch navn>`. Men typisk vil ikke dette være fremgangsmåten i SSB. Når man er fornøyd med endringene i en *branch*, så vil man *pushe* den opp til GitHub, slik at en kollega kan vurdere om den skal merges inn i *main*. Dermed gjøres selve *mergen* i GitHub-grensenittet. Vi skal se nærmere på GitHub i neste kapittel.
 
-## GitHub {{< fa brands github >}}
+## GitHub {{< fa brands GitHub >}}
 
-GitHub er et nettsted som bl.a. fungerer som vårt felles mappesystem for deling av kode. SSB har sin egen organisasjonskonto med navn [statisticsnorway](https://github.com/statisticsnorway). Men selv om SSB har en organisasjonskonto på GitHub må alle ansatte opprette sin egen brukerprofil, og knytte den mot SSB sin organisasjonskonto. Under forklarer vi hvordan du gjør dette.
+GitHub er et nettsted som bl.a. fungerer som vårt felles mappesystem for deling av kode. SSB har sin egen organisasjonskonto med navn [statisticsnorway](https://GitHub.com/statisticsnorway). Men selv om SSB har en organisasjonskonto på GitHub må alle ansatte opprette sin egen brukerprofil, og knytte den mot SSB sin organisasjonskonto. Under forklarer vi hvordan du gjør dette.
 
 ### Opprett GitHub-bruker
 
 Dette kapittelet er bare relevant hvis man ikke har en GitHub-brukerkonto fra før. For å bruke `ssb-project`-programmet til å generere et **remote repo** på GitHub må du ha en konto. Derfor starter vi med å gjøre dette. Det er en engangsjobb og du trenger aldri gjøre det igjen.
 
 ::: {.callout-note appearance="simple"}
-SSB har valgt å ikke sette opp SSB-brukerne til de ansatte som GitHub-brukere. En viktig årsak er at er en GitHub-konto ofte regnes som en del av den ansattes CV. For de som aldri har brukt GitHub før kan det virke fremmed, men det er nok en fordel på sikt når alle blir godt kjent med denne arbeidsformen.
+SSB har valgt å ikke sette opp SSB-brukerne til de ansatte som GitHub-brukere. En viktig årsak er at en GitHub-konto ofte regnes som en del av den ansattes CV. For de som aldri har brukt GitHub før kan det virke fremmed, men det er nok en fordel på sikt når alle blir godt kjent med denne arbeidsformen.
 :::
 
 Slik gjør du det:
 
-1.  Gå til <https://github.com/>
+1.  Gå til <https://GitHub.com/>
 2.  Trykk **Sign up** øverst i høyre hjørne
-3.  I dialogboksen som åpnes, se @fig-github-user-gen, skriver du inn din e-postkonto og lager et passord. Dette trenger ikke være din SSB-bruker og e-post. Vi anbefaler at du bruker en personlig e-postkonto og velger ditt eget passord. Det samme gjelder **brukernavn** også.
+3.  I dialogboksen som åpnes, se @fig-GitHub-user-gen, skriver du inn din e-postkonto og lager et passord. Dette trenger ikke være din SSB-bruker og e-post. Vi anbefaler at du bruker en personlig e-postkonto og velger ditt eget passord. Det samme gjelder **brukernavn** også.
 
-![Dialogboks for opprettelse av GitHub-bruker.](../images/github_register.JPG){#fig-github-user-gen fig-alt="Bilde av GitHub-siden for å generere en brukerkonto"}
+![Dialogboks for opprettelse av GitHub-bruker.](../images/GitHub_register.JPG){#fig-GitHub-user-gen fig-alt="Bilde av GitHub-siden for å generere en brukerkonto"}
 
 Du har nå laget en egen GitHub-bruker. I neste steg skal vi knytte denne kontoen til din SSB-bruker.
 
 ### To-faktor autentisering {#sec-tofaktor}
 
-Hvis du har fullført forrige steg så har du nå en GitHub-konto. Hvis du står på din profil-side så ser den ut som i @fig-github-exmaple-userpage.
+Hvis du har fullført forrige steg så har du nå en GitHub-konto. Hvis du står på din profil-side så ser den ut som i @fig-GitHub-exmaple-userpage.
 
-![Et eksempel på hjemmeområdet til en GitHub-bruker](../images/github_profile.png){#fig-github-exmaple-userpage fig-alt="Bilde av GitHub-siden for en bruker"}
+![Et eksempel på hjemmeområdet til en GitHub-bruker](../images/GitHub_profile.png){#fig-GitHub-exmaple-userpage fig-alt="Bilde av GitHub-siden for en bruker"}
 
 Det neste vi må gjøre er å aktivere 2-faktor autentisering, siden det er dette som benyttes i SSB. Hvis du står på siden i bildet over, så gjør du følgende for å aktivere 2-faktor autentisering mot GitHub:
 
 ::: grid
 ::: g-col-8
-1.  Trykk på den lille pilen øverst til høyre og velg **Settings**(se @fig-github-open-settings).
+1.  Trykk på den lille pilen øverst til høyre og velg **Settings**(se @fig-GitHub-open-settings).
 
 2.  Deretter velger du **Password and authentification** i menyen til venstre.
 
@@ -143,21 +143,21 @@ Det neste vi må gjøre er å aktivere 2-faktor autentisering, siden det er dett
 :::
 
 ::: g-col-4
-![Åpne settings for din GitHub-bruker.](../images/github_settings_menu.png){#fig-github-open-settings fig-alt="Bilde av GitHub-menyen for å åpne Settings-menyen." width="50%"}
+![Åpne settings for din GitHub-bruker.](../images/GitHub_settings_menu.png){#fig-GitHub-open-settings fig-alt="Bilde av GitHub-menyen for å åpne Settings-menyen." width="50%"}
 :::
 :::
 
-4.  @fig-github-enable-2fa viser dialogboksen som vises. Velg **Enable two-factor authentification**.
+4.  @fig-GitHub-enable-2fa viser dialogboksen som vises. Velg **Enable two-factor authentification**.
 
-![Dialogboks som åpnes når 2FA skrus på første gang.](../images/github_2fa_enable.JPG){#fig-github-enable-2fa fig-alt="Bilde av GitHub-dialogboks for å skru på 2-faktor autentisering."}
+![Dialogboks som åpnes når 2FA skrus på første gang.](../images/GitHub_2fa_enable.JPG){#fig-GitHub-enable-2fa fig-alt="Bilde av GitHub-dialogboks for å skru på 2-faktor autentisering."}
 
-5.  @fig-github-2fa-app viser dialogboksen som vises for å velge hvordan man skal autentisere seg. Her anbefales det å velge **Set up using an app**, slik at du kan bruke *Microsoft Authenticator*-appen på din mobil.
+5.  @fig-GitHub-2fa-app viser dialogboksen som vises for å velge hvordan man skal autentisere seg. Her anbefales det å velge **Set up using an app**, slik at du kan bruke *Microsoft Authenticator*-appen på din mobil.
 
-![Dialogboks for å velge hvordan man skal autentisere seg med 2FA.](../images/githbu_2fa_app.JPG){#fig-github-2fa-app fig-alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering."}
+![Dialogboks for å velge hvordan man skal autentisere seg med 2FA.](../images/githbu_2fa_app.JPG){#fig-GitHub-2fa-app fig-alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering."}
 
-@fig-github-QR viser QR-koden som vises. Denne skal vi bruke i neste steg.
+@fig-GitHub-QR viser QR-koden som vises. Denne skal vi bruke i neste steg.
 
-![QR-kode som skannes av Microsoft Authenticator.](../images/github_2fa.png){#fig-github-QR fig-alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering."}
+![QR-kode som skannes av Microsoft Authenticator.](../images/GitHub_2fa.png){#fig-GitHub-QR fig-alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering."}
 
 ::: grid
 ::: g-col-8
@@ -173,20 +173,20 @@ Det neste vi må gjøre er å aktivere 2-faktor autentisering, siden det er dett
 :::
 :::
 
-Nå har vi aktivert 2-faktor autentisering for GitHub og er klare til å knytte vår personlige konto til vår SSB-bruker på SSBs "Github organisation" [**statisticsnorway**](https://github.com/statisticsnorway).
+Nå har vi aktivert 2-faktor autentisering for GitHub og er klare til å knytte vår personlige konto til vår SSB-bruker på SSBs "GitHub organisation" [**statisticsnorway**](https://GitHub.com/statisticsnorway).
 
 ### Koble deg til SSB
 
 I forrige steg aktiverte vi 2-faktor autentisering for GitHub. Det neste vi må gjøre er å koble oss til **Single Sign On (SSO)** for SSB sin organisasjon på GitHub:
 
-1.  Trykk på lenken <https://github.com/orgs/statisticsnorway/sso>
-2.  I dialogboksen som dukker opp trykker du på **Continue**, slik som vist i @fig-github-sso.
+1.  Trykk på lenken <https://GitHub.com/orgs/statisticsnorway/sso>
+2.  I dialogboksen som dukker opp trykker du på **Continue**, slik som vist i @fig-GitHub-sso.
 
-![Single Sign on (SSO) for SSB sin organisasjon på GitHub](../images/github_sso.png){#fig-github-sso fig-alt="Bilde av GitHub-dialogboks for single sign on."}
+![Single Sign on (SSO) for SSB sin organisasjon på GitHub](../images/GitHub_sso.png){#fig-GitHub-sso fig-alt="Bilde av GitHub-dialogboks for single sign on."}
 
-Når du har gjennomført dette så har du tilgang til **statisticsnorway** på GitHub. Går du inn på [denne lenken](https://github.com/statisticsnorway?view_as=member) så skal du nå kunne lese både **Public**, **Private** og **Internal** repoer, slik som vist i @fig-github-member.
+Når du har gjennomført dette så har du tilgang til **statisticsnorway** på GitHub. Går du inn på [denne lenken](https://GitHub.com/statisticsnorway?view_as=member) så skal du nå kunne lese både **Public**, **Private** og **Internal** repoer, slik som vist i @fig-GitHub-member.
 
-![Medlemsvisning for SSB sin GitHub-organisasjon.](../images/github_asmember.png){#fig-github-member fig-alt="Bilde av repoene på GitHub for de som er tilknyttet staitsticsnorway."}
+![Medlemsvisning for SSB sin GitHub-organisasjon.](../images/GitHub_asmember.png){#fig-GitHub-member fig-alt="Bilde av repoene på GitHub for de som er tilknyttet staitsticsnorway."}
 
 ### Personal Access Token (PAT)
 
@@ -208,19 +208,19 @@ For å lage en PAT som er godkjent mot *statisticsnorway* så gjør man følgend
 
 6.  Under **Expiration** velger du hvor lang tid som skal gå før PAT blir ugyldig. Dette er en avvening mellom sikkerhet og hva som er praktisk. Det anbefales at du velger **365 dager**. Når PAT utløper må du gjenta stegene i dette kapittelet.
 
-7.  Under **Select scopes** velger du **repo** og **workflow** slik som vist i @fig-github-token.
+7.  Under **Select scopes** velger du **repo** og **workflow** slik som vist i @fig-GitHub-token.
 
-![Gi token et kort og beskrivende navn](../images/github_pat.png){#fig-github-token fig-alt="Bilde av GitHub-siden for generering av Personal Access Token"}
+![Gi token et kort og beskrivende navn](../images/GitHub_pat.png){#fig-GitHub-token fig-alt="Bilde av GitHub-siden for generering av Personal Access Token"}
 
-8.  Trykk på **Generate token** nederst på siden og du får noe lignende det du ser i @fig-github-token-gen.
+8.  Trykk på **Generate token** nederst på siden og du får noe lignende det du ser i @fig-GitHub-token-gen.
 
-![Token som ble generert.](../images/github_pat2.png){#fig-github-token-gen fig-alt="Bilde av GitHub-siden for det genererte tokenet"}
+![Token som ble generert.](../images/GitHub_pat2.png){#fig-GitHub-token-gen fig-alt="Bilde av GitHub-siden for det genererte tokenet"}
 
 9.  Kopier deretter PAT til en midlertidig fil. Grunnen er at du aldri vil se det igjen her etter at vi har gjennomført neste steg.
 
-10. Deretter trykker du på **Configure SSO** og velger **Authorize** ved siden statisticsnorway, slik som vist i @fig-github-token-authorize. Svar deretter på spørsmålene som dukker opp.
+10. Deretter trykker du på **Configure SSO** og velger **Authorize** ved siden statisticsnorway, slik som vist i @fig-GitHub-token-authorize. Svar deretter på spørsmålene som dukker opp.
 
-![Autorisering av Token mot SSBs GiHub-organisasjon.](../images/github_pat3.png){#fig-github-token-authorize fig-alt="Bilde av GitHub-siden for å autorisere Token mot statisticsnorway"}
+![Autorisering av Token mot SSBs GiHub-organisasjon.](../images/GitHub_pat3.png){#fig-GitHub-token-authorize fig-alt="Bilde av GitHub-siden for å autorisere Token mot statisticsnorway"}
 
 Vi har nå opprettet en PAT som er godkjent for bruk mot SSB sin kode på GitHub. Det betyr at hvis vi vil jobbe med **Git** på SSB sine maskiner i sky eller på bakken, så må vi sendte med dette tokenet for å få lov til å jobbe med koden som ligger på **statisticsnorway** på GitHub.
 
@@ -230,7 +230,7 @@ Vi har nå opprettet en PAT som er godkjent for bruk mot SSB sin kode på GitHub
 Det er ganske upraktisk å måtte sende med tokenet hver gang vi skal jobbe med GitHub. Vi bør derfor lagre det lokalt der vi jobber, slik at Git automatisk finner det. Det finnes mange måter å gjøre dette på og det er ikke bestemt hva som skal være beste-praksis i SSB. Men en måte å gjøre det er via en **.netrc**-fil. Vi oppretter da en fil som heter **.netrc** på vårt hjemmeområde, og legger følgende informasjon på en (hvilken som helst) linje i filen:
 
 ``` {.bash filename="~/.netrc"}
-machine github.com login <github-bruker> password <Personal Access Token>
+machine GitHub.com login <GitHub-bruker> password <Personal Access Token>
 ```
 
 **GitHub-bruker** er da din personlige bruker og IKKE brukernavnet ditt i SSB. **Personal Access Token** er det vi lagde i forrige kapittelet.
@@ -242,14 +242,14 @@ En veldig enkel måte å lagre dette er som følger. Anta at min personlige GitH
 2.  I den første kodecellen skriver du:
 
 ``` {.bash filename="terminal"}
-!echo "machine github.com login SSB-Chad password blablabla" >> ~/.netrc
+!echo "machine GitHub.com login SSB-Chad password blablabla" >> ~/.netrc
 ```
 
-Alternativt kan du droppe det utropstegnet og kjøre det direkte i en terminal. Det vil gi samme resultat. Koden over legger til en linje med teksten
+Alternativt kan du fjerne utropstegnet og kjøre kommandoen direkte i terminalen. Det vil gi samme resultat. Koden over legger til en linje med teksten
 
-**machine github.com login SSB-Chad password blablabla**
+**machine GitHub.com login SSB-Chad password blablabla**
 
-i en .netrc-fil på din hjemmeområdet, uanvhengig av om du har en fra før eller ikke. Hvis du har en fil fra før som allerede har et token fra GitHub, ville jeg nok slettet det før jeg legger en et nytt token.
+i en .netrc-fil på din hjemmeområdet, uavhengig av om du har en fra før eller ikke. Hvis du har en fil fra før som allerede har et token fra GitHub, ville jeg nok slettet det før jeg legger en et nytt token.
 
 Hver gang du jobber mot GitHub vil Git sjekke om informasjon om autentisering ligger i denne filen, og bruke den hvis den ligger der.
 
@@ -264,7 +264,7 @@ Her er stegene:
 3. Naviger til Git-fanen
 4. Lim inn token der det står 'Git Forge Personal Access Token' vist i @fig-dapla-lab-my-account
 
-![DaplaLab My account: lagre PAT](../images/dapla-lab-my-account.png){#fig-dapla-lab-my-account fig-alt="Skjermbilde av DaplaLab instillinger for Git"}
+![DaplaLab My account: lagre PAT](../images/dapla-lab-my-account.png){#fig-dapla-lab-my-account fig-alt="Skjermbilde av DaplaLab innstillinger for Git"}
 
 
 #### Oppdater PAT
