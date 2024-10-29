@@ -1,6 +1,6 @@
 # Git og Github
 
-I SSB versjonhåndterer vi koden vårmed [Git](https://git-scm.com/). Vi bruker [GitHub](https://github.com/) som brukergrensesnitt og applikasjon for versjonshåndtering med git. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og Github.
+I SSB versjonhåndterer vi koden vår med programvaren [Git](https://git-scm.com/) og [GitHub](https://github.com/) som brukergrensesnitt og applikasjon. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og Github.
 
 ::: callout-note
 ## Git vs. GitHub: kort fotalt
@@ -11,21 +11,29 @@ I SSB versjonhåndterer vi koden vårmed [Git](https://git-scm.com/). Vi bruker 
 
 GitHub er altså en tjeneste som bruker Git. Det finnes flere slike tjenester som for eksempel BitBucket og GitLab.
 
-Bortsett fra versjonshåndtering bruker vi Git og GitHub for å samarbeide om å lage og vedlikeholde produksjonssystemene våre. Disse verktøyene gjør det lett å spore endringer og se over/godkjenne hverandres bidrag. I praksis betyr det at man skriver kode på sitt område for så å sende disse endringene opp til GitHub.
+Git og GitHub er viktige verktøy for å samarbeide om produksjonssystemene våre. De gjør det lett å spore endringer og se over/godkjenne hverandres endringer.
 
-I dette kapittelet ser vi nærmere på Git og Github og hvordan de er implementert i SSB. Selv om SSB har laget programmet **ssb-project** for å gjøre det lettere å bl.a. forholde seg til Git og GitHub, så vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet. Forhåpentligvis vil det gjøre det lettere å håndtere mer kompliserte situasjoner som oppstår i arbeidshverdagen som statistikker.
+I dette kapittelet ser vi nærmere på Git og Github og hvordan de er implementert i SSB. Selv om ssb-project gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
 
-Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt) eller [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt). Se hele katalogen til KVAKK om Git og Github ved å gå inn på deres confluence-område: https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net)
+::: callout-tip
+## Les videre med interne ressurser
+Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt) eller [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt). Se hele katalogen til KVAKK om Git og Github ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net).
+
+Nettsiden [learngitbranching.js.org](https://learngitbranching.js.org/) er også en veldig god ressurs for å forstå konseptene.
+:::
 
 ## Git {{< fa brands git-alt >}}
 
 ### Hva er Git?
 
-**Git** er en programvare for distribuert versjonshåndtering av filer. Det vil si at den tar vare på historien til koden din. At Git er distribuert betyr at alle som jobber med koden har en kopi av kode hos seg selv. Når man ønsker på dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository. Typisk vil Git brukes til å passe på historien til rene tekstfiler, f.-eks .py-filer, men kan også versjonshåndtere bilder og PDFer-
+Git er en programvare for distribuert versjonshåndtering av filer:
 
-Git er installert på maskinen du jobber på og brukes fra terminalen. Det finnes pek-og-klikk versjoner av **Git**, blant annet i **Jupyterlab** og **RStudio**. Noen situasjoner vil bare kunne løses i terminalen. Av den grunn velger vi her å fokusere på hvordan **Git** fungerer fra terminalen.
+- Git tar vare på historien til koden din
+- Alle som jobber med koden har en kopi av koden hos seg selv (distribuert)
 
-Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, så vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
+Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Git versjonshåndterer filene i repoet. Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjoshåndtere bilder og PDFer.
+
+Git er installert på maskinen du jobber på og brukes fra terminalen. Det finnes pek-og-klikk versjoner av Git, blant annet i Jupyterlab og RStudio, men noen situasjoner vil bare kunne løses i terminalen.
 
 I SSB anbefaler vi at du starter et nytt Git-prosjekt ved å benytte [ssb-project](./jobbe-med-kode.html#ssb-project). Da vil du ikke bare aktivere Git, men du kan også få implementert en del andre gode praksiser for å holde koden din ryddig, oversiktlig og sikker.
 
@@ -33,7 +41,14 @@ Men før vi kan begynne å bruke Git må vi konfigurere vår egen bruker for Git
 
 Les mer om Git på <https://git-scm.com/>.
 
-### Oppsett av Git
+::: callout-note
+## Git i praksis: kort fotalt
+
+Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, så vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
+:::
+
+### Oppsett av Git i gamle jupyter
+*Denne delen er kun gjeldende for gamle jupyter, altså [jupyter.dapla.ssb.no](https://jupyter.dapla.ssb.no/), og ikke DaplaLab.*
 
 ::: callout-warning
 ## Bruk SSB sin konfigurasjon!
@@ -60,9 +75,9 @@ Dette scriptet vil spørre deg om ditt brukernavn i SSB, og så vil det opprette
 
 ### Git og Notebooks
 
-På Dapla er det **Jupyterlab** som er utviklingsmiljøet for kode. I Jupyterlab vil man ofte jobbe i notebooks, og det har noen konsekvenser for versjonshåndtering. En notebook er en **ipynb**-fil som inneholder både tekst og kode. Åpner vi disse filene i Jupyterlab så ser vi det kjente notebook-grensesnittet med kode- og markdown-celler. Men egentlig er det bare et grensesnitt bygd over en json-fil[^1]. Denne json-filen inneholder metadata og masse annet som gjør det vanskelig å se forskjellen på en fil over tid. Dette er derfor noe som å fikses før Git blir et nyttig verktøy for disse filene.
+På Dapla er **Jupyterlab** et av utviklingsmiljøene for kode. I Jupyterlab vil man ofte jobbe i notebooks, og det har noen konsekvenser for versjonshåndtering. En notebook er en **ipynb**-fil som inneholder både tekst og kode. Åpner vi disse filene i Jupyterlab så ser vi det kjente notebook-grensesnittet med kode- og markdown-celler. Men egentlig er det bare et grensesnitt bygd over en json-fil[^1]. Denne json-filen inneholder metadata og masse annet som gjør det vanskelig å se forskjellen på en fil over tid. Dette er derfor noe som å fikses før Git blir et nyttig verktøy for disse filene.
 
-[^1]: Prøv selv å åpne en ipynb som json ved høreklikke på fila i Jupyterlab, velge *Open with*, og velg *json*. Da vil du se den underliggende json-filen
+[^1]: Prøv selv å åpne en ipynb som json ved høyreklikke på fila i Jupyterlab, velge *Open with*, og velg *json*. Da vil du se den underliggende json-filen
 
 I [SSB sin anbefalte konfigurasjon](./git-og-github.qmd#oppsett-av-git) setter opp [nbdime](https://jupytext.readthedocs.io/en/latest/index.html) for å få leselige differ mellom notebooks. Har du satt opp Git med `ssb-gitconfig.py` så vil dette være automatisk satt opp for deg.
 
@@ -72,9 +87,15 @@ Det finnes også alternativer til å bruke **nbdime**. På Dapla er [Jupytext](h
 
 Git er veldig sterkt verktøy med mange muligheter. Det er ikke tenkt at alt skal adresseres i dette kapitlet. Men det er noen vanlig operasjoner som er så vanlige at alle som jobber med kode i SSB bør kjenne dem.
 
-Vi har tidligere nevnt at kommandoen for å aktivere versjonshåndtering med Git på en mappe, er `git init`. Dette gjøres også automatisk når man oppretter et nytt **ssb-project**.
+Vi har tidligere nevnt at kommandoen for å aktivere versjonshåndtering med Git på en mappe, er `git init`. Dette gjøres også automatisk når man oppretter et nytt ssb-project.
 
-Hva skjer hvis man gjør en endring i en fil i mappa? For det første kan du kjøre kommandoen `git status` for å se hvilke endringer Git har oppdaget. Men det betyr ikke at endringene er under versjonskontroll enda. For å fortelle Git om at disse endringene skal registreres så må du kjøre `git add <filnavn>`. Men fortsatt er ikke endringene et punkt i historien til koden din. For å gjøre det må du kjøre `git commit -m "Din melding her"`. Ved å gjøre det så har du laget et unikt punkt i historien til koden din, med en egen ID, som du kan gå tilbake til senere hvis du ønsker.
+Vanlige git-kommandoer:
+
+* `git status` for å se hvilke endringer Git har oppdaget
+* `git add <filnavn>` for å fortelle Git at endringene skal lagres
+* `git commit -m "Din melding her"` for å gjøre endringene om til et punkt i historien til koden din
+        * Hver commit har sin egen unike ID
+        * Flere filer kan samles i en commit
 
 Når man utvikler kode så gjør man det fra såkalte *branches*[^2]. Hvis vi tenker oss at din eksisterende kodebase er stammen på et tre (ofte kalt **master** eller **main**), så legger Git opp til at man gjør endringer på denne koden via *branches* eller grener av treet. Med andre ord holder vi stammen/master urørt helt til vi vet at endringen fungerer som den skal. Til slutt *merger* vi den inn i master. Vi kan opprette en ny branch og gå inn i den ved å skrive `git checkout -b <branch navn>`. Da står du i en branch og kan bruke kommandoer som `git add` og `git commit` som vist tidligere.
 
@@ -204,6 +225,7 @@ For å lage en PAT som er godkjent mot *statisticsnorway* så gjør man følgend
 Vi har nå opprettet en PAT som er godkjent for bruk mot SSB sin kode på GitHub. Det betyr at hvis vi vil jobbe med **Git** på SSB sine maskiner i sky eller på bakken, så må vi sendte med dette tokenet for å få lov til å jobbe med koden som ligger på **statisticsnorway** på GitHub.
 
 #### Lagre PAT {#lagre-pat}
+*Dette gjelder gamle Jupyter. Bla lenger ned for å lese om hvordan man lagrer PAT på DaplaLab*
 
 Det er ganske upraktisk å måtte sende med tokenet hver gang vi skal jobbe med GitHub. Vi bør derfor lagre det lokalt der vi jobber, slik at Git automatisk finner det. Det finnes mange måter å gjøre dette på og det er ikke bestemt hva som skal være beste-praksis i SSB. Men en måte å gjøre det er via en **.netrc**-fil. Vi oppretter da en fil som heter **.netrc** på vårt hjemmeområde, og legger følgende informasjon på en (hvilken som helst) linje i filen:
 
@@ -230,6 +252,20 @@ Alternativt kan du droppe det utropstegnet og kjøre det direkte i en terminal. 
 i en .netrc-fil på din hjemmeområdet, uanvhengig av om du har en fra før eller ikke. Hvis du har en fil fra før som allerede har et token fra GitHub, ville jeg nok slettet det før jeg legger en et nytt token.
 
 Hver gang du jobber mot GitHub vil Git sjekke om informasjon om autentisering ligger i denne filen, og bruke den hvis den ligger der.
+
+##### **På DaplaLab**
+
+Å lagre PAT på DaplaLab er enkelt og gjøres kun en gang uansett hvor mange tjenester man bruker.
+
+Her er stegene:
+
+1. Logg inn på [https://lab.dapla.ssb.no](https://lab.dapla.ssb.no)
+2. Trykk på 'My account'
+3. Naviger til Git-fanen
+4. Lim inn token der det står 'Git Forge Personal Access Token' vist i @fig-dapla-lab-my-account
+
+![DaplaLab My account: lagre PAT](../images/dapla-lab-my-account.png){#fig-dapla-lab-my-account fig-alt="Skjermbilde av DaplaLab instillinger for Git"}
+
 
 #### Oppdater PAT
 
