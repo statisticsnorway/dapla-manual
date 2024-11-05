@@ -1,23 +1,23 @@
 # Git og GitHub
 
-I SSB versjonshåndterer vi koden vår med programvaren [Git](https://git-scm.com/) og [GitHub](https://GitHub.com/) som brukergrensesnitt og applikasjon. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og GitHub.
+I SSB bruker vi [Git](https://git-scm.com/) til versjonskontroll av koden vår og deler den med andre via [GitHub](https://GitHub.com/). For å mestre disse verktøyene er det viktig å forstå forskjellen mellom Git og GitHub.
 
 ::: callout-note
 ## Git vs. GitHub: Kort fortalt
 
-**Git** er en programvare som er installert på maskinen du jobber på og som sporer endringer i koden din.
-**GitHub** er et slags felles mappesystem på internett som lar deg dele og samarbeide med andre om kode.
+**Git** er et verktøy installert på din lokale maskin som sporer endringer i koden din.  
+**GitHub** er en skybasert plattform som fungerer som et felles lagringssystem, der du kan dele og samarbeide med andre om kode.
 :::
 
-GitHub er altså en tjeneste som bruker Git. Det finnes flere slike tjenester som for eksempel BitBucket og GitLab.
+Git og GitHub er viktige verktøy for å sikre at produksjonssystemene våre er trygge og reproduserbare. De gjør det enkelt å spore endringer og gjennomgå eller godkjenne hverandres bidrag.
 
-Git og GitHub er viktige verktøy for å samarbeide om produksjonssystemene våre. De gjør det lett å spore endringer og se over/godkjenne hverandres endringer.
-
-I dette kapittelet ser vi nærmere på Git og GitHub og hvordan de er implementert i SSB. Selv om ssb-project gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
+I dette kapittelet ser vi nærmere på Git og GitHub og hvordan de er implementert i SSB. Selv om [ssb-project](./jobbe-med-kode.qmd#ssb-project) gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
 
 ::: callout-tip
 ## Les videre med interne ressurser
-Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt) eller [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt). Se hele katalogen til KVAKK om Git og GitHub ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net).
+Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt) eller [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt). Se hele katalogen til KVAKK om Git og GitHub ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). 
+
+I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net).
 
 Nettsiden [learngitbranching.js.org](https://learngitbranching.js.org/) er også en veldig god ressurs for å forstå konseptene.
 :::
@@ -75,13 +75,9 @@ Dette scriptet vil spørre deg om ditt brukernavn i SSB, og så vil det opprette
 
 ### Git og Notebooks
 
-På Dapla er **Jupyterlab** et av utviklingsmiljøene for kode. I Jupyterlab vil man ofte jobbe i notebooks, og det har noen konsekvenser for versjonshåndtering. En notebook er en **ipynb**-fil som inneholder både tekst og kode. Åpner vi disse filene i Jupyterlab så ser vi det kjente notebook-grensesnittet med kode- og markdown-celler. Men egentlig er det bare et grensesnitt bygd over en json-fil[^1]. Denne json-filen inneholder metadata og masse annet som gjør det vanskelig å se forskjellen på en fil over tid. Dette er derfor noe som må fikses før Git blir et nyttig verktøy for disse filene.
+Selv om det er vanlig å jobbe i *notebooks* på Dapla, så skal all kode i SSB [lagres og versjonhåndteres som rene tekstfiler](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3698458826/ADR0020+-+Lagringsformat+for+Jypyter+Notebooks) i **.R**- eller **.py**-filer i [prosent-formatet](https://jupytext.readthedocs.io/en/latest/formats-scripts.html#the-percent-format). I praksis har ikke dette så stor betydning, siden disse filtypene kan åpnes som notebooks i verktøy som Jupyterlab og VS Code, og på den måten handler det bare om hvilket filformat koden lagres til. 
 
-[^1]: Prøv selv å åpne en ipynb som json ved høyreklikke på fila i Jupyterlab, velge *Open with*, og velg *json*. Da vil du se den underliggende json-filen
-
-I [SSB sin anbefalte konfigurasjon](./git-og-GitHub.qmd#oppsett-av-git) setter opp [nbdime](https://jupytext.readthedocs.io/en/latest/index.html) for å få leselige differ mellom notebooks. Har du satt opp Git med `ssb-gitconfig.py` så vil dette være automatisk satt opp for deg.
-
-Det finnes også alternativer til å bruke **nbdime**. På Dapla er [Jupytext](https://jupytext.readthedocs.io/en/latest/index.html) installert for de som ikke ønsker å versjonshåndtere ipynb-filer, men heller vil bruke rene script-filer som **.py**- eller **.R**-filer. Måten Jupytext gjør dette på er konvertere f.eks. en ipynb-fil py-fil for deg, Den kan gjøre det automatisk når du lagrer, eller du kan gjøre det manuelt. Med denne tilnærmingen så kan du be Git ignorere alle ipynb-filer og bare versjonshåndtere de rene script.filene. Oppsett er Jupytext er ikke en del av SSB sin standard-konfigurasjon og er noe du må sett opp selv.
+[Les mer om hvordan man lagrer notebooks til rent tekstformat](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3567812611/Hvordan+lagre+Jupyter+notebooks+i+rent+tekstformat).
 
 ### Vanlige Git-operasjoner
 
