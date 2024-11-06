@@ -972,26 +972,29 @@ Unntak til versjonering: nyeste versjon og temporære data
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">        └── framskrevne-befolkningsendringer_p2019_p2050_v3.parquet</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Eksempelet over viser at siste versjon av en fil kan lagres med og uten versjonsnummer for å gjøre det lettere å lese inn nyeste versjon.</p>
-<section id="versjon-0-deling-av-data-som-ikke-har-oppnådd-stabil-tilstand" class="level4">
-<h4 class="anchored" data-anchor-id="versjon-0-deling-av-data-som-ikke-har-oppnådd-stabil-tilstand">Versjon 0: Deling av data som ikke har oppnådd stabil tilstand</h4>
-<p>Hvis det er behov for å dele data som fortsatt er under innsamling eller pågående klargjøring gjøres dette ved å bruke <em>versjonsnummer 0</em> i filnavnet.</p>
-<p>Dette versjonsnummeret skal kun brukes midlertidig fram til datasettet oppnår stabil tilstand. Ved stabil tilstand byttes versjonsnummer for datasettet til 1 eller høyere.</p>
-</section>
-<section id="eksempelkode-finne-neste-versjonsnummer-med-python-kode" class="level4">
-<h4 class="anchored" data-anchor-id="eksempelkode-finne-neste-versjonsnummer-med-python-kode">Eksempelkode: Finne neste versjonsnummer med python-kode</h4>
+<section id="eksempelkode-med-pakken-ssb-fagfunksjoner" class="level4">
+<h4 class="anchored" data-anchor-id="eksempelkode-med-pakken-ssb-fagfunksjoner">Eksempelkode med pakken ssb-fagfunksjoner</h4>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>Python kode fra SSB-fagfunksjoner for finne neste versjonsnummer</strong></pre>
+<pre><strong>Python kode fra SSB-fagfunksjoner for finne neste filversjon</strong></pre>
 </div>
-<div class="sourceCode" id="cb6" data-filename="Python kode fra SSB-fagfunksjoner for finne neste versjonsnummer"><pre class="sourceCode python yaml code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># importer funksjonen get_next_version_number() fra ssb-fagfunksjoner</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> get_next_version_number</span>
+<div class="sourceCode" id="cb6" data-filename="Python kode fra SSB-fagfunksjoner for finne neste filversjon"><pre class="sourceCode python yaml code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># importer funksjonen next_version_path() fra ssb-fagfunksjoner</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> next_version_path</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>filsti <span class="op">=</span> <span class="st">'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050.parquet'</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>neste_versjon <span class="op">=</span> get_next_version_number(filsti)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>ny_filsti <span class="op">=</span> next_version_path(filsti)</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(neste_versjon) <span class="co"># vil i dette tilfellet skrive ut 4</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ny_filsti)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># vil returnere:</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050_v4.parquet'</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>ssb-fagfunksjoner har også følgende funksjoner for å gjøre versjonering lettere:</p>
+<ul>
+<li><code>get_fileversions()</code> # Retrieves a list of file versions matching a specified pattern.</li>
+<li><code>latest_version_number()</code> # Function for finding latest version in use for a file.</li>
+<li><code>latest_version_path()</code> # Finds the path to the latest version of a specified file.</li>
+</ul>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1006,6 +1009,11 @@ Permanente data skal ikke endres eller slettes
 <em>Det må derfor lagres fysiske filer for hver versjon av datasettet. Dette er viktig for at SSB skal oppfylle krav om etterprøvbarhet av statistikkene.</em></p>
 </div>
 </div>
+</section>
+<section id="versjon-0-deling-av-data-som-ikke-har-oppnådd-stabil-tilstand" class="level4">
+<h4 class="anchored" data-anchor-id="versjon-0-deling-av-data-som-ikke-har-oppnådd-stabil-tilstand">Versjon 0: Deling av data som ikke har oppnådd stabil tilstand</h4>
+<p>Hvis det er behov for å dele data som fortsatt er under innsamling eller pågående klargjøring gjøres dette ved å bruke <em>versjonsnummer 0</em> i filnavnet.</p>
+<p>Dette versjonsnummeret skal kun brukes midlertidig fram til datasettet oppnår stabil tilstand. Ved stabil tilstand byttes versjonsnummer for datasettet til 1 eller høyere.</p>
 
 
 </section>
