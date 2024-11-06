@@ -255,7 +255,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/jobbe-med-kode.html">Kode</a></li><li class="breadcrumb-item"><a href="../statistikkere/git-og-github.html">Git og Github</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/jobbe-med-kode.html">Kode</a></li><li class="breadcrumb-item"><a href="../statistikkere/git-og-github.html">Git og GitHub</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -355,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Git og Github</span></a>
+ <span class="menu-text">Git og GitHub</span></a>
   </div>
 </li>
       </ul>
@@ -570,16 +570,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#git-og-github" id="toc-git-og-github" class="nav-link active" data-scroll-target="#git-og-github">Git og Github</a>
+  <li><a href="#git-og-github" id="toc-git-og-github" class="nav-link active" data-scroll-target="#git-og-github">Git og GitHub</a>
   <ul class="collapse">
   <li><a href="#git" id="toc-git" class="nav-link" data-scroll-target="#git">Git <i class="fa-brands fa-git-alt" aria-label="git-alt"></i></a>
   <ul class="collapse">
   <li><a href="#hva-er-git" id="toc-hva-er-git" class="nav-link" data-scroll-target="#hva-er-git">Hva er Git?</a></li>
-  <li><a href="#oppsett-av-git" id="toc-oppsett-av-git" class="nav-link" data-scroll-target="#oppsett-av-git">Oppsett av Git</a></li>
+  <li><a href="#oppsett-av-git-i-gamle-jupyter" id="toc-oppsett-av-git-i-gamle-jupyter" class="nav-link" data-scroll-target="#oppsett-av-git-i-gamle-jupyter">Oppsett av Git i gamle jupyter</a></li>
   <li><a href="#git-og-notebooks" id="toc-git-og-notebooks" class="nav-link" data-scroll-target="#git-og-notebooks">Git og Notebooks</a></li>
   <li><a href="#vanlige-git-operasjoner" id="toc-vanlige-git-operasjoner" class="nav-link" data-scroll-target="#vanlige-git-operasjoner">Vanlige Git-operasjoner</a></li>
   </ul></li>
-  <li><a href="#github" id="toc-github" class="nav-link" data-scroll-target="#github">GitHub <i class="fa-brands fa-github" aria-label="github"></i></a>
+  <li><a href="#github" id="toc-github" class="nav-link" data-scroll-target="#github">GitHub <i class="fa-brands fa-GitHub" aria-label="GitHub"></i></a>
   <ul class="collapse">
   <li><a href="#opprett-github-bruker" id="toc-opprett-github-bruker" class="nav-link" data-scroll-target="#opprett-github-bruker">Opprett GitHub-bruker</a></li>
   <li><a href="#sec-tofaktor" id="toc-sec-tofaktor" class="nav-link" data-scroll-target="#sec-tofaktor">To-faktor autentisering</a></li>
@@ -597,27 +597,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <section id="git-og-github" class="level1">
-<h1>Git og Github</h1>
-<p>I SSB anbefales det man versjonhåndterer koden sin med <a href="https://git-scm.com/">Git</a> og deler koden via <a href="https://github.com/">GitHub</a>. For å lære seg å bruke disse verktøyene på en god måte er det derfor viktig å forstå forskjellen mellom Git og Github. Helt overordnet er forskjellen følgende:</p>
-<ul>
-<li><strong>Git</strong> er programvare som er installert på maskinen du jobber på og som sporer endringer i koden din.</li>
-<li><strong>GitHub</strong> er et slags felles mappesystem på internett som lar deg dele og samarbeide med andre om kode.</li>
-</ul>
-<p>Av definisjonene over så skjønner vi at det er <strong>Git</strong> som gir oss all funksjonalitet for å lagre versjoner av koden vår. GitHub er mer som et valg av mappesystem. Men måten kodemiljøene våre er satt opp på <strong>Dapla</strong> så har vi ingen fellesmappe som alle kan kjøre koden fra. Man utvikler kode i sin egen hjemmemappe, som bare du har tilgang til, og når du skal samarbeide med andre, så må du sende koden til GitHub. De du samarbeider med må deretter hente ned denne koden før de kan kjøre den.</p>
-<p>I dette kapittelet ser vi nærmere på Git og Github og hvordan de er implementert i SSB. Selv om SSB har laget programmet <strong>ssb-project</strong> for å gjøre det lettere å bl.a. forholde seg til Git og GitHub, så vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet. Forhåpentligvis vil det gjøre det lettere å håndtere mer kompliserte situasjoner som oppstår i arbeidshverdagen som statistikker.</p>
+<h1>Git og GitHub</h1>
+<p>I SSB bruker vi <a href="https://git-scm.com/">Git</a> til versjonskontroll av koden vår og deler den med andre via <a href="https://GitHub.com/">GitHub</a>. For å mestre disse verktøyene er det viktig å forstå forskjellen mellom Git og GitHub.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Git vs.&nbsp;GitHub: Kort fortalt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Git</strong> er et verktøy installert på din lokale maskin som sporer endringer i koden din.<br>
+<strong>GitHub</strong> er en skybasert plattform som fungerer som et felles lagringssystem, der du kan dele og samarbeide med andre om kode.</p>
+</div>
+</div>
+<p>Git og GitHub er viktige verktøy for å sikre at produksjonssystemene våre er trygge og reproduserbare. De gjør det enkelt å spore endringer og gjennomgå eller godkjenne hverandres bidrag.</p>
+<p>I dette kapittelet ser vi nærmere på Git og GitHub og hvordan de er implementert i SSB. Selv om <a href="../statistikkere/jobbe-med-kode.html#ssb-project">ssb-project</a> gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Les videre med interne ressurser
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om <a href="https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt">Git anbefalt arbeidsflyt</a> eller <a href="https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt">hvordan man løser en merge conflict</a>. Se hele katalogen til KVAKK om Git og GitHub ved å gå inn på deres confluence-område: <a href="https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git">Versjonskontroll med Git</a>.</p>
+<p>I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i <a href="https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla">confluence-dokumentet Kom i gang med Dapla</a> (statistics-norway.atlassian.net).</p>
+<p>Nettsiden <a href="https://learngitbranching.js.org/">learngitbranching.js.org</a> er også en veldig god ressurs for å forstå konseptene.</p>
+</div>
+</div>
 <section id="git" class="level2">
 <h2 class="anchored" data-anchor-id="git">Git <i class="fa-brands fa-git-alt" aria-label="git-alt"></i></h2>
-<p><strong>Git</strong> er terminalprogram som installert på maskinen du jobber. Hvis man ikke liker å bruke terminalen finnes det mange pek-og-klikk versjoner av <strong>Git</strong>, blant annet i <strong>Jupyterlab</strong>, <strong>SAS EG</strong> og <strong>RStudio</strong>. Men typisk vil det en eller annen gang oppstå situasjoner der det ikke finnes løsninger i pek-og-klikk versjonen, og man må ordne opp i terminalen. Av den grunn velger vi her å fokusere på hvordan <strong>Git</strong> fungerer fra terminalen. Vi vil også fokusere på hvordan <strong>Git</strong> fungerer fra <strong>terminalen</strong> i <strong>Jupyterlab</strong> på <strong>Dapla</strong>.</p>
 <section id="hva-er-git" class="level3">
 <h3 class="anchored" data-anchor-id="hva-er-git">Hva er Git?</h3>
-<p>Git er en programvare for distribuert versjonshåndtering av filer. Det vil si at den tar vare på historien til koden din. At Git er distribuert betyr at alle som jobber med koden har en kopi av koden hos seg selv. Når man ønsker å dele koden med andre, så laster man opp koden til et felles kodelager som GitHub. Typisk vil Git brukes til å passe på historien til rene tekstfiler, f.eks. kode-script, hvor det gir mening å se på forskjeller mellom filen på ulike tidspunkter. Men når det er sagt, så kan Git også brukes til å følge med på endringer i andre filtyper, f.eks. binære filer som bilder, PDF-filer, etc.. Men binære filer er ikke så vanlig inkludere i Git-prosjekter siden forskjellene i historikken til filene er vanskelig å forstå for mennesker.</p>
-<p>Man aktiverer Git på en mappe i filsystemet sitt med kommandoen <code>git init</code> når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, så vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen <code>git add filnavn</code>. Når du har gjort dette, så kan du lagre endringen med kommandoen <code>git commit -m "Din melding her"</code>. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen <code>git push</code>. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.</p>
+<p>Git er en programvare for distribuert versjonshåndtering av filer:</p>
+<ul>
+<li>Git tar vare på historien til koden din</li>
+<li>Alle som jobber med koden har en kopi av koden hos seg selv (distribuert)</li>
+</ul>
+<p>Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Git versjonshåndterer filene i repoet. Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjonshåndtere bilder og PDFer.</p>
+<p>Git er installert på maskinen du jobber på og brukes fra terminalen. Det finnes pek-og-klikk versjoner av Git, blant annet i Jupyterlab og RStudio, men noen situasjoner vil bare kunne løses i terminalen.</p>
 <p>I SSB anbefaler vi at du starter et nytt Git-prosjekt ved å benytte <a href="./jobbe-med-kode.html#ssb-project">ssb-project</a>. Da vil du ikke bare aktivere Git, men du kan også få implementert en del andre gode praksiser for å holde koden din ryddig, oversiktlig og sikker.</p>
 <p>Men før vi kan begynne å bruke Git må vi konfigurere vår egen bruker for Git, som er forklart i neste seksjon.</p>
 <p>Les mer om Git på <a href="https://git-scm.com/" class="uri">https://git-scm.com/</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Git i praksis: Kort fortalt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Man aktiverer Git på en mappe i filsystemet sitt med kommandoen <code>git init</code> når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen <code>git add filnavn</code>. Når du har gjort dette, så kan du lagre endringen med kommandoen <code>git commit -m "Din melding her"</code>. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen <code>git push</code>. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.</p>
+</div>
+</div>
 </section>
-<section id="oppsett-av-git" class="level3">
-<h3 class="anchored" data-anchor-id="oppsett-av-git">Oppsett av Git</h3>
+<section id="oppsett-av-git-i-gamle-jupyter" class="level3">
+<h3 class="anchored" data-anchor-id="oppsett-av-git-i-gamle-jupyter">Oppsett av Git i gamle jupyter</h3>
+<p><em>Denne delen er kun gjeldende for gamle jupyter, altså <a href="https://jupyter.dapla.ssb.no/">jupyter.dapla.ssb.no</a>, og ikke DaplaLab.</em></p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -652,22 +695,26 @@ Bruk SSB sin konfigurasjon!
 </section>
 <section id="git-og-notebooks" class="level3">
 <h3 class="anchored" data-anchor-id="git-og-notebooks">Git og Notebooks</h3>
-<p>På Dapla er det <strong>Jupyterlab</strong> som er utviklingsmiljøet for kode. I Jupyterlab vil man ofte jobbe i notebooks, og det har noen konsekvenser for versjonshåndtering. En notebook er en <strong>ipynb</strong>-fil som inneholder både tekst og kode. Åpner vi disse filene i Jupyterlab så ser vi det kjente notebook-grensesnittet med kode- og markdown-celler. Men egentlig er det bare et grensesnitt bygd over en json-fil<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Denne json-filen inneholder metadata og masse annet som gjør det vanskelig å se forskjellen på en fil over tid. Dette er derfor noe som å fikses før Git blir et nyttig verktøy for disse filene.</p>
-<p>I <a href="../statistikkere/git-og-github.html#oppsett-av-git">SSB sin anbefalte konfigurasjon</a> setter opp <a href="https://jupytext.readthedocs.io/en/latest/index.html">nbdime</a> for å få leselige differ mellom notebooks. Har du satt opp Git med <code>ssb-gitconfig.py</code> så vil dette være automatisk satt opp for deg.</p>
-<p>Det finnes også alternativer til å bruke <strong>nbdime</strong>. På Dapla er <a href="https://jupytext.readthedocs.io/en/latest/index.html">Jupytext</a> installert for de som ikke ønsker å versjonshåndtere ipynb-filer, men heller vil bruke rene script-filer som <strong>.py</strong>- eller <strong>.R</strong>-filer. Måten Jupytext gjør dette på er konvertere f.eks. en ipynb-fil py-fil for deg, Den kan gjøre det automatisk når du lagrer, eller du kan gjøre det manuelt. Med denne tilnærmingen så kan du be Git ignorere alle ipynb-filer og bare versjonshåndtere de rene script.filene. Oppsett er Jupytext er ikke en del av SSB sin standard-konfigurasjon og er noe du må sett opp selv.</p>
+<p>Selv om det er vanlig å jobbe i <em>notebooks</em> på Dapla, så skal all kode i SSB <a href="https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3698458826/ADR0020+-+Lagringsformat+for+Jypyter+Notebooks">lagres og versjonhåndteres som rene tekstfiler</a> i <strong>.R</strong>- eller <strong>.py</strong>-filer i <a href="https://jupytext.readthedocs.io/en/latest/formats-scripts.html#the-percent-format">prosent-formatet</a>. I praksis har ikke dette så stor betydning, siden disse filtypene kan åpnes som notebooks i verktøy som Jupyterlab og VS Code, og på den måten handler det bare om hvilket filformat koden lagres til.</p>
+<p><a href="https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3567812611/Hvordan+lagre+Jupyter+notebooks+i+rent+tekstformat">Les mer om hvordan man lagrer notebooks til rent tekstformat</a>.</p>
 </section>
 <section id="vanlige-git-operasjoner" class="level3">
 <h3 class="anchored" data-anchor-id="vanlige-git-operasjoner">Vanlige Git-operasjoner</h3>
 <p>Git er veldig sterkt verktøy med mange muligheter. Det er ikke tenkt at alt skal adresseres i dette kapitlet. Men det er noen vanlig operasjoner som er så vanlige at alle som jobber med kode i SSB bør kjenne dem.</p>
-<p>Vi har tidligere nevnt at kommandoen for å aktivere versjonshåndtering med Git på en mappe, er <code>git init</code>. Dette gjøres også automatisk når man oppretter et nytt <strong>ssb-project</strong>.</p>
-<p>Hva skjer hvis man gjør en endring i en fil i mappa? For det første kan du kjøre kommandoen <code>git status</code> for å se hvilke endringer Git har oppdaget. Men det betyr ikke at endringene er under versjonskontroll enda. For å fortelle Git om at disse endringene skal registreres så må du kjøre <code>git add &lt;filnavn&gt;</code>. Men fortsatt er ikke endringene et punkt i historien til koden din. For å gjøre det må du kjøre <code>git commit -m "Din melding her"</code>. Ved å gjøre det så har du laget et unikt punkt i historien til koden din, med en egen ID, som du kan gå tilbake til senere hvis du ønsker.</p>
-<p>Når man utvikler kode så gjør man det fra såkalte <em>branches</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Hvis vi tenker oss at din eksisterende kodebase er stammen på et tre (ofte kalt <strong>master</strong> eller <strong>main</strong>), så legger Git opp til at man gjør endringer på denne koden via <em>branches</em> eller grener av treet. Med andre ord holder vi stammen/master urørt helt til vi vet at endringen fungerer som den skal. Til slutt <em>merger</em> vi den inn i master. Vi kan opprette en ny branch og gå inn i den ved å skrive <code>git checkout -b &lt;branch navn&gt;</code>. Da står du i en branch og kan bruke kommandoer som <code>git add</code> og <code>git commit</code> som vist tidligere.</p>
+<p>Vi har tidligere nevnt at kommandoen for å aktivere versjonshåndtering med Git på en mappe, er <code>git init</code>. Dette gjøres også automatisk når man oppretter et nytt ssb-project.</p>
+<p>Vanlige git-kommandoer:</p>
+<ul>
+<li><code>git status</code> for å se hvilke endringer Git har oppdaget</li>
+<li><code>git add &lt;filnavn&gt;</code> for å fortelle Git at endringene skal lagres</li>
+<li><code>git commit -m "Din melding her"</code> for å gjøre endringene om til et punkt i historien til koden din * Hver commit har sin egen unike ID * Flere filer kan samles i en commit</li>
+</ul>
+<p>Når man utvikler kode så gjør man det fra såkalte <em>branches</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Hvis vi tenker oss at din eksisterende kodebase er stammen på et tre (ofte kalt <strong>master</strong> eller <strong>main</strong>), så legger Git opp til at man gjør endringer på denne koden via <em>branches</em> eller grener av treet. Med andre ord holder vi stammen/master urørt helt til vi vet at endringen fungerer som den skal. Til slutt <em>merger</em> vi den inn i master. Vi kan opprette en ny branch og gå inn i den ved å skrive <code>git checkout -b &lt;branch navn&gt;</code>. Da står du i en branch og kan bruke kommandoer som <code>git add</code> og <code>git commit</code> som vist tidligere.</p>
 <p>Vi kan <em>merge</em> endringene fra vår <em>branch</em> inn i <em>main</em> ved å først gå inn i <em>main</em>, <code>git switch main</code>, og deretter skrive <code>git merge &lt;branch navn&gt;</code>. Men typisk vil ikke dette være fremgangsmåten i SSB. Når man er fornøyd med endringene i en <em>branch</em>, så vil man <em>pushe</em> den opp til GitHub, slik at en kollega kan vurdere om den skal merges inn i <em>main</em>. Dermed gjøres selve <em>mergen</em> i GitHub-grensenittet. Vi skal se nærmere på GitHub i neste kapittel.</p>
 </section>
 </section>
 <section id="github" class="level2">
-<h2 class="anchored" data-anchor-id="github">GitHub <i class="fa-brands fa-github" aria-label="github"></i></h2>
-<p>GitHub er et nettsted som bl.a. fungerer som vårt felles mappesystem for deling av kode. SSB har sin egen organisasjonskonto med navn <a href="https://github.com/statisticsnorway">statisticsnorway</a>. Men selv om SSB har en organisasjonskonto på GitHub må alle ansatte opprette sin egen brukerprofil, og knytte den mot SSB sin organisasjonskonto. Under forklarer vi hvordan du gjør dette.</p>
+<h2 class="anchored" data-anchor-id="github">GitHub <i class="fa-brands fa-GitHub" aria-label="GitHub"></i></h2>
+<p>GitHub er et nettsted som bl.a. fungerer som vårt felles mappesystem for deling av kode. SSB har sin egen organisasjonskonto med navn <a href="https://GitHub.com/statisticsnorway">statisticsnorway</a>. Men selv om SSB har en organisasjonskonto på GitHub må alle ansatte opprette sin egen brukerprofil, og knytte den mot SSB sin organisasjonskonto. Under forklarer vi hvordan du gjør dette.</p>
 <section id="opprett-github-bruker" class="level3">
 <h3 class="anchored" data-anchor-id="opprett-github-bruker">Opprett GitHub-bruker</h3>
 <p>Dette kapittelet er bare relevant hvis man ikke har en GitHub-brukerkonto fra før. For å bruke <code>ssb-project</code>-programmet til å generere et <strong>remote repo</strong> på GitHub må du ha en konto. Derfor starter vi med å gjøre dette. Det er en engangsjobb og du trenger aldri gjøre det igjen.</p>
@@ -677,22 +724,22 @@ Bruk SSB sin konfigurasjon!
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>SSB har valgt å ikke sette opp SSB-brukerne til de ansatte som GitHub-brukere. En viktig årsak er at er en GitHub-konto ofte regnes som en del av den ansattes CV. For de som aldri har brukt GitHub før kan det virke fremmed, men det er nok en fordel på sikt når alle blir godt kjent med denne arbeidsformen.</p>
+<p>SSB har valgt å ikke sette opp SSB-brukerne til de ansatte som GitHub-brukere. En viktig årsak er at en GitHub-konto ofte regnes som en del av den ansattes CV. For de som aldri har brukt GitHub før kan det virke fremmed, men det er nok en fordel på sikt når alle blir godt kjent med denne arbeidsformen.</p>
 </div>
 </div>
 </div>
 <p>Slik gjør du det:</p>
 <ol type="1">
-<li>Gå til <a href="https://github.com/" class="uri">https://github.com/</a></li>
+<li>Gå til <a href="https://GitHub.com/" class="uri">https://GitHub.com/</a></li>
 <li>Trykk <strong>Sign up</strong> øverst i høyre hjørne</li>
-<li>I dialogboksen som åpnes, se <a href="#fig-github-user-gen" class="quarto-xref">Figur&nbsp;1</a>, skriver du inn din e-postkonto og lager et passord. Dette trenger ikke være din SSB-bruker og e-post. Vi anbefaler at du bruker en personlig e-postkonto og velger ditt eget passord. Det samme gjelder <strong>brukernavn</strong> også.</li>
+<li>I dialogboksen som åpnes, se <a href="#fig-GitHub-user-gen" class="quarto-xref">Figur&nbsp;1</a>, skriver du inn din e-postkonto og lager et passord. Dette trenger ikke være din SSB-bruker og e-post. Vi anbefaler at du bruker en personlig e-postkonto og velger ditt eget passord. Det samme gjelder <strong>brukernavn</strong> også.</li>
 </ol>
-<div id="fig-github-user-gen" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for å generere en brukerkonto">
+<div id="fig-GitHub-user-gen" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for å generere en brukerkonto">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-user-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_register.JPG" class="img-fluid figure-img" alt="Bilde av GitHub-siden for å generere en brukerkonto">
+<div aria-describedby="fig-GitHub-user-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_register.JPG" class="img-fluid figure-img" alt="Bilde av GitHub-siden for å generere en brukerkonto">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-user-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-user-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;1: Dialogboks for opprettelse av GitHub-bruker.
 </figcaption>
 </figure>
@@ -701,13 +748,13 @@ Figur&nbsp;1: Dialogboks for opprettelse av GitHub-bruker.
 </section>
 <section id="sec-tofaktor" class="level3">
 <h3 class="anchored" data-anchor-id="sec-tofaktor">To-faktor autentisering</h3>
-<p>Hvis du har fullført forrige steg så har du nå en GitHub-konto. Hvis du står på din profil-side så ser den ut som i <a href="#fig-github-exmaple-userpage" class="quarto-xref">Figur&nbsp;2</a>.</p>
-<div id="fig-github-exmaple-userpage" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for en bruker">
+<p>Hvis du har fullført forrige steg så har du nå en GitHub-konto. Hvis du står på din profil-side så ser den ut som i <a href="#fig-GitHub-exmaple-userpage" class="quarto-xref">Figur&nbsp;2</a>.</p>
+<div id="fig-GitHub-exmaple-userpage" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for en bruker">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-exmaple-userpage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_profile.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for en bruker">
+<div aria-describedby="fig-GitHub-exmaple-userpage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_profile.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for en bruker">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-exmaple-userpage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-exmaple-userpage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;2: Et eksempel på hjemmeområdet til en GitHub-bruker
 </figcaption>
 </figure>
@@ -716,18 +763,18 @@ Figur&nbsp;2: Et eksempel på hjemmeområdet til en GitHub-bruker
 <div class="grid">
 <div class="g-col-8">
 <ol type="1">
-<li><p>Trykk på den lille pilen øverst til høyre og velg <strong>Settings</strong>(se <a href="#fig-github-open-settings" class="quarto-xref">Figur&nbsp;3</a>).</p></li>
+<li><p>Trykk på den lille pilen øverst til høyre og velg <strong>Settings</strong>(se <a href="#fig-GitHub-open-settings" class="quarto-xref">Figur&nbsp;3</a>).</p></li>
 <li><p>Deretter velger du <strong>Password and authentification</strong> i menyen til venstre.</p></li>
 <li><p>Under <strong>Two-factor authentication</strong> trykker du på <strong>Enable</strong>.</p></li>
 </ol>
 </div>
 <div class="g-col-4">
-<div id="fig-github-open-settings" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-menyen for å åpne Settings-menyen.">
+<div id="fig-GitHub-open-settings" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-menyen for å åpne Settings-menyen.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-open-settings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_settings_menu.png" class="img-fluid figure-img" style="width:50.0%" alt="Bilde av GitHub-menyen for å åpne Settings-menyen.">
+<div aria-describedby="fig-GitHub-open-settings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_settings_menu.png" class="img-fluid figure-img" style="width:50.0%" alt="Bilde av GitHub-menyen for å åpne Settings-menyen.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-open-settings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-open-settings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;3: Åpne settings for din GitHub-bruker.
 </figcaption>
 </figure>
@@ -735,38 +782,38 @@ Figur&nbsp;3: Åpne settings for din GitHub-bruker.
 </div>
 </div>
 <ol start="4" type="1">
-<li><a href="#fig-github-enable-2fa" class="quarto-xref">Figur&nbsp;4</a> viser dialogboksen som vises. Velg <strong>Enable two-factor authentification</strong>.</li>
+<li><a href="#fig-GitHub-enable-2fa" class="quarto-xref">Figur&nbsp;4</a> viser dialogboksen som vises. Velg <strong>Enable two-factor authentification</strong>.</li>
 </ol>
-<div id="fig-github-enable-2fa" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for å skru på 2-faktor autentisering.">
+<div id="fig-GitHub-enable-2fa" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for å skru på 2-faktor autentisering.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-enable-2fa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_2fa_enable.JPG" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for å skru på 2-faktor autentisering.">
+<div aria-describedby="fig-GitHub-enable-2fa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_2fa_enable.JPG" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for å skru på 2-faktor autentisering.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-enable-2fa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-enable-2fa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;4: Dialogboks som åpnes når 2FA skrus på første gang.
 </figcaption>
 </figure>
 </div>
 <ol start="5" type="1">
-<li><a href="#fig-github-2fa-app" class="quarto-xref">Figur&nbsp;5</a> viser dialogboksen som vises for å velge hvordan man skal autentisere seg. Her anbefales det å velge <strong>Set up using an app</strong>, slik at du kan bruke <em>Microsoft Authenticator</em>-appen på din mobil.</li>
+<li><a href="#fig-GitHub-2fa-app" class="quarto-xref">Figur&nbsp;5</a> viser dialogboksen som vises for å velge hvordan man skal autentisere seg. Her anbefales det å velge <strong>Set up using an app</strong>, slik at du kan bruke <em>Microsoft Authenticator</em>-appen på din mobil.</li>
 </ol>
-<div id="fig-github-2fa-app" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
+<div id="fig-GitHub-2fa-app" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-2fa-app-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="fig-GitHub-2fa-app-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../images/githbu_2fa_app.JPG" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-2fa-app-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-2fa-app-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;5: Dialogboks for å velge hvordan man skal autentisere seg med 2FA.
 </figcaption>
 </figure>
 </div>
-<p><a href="#fig-github-QR" class="quarto-xref">Figur&nbsp;6</a> viser QR-koden som vises. Denne skal vi bruke i neste steg.</p>
-<div id="fig-github-QR" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
+<p><a href="#fig-GitHub-QR" class="quarto-xref">Figur&nbsp;6</a> viser QR-koden som vises. Denne skal vi bruke i neste steg.</p>
+<div id="fig-GitHub-QR" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-QR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_2fa.png" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
+<div aria-describedby="fig-GitHub-QR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_2fa.png" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for å velge hvordan man skal autentisere seg med 2-faktor autentisering.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-QR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-QR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;6: QR-kode som skannes av Microsoft Authenticator.
 </figcaption>
 </figure>
@@ -792,32 +839,32 @@ Figur&nbsp;7: Mobilappen <em>Microsoft authenticator</em>
 </div>
 </div>
 </div>
-<p>Nå har vi aktivert 2-faktor autentisering for GitHub og er klare til å knytte vår personlige konto til vår SSB-bruker på SSBs “Github organisation” <a href="https://github.com/statisticsnorway"><strong>statisticsnorway</strong></a>.</p>
+<p>Nå har vi aktivert 2-faktor autentisering for GitHub og er klare til å knytte vår personlige konto til vår SSB-bruker på SSBs “GitHub organisation” <a href="https://GitHub.com/statisticsnorway"><strong>statisticsnorway</strong></a>.</p>
 </section>
 <section id="koble-deg-til-ssb" class="level3">
 <h3 class="anchored" data-anchor-id="koble-deg-til-ssb">Koble deg til SSB</h3>
 <p>I forrige steg aktiverte vi 2-faktor autentisering for GitHub. Det neste vi må gjøre er å koble oss til <strong>Single Sign On (SSO)</strong> for SSB sin organisasjon på GitHub:</p>
 <ol type="1">
-<li>Trykk på lenken <a href="https://github.com/orgs/statisticsnorway/sso" class="uri">https://github.com/orgs/statisticsnorway/sso</a></li>
-<li>I dialogboksen som dukker opp trykker du på <strong>Continue</strong>, slik som vist i <a href="#fig-github-sso" class="quarto-xref">Figur&nbsp;8</a>.</li>
+<li>Trykk på lenken <a href="https://GitHub.com/orgs/statisticsnorway/sso" class="uri">https://GitHub.com/orgs/statisticsnorway/sso</a></li>
+<li>I dialogboksen som dukker opp trykker du på <strong>Continue</strong>, slik som vist i <a href="#fig-GitHub-sso" class="quarto-xref">Figur&nbsp;8</a>.</li>
 </ol>
-<div id="fig-github-sso" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for single sign on.">
+<div id="fig-GitHub-sso" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-dialogboks for single sign on.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-sso-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_sso.png" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for single sign on.">
+<div aria-describedby="fig-GitHub-sso-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_sso.png" class="img-fluid figure-img" alt="Bilde av GitHub-dialogboks for single sign on.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-sso-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-sso-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;8: Single Sign on (SSO) for SSB sin organisasjon på GitHub
 </figcaption>
 </figure>
 </div>
-<p>Når du har gjennomført dette så har du tilgang til <strong>statisticsnorway</strong> på GitHub. Går du inn på <a href="https://github.com/statisticsnorway?view_as=member">denne lenken</a> så skal du nå kunne lese både <strong>Public</strong>, <strong>Private</strong> og <strong>Internal</strong> repoer, slik som vist i <a href="#fig-github-member" class="quarto-xref">Figur&nbsp;9</a>.</p>
-<div id="fig-github-member" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av repoene på GitHub for de som er tilknyttet staitsticsnorway.">
+<p>Når du har gjennomført dette så har du tilgang til <strong>statisticsnorway</strong> på GitHub. Går du inn på <a href="https://GitHub.com/statisticsnorway?view_as=member">denne lenken</a> så skal du nå kunne lese både <strong>Public</strong>, <strong>Private</strong> og <strong>Internal</strong> repoer, slik som vist i <a href="#fig-GitHub-member" class="quarto-xref">Figur&nbsp;9</a>.</p>
+<div id="fig-GitHub-member" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av repoene på GitHub for de som er tilknyttet staitsticsnorway.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-member-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_asmember.png" class="img-fluid figure-img" alt="Bilde av repoene på GitHub for de som er tilknyttet staitsticsnorway.">
+<div aria-describedby="fig-GitHub-member-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_asmember.png" class="img-fluid figure-img" alt="Bilde av repoene på GitHub for de som er tilknyttet staitsticsnorway.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-member-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-member-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;9: Medlemsvisning for SSB sin GitHub-organisasjon.
 </figcaption>
 </figure>
@@ -836,41 +883,41 @@ Figur&nbsp;9: Medlemsvisning for SSB sin GitHub-organisasjon.
 <li><p>Velg <strong>Generate new token</strong> og deretter <strong>Generate new token (classic)</strong>.</p></li>
 <li><p>Under <strong>Note</strong> kan du gi PAT’en et navn. Velg et navn som er intuitivt for deg. Hvis du skal bruke PAT til å jobbe mot Dapla, så ville jeg ganske enkelt kalt den <em>dapla</em>. Hvis du skal bruke den mot bakkemiljøet ville jeg kalt den <em>prodsone</em> eller noe annet som gjør det lett for det skjønne innholdet i ettertid.</p></li>
 <li><p>Under <strong>Expiration</strong> velger du hvor lang tid som skal gå før PAT blir ugyldig. Dette er en avvening mellom sikkerhet og hva som er praktisk. Det anbefales at du velger <strong>365 dager</strong>. Når PAT utløper må du gjenta stegene i dette kapittelet.</p></li>
-<li><p>Under <strong>Select scopes</strong> velger du <strong>repo</strong> og <strong>workflow</strong> slik som vist i <a href="#fig-github-token" class="quarto-xref">Figur&nbsp;10</a>.</p></li>
+<li><p>Under <strong>Select scopes</strong> velger du <strong>repo</strong> og <strong>workflow</strong> slik som vist i <a href="#fig-GitHub-token" class="quarto-xref">Figur&nbsp;10</a>.</p></li>
 </ol>
-<div id="fig-github-token" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for generering av Personal Access Token">
+<div id="fig-GitHub-token" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for generering av Personal Access Token">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-token-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_pat.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for generering av Personal Access Token">
+<div aria-describedby="fig-GitHub-token-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_pat.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for generering av Personal Access Token">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-token-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-token-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;10: Gi token et kort og beskrivende navn
 </figcaption>
 </figure>
 </div>
 <ol start="8" type="1">
-<li>Trykk på <strong>Generate token</strong> nederst på siden og du får noe lignende det du ser i <a href="#fig-github-token-gen" class="quarto-xref">Figur&nbsp;11</a>.</li>
+<li>Trykk på <strong>Generate token</strong> nederst på siden og du får noe lignende det du ser i <a href="#fig-GitHub-token-gen" class="quarto-xref">Figur&nbsp;11</a>.</li>
 </ol>
-<div id="fig-github-token-gen" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for det genererte tokenet">
+<div id="fig-GitHub-token-gen" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for det genererte tokenet">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-token-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_pat2.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for det genererte tokenet">
+<div aria-describedby="fig-GitHub-token-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_pat2.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for det genererte tokenet">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-token-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-token-gen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;11: Token som ble generert.
 </figcaption>
 </figure>
 </div>
 <ol start="9" type="1">
 <li><p>Kopier deretter PAT til en midlertidig fil. Grunnen er at du aldri vil se det igjen her etter at vi har gjennomført neste steg.</p></li>
-<li><p>Deretter trykker du på <strong>Configure SSO</strong> og velger <strong>Authorize</strong> ved siden statisticsnorway, slik som vist i <a href="#fig-github-token-authorize" class="quarto-xref">Figur&nbsp;12</a>. Svar deretter på spørsmålene som dukker opp.</p></li>
+<li><p>Deretter trykker du på <strong>Configure SSO</strong> og velger <strong>Authorize</strong> ved siden statisticsnorway, slik som vist i <a href="#fig-GitHub-token-authorize" class="quarto-xref">Figur&nbsp;12</a>. Svar deretter på spørsmålene som dukker opp.</p></li>
 </ol>
-<div id="fig-github-token-authorize" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for å autorisere Token mot statisticsnorway">
+<div id="fig-GitHub-token-authorize" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av GitHub-siden for å autorisere Token mot statisticsnorway">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-github-token-authorize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/github_pat3.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for å autorisere Token mot statisticsnorway">
+<div aria-describedby="fig-GitHub-token-authorize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/GitHub_pat3.png" class="img-fluid figure-img" alt="Bilde av GitHub-siden for å autorisere Token mot statisticsnorway">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-github-token-authorize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-token-authorize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;12: Autorisering av Token mot SSBs GiHub-organisasjon.
 </figcaption>
 </figure>
@@ -879,12 +926,13 @@ Figur&nbsp;12: Autorisering av Token mot SSBs GiHub-organisasjon.
 </section>
 <section id="lagre-pat" class="level4">
 <h4 class="anchored" data-anchor-id="lagre-pat">Lagre PAT</h4>
+<p><em>Dette gjelder gamle Jupyter. Bla lenger ned for å lese om hvordan man lagrer PAT på DaplaLab</em></p>
 <p>Det er ganske upraktisk å måtte sende med tokenet hver gang vi skal jobbe med GitHub. Vi bør derfor lagre det lokalt der vi jobber, slik at Git automatisk finner det. Det finnes mange måter å gjøre dette på og det er ikke bestemt hva som skal være beste-praksis i SSB. Men en måte å gjøre det er via en <strong>.netrc</strong>-fil. Vi oppretter da en fil som heter <strong>.netrc</strong> på vårt hjemmeområde, og legger følgende informasjon på en (hvilken som helst) linje i filen:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>~/.netrc</strong></pre>
 </div>
-<div class="sourceCode" id="cb3" data-filename="~/.netrc"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">machine</span> github.com login <span class="op">&lt;</span>github-bruker<span class="op">&gt;</span> password <span class="op">&lt;</span>Personal Access Token<span class="op">&gt;</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3" data-filename="~/.netrc"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">machine</span> GitHub.com login <span class="op">&lt;</span>GitHub-bruker<span class="op">&gt;</span> password <span class="op">&lt;</span>Personal Access Token<span class="op">&gt;</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>GitHub-bruker</strong> er da din personlige bruker og IKKE brukernavnet ditt i SSB. <strong>Personal Access Token</strong> er det vi lagde i forrige kapittelet.</p>
 <p>En veldig enkel måte å lagre dette er som følger. Anta at min personlige GitHub-bruker er <strong>SSB-Chad</strong> og at min Personal Access Token er <strong>blablabla</strong>. Da kan jeg gjøre følgende for å lagre det i <strong>.netrc</strong>:</p>
@@ -896,12 +944,33 @@ Figur&nbsp;12: Autorisering av Token mot SSBs GiHub-organisasjon.
 <div class="code-with-filename-file">
 <pre><strong>terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!echo</span> <span class="st">"machine github.com login SSB-Chad password blablabla"</span> <span class="op">&gt;&gt;</span> ~/.netrc</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">!echo</span> <span class="st">"machine GitHub.com login SSB-Chad password blablabla"</span> <span class="op">&gt;&gt;</span> ~/.netrc</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Alternativt kan du droppe det utropstegnet og kjøre det direkte i en terminal. Det vil gi samme resultat. Koden over legger til en linje med teksten</p>
-<p><strong>machine github.com login SSB-Chad password blablabla</strong></p>
-<p>i en .netrc-fil på din hjemmeområdet, uanvhengig av om du har en fra før eller ikke. Hvis du har en fil fra før som allerede har et token fra GitHub, ville jeg nok slettet det før jeg legger en et nytt token.</p>
+<p>Alternativt kan du fjerne utropstegnet og kjøre kommandoen direkte i terminalen. Det vil gi samme resultat. Koden over legger til en linje med teksten</p>
+<p><strong>machine GitHub.com login SSB-Chad password blablabla</strong></p>
+<p>i en .netrc-fil på din hjemmeområdet, uavhengig av om du har en fra før eller ikke. Hvis du har en fil fra før som allerede har et token fra GitHub, ville jeg nok slettet det før jeg legger en et nytt token.</p>
 <p>Hver gang du jobber mot GitHub vil Git sjekke om informasjon om autentisering ligger i denne filen, og bruke den hvis den ligger der.</p>
+<section id="på-daplalab" class="level5">
+<h5 class="anchored" data-anchor-id="på-daplalab"><strong>På DaplaLab</strong></h5>
+<p>Å lagre PAT på DaplaLab er enkelt og gjøres kun en gang uansett hvor mange tjenester man bruker.</p>
+<p>Her er stegene:</p>
+<ol type="1">
+<li>Logg inn på <a href="https://lab.dapla.ssb.no">https://lab.dapla.ssb.no</a></li>
+<li>Trykk på ‘My account’</li>
+<li>Naviger til Git-fanen</li>
+<li>Lim inn token der det står ‘Git Forge Personal Access Token’ vist i <a href="#fig-dapla-lab-my-account" class="quarto-xref">Figur&nbsp;13</a></li>
+</ol>
+<div id="fig-dapla-lab-my-account" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Skjermbilde av DaplaLab innstillinger for Git">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-my-account-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/dapla-lab-my-account.png" class="img-fluid figure-img" alt="Skjermbilde av DaplaLab innstillinger for Git">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-my-account-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;13: DaplaLab My account: lagre PAT
+</figcaption>
+</figure>
+</div>
+</section>
 </section>
 <section id="oppdater-pat" class="level4">
 <h4 class="anchored" data-anchor-id="oppdater-pat">Oppdater PAT</h4>
@@ -922,8 +991,7 @@ Figur&nbsp;12: Autorisering av Token mot SSBs GiHub-organisasjon.
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
 
 <ol>
-<li id="fn1"><p>Prøv selv å åpne en ipynb som json ved høreklikke på fila i Jupyterlab, velge <em>Open with</em>, og velg <em>json</em>. Da vil du se den underliggende json-filen<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><em>Branches</em> kan oversettes til grener på norsk. Men i denne boken velger vi å bruke det engelske ordet <strong>branches</strong>. Grunnen er at det erfaringsmessig er lettere forholde seg til det engelske ordet når man skal søke etter informasjon i annen dokumentasjon<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><em>Branches</em> kan oversettes til grener på norsk. Men i denne boken velger vi å bruke det engelske ordet <strong>branches</strong>. Grunnen er at det erfaringsmessig er lettere forholde seg til det engelske ordet når man skal søke etter informasjon i annen dokumentasjon<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
