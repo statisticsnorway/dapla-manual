@@ -1,0 +1,62 @@
+---
+title: Tilgangsstyring
+freeze: true
+jupyter: manual-kernel
+---
+
+
+Hvert Dapla-team har sine egne lagringsområder for data som ingen andre har tilgang til, med mindre teamet eksplisitt velger å dele data med andre team. I tillegg har teamet tilgang til egne ressurser for å behandle dataene. 
+
+Det er tilgangsgruppen [managers](./hva-er-dapla-team.html#managers) som bestemmer hvilke personer som skal ha hvilke roller i et team, og dermed hvilke data de ulike team-medlemmene får tilgang til. Den som jobber med data kan bli plassert i tilgangsgruppene [data-admins](./hva-er-dapla-team.html#data-admins) eller [developers](./hva-er-dapla-team.html#developers). Sistnevnte får tilgang til alle datatilstander utenom kildedata, mens *data-admins* er forhåndsgodkjent til å også å aksessere kildedata ved behov. Dermed er *data-admins* en priveligert rolle på teamet som er forbeholdt noen få personer.
+
+```{python}
+# | echo: false
+
+from diagrams import Diagram, Cluster, Edge
+from diagrams.custom import Custom
+from PIL import Image
+
+with Diagram("", filename="../images/dp-tilganger", show=True, graph_attr={"bgcolor": "transparent"}):
+    with Cluster("Sensitivt", graph_attr={"fontsize": "12", "bgcolor": "lightyellow"}):
+        kildedata = Custom("Kildedata", "../images/cloud-storage-generic-icon.png")
+
+    with Cluster("Skjermet"):
+        Annen_data = Custom("Annen data", "../images/cloud-storage-generic-icon.png")
+
+    with Cluster("developers"):
+        developers = [Custom("", "../images/multiple-users.png")]
+        developers >> Edge(label="Alltid tilgang") >> Annen_data
+
+    with Cluster(
+        "data-admins", graph_attr={"fontsize": "12", "bgcolor": "lightyellow"}
+    ):
+        data_admins = [Custom("", "../images/multiple-users.png")]
+        (
+            data_admins
+            >> Edge(style="dashed", label="Mildertidig tilgang ved behov")
+            >> kildedata
+        )
+        data_admins >> Edge(label="Alltid tilgang") >> Annen_data
+
+# Cropper bildet så det skal ta mindre plass
+# Open the image
+img = Image.open("../images/dp-tilganger.png")
+
+# Define the coordinates for the cropping box
+# The box is defined as (left, upper, right, lower)
+left = 200
+upper = 170
+right = 1050
+lower = 700
+cropping_box = (left, upper, right, lower)
+
+# Crop the image
+cropped_img = img.crop(cropping_box)
+
+# Save the cropped image
+cropped_img.save("../images/dp-tilganger-cropped.png")
+```
+
+![Datatilstander som et team sitt medlemmer har ilgang til.](../images/dp-tilganger-cropped.png){fig-alt="Diagram av av hvilke " #fig-dp-tilganger}
+
+@fig-dp-tilganger viser hvem som har tilgang til hvilke datatilstander. Som nevnt er *data-admins* ansett som forhåndsgodkjent til å aksessere kildedata ved behov. Måten dette er implementert på er at *data-admins* må aktivere denne tilgangen selv, ved å bruke et [JIT-grensesnitt (Just-In-Time Access)](./jit.html). Tilgangen krever en begrunnelse og bruken kan løpende monitoreres av *managers* for teamet. 
