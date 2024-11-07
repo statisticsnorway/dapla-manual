@@ -259,6 +259,34 @@ ssb-prod-team-personstatistikk-data-produkt-prod/
 
 Eksempelet over viser at siste versjon av en fil kan lagres med og uten versjonsnummer for å gjøre det lettere å lese inn nyeste versjon.
 
+#### Eksempelkode med pakken ssb-fagfunksjoner
+
+```python{.yaml filename="Python kode fra SSB-fagfunksjoner for finne neste filversjon"}
+# importer funksjonen next_version_path() fra ssb-fagfunksjoner
+from fagfunksjoner import next_version_path
+
+filsti = 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050.parquet'
+
+ny_filsti = next_version_path(filsti)
+
+print(ny_filsti)
+# vil returnere:
+# 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050_v4.parquet'
+
+```
+ssb-fagfunksjoner har også følgende funksjoner for å gjøre versjonering lettere:
+
+* `get_fileversions()` # Retrieves a list of file versions matching a specified pattern.
+* `latest_version_number()` # Function for finding latest version in use for a file.
+* `latest_version_path()` # Finds the path to the latest version of a specified file.
+
+::: {.callout-important}
+## Permanente data skal ikke endres eller slettes 
+
+**Tidligere delte/publiserte data skal ikke slettes eller overskrives!**  
+*Det må derfor lagres fysiske filer for hver versjon av datasettet. Dette er viktig for at SSB skal oppfylle krav om etterprøvbarhet av statistikkene.*
+:::
+
 #### Versjon 0: Deling av data som ikke har oppnådd stabil tilstand 
 
 Hvis det er behov for å dele data som
@@ -268,23 +296,3 @@ bruke *versjonsnummer 0* i filnavnet.
 Dette versjonsnummeret skal kun brukes
 midlertidig fram til datasettet oppnår stabil tilstand. Ved stabil tilstand
 byttes versjonsnummer for datasettet til 1 eller høyere.
-
-#### Eksempelkode: Finne neste versjonsnummer med python-kode
-
-```python{.yaml filename="Python kode fra SSB-fagfunksjoner for finne neste versjonsnummer"}
-# importer funksjonen get_next_version_number() fra ssb-fagfunksjoner
-from fagfunksjoner import get_next_version_number
-
-filsti = 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050.parquet'
-
-neste_versjon = get_next_version_number(filsti)
-
-print(neste_versjon) # vil i dette tilfellet skrive ut 4
-```
-
-::: {.callout-important}
-## Permanente data skal ikke endres eller slettes 
-
-**Tidligere delte/publiserte data skal ikke slettes eller overskrives!**  
-*Det må derfor lagres fysiske filer for hver versjon av datasettet. Dette er viktig for at SSB skal oppfylle krav om etterprøvbarhet av statistikkene.*
-:::
