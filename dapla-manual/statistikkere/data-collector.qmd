@@ -1,0 +1,86 @@
+---
+title: Data-Collector
+---
+
+Data Collector (DC) er et rammeverk for forbruk av REST APIer som samler inn data fra eksterne ressurser og skriver det til kildebøtter.DC kjører en deklarativ spesifikasjon ved kjøretid som beskriver hvordan data skal samles inn. Spesifikasjonen er bygget med en veldefinert DSL.
+
+DC-jobb startes fra Jupyter ved å bruke funksjon fra Dapla Toolbelt. Innsamlingsjobb beskrives med en  **specification** (json-fil).
+ 
+ [Les mer om arkitektur og funksjonalitet](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3409772746/Data+Collector)
+
+
+## Bruke Collector fra Dapla-lab
+
+Før brukeren kan kjøre DC fra dapla-lab, må en teamspesifikk collector må kjøres i et test- eller prod miljø.
+
+### Sett opp collector
+
+```{.python filename="notebook"}
+import json
+
+from dapla import CollectorClient
+
+collector_url = "https://data-collector-<team_navn>.intern.ssb.no/tasks"
+collector = CollectorClient(collector_url)
+specification = None
+
+# Load specification from file
+with open("<specification_file>.json") as specification_file:
+    specification = json.load(specification_file)
+
+topic = specification['configure'][0]['globalState']['global.topic']
+print (topic)
+
+```
+
+### Start data-innsamlingsjobb
+
+```{.python filename="notebook"}
+response = collector.start(specification)
+task_id = response.json()['workerId']
+print(f"Startet collector jobb, data skal bli skrevet til gs://<kilde-bøtte>/{topic}/")
+
+```
+
+### Liste kjøreneder tasks
+
+```{.python filename="notebook"}
+running_tasks = collector.running_tasks().json()
+print(running_tasks)
+
+```
+
+### Stoppe kjøreneder tasks
+
+```{.python filename="notebook"}
+
+stop_response = collector.stop(task_id)
+print(stop_response)
+     
+```
+
+## Konfigurasjoner
+Tre teamene kan kjøre collector på test og prodmiljø.
+
+**collector-url**
+
+- **skatt-person**
+  - TEST:
+    - skattemelding: https://data-collector-skatt-person-skattemelding.intern.test.ssb.no/tasks
+    - skatteoppgjor: https://data-collector-skatt-person-skatteoppgjor.intern.test.ssb.no/tasks
+  - PROD: 
+    - skattemelding: https://data-collector-skatt-person-skattemelding.intern.ssb.no/tasks
+    - skatteoppgjor: https://data-collector-skatt-person-skatteoppgjor.intern.ssb.no/tasks
+
+- **skatt-næering**
+  - TEST: https://data-collector-skatt-naering.intern.test.ssb.no/tasks
+  - PROD: https://data-collector-skatt-naering.intern.ssb.no/tasks
+
+- **strukt-mva**
+  - TEST: https://data-collector-strukt-mva.intern.test.ssb.no/tasks
+  - PROD: https://data-collector-strukt-mva.intern.ssb.no/tasks  
+ 
+## Logger
+
+Det er mulig å sjekke logger fra google-console for [test](https://console.cloud.google.com/logs/query?hl=en&project=nais-test-19b2) og [prod](https://console.cloud.google.com/logs/query?hl=en&project=nais-prod-1338).
+
