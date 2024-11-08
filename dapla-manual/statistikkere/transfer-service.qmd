@@ -19,7 +19,7 @@ Ved overføring av kildedata med Transfer Service så følger de samme prosedyre
 
 ## Tilgangsstyring
 
-Tilgangsstyringen til data gjelder også for overføringer av data med Transfer Service. Det betyr at du må ha tilgang til dataene du skal sette opp overføringsjobber for. Ved bruk av Transfer Service for overføring av data mellom bakke og sky så er det satt opp en dedikerte mapper for dette i prodsonen. Også her følges tilgangsstyringen til dataene, med unntak av at data-admins har permanent tilgang til kildedata som er synkronisert ned til bakken, mens man på Dapla må de gi seg selv korte, begrunnede tilganger ved behov.
+Tilgangsstyringen til data gjelder også for overføringer av data med Transfer Service. Det betyr at du må ha tilgang til dataene du skal sette opp overføringsjobber for. Ved bruk av Transfer Service for overføring av data mellom bakke og sky så er det satt opp dedikerte mapper for dette i prodsonen. Også her følges tilgangsstyringen til dataene, med unntak av at data-admins har permanent tilgang til kildedata som er synkronisert ned til bakken, mens man på Dapla må gi seg selv korte, begrunnede tilganger ved behov.
 
 :::: {.columns}
 
@@ -57,13 +57,13 @@ projects:
       - dapla-buckets
       - transfer-service
 ```
-I filen over ser du at teamet har skrudd på tjenesten i prod-miljøet, siden den `transfer-service` er listet under `features`. Hvis tjenesten ikke er skrudd på kan du lese om hvordan du skrur den på i [feature-dokumentasjonen](./features.html).
+I filen over ser du at teamet har skrudd på tjenesten i prod-miljøet, siden `transfer-service` er listet under `features`. Hvis tjenesten ikke er skrudd på kan du lese om hvordan du skrur den på i [feature-dokumentasjonen](./features.html).
 
 ## Overføring av data
 
 ::: {.callout-note}
 # Overføring av kildedata
-Overføring av kildedata må gjøres av en *data-admin* i teamet som har aktivert sin forhåndsgodkjente tilgang til kildedata. Tilgangen aktiveres ved å gå inn i [JIT-applikasjonen](https://jitaccess.dapla.ssb.no/) og velge prosjekt-id. Deretter velger du rollene **ssb.bucket.write**, **ssb.buckets.list** og **storagetransfer.admin**, og hvor lenge du ønsker tilgangen. Til slutt oppgir du en begrunnelse for hvorfor du trenger tilgangentilgangen og trykker **Request access**. Når du har gjort dette vil du få en bekreftelse på at tilgangen er aktivert, og det tar ca 1 minutt før den aktiverte tilgangen er synlig i GCC. 
+Overføring av kildedata må gjøres av en *data-admin* i teamet som har aktivert sin forhåndsgodkjente tilgang til kildedata. Tilgangen aktiveres ved å gå inn i [JIT-applikasjonen](https://jitaccess.dapla.ssb.no/) og velge prosjekt-id. Deretter velger du rollene **ssb.bucket.write**, **ssb.buckets.list** og **storagetransfer.admin**, og hvor lenge du ønsker tilgangen. Til slutt oppgir du en begrunnelse for hvorfor du trenger tilgangen og trykker **Request access**. Når du har gjort dette vil du få en bekreftelse på at tilgangen er aktivert, og det tar ca 1 minutt før den aktiverte tilgangen er synlig i GCC. 
 :::
 
 
@@ -95,11 +95,11 @@ Når det opprettes et Dapla-team, så opprettes det flere Google-prosjekter for 
 
 ::::
 
-Første gang du bruker **Storage Transfer** må man gjøre en engangsjobb for å bruke tjenesten. Dette gjøres kun første gang din bruker setter opp en jobb, og deretter trenger du ikke å gjøre det flere ganger. 
+Første gang du bruker **Storage Transfer** må du gjøre en engangsjobb for å bruke tjenesten. Dette gjøres kun første gang din bruker setter opp en jobb, og deretter trenger du ikke å gjøre det flere ganger. 
 
 Når du kommer inn på siden til **Storage Transfer** så trykker du på  **Set Up Connection**. Når du trykker på denne vil det dukke opp et nytt felt hvor du får valget **Create Pub-Sub Resources**. Trykk på den blå **Create**-knappen, og deretter trykk på **Close** lenger nede. Da er engangsjobben gjort, og du kan begynne å sette opp overføringsjobber.
 
-5. I navigasjonsmenyen til venstre trykk `Transfer jobs`, og deretter trykk på `+ Create transfer job` øverst på siden for å opprette en ny overføringsjobb. Da får du opp bildet som vist i @fig-transfer-tilsky.
+5. I navigasjonsmenyen til venstre trykk `Transfer jobs`, og trykk deretter på `+ Create transfer job` øverst på siden for å opprette en ny overføringsjobb. Da får du opp bildet som vist i @fig-transfer-tilsky.
 
 ![Opprett overføringsjobb i Google Cloud Console.](../images/data-transfer-tilsky.png){fig-alt="Bilde som viser Create a transfer job i Google Cloud Console." #fig-transfer-tilsky}
 
@@ -185,7 +185,7 @@ cropped_img.save("../images/ts-kilde-cropped.png")
 
 ### Prodsonen og Dapla
 
-Overføring mellom bakke og sky er en overføring av data mellom en bøtte på Dapla og en mappe i prodsonen. Siden tilgangsstyring til kildedata er strengere enn tilgangsstyring til annen data, så er det det to litt fremgangsmåter for å sette opp overføringsjobber for disse. 
+Overføring mellom bakke og sky er en overføring av data mellom en bøtte på Dapla og en mappe i prodsonen. Siden tilgangsstyring til kildedata er strengere enn tilgangsstyring til annen data, så er det to ulike fremgangsmåter for å sette opp overføringsjobber for disse. 
 
 Siden stegene er litt forskjellig avhengig av om man skal flytte kildedata eller annen data, så deler vi denne delen i to. @fig-ts-bakke-sky viser hvordan dette er satt opp. Kildeprosjektet på Dapla har en **tilsky**-bøtte for å flytting av data fra prodsonen til Dapla, og den har en **frasky**-bøtte for å flytte data fra Dapla til prodsonen. Standardprosjektet på Dapla har også en **tilsky**-bøtte for å flytte data fra prodsonen til Dapla, og den har en **frasky**-bøtte for å flytte data fra Dapla til prodsonen.
 
