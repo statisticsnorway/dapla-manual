@@ -110,12 +110,16 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Utviklere</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./notebooks/index.html"> 
-<span class="menu-text">Eksempler</span></a>
+    <a class="nav-link" href="./news/index.html"> 
+<span class="menu-text">Nyheter</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./blog/index.html"> 
 <span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./notebooks/index.html"> 
+<span class="menu-text">Eksempler</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./om-dapla.html"> 
@@ -321,6 +325,61 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="./statistikkere/index.html" class="btn-action-primary btn-action btn btn-success btn-lg" role="button" style="margin-top: 1em;">Kom i gang</a></p>
 </div>
 </div>
+<section id="siste-nyheter" class="sidebar-latest-news">
+<h3>Siste nyheter:</h3>
+<div id="latest-news-box">
+<ul id="latest-news-list">
+<!-- Latest news items will be appended here -->
+</ul>
+</div>
+</section>
+<script>
+  async function loadLatestPosts() {
+    try {
+      const response = await fetch('news/index.xml'); // Fetch the RSS feed
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const xmlText = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+
+      // Select the first three items from the RSS feed
+      const latestItems = xmlDoc.querySelectorAll("item");
+      const latestNewsList = document.getElementById('latest-news-list');
+
+      // Loop through the first three items and add them to the list
+      latestItems.forEach((item, index) => {
+        if (index < 3) { // Only process the first three items
+          const title = item.querySelector("title").textContent;
+          const pubDate = item.querySelector("pubDate").textContent;
+          const link = item.querySelector("link").textContent;
+
+          // Create a new list item with a clickable title and formatted date
+          const listItem = document.createElement('li');
+          const titleLink = document.createElement('a');
+          titleLink.href = link;
+          titleLink.target = "_blank"; // Open link in a new tab
+          titleLink.innerText = title;
+
+          const dateText = document.createElement('p');
+          dateText.innerText = new Date(pubDate).toLocaleDateString();
+          dateText.style.margin = "0"; // Optional: style to remove extra margin
+
+          listItem.appendChild(titleLink);
+          listItem.appendChild(dateText);
+          latestNewsList.appendChild(listItem);
+        }
+      });
+    } catch (error) {
+      console.error("Error loading latest news:", error);
+      const errorMessage = document.createElement('li');
+      errorMessage.innerText = "Kunne ikke laste nyheter";
+      document.getElementById('latest-news-list').appendChild(errorMessage);
+    }
+  }
+
+  loadLatestPosts();
+</script>
 
 
 
