@@ -13,9 +13,7 @@ resources:
   - images/ssb_logo.svg
   - images/dapla-long.svg
 ---
-
 ::: {.hero-banner}
-
 
 ::: {.content-block}
 
@@ -40,9 +38,8 @@ resources:
 
 ::: {.hero-animation}
 
-
 <div class="cube">
-  <div class="face left"><img  src="images/ssb_logo.svg" alt="ssb"/></div>
+  <div class="face left"><img src="images/ssb_logo.svg" alt="ssb"/></div>
   <div class="face front"><img src="images/dapla-long.svg" alt="dapla"/></div> 
   <div class="face right"><img src="images/ssb_logo.svg" alt="ssb"/></div>
   <div class="face back"><img src="images/dapla-long.svg" alt="dapla"/></div>
@@ -54,13 +51,10 @@ resources:
 
 :::
 
-
 ::: {.hello-quarto .alt-background}
 ::: {.content-block}
 
-
-# Velkommen   
-
+# Velkommen
 
 Dapla-manualen tar sikte på å gi SSB-ansatte mulighet til å ta i bruk grunnleggende funksjonalitet på Dapla uten hjelp fra *eksperter*. Den skal hjelpe statistikere, forskere og utviklere med å finne relevant informasjon på en enkel måte. Manualen er bygget opp med en del for [statistikere/forskere](./statistikkere/index.qmd), og en del for [IT-utviklere](./utviklere/lenker.qmd). I tillegg har vi en [blogg](./blog/index.qmd) der alle i SSB kan bidra med erfaringer, tanker og triks som kan være nyttig i overgangen til en ny plattform.
 
@@ -69,11 +63,9 @@ Alle ansatte i SSB kan bidra til denne manualen ved å følge [instruksjonene he
 
 ::: {.grid}
 
-
 :::
 :::
 :::
-
 
 ::: {.content-block}
 ::: {.features}
@@ -143,3 +135,60 @@ Følg beste-praksis for koding i SSB med vårt interne verktøy ssb-project.
 :::
 :::
 
+:::{.sidebar-latest-news}
+### Siste nyheter:
+
+<div id="latest-news-box">
+  <ul id="latest-news-list">
+    <!-- Latest news items will be appended here -->
+  </ul>
+</div>
+:::
+
+<script>
+  async function loadLatestPosts() {
+    try {
+      const response = await fetch('news/index.xml'); // Fetch the RSS feed
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const xmlText = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+
+      // Select the first three items from the RSS feed
+      const latestItems = xmlDoc.querySelectorAll("item");
+      const latestNewsList = document.getElementById('latest-news-list');
+
+      // Loop through the first three items and add them to the list
+      latestItems.forEach((item, index) => {
+        if (index < 3) { // Only process the first three items
+          const title = item.querySelector("title").textContent;
+          const pubDate = item.querySelector("pubDate").textContent;
+          const link = item.querySelector("link").textContent;
+
+          // Create a new list item with a clickable title and formatted date
+          const listItem = document.createElement('li');
+          const titleLink = document.createElement('a');
+          titleLink.href = link;
+          titleLink.target = "_blank"; // Open link in a new tab
+          titleLink.innerText = title;
+
+          const dateText = document.createElement('p');
+          dateText.innerText = new Date(pubDate).toLocaleDateString();
+          dateText.style.margin = "0"; // Optional: style to remove extra margin
+
+          listItem.appendChild(titleLink);
+          listItem.appendChild(dateText);
+          latestNewsList.appendChild(listItem);
+        }
+      });
+    } catch (error) {
+      console.error("Error loading latest news:", error);
+      const errorMessage = document.createElement('li');
+      errorMessage.innerText = "Kunne ikke laste nyheter";
+      document.getElementById('latest-news-list').appendChild(errorMessage);
+    }
+  }
+
+  loadLatestPosts();
+</script>
