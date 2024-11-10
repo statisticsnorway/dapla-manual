@@ -1,5 +1,6 @@
 ---
 title: Vscode-python
+date-modified: last-modified
 ---
 
 ![](../images/dapla-lab-vscode-service.png){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
@@ -19,43 +20,51 @@ Før man starter **Vscode-python** bør man ha lest [kapitlet om Dapla Lab](./da
 
 ## Konfigurasjon
 
-Før man åpner en tjeneste kan man konfigurere hvor mye ressurser man ønsker, hvilket team man skal representere, om et GitHub-repo skal klones ved oppstart, og mange andre ting. Valgene man gjør kan også lagres slik at man å slipper å gjøre samme jobb senere. @fig-dapla-lab-konf-resources viser første fane i tjenestekonfigurasjonen for Vscode-python.
+Før man åpner en tjeneste kan man konfigurere hvor mye ressurser man ønsker, hvilket team man skal representere, om et GitHub-repo skal klones ved oppstart, og mange andre ting. Valgene man gjør kan også lagres slik at man å slipper å gjøre samme jobb senere. @fig-dapla-lab-vscode-konf-resources viser første fane i tjenestekonfigurasjonen for Vscode-python.
 
-![Detaljert tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-konf-resources.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-resources}
+![Detaljert tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-vscode-konf-resources.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-vscode-konf-resources}
 
-### Service
+### Tjeneste
 
-I fanen **Service** kan man velge hvilke **PullPolicy** som skal gjelde ved oppstart av, samt **Version** av tjenesten. *PullPolicy* trenger brukerne sjelden å endre på, mens *Version* lar brukeren velge hvilken versjon av tjenesten som skal benyttes. 
+Under fanen **Tjeneste** kan man velge hvilke **Versjon** av Vscode-python som skal startes^[Med versjon menes her hvilken Docker-container som skal bygges. Men i konfigurasjonen har vi forenklet valget ved å kun vise hvilken Python-versjon som skal gjelde]. Siden Vscode-python-tjenesten kun kommer installert med Python så er det her man velger hvilken versjon man ønsker. Man kan velge mellom alle tidligere tilbudte versjoner av Python. 
 
-Siden Jupyter-tjenesten kommer installert med både R- og Python så er det her man velger hvilke versjoner av disse man ønsker. Man kan velge mellom alle tidligere tilbudte kombinasjoner av R og Python. I @fig-dapla-lab-konf-resources ser vi av navnet `vscode-python:-py311` at tjenesten som default vil startes med versjon 3.11 av Python. Etter hvert som nye versjoner av Python kommer kan disse tilgjengeliggjøres i tjenesten, men brukeren kan velge å starte en eldre versjon av tjenesten og Python.
+I @fig-dapla-lab-vscode-konf-resources ser vi av navnet `py311-v53-2024.10.25` at tjenesten som default vil startes med versjon 3.11 av Python. Etter hvert som nye versjoner av Python kommer kan disse tilgjengeliggjøres som standard i tjenesten, men brukeren kan velge å starte en eldre versjon av tjenesten.
 
-### Buckets
+### Dapla
 
-Under **Buckets** kan man velge **Enable** for å få tilgang til data fra bøtter i tjenesten. I tillegg må man velge hvilket team og tilgangsgruppe man skal representere. 
+Under **Dapla**-fanen kan man velge **Aktiver** for å få tilgang til data fra bøtter i tjenesten. I tillegg må man da velge hvilket team og tilgangsgruppe man skal representere.
+
+Aktiveres **Bøtter som filsystem** så blir bøttene til teamet tilgjengeliggjort som et vanlig filsystem under filstien `/buckets/`.
+
+Under **Team og tilgangsgruppe** kan man velge hvilket team og tilgangsgruppe man skal representere i tjenesten. Man gjør dette ved å velge navnet på tilgangsgruppen, og denne er alltid på formen `<teamnavn>-<tilgangsgruppe>`. @fig-dapla-lab-konf-buckets viser at brukeren har valgt tilgangsgruppen *dapla-felles-developers*, dvs. at de representerer tilgangsgruppen *developers* for teamet *dapla-felles*. 
 
 ![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
 
-@fig-dapla-lab-konf-buckets viser at man kan velge blant alle **developers**-gruppene i alle team man er medlem i. Velger man f.eks. å representere *Dapla group* teama-developers så kan man få alle standard-bøtter (produkt, frasky, tilsky og egne delt-bøtter) for det teamet. Men man får ikke tilgang til bøtter som man har tilgang til gjennom andre team. 
+Under **Team og tilgangsgruppe** kan brukeren også velge å representere tilgangsgruppen *data-admins* for et team. I de tilfellene er det et krav om brukeren oppgir en skriftlig begrunnelse for hvorfor tilgangen er nødvendig. I tillegg må kan de maksimalt aktivere tilgangen i 8 timer. 
 
-Man kan også spesifisere andre bøtter som skal tilgjengliggjøres i tjenesten teamet og tilgangsgruppen har tilgang til. Typisk vil dette være andre sine delt-bøtter som teamet har fått tilgang til.
+@fig-dapla-lab-konf-buckets-data-admins viser en bruker som aktiverer sin *data-admins* tilgang for team *dapla-felles*. Hvis brukeren ikke oppgir en begrunnelse vil de få en feilmelding ved oppstart av tjenesten.  
 
-### Resources
+![Aktivere tilgang til kildedata for data-admins.](../images/dapla-lab-konf-buckets-data-admin.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets-data-admins}
 
-Under fanen **Resources** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite som trengs for å gjøre jobben du skal gjøre. 
+### Ressurser
 
-![Konfigurasjon av ressurser for Vscode-python-tjenesten i Dapla Lab](../images/dapla-lab-resources.png){fig-alt="Viser Resources-fanen i Vscode-python-konfigurasjonen i Dapla Lab." #fig-dapla-lab-resources}
+Under fanen **Ressurser** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite trengs for å gjøre jobben du skal gjøre. 
 
-### Persistence
+![Konfigurasjon av ressurser for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-resources.png){fig-alt="Viser Resources-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-resources}
 
-Som default får alle som starter en instans av Vscode-python-tjenesten en lokal disk på 10GB inne i tjenesten. Under *Persistence*-fanen kan man velge å øke størrelsen på disken eller ikke noe disk i det hele tatt. Siden lokal disk i tjenesten hovedsakelig skal benyttes til å lagre en lokal kopi av koden som lagres på GitHub mens man gjør endringer, så bør ikke størrelsen på disken være større enn nødvendig.@fig-dapla-lab-resources viser valgene som kan gjøres under Resource-fanen. 
+### Diskplass
+
+Som default får alle som starter en instans av Jupyter-tjenesten en lokal disk på **10GB** inne i tjenesten. Under *Diskplass*-fanen kan man velge å øke størrelsen på disken eller ikke noe disk i det hele tatt. Siden lokal disk i tjenesten hovedsakelig skal benyttes til å lagre en lokal kopi av koden som lagres på GitHub mens man gjør endringer, så bør ikke størrelsen på disken være større enn nødvendig. @fig-dapla-lab-persistence viser valgene som kan gjøres under Diskplass-fanen. 
 
 ![Konfigurasjon av lokal disk for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-persistence.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-persistence}
 
 ### Git
 
-Under fanen **Git** kan man konfigurere Git og GitHub slik at det blir lettere å jobbe med inne i tjenesten. Som default arves informasjonen som er lagret under [*Min konto*-*Git* i Dapla Lab](./dapla-lab.html#git). Informasjonen under tjenestekonfigurasjonen blir tilgjengeliggjort som miljøvariabler i tjenesten. Informasjonen blir også lagt i `$HOME/.netrc` slik at man kan benytte ikke trenger å gjøre noe mer for å jobbe mot GitHub fra tjenesten.  
+Under fanen **Git** kan man konfigurere Git og GitHub slik at det blir lettere å jobbe med inne i tjenesten. Som standard arves informasjonen som er lagret under [*Min konto*-*Git* i Dapla Lab](./dapla-lab.html#git). Informasjonen under tjenestekonfigurasjonen blir tilgjengeliggjort som miljøvariabler i tjenesten. Informasjonen blir også lagt i `$HOME/.netrc` slik at man kan benytte ikke trenger å gjøre noe mer for å jobbe mot GitHub fra tjenesten.  
 
 ![Konfigurasjon av Git for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-konf-git.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-git}
+
+@fig-dapla-lab-konf-git viser at brukeren som standard får aktivert **Aktiver Git**. Dette innebærer at Git-brukernavn, Git e-post og GitHub-token arves fra brukerkonfigurasjonen. I tillegg så opprettes SSBs standard Git-konfigurasjon i `~/.gitconfig`. 
 
 ## Datatilgang
 
