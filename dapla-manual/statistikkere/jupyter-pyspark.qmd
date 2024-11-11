@@ -165,6 +165,11 @@ spark = SparkSession.builder \
     .config("spark.executor.memory", "4g") \
     .getOrCreate()
 ```
+
+Hvis du ikke overstyrer konfigurasjonen vil innhold i miljøvariabelen **PYSPARK_LOCAL_SUBMIT_ARGS** gjelde.
+```sh
+--master local[*] --driver-cores 1 --driver-memory 2g --executor-memory 2g  --conf spark.driver.maxResultSize=2g --conf spark.executor.pyspark.memory=1g pyspark-shell
+```
 ## Datatilgang
 
 Hvis man har valgt å tilgjengeliggjøre data fra et team sitt bøtter i tjenesten, så kan man inspisere dataene fra en terminal inne i tjenesten: 
