@@ -595,6 +595,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#konfigurering-av-pyspark-ressurser-i-notebook" id="toc-konfigurering-av-pyspark-ressurser-i-notebook" class="nav-link" data-scroll-target="#konfigurering-av-pyspark-ressurser-i-notebook">Konfigurering av PySpark-ressurser i Notebook</a></li>
   <li><a href="#tilgjengelige-jar-filer-og-bruk-i-pyspark" id="toc-tilgjengelige-jar-filer-og-bruk-i-pyspark" class="nav-link" data-scroll-target="#tilgjengelige-jar-filer-og-bruk-i-pyspark">Tilgjengelige JAR-filer og bruk i PySpark</a></li>
+  <li><a href="#hvordan-spark-lokalt-fungerer-og-arbeidsfordeling-på-kjerner" id="toc-hvordan-spark-lokalt-fungerer-og-arbeidsfordeling-på-kjerner" class="nav-link" data-scroll-target="#hvordan-spark-lokalt-fungerer-og-arbeidsfordeling-på-kjerner">Hvordan Spark Lokalt Fungerer og Arbeidsfordeling på Kjerner</a>
+  <ul class="collapse">
+  <li><a href="#kjøring-i-lokal-modus" id="toc-kjøring-i-lokal-modus" class="nav-link" data-scroll-target="#kjøring-i-lokal-modus">Kjøring i Lokal Modus</a></li>
+  </ul></li>
   <li><a href="#datatilgang" id="toc-datatilgang" class="nav-link" data-scroll-target="#datatilgang">Datatilgang</a></li>
   <li><a href="#installere-pakker" id="toc-installere-pakker" class="nav-link" data-scroll-target="#installere-pakker">Installere pakker</a></li>
   <li><a href="#slette-tjenesten" id="toc-slette-tjenesten" class="nav-link" data-scroll-target="#slette-tjenesten">Slette tjenesten</a></li>
@@ -741,7 +745,7 @@ Figur&nbsp;6: Konfigurasjon av Git for Jupyter-pyspark i Dapla Lab
 <li><strong>Start Jupyter-pyspark</strong>:
 <ul>
 <li>Logg inn på <strong>Dapla Lab</strong> og start <strong>Jupyter-pyspark</strong>-tjenesten.</li>
-<li>Når tjenesten er oppe, åpner du en ny eller eksisterende Notebook for å konfigurere PySpark.</li>
+<li>Når tjenesten er oppe, åpner du en ny eller eksisterende Spark (local) Notebook for å konfigurere PySpark.</li>
 </ul></li>
 <li><strong>Angi spesifikke PySpark-konfigurasjoner i Notebook</strong>:
 <ul>
@@ -751,9 +755,9 @@ Figur&nbsp;6: Konfigurasjon av Git for Jupyter-pyspark i Dapla Lab
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Start SparkSession med ønskede konfigurasjoner</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession.builder <span class="op">\</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    .appName(<span class="st">"Jupyter-pyspark-konfig"</span>) <span class="op">\</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.driver.memory"</span>, <span class="st">"10g"</span>) <span class="op">\</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.executor.memory"</span>, <span class="st">"4g"</span>) <span class="op">\</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.executor.cores"</span>, <span class="st">"2"</span>) <span class="op">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    .master(<span class="st">"local[*]"</span>) <span class="op">\</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.driver.memory"</span>, <span class="st">"10g"</span>) <span class="op">\</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.executor.memory"</span>, <span class="st">"4g"</span>) <span class="op">\</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    .getOrCreate()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Juster verdiene etter behov for å sikre optimal ytelse for oppgavene du kjører i Notebook.</p></li>
 </ul></li>
@@ -802,6 +806,25 @@ Figur&nbsp;6: Konfigurasjon av Git for Jupyter-pyspark i Dapla Lab
 </ul></li>
 </ol>
 <p>Med disse instruksjonene kan brukerne effektivt konfigurere Jupyter-PySpark til å jobbe med eksterne datakilder og forskjellige dataformater i sitt PySpark-miljø.</p>
+</section>
+<section id="hvordan-spark-lokalt-fungerer-og-arbeidsfordeling-på-kjerner" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-spark-lokalt-fungerer-og-arbeidsfordeling-på-kjerner">Hvordan Spark Lokalt Fungerer og Arbeidsfordeling på Kjerner</h2>
+<p>Når Spark kjøres lokalt, starter det en <strong>SparkSession</strong> som kjører på en enkelt node (tjenesten din) uten å involvere en distribuert klynge. Lokalt i Spark kan du kontrollere ressursbruken og fordele arbeidsmengden på tilgjengelige CPU-kjerner for å optimalisere ytelsen.</p>
+<section id="kjøring-i-lokal-modus" class="level3">
+<h3 class="anchored" data-anchor-id="kjøring-i-lokal-modus">Kjøring i Lokal Modus</h3>
+<p>Når Spark konfigureres til å kjøre i lokal modus, spesifiseres dette med <code>"local[N]"</code>, der <code>N</code> representerer antall kjerner som Spark skal bruke. For eksempel: - <code>"local[*]"</code>: Bruk alle tilgjengelige kjerner på maskinen. - <code>"local[2]"</code>: Bruk 2 kjerner, uavhengig av hvor mange som er tilgjengelige.</p>
+<p>Eksempel på konfigurasjon:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession.builder <span class="op">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    .appName(<span class="st">"Lokal Spark"</span>) <span class="op">\</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    .master(<span class="st">"local[*]"</span>) \  <span class="co"># Bruker alle tilgjengelige kjerner</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.driver.memory"</span>, <span class="st">"10g"</span>) <span class="op">\</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    .config(<span class="st">"spark.executor.memory"</span>, <span class="st">"4g"</span>) <span class="op">\</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    .getOrCreate()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Hvis du ikke overstyrer konfigurasjonen vil innhold i miljøvariabelen <strong>PYSPARK_LOCAL_SUBMIT_ARGS</strong> gjelde.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">--master</span> local<span class="pp">[</span><span class="ss">*</span><span class="pp">]</span> <span class="at">--driver-cores</span> 1 <span class="at">--driver-memory</span> 2g <span class="at">--executor-memory</span> 2g  <span class="at">--conf</span> spark.driver.maxResultSize=2g <span class="at">--conf</span> spark.executor.pyspark.memory=1g pyspark-shell</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 </section>
 <section id="datatilgang" class="level2">
 <h2 class="anchored" data-anchor-id="datatilgang">Datatilgang</h2>
