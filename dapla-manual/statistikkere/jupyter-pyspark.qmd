@@ -73,7 +73,7 @@ For å konfigurere PySpark-ressurser etter at Jupyter-pyspark har startet, kan d
 
 1. **Start Jupyter-pyspark**:
    - Logg inn på **Dapla Lab** og start **Jupyter-pyspark**-tjenesten.
-   - Når tjenesten er oppe, åpner du en ny eller eksisterende Notebook for å konfigurere PySpark.
+   - Når tjenesten er oppe, åpner du en ny eller eksisterende Spark (local) Notebook for å konfigurere PySpark.
 
 2. **Angi spesifikke PySpark-konfigurasjoner i Notebook**:
    - I din Notebook, inkluder følgende Python-kode for å konfigurere CPU, minne og andre PySpark-ressurser:
@@ -83,9 +83,9 @@ For å konfigurere PySpark-ressurser etter at Jupyter-pyspark har startet, kan d
      # Start SparkSession med ønskede konfigurasjoner
      spark = SparkSession.builder \
          .appName("Jupyter-pyspark-konfig") \
+         .master("local[*]") \
          .config("spark.driver.memory", "10g") \
          .config("spark.executor.memory", "4g") \
-         .config("spark.executor.cores", "2") \
          .getOrCreate()
      ```
 
@@ -144,6 +144,32 @@ I `/jupyter/lib`-mappen i Jupyter-pyspark-miljøet er flere nyttige JAR-filer ti
 
 Med disse instruksjonene kan brukerne effektivt konfigurere Jupyter-PySpark til å jobbe med eksterne datakilder og forskjellige dataformater i sitt PySpark-miljø.
 
+## Hvordan Spark Lokalt Fungerer og Arbeidsfordeling på Kjerner
+
+Når Spark kjøres lokalt, starter det en **SparkSession** som kjører på en enkelt node (tjenesten din) uten å involvere en distribuert klynge. Lokalt i Spark kan du kontrollere ressursbruken og fordele arbeidsmengden på tilgjengelige CPU-kjerner for å optimalisere ytelsen.
+
+### Kjøring i Lokal Modus
+
+Når Spark konfigureres til å kjøre i lokal modus, spesifiseres dette med `"local[N]"`, der `N` representerer antall kjerner som Spark skal bruke. For eksempel:
+- `"local[*]"`: Bruk alle tilgjengelige kjerner på maskinen.
+- `"local[2]"`: Bruk 2 kjerner, uavhengig av hvor mange som er tilgjengelige.
+
+Eksempel på konfigurasjon:
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("Lokal Spark") \
+    .master("local[*]") \  # Bruker alle tilgjengelige kjerner
+    .config("spark.driver.memory", "10g") \
+    .config("spark.executor.memory", "4g") \
+    .getOrCreate()
+```
+
+Hvis du ikke overstyrer konfigurasjonen vil innhold i miljøvariabelen **PYSPARK_LOCAL_SUBMIT_ARGS** gjelde.
+```sh
+--master local[*] --driver-cores 1 --driver-memory 2g --executor-memory 2g  --conf spark.driver.maxResultSize=2g --conf spark.executor.pyspark.memory=1g pyspark-shell
+```
 ## Datatilgang
 
 Hvis man har valgt å tilgjengeliggjøre data fra et team sitt bøtter i tjenesten, så kan man inspisere dataene fra en terminal inne i tjenesten: 
