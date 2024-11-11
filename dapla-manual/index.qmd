@@ -148,40 +148,41 @@ Følg beste-praksis for koding i SSB med vårt interne verktøy ssb-project.
 <script>
   async function loadLatestPosts() {
     try {
-      const response = await fetch('news/index.xml'); // Fetch the RSS feed
+      const response = await fetch('news/index.xml');
       if (!response.ok) throw new Error('Network response was not ok');
 
       const xmlText = await response.text();
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
 
-      // Select the first three items from the RSS feed
       const latestItems = xmlDoc.querySelectorAll("item");
       const latestNewsList = document.getElementById('latest-news-list');
 
-      // Loop through the first three items and add them to the list
       latestItems.forEach((item, index) => {
-        if (index < 3) { // Only process the first three items
+        if (index < 3) { 
           const title = item.querySelector("title").textContent;
           const pubDate = item.querySelector("pubDate").textContent;
           const link = item.querySelector("link").textContent;
 
-          // Create a new list item with a clickable title and formatted date
           const listItem = document.createElement('li');
           const titleLink = document.createElement('a');
           titleLink.href = link;
-          titleLink.target = "_blank"; // Open link in a new tab
+          titleLink.target = "_blank";
           titleLink.innerText = title;
 
           const dateText = document.createElement('p');
           dateText.innerText = new Date(pubDate).toLocaleDateString();
-          dateText.style.margin = "0"; // Optional: style to remove extra margin
+          dateText.style.margin = "0";
 
           listItem.appendChild(titleLink);
           listItem.appendChild(dateText);
           latestNewsList.appendChild(listItem);
         }
       });
+
+      // Calculate height dynamically based on list items
+      const sidebar = document.querySelector('.sidebar-latest-news');
+      sidebar.style.height = `${latestNewsList.scrollHeight + 40}px`; // Add padding
     } catch (error) {
       console.error("Error loading latest news:", error);
       const errorMessage = document.createElement('li');
