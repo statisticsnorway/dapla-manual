@@ -64,6 +64,7 @@ spec:
   owner: microdata-developers
   domain: formidling
 ```
+
 La oss se på feltene og hva de betyr:
 - **apiVersion**: spesifiserer backstage sitt dokumentformat
 - **kind**: Vi ønsker å definere et `System`
@@ -72,7 +73,7 @@ La oss se på feltene og hva de betyr:
 - **title:** Menneskeleselig navn på Systemet
 - **description:** En kort beskrivelse av systemet
 - **links:** En liste med relevante lenker for systemet
-- **tags:** En ustrukturert liste med emnemerker. [Se retningslinjene for tags i SSB](...)
+- **tags:** En ustrukturert liste med emnemerker. [Se retningslinjene for tags i SSB](#Retningslinjer-for-tags)
 #### Spec:
 - **owner:** Gruppen som eier systemet
 - **domain:** Domenetilhørligheten til systemet 
@@ -83,6 +84,7 @@ Etter noen minutter, kan vi navigere til backstage websiden og se at systemet v�
 I microdata teamet publiserer vi et python bibliotek til PyPI. Denne pakken brukes av 
 andre komponenter i systemet. La oss gå til github repoet til komponenten `statisticsnorway/microdata-tools`,
 markere repoet med `backstage` som topic, og legge til en `backstage.yaml` i roten av repoet:
+
 ```yaml
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -105,6 +107,7 @@ spec:
   dependencyOf:
     - component:microdata-job-service
 ```
+
 Mange av feltene ligner veldig for å dokumentere en komponent. Dette er en komponent av type `library`.
 La oss se på hva feltene betyr:
 #### Metadata
@@ -112,10 +115,10 @@ La oss se på hva feltene betyr:
 - **title:** Menneskeleselig navn på komponenten
 - **description:** En kort beskrivelse av komponenten
 - **annotations:** Lokasjonen til komponenten på github
-- **tags:** En ustrukturert liste med emnemerker. [Følg retningslinjene for tags i SSB](...)
+- **tags:** En ustrukturert liste med emnemerker. [Følg retningslinjene for tags i SSB](#Retningslinjer-for-tags)
 
 #### Spec:
-- **type:** Hva slags type komponent dette er [Se retningslinjene for type i SSB](...)
+- **type:** Hva slags type komponent dette er [Se retningslinjene for type i SSB](#Retningslinjer-for-typer)
 - **system:** Systemet denne komponenten er en del av
 - **owner:** Gruppen som eier kompoonenten
 - **lifecycle:** Må være satt til en av:
@@ -135,7 +138,8 @@ og en api definisjon for å beskrive grensesnittet. Vi kan beskrive flere entite
 ved å putter tre bindestreker på en linje mellom definisjonene.
 La oss gå til github repoet til komponenten `statisticsnorway/microdata-job-service`,
 markere repoet med `backstage` som topic, og legge til en `backstage.yaml` i roten av repoet:
-```
+
+```yaml
 apiVersion: backstage.io/v1alpha1
 kind: Component
 La oss ta for oss et fiktivt microdata-system for å forklare hvordan man dokumenterer alle de forskjellige entitetene.
@@ -174,6 +178,7 @@ spec:
   definition:
     $text: ./doc/openapi.yaml
 ```
+
 Her er mange av feltene for `Component` delen like som i sist eksempel, med unntak av:
 - **providesApis:** Peker på grensesnitt ved en, eller flere, `API` entiteter denne komponenten eksponerer
 - **dependsOn:** Peker på en eller flere komponenter og ressurser denne tjenesten er avhengig av
@@ -188,7 +193,7 @@ For API spesifikasjonen som finnes under `---`:
 - **description:** En kort beskrivelse av APIet
 
 #### Spec:
-- **type:** Hva slags type grensesnitt dette APIet er. [Se retningslinjene for type i SSB](...) 
+- **type:** Hva slags type grensesnitt dette APIet er. [Se retningslinjene for type i SSB](#Retningslinjer-for-typer) 
 - **system:** Systemet dette APIet er en del av
 - **owner:** Gruppen som eier APIet
 - **lifecycle:** Må være satt til en av:
@@ -233,7 +238,7 @@ spec:
 - **description:** En kort beskrivelse av ressursen
 
 #### Spec:
-- **type:** Hva slags type ressurs dette er. [Se retningslinjene for type i SSB](...) 
+- **type:** Hva slags type ressurs dette er. [Se retningslinjene for type i SSB](#Retningslinjer-for-typer) 
 - **system:** Systemet denne ressursen er en del av
 - **owner:** Gruppen som eier ressursen
 - **lifecycle:** Må være satt til en av:
