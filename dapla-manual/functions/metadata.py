@@ -1,7 +1,8 @@
 import subprocess
 from datetime import datetime
+import os
 
-def get_last_modified(file_path, suppress_author=False):
+def get_last_modified(file_path, suppress_author=False, folder = 'statistikkere'):
     """
     Returns the author and date of the last modified commit.
     If the current date matches the specified implementation date,
@@ -10,8 +11,9 @@ def get_last_modified(file_path, suppress_author=False):
     
     Args:
         file_path (str): Name of the given file, including its path. 
-                         Eg. "statistikkere/somefile.qmd"
+                         Eg. "navnestandard.qmd"
         suppress_author (bool): If True, omits the author name in the output.
+        folder (bool): Defaults to 'statistikkere' because environemnt is here
 
     Returns:
         str: A formatted string with the author and date of the relevant commit,
@@ -22,16 +24,18 @@ def get_last_modified(file_path, suppress_author=False):
 
     try:
         # Check if the file is tracked by Git
-        subprocess.check_output(["git", "ls-files", "--error-unmatch", file_path], stderr=subprocess.DEVNULL)
+        base_directory = os.path.abspath(os.path.join(os.getcwd(), ".."))
+        target_directory = os.path.join(base_directory, folder)
+        subprocess.check_output(["git", "ls-files", "--error-unmatch", file_path], stderr=subprocess.DEVNULL, cwd=target_directory)
         
         # Get the last two commits for the specified file
         last_two_commits = subprocess.check_output(
             ["git", "log", "-2", "--pretty=format:%an|%ad", "--date=short", file_path],
-            text=True, encoding="utf-8"
+            text=True, encoding="utf-8", cwd = target_directory
         ).strip().split('\n')
         
         if not last_two_commits:
-            return f"No commit history found for '{file_path}'."
+            return ""
         
         # Default to the most recent commit
         commit_info = last_two_commits[0]
@@ -51,4 +55,4 @@ def get_last_modified(file_path, suppress_author=False):
             return f"Sist endret: {date} av {author}"
     
     except subprocess.CalledProcessError:
-        return f"Error: The file '{file_path}' is not tracked by Git or does not exist in the repository."
+        return ""
