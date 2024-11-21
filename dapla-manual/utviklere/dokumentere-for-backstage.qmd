@@ -1,0 +1,350 @@
+# Hvordan dokumentere systemer for backstage?
+
+Backstage er en utviklerportal utviklet hos spotify. Vi drifter vår egen instans på NAIS og du kan nå den
+fra VPN, eller med naisdevice, på backstage.intern.ssb.no. Tech lead gruppen vedlikeholder techradaren vår der, og
+det er bestemt at alle utviklingsteam hos SSB skal dokumentere sine systemer i backstage sin software katalog.
+
+Å dokumentere et system i backstage er ganske enkelt. Alt du trenger er kunnskap om formatet, så kommer du
+fort igang. Dokumentasjonen skal ligge så nærme koden som mulig så den er enkel å vedlikeholde for utviklerne.
+
+I dette dokumentet går vi gjennom hvordan backstage fungerer ved å først bli kjent med terminologien. Deretter
+bruker vi et fiktivt microdata-system som eksempel for hvordan vi dokumenterer de forskjellige entitetene. I
+bunnen av dokumentet finner du også SSB-spesifikke retningslinjer for backstage dokumenteringen.
+
+Om du har noen spørsmål som ikke blir besvart i løpet av dette dokumentet, kontakt gjerne techlead gruppen
+på slack: #tech-lead-forum.
+
+## Beskrivelse av entiteter i backstage
+
+For å dokumentere våre systemer i backstage må vi være kjent med
+[entitietene i backstage sin system modell](https://backstage.io/docs/features/software-catalog/system-model).
+Her er en kort beskrivelse av hvordan vi bruker disse i SSB:
+
+- **User:** Er en enkelt ansatt som hentet fra vår EntraID
+- **Group:** Er et team som hentet fra vår EntraID f.eks.: `microdata-developers`
+- **Domain:** Grupperer systemene under domener. Vi har valgt å binde domenene til emnene i [veikartet](https://ssbno.sharepoint.com/sites/Moderniseringogutvikling/SitePages/Veikart-for-utvikling%20i%20SSB.aspx):
+  - formidling
+  - dapla
+  - fellesfunksjoner
+- **System**: En samling software og ressurser som sammen utfører en funksjon
+- **Component**: Et stykke software i et system
+- **API**: Et grensesnitt for kommunikasjon mellom komponenter
+- **Resource**: Et stykke fysisk eller virituell infrastruktur for som trengs for å operere en komponent
+
+## Dokumentasjon
+
+For å dokumentere entiteter (systemer, komponenter, api'er og ressurser) må vi til statisticsnorway sin github.
+Backstage går nemlig gjennom alle repoene vi eier jevnlig og sjekker om nye backstage-definisjoner har blitt postet.
+Alt man trenger for at backstage skal legge merke til definisjonene dine er å:
+
+- Sette `backstage` som topic i repoet. Du gjør dette ved å trykke på tannhjulet ved siden av `About` på repo siden.
+- Legge en `backstage.yaml` fil i roten av repoet med en gyldig backstage definisjon
+
+La oss ta for oss et fiktivt microdata-system for å forklare hvordan man dokumenterer alle de forskjellige entitetene.
+
+### Dokumentere et system
+
+Som sagt tidligere er `users` og `groups` hentet fra EntraID, og domenene er allerede definert sentralt.
+Når vi starter å dokumentere systemet vårt er derfor det første vi må starte med systemet selv.
+
+Ettersom definisjonen av systemet selv ikke hører hjemme i noe spesielt repo, har vi valgt å lage et repo
+`statisticsnorway/microdata-docs` der vi lagrer dokumentasjon som tilhører microdatasystemet som helhet.
+Om vi tagger dette repoet med `backstage`-taggen, kan vi definere systemet vårt i roten av repoet med en `backstage.yaml` slik:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: microdata
+  title: microdata
+  description: Tilgang på registerdata uten søknadsprosess
+  links:
+    - title: microdata.no
+      url: https://microdata.no
+    - title: data-administrasjon
+      url: https://microdata.no/datastore-admin
+  tags:
+    - on-premises
+    - python
+    - typescript
+spec:
+  owner: microdata-developers
+  domain: formidling
+```
+
+La oss se på feltene og hva de betyr:
+
+- **apiVersion**: spesifiserer backstage sitt dokumentformat
+- **kind**: Vi ønsker å definere et `System`
+
+#### Metadata
+
+- **name:** Navnet på systemet i kebab-case
+- **title:** Menneskeleselig navn på Systemet
+- **description:** En kort beskrivelse av systemet
+- **links:** En liste med relevante lenker for systemet
+- **tags:** En ustrukturert liste med emnemerker. [Se retningslinjene for tags i SSB](#retningslinjer-for-tags)
+
+#### Spec
+
+- **owner:** Gruppen som eier systemet
+- **domain:** Domenetilhørligheten til systemet
+
+Etter noen minutter, kan vi navigere til backstage websiden og se at systemet vår har dukket opp.
+
+### Dokumentere komponenter
+
+I microdata teamet publiserer vi et python bibliotek til PyPI. Denne pakken brukes av
+andre komponenter i systemet. La oss gå til github repoet til komponenten `statisticsnorway/microdata-tools`,
+markere repoet med `backstage` som topic, og legge til en `backstage.yaml` i roten av repoet:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: microdata-tools
+  title: Microdata tools
+  description: |
+    Tools for packaging, encrypting and validating microdata datasets
+  annotations:
+    github.com/project-slug: statisticsnorway/microdata-tools
+  tags:
+    - python
+    - pyarrow
+    - pydantic
+spec:
+  type: library
+  system: microdata
+  owner: microdata-developers
+  lifecycle: production
+  dependencyOf:
+    - component:microdata-job-service
+```
+
+Mange av feltene ligner veldig for å dokumentere en komponent. Dette er en komponent av type `library`.
+La oss se på hva feltene betyr:
+
+#### Metadata
+
+- **name:** Navnet på komponenten i kebab-case
+- **title:** Menneskeleselig navn på komponenten
+- **description:** En kort beskrivelse av komponenten
+- **annotations:** Lokasjonen til komponenten på github
+- **tags:** En ustrukturert liste med emnemerker. [Følg retningslinjene for tags i SSB](#retningslinjer-for-tags)
+
+#### Spec
+
+- **type:** Hva slags type komponent dette er [Se retningslinjene for type i SSB](#retningslinjer-for-typer)
+- **system:** Systemet denne komponenten er en del av
+- **owner:** Gruppen som eier kompoonenten
+- **lifecycle:** Må være satt til en av:
+  - experimental: Om komponenten er under utvikling, men ikke blitt prodsatt
+  - production: Om komponenten er prodsatt og i drift
+  - deprecated: Om komponenten er markert for nedleggelse
+- **dependencyOf:** Her kan du spesifisere hvilke andre entiteter som er avhengige av denne komponenten.
+                    Det er viktig å vite at om det finnes noen som bruker dette biblioteket, og marker seg
+                    selv som en avhengig av denne, vil det fortsatt registreres av backstage selv om
+                    denne avhengigheten ikke er til stedet under `dependencyOf`-feltet her.
+
+### Dokumentere APIer
+
+Vi har et rest-api som kjører on-prem som vi kaller job-service. Job-service eksponerer
+et rest-api, og er avhengig av microdata-tools som avhengighet. Dette betyr at for å representere job-service
+må vi bruke to komponenter i backstage-modellen. En komponent for å beskrive tjenesten selv (type: `service`)
+og en api definisjon for å beskrive grensesnittet. Vi kan beskrive flere entiteter i samme `backstage.yaml`
+ved å putter tre bindestreker på en linje mellom definisjonene.
+La oss gå til github repoet til komponenten `statisticsnorway/microdata-job-service`,
+markere repoet med `backstage` som topic, og legge til en `backstage.yaml` i roten av repoet:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+La oss ta for oss et fiktivt microdata-system for å forklare hvordan man dokumenterer alle de forskjellige entitetene.
+metadata:
+  name: job-service
+  title:  Job service
+  description: |
+    Lookup service for jobs
+  tags:
+    - python
+    - flask
+    - pymongo
+  annotations:
+    github.com/project-slug: statisticsnorway/microdata-job-service
+spec:
+  type: service
+  system: microdata
+  owner: microdata-developers
+  lifecycle: production
+  providesApis:
+    - job-service-api
+  dependsOn:
+    - component:microdata-tools
+    - resource:job-db
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: job-service-api
+  description: Job service
+spec:
+  type: openapi
+  system: microdata
+  owner: microdata-developers
+  lifecycle: production
+  definition:
+    $text: ./doc/openapi.yaml
+```
+
+Her er mange av feltene for `Component` delen like som i sist eksempel, med unntak av:
+
+- **providesApis:** Peker på grensesnitt ved en, eller flere, `API` entiteter denne komponenten eksponerer
+- **dependsOn:** Peker på en eller flere komponenter og ressurser denne tjenesten er avhengig av
+
+Felter man kan ta i bruk som man ikke ser her er også:
+
+- **ConsumesApis:** Peker på grensesnitt ved en, eller flere, `API` entiteter denne komponenten konsumerer
+
+For API spesifikasjonen som finnes under `---`:
+
+#### Metadata
+
+- **name:** Navnet på APIet i kebab-case
+- **title:** Menneskeleselig navn på APIet
+- **description:** En kort beskrivelse av APIet
+
+#### Spec
+
+- **type:** Hva slags type grensesnitt dette APIet er. [Se retningslinjene for type i SSB](#retningslinjer-for-typer)
+- **system:** Systemet dette APIet er en del av
+- **owner:** Gruppen som eier APIet
+- **lifecycle:** Må være satt til en av:
+  - experimental: Om komponenten er under utvikling, men ikke blitt prodsatt
+  - production: Om komponenten er prodsatt og i drift
+  - deprecated: Om komponenten er markert for nedleggelse
+- **definition:** Om dette er et openapi kan det defineres med openapi formatet i en annen fil.
+                   Oppgi path til denne filen i samme repo med $text:
+
+Vi får nå se avhengigheter tydelig i grafene som backstage generer. Vi kan også undersøke API definisjonene
+i backstage websiden ved å gå til "definition" fanen i API ressursen vi har definert.
+
+### Dokumentere ressurser
+
+I microdata.no drifter vi også en mongodb som vi så over at job-service var avhengig av. Mongodb er en database-ressurs.
+Vi har et repo der vi bygger imaget til denne databasen, men her kunne du lagt ved ressursdefinisjonen sammen med applikasjonen
+eller i iac-repoet til teamen. Backstage definisjonen bør være så nærme den aktuelle koden som mulig, så tenk pragmatisk på
+det beste stedet å legge den.
+I dette tilfellet går vi til github repoet til ressursen `statisticsnorway/microdata-job-db`,
+markere repoet med `backstage` som topic, og legge til en `backstage.yaml` i roten av repoet:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: job-db
+  description: |
+    MongoDB that stores jobs and job information in the microdata platform
+  tags:
+    - mongodb
+  annotations:
+    github.com/project-slug: statisticsnorway/microdata-job-db
+spec:
+  type: database
+  owner: microdata-developers
+  lifecycle: production
+  system: microdata
+```
+
+#### Metadata
+
+- **name:** Navnet på ressursen i kebab-case
+- **title:** Menneskeleselig navn på ressursen
+- **description:** En kort beskrivelse av ressursen
+
+#### Spec
+
+- **type:** Hva slags type ressurs dette er. [Se retningslinjene for type i SSB](#retningslinjer-for-typer)
+- **system:** Systemet denne ressursen er en del av
+- **owner:** Gruppen som eier ressursen
+- **lifecycle:** Må være satt til en av:
+  - experimental: Om komponenten er under utvikling, men ikke blitt prodsatt
+  - production: Om komponenten er prodsatt og i drift
+  - deprecated: Om komponenten er markert for nedleggelse
+
+Da har vi dokumentert alle de forskjellige entitetene vi trenger i backstage. Det er viktig at vi opprettholder denne
+informasjonen for en bedre utvikleropplevelse i SSB. Om du har noen spørsmål angående denne guiden, eller lurer på noe
+angående backstage; ta kontakt med tech lead gruppen på slack under #tech-lead-forum.
+
+## Retningslinjer
+
+### Retningslinjer for typer
+
+For å forsikre søkbarhet og god kommunikasjon er det viktig at vi bruker samme
+språk for å beskrive systemene våre.
+Det er [anbefalt av backstage](https://backstage.io/docs/features/software-catalog/descriptor-format/#spectype-required)
+at organisasjonen tar stilling til bruk av type-feltet. Vi forsøker å holde mengden definisjoner
+til et minimum, og bruker samme terminologi som NAIS når vi har mulighet.
+Om du mener det mangler en type i listene  her, ta gjerne kontakt med techlead-teamet
+på slack for diskusjon, eller post en pull request med forslaget til denne dokumentasjonen.
+
+#### Komponenttyper
+
+For type på komponenter skal kun en av disse brukes:
+
+- service: For langtlevende tjenester
+- library: For biblioteker/pakker som eksponeres på maven/pypi/crates el.
+- job: For applikasjoner som er ment å kjøres på et skjema, one-shot eller på en trigger
+- website: For applikasjoner som skal eksponeres med browser
+
+#### API-typer
+
+For type på APIer skal kun en av disse typene brukes:
+
+- openapi: Dette gjør at api'et kan dokumenteres med openapi dokumentasjon
+
+#### Ressurstyper
+
+For type på ressurser skal kun en av disse brukes:
+
+- database: for alle databaser
+- bucket: for bøtter
+- queue: for meldingskøer som pub/sub og kafka
+
+### Retningslinjer for tags
+
+På samme måte ønsker vi at alle tagger sine systemer på en konsistent måte.
+
+#### Tagging av systemer
+
+Tags for et system skal BARE inneholde:
+
+- Hvor systemet kjører. f.eks.: on-premises, bip, nais
+- Programmeringsspråkene brukt i systemet f.eks.: python, kotlin, rust
+
+#### Tagging av komponenter
+
+Tags for komponenter skal BARE inneholde:
+
+- Programmeringsspråkene brukt i systemet f.eks.: python, kotlin, rust
+- Kjerneteknologier brukt i komponenten f.eks.: micronaut, flask, pyarrow
+
+#### Tagging av ressurser
+
+Tags for ressurser kan BARE inneholde:
+
+- Spesifisering av teknologi. ex.: postgresql, mongodb, pubsub
+
+### Validering
+
+Man kan validere at Backstage yaml filer er gyldige vha. følgende kommando:
+
+```shell
+npx @roadiehq/backstage-entity-validator backstage.yaml
+```
+
+
+## Lenker
+
+- [Backstage](https://backstage.io)
+- [Backstage Docs: The system model](https://backstage.io/docs/features/software-catalog/system-model)
+- [ADR for bruk av backstage i SBB](https://github.com/statisticsnorway/adr/blob/main/docs/0027-dokumentasjon-av-systemer.md)
