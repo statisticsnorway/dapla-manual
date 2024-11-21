@@ -1,4 +1,22 @@
-# Kartdata
+---
+title: Kartdata
+freeze: true
+execute:
+    echo: false
+    include: true
+---
+
+```{python}
+import sys
+import os
+sys.path.append("..")
+
+from functions.metadata import get_last_modified
+
+file_path = os.path.abspath('kartdata.qmd')
+print(get_last_modified(file_path, True))
+```
+
 Det er tilrettelagt kartdata i Dapla til analyse, statistikkproduksjon og visualisering. 
 Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på **ssb-kart-data-delt-prod**.
 De er lagret som parquetfiler i standardprojeksjonen vi bruker i SSB (UTM sone 33N) hvis ikke annet er angitt. 

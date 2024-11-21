@@ -1,6 +1,21 @@
 ---
 title: Just-in-Time Access
+freeze: true
+execute:
+    echo: false
+    include: true
 ---
+
+```{python}
+import sys
+import os
+sys.path.append("..")
+
+from functions.metadata import get_last_modified
+
+file_path = os.path.abspath('jit.qmd')
+print(get_last_modified(file_path, False))
+```
 
 
 *Just-in-Time Access* (JIT) er en applikasjon der [data-admins](./hva-er-dapla-team.html#data-admins) kan gi seg selv midlertidig tilgang til [kildedata](datatilstander.html#kildedata). På Dapla benyttes for dette for å unngå at data-admins har permanent tilgang til sensitive data, siden all kildedata er definert som sensitiv informasjon. *data-admins* må bruke JIT-applikasjonen for å gi seg selv korte, begrunnede tilganger til kildedata ved behov. Den som er ansvarlig for teamet kan monitere i hvilken grad teamets data-admins benytter seg av denne muligheten.

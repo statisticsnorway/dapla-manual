@@ -1,0 +1,24 @@
+digraph {
+	graph [bgcolor=transparent fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="" nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	subgraph cluster_Sensitivt {
+		graph [bgcolor=lightyellow fontname="Sans-Serif" fontsize=12 label=Sensitivt labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		efd338dd06784a6bb8c6f28185b48842 [label=Kildedata height=1.9 image="../images/cloud-storage-generic-icon.png" shape=none]
+	}
+	subgraph cluster_Skjermet {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Skjermet labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"04fb52d4f446433193c2c4ed19958394" [label="Annen data" height=1.9 image="../images/cloud-storage-generic-icon.png" shape=none]
+	}
+	f56aa2417a6f4d9196b2c5195cdc1bbf -> "04fb52d4f446433193c2c4ed19958394" [label="Alltid tilgang" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	subgraph cluster_developers {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=developers labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		f56aa2417a6f4d9196b2c5195cdc1bbf [label="" height=1.9 image="../images/multiple-users.png" shape=none]
+	}
+	"051ff6257f3843d9992d5ef016733d51" -> efd338dd06784a6bb8c6f28185b48842 [label="Mildertidig tilgang ved behov" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"051ff6257f3843d9992d5ef016733d51" -> "04fb52d4f446433193c2c4ed19958394" [label="Alltid tilgang" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	subgraph "cluster_data-admins" {
+		graph [bgcolor=lightyellow fontname="Sans-Serif" fontsize=12 label="data-admins" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"051ff6257f3843d9992d5ef016733d51" [label="" height=1.9 image="../images/multiple-users.png" shape=none]
+	}
+}

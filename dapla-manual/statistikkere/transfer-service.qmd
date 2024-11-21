@@ -1,8 +1,21 @@
 ---
 title: Transfer Service
 freeze: true
+execute:
+    echo: false
+    include: true
 ---
 
+```{python}
+import sys
+import os
+sys.path.append("..")
+
+from functions.metadata import get_last_modified
+
+file_path = os.path.abspath('transfer-service.qmd')
+print(get_last_modified(file_path, False))
+```
 [Storage Transfer Service](https://cloud.google.com/storage-transfer-service)^[I SSB kaller vi tjenesten for *Transfer Service*, men du kan oppleve at Google kaller den litt forskjellige ting. Den blir omtalt som *Storage Transfer Service* noen steder, mens i *Google Cloud Console* blir den omtalt som *Data Transfer* eller *Storage Transfer*] er en Google-tjeneste for å flytte data mellom lagringsområder. I SSB bruker vi hovedsakelig tjenesten til å: 
 
 1. Flytte data mellom et Dapla-team sine bøtter på Dapla og deres lagringsområde i prodsonen. 
