@@ -20,13 +20,12 @@ def get_last_modified(file_path, suppress_author=False, folder = 'statistikkere'
              or an error message if the file or commit log is not found.
     """
     # Define the implementation date for checking
-    implementation_date = datetime(2024, 11, 15).date()
+    implementation_date = datetime(2024, 11, 21).date()
 
     try:
         # Check if the file is tracked by Git
         base_directory = os.path.abspath(os.path.join(os.getcwd(), ".."))
         target_directory = os.path.join(base_directory, folder)
-        print(f"Target directory for Git commands: {target_directory}")
         subprocess.check_output(["git", "ls-files", "--error-unmatch", file_path], stderr=subprocess.DEVNULL, cwd=target_directory)
         
         # Get the last two commits for the specified file
