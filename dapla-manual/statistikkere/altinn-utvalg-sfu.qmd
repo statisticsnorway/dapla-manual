@@ -1,0 +1,113 @@
+---
+title: Utvalg fra SFU
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.15.2
+  kernelspec:
+    display_name: s821-datafangst-python
+    language: python
+    name: s821-datafangst-python
+---
+
+Denne siden beskriver hvordan du bruker [dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) for å hente utvalg og enhetsinformasjon fra SFU i Dapla-miljøet.
+
+Det finnes fortsatt avhengigheter til bakkesystemene for å kunne kjøre et fullstendig produksjonsløp på Dapla. SU-V har laget integrasjoner mellom bakke- og skyløsninger der det er behov for dette. Administrasjon av utvalg og enheter skjer fortsatt fra SFU på bakke.
+
+## Forutsetninger
+
+::: {.callout-important}
+## Tilgang til bakkesystemer
+
+For å kunne hente enhetsinformasjon fra SFU må du ha tilgang til delregisteret i riktig miljø (DB1T/DB1P).
+:::
+
+## Kodeeksempler
+
+Eksemplene viser hvordan du henter utvalg og enhetsinformasjon fra SFU. 
+
+### Hente utvalg fra SFU
+
+For å hente utvalg fra SFU, bruk metoden `get_utvalg_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer for utvalget. Dersom utvalget er delt inn i puljer kan du oppgi pulje som parameter.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+response = client.get_utvalg_from_sfu(
+    delreg_nr=49430224,
+    ra_nummer='RA-0666A3',
+    pulje='2'
+)
+
+print(json.dumps(response, indent=4))
+```
+
+### Hente enhetsinformasjon fra SFU
+
+For å hente enhetsinformajon fra SFU, bruk metoden `get_enhet_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og organisajonsnummer.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+response = client.get_enhet_from_sfu(
+    delreg_nr=49430224,
+    orgnr='123456789' 
+)
+
+print(json.dumps(response, indent=4))
+```
+### Eksempel på output
+
+Resultatet returneres i en json struktur
+
+```json
+{
+    "delreg_nr": 49430224,
+    "ident_nr": "A3TF0019",
+    "orgnr": "123456789",
+    "enhets_type": "FRTK",
+    "foretak": "A3TF0019",
+    "orgnr_foretak": "123456789",
+    "flv": "0",
+    "navn1": "MITT REGNSKAP",
+    "navn2": null,
+    "navn3": null,
+    "f_adresse1": "Testvegen 19",
+    "f_adresse2": null,
+    "f_adresse3": null,
+    "f_postnr": "0019",
+    "f_poststed": "OSLO",
+    "maalform": null,
+    "kontaktperson": "OLA NORDMANN",
+    "kont_telefon": "12121212",
+    "kont_mobiltlf": null,
+    "kont_epost": null,
+    "h_var1_n": null,
+    "h_var2_n": null,
+    "h_var3_n": null,
+    "h_var1_a": null,
+    "h_var2_a": null,
+    "h_var3_a": null,
+    "utvalgsstatus": null,
+    "pulje_nr": 2,
+    "vedtak_tvmulkt": "N",
+    "sendt_si": "N",
+    "status": null,
+    "org_form": null,
+    "sn07_1": "17.120",
+    "str_kode": null,
+    "viktig_enhet": null,
+    "kommentar_int": null,
+    "kommentar_ekst": null,
+    "test_pulje": null,
+    "prosedyre": null,
+    "felles_oppgave": null
+}
+```
+
+
+
+

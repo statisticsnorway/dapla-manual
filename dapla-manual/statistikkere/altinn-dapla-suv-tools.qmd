@@ -1,0 +1,100 @@
+---
+title: dapla-suv-tools
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.15.2
+  kernelspec:
+    display_name: s821-datafangst-python
+    language: python
+    name: s821-datafangst-python
+---
+
+[dapla-suv-tools](https://pypi.org/project/dapla-suv-tools/) er en python pakke med en samling verktøy for integrering med SUV-plattformen. Pakken tilbyr verktøy for skjema administrasjon, bygging av prefill og utsending av skjema på [Altinn 3 plattformen](https://docs.altinn.studio/nb/community/about/).
+
+[Dokumentasjon av pakken ligger her](https://supreme-meme-lmjyn57.pages.github.io/index.html). Denne gir en teknisk innføring som du kan følge og kopiere kode fra. Noe demokode ligger også i repoet og kan være ett godt utgangspunkt.
+
+## Installasjon
+
+#### Pip
+
+```{.bash filename="Terminal"}
+pip install dapla-suv-tools
+```
+
+#### Poetry
+
+```{.bash filename="Terminal"}
+poetry add dapla-suv-tools
+```
+
+## Opprette klient
+For å kunne bruke pakken må du importere klienten:
+
+```{.python filename="notebook"}
+from dapla_suv_tools.suv_client import SuvClient
+
+client = SuvClient()
+```
+
+## Paginering
+For å sette opp paginering må du importere PaginationInfo
+
+```{.python filename="notebook"}
+from dapla_suv_tools.pagination import PaginationInfo
+```
+
+Paginering brukes for å hente data i mindre deler spesielt når et datasett er stort. Dette bidrar til å redusere belastningen både på klient og server, og gir bedre ytelse. Side- og størrelsesparametere sendes som en del av forespørselen.
+
+::: {.callout-warning}
+## Maksimal størrelse
+
+Maksimal tillatt størrelse per side er `100` i alle forespørsler. Hvis man angir en høyere verdi vil forespørselen feile eller bli begrenset til 100 poster per side.
+:::
+
+### Enkel bruk av paginering
+I dette eksempelet brukes paginering for å hente en spesifikk side med et gitt antall elementer. 
+
+```{.python filename="notebook"}
+p_info = PaginationInfo(page=1, size=5)
+
+result = client.get_skjema_by_ra_nummer(
+    ra_nummer="RA-0666A3", pagination_info=p_info
+)
+```
+
+Her hentes den første siden (page=1) med 5 elementer per side (size=5).
+
+### Hente alle data med paginering
+Dette eksempelet viser hvordan man kan hente alle data ved å iterere gjennom flere sider.
+
+```{.python filename="notebook"}
+page = 1
+size = 100
+all_records = []
+
+while True:
+    p_info = PaginationInfo(page=page, size=size)
+    
+    response = client.get_utvalg_from_sfu(
+        delreg_nr=49430324,
+        ra_nummer='RA-0666A3',
+        pagination_info=p_info
+    )
+    
+    records = response
+    all_records.extend(records)
+    
+    if len(records) < size:
+        break
+    
+    page += 1
+
+print(f"Totalt antall poster: {len(all_records)}")
+)
+```
+
+Dette sikrer at alle poster hentes når datasettet går over flere sider.
