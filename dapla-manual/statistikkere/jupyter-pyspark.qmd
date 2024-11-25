@@ -1,3 +1,4 @@
+
 ---
 title: Jupyter-pyspark
 date-modified: last-modified
@@ -40,7 +41,7 @@ Under **Team og tilgangsgruppe** kan man velge hvilket team og tilgangsgruppe ma
 
 ![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
 
-Under **Team og tilgangsgruppe** kan brukeren også velge å representere tilgangsgruppen *data-admins* for et team. I de tilfellene er det et krav om brukeren oppgir en skriftlig begrunnelse for hvorfor tilgangen er nødvendig. I tillegg må kan de maksimalt aktivere tilgangen i 8 timer. 
+Under **Team og tilgangsgruppe** kan brukeren også velge å representere tilgangsgruppen *data-admins* for et team. I de tilfellene er det et krav om brukeren oppgir en skriftlig begrunnelse for hvorfor tilgangen er nødvendig. I tillegg kan de maksimalt aktivere tilgangen i 8 timer. 
 
 @fig-dapla-lab-konf-buckets-data-admins viser en bruker som aktiverer sin *data-admins* tilgang for team *dapla-felles*. Hvis brukeren ikke oppgir en begrunnelse vil de få en feilmelding ved oppstart av tjenesten.  
 
@@ -48,7 +49,7 @@ Under **Team og tilgangsgruppe** kan brukeren også velge å representere tilgan
 
 ### Ressurser
 
-Under fanen **Ressurser** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite som trengs for å gjøre jobben du skal gjøre. 
+Under fanen **Ressurser** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite som trengs for å gjøre jobben du skal gjøre. Spark tildeles nå automatisk 90% av minnet konfigurert i tjenestekonfigurasjonen.
 
 ![Konfigurasjon av ressurser for Jupyter-pyspark i Dapla Lab](../images/dapla-lab-resources.png){fig-alt="Viser Resources-fanen i Jupyter-pyspark-konfigurasjonen i Dapla Lab." #fig-dapla-lab-resources}
 
@@ -69,27 +70,11 @@ Under fanen **Git** kan man konfigurere Git og GitHub slik at det blir lettere �
 
 ## Konfigurering av PySpark-ressurser i Notebook
 
-For å konfigurere PySpark-ressurser etter at Jupyter-pyspark har startet, kan du sette opp spesifikke PySpark-innstillinger direkte i en Jupyter Notebook. Dette gir fleksibilitet til å justere ressursene basert på behovet for hver sesjon. Merk her at begrensningen er hva du har konfigurert i tjenestekonfigurasjonen, [se Ressurser](#ressurser)
+Fra og med den siste oppdateringen trenger du ikke lenger å manuelt angi mengden RAM i PySpark-konfigurasjonen. Tjenesten er nå konfigurert slik at Spark automatisk tildeles 90% av det totale minnet som er definert i tjenestekonfigurasjonen under **Ressurser**.
 
-1. **Start Jupyter-pyspark**:
-   - Logg inn på **Dapla Lab** og start **Jupyter-pyspark**-tjenesten.
-   - Når tjenesten er oppe, åpner du en ny eller eksisterende Spark (local) Notebook for å konfigurere PySpark.
+Dette forenkler oppsettet og sikrer optimal utnyttelse av tilgjengelige ressurser.
 
-2. **Angi spesifikke PySpark-konfigurasjoner i Notebook**:
-   - I din Notebook, inkluder følgende Python-kode for å konfigurere CPU, minne og andre PySpark-ressurser:
-     ```python
-     from pyspark.sql import SparkSession
 
-     # Start SparkSession med ønskede konfigurasjoner
-     spark = SparkSession.builder \
-         .appName("Jupyter-pyspark-konfig") \
-         .master("local[*]") \
-         .config("spark.driver.memory", "10g") \
-         .config("spark.executor.memory", "4g") \
-         .getOrCreate()
-     ```
-
-   - Juster verdiene etter behov for å sikre optimal ytelse for oppgavene du kjører i Notebook.
 
 ## Tilgjengelige JAR-filer og bruk i PySpark
 
@@ -161,15 +146,9 @@ from pyspark.sql import SparkSession
 spark = SparkSession.builder \
     .appName("Lokal Spark") \
     .master("local[*]") \  # Bruker alle tilgjengelige kjerner
-    .config("spark.driver.memory", "10g") \
-    .config("spark.executor.memory", "4g") \
     .getOrCreate()
 ```
 
-Hvis du ikke overstyrer konfigurasjonen vil innhold i miljøvariabelen **PYSPARK_LOCAL_SUBMIT_ARGS** gjelde.
-```sh
---master local[*] --driver-cores 1 --driver-memory 2g --executor-memory 2g  --conf spark.driver.maxResultSize=2g --conf spark.executor.pyspark.memory=1g pyspark-shell
-```
 ## Datatilgang
 
 Hvis man har valgt å tilgjengeliggjøre data fra et team sitt bøtter i tjenesten, så kan man inspisere dataene fra en terminal inne i tjenesten: 
