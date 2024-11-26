@@ -1,0 +1,156 @@
+---
+title: Bygge skjemaprefill
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.15.2
+  kernelspec:
+    display_name: s821-datafangst-python
+    language: python
+    name: s821-datafangst-python
+---
+
+Denne siden forklarer hvordan du går fram for å bygge din egen skjemaprefill. Med skjemaprefill menes prefill som går ut over det som er standard prefill i skjemaet.
+
+::: {.callout-note}
+I utgangspunktet er det kun InternInfo som er obligatorisk “blokk” i instansieringsfila. I tillegg vil de aller fleste ha blokka for Kontakt (kontaktperson-info). Blokka for SkjemaData vil finnes for alle som har prefill ut over det som ligger i InternInfo.
+:::
+
+## Skjema prefill meta
+For hver skjemaversjon eksisterer det en skjema prefill meta tabell. Tabellen gir informasjon om hvilke skjemaspesifikke prefill-felter som skjemaet kan inneholde.
+
+![Eksempel på skjema prefill meta tabell](../images/altinn-skjema-prefill-meta.png){fig-alt="Alternativtekst" #fig-altinn-prefill-meta}
+
+::: {.callout-tip}
+## Hva hvis skjemaprefill meta mangler?
+Ta kontakt med planleggeren for skjemaet på seksjon 821 dersom skjemaet ditt skal inneholde skjemaprefill og meta-tabellen ikke inneholder data.
+:::
+
+### Metadata beskrivelse
+
+@tbl-prefill-meta beskriver feltene i skjemaprefill meta-tabellen. 
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| Komplett sti | Refererer til hele stien som brukes for å navigere fra SkjemaData til en spesifikk verdi. Den beskriver nøyaktig plasseringen av dataene i hierarkiet og kan bestå av flere nivåer. 
+| Type | Beskriver hvilken datatype feltet kan inneholde. 
+| Min | Begrensing (minimum) på datatypen.
+| Maks | Begrensing (makimum) på datatypen. 
+| Obligatorisk | Indikerer om feltet er påkrevd for prefill. 
+| Statistikk navn | Kan brukes for mapping til statistikkteamenes interne systemer.
+| Kommentar | Eventuelle merknader eller tilleggsinformasjon om feltet.
+: Prefill Meta {#tbl-prefill-meta .striped}
+
+### Hente prefill meta med kode
+For å hente ut skjema prefill meta i Python, kan du bruke metoden `get_prefill_meta_by_skjema_def` i `SuvClient`. Sørg for at du oppgir riktig RA-nummer, versjon og undersøkelsesnummer.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_prefill_meta_by_skjema_def(
+            ra_nummer = 'RA-0666A3',
+            versjon = 1,
+            undersokelse_nr = '1060'
+        )
+
+print(json.dumps(output, indent=4))
+```
+
+## Struktur på skjemaprefill
+Skjemaprefill kan representeres som en hierarkisk struktur basert på `sti_navn`. Dette gir en oversikt over hvordan dataene er organisert. Følgende kode viser hvordan du bygger strukturen med valgfri inkludering av metadata.
+
+```{.python filename="notebook"}
+def build_structure(data, include_metadata=False):
+    structure = {}
+
+    for item in data:
+        path = item['sti_navn'].split('.') if item['sti_navn'] else [item['navn']]
+        current_level = structure
+
+        for part in path:
+            if part not in current_level:
+                current_level[part] = {"metadata": {}} if include_metadata else {}
+            current_level = current_level[part]
+
+        if include_metadata:
+            current_level["metadata"]["type"] = item.get("type")
+            current_level["metadata"]["kontroll"] = item.get("kontroll")
+            current_level["metadata"]["stat_navn"] = item.get("stat_navn")
+            current_level["metadata"]["kommentar"] = item.get("kommentar")
+
+    return structure    
+```
+
+Eksempel på output for hierarkisk struktur uten metadata:
+
+```json
+{
+    "innkjoptElektriskKraft": {},
+    "innkjoptElektriskKost": {},
+    "GassOgPetroleumKost": {
+        "produktTypeBruktId": {},
+        "produktTypeBrukt": {},
+        "produktEnhet": {}
+    },
+    "EgneprodEnergiProd": {
+        "egenprodEnergiProdTypeID": {},
+        "egenprodEnergiProdType": {},
+        "egenprodEnergiProdEnhet": {}
+    }
+}
+```
+
+## Lagre prefill data
+For å lagre prefill for en enhet kan du bruke metoden `save_prefill_for_enhet` i `SuvClient`. Metoden lagrer skjemaprefill for en spesifikk enhet i utvalget. Beskrivelse av hvordan du kan hente utvalg finner du på siden [Utvalg fra SFU](./altinn-utvalg-sfu.html)
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.save_prefill_for_enhet(
+     ra_nummer = 'RA-0666A3',
+     versjon = 1,
+     periode_aar = 2024,
+     periode_type = 'KVRT',
+     periode_nr = 2,
+     enhetsident = 'A3TF0018',
+     enhetstype = 'FRTK',
+     prefill = {
+        "innkjoptElektriskKost": 10, 
+        "innkjoptElektriskKraft": 20, 
+        "GassOgPetroleumKost": [
+            {"produktTypeBruktId": "1"},
+            {"produktTypeBruktId": "2"}
+        ]
+    }                  
+ )
+print(output)    
+```
+
+@tbl-lagre-prefill-param viser en beskrivelse av de ulike parameterne i `save_prefill_for_enhet` 
+
+| Parameter | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| RA-nummer | RA-nummer for skjemaet.  
+| versjon | Skjemaversjon.
+| periode_aar | Årstall for perioden.
+| periode_type | Periode type. Gyldige verdier er `AAR`, `MND`, `KVRT`, `UKE` 
+| periode_nr | Periode nummer
+| enhetsident | Identifikator for enheten
+| enhetstype | Type enhet. Gyldige verdier er `FRTK`, `BEDR`, `PERS`
+| prefill | Prefill-data i gyldig JSON-format.
+: Beskrivelse av parametere {#tbl-lagre-prefill-param .striped}
+
+## Validering av prefill data
+Validering av skjemaprefill sikrer at dataene oppfyller kravene til struktur og innhold. Dette gjøres automatisk i `save_prefill_for_enhet`. Feil i valideringen vil føre til at dataene ikke lagres, og det gis en feilmelding. Dersom du ønsker å sjekke om prefill er gyldig før lagring er dette mulig ved hjelp av metoden `ikke implementert ennå`. 
+
+[dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) inneholder også metoder for å hente ut lagret prefill og slette prefill. Det er mulig å slette prefill enten på enhetsnivå eller skjemanivå.
+
+Valideringen er basert på [JSON Schema](https://pypi.org/project/jsonschema/).
+
+::: {.callout-warning}
+Dersom skjemaet blir instansiert med ugyldige prefill data vil skjemaet feile ved instansiering hos Altinn. Skjemaet vil i dette tilfellet bli slettet fra innboksen til oppdragsgiver.
+:::
+
