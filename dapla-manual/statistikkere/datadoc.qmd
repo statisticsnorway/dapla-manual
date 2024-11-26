@@ -5,7 +5,9 @@ date-modified: "11/25/2024"
 
 ![](../images/dapla-lab-datadoc-service.png){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
 
-Datadoc er en tjeneste som tilbyr et grafisk grensesnitt for å dokumentere datasett og variablene som utgjør datasettet. Formålet med tjenesten er å tilby et lett-å-bruke grensesnitt som hovedsakelig vil benyttes første gang man dokumenterer en type datasett.
+Datadoc er et grafisk grensesnitt for å dokumentere datasett og variablene som utgjør datasettet.
+
+Formålet med tjenesten er å tilby et lett-å-bruke grensesnitt som hovedsakelig vil benyttes første gang man dokumenterer en type datasett.
 
 Siden løpende statistikkproduksjon ofte innebærer at nye data legges til data fra tidligere perioder, uten at strukturen i datasett endres, så tilbys det også et annet verktøy som lar brukeren programmatisk gjenbruke metadata fra en tidligere periode. Les mer om Python-pakken [dapla-toolbelt-metadata](./dapla-toolbelt-metadata.qmd).
 
@@ -27,9 +29,9 @@ Før man starter Datadoc bør man konfigurere tjenesten. Dette er spesielt vikti
 
 ### Data
 
-Under Data i konfigurasjonslisten er det en nedtrekksmeny der man kan velge **Team og tilgangsgruppe**. I denne menyen får du listet alle team og tilgangsgrupper du er med i. Listen vises på formen *\<daplateam\>-\<tilgangsgruppe\>*.
+Under Data kan man velge **Team og tilgangsgruppe**. I denne menyen får du listet alle team og tilgangsgrupper du er med i. Listen vises på formen *\<daplateam\>-\<tilgangsgruppe\>*.
 
-@fig-datadoc-config viser tilfellet der det er valgt å representere tilgangsgruppen **developers** i teamet **Dapla Felles**, derav *dapla-felles-developers*. Det er også det som velges som standard hvis man ikke velger noe annet. 
+@fig-datadoc-config viser tilfellet der det er valgt å representere tilgangsgruppen **developers** i teamet **Dapla Felles**, derav *dapla-felles-developers*. Dette er standardvalget. 
 
 ![Data-menyen i tjenestekonfigurasjonen for Datadoc.](../images/datadoc-config.png){fig-alt="Slik ser config for datadoc ut" width="100%" #fig-datadoc-config}
 
@@ -77,7 +79,7 @@ Etter at man har trykket på _Åpne fil_ knappen bør man se meldingen vist i @f
 
 #### Vellykket åpning med advarsel
 
-Hvis man åpner en datasett som ikke følger navnestandarden, vil det komme en advarsel (@fig-aapne-datasett-advarsel). Det er fullt mulig å bruke Datadoc fortsatt for å dokumentere datasettet, men ikke like mye metadata kan utledes automatisk (TODO: lenke til seksjonen om utledning).
+Hvis man åpner et datasett som ikke følger navnestandarden, vil det komme en advarsel (@fig-aapne-datasett-advarsel). Det er fullt mulig å bruke Datadoc fortsatt for å dokumentere datasettet, men ikke like mye metadata kan utledes automatisk (TODO: lenke til seksjonen om utledning).
 
 ::: {.callout-note}
 Dette kan være en fin anledning til å justere på navngivning og strukturen i teamets bøtter slik at alt følger [navnestandarden](./navnestandard.html). Det er en lenke til navnestandarden i meldingen.
@@ -87,7 +89,7 @@ Dette kan være en fin anledning til å justere på navngivning og strukturen i 
 
 #### Feil ved åpning
 
-Hvis Datadoc klarer ikke åpne datasettet, vises en rød error melding (@fig-aapne-datasett-feil). Dette forårsakes oftest at filen ikke finnes (for eksempel på grunn av en typo i filstien), men kan også være på grunn av at man ikke har tilgang til filen, eller at det er et brudd i nettverket.
+Hvis Datadoc ikke klarer å åpne datasettet vises en rød error melding (@fig-aapne-datasett-feil). Som oftest forårsakes dette av at filen ikke finnes (skrivefeil) eller fordi man ikke har tilgang til filen.
 
 ![Meldingen at det var en feil ved åpning av datasettet.](../images/datadoc-aapne-datasett-feil.png){fig-alt="Figur som viser meldingen at det var en feil ved åpning av datasettet." fig-align="left" width="40%" #fig-aapne-datasett-feil}
 
@@ -99,7 +101,7 @@ Hvis et metadatadokument eksisterer, er det denne informasjonen som lastes inn. 
 
 Informasjon som kan utledes vil bli fylt inn når du åpner datasettet. Informasjonen hentes enten fra filstien eller settes inn som en default verdi (*). Det er mulig å korrigere informasjonen i ettertid.  Følgende felter blir forsøkt utledet:
 
-Datasett:
+**Datasett:**
 
 - Verdivurdering
 - Status (*)
@@ -110,7 +112,7 @@ Datasett:
 - Inneholder data t.o.m.
 - Geografisk dekningsområde (*)
 
-Variabler:
+**Variabler:**
 
 - Kortnavn
 - Datatype
@@ -155,7 +157,7 @@ Dette gjelder følgende felter:
 - Inneholder data t.o.m
 
 Det er mulig å redigere vediene i variabelforekomst fanen etter en verdi er satt i datasettfanen.
-Men hvis disse feltene blir endret i datasettfanen senere, vil de alltid overskrive det som er satt i variabelforekomst fanen.
+Hvis disse feltene blir endret i datasettfanen senere, vil de alltid overskrive det som er satt i variabelforekomst fanen.
 
 #### Søk i variabelforekomster
 
@@ -168,7 +170,7 @@ Det er mulig å søke gjennom variabelforekomstene sine kortnavn. Dette filtrere
 ::: {.callout-warning}
 ## Viktig informasjon
 
-Datadoc mellomlagrer ikke utfylt metadata.
+**Datadoc mellomlagrer ikke utfylt metadata.**
 Pass på å lagre metadataene ofte ved å trykke lagre og legg merke til om du får en bekreftelse på at metadataene er lagret.
 :::
 
@@ -182,18 +184,21 @@ Advarselen for datasett viser en liste over hvilke felt som mangler. For variabe
 
 Når du fyller ut de manglende obligatoriske feltene må du lagre på nytt og advarslene vil forsvinne når alle obligatoriske felt er fylt ut.
 
-Ved lagring gjøres det også en sjekk på om variabel kortnavene avviker for navne standarden for variabel kortnavn. 
+Ved lagring gjøres det også en sjekk på om variabel kortnavene avviker for navnestandarden for variabelnavn. 
 Om det finnes avvik vil disse kortnavene vises i en gul advarsel boks. 
-Navne standarden for variabelkortnavn er som følger: 
-Alfanumerisk begrenset til a-z (kun små bokstaver), 0-9 og _ (understrek).
+Navnestandarden for variabelkortnavn er som følger:
+
+- Alfanumerisk begrenset til a-z (kun små bokstaver)
+- 0-9
+- _ (understrek).
 
 #### Metadata filen
 
-Når du trykker på _Lagre metadata_ knappen i Datadoc så skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er
+Når du trykker på _Lagre metadata_ knappen i Datadoc skrives alle metadata til en fil i samme mappe (katalog) som datafilen. Dette er en JSON-fil med nesten samme navn som datafilen. Navnekonvensjonen for metadatafilen er
 
 `<navn på datasettfilen uten endelse>__DOC.json`
 
-Eksempelvis hvis datafilen har navnet `skattedata_p2022_v1.parquet`, så vil Datadoc lagre metadata i filen `skattedata_p2022_v1__DOC.json`.
+Eksempelvis vil Datadoc lagre metadata i filen `skattedata_p2022_v1__DOC.json` hvis datafilen har navnet `skattedata_p2022_v1.parquet`.
 
 Fordelen med å benytte en JSON-fil til å lagre metadata er at denne filen kan kopieres og flyttes like enkelt som selve datafilen. JSON-filer er strukturerte tekstfiler som kan leses av både maskiner (Python/R) og av mennesker (åpnes i en tekst-editor).
 
