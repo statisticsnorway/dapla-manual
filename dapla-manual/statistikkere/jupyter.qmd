@@ -1,6 +1,6 @@
 ---
 title: Jupyter
-date-modified: last-modified
+date-modified: "11/25/2024"
 ---
 
 ![](../images/dapla-lab-jupyter-service.png){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
@@ -22,23 +22,13 @@ Før man starter **Jupyter-tjenesten** bør man ha lest [kapitlet om Dapla Lab](
 
 ## Konfigurasjon
 
-Før man åpner en tjeneste kan man konfigurere hvor mye ressurser man ønsker, hvilket team man skal representere, om et GitHub-repo skal klones ved oppstart, og mange andre ting. Valgene man gjør kan også lagres slik at man å slipper å gjøre samme jobb senere. @fig-dapla-lab-tjenestekonf-detail viser Tjeneste-fanen i konfigurasjonen for Jupyter.
+Før man åpner en tjeneste kan man konfigurere hvor mye ressurser man ønsker, hvilket team man skal representere, om et GitHub-repo skal klones ved oppstart, og mange andre ting. Valgene man gjør kan også lagres slik at man å slipper å gjøre samme jobb senere. @fig-dapla-lab-tjenestekonf-detail viser Tjeneste-delen i konfigurasjonen for Jupyter hvor man kan velge hvilken versjon av Jupyter man vil bruke.
 
-![Detaljert tjenestekonfigurasjon i Dapla Lab](../images/dapla-lab-tjenestekonf-detail.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-tjenestekonf-detail}
+![Jupyter-versjon i Dapla Lab](../images/dapla-lab-tjenestekonf-detail.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-tjenestekonf-detail}
 
-### Tjeneste
+### Data
 
-Under fanen **Tjeneste** kan man velge hvilke **Versjon** av Jupyter som skal startes^[Med versjon menes her hvilken Docker-container som skal bygges. Men i konfigurasjonen har vi forenklet valget ved å kun vise hvilke R- og Python-versjoner som skal gjelde]. Siden Jupyter-tjenesten kommer installert med både R- og Python så er det her man velger hvilke versjoner av disse man ønsker. Man kan velge mellom alle tidligere tilbudte kombinasjoner av R og Python. 
-
-I @fig-dapla-lab-tjenestekonf-detail ser vi av navnet `r4.4.0-py311-v55-2024.10.31` at tjenesten som default vil startes versjon 4.4.0 av R og 3.11 for Python. Etter hvert som nye versjoner av R og Python kommer kan disse tilgjengeliggjøres i tjenesten, men brukeren kan velge å starte en eldre versjon av tjenesten.
-
-### Dapla
-
-Under **Dapla**-fanen kan man velge **Aktiver** for å få tilgang til data fra bøtter i tjenesten. I tillegg må man da velge hvilket team og tilgangsgruppe man skal representere.
-
-Aktiveres **Bøtter som filsystem** så blir bøttene til teamet tilgjengeliggjort som et vanlig filsystem under filstien `/buckets/`.
-
-Under **Team og tilgangsgruppe** kan man velge hvilket team og tilgangsgruppe man skal representere i tjenesten. Man gjør dette ved å velge navnet på tilgangsgruppen, og denne er alltid på formen `<teamnavn>-<tilgangsgruppe>`. @fig-dapla-lab-konf-buckets viser at brukeren har valgt tilgangsgruppen *dapla-felles-developers*, dvs. at de representerer tilgangsgruppen *developers* for teamet *dapla-felles*. 
+Under **Data**-menyen kan man velge hvilket team og tilgangsgruppe man skal representere. Man gjør dette ved å velge navnet på tilgangsgruppen, og denne er alltid på formen `<teamnavn>-<tilgangsgruppe>`. @fig-dapla-lab-konf-buckets viser at brukeren har valgt tilgangsgruppen *dapla-felles-developers*, dvs. at de representerer tilgangsgruppen *developers* for teamet *dapla-felles*. 
 
 ![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
 
@@ -48,29 +38,37 @@ Under **Team og tilgangsgruppe** kan brukeren også velge å representere tilgan
 
 ![Aktivere tilgang til kildedata for data-admins.](../images/dapla-lab-konf-buckets-data-admin.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets-data-admins}
 
+### Git/GitHub
+
+Under menyen **Git/GitHub** kan man konfigurere Git og GitHub slik at det blir lettere å jobbe med inne i tjenesten. Som standard arves informasjonen som er lagret under [*Min konto*-*Git* i Dapla Lab](./dapla-lab.html#git). Informasjonen under tjenestekonfigurasjonen blir tilgjengeliggjort som miljøvariabler i tjenesten. Informasjonen blir også lagt i `$HOME/.netrc` slik at man kan benytte ikke trenger å gjøre noe mer for å jobbe mot GitHub fra tjenesten.  
+
+![Konfigurasjon av Git og GitHub for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-konf-git.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-git}
+
+@fig-dapla-lab-konf-git viser at brukeren som standard får aktivert **Aktiver Git**. Dette innebærer at Git-brukernavn, Git e-post og GitHub-token arves fra brukerkonfigurasjonen. I tillegg så opprettes SSBs standard Git-konfigurasjon i `~/.gitconfig`. 
+
+### Python/R
+
+Under menyen Python/R kan man velge hvilke versjon av R og Python man ønsker å kjøre. Man kan velge mellom alle tidligere tilbudte kombinasjoner av R og Python.
+
+I @fig-dapla-lab-konf-pyr ser vi av navnet r4.4.0-py311-v55-2024.10.31 at tjenesten som default vil startes versjon 4.4.0 av R og 3.11 for Python. Etterhvert som nye versjoner av R og Python kommer kan disse tilgjengeliggjøres i tjenesten, men brukeren kan velge å starte en eldre versjon av tjenesten.
+
+![Konfigurasjon av Git og GitHub for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-jupyter-konf-python-r.png){fig-alt="Viser Python/R-menyen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-pyr}
+
 ### Ressurser
 
-Under fanen **Ressurser** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite trengs for å gjøre jobben du skal gjøre. 
+Under menyen **Resources** kan man velge hvor mye CPU og RAM man ønsker i tjenesten, slik som vist i @fig-dapla-lab-resources. Velg så lite treng for ås gjøre jobben du skal gjøre. 
 
 ![Konfigurasjon av ressurser for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-resources.png){fig-alt="Viser Resources-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-resources}
 
 ### Diskplass
 
-Som default får alle som starter en instans av Jupyter-tjenesten en lokal disk på **10GB** inne i tjenesten. Under *Diskplass*-fanen kan man velge å øke størrelsen på disken eller ikke noe disk i det hele tatt. Siden lokal disk i tjenesten hovedsakelig skal benyttes til å lagre en lokal kopi av koden som lagres på GitHub mens man gjør endringer, så bør ikke størrelsen på disken være større enn nødvendig. @fig-dapla-lab-persistence viser valgene som kan gjøres under Diskplass-fanen. 
+Som default får alle som starter en instans av Jupyter-tjenesten en lokal disk på **10GB** inne i tjenesten. Under *Diskplass*-menyen kan man velge å øke størrelsen på disken eller ikke noe disk i det hele tatt. Siden lokal disk i tjenesten hovedsakelig skal benyttes til å lagre en lokal kopi av koden som lagres på GitHub mens man gjør endringer bør ikke størrelsen på disken være stor. @fig-dapla-lab-persistence viser valgene som kan gjøres under Diskplass-fanen. 
 
 ![Konfigurasjon av lokal disk for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-persistence.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-persistence}
 
-### Git
-
-Under fanen **Git** kan man konfigurere Git og GitHub slik at det blir lettere å jobbe med inne i tjenesten. Som standard arves informasjonen som er lagret under [*Min konto*-*Git* i Dapla Lab](./dapla-lab.html#git). Informasjonen under tjenestekonfigurasjonen blir tilgjengeliggjort som miljøvariabler i tjenesten. Informasjonen blir også lagt i `$HOME/.netrc` slik at man kan benytte ikke trenger å gjøre noe mer for å jobbe mot GitHub fra tjenesten.  
-
-![Konfigurasjon av Git for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-konf-git.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-git}
-
-@fig-dapla-lab-konf-git viser at brukeren som standard får aktivert **Aktiver Git**. Dette innebærer at Git-brukernavn, Git e-post og GitHub-token arves fra brukerkonfigurasjonen. I tillegg så opprettes SSBs standard Git-konfigurasjon i `~/.gitconfig`. 
-
 ## Datatilgang
 
-Hvis man har valgt å tilgjengeliggjøre data fra et team sitt bøtter i tjenesten, så kan man inspisere dataene fra en terminal inne i tjenesten: 
+Slik kan man inspisere dataene fra en terminal inne i tjenesten: 
 
 1. Åpne en instans av Jupyter med data fra bøtter 
 2. Åpne en terminal inne i Jupyter
