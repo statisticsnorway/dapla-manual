@@ -126,11 +126,11 @@ La oss se på hva feltene betyr:
 
 #### Metadata
 
-- **name:** Navnet på komponenten i kebab-case
+- **name:** Navnet på komponenten i kebab-case [Se retningslinjene for navn i SSB](#retningslinjer-for-navn)
 - **title:** Menneskeleselig navn på komponenten
 - **description:** En kort beskrivelse av komponenten
 - **annotations:** Lokasjonen til komponenten på github
-- **tags:** En ustrukturert liste med emnemerker. [Følg retningslinjene for tags i SSB](#retningslinjer-for-tags)
+- **tags:** En ustrukturert liste med emnemerker. [Se retningslinjene for tags i SSB](#retningslinjer-for-tags)
 
 #### Spec
 
@@ -161,7 +161,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 La oss ta for oss et fiktivt microdata-system for å forklare hvordan man dokumenterer alle de forskjellige entitetene.
 metadata:
-  name: job-service
+  name: microdata-job-service
   title:  Job service
   description: |
     Lookup service for jobs
@@ -180,12 +180,12 @@ spec:
     - job-service-api
   dependsOn:
     - component:microdata-tools
-    - resource:job-db
+    - resource:microdata-job-db
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: job-service-api
+  name: microdata-job-service-api
   description: Job service
 spec:
   type: openapi
@@ -209,7 +209,7 @@ For API spesifikasjonen som finnes under `---`:
 
 #### Metadata
 
-- **name:** Navnet på APIet i kebab-case
+- **name:** Navnet på APIet i kebab-case [Se retningslinjene for navn i SSB](#retningslinjer-for-navn)
 - **title:** Menneskeleselig navn på APIet
 - **description:** En kort beskrivelse av APIet
 
@@ -241,7 +241,7 @@ markere repoet med `backstage` som topic, og legge til en `backstage.yaml` i rot
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: job-db
+  name: microdata-job-db
   description: |
     MongoDB that stores jobs and job information in the microdata platform
   tags:
@@ -257,7 +257,7 @@ spec:
 
 #### Metadata
 
-- **name:** Navnet på ressursen i kebab-case
+- **name:** Navnet på ressursen i kebab-case [Se retningslinjene for navn i SSB](#retningslinjer-for-navn)
 - **title:** Menneskeleselig navn på ressursen
 - **description:** En kort beskrivelse av ressursen
 
@@ -333,6 +333,10 @@ Tags for komponenter skal BARE inneholde:
 Tags for ressurser kan BARE inneholde:
 
 - Spesifisering av teknologi. ex.: postgresql, mongodb, pubsub
+
+### Retningslinjer for navn
+
+For at komponenter og ressurser skal kunne kobles sammen og vises korrekt i avheninghetsgrafen, så er vi avhengig av at det er unike tekniske navn på disse på tvers av Systemer i Backstage. Dette gjør vi enklest ved å prefikse med Systemet de tilhører: `name: <system>-<navn>`. 
 
 ### Validering
 
