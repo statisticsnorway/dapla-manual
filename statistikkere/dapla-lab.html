@@ -598,7 +598,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">November 29, 2024</p>
+      <p class="date-modified">December 2, 2024</p>
     </div>
   </div>
     
@@ -874,8 +874,22 @@ Figur&nbsp;12: Grafana dashbaordet for en spesifikk tjeneste på Dapla Lab
 <p>For å få tilgang til lagringsbøttene i prod-prosjektet til et team, så må man logge seg inn i prod-miljøet til Dapla Lab (<a href="https://lab.dapla.ssb.no/" class="uri">https://lab.dapla.ssb.no/</a>). Skal man ha tilgang til lagringsbøttene i test-prosjektet til et team må man logge seg inn i test-miljøet til Dapla Lab (<a href="https://lab.dapla-test.ssb.no/" class="uri">https://lab.dapla-test.ssb.no/</a>). For team som har er et dev-miljø så gjelder følgende dev-miljøet til Dapla Lab (<a href="https://lab.dapla-test.ssb.no/" class="uri">https://lab.dapla-test.ssb.no/</a>).</p>
 <section id="bøtter-som-filsystem" class="level3">
 <h3 class="anchored" data-anchor-id="bøtter-som-filsystem">Bøtter som filsystem</h3>
-<p>Tjenestetilbyderne i Dapla Lab kan tilby datatilgang til bøtter gjennom å tilgjengeliggjøring av data i bøtter som filsystem inne i tjenesten. Det vil si at man kan referere til data som man er vant til på vanlige filsystem, og man kan bruke biblioteker uten å autentisere seg mot bøtter.</p>
-<p>Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien <code>/buckets/</code>. Hvis man åpner en tjeneste med denne løsningen så kan liste ut hvilke bøtter som ble tilgjengeliggjort.</p>
+<p>Tjenestene i Dapla Lab gjør teamets bøtter tilgjengelig som mapper i filsystemet i tjenesten. Det vil si at man kan referere til data som man er vant til på vanlige filsystem, og man kan bruke biblioteker uten å autentisere seg mot bøtter.</p>
+<p>Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien <code>/buckets/</code>. Videre representeres bøttene ved sitt kortnavn. F.eks. vil bøttestien <code>gs://ssb-dapla-felles-data-produkt-prod/</code> representeres som <code>/buckets/produkt/</code> i tjenesten.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Eksterne endringer i bøtter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En svakhet ved tilgjengeliggjøringen av bøtter som filsystem i tjenesten, er at filer som opprettes i nye mapper fra andre ressurser, ikke oppdateres i tjenesten. F.eks. hvis personA har åpnet en Jupyter som <code>dapla-felles-developers</code>, og f.eks. Kildomaten skriver nye filer til en ny mappe i produktbøtta, så vil ikke dette vises i filsystemet til personA. Dette vil også være tilfellet vil personB også åpner en tjeneste <code>dapla-felles-developers</code> og skriver en fil til en nyopprettet mappe. Da vil heller ikke dette vises i filsystemet til personA sin tjeneste, selv om filen eksisterer i bøtta.</p>
+<p>Løsningen er at brukeren må kjøre kommandoen <code>refresh-buckets</code> fra terminalen i tjenesten. Det gjør at alle mapper som ble opprettet etter at tjenesten ble startet, blir vist i tjenesten.</p>
+</div>
+</div>
 </section>
 <section id="jobbe-med-data" class="level3">
 <h3 class="anchored" data-anchor-id="jobbe-med-data">Jobbe med data</h3>
