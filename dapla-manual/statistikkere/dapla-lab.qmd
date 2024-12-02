@@ -151,13 +151,22 @@ Under **Mine tjenester** får du oversikt over hvilke kjørende tjenester. Hvis 
 
 Brukere som skal ha tilgang til data fra en tjeneste må først oppgi hvilket team og tilgangsgruppe^[Hvis en bruker er medlem i både *data-admins*- og *developers*-gruppa til et team, så må de velge hvilken av de to gruppene de skal representere i tjenesten som startes.] de skal representere. Siden brukere ofte er medlem av flere team, så er dette et viktig sikkerhetstiltak for å sikre at data ikke kobles på tvers av team uten at dette er godkjent av data-ansvarlige.
 
-For å få tilgang til lagringsbøttene i prod-prosjektet til et team, så må man logge seg inn i prod-miljøet til Dapla Lab (<https://lab.dapla.ssb.no/>). Skal man ha tilgang til lagringsbøttene i test-prosjektet til et team må man logge seg inn i test-miljøet til Dapla Lab (<https://lab.dapla-test.ssb.no/>). For team som har er et dev-miljø så gjelder følgende dev-miljøet til Dapla Lab (<https://lab.dapla-test.ssb.no/>). 
+For å få tilgang til lagringsbøttene i prod-prosjektet til et team, så må man logge seg inn i prod-miljøet til Dapla Lab (<https://lab.dapla.ssb.no/>). Skal man ha tilgang til lagringsbøttene i test-prosjektet til et team må man logge seg inn i test-miljøet til Dapla Lab (<https://lab.dapla-test.ssb.no/>). For team som har er et dev-miljø så gjelder følgende dev-miljøet til Dapla Lab (<https://lab.dapla-test.ssb.no/>).
 
 ### Bøtter som filsystem
 
-Tjenestetilbyderne i Dapla Lab kan tilby datatilgang til bøtter gjennom å tilgjengeliggjøring av data i bøtter som filsystem inne i tjenesten. Det vil si at man kan referere til data som man er vant til på vanlige filsystem, og man kan bruke biblioteker uten å autentisere seg mot bøtter. 
+Tjenestene i Dapla Lab gjør teamets bøtter tilgjengelig som mapper i filsystemet i tjenesten. Det vil si at man kan referere til data som man er vant til på vanlige filsystem, og man kan bruke biblioteker uten å autentisere seg mot bøtter. 
 
-Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien `/buckets/`. Hvis man åpner en tjeneste med denne løsningen så kan liste ut hvilke bøtter som ble tilgjengeliggjort.
+Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien `/buckets/`. Videre representeres bøttene ved sitt kortnavn. F.eks. vil bøttestien `gs://ssb-dapla-felles-data-produkt-prod/` representeres som `/buckets/produkt/` i tjenesten. 
+
+::: {.callout-caution}
+## Eksterne endringer i bøtter
+
+En svakhet ved tilgjengeliggjøringen av bøtter som filsystem i tjenesten, er at filer som opprettes i nye mapper fra andre ressurser, ikke oppdateres i tjenesten. F.eks. hvis personA har åpnet en Jupyter som `dapla-felles-developers`, og f.eks. Kildomaten skriver nye filer til en ny mappe i produktbøtta, så vil ikke dette vises i filsystemet til personA. Dette vil også være tilfellet vil personB også åpner en tjeneste `dapla-felles-developers` og skriver en fil til en nyopprettet mappe. Da vil heller ikke dette vises i filsystemet til personA sin tjeneste, selv om filen eksisterer i bøtta.  
+
+Løsningen er at brukeren må kjøre kommandoen `refresh-buckets` fra terminalen i tjenesten. Det gjør at alle mapper som ble opprettet etter at tjenesten ble startet, blir vist i tjenesten. 
+:::
+
 
 ### Jobbe med data
 
