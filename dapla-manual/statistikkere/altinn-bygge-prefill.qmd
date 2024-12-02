@@ -154,3 +154,40 @@ Valideringen er basert på [JSON Schema](https://pypi.org/project/jsonschema/).
 Dersom skjemaet blir instansiert med ugyldige prefill data vil skjemaet feile ved instansiering hos Altinn. Skjemaet vil i dette tilfellet bli slettet fra innboksen til oppdragsgiver.
 :::
 
+## Eksempelkode
+[Noe demokode ligger i repoet](https://github.com/statisticsnorway/dapla-suv-tools/tree/main/demo/prefill), og kan være ett godt utgangspunkt å kopiere og endre fra.
+
+### RA-0678 (Ledige stillinger)
+Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0678 (Ledige stillinger). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
+
+```json
+{
+    "SkjemaData": {
+        "type": "object",
+        "properties": {
+            "ledigeStillinger": {
+                "type": "integer",
+                "maximum": 10000,
+                "minimum": 0
+        },
+            "antallAnsattePrefill": {
+                "type": "string"
+            },
+            "datoPrefill": {
+                "type": "string"
+            }
+    }
+}
+```
+
+Skjemaet inneholder to felter som skal forhåndsutfylles. Det er `antallAnsattePrefill` og `datoPrefill`. 
+
+@tbl-prefill-ra0678 beskriver feltene som skal forhåndsutfylles. 
+
+| Felt | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| antallAnsattePrefill | Tekststreng som forhåndsutfyller antall ansatte
+| datoPrefill | Tekststreng som forhåndsutfyller dato. 
+: Prefill felter {#tbl-prefill-ra0678 .striped}
+
+Eksempelet leser prefill-data fra en tekstfil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
