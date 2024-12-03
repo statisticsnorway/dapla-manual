@@ -159,12 +159,10 @@ Tjenestene i Dapla Lab gjør teamets bøtter tilgjengelig som mapper i filsystem
 
 Alle tjenester som tilgjengeliggjør data fra bøtter monterer filsystemet på stien `/buckets/`. Videre representeres bøttene ved sitt kortnavn. F.eks. vil bøttestien `gs://ssb-dapla-felles-data-produkt-prod/` representeres som `/buckets/produkt/` i tjenesten. 
 
-::: {.callout-caution}
-## Eksterne endringer i bøtter
+::: {.callout-warning}
+## Tilgang til andre sine delt data
 
-En svakhet ved tilgjengeliggjøringen av bøtter som filsystem i tjenesten, er at filer som opprettes i nye mapper fra andre ressurser, ikke oppdateres i tjenesten. F.eks. hvis personA har åpnet en Jupyter som `dapla-felles-developers`, og f.eks. Kildomaten skriver nye filer til en ny mappe i produktbøtta, så vil ikke dette vises i filsystemet til personA. Dette vil også være tilfellet vil personB også åpner en tjeneste `dapla-felles-developers` og skriver en fil til en nyopprettet mappe. Da vil heller ikke dette vises i filsystemet til personA sin tjeneste, selv om filen eksisterer i bøtta.  
-
-Løsningen er at brukeren må kjøre kommandoen `refresh-buckets` fra terminalen i tjenesten. Det gjør at alle mapper som ble opprettet etter at tjenesten ble startet, blir vist i tjenesten. 
+Tilgang til andre team sine delte-data kan foreløpig ikke aksesseres som en vanlig filsti under `/buckets/`. Da må man bruke `dapla-toolbelt` for lese og skrive til bøttene. Om kort tid vil dette også være tilgjengelig i filsystemet som resten av teamets data. 
 :::
 
 
@@ -172,15 +170,18 @@ Løsningen er at brukeren må kjøre kommandoen `refresh-buckets` fra terminalen
 
 Siden Dapla Lab tilbyr å tilgjengliggjøre lagringsbøtter som filsystem inne i tjenesten, så finnes det nå to måter å aksessere data på: 
 
-1. dapla-toolbelt direkte mot bøttene
-2. bruke "vanlige pakker" og referere til filstien som starter med `/buckets/`
+1. Bruke *vanlige pakker* som Pandas, Polars, Pyarrow, etc. mot filsystemet under `/buckets/`.
+2. Den "gamle" måten med [dapla-toolbelt](./jobbe-med-data.qmd#dapla-toolbelt) som er et overbygg over Pandas og Pyarrow^[dapla-toolbelt er en pakke som ble bygget som et overbygg over Pandas og Pyarrow slik at det ble lettere å lese/skrive mot bøtter. Med bøtter som filsystem inne i tjenestene er ikke dette lenger nødvendig.].
 
-::: {.callout-warning}
-## Tilgang til andre sine delt data
+Det er anbefalt at alle benytter seg av alternativ 1 siden det er enklere for de fleste og gjør at alle medlemmer av et team kan se hverandres endringer når man jobber mot samme bøtte (se boks under). 
 
-Tilgang til andre team sine delte-data kan foreløpig ikke aksesseres som en vanlig filsti under `/buckets/`. Da må man bruke `dapla-toolbelt` for lese og skrive til bøttene. Om kort tid vil dette også være tilgjengelig i filsystemet som resten av teamets data. 
+::: {.callout-caution}
+## Eksterne endringer i bøtter
+
+Hvis to brukere åpner en tjeneste med den samme team og tilgangsgruppe, så vil man kun se hverandres endringer i filsystemet^[Med endringer menes her at man oppretter en ny mappe] hvis begge jobber direkte mot `buckets`-filstien. Hvis en av de skriver filer med dapla-toolbelt, mens den andre bruker dapla-toolbelt eller et annet verktøy, så vil man ikke se dette i filsystemet inne i tjenesten. Brukeren kan da kjøre `refresh-buckets` fra terminalen i tjenesten for å se hva som har dukket opp. Vi anbefaler derfor alle å bruke `buckets`-tilnærmingen. 
+
+Hvis brukeren refererer til en fil som finnes i bøtta, men som ikke synes i filsystemet, så vil det fortsatt kunne leses inn. Dette gjelder også for filer produsert av [Kildomaten](./kildomaten.qmd). Fremover kommer vi til å tilpasse K
 :::
-
 
 ## Miljøer
 
