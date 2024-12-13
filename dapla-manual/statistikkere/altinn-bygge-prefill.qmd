@@ -60,9 +60,17 @@ print(json.dumps(output, indent=4))
 ```
 
 ## Struktur på skjemaprefill
-Skjemaprefill kan representeres som en hierarkisk struktur basert på `sti_navn`. Dette gir en oversikt over hvordan dataene er organisert. Følgende kode viser hvordan du bygger strukturen med valgfri inkludering av metadata.
+Skjemaprefill kan representeres som en hierarkisk struktur basert på `sti_navn`. Dette gir en oversikt over hvordan dataene er organisert. Følgende kode viser hvordan du kan vise strukturen med valgfri inkludering av metadata.
 
 ```{.python filename="notebook"}
+client = SuvClient()
+
+resultat = client.get_prefill_meta_by_skjema_def(
+                ra_nummer = 'RA-0666A3',
+                versjon = 1,
+                undersokelse_nr = '1060'            
+)
+
 def build_structure(data, include_metadata=False):
     structure = {}
 
@@ -81,7 +89,10 @@ def build_structure(data, include_metadata=False):
             current_level["metadata"]["stat_navn"] = item.get("stat_navn")
             current_level["metadata"]["kommentar"] = item.get("kommentar")
 
-    return structure    
+    return structure          
+
+result_without_metadata = build_structure(resultat, include_metadata=False)
+print(json.dumps(result_without_metadata, indent=4))
 ```
 
 Eksempel på output for hierarkisk struktur uten metadata:
@@ -104,7 +115,7 @@ Eksempel på output for hierarkisk struktur uten metadata:
 ```
 
 ## Lagre prefill data
-For å lagre prefill for en enhet kan du bruke metoden `save_prefill_for_enhet` i `SuvClient`. Metoden lagrer skjemaprefill for en spesifikk enhet i utvalget. Beskrivelse av hvordan du kan hente utvalg finner du på siden [Utvalg fra SFU](./altinn-utvalg-sfu.html)
+For å lagre prefill for en enhet bruker du metoden `save_prefill_for_enhet` i `SuvClient`. Metoden lagrer skjemaprefill for en spesifikk enhet i utvalget. Beskrivelse av hvordan du henter utvalg finner du på siden [Utvalg fra SFU](./altinn-utvalg-sfu.html)
 
 ```{.python filename="notebook"}
 client = SuvClient()
@@ -144,7 +155,17 @@ print(output)
 : Beskrivelse av parametere {#tbl-lagre-prefill-param .striped}
 
 ## Validering av prefill data
-Validering av skjemaprefill sikrer at dataene oppfyller kravene til struktur og innhold. Dette gjøres automatisk i `save_prefill_for_enhet`. Feil i valideringen vil føre til at dataene ikke lagres, og det gis en feilmelding. Dersom du ønsker å sjekke om prefill er gyldig før lagring er dette mulig ved hjelp av metoden `ikke implementert ennå`. 
+Validering av skjemaprefill sikrer at dataene oppfyller kravene til struktur og innhold. Dette gjøres automatisk i `save_prefill_for_enhet`. Feil i valideringen vil føre til at dataene ikke lagres, og det gis en feilmelding. Dersom du ønsker å sjekke om prefill er gyldig før lagring er dette mulig ved hjelp av metoden `validate_skjemadata`. 
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+client.validate_skjemadata(      
+        ra_nummer = 'RA-0678A3',
+        versjon = 2,
+        skjemadata = {"antallAnsattePrefill": "10"}
+)   
+```
 
 [dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) inneholder også metoder for å hente ut lagret prefill og slette prefill. Det er mulig å slette prefill enten på enhetsnivå eller skjemanivå.
 
@@ -155,7 +176,7 @@ Dersom skjemaet blir instansiert med ugyldige prefill data vil skjemaet feile ve
 :::
 
 ## Eksempelkode
-[Noe demokode ligger i repoet](https://github.com/statisticsnorway/dapla-suv-tools/tree/main/demo/prefill), og kan være ett godt utgangspunkt å kopiere og endre fra.
+[Noe demokode ligger i repoet](https://github.com/statisticsnorway/dapla-suv-tools/tree/main/demo), og kan være ett godt utgangspunkt å kopiere og endre fra.
 
 ### RA-0678 (Ledige stillinger)
 Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0678 (Ledige stillinger). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
@@ -163,31 +184,137 @@ Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0678 (Ledige sti
 ```json
 {
     "SkjemaData": {
-        "type": "object",
-        "properties": {
-            "ledigeStillinger": {
-                "type": "integer",
-                "maximum": 10000,
-                "minimum": 0
+        "antallAnsattePrefill": {
+            "type": "string"
         },
-            "antallAnsattePrefill": {
-                "type": "string"
-            },
-            "datoPrefill": {
-                "type": "string"
-            }
+        "datoPrefill": {
+            "type": "string"
+        }
     }
 }
 ```
 
 Skjemaet inneholder to felter som skal forhåndsutfylles. Det er `antallAnsattePrefill` og `datoPrefill`. 
 
-@tbl-prefill-ra0678 beskriver feltene som skal forhåndsutfylles. 
+@tbl-prefill-ra0678 beskriver feltene som kan forhåndsutfylles. 
 
-| Felt | Forklaring |
+| Felt | Sti |
 | ----------------- |-------------------------------------------------------------------------------------- |
-| antallAnsattePrefill | Tekststreng som forhåndsutfyller antall ansatte
-| datoPrefill | Tekststreng som forhåndsutfyller dato. 
+| antallAnsattePrefill | -
+| datoPrefill | -
 : Prefill felter {#tbl-prefill-ra0678 .striped}
 
 Eksempelet leser prefill-data fra en tekstfil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
+
+### RA-0692 (Utenrikshandel med tjenester)
+Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0692 (Utenrikshandel med tjenester). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
+
+```json
+{
+   "SkjemaData": {
+        "type": "object",
+        "properties": {
+            "leveransetype": {
+                "type": "string",
+                "enum": [
+                    "0",
+                    "1",
+                    "2"
+                  ]
+            },
+            "Eksport": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/$defs/Eksport"                
+              }
+            },
+            "Import": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/$defs/Import"
+            }
+        }
+    },   
+    "Eksport": {
+        "type": "object",
+        "properties": {
+            "cpaLevel1Eksport": {
+                "type": "string"        
+            },
+            "cpaEksport": {
+                "type": "string"
+            },
+            "PostEksport": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/$defs/PostEksport"
+            }
+        }
+    },
+    "Import": {
+        "type": "object",
+        "properties": {
+            "cpaLevel1Import": {
+                "type": "string",          
+            },
+            "cpaImport": {
+                "type": "string"
+            },
+            "PostImport": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/$defs/PostImport"
+            }
+        } 
+    },
+    "PostEksport": {
+        "type": "object",
+        "properties": {
+            "landkodeEksport": {
+                "type": "string"
+            },
+            "forrigeKvartalKrEksport": {
+                "type": "integer"
+            },
+            "forrigeKonsernIntKrEksport": {
+                "type": "integer"
+            },
+        }
+    },
+    "PostImport": {
+        "type": "object",
+        "properties": {
+            "landkodeImport": {
+                "type": "string",
+            },
+            "forrigeKvartalKrImport": {
+                "type": "integer"
+            },
+            "forrigeKonsernIntKrImport": {
+                "type": "integer"
+            },
+        }
+    }
+}
+```
+
+Merk at både Eksport/Import og PostEksport/PostImport er repeterende. Den ytterste gruppa er CPA-verdien, mens den innerste gruppa inneholder landskodene og kronebeløpene.
+
+@tbl-prefill-ra0692 beskriver feltene som kan forhåndsutfylles. 
+
+| Felt | Sti |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| leveransetype | -
+| cpaLevel1Eksport | Eksport 
+| cpaEksport | Eksport
+| landkodeEksport | Eksport.PostEksport
+| forrigeKvartalKrEksport | Eksport.PostEksport
+| forrigeKonsernIntKrEksport | Eksport.PostEksport
+| cpaLevel1Import | Import 
+| cpaImport | Import
+| landkodeImport | Import.PostImport
+| forrigeKvartalKrImport | Import.PostImport
+| forrigeKonsernIntKrImport | Import.PostImport
+: Prefill felter {#tbl-prefill-ra0692 .striped}
+
+Eksempelet leser prefill-data fra flere tekstfiler og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
