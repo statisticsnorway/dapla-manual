@@ -31,16 +31,15 @@ jupyter:
 Begrepet testing kan føre til misforståelser mellom statistikkere og utviklere: en statistikker vil ofte tenke på testing av data, og utvikler på testing av kode. Sistnevnte omtales som enhetstesting.
 
 Det finnes flere rammeverk for testing av kode og datavalidering.
-
-Når det kommer til Python bruker vi i SSB som oftest [Pytest](https://docs.pytest.org/en/stable/) pakken for testing av kode, og Pandera eller [Pydantic](https://docs.pydantic.dev/latest/) pakkene for data validering.
+Når det kommer til Python bruker vi i SSB som oftest [Pytest](https://docs.pytest.org/en/stable/) pakken for testing av kode, og Pandera eller [Pydantic](https://docs.pydantic.dev/latest/) pakkene for datavalidering.
 Alle disse pakkene står oppført på [godkjentlista](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3538355352/Godkjentliste+for+statistikkproduksjon+p+Dapla#Enhetstester,-objektmodeller-og-milj%C3%B8variabler) i SSB. 
 
-**Pandera eller Pydantic?** Hvem av som bør benyttes avhenger mest av strukturen på dataene din.
+**Pandera eller Pydantic?** Hvem av dem som bør benyttes avhenger mest av strukturen på dataene din.
 Dersom dataene er semi-strukturert (ofte filformater som json og xml) så vil fort Pydantic være mest aktuell, mens er dataene strukturerte (som en dataframe, eller filformat som csv) så vil Pandera være ett mer naturlig valg. Her vil det gis en intro til Pandera. Vel og merke vil innholdet her dreie seg om grunnleggende bruk, samt forskjellige tips og triks i hvordan det kan brukes, og muligens en bonus til slutt. Mer avanserte temaer, som f.eks. hypotesetesting, er ikke med her.
 
 Men **hvorfor Pandera?** Og hvorfor validere data? Siste er enkelt å besvare og ligger godt integrert i SSBs samfunnsansvar: Vi skal ha god kvalitet i all statistikk, forskning og analyse.
 
-I den moderniseringsprosessen SSB er i, overgang til Dapla, er det naturlig at dette integreres i kodene våre. Da er datavalideringspakker som Pandera høyst aktuelle. I tillegg er det en [anbefaling fra KVAKK](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3041492993/Regler+og+anbefalinger+for+versjonskontroll+med+Git#A-011-Anbefaling:-Produksjonskode-skal-som-standard-v%C3%A6re-%C3%A5pen-kildekode.-Det-vil-si-at-git-repoene-skal-v%C3%A6re-public.), og en [ADR vedtatt i SSB](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/4248731934/ADR0006+-+Retningslinjer+for+pen+intern+og+lukket+kildekode+i+SSB), om at kildekode skal være offentlig tilgjengelig. En eller annen gang skal altså produksjonskoden vår bli offentlig tilgjengelig. Dette er kanskje mine personlige meninger rundt det, men jeg vil tro at det vil foreligge en stor forventning der ute om at SSB validerer data i kode. Selv om Pandera er relativt nytt støtter den de aller mest brukte dataframe-rammeverkene som er i bruk i SSB, slik som Pandas, Polars, og PySpark.
+I den moderniseringsprosessen SSB er i, overgang til Dapla, er det naturlig at dette integreres i kodene våre. Det er en [anbefaling fra KVAKK](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3223420981/Trinnvis+arbeid#A-021-Anbefaling%3A-Kontroller-data-for-hvert-trinn.) anbefaler også å kontrollere data for hvert trinn. Da er datavalideringspakker som Pandera høyst aktuell. I tillegg er det en [annen anbefaling fra KVAKK](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3041492993/Regler+og+anbefalinger+for+versjonskontroll+med+Git#A-011-Anbefaling:-Produksjonskode-skal-som-standard-v%C3%A6re-%C3%A5pen-kildekode.-Det-vil-si-at-git-repoene-skal-v%C3%A6re-public.), og en [ADR vedtatt i SSB](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/4248731934/ADR0006+-+Retningslinjer+for+pen+intern+og+lukket+kildekode+i+SSB), om at kildekode skal være offentlig tilgjengelig. En eller annen gang skal altså produksjonskoden vår bli offentlig tilgjengelig. Dette er kanskje mine personlige meninger rundt det, men jeg vil tro at det vil foreligge en stor forventning der ute om at SSB validerer data i kode. Selv om Pandera er relativt nytt støtter den de aller mest brukte dataframe-rammeverkene som er i bruk i SSB, slik som Pandas, Polars, og PySpark.
 
 ## Import og testdata
 
@@ -114,7 +113,7 @@ Det er elementer her som ikke nødvendigvis er fullt realistist med virkelighete
 
 For å ta i bruk pandera må vi **definere et schema**. Schemaer definerer hvordan dataene forventes at skal se ut, spesielt når det kommer til datatyper.
 
-Med pandera kan du validere både datatyper og innhold. Det er  flere måter å definere ett schema på, men jeg kommer til å vise den   anbefalte måten å gjøre det på. Den er ikke den enkleste men den er enkel nok og har likheter til Pydantic.
+Med pandera kan du validere både datatyper og innhold. Det er flere måter å definere ett schema på, men jeg kommer til å vise den anbefalte måten å gjøre det på. Den er ikke nødvendigvis den enkleste, men den er enkel nok, og har likheter til Pydantic.
 
 Et schema i pandera defineres som følgende;
 
@@ -149,7 +148,7 @@ Vi har nå definert et eget Objekt, en class, kalt SchemaValidation1, som arver 
 - *id_nr* er en Serie (kolonner i pandas dataframe er av datatypen pandas serie) med forventet datatype string (str). Regler som er satt er at innholdet er unikt, altså ingen duplikater i de verdiene som ligger i kolonnen.
 - *lope_id_nr* er også forventet datatype string. Den har 2 regler; at alle verdier starter med 'L', og at teksten er minimum og maksimum 5 karakterer lang.
 - *aar* er forventet å være string, med regel om at den er 4 tegn lang.
-- *navn* er forventet å være string, med regel om at det ikke skal være noen manglende verdier (missing values). Dette er standard  alle regler, så det er ikke nødvendig å notere, men for demonstrasjonens skyld så gjorde jeg det her.
+- *navn* er forventet å være string, med regel om at det ikke skal være noen manglende verdier (missing values). Dette er standard for alle regler, så det er ikke nødvendig å notere, men for demonstrasjonens skyld så gjorde jeg det her.
 - *produkt* er forventet å være string, med regler om at innholdet er blant verdiene i en gitt liste. I dette tilfellet Eple, Banan, Gulrot, Brokkoli. Kanskje er dette varene butikken selger og har i sortimentet sitt.
 - *salgsverdi* er forventet å være en integer (int). Regel som er satt her er at verdiene er større eller lik 1000.
 - *vekt* er forventet å være en integer. Regel som er satt her er at verdiene er større eller lik 500.
@@ -249,7 +248,7 @@ Schemaet SchemaValidation2 har som vi ser nå 3 metoder;
 
 - check_groupby som grupperer verdiene i kolonnen produkt. Det sjekkes her for kolonnene kostverdi og salgsverdi. Den sjekker at summen av bananer er høyere enn summen av epler (for å gjøre noe enkelt og irrelevant).
 
-- de 2 første sjekkene kan kun jobbe med en kolonne av gangen, ev. en groupby på en annen kolonne med fokus på de gjeldende kolonnene en har tenkt å sjekke for. Den tredje siste sjekken er litt annerledes, for de andre sjekkene har benyttet decoratoren check, mens den siste har dataframe_check. Dette vil si at hele dataframen sendes inn, og her vil du ha full fleksibilitet til å sjekke det du måtte ønske på tvers av alle kolonner. Viktigste er at det returneres en serie(kolonne). I denne siste sjekken unique_combo_idnr_lopeidnr sjekkes det at kombinasjonen av kolonnene id_nr og lope_id_nr er unike i dataframen.
+- de 2 første sjekkene kan kun jobbe med en kolonne av gangen, ev. en groupby på en annen kolonne med fokus på de gjeldende kolonnene en har tenkt å sjekke for. Den tredje siste sjekken er litt annerledes, for de andre sjekkene har benyttet decoratoren check, mens den siste har dataframe_check. Dette vil si at hele dataframen sendes inn, og her vil du ha full fleksibilitet til å sjekke det du måtte ønske på tvers av alle kolonner. Viktigste er at det returneres en serie(kolonne) av boolske verdier (True/False). I denne siste sjekken unique_combo_idnr_lopeidnr sjekkes det at kombinasjonen av kolonnene id_nr og lope_id_nr er unike i dataframen.
 
 Igjen kan dataene valideres;
 
@@ -287,7 +286,7 @@ except SchemaErrors as error:
 klargjort_df
 ```
 
-Deretter definerer vi et eget schema for statistikkdata, men noen tilhørende regler og datatyper;
+Deretter definerer vi et eget schema for statistikkdata, med noen tilhørende regler og datatyper;
 
 ```{python}
 class StatistikkSchema(pan.DataFrameModel):
