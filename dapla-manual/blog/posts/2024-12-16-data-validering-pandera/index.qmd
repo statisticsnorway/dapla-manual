@@ -1,0 +1,420 @@
+---
+title: Intro til Pandera
+subtitle: Data validering i kode med Pandera.
+categories:
+  - Data validering
+  - Python
+  - Pandera
+author:
+  - name: Jonathan Husø
+    affiliation:
+      - name: Seksjon for Utenrikshandelsstatistikk (214)
+        email: jhu@ssb.no
+image: Pandera-Python-package.png
+image-alt: Logo til Pandera
+date: 12/16/2024
+date-modified: 12/16/2024
+freeze: true
+draft: false
+jupyter:
+  jupytext:
+    cell_metadata_filter: 'tags,-papermill'
+    notebook_metadata_filter: 'jupytext.text_representation,-jupytext.text_representation.jupytext_version,-widgets,-varInspector'
+  kernelspec:
+    display_name: a200-stoetteteam-examples
+    language: python
+    name: a200-stoetteteam-examples
+---
+
+[Pandera](https://pandera.readthedocs.io/en/stable/index.html#) er en python pakke og rammeverk for testing av data - altså *datavalidering*.
+
+Begrepet testing kan føre til misforståelser mellom statistikkere og utviklere: en statistikker vil ofte tenke på testing av data, og utvikler på testing av kode. Sistnevnte omtales som enhetstesting.
+
+Det finnes flere rammeverk for testing av kode og datavalidering.
+Når det kommer til Python bruker vi i SSB som oftest [Pytest](https://docs.pytest.org/en/stable/) pakken for testing av kode, og Pandera eller [Pydantic](https://docs.pydantic.dev/latest/) pakkene for datavalidering.
+Alle disse pakkene står oppført på [godkjentlista](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3538355352/Godkjentliste+for+statistikkproduksjon+p+Dapla#Enhetstester,-objektmodeller-og-milj%C3%B8variabler) i SSB. 
+
+**Pandera eller Pydantic?** Hvem av dem som bør benyttes avhenger mest av strukturen på dataene din.
+Dersom dataene er semi-strukturert (ofte filformater som json og xml) så vil fort Pydantic være mest aktuell, mens er dataene strukturerte (som en dataframe, eller filformat som csv) så vil Pandera være ett mer naturlig valg. Her vil det gis en intro til Pandera. Vel og merke vil innholdet her dreie seg om grunnleggende bruk, samt forskjellige tips og triks i hvordan det kan brukes, og muligens en bonus til slutt. Mer avanserte temaer, som f.eks. hypotesetesting, er ikke med her.
+
+Men **hvorfor Pandera?** Og hvorfor validere data? Siste er enkelt å besvare og ligger godt integrert i SSBs samfunnsansvar: Vi skal ha god kvalitet i all statistikk, forskning og analyse.
+
+I den moderniseringsprosessen SSB er i, overgang til Dapla, er det naturlig at dette integreres i kodene våre. Det er en [anbefaling fra KVAKK](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3223420981/Trinnvis+arbeid#A-021-Anbefaling%3A-Kontroller-data-for-hvert-trinn.) anbefaler også å kontrollere data for hvert trinn. Da er datavalideringspakker som Pandera høyst aktuell. I tillegg er det en [annen anbefaling fra KVAKK](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3041492993/Regler+og+anbefalinger+for+versjonskontroll+med+Git#A-011-Anbefaling:-Produksjonskode-skal-som-standard-v%C3%A6re-%C3%A5pen-kildekode.-Det-vil-si-at-git-repoene-skal-v%C3%A6re-public.), og en [ADR vedtatt i SSB](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/4248731934/ADR0006+-+Retningslinjer+for+pen+intern+og+lukket+kildekode+i+SSB), om at kildekode skal være offentlig tilgjengelig. En eller annen gang skal altså produksjonskoden vår bli offentlig tilgjengelig. Dette er kanskje mine personlige meninger rundt det, men jeg vil tro at det vil foreligge en stor forventning der ute om at SSB validerer data i kode. Selv om Pandera er relativt nytt støtter den de aller mest brukte dataframe-rammeverkene som er i bruk i SSB, slik som Pandas, Polars, og PySpark.
+
+## Import og testdata
+
+Først importerer vi noen biblioteker som vi skal benytte. For å benytte Pandera pakken må det lastes inn til ett virtuelt miljø, som vi i SSB benytter [ssb-project](../../../statistikkere/jobbe-med-kode.qmd#dapla-toolbelt) for;
+
+``` {.bash filename="terminal"}
+poetry add pandera
+```
+
+Versjonen av Pandera som benyttes i introduksjonen her er **0.20.4**. Følgende pakker får jeg importert deretter;
+
+```{python}
+import uuid
+from typing import Dict
+import pandas as pd
+import numpy as np
+import pandera as pan
+from pandera.typing import DataFrame, Series
+from pandera.errors import SchemaErrors
+```
+
+Jeg lager også følgende lekedata vi skal ta for oss i eksemplene;
+
+```{python}
+size = 6
+
+random_data = pd.DataFrame({
+    "id_nr": [str(uuid.uuid4()) for _ in range(size)],
+    "lope_id_nr": ["L" + str(1).zfill(4) for _ in range(size)],
+    "aar": np.random.choice(['2023', '2024'], size),
+    "navn": np.random.choice(['Ola', 'Kari', 'Per', 'Ida'], size),
+    "produkt": np.random.choice(['Eple', 'Gulrot', 'Brokkoli'], size),
+    "salgsverdi": np.random.randint(1000, 10000, size),
+    "vekt": np.random.randint(500, 5000, size)
+})
+
+random_data['kostverdi'] = (
+    random_data['salgsverdi'] * 0.75
+).astype(int)
+
+bad_data = pd.DataFrame({
+    "id_nr": ["random-id1", "random-id1", "random-id2",
+              "random-id2", "random-id3"],
+    "lope_id_nr": ["L0001", "L0002", "L0001", "L0001", "0001"],
+    "aar": ['2023', '2023', '2024', '2024', '2024Q1'],
+    "navn": ['Ola', 'Ola', 'Per', 'Kari', None],
+    "produkt": ['Banan', 'Eple', 'Eple', 'Agurk', 'Eple'],
+    "salgsverdi": [5000, 4000, 7000, 3000, 50],
+    "vekt": [700, 600, 700, 100, 5],
+    "kostverdi": [3500, 2500, 5000, 3100, 55],
+})
+
+data = pd.concat([random_data, bad_data], ignore_index=True)
+data
+```
+
+Dataframen består av følgende kolonner:
+
+- *id_nr*: identifiseringsnummer
+- *lope_nr_id*: et slags løpenummerid
+- *aar*: perioden i år for gjeldende rad
+- *navn*: navn på enheten (person eller kunde)
+- *produkt*: produktet det gjelder - la oss si i en frukt og grønt butikk
+- *salgsverdi*: sluttverdien varen ble solgt for
+- *vekt*: sluttvekten som ble solgt
+- *kostverdi*: kostnaden tilknyttet innkjøp av produktet eller varen.
+
+Det er elementer her som ikke nødvendigvis er fullt realistist med virkeligheten, men sammensetningen av disse kolonnene er mest bygd opp for å demonstrere mulighetene og fleksibiliteten ved bruk av pandera.
+
+## Grunnleggende bruk - schema
+
+For å ta i bruk pandera må vi **definere et schema**. Schemaer definerer hvordan dataene forventes at skal se ut, spesielt når det kommer til datatyper.
+
+Med pandera kan du validere både datatyper og innhold. Det er flere måter å definere ett schema på, men jeg kommer til å vise den anbefalte måten å gjøre det på. Den er ikke nødvendigvis den enkleste, men den er enkel nok, og har likheter til Pydantic.
+
+Et schema i pandera defineres som følgende;
+
+```{python}
+class SchemaValidation1(pan.DataFrameModel):
+    
+    id_nr: Series[str] = pan.Field(unique=True)
+    lope_id_nr: Series[str] = pan.Field(
+        str_startswith='L',
+        str_length={'min_value': 5,
+                    'max_value': 5}
+    )
+    aar: Series[str] = pan.Field(
+        str_length={'min_value': 4,
+                    'max_value': 4}
+    )
+    navn: Series[str] = pan.Field(
+        nullable=False # Default
+    )
+    produkt: Series[str] = pan.Field(
+        isin=['Eple', 'Banan', 'Gulrot', 'Brokkoli']
+    )
+    salgsverdi: Series[int] = pan.Field(ge=1000)
+    vekt: Series[int] = pan.Field(ge=500)
+    kostverdi: Series[int] = pan.Field(gt=700)
+```
+
+Så **hva er det vi har definert her?**
+
+Vi har nå definert et eget Objekt, en class, kalt SchemaValidation1, som arver egenskapene til Pandera sitt objekt DataFrameModel. Mer avansert fra objekt og class verden trenger du ikke å gjøre eller kunne her egentlig, så ikke bli skremt med det første. Deretter definerer vi kolonnene som vi forventer i dette schemaet. Pandera er bygget på typing systemet til Python vel og merke, som enkelt forklart vil si at jeg kan bruke typing-pakkens objekter i definisjonen som han vil bruke til å validere for, men det gir også muligheten til å benytte pythons standardobjekter som str og int i definisjonen. Vi har også definert regler tilknyttet hver av disse kolonnene som da vil bli validert sammen med datatypene.
+
+- *id_nr* er en Serie (kolonner i pandas dataframe er av datatypen pandas serie) med forventet datatype string (str). Regler som er satt er at innholdet er unikt, altså ingen duplikater i de verdiene som ligger i kolonnen.
+- *lope_id_nr* er også forventet datatype string. Den har 2 regler; at alle verdier starter med 'L', og at teksten er minimum og maksimum 5 karakterer lang.
+- *aar* er forventet å være string, med regel om at den er 4 tegn lang.
+- *navn* er forventet å være string, med regel om at det ikke skal være noen manglende verdier (missing values). Dette er standard for alle regler, så det er ikke nødvendig å notere, men for demonstrasjonens skyld så gjorde jeg det her.
+- *produkt* er forventet å være string, med regler om at innholdet er blant verdiene i en gitt liste. I dette tilfellet Eple, Banan, Gulrot, Brokkoli. Kanskje er dette varene butikken selger og har i sortimentet sitt.
+- *salgsverdi* er forventet å være en integer (int). Regel som er satt her er at verdiene er større eller lik 1000.
+- *vekt* er forventet å være en integer. Regel som er satt her er at verdiene er større eller lik 500.
+- *kostverdi* er forventet å være en integer. Regel som er satt her er at verdiene er større enn 700.
+
+Okei, da har vi definert schemaet. Vi skal bygge videre på dette snart. Det finnes mange flere innebygde valideringsregler enn de vi benytter her, og man må inn i dokumentasjonen til Pandera for å se om noe kan passe deg og ditt behov der, men her demonstrerer vi hvertfall noen som sikkert kommer til å bli brukt.
+
+For å utføre valideringen gjør vi følgende;
+
+```{python}
+try:
+    valresult = SchemaValidation1.validate(data, lazy=True)
+except SchemaErrors as error:
+    # Rapport av feil utslag i dataframe
+    valresult = error.failure_cases
+    # Dataframe som ble sendt inn
+    errdata = error.data
+    # Antall feil utslag
+    num_errors = error.error_counts
+    # Rapportmeilding av feil utslag i dict
+    error_message = error.message
+
+valresult
+```
+
+Objektet SchemaValidation1 har en metode validate som vi kan sende inn dataframen som skal valideres opp mot schemaet(som vi arvet fra pandera DataFrameModel objektet). Jeg har satt lazy til True her fordi jeg vil at han skal validere alt og ikke stoppe ved første feil han finner. Dersom valideringen feiler har pandera et error objekt SchemaErrors hvor flere nyttige rapporter blir lagd tilgjengelig for oss. Du kan selv legge med flere av dem, men her tar vi for oss dataframen med alle feilmeldingene som dukker opp. Dersom valideringen gikk bra vil du få dataframen du sendte inn i retur.
+
+Rapporten vi har fått ut nå i dataframen valresult har vi flere utslag på. Kolonnen id_nr finnes det duplikater blant annet. Kolonnen lope_id_nr er det funnes en som har slått ut i begge definerte reglene som nevnt tidligere. osv, osv. Denne rapporten har vi kanskje et potensial for å utnytte videre? Men det får være opp til den enkelte.
+
+## Behov for flere kontroller
+
+Dersom de innebygde mulighetene for validering ikke strekker til kan man definere reglene selv ved å definere egne metoder med tilhørende decorator (alfakrøll over metoden). Under her definerer jeg SchemaValidation2 som sett bort ifra de nye metodene er nesten helt identisk med SchemaValidation1. Forskjellen er at nå har kolonnen id_nr kun regelen om at den skal ikke ha manglende verdier i stedet for at det skal unike verdier.
+
+```{python}
+class SchemaValidation2(pan.DataFrameModel):
+    
+    id_nr: Series[str] = pan.Field(nullable=False) # Default
+    lope_id_nr: Series[str] = pan.Field(
+        str_startswith='L',
+        str_length={'min_value': 5,
+                    'max_value': 5}
+    )
+    aar: Series[str] = pan.Field(
+        str_length={'min_value': 4,
+                    'max_value': 4}
+    )
+    navn: Series[str] = pan.Field(nullable=False) # Default
+    produkt: Series[str] = pan.Field(
+        isin=['Eple', 'Banan', 'Gulrot', 'Brokkoli']
+    )
+    salgsverdi: Series[int] = pan.Field(ge=1000)
+    vekt: Series[int] = pan.Field(ge=500)
+    kostverdi: Series[int] = pan.Field(gt=700)
+
+    # Sjekke at kolonne aar er tekst med tall i seg
+    @pan.check("aar",
+               # Valgfritt, men gir eget navn til regelen enn metodenavnet
+               name="str_isdigits",
+               # Valgfritt, men her kan man styre feilmeldingen
+               error="str_not_digits")
+    def check_isdigits(cls, s: Series[str]) -> Series[bool]:
+        return s.str.isdigit()
+
+    # En metode kan sjekke flere kolonner,
+    # her sjekker vi både kostverdi og salgsverdi.
+    # Validerer at Bananer har både høyere
+    # salgsverdi og kostverdi enn Epler
+    @pan.check("kostverdi", "salgsverdi",
+               groupby="produkt",
+               name="check_epler_bananer")
+    def check_groupby(cls, grouped_value: Dict[str, Series[int]]) -> bool:
+        return grouped_value["Eple"].sum() < grouped_value["Banan"].sum()
+
+    # Trenger du å sjekke mer enn bare en kolonne av gangen?
+    # f.eks. at forholde mellom flere kolonner
+    # har en bestemt regel å følge?
+    # Her sjekkes at kombinasjonen for kolonnene
+    # id_nr og lope_id_nr er unike
+    @pan.dataframe_check
+    def unique_combo_idnr_lopeidnr(cls, df: pd.DataFrame) -> Series[bool]:
+        df2 = df.copy()
+        df3 = (
+            df2
+            .groupby(['id_nr', 'lope_id_nr'])
+            .agg({'aar': 'count'})
+            .rename(columns={'aar': 'duplikater'}) == 1
+        ).reset_index()
+        df2 = df2.merge(df3,
+                        on=['id_nr', 'lope_id_nr'],
+                        how='left')
+        return df2['duplikater']
+```
+
+Schemaet SchemaValidation2 har som vi ser nå 3 metoder;
+
+- check_isdigits som sjekker at teksten faktisk kun inneholder tall. Her sjekkes kun kolonnen aar.
+
+- check_groupby som grupperer verdiene i kolonnen produkt. Det sjekkes her for kolonnene kostverdi og salgsverdi. Den sjekker at summen av bananer er høyere enn summen av epler (for å gjøre noe enkelt og irrelevant).
+
+- de 2 første sjekkene kan kun jobbe med en kolonne av gangen, ev. en groupby på en annen kolonne med fokus på de gjeldende kolonnene en har tenkt å sjekke for. Den tredje siste sjekken er litt annerledes, for de andre sjekkene har benyttet decoratoren check, mens den siste har dataframe_check. Dette vil si at hele dataframen sendes inn, og her vil du ha full fleksibilitet til å sjekke det du måtte ønske på tvers av alle kolonner. Viktigste er at det returneres en serie(kolonne) av boolske verdier (True/False). I denne siste sjekken unique_combo_idnr_lopeidnr sjekkes det at kombinasjonen av kolonnene id_nr og lope_id_nr er unike i dataframen.
+
+Igjen kan dataene valideres;
+
+```{python}
+try:
+    valresult = SchemaValidation2.validate(data, lazy=True)
+except SchemaErrors as error:
+    valresult = error.failure_cases
+
+valresult
+```
+
+Desverre vil sjekker som gjelder hele dataframen registrere flere feil ettersom han sjekker alle kolonner for gjeldende rader. Derimot er fleksibiliteten ganske stor!
+
+## Bruk av validering i funksjonene
+
+Over til et eksempel hvor pandera viser seg som veldig nyttig! La oss si at vi har klargjorte data klart, ihht. datatilstandene, og vi er da klare for å lage statistikkdata. Det er ikke gitt at løpet er helt rett fram mellom disse datatilstandene, men i dette eksempelet er jobben bare å få aggregert klargjorte data.
+
+Nedenfor her lager jeg klargjorte data av de dataene som vi har jobbet med, og som er korrekte. Lager et tilhørende skjema, som bare arver fra det første schemaet vi lagde. Valideringen her vil selvsagt gå smertefritt igjennom.
+
+```{python}
+klargjort_df = data.head(6)
+
+
+class KlargjortSchema(SchemaValidation1):
+    pass
+
+
+try:
+    klargjort_df = KlargjortSchema.validate(klargjort_df, lazy=True)
+except SchemaErrors as error:
+    valresult = error.failure_cases
+    raise error
+
+klargjort_df
+```
+
+Deretter definerer vi et eget schema for statistikkdata, med noen tilhørende regler og datatyper;
+
+```{python}
+class StatistikkSchema(pan.DataFrameModel):
+    
+    aar: Series[pd.CategoricalDtype] = pan.Field(
+        coerce=True, # Vil konvertere datatypene for meg
+        str_length={'min_value': 4,
+                    'max_value': 4})
+    produkt: Series[pd.CategoricalDtype] = pan.Field(
+        coerce=True, # Vil konvertere datatypene for meg
+        isin=['Eple', 'Banan', 'Gulrot', 'Brokkoli'])
+    salgsverdi: Series[int] = pan.Field(ge=0)
+```
+
+Så over til magien; **Pandera schemaene kan innlemmes i hvilken som helst funksjon som har dataframes som input eller output**, og det uten at du selv skriver at valideringen skal skje i funksjonen, det skjer automagisk! Og det gjøres som følgende;
+
+```{python}
+# Lazy for at valideringen skal utføres igjennom hele dataframene
+@pan.check_types(lazy=True)
+def agg_statistikk(
+    df: DataFrame[KlargjortSchema]
+) -> DataFrame[StatistikkSchema]:
+    dff = (
+        df
+        .copy()
+        .groupby(['aar', 'produkt'], as_index=False)
+        .agg({'salgsverdi': 'sum'})
+    )
+    return dff
+```
+
+Så nå ved å bruke funksjonen, vil du ikke få lagd statistikkdata uten at både klargjorte data blir validert og godkjent, og at statistikkdata som er på vei ut av funksjonen er validert og godkjent. I vårt tilfelle skal det gå fint nå;
+
+```{python}
+statistikk_df = agg_statistikk(klargjort_df)
+statistikk_df
+```
+
+Man skal også kunne validere flere schemaer samtidig også hvis en ønsker det. Altså at input til funksjonen sjekkes opp mot flere schema samtidig, eller at output blir det. Det er ikke blitt demonstrert her.
+
+Med det samme kan vi sjekke datatypene, vi hadde satt at Pandera skulle endre datatypene for oss. Både før og etter;
+
+```{python}
+#| echo: true
+#| code-fold: true
+from IPython.display import HTML, display
+
+kdf = pd.DataFrame(klargjort_df.dtypes, columns=['Datatyper'])
+sdf = pd.DataFrame(statistikk_df.dtypes, columns=['Datatyper'])
+
+# Style dataframes
+styled_df1 = kdf.style.set_caption("Klargjorte-data")
+styled_df2 = sdf.style.set_caption("Statistikk data")
+
+display(HTML(
+f"""
+<div style="display: flex; justify-content: space-around;">
+<div>{styled_df1.to_html()}</div>
+<div>{styled_df2.to_html()}</div>
+</div>
+"""
+))
+```
+
+## BONUS: Auto-transformasjon av kolonneverdier
+
+Pandera har noe som kalles *parsers*, som gir oss muligheten til å utføre preprosesseringer på dataene før validering.
+Dette kan være flere typer transformasjoner som man bør sørge for er gjort før valideringen utføres, ev. om transformasjonen bare skal gjennomføres.
+
+La oss ta et eksempel med en liten del av dataene vi har jobbet med til nå, da med data vi vet det ikke skal bli noe problemer med;
+
+```{python}
+data['dekningsbidrag'] = data['salgsverdi'] - data['kostverdi']
+
+df = data.head(3).copy()
+df
+```
+
+Jeg beregner her dekningsbidraget for hver observasjon, som da er differansen mellom salgsverdi og kostverdi. Det er mer eller mindre en funksjon som avhenger av disse to variablene, og må holdes oppdatert.
+
+Og la oss nå si at kostverdien på første observasjonen ikke skulle være på 75 % av salgsverdi slik vi startet med, men av en eller annen grunn heller skulle være på 85 %. Vi kan editere det inn;
+
+```{python}
+df.loc[0, ['kostverdi']] = int(round(
+    df.iloc[0]['salgsverdi'] * 0.85, 0)
+                              )
+
+df
+```
+
+Så nå har vi fått korrigert kostverdien på første observasjon, men dekningsbidraget er fortsatt den samme. Dette kan løses som en egen funksjon, men hvorfor ikke innlemme det i data valideringen vår, da pandera støtter slik transformering. Vi lager først et tilhørende schema;
+
+```{python}
+class ParserSchema(SchemaValidation1):
+    dekningsbidrag: Series[int]
+
+    @pan.check("navn")
+    def is_uppercase(cls, s: Series[str]) -> Series[bool]:
+        return s.str.isupper()
+
+    # konverterer all tekst i kolonnen til å ha kun store bokstaver
+    @pan.parser("navn")
+    def uppercase(cls, s: Series[str]) -> Series[str]:
+        return s.str.upper()
+
+    # Sørger for at dekningsbidrag blir rekalkulert
+    @pan.dataframe_parser
+    def kalkuler_dekningsbidrag(cls, df: pd.DataFrame) -> pd.DataFrame:
+        df['dekningsbidrag'] = df['salgsverdi'] - df['kostverdi']
+        return df
+```
+
+Så her tar jeg i bruk det aller første schema som vi definerte, men legger på dekningsbidrag som ikke har noen andre valideringer enn datatype. Med dataene vi har nå skal det ikke dukke opp noen feil med dette. Jeg legger ved en valideringsregel for navn i dette tilfelle, hvor nå alt i kolonnen navn skal være store bokstaver. Vi vet allerede at det ikke er noen store bokstaver der, så vi legger inn en metode som har decorator parser som vil transformere dette. I tillegg legger vi til en egen metode med decorator dataframe_parser for å rekalkulere dekningsbidraget.
+
+Så sånn sett skulle man kanskje tro at valideringen av kolonnen navn vil kunne slå ut i valideringen, men som nevnt så kjøres transformasjonene først før valideringen. I tillegg, når valideringen går igjennom, vil du få dataframen du sendte inn i retur ved utførelsen av valideringen;
+
+```{python}
+try:
+    valresult = ParserSchema.validate(df, lazy=True)
+except SchemaErrors as error:
+    valresult = error.failure_cases
+
+valresult
+```
+
+Som vi nå ser har valideringen gått fint for seg. Vi ser at alle verdier i kolonnen navn har blitt tekst med kun store bokstaver, og vi ser at dekningsbidraget har blitt rekalkulert så det nå er korrekt!
+
+## Oppsummering
+
+For at vi skal kunne produsere og levere statistikk av høy kvalitet er det viktig at vi validerer data løpende i produksjonsløpene våre. Store deler av dataene våre er strukturerte, ev. tidy om du vil, og da er python pakken Pandera en sterk kandidat å benytte inn i kodene våre. Hvertfall hvis du programmerer i Python. For R så er pakken [Validate](https://github.com/data-cleaning/validate) aktuell. Her har vi introdusert generell bruk av Pandera for validering av data; hvordan definere schema og valideringsregler, hvordan validere en dataframe med det, og hvordan det kan tas i bruk i blant annet funksjoner. Trenger du hjelp til å implementere data validering med Pandera inn i koden din, så er Støtteteamene mulig å spørre, ellers kommer man ikke unna [dokumentasjonen til Pandera](https://pandera.readthedocs.io/en/stable/index.html) selv.
+
