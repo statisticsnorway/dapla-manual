@@ -184,6 +184,113 @@ print(json.dumps(output, indent=4))
 ```
 
 ## Pulje 
+En periode kan ha en eller flere puljer knyttet til seg. Hvilke puljer som er lagt inn på skjemaet kan du se i detaljvisningen når du har valgt en periode. 
+
+**Eksempel på periode med pulje**<br>
+Bildet nedenfor viser eksempel på en periode med en tilknyttet pulje:
+
+![Periode pulje](../images/altinn-skjemaadm-pulje.png){fig-alt="Illustrasjon av periode og pulje." #fig-altinn-periode-pulje} 
+
+::: {.callout-tip collapse="true"}
+## Beskrivelse av pulje metadata
+
+@tbl-pulje-meta beskriver metadatafeltene for en pulje
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| Pulje | Pulje nummer.
+| Tilgjengelig fra | Angir fra når skjemaet er tilgjengelig for oppdragsgiver ute hos Altinn. 
+| Svarfrist | Angir svarfrist for undersøkelsen.
+| Tvmulkt svarfrist | Angir svarfrist før utsendelse av tvangsmulkt.
+| Send SI |  
+: Pulje metadata {#tbl-pulje-meta .striped}
+:::
+
+### Kodeeksempel
+For å lage en ny pulje, kan du bruke metoden `create_pulje` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+_altinn_tilgjengelig = datetime(2024, 11, 20, 14, 30, 0)
+_altinn_svarfrist = datetime(2024, 11, 21)
+_tvangsmulkt_svarfrist_ = datetime(2024, 11, 22)
+_send_si = datetime(2024, 11, 23)
+
+client.create_pulje(
+    periode_id = 24,
+    pulje_nr = 1,
+    altinn_tilgjengelig=_altinn_tilgjengelig,
+    altinn_svarfrist = _altinn_svarfrist,
+    tvangsmulkt_svarfris t= _tvangsmulkt_svarfrist_,
+    send_si = _send_si
+)
+
+print(output)
+```
+
+For å hente ut pulje med tilhørende metadata i Python, kan du bruke metoden `get_pulje_by_periode_id` i `SuvClient`. Sørg for at du oppgir riktig periode_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_pulje_by_periode_id(
+            periode_id = 99
+        )
+
+print(output)
+```
 
 ## Utsending
+En pulje kan ha en eller flere utsendinger knyttet til seg. Hvilke utsendinger som er lagt inn på puljen kan du se i detaljvisningen når du har valgt en pulje. 
 
+**Eksempel på pulje med utsending**<br>
+Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
+
+![Pulje utsending](../images/altinn-skjemaadm-utsending.png){fig-alt="Illustrasjon av pulje og utsending." #fig-altinn-pulje-utsending} 
+
+::: {.callout-tip collapse="true"}
+## Beskrivelse av utsending metadata
+
+@tbl-utsending-meta beskriver metadatafeltene for en utsending
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| Utsendingstype | Angir type utsending (f.eks instansiering).
+| Trigger | Angir trigger for utsending (Manuell, Auto, Ekstern). 
+| Test | 
+| Send ut | Angir tidspunkt for utsendelse.
+: Pulje metadata {#tbl-utsending-meta .striped}
+:::
+
+### Kodeeksempel
+For å lage en ny utsending, kan du bruke metoden `create_pulje` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+_altinn_uts_tidspunkt = datetime(2024, 11, 20, 14, 30, 0)
+
+output = client.create_utsending(
+            pulje_id = 75,
+            utsendingstype_navn = 'instansiering',
+            altinn_uts_tidspunkt = _altinn_uts_tidspunkt
+        )
+        
+print(output)
+```
+
+For å hente ut utsending med tilhørende metadata i Python, kan du bruke metoden `get_utsending_by_id` i `SuvClient`. Sørg for at du oppgir riktig utsending_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.client.get_utsending_by_id(
+            utsending_id = 133   
+        )
+
+print(output)
+```
+
+## Eksempelkode sammenstilling av data
+Noe demokode for sammenstilling av data ligger i [repoet](https://github.com/statisticsnorway/dapla-suv-tools/tree/main/demo), og kan være ett godt utgangspunkt å kopiere og endre fra.
