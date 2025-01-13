@@ -15,14 +15,13 @@ jupyter:
 
 ![](../images/altinn_logo.png){style="max-width: 50%; float: right;" fig-alt="Dapla logo"}
 
-Frem mot sommeren 2025 skal alle skjema-undersøkelser i SSB som gjennomføres på **Altinn 2** flyttes over til [Altinn 3](https://docs.altinn.studio/nb/community/about/). Skjemaer som flyttes til Altinn 3 vil motta sine data på **Dapla**, og ikke på *bakken* som tidligere. Datafangsten håndteres av [Team SUV](https://statistics-norway.atlassian.net/wiki/spaces/CUL/pages/2805530625/Teamsider), mens statistikkseksjonene henter sine data fra Team SUV sitt lagringsområde på Dapla. I dette kapitlet beskriver vi nærmere hvordan statistikkseksjonene kan jobbe med Altinn3-data på Dapla. Kort oppsummert består det av disse stegene:
+Frem mot sommeren 2026 skal alle skjema-undersøkelser i SSB som gjennomføres på **Altinn 2** flyttes over til [Altinn 3](https://docs.altinn.studio/nb/community/about/). Skjemaer som flyttes til Altinn 3 vil motta sine data på **Dapla**, og ikke på *bakken* som tidligere. Datafangsten håndteres av [Team SUV](https://statistics-norway.atlassian.net/wiki/spaces/CUL/pages/2805530625/Teamsider), mens statistikkseksjonene henter sine data fra Team SUV sitt lagringsområde på Dapla. I dette kapitlet beskriver vi nærmere hvordan statistikkseksjonene kan jobbe med Altinn3-data på Dapla. Kort oppsummert består det av disse stegene:
 
 1. Statistikkprodusenten avtaler overføring av skjema fra **Altinn 2** til **Altinn 3** med planleggere på S821, som koordinerer denne jobben. 
 2. Når statistikkprodusentene får beskjed om at Altinn3-skjemaet skal sendes ut til oppgavegiverne, så må de opprette et [Dapla-team](./opprette-dapla-team.html).
-3. Når Dapla-teamet er opprettet, og første skjema er sendt inn, så ber de Team SUV om å gi statistikkteamet tilgang til dataene som har kommet inn fra Altinn 3. I tillegg ber de om at Team SUV gir tilgang til teamets *Transfer Service* instans. ^[Forslag til e-post til Kundeservice etter at teamet er opprettet:  
-***Emne**: Tilgang databøtter - team SUV<br>**Navn** på Dapla-team<br>**Skjema** (RA-nummer). Dersom RA-1000A3 - oppgi også Undersøkelsesnummer for Norsamu (SFU)<br>**Miljø** (test eller produksjon)*] Merk at det må gis separate tilganger for data i test- og produksjonsmiljø. 
+3. Når Dapla-teamet er opprettet, og første skjema er sendt inn, se ber de om at Team SUV gir tilgang til teamets *Transfer Service* instans. Søknad om tilgang gjøres gjennom Kundeservice og [selvbetjeningsportalen](https://ssb.pureservice.com/). For å søke om tilgang velger du *Meld sak til Spørreundersøkelser virksomhet (SUV)*. Her vil du finne et eget skjema som du fyller ut for å søke om tilgang. Merk at det må gis separate tilganger for data i test- og produksjonsmiljø. 
 4. Statistikkprodusenten setter opp en automatisk overføring av skjemadata med [Transfer Service](./transfer-service.html), fra Team SUV sitt lagringsområde over til Dapla-teamet sin kildebøtte.
-5.  Statistikkprodusentene kan begynne å jobbe med dataene i Dapla. Blant annet tilbyr Dapla en **automatiseringstjeneste** man kan bruke for å prosessere dataene fra kildedata til inndata^[En typisk prosessering som de fleste vil ønske å gjøre er å konvertere fra xml-formatet det kom på, og over til parquet-formatet.].
+5.  Statistikkprodusentene kan begynne å jobbe med dataene i Dapla. Blant annet tilbyr Dapla en **automatiseringstjeneste** som man kan bruke for å prosessere dataene fra kildedata til inndata^[En typisk prosessering som de fleste vil ønske å gjøre er å konvertere fra xml-formatet det kom på, og over til parquet-formatet.].
 
 Under forklarer vi mer med mer detaljer hvordan man går frem for gjennomføre steg 4-5 over. 
 
@@ -37,7 +36,7 @@ Selv om Team SUV tar ansvaret for datafangst fra Altinn3, så er det statistikkt
 Når skjema-dataene kommer inn fra Altinn 3 til Team SUV sitt lagringsområde, så er det en del ting som er verdt å tenke på:
 
 - **Hvordan er filene organisert hos Team SUV?**  
-Filstrukturen der Team SUV lagrer dataene som kommer inn fra Altinn 3, har en klar struktur. Du kan selv gå inn å kikke på dataene, enten [fra Jupyter](./jobbe-med-data.html) eller [Google Cloud Console](./gcc.html), og bli bedre kjent med strukturen^[Du kan gå inn i [Google Cloud Console](./gcc.html) og søke opp prosjektet til Team SUV som de bruker for å dele data. Det heter **altinn-data-prod**, og du finner bøttene ved å klikke deg inn på **Cloud Storage**]. @fig-altinn-path viser en hvordan en typisk filsti ser ut på lagringsområdet til Team SUV. Det starter med navnet til bøtta som Team SUV har opprettet for skjemaet. Deretter viser den innvitteringsdato, deretter et teknisk navn, og til slutt selve skjemanavnet. 
+Filstrukturen der Team SUV lagrer dataene som kommer inn fra Altinn 3, har en klar struktur. Du kan selv gå inn å kikke på dataene, enten [fra Jupyter](./jobbe-med-data.html) eller [Google Cloud Console](./gcc.html), og bli bedre kjent med strukturen^[Du kan gå inn i [Google Cloud Console](./gcc.html) og søke opp prosjektet til Team SUV som de bruker for å dele data. Det heter **suv-altinn-data-p**, og du finner bøttene ved å klikke deg inn på **Cloud Storage**]. @fig-altinn-path viser en hvordan en typisk filsti ser ut på lagringsområdet til Team SUV. Det starter med navnet til bøtta som Team SUV har opprettet for skjemaet. Deretter viser den innvitteringsdato, deretter et teknisk navn, og til slutt selve skjemanavnet. 
 
 ![Typisk filsti for et Altinn3-skjema.](../images/altinn_filsti.png){fig-alt="Bilde av en typisk filsti som forklarer hva de ulike komponentene av stien betyr" #fig-altinn-path}
 
@@ -49,11 +48,11 @@ Skjemanavnet du ser i @fig-altinn-path er unike. Dvs. at hvis en oppgavegiver se
 
 ## Transfer Service
 
-Når vi skal overføre filer fra Team SUV sin bøtte til vår kildebøtte, så kan vi gjøre det manuelt fra Jupyter [som forklart her.](./altinn3.qmd#kopiere-filer-manuelt). Men det er en bedre løsning å bruke en tjeneste som gjør dette for deg. [Transfer Service](./transfer-service.html) er en tjeneste som kan brukes til å synkronisere innholdet mellom bøtter på Dapla, samt mellom bakke og sky. Når du skal ta i bruk tjenesten for å overføre data mellom en bøtte fra Team SUV sitt prosjekt **altinn-data-prod**, til en kildedata-bøtte i Dapla-teamet ditt, så gjør du følgende: 
+Når vi skal overføre filer fra Team SUV sin bøtte til vår kildebøtte, så kan vi gjøre det manuelt fra Jupyter [som forklart her.](./altinn3.qmd#kopiere-filer-manuelt). Men det er en bedre løsning å bruke en tjeneste som gjør dette for deg. [Transfer Service](./transfer-service.html) er en tjeneste som kan brukes til å synkronisere innholdet mellom bøtter på Dapla, samt mellom bakke og sky. Når du skal ta i bruk tjenesten for å overføre data mellom en bøtte fra Team SUV sitt prosjekt **suv-altinn-data-p**, til en kildedata-bøtte i Dapla-teamet ditt, så gjør du følgende: 
 
 1. Følg denne beskrivelsen hvordan man [setter opp overføringsjobber](./transfer-service.html#overføring-av-data).
 2. Etter at du har trykket på `Create Transfer Job` velger du **Google Cloud Storage** på begge alternativene under **Get Started**. Deretter går du videre ved å klikke på **Next Step**.
-3. Under **Choose a source** så skal du velge hvor du skal kopiere data fra. Trykk på **Browse**. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av **Project ID**. I søkevinduet som dukker opp søker du opp **altinn-data-prod** og trykker på navnet. Da får du listet opp alle bøttene i altinn-data-prod prosjektet. Til slutt trykker du på bøtta som Team SUV har opprettet for undersøkelsen^[Bøttenavnet starter alltid med RA-nummeret til undersøkelsen.] og klikker **Select** til nederst på siden. Trykk deretter **Next step** for å gå videre. 
+3. Under **Choose a source** så skal du velge hvor du skal kopiere data fra. Trykk på **Browse**. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av **Project ID**. I søkevinduet som dukker opp søker du opp **suv-altinn-data-p** og trykker på navnet. Da får du listet opp alle bøttene i suv-altinn-data-p prosjektet. Til slutt trykker du på bøtta som Team SUV har opprettet for undersøkelsen^[Bøttenavnet starter alltid med RA-nummeret til undersøkelsen.] og klikker **Select** til nederst på siden. Trykk deretter **Next step** for å gå videre. 
 4. Under **Choose a destination** så skal du velge hvor du skal kopiere data til. Dette steget er ganske likt som forrige, men du skal nå velge ditt eget projekt og kildebøtta der. Trykk på **Browse**. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av **Project ID**. I søkevinduet som dukker opp søker du opp **prod-\<ditt teamnavn\>** og trykker på navnet. Da får du listet opp alle bøttene i ditt team sitt prosjekt. Velg kildebøtta som har navnet **ssb-prod-\<teamnavn\>-data-kilde**. Hvis du ønsker å kopiere data til en undermappe i bøtta, så trykker du på <span style="color:red;">**>**</span>-ikonet ved bøttenavnet og velger ønsket undermappe^[Alternativt oppretter du en mappe direkte vinduet ved å trykke på mappe-ikonet med en **+**-tegn i seg.]. Til slutt trykker du på **Select** til nederst på siden. Trykk deretter **Next step** for å gå videre.
 5. Under **Choose how and when to run job** velger du **Run with custom frequency** og **Starting now** i **Batch**-modus. Hvis du ønsker å overføre så ofte som mulig, så velger du **Custom frequency** og **Repeat every 1 Hours**. Til slutt trykker du **Next Step** nederst på siden.
 6. Under **Choose Settings** så legger du til en kort beskrivelse av jobben du har opprettet. Under de andre valgene kan du gjøre følgende: 
@@ -116,14 +115,14 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 # Henter ut alle xml-filer under en filsti
-xml_files = fs.glob("gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/10/**.xml")
+xml_files = fs.glob("gs://ssb-suv-altinn-ra0678-01-prod/2023/3/10/**.xml")
 
 # Print the list of parquet files
 xml_files
 
 ```
 
-Her bruker vi `fs.glob()`-funksjonen fra **gcsfs** til å loope gjennom alle undermapper av `gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/10/`, og legge alle filer som slutter med `.xml` til listen `xml_files`. Dermed har vi et Python-objekt som kun brukes til å hente inn de filene vi ønsker. Vi bruker da det vi vet om mappestrukturen i Team SUV sin bøtte som vi så tidligere i @fig-altinn-path. 
+Her bruker vi `fs.glob()`-funksjonen fra **gcsfs** til å loope gjennom alle undermapper av `gs://ssb-suv-altinn-ra0678-01-prod/2023/3/10/`, og legge alle filer som slutter med `.xml` til listen `xml_files`. Dermed har vi et Python-objekt som kun brukes til å hente inn de filene vi ønsker. Vi bruker da det vi vet om mappestrukturen i Team SUV sin bøtte som vi så tidligere i @fig-altinn-path. 
 
 **Dapla Lab** tilbyr å tilgjengliggjøre lagringsbøtter som filsystem inne i tjenesten. Se mer om å jobbe med data [her](./dapla-lab.html#jobbe-med-data).
 
@@ -245,7 +244,7 @@ def single_xml_to_dataframe(file_path: str) -> pd.DataFrame:
     return df
 
 # Run the function
-file_path = "gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/24/28c34dce4232_e7bed8a4-def5-42dc-b1e2-b9fc66beb769/form_28c34dce4232.xml"
+file_path = "gs://ssb-suv-altinn-ra0678-01-prod/2023/3/24/28c34dce4232_e7bed8a4-def5-42dc-b1e2-b9fc66beb769/form_28c34dce4232.xml"
 df = single_xml_to_dataframe(file_path=file_path)
 
 ```
@@ -281,7 +280,7 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 # Henter ut alle xml-filer under en filsti
-xml_files = fs.glob("gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/10/**.xml")
+xml_files = fs.glob("gs://ssb-suv-altinn-ra0678-01-prod/2023/3/10/**.xml")
 
 # Stien du ønsker å kopiere til.
 # Koden under foutsetter at du har med gs:// først
@@ -298,4 +297,4 @@ for file in xml_files:
 
 ```
 
-I koden over så bruker vi `fs.glob()` og `**` til å søke rekursivt etter alle xml-filer under filstien `gs://ra0678-01-altinn-data-prod-e17d-ssb-altinn/2023/3/10`. Deretter kopierer vi over filene til egen kildebøtte med `fs.cp()`. Når vi skal kopiere over til en ny bøtte må vi bestemme oss for hvor filene skal ligge og hvor mye av den gamle filstien vi skal beholde. Anta at vi skal beholde hele mappestrukturen i Team SUV sin bøtte. Da kan vi egentlig bare erstatte `ra0678-01-altinn-data-prod-e17d-ssb-altinn/` med den nye bøtte-navnet, og vi vil få den samme strukturen som i Team SUV sin bøtte.
+I koden over så bruker vi `fs.glob()` og `**` til å søke rekursivt etter alle xml-filer under filstien `gs://ssb-suv-altinn-ra0678-01-prod/2023/3/10`. Deretter kopierer vi over filene til egen kildebøtte med `fs.cp()`. Når vi skal kopiere over til en ny bøtte må vi bestemme oss for hvor filene skal ligge og hvor mye av den gamle filstien vi skal beholde. Anta at vi skal beholde hele mappestrukturen i Team SUV sin bøtte. Da kan vi egentlig bare erstatte `ssb-suv-altinn-ra0678-01-prod/` med den nye bøtte-navnet, og vi vil få den samme strukturen som i Team SUV sin bøtte.
