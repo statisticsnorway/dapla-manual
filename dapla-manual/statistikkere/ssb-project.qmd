@@ -1,0 +1,468 @@
+---
+title: SSB-project
+date-modified: 01/14/2025
+---
+:::{.callout-note collapse="true"}
+## I farta? SSB-project på 1-2-3!
+SSB-project er en mal for GitHub repoer som lar deg håndtere pakker i Python med poetry.
+
+Etter en `git clone`, kjør:
+```{.bash filename="terminal"}
+ssb-project build
+```
+Dette aktiverer poetry, installerer pakker og lager en kernel med navnet til repoet. Dette bør gjøres hver gang *poetry.toml* filen endrer seg for at kernelen oppdaterer seg.
+
+Kjør `poetry add <navn på pakke>` i terminalen for å installere pakker i en kernel.
+:::
+
+Statistikkproduksjon på Dapla må være *reproduserbart*, *delbart* og *gjenkjennelig*. SSB-project er et verktøy som hjelper deg med dette ved å gjøre følgende:
+
+- versjonshåndtere kode med **Git**
+- opprette et **GitHub**-repo etter SSB-standard
+- opprette et **virtuelt miljø** som husker hvilke versjoner av pakker og programmeringsspråk du brukte
+- opprette en **Jupyter kernel** som kan brukes i Jupyterlab
+- konfigurere prosjektet til å passe med enten prodsonen eller Dapla.
+
+Vi mener at **ssb-project** er et naturlig sted å starte når man skal bygge opp koden i Python eller R. Det gjelder både på bakken og på sky. I denne delen av kapitlet forklarer vi deg hvordan du kan ta i bruk **ssb-project**.
+
+Kort fortalt kan du kjøre denne kommandoen i en terminal:
+
+```{.bash filename="terminal"}
+ssb-project create stat-testprod
+```
+
+Da vil få en mappe som heter **stat-testprod** med følgende innhold:
+
+1. **Standard mappestruktur**
+En standard mappestruktur gjør det lettere å dele og samarbeide om kode, som igjen reduserer sårbarheten knyttet til at få personer kjenner koden.
+2. **Virtuelt miljø**
+Virtuelle miljøer isolerer og lagrer informasjon knyttet til kode. For eksempel hvilken versjon av Python du bruker og tilhørende pakkeversjoner. Det er viktig for at publiserte tall skal være reproduserbare. Verktøyet for å lage virtuelt miljø er [Poetry](https://python-poetry.org/docs/).
+3. **Versjonshåndtering med Git**
+Initierer versjonshåndtering med [Git](https://git-scm.com/) og legger til SSBs anbefalte *.gitignore* og *.gitattributes*. Det sikrer at du ikke versjonhåndterer filer/informasjon som ikke skal versjonshåndteres.
+
+I tillegg lar **ssb-project** deg opprette et GitHub-repo hvis du ønsker. Hvis du velger å la **ssb-project** opprette et GitHub-repo for deg, så vil det også sette opp SSBs anbefalte GitHub-oppsett. Det er viktig for at du skal kunne dele koden din med andre i SSB på en sikker måte.
+
+:::{.callout-note}
+Dokumentasjonen for `ssb-project` finnes her: <https://statisticsnorway.github.io/ssb-project-cli/>.
+Det oppdateres hver gang en ny versjon av `ssb-project` slippes.
+:::
+
+## Forberedelser
+
+Før du kan ta i bruk **ssb-project** så er det et par ting som må være på plass:
+
+1. Du må ha konfigurert Git etter SSB sin standard ([les mer om hvordan her](git-og-github.qmd#oppsett-av-git)).
+2. Hvis du ønsker at **ssb-project** også skal opprette et GitHub-repo for deg må også følgende være på plass:
+    a. Du må ha en **GitHub-bruker** ([les hvordan her](git-og-github.qmd#opprett-github-bruker))
+    b. Skru på **2-faktor autentifisering** for GitHub-brukeren din ([les hvordan her](git-og-github.qmd#sec-tofaktor))
+    c. Være koblet mot SSBs organisasjon [statisticsnorway](https://github.com/statisticsnorway) på GitHub ([les hvordan her](git-og-github.qmd#koble-deg-til-ssb))
+    d. Opprette **Personal Access Token (PAT)** og godkjenne det for bruk mot **statisticsnorway** ([les hvordan her](git-og-github.qmd#personal-access-token-pat))
+
+Det er også å anbefale at du [lagrer PAT lokalt/i Dapla Lab](git-og-github.qmd#lagre-pat) slik at du ikke trenger å forholde deg til det når jobber med Git og GitHub. Hvis du har alt dette på plass så kan du bare fortsette å følge de neste kapitlene.
+
+## Opprett ssb-project
+
+### Uten GitHub-repo
+
+For å opprette et nytt **ssb-project** uten GitHub-repo gjør du følgende:
+
+1. Åpne en terminal. De fleste vil gjøre dette i Jupyterlab på bakke eller sky og da kan de bare trykke på det blå ➕-tegnet i Jupyterlab og velge **Terminal**.
+
+2. Før vi kjører programmet må vi være obs på at **ssb-project** vil opprette en ny mappe der vi står. Gå derfor til den mappen du ønsker å ha den nye prosjektmappen i. For å opprette et prosjekt som heter **stat-testprod** så skriver du følgende i terminalen:
+
+```{.bash filename="terminal"}
+ssb-project create stat-testprod
+```
+
+::: {.grid}
+
+::: {.g-col-8}
+Hvis du stod i hjemmemappen din på når du skrev inn kommandoen over i terminalen, så har du fått mappestrukturen som vises i @fig-ssb-proj-folder. ^[Filer og mapper som starter med punktum er skjulte med mindre man ber om å se dem. I Jupyterlab kan disse vises i filutforskeren ved å velge **View** fra menylinjen, og deretter velge **Show hidden files**. I en terminal skriver man `ls -a` for å se de.]. Den inneholder følgende :
+
+- **.git**-mappe som blir opprettet for å versjonshåndtere med Git.
+- **src**-mappe som skal inneholde all koden som utgjør produksjonsløpet. src er kort for *source*
+- **tests**-mappe som inneholder tester du skriver for koden din.
+- **LICENCE**-fil som skal benyttes for public-repos i SSB.
+- **poetry.lock**-fil som inneholder alle versjoner av Python-pakker som blir brukt.
+- **pyproject.toml**-fil som inneholder informasjon om prosjektet og hvilke pakker som blir brukt.
+- **README.md**-fil som brukes for tekstlig innhold på GitHub-siden for prosjektet.
+
+
+:::
+
+::: {.g-col-4}
+![Mappen som ble opprettet av ssb-project.](../images/ssbproject_folders.png){fig-alt="Bilde av filutforskeren i Jupyterlab med en mappe laget av ssb-project" #fig-ssb-proj-folder}
+
+:::
+
+:::
+
+### Med Github-repo
+
+Over så opprettet vi et **ssb-project** uten å opprette et GitHub-repo. Hvis du ønsker å opprette et GitHub-repo også må du endre kommandoen over til:
+
+```{.bash filename="terminal"}
+ssb-project create stat-testprod --github --github-token='blablabla'
+```
+
+Kommandoen over oppretter en mappestruktur slik vi så tidligere, men også et ssb-project som heter **stat-testprod** med et GitHub-repo med samme navn. Som du ser så må vi da sende med opsjonen `--github` og PAT med opsjonen `--github-token='blablabla'`. Repoet i GitHub ser da ut som i @fig-ssb-proj-github. Hvis du ønsker å slippe å måtte forholde deg til PAT hver gang interagerer med GitHub, kan du følge [denne beskrivelsen](./git-og-github.html#personal-access-token-(pat)) for å lagre den lokalt. Da kan droppe `--github-token='blablabla'` fra kommandoen over.
+
+![GitHub-repo som er opprettet av ssb-project](../images/ssbproject_github.png){fig-alt="Bilde av et GitHub-repo som ble opprettet av ssb-project" #fig-ssb-proj-github}
+
+::: {.callout-warning appearance="simple"}
+Når du har opprettet et nytt ssb-project, eller bygget et eksisterende prosjekt, så kan det ta rundt 30 sekunder før kernelen viser seg i Jupterlab-launcher. Vær tålmodig!
+:::
+
+## Bygg eksisterende ssb-project
+
+Når vi skal samarbeide med andre om kode så gjør vi dette via **GitHub**. Når du *pusher* koden din til GitHub, så kan samarbeidspartnere *pulle* ned koden og jobbe videre med den. Men når de henter ned koden så vil de bare hente ned selve koden, ikke pakker og Python-versjonen som ble brukt. De må installere alt som du hadde installert. I tillegg trenger de en kernel hvis de skal jobbe i Jupyterlab. **ssb-project** gjør det svært enkelt å bygge opp det du trenger, siden det virtuelle miljøet har all informasjon om hva som trengs.
+
+For at samarbeidspartneren din skal kunne bygge miljøet på nytt, må de ha gjort en minimal konfigurering av Git. [Les mer om hvordan](git-og-github.qmd#oppsett-av-git) du frem for å gjøre dette her.
+
+
+For å bygge opp et eksisterende miljø gjør du følgende:
+
+1. Først må du kopiere prosjektet ned lokalt, eller *klone* repoet med git-terminologi
+
+```{.bash filename="terminal"}
+git clone https://github.com/statisticsnorway/<prosjektnavn>
+```
+
+2. Gå inn i mappen du klonet
+
+```{.bash filename="terminal"}
+cd <prosjektnavn>
+```
+
+3. Skape et virtuelt miljø og installere en tilsvarende Jupyter kernel med
+
+```{.bash filename="terminal"}
+ssb-project build
+```
+
+## Slette ssb-project
+
+Det vil være tilfeller hvor man ønsker å slette et ssb-project, enten fordi man ikke trenger koden lenger eller fordi man bare testet litt.
+
+### Lokalt
+
+Hvis man jobber med flere prosjekter så kan det fort bli mange Jupyter kerneler hengende igjen. Derfor er det også mulighet å kjøre
+
+```{.bash filename="terminal"}
+ssb-project clean stat-testprod
+```
+
+som sletter Jupyter-kernelen og de installerte pakkene i prosjektet. Hvis du også ønsker å slette selve mappen med kode må du gjøre det manuelt^[Dette kan også gjøres ved å høyreklikke på mappen i Jupyterlab sin filutforsker og velge **Delete**.]:
+
+```{.bash filename="terminal"}
+rm -rf ~/stat-testprod/
+```
+
+Prosjektmappen over lå direkte i hjemmemappen min og hjemmemappen på Linux kan alltid referes til med et tilda-tegn **~**.
+
+### Arkiver GitHub-repo
+
+GitHub-repoer som er opprettet under SSB sin organinasjons [statisticsnorway]() på GitHub kan ikke slettes, bare arkiveres. Grunnen er at hvis man oppdager en sårbarhet senere så er det viktig å kunne se repoet for å forstå hva som har skjedd.
+
+Hvis du ikke trenger et GitHub-repo lenger kan man **arkivere repoet**. Det gjør du på følgende måte:
+
+1. Gi inn i repoet **Settings** slik som vist med rød pil i @fig-github-repo-settings.
+
+![Settings for repoet.](../images/github_repo_settings.png){fig-alt="Bilde som viser hvor Settings til et spesifikt repo" #fig-github-repo-settings}
+
+2. Under **General** scroller du deg ned til delen som heter **Danger Zone** og velger **Archive this repository**, slik som vist på @fig-github-repo-settings-archive.
+
+![Arkivering av et repo.](../images/github_repo_settings_archive.png){fig-alt="Bilde som viser hvordan man arkiverer et repo." #fig-github-repo-settings-archive}
+
+3. I dialogboksen som dukker opp fyller du inn reponavnet som beskrevet og trykker på **I understand the consequences, archive this repository**.
+
+Når det er gjort så er repoet lesbart, men man kan ikke jobbe med det. Men som vi ser av @#fig-github-repo-settings-archive-warning kan man omgjøre arkiveringen senere hvis det skulle være ønskelig.
+
+## Spark i ssb-project
+
+For å kunne bruke [Spark](./spark.html) i et **ssb-project** må man først installere [pyspark](https://spark.apache.org/docs/latest/api/python/index.html). Det gjør du ved å skrive følgende i en terminal:
+
+```{.bash filename="terminal"}
+poetry add pyspark==$(pip show pyspark | grep Version | egrep -o "([0-9]{1,}\.)+[0-9]{1,}") --no-dev
+```
+
+Her installerer du samme versjon av pyspark som på Jupyterlab. 
+
+Videre kan vi konfigurere Spark til å enten kjøre på lokal maskin eller på flere maskiner (såkalte *clusters*). Under beskriver vi begge variantene.
+
+### Lokal maskin
+
+Oppsettet for Pyspark på lokal maskin er det enkleste å sette opp siden Pyspark vil ha direkte tilgang til det lokale filsystemet. Man kan bruke miljøvariabelen `PYSPARK_PYTHON` til å peke på det virtuelle miljøet, og dermed vil Pyspark også ha tilgang til alle pakkene som er installert der. I en notebook vil dette kunne settes opp slik:
+
+```{.python filename="notebook"}
+import os
+import subprocess
+
+# Finner filstien til det virtuelle miljøet
+python_path = subprocess.run(['poetry', 'run', 'which', 'python'],
+                             capture_output=True, text=True).stdout.rstrip('\n')
+
+os.environ["PYSPARK_PYTHON"] = python_path
+os.environ["PYSPARK_SUBMIT_ARGS"] = os.environ["PYSPARK_LOCAL_SUBMIT_ARGS"]
+``` 
+
+Når du oppretter en Notebook og bruker den kernelen du har laget så må du alltid ha denne på toppen av notebooken. Det initialiserer Spark slik at det kan brukes i notebooken.
+
+```{.python filename="notebook"}
+%run /usr/local/share/jupyter/kernels/pyspark_local/init.py
+``` 
+
+Dette scriptet vil sette et `spark` objekt som brukes for å kalle API'et til pyspark.
+
+### Cluster
+
+Hvis man vil kjøre Pyspark i et cluster (dvs. på flere maskiner) så vil databehandlingen foregå på andre maskiner som ikke har tilgang til det lokale filsystemet. Man må dermed lage en "pakke" av det virtuelle miljøet på lokal maskin og tilgjengeliggjøre dette for alle maskinene i clusteret. For å lage en slik "pakke" kan man bruke et bibliotek som heter `venv-pack`. Dette kan kjøres fra et terminalvindu slik:
+
+```{.bash filename="terminal"} 
+venv-pack -p .venv -o pyspark_venv.tar.gz
+``` 
+
+Merk at kommandoen over må kjøres fra rot-mappen i prosjektet ditt. Her er `pyspark_venv.tar.gz` et tilfeldig valgt filnavn, men dette filnavnet skal brukes videre i notebooken.
+
+```{.python filename="notebook"}
+import os
+import subprocess
+
+# Miljøvariabel som peker på en utpakket versjon av det virtuelle miljøet
+os.environ["PYSPARK_PYTHON"] = "./environment/bin/python"
+
+# Legg til et flagg, --archives, som peker på "pakken" med det virtuelle miljøet
+conf = os.environ["PYSPARK_K8S_SUBMIT_ARGS"].split(' ')
+last_index = conf.index('pyspark-shell')
+conf[last_index:last_index] = ['--archives', 'pyspark_venv.tar.gz#environment']
+os.environ["PYSPARK_SUBMIT_ARGS"] = ' '.join(conf)
+``` 
+
+Når du oppretter en Notebook og bruker den kernelen du har laget så må du alltid ha denne på toppen av notebooken. Det initialiserer Spark slik at det kan brukes i notebooken.
+
+```{.python filename="notebook"}
+%run /usr/local/share/jupyter/kernels/pyspark_k8s/init.py
+``` 
+
+Dette scriptet vil sette et `spark` objekt som brukes for å kalle API'et til pyspark.
+
+## Tips og triks
+
+I denne delen av kapitlet vil vi gi deg noen tips og triks som kan være nyttige når du jobber med **ssb-project**.
+
+### Poetry
+
+**ssb-project** bruker [Poetry](https://python-poetry.org/docs/) for å håndtere virtuelle miljøer. Poetry er et verktøy som gjør det enkelt å installere pakker og håndtere versjoner av disse. Det er også Poetry som håndterer Jupyter-kernelen for deg. 
+
+Hvis du etterlyser funksjonalitet i et ssb-project så kan det være nyttig å lese dokumentasjonen til Poetry for å se om det er mulig å få til det du ønsker.
+
+### Full disk på Dapla
+
+[Det "lokale" filsystemet](./hva-er-botter.qmd#lokalt-filsystem-på-dapla) på Dapla har kun **10GB** diskplass. Har du mange virtuelle miljøer på denne disken kan det fort bli fullt, siden alle pakker blir installert her. Vanligvis er det 2 grunner til at disken blir full:
+
+1. **For mange virtuelle miljøer (ssb-projects) lagret lokalt.**  
+Dette vil ofte kunne løses ved å [slette virtuelle miljøer](./jobbe-med-kode.qmd#slette-ssb-project) som ikke lenger er i bruk. Hvis du har 5 virtuelle miljøer som hver bruker 1GB, og du kun jobber på en av de nå, så vil du frigjøre 40% av disken ved å slette 4 av dem. Husk at det permanente lagringsstedet for kode er på GitHub, og du kan alltid klone ned et prosjekt senere og bygge det hvis det trengs.
+
+2. **`/home/jovyan/.cache/` har blitt for stort.**  
+Dette er en mappe som brukes av applikasjoner til å lagre midlertidig data slik at de kan kjøre raskere. Denne kan bli ganske stor etter hvert. Ofte kan man frigjøre flere GB ved å slette denne. Du sletter denne mappen ved å skrive følgende i en terminal:
+
+```{.bash filename="terminal"}
+rm -rf /home/jovyan/.cache/
+```
+
+Hvis du opplever at disken er full, så kan det anbefales å undersøke hvilke mapper som tar størst plass med følgende kommando i terminalen:
+
+```{.bash filename="terminal"}
+cd ~ && du -h --max-depth=5 | sort -rh | head -n 10 && cd -
+```
+
+Kommandoen over sjekker, fra hjemmemappen din, hvilke mapper og undermapper som tar mest plass. Den viser de 10 største mappene. Hvis du ønsker å se flere mapper så kan du endre tallet etter **head -n**. Hvis du ønsker å se alle mapper så kan du fjerne **head -n**. `--max-depth=5` betyr at den kun sjekker mapper som er 5 mapper dype fra hjemmemappen din.
+
+Når du har gjort det kan selv vurdere hvilke som kan slettes for å frigjøre plass.
+
+# R og renv
+
+R-pakken, [`renv`](https://rstudio.github.io/renv/articles/renv.html), er et verktøy som lar oss opprette et miljø for R og installere pakker. Det er anbefalt å bruke renv for å sikre at alle som jobber med prosjektet har samme versjon av pakkene. I tillegg er det enkelt å dele prosjektet med andre.
+
+Oppretting av renv-miljø og installering av pakker må gjøres fra terminal for å få riktig oppsett. For å starte R i terminalen i Jupyter/DAPLA:
+
+1.  Åpne en terminal fra Launcher
+2.  Stå i mappen der du vil aktivere det virtuelle miljøet/installere pakker, dvs prosjekt mappen.
+3.  Starte R ved å skrive in `R`
+
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927091838?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Start R i terminal"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+### Starte renv i et eksisterende prosjekt
+
+For å installere dine egne R-pakker må du opprette et renv-miljø med **renv**. Dette kan gjøres ved å starte R i terminalen (se over) og skrive:
+
+```{.r filename="terminal"}
+renv::init()
+```
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094706?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="init"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+Kommandoen aktiverer et renv-miljø i mappen du står i. Rent praktisk vil det si at du fikk følgende filer/mapper i mappen din:
+
+-   **renv.lock**\
+    En fil som inneholder versjoner av alle pakker du benytter i koden din.
+
+-   **.Rprofile** En fil som inneholder informasjon om oppsetting av miljø.
+
+-   **renv**\
+    Mappe som inneholder alle pakkene du installerer.
+
+-   **renv/activate.R** En fil som aktiverer renv miljøet for et prosjekt.
+
+### Kobler en .R eller notebook fil til et renv-miljø
+
+For å ta i bruk et renv-miljø må det aktiveres ved starten av koden som skal kjøres. I JupyterLab når du åpner en .R-fil som en notebook må renv-miljøet aktiveres ved:
+
+```{.r filename="notebook"}
+renv::autoload()
+```
+
+Deretter kan du benytte pakker som er installerte (se neste avsnitt) og funksjoner ved `library()` osv. Funkjsonen `renv::autoload()` vil lete etter filene i prosjektet for å aktivere miljøet, både i prosjekt-mappen og i foreldre-mapper.
+
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094616?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="autoload"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+
+### Installering av pakker
+
+Pakker kan installeres fra R på terminalen eller i en notebook/.R fil. Vi installerer pakker med funksjonen `renv::install()`. For eksempel, for å installere pakken [PxWebApiData](https://cran.r-project.org/web/packages/PxWebApiData/vignettes/Introduction.html):
+
+```{.r filename="notebook"}
+renv::install("PxWebApiData")
+```
+
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927097853?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-pakke"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+For å installere R-pakker som ligger på 'statisticsnorway' området på github må det spesifiseres foran pakkenavnet:
+
+```{.r filename="notebook"}
+renv::install("statisticsnorway/ssb-klassr")
+```
+
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094840?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-ssb-pakke"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+For å installere en spesifikk versjon av en pakke kan du spesifisere dette med installering med `@` og versjonsnummer. For eksempel å installere `PxWEbApiData` versjon 0.4.0:
+
+```{.r filename="terminal"}
+renv::install("PxWebApiData@0.4.0")
+```
+
+For å lagre versjonsnummer av de nye pakkene som er installerte til *renv.lock* filen, kjør:
+```{.r filename="notebook"}
+`renv::snapshot()`
+```
+
+### Dele prosjektet og renv-miljøet med andre
+
+Før du deler prosjektet forsikre det om at *renv.lock*-filen er oppdatert. Dette kan gjøres ved å kjøre:
+
+```{.r filename="notebook"}
+renv::snapshot()
+```
+
+For at en pakke skal lagres i *renv.lock* må pakken benyttes ved `library()` et sted i prosjektet (på en .R eller .ipynb fil). 
+
+For å dele renv-miljøet som en del av prosjektet skal følgende filene være på github: *renv.lock*, *.Rprofile* og *renv/activate.R*
+
+
+### Ta i bruk et prosjekt og renv-miljø fra andre
+
+Hvis prosjektet er opprettet av noen andre, og har blitt delt med deg, kan alle pakkene i prosjektet installeres samtidig. Clone repository og start deretter R i terminalen. Kjør følgende for å installere alle nødvendige pakker:
+
+```{.r filename="terminal"}
+renv:restore()
+```
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927134123?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="clone-restore"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+### Avinstallering
+
+Individuelle pakker kan fjernes fra renv-miljøet ved `renv::remove()`-funksjonen. For eksempel:
+
+```{.r filename="terminal"}
+renv::remove("PxWebApiData")
+```
+
+For å fjerne fra *renv.lock*-filen også må du ta en `snapshot()` etterpå.
+
+```{.r filename="terminal"}
+renv::snapshot()
+```
+
+En annen nyttig funksjon er `renv::clean()`. Dette fjerner alle pakker fra library som ikke er i bruk
+
+```{.r filename="terminal"}
+renv::clean()
+```
+
+Igjen må du ta en `snapshot()` for at endringer skal lagres på *renv.lock*-filen
+
+### Oppgradere pakker
+
+For å oppgradere en pakke kan du bruke `renv::update()`. For eksempel, for å oppgradere `PxWebApiData` skriv:
+
+```{.r filename="terminal"}
+renv::update("PxWebApiData")
+```
+
+Husk å ta en `snapshot()` etterpå for å lagre endringer til *renv.lock*-filen. Det betyr at du og andre kan gjenskape miljøet på nytt.
+
+```{.r filename="terminal"}
+renv::snapshot()
+```
+
+### Oppgradering av R
+
+I Jupyterlab på Dapla og i produksjonssone vil versjonen av R oppgraderes jevnlig. Dette er fordi operativsystemet og programmer som R er avhengig skal holdes oppdatert. For at R skal fungere optimalt må det oppgraderes ofte. Dette skaper noen utfordringer for renv-miljøer som er avhengig av en spesifikk versjon av R.
+
+Hvis du plutselig får en feilmelding ved oppstart eller når du kjøre `renv::autoload()`, om at R-versjonen er forskjellig fra det den som e r oppgitt lock-filen, har det trolig vært en oppgradering av R siden sist noen jobbet med koden. Følg denne oppskriften for å løse opp i problemene:
+
+Benytt prosjekt-biblioteket ved å kjøre:
+
+1. Start R i terminal.
+
+2. Oppgrader versjon av renv ved:
+
+```r{.r filename="terminal"}        
+renv::upgrade()
+```
+
+3. Oppgrader alle pakkene ved:
+
+```{.r filename="terminal"}        
+renv::hydrate(update = "all")
+```
+
+4. Lagre *renv.lock* filen:
+
+```{.r filename="terminal"}        
+renv::snapshot()
+```
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927098000?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="upgrade-R"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+For mer informasjon kan du lese denne [artikkelen om oppdatering av renv her](https://inbo.github.io/tutorials/tutorials/r_renv_update/)
+
+### Ta det lang tid til å starte et renv-miljø?
+
+Ved å aktivere et renv-miljø ved `renv::autoload()` søker R i alle programfiler for å sjekke at alle pakker som benyttes er installerte. Hvis du har en veldig stor repository kan dette ta en lang tid. En løsning er å opprette en `.renvignore` fil som spesifisere hvilke filer skal ignoreres. For eksempel om alle R kode ligger i .R filer kan `.renvignore` inneholder *.ipynb (ignorere all notebook filer).
+
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094915?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="renvignore"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+### Flytting mellom jupyter på bakken og Dapla
+Pakker installeres fra forkjellige sted når vi jobber på Dapla vs jupyter på bakken. For å benytte et renv-miljø i Jupyter som var laget i Jupyter på bakken må vi endre repository i *renv.lock*-filen.
+
+<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094748?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="lock-update"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+
+### Pakke installering med renv på bakken
+
+Prosessen med å installere pakker for R på bakken er det samme som [på Dapla](./jobbe-med-kode.qmd#installering-av-pakker). Noen pakker (for eksempel `devtools`) kan foreløpig ikke installeres på bakken på egenhånd pga 3. parti avhengigheter. Vi jobber med å finne en løsning til dette.
+
+For å installere `arrow`, kopier og kjør følgende kommando i R:
+
+```{.r filename="terminal"}
+install.packages("/ssb/bruker/felles/R_pakker/arrow_11.0.0.2.tar.gz",
+                repos = NULL,
+                type = "source")
+```
