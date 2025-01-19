@@ -1,0 +1,104 @@
+---
+title: Lakehouse på Dapla Lab
+subtitle: Bruk av Delta Lake (uten Spark) på Dapla Lab
+categories:
+  - Delta Lake
+  - Python
+  - delta-rs
+  - Lakehouse
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+image: delta-rust-logo.svg
+date: 01/16/2025
+date-modified: 01/16/2025
+freeze: true
+draft: false
+---
+
+Lakehouse er et konsept rundt lagring i bøtter.
+
+## Forberedelser
+
+For å bruke deltalake må man installere python-pakken. Det enkleste er å gjøre det i et ssb-project.
+
+1.  Start opp din favoritttjeneste på Dapla Lab[^1] som `dapla-felles-developers`.
+2.  Kjør følgende kommando i terminalen: `cd /home/onyxia/work && ssb-project create test-deltalake`
+3.  Gå inn i prosjektmappen: `cd /home/onyxia/work/test-deltalake`
+4.  Installer nødvendige pakker: `poetry add pandas deltalake`
+
+[^1]: Jupyterlab og Vs Code har Python installert.
+
+Dermed er du klar for å kjøre eksemplene under.
+
+## Skrive til bøtte
+
+La oss opprette en fiktiv Pandas-dataframe:
+
+```{python}
+#| output: true
+
+from deltalake import DeltaTable, write_deltalake
+import pandas as pd
+
+df = pd.DataFrame(
+    {
+        "fnr": [111111111, 222222222, 333333333],
+        "navn": ["oyvind", "Miles", "Mike"],
+    }
+)
+
+df
+```
+
+Deretter kan vi skrive tabellen til produkt-bøtta til team dapla-felles:
+
+``` python
+table_path = "gs://ssb-dapla-felles-data-produkt-prod/deltrs-test/tulledata_p2025-Q1"
+
+write_deltalake(table_path, df)
+```
+
+Hvis du vil kjøre eksempelet selv, så bytter du ut `tulledata_p2025-Q1` med et annet unikt navn.
+
+## Lese inn en tabell
+
+Vi starter med å lese objektet inn i minnet og printe ut litt informasjon omd den:
+
+```{python}
+#| output: true
+
+table_path = "gs://ssb-dapla-felles-data-produkt-prod/deltrs-test/tulledata_p2025-Q1"
+
+dt = DeltaTable(table_path)
+print(f"Version: {dt.version()}")
+print(f"Files: {dt.files()}")
+print(f"Object: {type(dt)}")
+```
+
+Vi har nå lest metadatene til DeltaTable-objektet inn i minnet. La oss materialisere objektet til en Pandas dataframe:
+
+```{python}
+#| output: true
+dt.to_pandas()
+```
+
+
+## Append data
+
+
+```{.python}
+
+df2 = pd.DataFrame(
+    {
+        "fnr": [444444444, 555555555, 666666666],
+        "navn": ["Johnny", "Jorge", "Nick"],
+    }
+)
+
+df2
+
+write_deltalake(table_path, df2, mode="append")
+```
