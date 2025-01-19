@@ -1,0 +1,154 @@
+---
+title: Pakkehåndtering i Python
+date-modified: 01/14/2025
+---
+ 
+I tillegg til å opprette GitHub repoer etter vår SSB-mal hjelper SSB-project deg med å lage kernels og holde styr på Python-pakkene dine ved bruk av [Poetry](https://python-poetry.org/)
+
+## Installere pakker
+
+:::{.callout-note collapse="true"}
+## Forsikre deg om at pakken er trygg! 
+Før du installerer en pakke bør gjøre følgende for å sikre deg at du ikke installerer en pakke med skadelig kode:
+
+1. Søk opp pakken på [PyPI](https://pypi.org/). 
+
+2. Sjekk om pakken er et populært/velkjent prosjekt ved å besøke repoet der koden ligger. Antall *Stars* og *Forks* på gitHub er en grei indikasjon på dette.
+
+3. Hvis du er i tvil om pakken er trygg å installere, så kan du spørre kollegaer om de har erfaring med den, eller spørre på en egnet Yammer-kanal i SSB.
+
+4. Hvis du fortsatt ønsker å installere pakken så anbefaler vi å *copy-paste* navnet fra PyPi, ikke skrive det inn manuelt når du installerer.  
+
+:::
+
+Når du har opprettet et **ssb-project** kan du installere de python-pakkene du trenger [fra PyPI](https://pypi.org/).
+
+Selve installeringen av pakken gjøres enkelt på følgende måte:
+
+1. Åpne en terminal i Jupyterlab.
+2. Gå inn i prosjektmappen din ved å skrive:
+
+```{.bash filename="terminal"}
+cd <sti til prosjektmappe>
+```
+
+3. Lag en *branch*/utviklingsbranch som f.eks. heter **install-pandas**:
+
+```{.bash filename="terminal"}
+git checkout -b install-pandas
+```
+
+4. Installer, f.eks. **Pandas**, ved å skrive følgende:
+
+```{.bash filename="terminal"}
+poetry add pandas
+```
+
+![Installasjon av Pandas med ssb-project](../images/jupyterlab_terminal_install.png){fig-alt="Bilde av et GitHub-repo som ble opprettet av ssb-project" #fig-ssb-proj-install}
+
+@fig-ssb-proj-install viser hvordan dette vil se ut i en Jupyterlab-terminal. Kommandoen for å installere noe er `poetry add` etterfulgt av pakkenavnet. Vi ser også at den automatisk legger til Pandas-versjonen i filen **poetry.lock**. 
+
+Du kan også spesifisere en konkret versjon av pakken som skal installeres med følgende kommando:
+
+```{.bash filename="terminal"}
+poetry add pandas@1.2.3
+```
+
+### Avinstallere pakker
+
+Ofte eksperimenterer man med nye pakker, og alle blir ikke med videre i produksjonskoden. Det er god praksis å fjerne pakker som ikke brukes, blant annet for å unngå at de blir en sikkerhetsrisiko. Det gjør du enkelt ved å skrive følgende i terminalen:
+
+```{.bash filename="terminal"}
+poetry remove pandas
+```
+
+### Oppdatere pakker
+
+Hvis det kommer en ny versjon av en pakke du bruker, så kan du oppdatere den med følgende kommando:
+
+```{.bash filename="terminal"}
+poetry update pandas
+```
+
+hvis du kjører `poetry update` uten noe pakkenavn, så vil alle pakkene dine oppdateres til siste versjon, med mindre du har spesifisert versjonsbegrensninger i **pyproject.toml**-filen.
+
+### Undersøk avhengigheter
+
+Hvis du lurer på hvilke pakker som har hvilke avhengigheter, så kan du lett liste ut dette i terminalen med følgende kommando:
+
+```{.bash filename="terminal"}
+poetry show --tree
+```
+
+Det vil gi en grafisk fremstilling av avhengighetene som vist i @fig-ssb-proj-tree.
+
+![Visning av pakke-avhengigheter i ssb-project](../images/poetry-tree-cmd.png){fig-alt="Bilde av en print i terminalen av avhengighetene mellom pakker i et ssb-project." #fig-ssb-proj-tree}
+
+## Push til GitHub
+
+Når du nå har installert en pakke så har filen **poetry.lock** endret seg. For at dine samarbeidspartnere skal få tilgang til denne endringen i et SSB-project, så må du pushe en ny versjon av poetry.lock-filen opp Github, og kollegaene må pulle ned og [bygge prosjektet på nytt](./jobbe-med-kode.html#bygg-eksisterende-ssb-project). Du kan gjøre dette på følgende måte etter at du har installert en ny pakke:
+
+1. Vi kan *stage* alle endringer med følgende kommando i terminalen når vi står i prosjektmappen:
+
+```{.bash filename="terminal"}
+git add -A
+```
+
+2. Deretter *commit*e en endring, dvs. ta et stillbilde av koden i dette øyeblikket, ved å skrive følgende:
+
+```{.bash filename="terminal"}
+git commit -m "Installert pandas"
+```
+
+3. Push det opp til GitHub^[Å pushe til GitHub uten å sende ved *Personal Access Token* fordrer at du har lagret det lokalt så Git kan finne det. [Her et eksempel på hvordan det kan gjøres](git-og-github.qmd#lagre-pat).]. Anta at vi gjorde dette i *branchen* *install-pandas* som ble opprettet tidligere. Da kan vi skrive følgende    :
+
+```{.bash filename="terminal"}
+git push --set-upstream origin install-pandas
+```
+
+Deretter kan kollegaene dine pulle ned endringene og bygge prosjektet på nytt. Vi forklarer hvordan man kan bygge prosjektet på nytt senere i kapitlet.
+
+### Hold prosjektet oppdatert
+
+Hvis du sitter med en lokal kopi av prosjektet ditt, og flere andre jobber med den samme kodebasen, så er det viktig at du holder din lokale kopi oppdatert. Hvis du jobber i en branch på en lokal kopi, bør du holde denne oppdatert med main-branchen på GitHub. Det er vanlig Git-praksis. Når man også bruker **ssb-project**, så man huske å også bygge prosjektet på nytt hver gang det er endringer som er gjort av andre i `poetry.lock.`-filen. 
+
+## Dependabot
+
+Når man installerer pakker så vil det etter hvert utvikle seg et sett av potensielt kompliserte avhengigheter mellom disse pakkene. Dette skyldes at en pakke kan benytte seg av funksjonalitet i andre pakker, som igjen benytter seg av funksjonalitet i andre pakker, osv.. Hvis noen finner en sikkerhetssårbarhet i en pakke så kan det fikses ved at en ny versjon av den pakken slippes, som igjen kan få konsekvenser for pakker som er avhengig av denne.
+
+I SSB er det tilrettelagt for at alle som versjonshåndterer koden sin på GitHub kan skanne pakkene sine for sårbarheter og nye versjoner av pakker med Dependabot. Dependabot hjelper oss med å finne og fikse sårbarheter og gamle pakkeversjoner. Dette er spesielt viktig når man installerer sine egne pakker.
+
+Dependabot sjekker med jevne mellomrom om det finnes oppdateringer i pakkene som er listet i din **pyproject.toml-fil**, og den tilhørende **poetry.lock**. Hvis det finnes oppdateringer så vil den lage en *pull request* som du kan godkjenne. Når du godkjenner den så vil den oppdatere poetry.lock-filen og lage en ny *commit* som du kan *pushe* til GitHub. Dependabot gir også en sikkerhetsvarslinger hvis det finnes kjente sårbarheter i pakkene du bruker.
+
+Det er anbefalt at alle som installerer sine egne pakker i SSB skrur på Dependabot i sine GitHub-repoer.
+
+### Aktivere Dependabot
+
+Du kan aktivere Dependabot ved å gi inn i GitHub-repoet ditt og gjøre følgende:
+
+-   Gå inn repoet
+-   Trykk på **Settings** for det repoet som vist på @fig-github-repo-settings-button.
+
+![Åpne *Settings* for et GitHub-repo.](../images/github_repo_settings_button.png){#fig-github-repo-settings-button fig-alt="Bilde av knappen man trykker på for å komme inn i repo-settings"}
+
+-   I menyen til venstre velger du **Code security and analysis**
+
+-   Under seksjonen **Dependabot** velger **Enable** på minst **Dependabot alerts** og **Dependabot security updates**, slik som vist i @fig-github-dependabot.
+
+![Skru på Dependabot i GitHub.](../images/github_dependabot.png){#fig-github-dependabot fig-alt="Bilde som indikerer hvor man skrur på Dependabot i GitHub"}
+
+Når du har gjort dette vil GitHub varsle deg hvis det finnes en kjent sårbarhet i pakkene som benyttes.
+
+### Oppdatere pakker
+
+Hvis en av pakkene du bruker kommer med en oppdatering, så vil Dependabot lage en *pull request* (PR) i GitHub som du kan godkjenne. Dependabot sjekker også om oppdateringen er i konflikt med andre pakker du bruker. Hvis det er tilfellet så vil den lage en *pull request* som oppdaterer alle pakkene som er i konflikt.
+
+Hvis en av pakkene du bruker har en kjent sikkerhetssårbarhet, så vil Dependabot varsle deg om dette under **Security**-fanen i GitHub-repoet ditt. Hvis du trykker på **View Dependabot alerts** så vil du få en oversikt over alle sårbarhetene som er funnet, og hvilken alvorlighetsgrad den har. Hvis du trykker på en av sårbarhetene så vil du få mer informasjon om den, og du kan trykke på **Create pull request** for å oppdatere pakken.
+
+Som nevnt over kan du enkelt oppdatere pakker fra GitHub ved hjelp av Dependabot. Men det finnes tilfeller der du vil teste om en oppdatering gjør at deler av koden din ikke fungerer lenger. Anta at du bruker en Python-pakken **Pandas** i koden din, og at du får en *pull request* fra Dependabot om å oppdatere den fra versjon 1.5 til 2.0. Hvis du ønsker å teste om koden din fortsatt fungerer med den nye versjonen av **Pandas**, så kan du gjøre dette i Jupyterlab ved å følge ved å lage en branch som f.eks. heter **update-pandas**. Deretter kan du installere den nye versjonen av **Pandas** med følgende kommando fra terminalen:
+
+```{.bash filename="terminal"}
+poetry update pandas@2.0
+```
+
+Hvis du nå kjører koden din kan du teste om den fortsatt fungerer som forventet. Gjør den ikke det kan du tilpasse koden din og pushe endringene til Github. Deretter kan du godkjenne *pull requesten* fra Dependabot og merge den. Etter dette kan du slette den PR-en som Dependabot lagde for deg. 
