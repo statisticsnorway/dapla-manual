@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Dapla-bloggen – Dapla-manualen</title>
+<title>dapla-suv-tools – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,8 +65,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../images/dapla-favicon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -69,90 +101,22 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-<style>
-
-      .quarto-title-block .quarto-title-banner {
-        background: #e3f1e6;
-      }
-</style>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="Dapla-bloggen – Dapla-manualen">
-<meta property="og:description" content="Stedet der alle i SSB kan dele erfaringer og kunnskap om Dapla">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-favicon.png">
+<meta property="og:title" content="dapla-suv-tools – Dapla-manualen">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:height" content="16">
-<meta property="og:image:width" content="16">
-<meta name="twitter:title" content="Dapla-bloggen – Dapla-manualen">
-<meta name="twitter:description" content="Stedet der alle i SSB kan dele erfaringer og kunnskap om Dapla">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-favicon.png">
-<meta name="twitter:image-height" content="16">
-<meta name="twitter:image-width" content="16">
+<meta name="twitter:title" content="dapla-suv-tools – Dapla-manualen">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -182,7 +146,7 @@ window.Quarto = {
 <span class="menu-text">Nyheter</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../blog/index.html" aria-current="page"> 
+    <a class="nav-link" href="../blog/index.html"> 
 <span class="menu-text">Blogg</span></a>
   </li>  
   <li class="nav-item">
@@ -289,278 +253,163 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">Dapla-bloggen</h1>
-            <p class="subtitle lead">Stedet der alle i SSB kan dele erfaringer og kunnskap om Dapla</p>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta column-page-left">
-
-      
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Kategorier</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">Alle <span class="quarto-category-count">(6)</span></div><div class="category" data-category="QXJraXY=">Arkiv <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGF0YSUyMHZhbGlkZXJpbmc=">Data validering <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RGF0YWRvaw==">Datadok <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmFtZQ==">Fame <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SnVweXRlcg==">Jupyter <span class="quarto-category-count">(1)</span></div><div class="category" data-category="S2FydA==">Kart <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFuZGVyYQ==">Pandera <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGFycXVldA==">Parquet <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHNldWRvbnltaXNlcmluZw==">Pseudonymisering <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UHl0aG9u">Python <span class="quarto-category-count">(5)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGlkc3Nlcmllcg==">Tidsserier <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGFwbGEtdG9vbGJlbHQtcHNldWRv">dapla-toolbelt-pseudo <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#installasjon" id="toc-installasjon" class="nav-link active" data-scroll-target="#installasjon">Installasjon</a></li>
+  <li><a href="#opprette-klient" id="toc-opprette-klient" class="nav-link" data-scroll-target="#opprette-klient">Opprette klient</a></li>
+  <li><a href="#paginering" id="toc-paginering" class="nav-link" data-scroll-target="#paginering">Paginering</a>
+  <ul class="collapse">
+  <li><a href="#enkel-bruk-av-paginering" id="toc-enkel-bruk-av-paginering" class="nav-link" data-scroll-target="#enkel-bruk-av-paginering">Enkel bruk av paginering</a></li>
+  <li><a href="#hente-alle-data-med-paginering" id="toc-hente-alle-data-med-paginering" class="nav-link" data-scroll-target="#hente-alle-data-med-paginering">Hente alle data med paginering</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/altinn-dapla-suv-tools.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/altinn-dapla-suv-tools.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">dapla-suv-tools</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">January 21, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
 
 
+</header>
 
 
+<p><a href="https://pypi.org/project/dapla-suv-tools/">dapla-suv-tools</a> er en python pakke med en samling verktøy for integrering med SUV-plattformen. Pakken tilbyr verktøy for skjema administrasjon, bygging av prefill og utsending av skjema på <a href="https://docs.altinn.studio/nb/community/about/">Altinn 3 plattformen</a>.</p>
+<p><a href="https://suvtools.docs.ssb.no/">Dokumentasjon av pakken ligger her</a>. Denne gir en teknisk innføring som du kan følge og kopiere kode fra. Noe demokode ligger også i repoet og kan være ett godt utgangspunkt.</p>
+<section id="installasjon" class="level2">
+<h2 class="anchored" data-anchor-id="installasjon">Installasjon</h2>
+<section id="pip" class="level4">
+<h4 class="anchored" data-anchor-id="pip">Pip</h4>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install dapla-suv-tools</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="poetry" class="level4">
+<h4 class="anchored" data-anchor-id="poetry">Poetry</h4>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add dapla-suv-tools</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="opprette-klient" class="level2">
+<h2 class="anchored" data-anchor-id="opprette-klient">Opprette klient</h2>
+<p>For å kunne bruke pakken må du importere klienten:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_suv_tools.suv_client <span class="im">import</span> SuvClient</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="paginering" class="level2">
+<h2 class="anchored" data-anchor-id="paginering">Paginering</h2>
+<p>For å sette opp paginering må du importere PaginationInfo</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_suv_tools.pagination <span class="im">import</span> PaginationInfo</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Paginering brukes for å hente data i mindre deler spesielt når et datasett er stort. Dette bidrar til å redusere belastningen både på klient og server, og gir bedre ytelse. Side- og størrelsesparametere sendes som en del av forespørselen.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Maksimal størrelse
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Maksimal tillatt størrelse per side er <code>100</code> i alle forespørsler. Hvis man angir en høyere verdi vil forespørselen feile eller bli begrenset til 100 poster per side.</p>
+</div>
+</div>
+<section id="enkel-bruk-av-paginering" class="level3">
+<h3 class="anchored" data-anchor-id="enkel-bruk-av-paginering">Enkel bruk av paginering</h3>
+<p>I dette eksempelet brukes paginering for å hente en spesifikk side med et gitt antall elementer.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>p_info <span class="op">=</span> PaginationInfo(page<span class="op">=</span><span class="dv">1</span>, size<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> client.get_skjema_by_ra_nummer(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    ra_nummer<span class="op">=</span><span class="st">"RA-0666A3"</span>, pagination_info<span class="op">=</span>p_info</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Her hentes den første siden (page=1) med 5 elementer per side (size=5).</p>
+</section>
+<section id="hente-alle-data-med-paginering" class="level3">
+<h3 class="anchored" data-anchor-id="hente-alle-data-med-paginering">Hente alle data med paginering</h3>
+<p>Dette eksempelet viser hvordan man kan hente alle data ved å iterere gjennom flere sider.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>page <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>size <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>all_records <span class="op">=</span> []</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    p_info <span class="op">=</span> PaginationInfo(page<span class="op">=</span>page, size<span class="op">=</span>size)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> client.get_utvalg_from_sfu(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        delreg_nr<span class="op">=</span><span class="dv">49430324</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        ra_nummer<span class="op">=</span><span class="st">'RA-0666A3'</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        pagination_info<span class="op">=</span>p_info</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    records <span class="op">=</span> response</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    all_records.extend(records)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(records) <span class="op">&lt;</span> size:</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    page <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Totalt antall poster: </span><span class="sc">{</span><span class="bu">len</span>(all_records)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dette sikrer at alle poster hentes når datasettet går over flere sider.</p>
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="RGF0YSUyMHZhbGlkZXJpbmclMkNQeXRob24lMkNQYW5kZXJh" data-listing-date-sort="1734307200000" data-listing-file-modified-sort="1737568260642" data-listing-date-modified-sort="1734307200000" data-listing-reading-time-sort="18" data-listing-word-count-sort="3507">
-<div class="thumbnail">
-<p><a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external"></a></p><a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/posts/2024-12-16-data-validering-pandera/Pandera-Python-package.png" class="thumbnail-image" alt="Logo til Pandera"></p>
-</a><p><a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external">Intro til Pandera</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external">Data validering i kode med Pandera.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('RGF0YSUyMHZhbGlkZXJpbmc='); return false;">
-Data validering
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('UGFuZGVyYQ=='); return false;">
-Pandera
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external">Pandera er en python pakke og rammeverk for testing av data - altså <em>datavalidering</em>.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/posts/2024-12-16-data-validering-pandera/index.html" class="no-external">
-<div class="listing-date">
-Dec 16, 2024
-</div>
-<div class="listing-author">
-Jonathan Husø
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="S2FydCUyQ1B5dGhvbiUyQ0p1cHl0ZXI=" data-listing-date-sort="1729123200000" data-listing-file-modified-sort="1737568260642" data-listing-date-modified-sort="1729123200000" data-listing-reading-time-sort="4" data-listing-word-count-sort="615">
-<div class="thumbnail">
-<p><a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external"></a></p><a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/posts/2024-11-17-lonboard/dalle-lonboard.jpg" class="thumbnail-image" alt="Bilde av skateboard med et kart"></p>
-</a><p><a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external">Lonboard</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external">Et raskere kartvisualiseringsbibliotek</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('S2FydA=='); return false;">
-Kart
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('SnVweXRlcg=='); return false;">
-Jupyter
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external">Lonboard<sup>1</sup> er et bibliotek for å vise kart i Jupyter notebooks. Lonboard er bygget på Deck.gl, et GPU akselerert, høytytende, kartvisualiseringsbibliotek for store data.…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/posts/2024-11-17-lonboard/index.html" class="no-external">
-<div class="listing-date">
-Oct 17, 2024
-</div>
-<div class="listing-author">
-Bjørn Lie Rapp
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="UHNldWRvbnltaXNlcmluZyUyQ1B5dGhvbiUyQ2RhcGxhLXRvb2xiZWx0LXBzZXVkbw==" data-listing-date-sort="1720656000000" data-listing-file-modified-sort="1737568260636" data-listing-date-modified-sort="1727049600000" data-listing-reading-time-sort="6" data-listing-word-count-sort="1003">
-<div class="thumbnail">
-<p><a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external"></a></p><a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/posts/2024-07-11-pseudo-testdata/pseudonymize-image-chatgpt.png" class="thumbnail-image"></p>
-</a><p><a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external">Pseudonymisering med testdata</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external">Bruk testdata for å bli kjent med pseudonymisering.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('UHNldWRvbnltaXNlcmluZw=='); return false;">
-Pseudonymisering
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('ZGFwbGEtdG9vbGJlbHQtcHNldWRv'); return false;">
-dapla-toolbelt-pseudo
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external">Den strenge tilgangsstyringen til pseudonymiseringsfunksjonaliteten på Dapla gjør at det er vanskelig for brukere å bli kjent med funksjonaliteten ved bruk av…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/posts/2024-07-11-pseudo-testdata/index.html" class="no-external">
-<div class="listing-date">
-Jul 11, 2024
-</div>
-<div class="listing-author">
-Øyvind Bruer-Skarsbø
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="UHl0aG9uJTJDQXJraXYlMkNEYXRhZG9rJTJDUGFycXVldA==" data-listing-date-sort="1705622400000" data-listing-file-modified-sort="1737568260636" data-listing-date-modified-sort="1705881600000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1284">
-<div class="thumbnail">
-<p><a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external"></a></p><a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external">
-<p><img loading="lazy" src="../images/parquet-logo.jpg" class="thumbnail-image"></p>
-</a><p><a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external">Fra arkiv til parquet</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external">Konvertering av arkivfiler</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('QXJraXY='); return false;">
-Arkiv
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('RGF0YWRvaw=='); return false;">
-Datadok
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('UGFycXVldA=='); return false;">
-Parquet
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external">I arkivet til SSB ligger data lagret som posisjonerte flatfiler, også kalt fastbredde-fil eller <em>fixed width file</em> på engelsk. I Datadok ligger det spesifisert hvordan du…<strong></strong><strong></strong><strong></strong></a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/posts/2023-01-19-fra-arkiv-til-parquet/index.html" class="no-external">
-<div class="listing-date">
-Jan 19, 2024
-</div>
-<div class="listing-author">
-Carl F. Corneil
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="RmFtZSUyQ1B5dGhvbiUyQ1RpZHNzZXJpZXI=" data-listing-date-sort="1705017600000" data-listing-file-modified-sort="1737568260636" data-listing-date-modified-sort="1705363200000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1330">
-<div class="thumbnail">
-<p><a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external"></a></p><a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external">
-<p><img loading="lazy" src="../blog/posts/2023-01-12-fame-extractor-python/fame.png" class="thumbnail-image" alt="Bilde av Fame-logoen"></p>
-</a><p><a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external">Fra Fame til Python</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external">Python-pakken <code>fython</code> lar deg hente ut data fra Fame-databaser.</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('RmFtZQ=='); return false;">
-Fame
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('UHl0aG9u'); return false;">
-Python
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('VGlkc3Nlcmllcg=='); return false;">
-Tidsserier
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external">Mange i SSB har data lagret i Fame som de ønsker å bearbeide med Python og R. Dette er spesielt relevant når man skal flytte statistikkproduksjon til Dapla. <code>fython</code> er en…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/posts/2023-01-12-fame-extractor-python/index.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2024
-</div>
-<div class="listing-author">
-Magnus Kvåle Helliesen
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="UXVhcnRv" data-listing-date-sort="1704931200000" data-listing-file-modified-sort="1737568260636" data-listing-date-modified-sort="1704931200000" data-listing-reading-time-sort="3" data-listing-word-count-sort="415">
-<div class="thumbnail">
-<p><a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external"></a></p><a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external">
-<p><img loading="lazy" src="../images/dapla-long.png" class="thumbnail-image" alt="Bilde av Fame-logoen"></p>
-</a><p><a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external">Ideen bak bloggen</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external">Hvorfor vi har opprettet denne bloggen?</a>
-</div>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('UXVhcnRv'); return false;">
-Quarto
-</div>
-</div>
-<div class="listing-description">
-<a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external"> SSB-ere løser hele tiden problemer på nye måter som andre gjerne skulle nyttiggjort seg av. Spesielt når vi gjør en så stor overgang i arbeidsform som overgangen til en ny…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="../blog/posts/2023-01-11-hvorfor-en-blogg/index.html" class="no-external">
-<div class="listing-date">
-Jan 11, 2024
-</div>
-<div class="listing-author">
-Øyvind Bruer-Skarsbø
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-Ingen treff
-</div>
-</div></main> <!-- /main -->
+</section>
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -986,7 +835,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/blog/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/blog/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/altinn-dapla-suv-tools.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/altinn-dapla-suv-tools.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
