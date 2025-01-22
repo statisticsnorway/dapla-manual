@@ -1,0 +1,311 @@
+---
+title: Administrasjon av skjema
+date-modified: 01/21/2025
+lightbox: true
+---
+
+SU-V tilbyr både et grafisk brukergrensesnitt (GUI) og en Python-pakke for administrasjon av skjemaer. Du kan få tilgang til GUI via følgende lenker:
+
+- [Produksjonsmiljø](https://altinn3-admin-gui.prod-bip-app.ssb.no/)
+- [Testmiljø](https://stage-altinn3-admin-gui.staging-bip-app.ssb.no/)
+
+Mer informasjon om Python-pakken finner du [her](./altinn-dapla-suv-tools.html).
+
+Alle operasjoner og visninger som er tilgjengelige i GUI, kan også utføres ved hjelp av kode. Administrasjon av skjema innebærer håndtering av metadata knyttet til skjemaer, perioder, puljer og utsendinger.
+
+## Tilgang til skjema
+Alle brukere har lesetilgang til skjemaet, noe som betyr at de kan se og hente data uten å gjøre endringer.
+
+For å kunne utføre administrasjonsoppgaver og gjøre endringer på skjemaet, må du være medlem av data-admins i Dapla-teamet som eier skjemaet. Kun data-admins har mulighet til å redigere eller konfigurere skjemaet. Se mer om administrasjon av team [her](./administrasjon-av-team.html).
+
+## Hierarki for skjema administrasjon
+Et skjema består av følgende strukturer:
+
+- Skjema kan inneholde flere perioder.
+- En periode kan inneholde flere puljer.
+- En pulje kan inneholde flere utsendinger.
+
+Illustrasjonen nedenfor viser sammenhengen mellom de ulike nivåene:
+
+![Avhengigheter skjema administrasjon](../images/altinn-skjemaadm-avhengigheter.png){fig-alt="Illustrasjon som viser hierarkiet for skjemaadministrasjon: skjema, perioder, puljer og utsendinger." #fig-altinn-skjema-adm-avhengigheter}
+
+## Generelle UI operasjoner
+
+Mange av skjermbildene i GUI tilbyr de samme typene operasjoner. Disse operasjonene er beskrevet i tabellen nedenfor.
+
+@tbl-skjemaadm-ui beskriver generelle UI operasjoner. 
+
+| Ikon | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| ![Legg til](../images/altinn-ui-legg-til.png) | Legg til en ny rad.
+| ![Redigere](../images/altinn-ui-rediger.png) | Redigere en rad.
+| ![Kopiere](../images/altinn-ui-kopier.png) | Kopiere en rad.
+| ![Slette](../images/altinn-ui-slett.png) | Slett en rad. 
+| ![Vis](../images/altinn-ui-vis.png) | Vise detaljer for en rad. 
+| ![Tilbake](../images/altinn-ui-tilbake.png) | Gå tilbake til forrige skjermbilde.
+: UI operasjoner {#tbl-skjemaadm-ui .striped}
+
+## Skjema
+For å begynne å jobbe med et skjema, må du finne riktig skjemaversjon i skjemakatalogen.
+
+**Slik søker du fram et skjema**
+
+1. Velg **Skjemadata** i venstremenyen.
+2. Bruk søkefeltet i det nye skjermbildet for å finne skjemaet ditt.
+3. Klikk på **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om skjemaet.
+
+Bildet nedenfor viser eksempel på søkebilde:
+
+![Søke fram skjema](../images/altinn-skjemaadm-skjemasok.png){fig-alt="Illustrasjon av hvordan man søker fram et skjema." #fig-altinn-skjema-sok}
+
+::: {.callout-note}
+## Hva hvis skjema mangler?
+Hvis du ikke finner riktig skjemaversjon, ta kontakt med planleggeren for skjemaet på seksjon 821.
+:::
+
+### Skjema metadata
+Hvert skjema har tilknyttet metadata som gir detaljert informasjon om det. Bildet nedenfor viser et eksempel på metadata for et skjema:
+![Skjema metadata](../images/altinn-skjemaadm-skjemametapng.png){fig-alt="Illustrasjon av skjemametadata." #fig-altinn-skjema-sok}
+
+::: {.callout-tip collapse="true"}
+## Beskrivelse av skjema metadata
+
+@tbl-skjema-meta beskriver metadatafeltene for et skjema
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| RA-nummer | RA-nummer for skjemaet.
+| Versjon | Skjemaversjon. 
+| Und.nr | Undersøkelsesnummer.
+| Datamodell | Navn på datamodellen. 
+| Navn | Navn på undersøkelsen. 
+| Navn nynorsk | Navn på undersøkelsen (nynorsk).
+| Navn engelsk | Navn på undersøkelsen (engelsk).
+| Eier | Dapla-team.
+| Gyldig fra | Fra hvilken dato undersøkelsen er gyldig.
+| Gyldig til | Til hvilken dato undersøkelsen er gyldig.
+| URL infoside | Informasjonsside for undersøkelsen.
+| Beskrivelse | Tilleggsinformasjon om undersøkelsen.
+: Skjema metadata {#tbl-skjema-meta .striped}
+:::
+
+### Kodeeksempel
+For å hente ut et skjema med tilhørende metadata i Python, kan du bruke metoden `get_skjema_by_ra_nummer` i `SuvClient`. Sørg for at du oppgir riktig RA-nummer og versjon.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_skjema_by_ra_nummer(
+            ra_nummer = "RA-0678A3", 
+            versjon = 2 
+        )
+        
+print(json.dumps(output, indent=4))
+```
+
+### Legge til skjema som favoritt
+For å gjøre det enklere å finne skjemaene du jobber mest med, kan du legge dem til som favoritter. Dette er spesielt nyttig ettersom skjemakatalogen kan inneholde mange ulike skjemaer og versjoner.
+
+**Slik legger du til et skjema som favoritt:**
+
+1. **Søk opp skjemaet:** Bruk søkefunksjonen for å finne skjemaet du ønsker.
+2. **Vis detaljer:** Klikk på skjemaet i tabellen for å åpne detaljvisningen.
+3. **Legg til som favoritt:** Trykk på stjerneikonet ved siden av skjemaets navn. Når stjernen er markert, er skjemaet lagt til som favoritt.
+
+Skjemaet vil deretter være tilgjengelig under **Favoritter** i venstremenyen.
+
+Bildet nedenfor viser hvordan du velger et skjema som favoritt:
+
+![Legge til skjema som favoritt](../images/altinn-skjemaadm-favoritt.png){fig-alt="Illustrasjon av hvordan man legger til et skjema som favoritt i skjemakatalogen." #fig-altinn-skjema-favoritt}
+
+## Periode
+Et skjema kan ha en eller flere perioder knyttet til seg. Hvilke perioder som er lagt inn på skjemaet kan du se i detaljvisningen når du har valgt et skjema. 
+
+**Administrasjon av utvalg og enheter**<br>
+Administrasjon av utvalg og enheter skjer fortsatt fra SFU på bakke. Knytningen mellom skjemaet og bakkesystemene skjer ved at et delregister-nr registreres på perioden. Mer informasjon om håndtering av utvalg fra SFU finner du [her](./altinn-utvalg-sfu.html).
+
+**Eksempel på skjema med periode**<br>
+Bildet nedenfor viser eksempel på et skjema med en tilknyttet periode:
+
+![Skjema periode](../images/altinn-skjemaadm-periode.png){fig-alt="Illustrasjon av skjema og periode." #fig-altinn-skjema-periode} 
+
+::: {.callout-tip collapse="true"}
+## Beskrivelse av periode metadata
+
+@tbl-periode-meta beskriver metadatafeltene for en periode
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| Type | Undersøkelsestype (f.eks Kvartal, Måned, År).
+| Nr | Periode nummer. 
+| År | Periode år.
+| Periode-dato |  
+| Delreg-nr | Delregister-nummer i SFU som er tilknyttet perioden. 
+| Enhet-type | Enhetstype (f.eks Bedrift, Foretak, Person).
+| Oppgavebyrde | Aktivere oppgavebyrde i skjemaet.
+| Brukeropplevelse | Aktivere oppgavebyrde i skjemaet.
+| Skjemadata | 
+| Journalnummer | 
+: Periode metadata {#tbl-periode-meta .striped}
+:::
+
+### Kodeeksempel
+For å lage en ny periode, kan du bruke metoden `create_periode` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.create_periode(
+            skjema_id = 142,
+            periode_type = 'KVRT',
+            periode_nr = 3,
+            periode_aar = 2024,
+            delreg_nr = 21130324,
+            enhet_type = 'BEDR'
+        )
+
+print(output)
+```
+
+For å hente ut perioder med tilhørende metadata i Python, kan du bruke metoden `get_perioder_by_skjema_id` i `SuvClient`. Sørg for at du oppgir riktig skjema_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_perioder_by_skjema_id(
+            skjema_id=142
+        )
+
+print(json.dumps(output, indent=4))
+```
+
+## Pulje 
+En periode kan ha en eller flere puljer knyttet til seg. Hvilke puljer som er lagt inn på skjemaet kan du se i detaljvisningen når du har valgt en periode. 
+
+**Eksempel på periode med pulje**<br>
+Bildet nedenfor viser eksempel på en periode med en tilknyttet pulje:
+
+![Periode pulje](../images/altinn-skjemaadm-pulje.png){fig-alt="Illustrasjon av periode og pulje." #fig-altinn-periode-pulje} 
+
+::: {.callout-tip collapse="true"}
+## Beskrivelse av pulje metadata
+
+@tbl-pulje-meta beskriver metadatafeltene for en pulje
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| Pulje | Pulje nummer.
+| Tilgjengelig fra | Angir fra når skjemaet er tilgjengelig for oppdragsgiver ute hos Altinn. 
+| Svarfrist | Angir svarfrist for undersøkelsen.
+| Tvmulkt svarfrist | Angir svarfrist før utsendelse av tvangsmulkt.
+| Send SI |  
+: Pulje metadata {#tbl-pulje-meta .striped}
+:::
+
+### Kodeeksempel
+For å lage en ny pulje, kan du bruke metoden `create_pulje` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+_altinn_tilgjengelig = datetime(2024, 11, 20, 14, 30, 0)
+_altinn_svarfrist = datetime(2024, 11, 21)
+_tvangsmulkt_svarfrist_ = datetime(2024, 11, 22)
+_send_si = datetime(2024, 11, 23)
+
+client.create_pulje(
+    periode_id = 24,
+    pulje_nr = 1,
+    altinn_tilgjengelig=_altinn_tilgjengelig,
+    altinn_svarfrist = _altinn_svarfrist,
+    tvangsmulkt_svarfris t= _tvangsmulkt_svarfrist_,
+    send_si = _send_si
+)
+
+print(output)
+```
+
+For å hente ut pulje med tilhørende metadata i Python, kan du bruke metoden `get_pulje_by_periode_id` i `SuvClient`. Sørg for at du oppgir riktig periode_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_pulje_by_periode_id(
+            periode_id = 99
+        )
+
+print(output)
+```
+
+## Utsending
+En pulje kan ha en eller flere utsendinger knyttet til seg. Hvilke utsendinger som er lagt inn på puljen kan du se i detaljvisningen når du har valgt en pulje. 
+
+**Eksempel på pulje med utsending**<br>
+Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
+
+![Pulje utsending](../images/altinn-skjemaadm-utsending.png){fig-alt="Illustrasjon av pulje og utsending." #fig-altinn-pulje-utsending} 
+
+::: {.callout-tip collapse="true"}
+## Beskrivelse av utsending metadata
+
+@tbl-utsending-meta beskriver metadatafeltene for en utsending
+
+| Meta | Forklaring |
+| ----------------- |-------------------------------------------------------------------------------------- |
+| Utsendingstype | Angir type utsending (f.eks instansiering).
+| Trigger | Angir trigger for utsending (Manuell, Auto, Ekstern). 
+| Test | 
+| Send ut | Angir tidspunkt for utsendelse.
+: Pulje metadata {#tbl-utsending-meta .striped}
+:::
+
+### Send nå
+Ønsker du å gjøre en utsending umiddelbart må dette gjøres fra GUI.
+
+**Slik gjør du en utsending umiddelbart:**
+
+1. Velg **Skjemadata** i venstremenyen.
+2. Bruk søkefeltet i det nye skjermbildet for å finne skjemaet ditt.
+3. Klikk på **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om skjemaet.
+4. Finn ønsket **periode** og velg **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om perioden.
+5. Finn ønsket **utsending** og velg **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om utsendingen (eventuelt så kan du opprette en helt ny utsending).
+6. Trykk **"Send nå"**.
+
+![Send nå](../images/altinn-skjemaadm-utsending-jobb.png){fig-alt="Illustrasjon av utsending." #fig-altinn-utsending} 
+
+::: {.callout-tip}
+## Utsending til utvalgt(e) enhet(er)
+For å sende til én eller flere spesifikke enheter, kan du oppgi organisasjonsnumrene som en kommaseparert liste. Eksempel: 123456789, 987654321. Dersom ingen enheter oppgis, vil utsendingen automatisk gjelde for hele puljen.
+:::
+
+### Kodeeksempel
+For å lage en ny utsending, kan du bruke metoden `create_pulje` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+_altinn_uts_tidspunkt = datetime(2024, 11, 20, 14, 30, 0)
+
+output = client.create_utsending(
+            pulje_id = 75,
+            utsendingstype_navn = 'instansiering',
+            altinn_uts_tidspunkt = _altinn_uts_tidspunkt
+        )
+        
+print(output)
+```
+
+For å hente ut utsending med tilhørende metadata i Python, kan du bruke metoden `get_utsending_by_id` i `SuvClient`. Sørg for at du oppgir riktig utsending_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.client.get_utsending_by_id(
+            utsending_id = 133   
+        )
+
+print(output)
+```
+
+## Eksempelkode sammenstilling av data
+Noe demokode for sammenstilling av data ligger i [repoet](https://github.com/statisticsnorway/dapla-suv-tools/tree/main/demo), og kan være ett godt utgangspunkt å kopiere og endre fra.
