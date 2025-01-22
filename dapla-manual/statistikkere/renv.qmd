@@ -146,7 +146,7 @@ Benytt prosjekt-biblioteket ved å kjøre:
 
 2. Oppgrader versjon av renv ved:
 
-```r{.r filename="terminal"}        
+```{.r filename="terminal"}        
 renv::upgrade()
 ```
 
@@ -172,9 +172,17 @@ Ved å aktivere et renv-miljø ved `renv::autoload()` søker R i alle programfil
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094915?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="renvignore"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 ### Flytting mellom jupyter på bakken og Dapla
-Pakker installeres fra forkjellige sted når vi jobber på Dapla vs jupyter på bakken. For å benytte et renv-miljø i Jupyter som var laget i Jupyter på bakken må vi endre repository i *renv.lock*-filen.
+Pakker installeres fra ulike sted når vi jobber på Dapla vs jupyter på bakken. For å bruke et renv-miljø i en repo som var laget på bakken, på Dapla, må vi endre adressen hvor pakkene skal installeres fra i *renv.lock*. Addressen skal se slik ut:
 
-<div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094748?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="lock-update"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+```{.json filename="renv.lock"}
+"Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "https://packagemanager.posit.co/cran/latest"
+      }
+    ]
+```
+
 
 ### Pakke installering med renv på bakken
 
