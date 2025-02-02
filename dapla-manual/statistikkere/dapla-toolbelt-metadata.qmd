@@ -7,48 +7,34 @@ date-modified: "01/31/2025"
 
 ## Forberedelser
 
-Før man tar i bruk *dapla-toolbelt-metadata* bør man ha lest [kapitlet om Dapla Lab](./dapla-lab.html) og satt opp Git- og GitHub-konfigurasjonen under **Min konto**. Deretter gjør du følgende:
+dapla-toolbelt-metadata kan installeres i tjenester på Dapla Lab. Siden det er en Python-pakke så må den installeres i en tjeneste der Python er installert. Deretter gjør du følgende:
 
-1. Logg deg inn på [Dapla Lab](https://lab.dapla.ssb.no/)
-2. Under **Tjenestekatalog** trykker du på **Start**-knappen for enten [Jupyter](./jupyter.qmd) eller [vscode-python](./vscode-python.qmd).
-3. Gi tjenesten et navn.
-4. Åpne **Jupyter konfigurasjoner**
-5. Velg hvilket team du skal representere
-6. Inne i tjenesten åpner du en terminal og oppretter et [ssb-project](./ssb-project.qmd) ved å skrive:
+1.  Åpne en tjeneste på [Dapla Lab](https://lab.dapla.ssb.no/) med Python installert. Før du åpner tjenesten må du velge å representere team og tilgangsgruppe som har tilgang til 
+2.  Installer pakken i et [ssb-project](./ssb-project.qmd) på følgende måte:
 
-```{.bash filename="Terminal"}
-ssb-project create test-metadata
+``` {.bash filename="Terminal"}
+poetry add dapla-toolbelt-metadata
 ```
 
-7. Installer pakken ved å skrive inn følgende
+Etter det er du klar for bruke funksjonaliteten i *dapla-toolbelt-metadata* i en notebook.
 
-```{.bash filename="Terminal"}
-cd test-metadata && poetry add dapla-toolbelt-metadata
-```
+::: {.callout-caution}
+## Dapla Lab og dapla-toolbelt-metadata
+I Dapla Lab velger man hvilket team og tilgangsgruppe man skal representere før man åpner en tjeneste. Hvis man f.eks. skal dokumentere et datasett i datatilstanden [inndata](./datatilstander.qmd#inndata) for et team som heter **dapla-felles**, så må man logge seg inn i en tjeneste som **dapla-felles-developers**, hvis ikke har man ikke tilgang til datasettet. 
 
-8. Åpne en ny notebook og velg kernel ved navn **test-metadata**
+I tillegg så benytter Vardef bl.a. informasjon om hvilket team og tilgangsgruppe du logget deg inn som, for definere hvilket team som blir eier av en nyopprettet variabeldefinisjon. På samme måte bruker Vardef denne informasjonen til å avgjøre om en bruker har tilgang til å endre en definisjon. F.eks. vil en bruker som logger seg inn som **dapla-felles-developers** og oppretter en ny definisjon, så vil **dapla-felles** stå som eier av definisjonen og det vil kun være medlemmer av dette teamet som kan gjøre endringer i definisjonen.  
+:::
 
-Etter det er du klar for bruke funksjonaliteten i *dapla-toolbelt-metadata*. I eksempelet over ble prosjektet navngitt **test-metadata**, men du kan bare kalle det hva du vil.
 
 ## Datadoc
 
-Den anbefalte måten å skape metadata for et nytt datasett er med [Datadoc brukergrensesnittet](./datadoc.qmd). Men det finnes tilfeller hvor det kan være tungvint å bruke og man ønsker å jobbe med metadata ved hjelp av kodespråk. Det kan man gjøre med `Datadoc` klassen i `dapla-toolbelt-metadata` pakken.
+[Datadoc](./datadoc.qmd) er SSBs system for dokumentasjon av datasett. Første gang man skal dokumentere et datasett i Datadoc så er det anbefalt å bruke det grafiske grensesnittet i [Datadoc-editor](./datadoc-editor.qmd). I løpende produksjon er det dermed anbefalt å benytte en programmatisk tilnærming gjennom `Datadoc`-klassen i Python-pakken [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
 
-### Brukstilfeller
+### Dokumentere ny periode
 
-#### Nye tidsperioder
+Hvis man har dokumentert datasett for *periode t* med [Datadoc-editor](./datadoc-editor.qmd), så kan man programmatisk dokumentere *periode t+1* ved å benytte `Datadoc`-klassen i dapla-toolbelt-metadata. Det forutsetter at det kun nye data som har kommet til og at det er den eneste endringen i dataene. Da kan man dokumentere den nye perioden på følgende måte:
 
-Det primære brukstilfelle er å skape metadata for datasett skapt for nye tidsperioder som en del av produksjonsløp.
-
-I dette tilfelle er Datadoc brukergrensesnittet brukt for å skape det første metadatadokumentet. Man kan deretter bruke metadatadokumentet som en utgangspunkt for nye tidsperioder. `Datadoc` klassen utleder oppdatert informasjon fra filstien til datasettene for nye tidsperioder og oppdaterer metadataen til å stemme.
-
-::: {.callout-note}
-Dette forutsetter at strukturen av datasettet og betydningen av variablene er lik mellom tidsperiodene. Om det finnes uforventede avvik så kastes en `InconsistentDatasetsError` med detaljer om avviket.
-:::
-
-##### Kodeeksempel
-
-```{.python filename="Notebook"}
+``` {.python filename="Notebook"}
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
@@ -58,16 +44,112 @@ meta = Datadoc(
 meta.write_metadata_document() # <3>
 ```
 
-1. En ny tidsperiode av et datasett
-2. Eksisterende metadatadokument
-3. Skaper et nytt metadatadokument med filsti som stemmer med datasettet, i dette tilfellet `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`
+1.  `dataset_path` angir det nye datasettet som skal dokumenteres.
+2.  `metadata_document_path` angir sti til tidligere periodes metadata.
+3.  `write_metadata_document` er kommandoen som produserer de nye metadataene og skriver de til filen `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`.
+
+Det veldig viktig at man ikke bruker denne metoden hvis det er endringer i hvilke kolonner som finnes i datasettet eller andre større endringer. Metoden over antar at den eneste informasjonen som har endret seg er den som kan leses ut av filstien. Ved større endringer i selve dataene bør man heller gjøre en manuell gjennomgang av metadataene med [Datadoc-editor](./datadoc-editor.qmd)
 
 ## Vardef
-kdljfklds
+
+[Vardef](./vardef.qmd) er SSBs system for dokumentasjon av variabler. Vardef består av et sentralt datalager som man kan interagere med via et API. Måten statistikere og forskere i SSB kan ta i bruk Vardef er gjennom `Vardef`-klassen i Python-pakken bruke pakken til følgende: [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/). Man kan
+
+-   Liste ut alle definisjoner.
+-   Migrere definisjoner fra Vardok^[Vardok er SSBs tidligere system for variabeldefinisjoner og som erstattes av Vardef.].
+- Opprette ny definisjon
+- Endre eksisterende definisjon
 
 ### Opprette ny definisjon
 
-dfskjkldjsf
+For å opprette en ny variabeldefinisjon så må man starte en tjeneste på Dapla Lab som det Dapla-teamet som skal eie variabeldefinsisjonen. Hvis man f.eks. logger seg inn som *dapla-felles-developers*, oppretter en ny definisjon, så blir det Dapla-teamet *dapla-felles* som blir stående som eier av definisjonen.
+
+For å opprette en ny variabeldefinisjon må man fylle inn all [obligatorisk informasjon](https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3009839199/VarDef+-+Krav+til+dokumentasjon+av+variabler) på et av disse formatene:
+
+1. `models`-funksjonen i dapla-toolbelt-metadata
+2. Python dictionary
+3. Yaml-fil 
+
+::: {.panel-tabset}
+## models
+
+``` {.python}
+draft = models.Draft(
+    name = {
+        "nb": "test navn",
+        "nn": "test namn",
+        "en": "test name",
+    },
+    short_name= "test_shortname",
+    definition= {
+        "nb": "Skriv en definisjonstekst på norsk bokmål.",
+        "nn": "Skriv ein definisjonstekst på nynorsk.",
+        "en": "Write a definition text in english.",
+    },
+    classification_reference="91",
+    unit_types=[
+        "01",
+    ],
+    subject_fields=[
+        "al",
+    ],
+    contains_special_categories_of_personal_data=False,
+    measurement_type=None,
+    valid_from=date(2024,12,18),
+    external_reference_uri=None,
+    comment=None,
+    related_variable_definition_uris=None,
+    contact=None,
+)
+
+my_draft = Vardef.create_draft(draft)
+```
+
+## Python dictionary
+
+``` {.python}
+NEW_DRAFT = {
+    "name": {"en": "Country Background",
+             "nb": "Landbakgrunn",
+             "nn": "Landbakgrunn"},
+    "short_name": "new_short_name1",
+    "definition": {
+        "en": "Country background is the person's own, the mother's or possibly the father's country of birth. Persons  without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen. If neither the person nor the parents are born abroad, country background is chosen from the first person born abroad in the order mother's mother, mother's father, father's mother, father's father.",
+        "nb": "For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.",
+        "nn": "For personar fødd i utlandet, er dette (med nokre få unntak) eige fødeland. For personar fødd i Noreg er det fødelandet til foreldra. I dei tilfella der foreldra har ulikt fødeland, er det fødelandet til mora som blir valt. Viss ikkje personen sjølv eller nokon av foreldra er utenlandsfødt, blir henta landsbakgrunn frå dei første utenlandsfødte ein treffar på i rekkjefølgja mormor, morfar, farmor eller farfar.",
+    },
+    "classification_reference": "91",
+    "unit_types": ["01", "02"],
+    "subject_fields": ["he04"],
+    "contains_special_categories_of_personal_data": True,
+    "measurement_type": None,
+    "valid_from": "2003-01-01",
+    "external_reference_uri": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1919/nb",
+    "comment": {
+        "nb": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "nn": "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.",
+        "en": "As of 1 January 2003, the definition was changed to also include the grandparents' country of birth.",
+    },
+    "related_variable_definition_uris": ["https://example.com/"],
+    "contact": {
+        "title": {
+            "en": "Division for population statistics",
+            "nb": "Seksjon for befolkningsstatistikk",
+            "nn": "Seksjon for befolkningsstatistikk",
+        },
+        "email": "s320@ssb.no",
+    },
+}
+```
+
+## yaml-fil
+
+``` {.python}
+#kommer snart
+```
+
+:::
+
+
 
 ### Endre eksisterende definisjon
 
