@@ -648,6 +648,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#liste-ut-variabeldefinisjoner" id="toc-liste-ut-variabeldefinisjoner" class="nav-link" data-scroll-target="#liste-ut-variabeldefinisjoner">Liste ut variabeldefinisjoner</a></li>
   <li><a href="#opprette-ny-definisjon" id="toc-opprette-ny-definisjon" class="nav-link" data-scroll-target="#opprette-ny-definisjon">Opprette ny definisjon</a></li>
   <li><a href="#endre-eksisterende-definisjon" id="toc-endre-eksisterende-definisjon" class="nav-link" data-scroll-target="#endre-eksisterende-definisjon">Endre eksisterende definisjon</a></li>
+  <li><a href="#slette-et-utkast" id="toc-slette-et-utkast" class="nav-link" data-scroll-target="#slette-et-utkast">Slette et utkast</a></li>
   <li><a href="#migrere-definisjon-fra-vardok" id="toc-migrere-definisjon-fra-vardok" class="nav-link" data-scroll-target="#migrere-definisjon-fra-vardok">Migrere definisjon fra Vardok</a></li>
   </ul></li>
   </ul>
@@ -1184,6 +1185,17 @@ Mindre endringer som ikke betyr noen innholdsmessige endring i beskrivelsen av v
 <li><strong>Større endringer</strong><br>
 Endringer som innebærer innholdsmessige endringer i variabelen. F.eks. en ny skatteregel krever at beskrivelsen for en skattevariabel må oppdateres.</li>
 </ol>
+</section>
+<section id="slette-et-utkast" class="level3">
+<h3 class="anchored" data-anchor-id="slette-et-utkast">Slette et utkast</h3>
+<p>Man kan slette et utkast på følgende måte:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>my_vardok_draft.delete_draft()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dette kan kun gjøres på definisjoner med status utkast/draft.</p>
 <section id="mindre-endringer" class="level4">
 <h4 class="anchored" data-anchor-id="mindre-endringer">Mindre endringer</h4>
 <p>Mindre endringer, kalt <em>patches</em> i Vardef, er mindre endringer som ikke krever en ny gyldighetsperiode for variabelen. Under er det noen eksempler på slike endringer og hvordan de gjøres:</p>
@@ -1193,28 +1205,28 @@ Endringer som innebærer innholdsmessige endringer i variabelen. F.eks. en ny sk
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.variable_definitions.generated.vardef_client.models.owner <span class="im">import</span> (</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    Owner,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.variable_definitions.generated.vardef_client.models.patch <span class="im">import</span> (</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    Patch,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>new_owner <span class="op">=</span> Patch(</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    owner<span class="op">=</span>Owner(</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    team<span class="op">=</span><span class="st">"dapla-felles"</span>,</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    groups<span class="op">=</span>[</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"dapla-felles-developers"</span>,</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"play-enhjoern-a-developers"</span>,</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>),</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>my_draft.create_patch(new_owner)</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>my_draft <span class="op">=</span> Vardef.get_variable_definition(my_draft.<span class="bu">id</span>)</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_draft.owner)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.variable_definitions.generated.vardef_client.models.owner <span class="im">import</span> (</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    Owner,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.variable_definitions.generated.vardef_client.models.patch <span class="im">import</span> (</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    Patch,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>new_owner <span class="op">=</span> Patch(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    owner<span class="op">=</span>Owner(</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    team<span class="op">=</span><span class="st">"dapla-felles"</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    groups<span class="op">=</span>[</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"dapla-felles-developers"</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"play-enhjoern-a-developers"</span>,</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>my_draft.create_patch(new_owner)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>my_draft <span class="op">=</span> Vardef.get_variable_definition(my_draft.<span class="bu">id</span>)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_draft.owner)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1225,21 +1237,60 @@ Endringer som innebærer innholdsmessige endringer i variabelen. F.eks. en ny sk
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb23" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>valid_validity_period <span class="op">=</span> models.ValidityPeriod(</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    definition<span class="op">=</span>{</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"nb"</span>: <span class="st">"ny definisjon2"</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"nn"</span>: <span class="st">"ny definisjon2"</span>,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"en"</span>: <span class="st">"new definition2"</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    valid_from<span class="op">=</span>date(<span class="dv">2040</span>,<span class="dv">4</span>,<span class="dv">5</span>),</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>my_draft.create_validity_period(valid_validity_period)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>valid_validity_period <span class="op">=</span> models.ValidityPeriod(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    definition<span class="op">=</span>{</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"nb"</span>: <span class="st">"ny definisjon2"</span>,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"nn"</span>: <span class="st">"ny definisjon2"</span>,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"en"</span>: <span class="st">"new definition2"</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    valid_from<span class="op">=</span>date(<span class="dv">2040</span>,<span class="dv">4</span>,<span class="dv">5</span>),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>my_draft.create_validity_period(valid_validity_period)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="migrere-definisjon-fra-vardok" class="level3">
 <h3 class="anchored" data-anchor-id="migrere-definisjon-fra-vardok">Migrere definisjon fra Vardok</h3>
-<p>Placeholder</p>
+<p>Eksternt publiserte variabeldefinisjoner fra <a href="https://www.ssb.no/a/metadata/definisjoner/variabler/main.html">Vardok</a> kan migreres til Vardef med funksjonen <code>migrate_from_vardok()</code>-funksjonen i dapla-toolbelt-metadata. For å migrere en variabeldefinisjon må man referere til variabelens ID i Vardok. Siden alle definisjoner er eid av en seksjon så har alle seksjoner en oversikt over hvilke definisjoner de er ansvarlig for, med tilhørende ID, og skal kun migrere disse definisjonene.</p>
+<p><code>migrate_from_vardok()</code>-funksjonen migrerer alle feltene fra Vardok som skal videreføres til Vardef, oppdaterer felter automatisk der det er mulig, og publiserer den som et <em>Utkast</em> i Vardef. Deretter må hvert fagansvarlig gå gjennom all informasjon, gjøre nødvendige endringer og kvalitetssikre informasjonen, før den kan publiseres. Husk at eierteamet for definisjon blir bestemt av hvilket team man representerer i Dapla Lab når <code>migrate_from_vardok()</code>-funksjonen kjøres.</p>
+<p>I koden under vises et eksempel der definisjonen for <a href="https://www.ssb.no/a/metadata/conceptvariable/vardok/90/nb">Spesifisert registreringstype</a> migreres fra Vardok til Vardef. ID-en til variabelen er <strong>90</strong> og derfor er det denne det refereres til i funksjonen:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb25" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_vardok_draft <span class="op">=</span> Vardef.migrate_from_vardok(<span class="st">"90"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_vardok_draft)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Alle definisjoner i Vardef må ha et gyldig kortnavn,. Hvis en definisjon som migreres fra Vardok ikke har et kortnavn så vil det genereres et midlertidig kortnavn ved migrering. Dette kortnavnet må endres før definisjonen publiseres internt eller eksternt. Automatisk genererte kortnavn starter alltid med <strong>generert</strong>. Man kan liste ut alle definisjoner i Vardef med et generert kortnavn for et gitt Dapla-team, med følgende kode:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb26" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>my_vardok_missing_short_name <span class="op">=</span> Vardef.migrate_from_vardok(<span class="st">"123"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>my_owner_team <span class="op">=</span> <span class="st">"dapla-felles"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>my_team_variables_generert_kortnavn <span class="op">=</span> [</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    {variable.short_name, variable.<span class="bu">id</span>}</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> variable <span class="kw">in</span> Vardef.list_variable_definitions()</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> variable.owner[<span class="st">"team"</span>] <span class="op">==</span> my_owner_team <span class="kw">and</span> variable.short_name.startswith(<span class="st">"generert"</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_team_variables_generert_kortnavn)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Definisjoner i Vardok kan kun migreres en gang
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En definisjon i Vardok kan kun migreres en gang. Hvis noen flere prøver å migrere en variabel vil man få en feilmelding i dapla-toolbelt-pseudo. Hvis den migrerte definisjonen har status <em>Utkast</em>, så er det mulig for eierteamet å slette utkastet, slik at et annet team kan migrere definisjonen. Eierteamet kan også overføre eierskapet til en definisjon i Vardef til et annet team.</p>
+</div>
+</div>
 
 
 </section>
