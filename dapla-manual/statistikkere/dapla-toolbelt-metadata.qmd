@@ -411,6 +411,16 @@ Mindre endringer som ikke betyr noen innholdsmessige endring i beskrivelsen av v
 2. **Større endringer**  
 Endringer som innebærer innholdsmessige endringer i variabelen. F.eks. en ny skatteregel krever at beskrivelsen for en skattevariabel må oppdateres.
 
+### Slette et utkast
+
+Man kan slette et utkast på følgende måte:
+
+```{.python filename="Notebook"}
+my_vardok_draft.delete_draft()
+```
+
+Dette kan kun gjøres på definisjoner med status utkast/draft.
+
 #### Mindre endringer
 
 Mindre endringer, kalt *patches* i Vardef, er mindre endringer som ikke krever en ny gyldighetsperiode for variabelen. Under er det noen eksempler på slike endringer og hvordan de gjøres:
@@ -460,4 +470,46 @@ my_draft.create_validity_period(valid_validity_period)
 
 ### Migrere definisjon fra Vardok
 
-Placeholder
+Eksternt publiserte variabeldefinisjoner fra [Vardok](https://www.ssb.no/a/metadata/definisjoner/variabler/main.html) kan migreres til Vardef med funksjonen `migrate_from_vardok()`-funksjonen i
+dapla-toolbelt-metadata. For å migrere en variabeldefinisjon må man referere til variabelens ID i Vardok. Siden alle definisjoner er eid av en seksjon så har alle seksjoner en oversikt over hvilke 
+definisjoner de er ansvarlig for, med tilhørende ID, og skal kun migrere disse definisjonene. 
+
+`migrate_from_vardok()`-funksjonen migrerer alle feltene fra Vardok som skal videreføres til Vardef, oppdaterer felter automatisk der det er mulig, og publiserer den som et *Utkast* i Vardef. Deretter 
+må hvert fagansvarlig gå gjennom all informasjon, gjøre nødvendige endringer og kvalitetssikre informasjonen, før den kan publiseres. Husk at eierteamet for definisjon blir bestemt av hvilket team man 
+representerer i Dapla Lab når `migrate_from_vardok()`-funksjonen kjøres.
+
+I koden under vises et eksempel der definisjonen for [Spesifisert registreringstype](https://www.ssb.no/a/metadata/conceptvariable/vardok/90/nb) migreres fra Vardok til Vardef. ID-en til variabelen er 
+**90** og derfor er det denne det refereres til i funksjonen: 
+
+```{.python filename="Notebook"}
+my_vardok_draft = Vardef.migrate_from_vardok("90")
+print(my_vardok_draft)
+```
+
+Alle definisjoner i Vardef må ha et gyldig kortnavn,. Hvis en definisjon som migreres fra Vardok ikke har et kortnavn så vil det genereres et midlertidig kortnavn ved migrering. Dette kortnavnet må 
+endres før definisjonen publiseres internt eller eksternt. Automatisk genererte kortnavn starter alltid med **generert**. Man kan liste ut alle definisjoner i Vardef med et generert kortnavn for et gitt 
+Dapla-team, med følgende kode:
+
+```{.python filename="Notebook"}
+my_vardok_missing_short_name = Vardef.migrate_from_vardok("123")
+
+my_owner_team = "dapla-felles"
+
+my_team_variables_generert_kortnavn = [
+    {variable.short_name, variable.id}
+    for variable in Vardef.list_variable_definitions()
+    if variable.owner["team"] == my_owner_team and variable.short_name.startswith("generert")
+]
+
+print(my_team_variables_generert_kortnavn)
+```
+
+::: {.callout-caution}
+## Definisjoner i Vardok kan kun migreres en gang
+
+En definisjon i Vardok kan kun migreres en gang. Hvis noen flere prøver å migrere en variabel vil man få en feilmelding i dapla-toolbelt-pseudo. Hvis den migrerte definisjonen har status *Utkast*, så 
+er det mulig for eierteamet å slette utkastet, slik at et annet team kan migrere definisjonen. Eierteamet kan også overføre eierskapet til en definisjon i Vardef til et annet team.
+
+:::
+
+
