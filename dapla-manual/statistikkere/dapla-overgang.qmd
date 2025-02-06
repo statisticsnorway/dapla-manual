@@ -7,6 +7,42 @@ I denne artikkelen beskriver vi hvordan man bør jobbe for å få en statistikk 
 
 ### Steg 1: Opprette Dapla team
 
-Litt som å skaffe seg tilganger til et område på Linux er det første man bør gjøre å opprette et Dapla team.
+Det første man må gjøre når man skal få en statistikk over på Dapla er å opprette et Dapla team. Et Dapla team gir en tilgang til Google Cloud. Det er anbefalt praksis å ha ett team per seksjon. Seksjon for Prisstatistikk (s240) har eksempelvis team-navnet `prisstat`.
 
-Dapla team er sentarlt i statistikkproduksjon på Dapla. Et Dapla team er nøkkelen til Google Cloud Platform. Det er gjennom Dapla team vi tilgangsstyrer lagringsområdene for data.
+::: {.callout-tip}
+# Hvordan oppretter du et team?
+I [applikasjonen Dapla-Ctrl](https://dapla-ctrl.intern.ssb.no/)! Dette må gjøres av seksjonsleder. Les brukerveiledning i [artikkelen vår om Dapla-Ctrl](https://manual.dapla.ssb.no/statistikkere/dapla-ctrl.html#opprette-team) om du trenger hjelp.
+:::
+
+### Steg 2: Jobb med egne data på Dapla!
+
+En av de viktigste delene av å få en statistikk over på Dapla er å jobbe på Dapla!
+
+Flere i SSB bruker produksjonssonen for å skrive produksjonssløp i Python og R. Det er ikke anbefalt. Det er tre hovedgrunner til dette:
+
+* Jobber man på bakken isolerer man seg fra ny og viktig Dapla-funksjonalitet
+* Det tar tid å flytte et produksjonsløp fra bakken til sky!
+* Jupyter på bakken er ikke skalert for å håndtere produksjonssløp
+
+#### Hvordan flytter man data fra produksjonssonen til Google Cloud Storage?
+
+##### Steg 1. Finn dataene du skal flytte
+
+Bestem deg for hvilke data du skal begynne å jobbe med. Vi anbefaler å begynne med inndata eller kildedata. Fordelen med å begynne med inndata er at man slipper å be om kildedatatilgang hver dag.
+
+##### Steg 2. Standardiser dataene (filformat og filnavn)
+
+Les filene inn i Python i jupyter i produksjonssonen og lagre de som .parquet-filer med filnavn som følger [navnestandard for datalagring](navnestandard.qmd).
+
+##### Steg 3. Flytt dataene til ssb/cloud_sync/<dapla-team>/tilsky/
+
+Flytt så dataene til *ssb/cloud_sync/<dapla-team>/tilsky/* på linux.
+Hvordan dette gjøres spørs på hvor dataene ligger. Ligger dataene på linux kan man enkelt kopiere og lime ved å bruke `cp`
+Ligger de på x-disken må man bruke FileZilla.
+
+##### Steg 4. Lag en transfer-tjeneste på Google Cloud Platform
+
+##### Steg 5. *kjøh*
+
+### Steg 3: Tegn dagens produksjonssystem
+
