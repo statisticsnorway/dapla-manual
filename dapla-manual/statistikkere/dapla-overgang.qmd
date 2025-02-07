@@ -51,7 +51,7 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 
 :::
 
-##### Steg 4. Finn frem til Transfer service-området på Google Cloud Platform
+##### Steg 4: Finn frem til Transfer service-området på Google Cloud Platform
 
 1. Gå inn på [Google Cloud Console](https://console.cloud.google.com) i en nettleser.
 2. Sjekk, øverst i høyre hjørne, at du er logget inn med din SSB-konto (xxx@ssb.no).
@@ -62,16 +62,27 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 4. Etter at du har valgt prosjekt kan du søke etter **Transfer jobs** eller **Storage transfer** i søkefeltet øverst på siden, og gå inn på siden *Transfer jobs*
 
 
-##### Steg 5. Lag en transfer job for flytting fra bakke til sky
+##### Steg 5: Lag en transfer job for flytting fra bakke til sky
+
+* Trykk så på `CREATE TRANSFER JOB`-knappen.
+* Velg *POSIX filesystem* under source type, og *Google Cloud Storage* under Destination type
+* Velg mellom *Batch* og *Event-driven* under Scheduling mode
+* Velg *transfer_service_default* under Agent pool
+* Velg skriv  *tilsky/* under Source directory path
+* Velg bøtte du vil overføre til. Enten tilsky (*ssb-<team-navn>-data-tilsky-prod*) eller produkt (*ssb-<team-navn>-data-produkt-prod*)
+* Velg overførignshyppighet. Velger du *Run once* kan du uansett kjøre tjenesten manuelt i fremtiden
+* Skriv en kort beskrivelse (eks. 'Bakke til sky - engangskjøring')
+* Voilà! 
+
+##### Steg 6: Kjør transfer job!
+
+Gå tilbake itl transfer jobs-siden og kjør din nye transfer-job vewd å trykke på jobb-navnet og ~Start a run*
 
 
+### Steg 7: Lag repo med SSB-project
 
-##### Steg 5. *kjøh*
+### Steg 8: Tegn dagens produksjonssystem
 
-### Steg 3: Lag repo med SSB-project
-
-### Steg 4: Tegn dagens produksjonssystem
-
-### Steg 5: Jobb deg gjennom datatilstandene 
+### Steg 9: Jobb deg gjennom datatilstandene 
 
 ### Og så må du finne din egen vei....
