@@ -1,0 +1,38 @@
+---
+title: Parquet-utforsker i VS Code
+subtitle: Utforsk Parquet-filene dine uten kode
+categories:
+  - Parquet
+  - Vscode
+  - SQL
+  - Duckdb
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+image: ../../../images/parquet-logo.jpg
+image-alt: Logo til Pandera
+date: 02/07/2025
+date-modified: 02/07/2025
+draft: false
+---
+
+I Dapla Lab tjenesten [Vscode-python](../../../statistikkere/vscode-python.qmd) er nå *extension*'en [vscode-parquet-visualizer](https://github.com/Data-Lake-Visualizer/vscode-parquet-visualizer) installert. Den lar deg åpne en Parquet-fil uten bruk av Python- eller R-biblioteker. I tillegg lar den deg spørre mot datasettet med SQL, filtrere dataettet uten kode, sortere kolonner, gir deg metadata om kolonner og datasett, og gir en forhåndsvisning av komplekse celler.
+
+I videoen under ser man hvordan man åpner en Parquet-fil i en bøtte fra et ssb-project. Filen som åpnes har 4 kolonner, 5 millioner rader og er på 85 megabytes. 
+
+{{< video parquet-viewer.mp4
+    title="Eksempel på bruk av parquet-visualizer"
+    start="0"
+    aspect-ratio="21x9" 
+    background-video-loop="true"
+>}}
+
+## Bruksområde
+
+Bruksområdet for denne funksjonaliteten er å utforske Parquet-filer og ikke prosessere data i produksjon. Selv om man kan skrive ut et filtrert datasett med løsningen, så skal det ikke benyttes til prosessering som skal være reproduserbar siden det ikke dokumenteres med kode.
+
+## Skrive SQL
+
+SQL-en som skrives må være [duckdbsql](https://duckdb.org/docs/sql/introduction.html) siden det er dette extension'en benytter for å hente informasjon fra Parquet-filen. 
