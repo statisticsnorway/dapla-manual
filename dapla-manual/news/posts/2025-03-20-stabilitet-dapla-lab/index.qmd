@@ -1,0 +1,52 @@
+---
+title: Arbeid rundt stabilitet i Dapla Lab
+subtitle:  <todo>
+categories:
+  - Dapla Lab
+author:
+  - name: John Kasper Svergja
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: hnk@ssb.no
+date: "03/20/2025"
+date-modified: "03/20/2025"
+image: ../../../images/dapla-long.png
+image-alt: "Bilde av Dapla-logoen"
+lightbox: true
+draft: false
+---
+
+TL;DR:
+- Vi forventer færre avbrudd i tjenester relatert til skalering av maskiner.
+- Vi forventer økt stabilitet i tjenester relatert til konkurerende minnebruk på maskiner.
+
+Med overgang fra 'gamle' jupyter til Dapla Lab og flere valg og fleksibilitet med tanke på tjenester og konfigurasjon møter vi på nye utfordringer knyttet til opplevd stabilitet fra brukeren.
+
+Som bruker av Dapla Lab ønsker man forutsigbarhet og et stabilt miljø man kan stole på når man sitter og jobber. Spørsmålet som da stiller seg er hvordan plattformteamene kan ettergå samt levere dette etter beste evne, med de forutsetningene og den underliggende plattformen som er satt.
+"Under the hood" benyttes det som på sett og vis har blitt bransjestandarden for plattformener, Kubernetes. Et prosjekt som har utspring fra Google, og brukes i utstrakt grad i industrien i dag (både Nais og gamle BiP bygger på denne platformen, og nå også Dapla Lab).
+
+Når en tjenete startes i Dapla Lab bestemmer Kubernetes hvilken underliggende maskin (også kalt node) tjenesten skal starte på. Hvis det er for lite kapasitet vil Kubernetes starte en ny maskin. Denne skaleringen er grunnen til at oppstart av tjeneste noen ganger kan ta ekstra tid utover vanlig. 
+Skulle det vise seg at vi har flere maskiner enn nødvendig vil de overflødige maskinene bli avsluttet. Ved å kun kjøre det minste nødvendige antallet med maskiner kan vi ha en mer kostnadseffektiv drift. En konsekvens av dette har vært at tjenester plutselig kan oppleve et midlertidig avbrudd mens tjenesten blir flyttet fra en maskin til en annen. 
+Etter tilbakemelding fra brukerne har vi endret denne praksisen, og lar når tjenestene bli igjen på maskinen den kjører på, selv om det er ledig kapasitet på andre plattformer. **Vi oppfordrer deg til å stanse tjenesten når du ikke lengre har behov for den.**
+
+< illustrasjon som viser scale up og ned >
+
+Når du som bruker i Dapla Lab konfigurerer tjenesten din med CPU og minne blir det satt føringer som må overholdes av Kubernetes. Hvis vi tenker på minne: Den ene føringen er en forespørsel - som man er garantert å få. Den andre er grensen/taket.
+Hvis man går over taket vil Kubernetes drepe tjenesten og starte den på nytt.
+I "tradisjonelle" applikasjoner (tenk feks klass-api-et) gir forespørselen og grenser mening, grunnet naturlig variasjon i belastning og trafikk, og applikasjonene er designet for å kunne feile, starte på nytt ofte og kjøre flere i parallel. Hvis den igjen og igjen går over grensen sin tyder dette på en feil i applikasjonen (feks minnelekasje).
+Kubernetes benytter seg av det forespurte minnet når den velger hvilken maskin tjenesten eller applikasjonen skal kjøre på. Det vil si at det er en mulighet å ha en total høyere minnegrense enn hva som er tilgjengelig på noden. Feks hvis tjeneste A har minne -forespørsel/-grense på 100gb/150gb, og tjeneste B har tilsvarende, men maskinen bare har 256gb med minne tilgjengelig. Da er vi i et scenario at maksinen ikke har nok minne hvis både tjeneste A og tjeneste B bruker opp til minnegrensen sin. Også i dette tilfellet vil tjenesten da bli drept og startet på nytt (merk: dette kan være en tilfeldig tjeneste på maskinen, ikke nødvendigvis den som bruker mest minne).
+Vi har sett at det for tjenester på Dapla Lab ikke gir mening å differensiere på forespørsel og grense, som i tradisjonelle applikasjoner. Derfor er det nå innført en endring der forespørselen er lik grensen.
+Dette håper vi gjør det mer forutsigbart for brukeren hva de kan forvente av tilgjengelig minne, samtidig som stabiliteten for alle brukerene ved at "minnetunge" brukere ikke påvirker andre brukere sine tjenester.
+
+Det å velge korrekte maskiner er ikke nødvendigvis en enkel oppgave, da generell bruk av maskinen må veies opp mot kost. Kostnadsdriveren for maskinene Dapla Lab og tjenestene kjører på er minne. Den nysgjerrige kan ta en titt på pris-oversikten her: https://cloud.google.com/compute/all-pricing?hl=nb vi kjører maskintype `n2` (standard og highmem).
+Ved å monitorerer og observere bruken av ressurser gjør vi nå også endringer i hvilke underliggende maskiner som kan kjøres opp. Fremover vil vi kjøre opp færre store maskiner enn flere små (grunnet til en grunnkost av det å kjøre en maskin), samtidig som vi nå innfører en maskintype som ikke har like mye minne som andre (`n2-standard-80`). Det vil være kosteffektivt for dem som trenger mye CPU men ikke tilsvarende med minne.
+Dette vil være noe brukerne ikke merker eller vil ha et forhold til.
+
+
+< foto - bruksmønster av cpu og pod i clusteret>
+En generell oppfordring til våre brukere er å ikke etterspørre mer ressurser enn det man tror man trenger.
+
+
+
+
+
