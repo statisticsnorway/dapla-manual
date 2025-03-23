@@ -15,7 +15,106 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.6.42</generator>
-<lastBuildDate>Tue, 18 Mar 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 24 Mar 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Støtte for langtkjørende jobber på Dapla Lab</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-03-24-dapla-lab-tmux/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Brukere som har behov for å kjøre jobber på Dapla Lab som tar mer enn 12 timer, har opplevd at kjøringene avbrytes etter noen timer uten noen åpenbar grunn. Feilen har også oppstått når brukeren har lukket nettleser-fanen eller maskinen til brukeren har gått i dvale, selv om dette ikke i teorien skulle påvirke kjøringen. Årsaken virker å være IDE-ene (Jupyter, VS Code og RStudio) pauser jobbene når de blir pauset.</p>
+<p>For å unngå denne oppførselen er terminal-verktøyet <a href="https://github.com/tmux/tmux/wiki">tmux</a> installert i Jupyter, VS Code og RStudio. tmux er <em>terminal multiplexer</em> som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (&gt;12h) kjører koden i en tmux-session.</p>
+<p>Du kan kjøre ditt Python-script ved å kjøre følgende:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tmux</span> new <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-s</span> mittsesjon</span></code></pre></div>
+</div>
+<p>I koden over startes en session med navn <strong>minsesjon</strong>. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med <code>python</code>-kommandoen i en terminal, så kan du kjøre kommandoen:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">poetry</span> shell</span></code></pre></div>
+</div>
+<p>Nå kan du kjøre scriptet ditt på følgende måte:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">python</span> mittskript.py</span></code></pre></div>
+</div>
+<p>Deretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge <a href="../../../statistikkere/dapla-lab.html#automatisk-pausing">denne oppskriften</a>.</p>
+
+
+
+ ]]></description>
+  <category>Dapla Lab</category>
+  <category>tmux</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-03-24-dapla-lab-tmux/</guid>
+  <pubDate>Mon, 24 Mar 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
+<item>
+  <title>Endringer for økt stabilitet på Dapla Lab</title>
+  <dc:creator>John Kasper Svergja</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-03-20-stabilitet-dapla-lab/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Etter overgangen til Dapla Lab februar 2025 har vi gjort erfaringer som tilsa at vi burde endre hvordan tjenestene er satt opp. Dette burde resultere i at brukere opplever færre avbrudd når de jobber i en tjeneste som Jupyter, og at det blir færre problemer knyttet til konkurerende minnebruk. Ofte er disse vurderingene en avveining mellom opplevd stabilitet og fleksibilitet vs kostnader for SSB. Det optimalet oppsettet er derfor noe vi må kontinuerlig justere etter hvert som vi får erfaring.</p>
+<section id="færre-avbrudd" class="level2">
+<h2 class="anchored" data-anchor-id="færre-avbrudd">Færre avbrudd</h2>
+<p>Brukere som har jobbet i Jupyter, VS Code eller RStudio har rapportert at de plutselig kan oppleve avbrudd og at tjenesten ikke kan brukes på noen minutter. En <em>refresh</em> av nettsiden etter noen minutter har fikset problemet, men det oppleves ustabilt for brukeren. Vi har nå gjort endringer i den underliggende plattformen slik at dette ikke skal skje. Årsaken til avbruddene har vært at brukere har blitt omplassert på nye maskiner for å spare ressurser. Vi har nå økt toleransen for at brukere skal bli omplassert på ny maskin og dermed bør problemet forsvinne. For de som er interessert i mer detaljer så kan de lese neste avsnitt.</p>
+<p>Når en tjeneste startes i Dapla Lab bestemmer Kubernetes<sup>1</sup> hvilken underliggende maskin (også kalt <em>node</em>) tjenesten skal starte på. Hvis det er for lite kapasitet vil Kubernetes starte en ny maskin. Denne skaleringen er grunnen til at oppstart av en tjeneste noen ganger kan ta ekstra tid. Skulle det vise seg at vi har flere maskiner enn nødvendig vil de overflødige maskinene bli skrudd av. Ved å kun kjøre det minste nødvendige antallet med maskiner får vi en mer kostnadseffektiv drift. En konsekvens av dette har vært at tjenester plutselig kan oppleve et midlertidig avbrudd mens tjenesten blir flyttet fra en maskin til en annen. Etter tilbakemelding fra brukerne har vi endret denne praksisen, og lar nå tjenestene kjøre videre på samme maskin, selv om det er ledig kapasitet på andre maskiner.</p>
+</section>
+<section id="mindre-konkurrerende-minnebruk" class="level2">
+<h2 class="anchored" data-anchor-id="mindre-konkurrerende-minnebruk">Mindre konkurrerende minnebruk</h2>
+<p><a href="./dapla-lab-cpu-ram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://manual.dapla.ssb.no/news/posts/2025-03-20-stabilitet-dapla-lab/dapla-lab-cpu-ram.png" class="img-fluid" style="max-width: 60%; float: right;" alt="Dapla logo"></a></p>
+<p>Enkelte brukere har opplevd at tjenesten i Dapla Lab kræsjer pga. minnebruk selv om minnebruken er mindre enn det som ble forespurt av brukeren. Dette skyldes at det er forskjell på forespurte og tilgjengelige ressurser i Kubernetes. Vi har nå endret oppsettet i Dapla Lab slik at brukerne alltid får det som forespørres, og derfor vil mangel på ressurser ikke forekomme lenger. Resultatet for brukeren er en mer stabil tjeneste og bedre brukeropplevelse. De som er interessert i flere detaljer rundt dette, kan lese avsnittet under.</p>
+<p>Når man som bruker i Dapla Lab konfigurerer en tjeneste med CPU og Minne/RAM, så blir det satt føringer som må overholdes av Kubernetes. Den ene føringen er en forespørsel - mengden CPU/minne man er garantert å få - og den andre er grensen/taket. Hvis man går over taket vil Kubernetes “drepe” tjenesten og starte den på nytt.</p>
+<p>I “tradisjonelle” applikasjoner (tenk f.eks. Klass sitt API) gir forespørsler og grenser mening, grunnet naturlig variasjon i belastning og trafikk, og at applikasjonene er designet for å kunne feile, starte på nytt ofte og kjøre flere instanser i parallel. Hvis den om og om igjen går over grensen sin tyder dette på en feil i applikasjonen (f.eks. minnelekkasje).</p>
+<p>Kubernetes benytter seg av det forespurte minnet når den velger hvilken maskin tjenesten eller applikasjonen skal kjøre på. Det vil si at det er mulig å totalt ha en høyere minnegrense enn hva som er tilgjengelig på maskinen. Et eksempel på dette er hvis tjeneste A har minneforespørsel/-grense på 100GB/150GB, og tjeneste B har tilsvarende, men maskinen bare har 256GB med minne tilgjengelig. Da er vi i et scenario der maskinen ikke har nok minne hvis både tjeneste A og tjeneste B bruker opp til minnegrensen sin. I dette tilfellet vil en tjeneste på maskinen bli drept og startet på nytt. Merk at dette kan være en tilfeldig tjeneste på maskinen, ikke nødvendigvis den som bruker mest minne.</p>
+<p>Vi har sett at det for tjenester på Dapla Lab ikke gir mening å differensiere på forespørsel og grense, som i tradisjonelle applikasjoner. Derfor er det nå innført en endring der forespørselen er lik grensen.Dette håper vi gjør det mer forutsigbart for brukeren hva de kan forvente av tilgjengelig minne, samtidig som stabiliteten for alle brukerne ved at “minnetunge” brukere ikke påvirker andre sine tjenester.</p>
+</section>
+<section id="nye-maskiner" class="level2">
+<h2 class="anchored" data-anchor-id="nye-maskiner">Nye maskiner</h2>
+<p>Det å velge korrekte maskiner er ikke nødvendigvis en enkel oppgave, da generell bruk av maskinen må veies opp mot kostnaden ved den. Kostnadsdriveren for maskinene Dapla Lab og tjenestene kjører på er minne. Den nysgjerrige kan ta en titt på pris-oversikten her:<br>
+<a href="https://cloud.google.com/compute/all-pricing?hl=nb." class="uri">https://cloud.google.com/compute/all-pricing?hl=nb.</a></p>
+<p>På Dapla Lab benyttes maskintype <code>n2</code> (standard og highmem). Ved å monitorere og observere bruken av ressurser gjør vi nå også endringer i hvilke underliggende maskiner som kan kjøres opp. Fremover vil vi kjøre opp færre store maskiner enn flere små (fordi det finnes en basiskostnad for hver ekstra maskin), samtidig som vi nå innfører en maskintype som ikke har like mye minne som andre (<code>n2-standard-80</code>). Det vil være kostnadseffektivt for dem som trenger mye CPU men ikke nødvendigvis masse minne.</p>
+<p>Dette vil være noe brukerne ikke merker eller vil ha et forhold til.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>Kubernetes er systemet som brukes <em>under panseret</em> for å skalere opp og ned ressurser i Dapla Lab. <a href="https://kubernetes.io/">Les mer om Kubernetes her</a>.↩︎</p></li>
+</ol>
+</section></div> ]]></description>
+  <category>Dapla Lab</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-03-20-stabilitet-dapla-lab/</guid>
+  <pubDate>Thu, 20 Mar 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
 <item>
   <title>Forbedring av konfigurasjon i Dapla Lab</title>
   <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
@@ -557,54 +656,6 @@ vscode-detlev
   <category>Pandera</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2024-12-16-blogpost-pandera/</guid>
   <pubDate>Mon, 16 Dec 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
-</item>
-<item>
-  <title>Tar i bruk Navs applikasjonsplattform</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2024-12-11-nais-platform/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>I 2025 skal SSB for fullt ta i bruk <a href="https://docs.ssb.cloud.nais.io/">Navs applikasjonsplattform, NAIS</a>.</p>
-<blockquote class="blockquote">
-<p>Med Nais er mange gjennomtenkte valg allerede tatt. Det blir lettere for applikasjonsutviklere i SSB å gå fra idé til implementering, samtidig som vi slipper utvikling og vedlikehold som ellers måtte gjøre selv.</p>
-</blockquote>
-<p><a href="https://ssbno.sharepoint.com/sites/byraanettet/SitePages/Tar%20i%20bruk%20Navs%20applikasjonsplattform.aspx">Les mer i denne SSB-interne saken</a>.</p>
-<p><img src="https://manual.dapla.ssb.no/images/nais_logo_ssb.png" class="img-fluid" alt="Dapla logo"></p>
-
-
-
- ]]></description>
-  <category>NAIS</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2024-12-11-nais-platform/</guid>
-  <pubDate>Wed, 11 Dec 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/nais_logo_ssb.png" medium="image" type="image/png" height="192" width="144"/>
-</item>
-<item>
-  <title>refresh-buckets kommando i Dapla Lab</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2024-12-03-refresh-buckets/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p><img src="https://manual.dapla.ssb.no/images/dapla-long.png" class="img-fluid" style="max-width: 40%; float: right;" alt="Dapla logo"> Nå kan man kjøre kommandoen <code>refresh-buckets</code> fra terminalen i en tjeneste på Dapla Lab for å oppdatere visningen av en bøttene i filsystemet. Dette kan være nyttig hvis det blir opprettet mapper med <a href="../../../statistikkere/jobbe-med-data.html#dapla-toolbelt">dapla-toolbelt</a> eller <a href="../../../statistikkere/kildomaten.html">Kildomaten</a>, og ikke via <code>buckets</code>-mappen i filsystemet. Les mer i <a href="../../../statistikkere/dapla-lab.html">kapitlet om Dapla Lab</a>.</p>
-
-
-
- ]]></description>
-  <category>Dapla Lab</category>
-  <category>Jupyter</category>
-  <category>Vscode</category>
-  <category>Rstudio</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2024-12-03-refresh-buckets/</guid>
-  <pubDate>Tue, 03 Dec 2024 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 </channel>
