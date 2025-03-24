@@ -10,7 +10,7 @@ author:
       - name: Seksjon for dataplattform (724)
         email: hobr@ssb.no
 date: "03/24/2025"
-date-modified: "03/24/2025"
+date-modified: "03/25/2025"
 image: ../../../images/dapla-long.png
 image-alt: "Bilde av Dapla-logoen"
 lightbox: true
@@ -24,7 +24,7 @@ For å unngå denne oppførselen er terminal-verktøyet [tmux](https://github.co
 Du kan kjøre ditt Python-script ved å kjøre følgende:
 
 ```{.bash filename="Terminal"}
-tmux new -s mittsesjon
+tmux new -s minsesjon
 ```
 I koden over startes en session med navn **minsesjon**. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med `python`-kommandoen i en terminal, så kan du kjøre kommandoen:
 
@@ -39,3 +39,27 @@ python mittskript.py
 ```
 
 Deretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge [denne oppskriften](../../../statistikkere/dapla-lab.qmd#automatisk-pausing).
+
+tmux operer med konsepter som *session*, *window* pg *panes*. Over startet vi en *session* med navnet **minsesjon**. Dette er et komplett arbeidsmiljø hvor man kan ha flere terminaler delt opp i *panes*. En av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en *session* kan være *attached*, dvs. at du er koblet til den ser den i terminalen, og *detached*, som betyr at den kan kjøre i bakgrunnen mens du jobber i en separat *session*. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:
+
+```{.bash filename="Terminal"}
+tmux ls
+```
+
+I eksempelet over så kan vi koble til (*attach*) til vår sesjon ved å skrive:
+
+```{.bash filename="Terminal"}
+tmux attach -t minsesjon
+```
+
+Du vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist @fig-dapla-lab-tmux-status.
+
+![Statusbar for en tmux-sesjon](./dapla-lab-tmux-status.png){fig-alt="Viser tmux statusbar" #fig-dapla-lab-tmux-status}
+
+Du kan koble fra en sesjon ved taste **CTRL B** og deretter **d**, eller skrive følgende i terminalen:
+
+```{.bash filename="Terminal"}
+tmux detach -s minsesjon
+```
+
+Prosessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten.  
