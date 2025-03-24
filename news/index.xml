@@ -37,7 +37,7 @@
 background-color: null;
 font-style: inherit;">tmux</span> new <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">-s</span> mittsesjon</span></code></pre></div>
+font-style: inherit;">-s</span> minsesjon</span></code></pre></div>
 </div>
 <p>I koden over startes en session med navn <strong>minsesjon</strong>. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med <code>python</code>-kommandoen i en terminal, så kan du kjøre kommandoen:</p>
 <div class="code-with-filename">
@@ -58,6 +58,49 @@ background-color: null;
 font-style: inherit;">python</span> mittskript.py</span></code></pre></div>
 </div>
 <p>Deretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge <a href="../../../statistikkere/dapla-lab.html#automatisk-pausing">denne oppskriften</a>.</p>
+<p>tmux operer med konsepter som <em>session</em>, <em>window</em> pg <em>panes</em>. Over startet vi en <em>session</em> med navnet <strong>minsesjon</strong>. Dette er et komplett arbeidsmiljø hvor man kan ha flere terminaler delt opp i <em>panes</em>. En av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en <em>session</em> kan være <em>attached</em>, dvs. at du er koblet til den ser den i terminalen, og <em>detached</em>, som betyr at den kan kjøre i bakgrunnen mens du jobber i en separat <em>session</em>. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tmux</span> ls</span></code></pre></div>
+</div>
+<p>I eksempelet over så kan vi koble til (<em>attach</em>) til vår sesjon ved å skrive:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tmux</span> attach <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-t</span> minsesjon</span></code></pre></div>
+</div>
+<p>Du vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist Figur&nbsp;1.</p>
+<div id="fig-dapla-lab-tmux-status" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser tmux statusbar">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-tmux-status-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./dapla-lab-tmux-status.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Statusbar for en tmux-sesjon"><img src="https://manual.dapla.ssb.no/news/posts/2025-03-24-dapla-lab-tmux/dapla-lab-tmux-status.png" class="img-fluid figure-img" alt="Viser tmux statusbar"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-tmux-status-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Statusbar for en tmux-sesjon
+</figcaption>
+</figure>
+</div>
+<p>Du kan koble fra en sesjon ved taste <strong>CTRL B</strong> og deretter <strong>d</strong>, eller skrive følgende i terminalen:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tmux</span> detach <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-s</span> minsesjon</span></code></pre></div>
+</div>
+<p>Prosessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten.</p>
 
 
 

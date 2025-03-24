@@ -76,6 +76,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-2a80c81b00fa0de043cc059990ad5525.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -208,7 +211,7 @@ background: #274247;
  <span class="dropdown-text">FAQ</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../faq-dapla-lab.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="dropdown-item" href="../../../faq-dapla-lab.qmd"><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="dropdown-text">FAQ Dapla Lab</span></a>
   </li>  
@@ -317,7 +320,7 @@ background: #274247;
       <div>
       <div class="quarto-title-meta-heading">Sist endret</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">March 24, 2025</p>
+        <p class="date-modified">March 25, 2025</p>
       </div>
     </div>
       
@@ -347,7 +350,7 @@ background: #274247;
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> new <span class="at">-s</span> mittsesjon</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> new <span class="at">-s</span> minsesjon</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I koden over startes en session med navn <strong>minsesjon</strong>. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med <code>python</code>-kommandoen i en terminal, så kan du kjøre kommandoen:</p>
 <div class="code-with-filename">
@@ -364,6 +367,39 @@ background: #274247;
 <div class="sourceCode" id="cb3" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> mittskript.py</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Deretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge <a href="../../../statistikkere/dapla-lab.html#automatisk-pausing">denne oppskriften</a>.</p>
+<p>tmux operer med konsepter som <em>session</em>, <em>window</em> pg <em>panes</em>. Over startet vi en <em>session</em> med navnet <strong>minsesjon</strong>. Dette er et komplett arbeidsmiljø hvor man kan ha flere terminaler delt opp i <em>panes</em>. En av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en <em>session</em> kan være <em>attached</em>, dvs. at du er koblet til den ser den i terminalen, og <em>detached</em>, som betyr at den kan kjøre i bakgrunnen mens du jobber i en separat <em>session</em>. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> ls</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I eksempelet over så kan vi koble til (<em>attach</em>) til vår sesjon ved å skrive:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb5" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> attach <span class="at">-t</span> minsesjon</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Du vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist <a href="#fig-dapla-lab-tmux-status" class="quarto-xref">Figur&nbsp;1</a>.</p>
+<div id="fig-dapla-lab-tmux-status" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser tmux statusbar">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-tmux-status-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./dapla-lab-tmux-status.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Statusbar for en tmux-sesjon"><img src="./dapla-lab-tmux-status.png" class="img-fluid figure-img" alt="Viser tmux statusbar"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-tmux-status-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Statusbar for en tmux-sesjon
+</figcaption>
+</figure>
+</div>
+<p>Du kan koble fra en sesjon ved taste <strong>CTRL B</strong> og deretter <strong>d</strong>, eller skrive følgende i terminalen:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tmux</span> detach <span class="at">-s</span> minsesjon</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Prosessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten.</p>
 
 
 
@@ -799,6 +835,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
