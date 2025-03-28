@@ -31,26 +31,28 @@ Se på bildene for å se hvordan det skal se ut.
 Det er lurt å skrive tydelig i "Description" feltet før jobben lages hvilken undersøkelse det gjelder og hva transfer jobben gjør. Det sparer andre i teamet (og deg selv) forvirring senere. 
 
 ::: panel-tabset
-## Image 1
-![](../images/images/altinn3-isee-kilde-transfer-1.png){width=80%}
+## Get started
+![](../images/altinn3-isee-kilde-transfer-1.png){width=80%}
 
-## Image 2
-![](../images/images/altinn3-isee-kilde-transfer-2.png){width=80%}
+## Choose a source
+![](../images/altinn3-isee-kilde-transfer-2.png){width=80%}
 
-## Image 3
-![](../images/images/altinn3-isee-kilde-transfer-3.png){width=80%}
+## Choose a destination
+![](../images/altinn3-isee-kilde-transfer-3.png){width=80%}
 
-## Image 4
-![](../images/images/altinn3-isee-kilde-transfer-4.png){width=80%}
+## Choose when to run job
+![](../images/altinn3-isee-kilde-transfer-4.png){width=80%}
 
-## Image 5
-![](../images/images/altinn3-isee-kilde-transfer-5.png){width=80%}
+## Choose settings
+![](../images/altinn3-isee-kilde-transfer-5.png){width=80%}
 :::
 
 ## 2. Kildomaten
 Nå skal vi gå løs på den mest tekniske delen av oppsettet. Her blir det nok mye prøving og feiling for å få alt til å fungere, så ikke mist motet.
 
-I første omgang holder vi det enkelt og setter opp rammen som vi senere skal fylle ut. Vi kommer tilbake til mapping senere, hvis du er utålmodig kan du hoppe til steg 8 og gå løs på det nå.
+I første omgang holder vi det enkelt og setter opp rammen som vi senere skal fylle ut.
+
+De to filene nedenfor skal opprettes og plasseres i mappen dapla-team-iac/automation/source-data/dapla-team-prod/hagebruk/
 
 ```{.yaml filename="config.yaml"}
 folder_prefix: hagebruk/altinn
@@ -79,32 +81,30 @@ def main(source_file):
             raise ValueError (f'source_filen sitt navn inneholder verken altinn/test/ eller altinn/prod/: {source_file}')
 ```
 
-Tilpasningen du selv må gjøre er å endre filstiene og fylle ut mapping.
+Filstiene må du endre nå, mappingen kan du utsette til du er ferdig med å sette opp resten av overføringene.
 
-Filstiene må du endre nå, mappingen kan du utsette til du er ferdig med å sette opp overføringene. Det er vanskelig å sjekke om mappingen din stemmer uten å ha forsøkt innlasting til ISEE, så det kan være greit å ordne resten av løpet først.
+Det er vanskelig å sjekke om mappingen din stemmer uten å ha forsøkt innlasting til ISEE, så det kan være greit å ordne resten av løpet først.
 
-Hva er poenget med mapping?
-
-Mapping brukes for å koble nytt variabelnavn til ISEE feltnavn og er nødvendig for at dataene dine skal bli synlige i ISEE.
+Mapping brukes for å omkode nytt variabelnavn fra altinn3 til ISEE feltnavn og er nødvendig for at dataene dine skal bli synlige i ISEE.
 
 ## 3. Transfer service fra din produkt bøtte til frasky bøtten
 
-Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. Før filene kan sendes til bakken, så skal de innom frasky-bøtta
+Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. Før filene kan sendes til bakken, så skal de innom frasky-bøtta.
 
 ::: panel-tabset
-## Image 1
+## Get started
 ![](image1.png){width=80%}
 
-## Image 2
+## Choose a source
 ![](image2.png){width=80%}
 
-## Image 3
+## Choose a destination
 ![](image3.png){width=80%}
 
-## Image 4
+## Choose when to run job
 ![](image4.png){width=80%}
 
-## Image 5
+## Choose settings
 ![](image5.png){width=80%}
 :::
 
@@ -113,15 +113,37 @@ Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. F�
 Nå flytter vi filene ned til bakken. Måten mottaket på bakken er lagt opp er at det finnes en mappe på linux for ditt dapla team under området cloud_sync.
 - Det vil ha filstien cloud_sync/team-navn/...
 
+Måten du skal sette opp transfer service kan du se her:
+::: panel-tabset
+## Get started
+![](image1.png){width=80%}
+
+## Choose a source
+![](image2.png){width=80%}
+
+## Choose a destination
+![](image3.png){width=80%}
+
+## Choose when to run job
+![](image4.png){width=80%}
+
+## Choose settings
+![](image5.png){width=80%}
+:::
+
 Her finnes det et mottak for kildedata og ett for annen data, det er sistnevnte mottak vi skal bruke. Det vil si at vi skal forholde oss til cloud_sync/team-navn/standard/frasky.
 
 I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapper, "prod" og "test".
 
-# Sett inn bilde her
-	
+![Mappestruktur på cloud_sync](../images/altinn3-isee-mapper-cloudsync.png)
+
+
 ## 5. Opprette mappestruktur på stammen
 
 For at innlasting til ISEE skal fungere så trengs det noen spesifikke mapper på stammen.
+
+![Mappestruktur på stammen](../images/altinn3-isee-mapper-stamme.png)
+
 
 ## 6 MoveIT og lasting til ISEE
 
