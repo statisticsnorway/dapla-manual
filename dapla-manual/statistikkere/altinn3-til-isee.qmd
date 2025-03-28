@@ -14,12 +14,12 @@ I prosessen er det en del overføringer som må settes opp, men de kjøres autom
 
 Før vi går detaljert gjennom hvert steg så kan det være greit å få et overblikk av hva vi skal begi oss ut på. Helt overordnet ser flyten som skal settes opp slik ut (bilde)
 
-1. Overføring fra datamottak til din kildebøtte
-2. Kildomaten
-3. Overføring fra produktbøtten til frasky bøtten
-4. Overføring fra sky til bakken (cloud_sync)
-5. Overføring fra cloud_sync til stammen
-6. Lasting til ISEE
+    1. Overføring fra datamottak til din kildebøtte
+    2. Kildomaten
+    3. Overføring fra produktbøtten til frasky bøtten
+    4. Overføring fra sky til bakken (cloud_sync)
+    5. Overføring fra cloud_sync til stammen
+    6. Lasting til ISEE
 
 
 ## 1. Transfer service fra datamottak til din kildebøtte.
@@ -93,69 +93,84 @@ Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. F�
 
 ::: panel-tabset
 ## Get started
-![](image1.png){width=80%}
+![](../images/altinn3-isee-inndata-frasky-1.png){width=80%}
 
 ## Choose a source
-![](image2.png){width=80%}
+![](../images/altinn3-isee-inndata-frasky-2.png){width=80%}
 
 ## Choose a destination
-![](image3.png){width=80%}
+![](../images/altinn3-isee-inndata-frasky-3.png){width=80%}
 
 ## Choose when to run job
-![](image4.png){width=80%}
+![](../images/altinn3-isee-inndata-frasky-4.png){width=80%}
 
 ## Choose settings
-![](image5.png){width=80%}
+![](../images/altinn3-isee-inndata-frasky-5.png){width=80%}
 :::
 
 ## 4. Transfer service fra din frasky bøtte til bakken
 
 Nå flytter vi filene ned til bakken. Måten mottaket på bakken er lagt opp er at det finnes en mappe på linux for ditt dapla team under området cloud_sync.
-- Det vil ha filstien cloud_sync/team-navn/...
+    - Det vil ha filstien cloud_sync/team-navn/...
 
 Måten du skal sette opp transfer service kan du se her:
+
 ::: panel-tabset
 ## Get started
-![](image1.png){width=80%}
+![](../images/altinn3-isee-frasky-bakken-1.png){width=80%}
 
 ## Choose a source
-![](image2.png){width=80%}
+![](../images/altinn3-isee-frasky-bakken-2.png){width=80%}
 
 ## Choose a destination
-![](image3.png){width=80%}
+![](../images/altinn3-isee-frasky-bakken-3.png){width=80%}
 
 ## Choose when to run job
-![](image4.png){width=80%}
+![](../images/altinn3-isee-frasky-bakken-4.png){width=80%}
 
 ## Choose settings
-![](image5.png){width=80%}
+![](../images/altinn3-isee-frasky-bakken-5.png){width=80%}
 :::
 
 Her finnes det et mottak for kildedata og ett for annen data, det er sistnevnte mottak vi skal bruke. Det vil si at vi skal forholde oss til cloud_sync/team-navn/standard/frasky.
 
+::: {layout="columns"}
+::: {width="50%"}
 I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapper, "prod" og "test".
+:::
 
-![Mappestruktur på cloud_sync](../images/altinn3-isee-mapper-cloudsync.png)
+::: {width="50%"}
+![Mappestruktur på cloud_sync](../images/altinn3-isee-mapper-cloud_sync.png)
+:::
+:::
+
 
 
 ## 5. Opprette mappestruktur på stammen
 
+::: {layout="columns"}
+::: {width="50%"}
 For at innlasting til ISEE skal fungere så trengs det noen spesifikke mapper på stammen.
+:::
 
+::: {width="50%"}
 ![Mappestruktur på stammen](../images/altinn3-isee-mapper-stamme.png)
-
+:::
+:::
 
 ## 6 MoveIT og lasting til ISEE
 
 Nå som vi har satt opp mappestrukturene som trengs så har vi en positiv overraskelse, det neste steget er enkelt for deg som statistikkansvarlig.
 
-Først skal du opprette skjemaet i ISEE. Det skal hete RA-XXXXA3. Deretter skal du sende en mail til kundeservice. I den skal du:
-- si at du trenger en MoveIt overføring fra cloudsync/standard/undersøkelse/altinn/prod/ og til din stamme sin wk24/datafangst/gSdv/ mappe.
-- og at du trenger opplasting fra datafangst/gSdv mappen din til ISEE.
+Først skal du opprette skjemaet i ISEE. Det skal hete RA-XXXXA3.
+
+Deretter skal du sende en mail til kundeservice. I den skal du:
+    - si at du trenger en MoveIt overføring fra cloudsync/standard/undersøkelse/altinn/prod/ og til din stamme sin wk24/datafangst/gSdv/ mappe.
+    - at du trenger opplasting fra datafangst/gSdv mappen din til ISEE.
 
 Du kan ta utgangspunkt i malen nedenfor.
 
-```
+```plaintext
 Hei!
 
 Trenger to moveit jobber og innlasting til ISEE fra stammen.
@@ -176,15 +191,13 @@ Trenger også at det opprettes lastejobb fra wk24 og test/wk24 til DB1P og DB1T.
 
 Når disse jobbene er satt opp så får du data inn i ISEE!
 
-## 7. Detaljer, detaljer, detaljer
+## 7. Prosessen er satt opp, hva nå?
 
-Du burde nå få data lastet inn i tabellene ISEE er bygd på, men sannsynligvis er det en jobb igjen.
+Du burde nå få data lastet inn i tabellene ISEE er bygd på, som er et godt stykke men likevel er det en del jobb igjen.
 
 Det er mange detaljer som skal stemme for at dataene som lastes inn skal dukke opp riktig i ISEE. Du må sjekke at kodelister eksisterer for variablene dine, at disse matcher variabelverdiene som kommer fra altinn3 og at eventuelle endringer i altinn3 skjemaet er hensyntatt i skjemavisningen i ISEE.
+
 Vær oppmerksom på at ofte vil noen kodelister som benyttes i altinn3 skjemaet skille seg fra det som ble brukt i altinn2, som vil kreve noen endringer i skjemabyggeren.
 
-Stort sett må du bare fikse på skjemabyggeren i ISEE og mapping i process_source_data.py, resten av løpet er du ferdig med.
-
-
-
-
+Her er det en samling av ressurser som kan være til hjelp med å ferdigstille opplegget ditt:
+https://statistics-norway.atlassian.net/wiki/spaces/altinnpython/overview
