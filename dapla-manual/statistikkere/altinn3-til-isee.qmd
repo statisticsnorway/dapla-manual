@@ -11,6 +11,7 @@ Det kan stort sett kopieres så lenge du endrer filstier og navn fra hagebruk ti
 
 Eksemplene som vises er for å laste produksjonsdata, dersom du ønsker å sende ned skjemaer fra test-altinn (tt02) til DB1T kan du se på tegningen av den overordnede flyten.
     - Prosessen er identisk, men filstiene er ulike.
+    - Det anbefales å sette opp test-løpet, så du slipper å potesnielt lage rot i DB1P. 
 
 # Er det innafor å si at de isåfall må kontakte kundeservice og få åpnet mulighet for å ta altinn-staging inn i prod teamet???
 
@@ -83,6 +84,7 @@ Et lite tips er å la denne jobben kjøre ofte, siden det vil gjøre at skjemaen
 Nå skal vi gå løs på den mest tekniske delen av oppsettet. Her blir det nok mye prøving og feiling for å få alt til å fungere, så ikke mist motet.
 
 Kildomaten er en tjeneste som automatiserer bearbeiding av data som kommer inn i kildebøtta. Etter at den er satt opp så vil den automatisk bearbeide filer som havner i mappen den er stilt inn til å følge med på. Den vil enkelt forklart bearbeide hvert enkelt skjema hver for seg, og sende videre til produkt bøtta.
+
 For mer informasjon om kildomaten kan du se her https://manual.dapla.ssb.no/statistikkere/kildomaten.html
     - Se spesielt på "Rull ut tjenesten"
 
@@ -126,6 +128,8 @@ Mapping brukes for å omkode nytt variabelnavn fra altinn3 til ISEE feltnavn og 
 ## 3. Transfer service fra din produkt bøtte til frasky bøtten
 
 Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. Før filene kan sendes til bakken, så skal de innom frasky-bøtta. Det betyr at flyttingen ned til bakken involverer to transfer jobs.
+
+Disse jobbene trenger ikke kjøre mer enn én gang om dagen, men pass på at jobben som flytter fra produkt til frasky kjører før jobben som flytter filer til bakken. Hva du kan sette på tidspunkt er vist på "Choose when to run job" bildene for hver jobb.
 
 Først skal du skifte hvilket prosjekt du jobber i. Nå skal vi være i teamet som heter ditt-teamnavn-p, altså det som ikke har kilde i navnet sitt.
 
@@ -187,6 +191,8 @@ På bakken er det ett mottak for kildedata (mappen som heter kilde) og ett for a
 ::: {layout="columns"}
 ::: {width="50%"}
 I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapper, "prod" og "test".
+
+
 :::
 
 ::: {width="50%"}
@@ -199,6 +205,8 @@ I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapp
 ::: {layout="columns"}
 ::: {width="50%"}
 For at innlasting til ISEE skal fungere så trengs det noen spesifikke mapper på stammen.
+
+Dette er nødvendig for at den automatiske lastejobben skal fungere, og så lenge du følger dette oppsettet så burde selve innlastingen gå fint.
 :::
 
 ::: {width="50%"}
@@ -256,6 +264,9 @@ Det er mulig å abonnere på rapporter fra ISEE også hvis du går inn på Admin
 
 Her er det en samling av ressurser som kan være til hjelp med å ferdigstille opplegget ditt:
 
-https://statistics-norway.atlassian.net/wiki/spaces/altinnpython/overview
+Dokumentasjon for ssb-altinn-python pakken:
+    - https://statistics-norway.atlassian.net/wiki/spaces/altinnpython/overview 
+    - https://statisticsnorway.github.io/ssb-altinn-python/ 
 
-https://statistics-norway.atlassian.net/wiki/spaces/ISEE/pages/3958932046/Generelt
+ISEE dokumentasjon:
+    - https://statistics-norway.atlassian.net/wiki/spaces/ISEE/pages/3958932070/Brukerdokumentasjon 
