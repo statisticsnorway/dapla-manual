@@ -1,22 +1,22 @@
 ---
 title: Administrasjon av skjema
-date-modified: 01/21/2025
+date-modified: 03/28/2025
 lightbox: true
 ---
 
 SU-V tilbyr både et grafisk brukergrensesnitt (GUI) og en Python-pakke for administrasjon av skjemaer. Du kan få tilgang til GUI via følgende lenker:
 
-- [Produksjonsmiljø](https://altinn3-admin-gui.prod-bip-app.ssb.no/)
-- [Testmiljø](https://stage-altinn3-admin-gui.staging-bip-app.ssb.no/)
+- [Produksjonsmiljø](https://prod-altinn3-admin-gui.intern.ssb.no/)
+- [Testmiljø](https://test-altinn3-admin-gui.intern.test.ssb.no/)
 
 Mer informasjon om Python-pakken finner du [her](./altinn-dapla-suv-tools.html).
 
 Alle operasjoner og visninger som er tilgjengelige i GUI, kan også utføres ved hjelp av kode. Administrasjon av skjema innebærer håndtering av metadata knyttet til skjemaer, perioder, puljer og utsendinger.
 
 ## Tilgang til skjema
-Alle brukere har lesetilgang til skjemaet, noe som betyr at de kan se og hente data uten å gjøre endringer.
+Alle brukere har lesetilgang til skjemaene, noe som betyr at de kan se og hente data uten å gjøre endringer.
 
-For å kunne utføre administrasjonsoppgaver og gjøre endringer på skjemaet, må du være medlem av data-admins i Dapla-teamet som eier skjemaet. Kun data-admins har mulighet til å redigere eller konfigurere skjemaet. Se mer om administrasjon av team [her](./administrasjon-av-team.html).
+For å kunne utføre administrasjonsoppgaver og gjøre endringer knyttet til skjemaet, må du være medlem av data-admins eller developers i Dapla-teamet som eier skjemaet. Se mer om administrasjon av team [her](./administrasjon-av-team.html).
 
 ## Hierarki for skjema administrasjon
 Et skjema består av følgende strukturer:
@@ -254,7 +254,7 @@ Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
 | ----------------- |-------------------------------------------------------------------------------------- |
 | Utsendingstype | Angir type utsending (f.eks instansiering).
 | Trigger | Angir trigger for utsending (Manuell, Auto, Ekstern). 
-| Test | 
+| Test | Angir testutsending (sendes ikke til utvalg)
 | Send ut | Angir tidspunkt for utsendelse.
 : Pulje metadata {#tbl-utsending-meta .striped}
 :::
@@ -279,7 +279,7 @@ For å sende til én eller flere spesifikke enheter, kan du oppgi organisasjonsn
 :::
 
 ### Kodeeksempel
-For å lage en ny utsending, kan du bruke metoden `create_pulje` i `SuvClient`.
+For å lage en ny utsending, kan du bruke metoden `create_utsending` i `SuvClient`.
 
 ```{.python filename="notebook"}
 client = SuvClient()
@@ -306,6 +306,3 @@ output = client.client.get_utsending_by_id(
 
 print(output)
 ```
-
-## Eksempelkode sammenstilling av data
-Noe demokode for sammenstilling av data ligger i [repoet](https://github.com/statisticsnorway/dapla-suv-tools/tree/main/demo), og kan være ett godt utgangspunkt å kopiere og endre fra.
