@@ -1,0 +1,168 @@
+# Altinn3 til ISEE
+Her skal vi gå gjennom det du trenger for å få i gang lasting av altinn3 skjemaer til ISEE, steg for steg.
+
+Måten vi gjør det ved å gå gjennom hvordan prosessen er satt opp for en hagebruksundersøkelsen, så har du et konkret eksempel å se på underveis.
+Det kan stort sett kopieres så lenge du endrer filstiene til å passe egen undersøkelse
+Eksemplene som vises er for å laste produksjonsdata, dersom du ønsker å sende ned skjemaer fra test-altinn (tt02) kan du se på tegningen. Prosessen er identisk, men filstiene er ulike.
+# Er det innafor å si at de isåfall må kontakte kundeservice og få åpnet mulighet for å ta altinn-staging inn i prod teamet???
+
+Vi kommer til å være innom Transfer service og Kildomaten, men det er ikke krav om forkunnskaper for å komme gjennom denne veiledningen.
+
+Når prosessen er satt opp for en undersøkelse så vil det i de fleste tilfeller ikke være behov for å endre på det, så det er vanligvis en engangsjobb å få på plass.
+
+I prosessen er det en del overføringer som må settes opp, men de kjøres automatisk når det først er i gang.
+
+Før vi går detaljert gjennom hvert steg så kan det være greit å få et overblikk av hva vi skal begi oss ut på. Helt overordnet ser flyten som skal settes opp slik ut (bilde)
+
+1. Overføring fra datamottak til din kildebøtte
+2. Kildomaten
+3. Overføring fra produktbøtten til frasky bøtten
+4. Overføring fra sky til bakken (cloud_sync)
+5. Overføring fra cloud_sync til stammen
+6. Lasting til ISEE
+
+
+## 1. Transfer service fra datamottak til din kildebøtte.
+
+Det første du skal gjøre er å sette opp transfer service fra datamottaket til din kildebøtte. Du kommer til å være godt kjent med å sette opp transfer service når vi er ferdige med dette, og det er en del detaljer som må stemme. Så det er bare å holde hodet kaldt, dobbeltsjekke at alt stemmer, prøve seg frem og be om hjelp hvis du står fast.
+
+Se på bildene for å se hvordan det skal se ut.
+
+Det er lurt å skrive tydelig i "Description" feltet før jobben lages hvilken undersøkelse det gjelder og hva transfer jobben gjør. Det sparer andre i teamet (og deg selv) forvirring senere. 
+
+::: panel-tabset
+## Image 1
+![](../images/images/altinn3-isee-kilde-transfer-1.png){width=80%}
+
+## Image 2
+![](../images/images/altinn3-isee-kilde-transfer-2.png){width=80%}
+
+## Image 3
+![](../images/images/altinn3-isee-kilde-transfer-3.png){width=80%}
+
+## Image 4
+![](../images/images/altinn3-isee-kilde-transfer-4.png){width=80%}
+
+## Image 5
+![](../images/images/altinn3-isee-kilde-transfer-5.png){width=80%}
+:::
+
+## 2. Kildomaten
+Nå skal vi gå løs på den mest tekniske delen av oppsettet. Her blir det nok mye prøving og feiling for å få alt til å fungere, så ikke mist motet.
+
+I første omgang holder vi det enkelt og setter opp rammen som vi senere skal fylle ut. Vi kommer tilbake til mapping senere, hvis du er utålmodig kan du hoppe til steg 8 og gå løs på det nå.
+
+```{.yaml filename="config.yaml"}
+folder_prefix: hagebruk/altinn
+memory_size: 1
+```
+
+```{.python filename="process_source_data.py"}
+import dapla as dp
+from altinn import isee_transform, create_isee_filename
+
+tags = ["SkjemaData", "Kontakt", "Brukeropplevelse"]
+
+mapping = {
+    "Altinn3 navn": "ISEE navn"
+}
+
+def main(source_file):
+    if source_file.endswith(".xml"):
+        fil = isee_transform(source_file, mapping, tag_list=tags) # transformerer XML'ene fra kildedatabøtta til pandas dataframe med riktig ISEE-feltnavn
+        fil["FELTNAVN"] = fil["FELTNAVN"].str[:25].str.upper()
+        if "altinn/test/" in source_file:
+            dp.write_pandas(df = fil, gcs_path = f"ssb-primaer-j-skjema-data-produkt-prod/hagebruk/temp/test/altinn/{create_isee_filename(source_file)}", file_format="csv", index=False, sep=";")
+        elif "altinn/prod/" in source_file:
+            dp.write_pandas(df = fil, gcs_path = f"ssb-primaer-j-skjema-data-produkt-prod/hagebruk/inndata/altinn/{create_isee_filename(source_file)}", file_format="csv", index=False, sep=";")
+        else: 
+            raise ValueError (f'source_filen sitt navn inneholder verken altinn/test/ eller altinn/prod/: {source_file}')
+```
+
+Tilpasningen du selv må gjøre er å endre filstiene og fylle ut mapping.
+
+Filstiene må du endre nå, mappingen kan du utsette til du er ferdig med å sette opp overføringene. Det er vanskelig å sjekke om mappingen din stemmer uten å ha forsøkt innlasting til ISEE, så det kan være greit å ordne resten av løpet først.
+
+Hva er poenget med mapping?
+
+Mapping brukes for å koble nytt variabelnavn til ISEE feltnavn og er nødvendig for at dataene dine skal bli synlige i ISEE.
+
+## 3. Transfer service fra din produkt bøtte til frasky bøtten
+
+Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. Før filene kan sendes til bakken, så skal de innom frasky-bøtta
+
+::: panel-tabset
+## Image 1
+![](image1.png){width=80%}
+
+## Image 2
+![](image2.png){width=80%}
+
+## Image 3
+![](image3.png){width=80%}
+
+## Image 4
+![](image4.png){width=80%}
+
+## Image 5
+![](image5.png){width=80%}
+:::
+
+## 4. Transfer service fra din frasky bøtte til bakken
+
+Nå flytter vi filene ned til bakken. Måten mottaket på bakken er lagt opp er at det finnes en mappe på linux for ditt dapla team under området cloud_sync.
+- Det vil ha filstien cloud_sync/team-navn/...
+
+Her finnes det et mottak for kildedata og ett for annen data, det er sistnevnte mottak vi skal bruke. Det vil si at vi skal forholde oss til cloud_sync/team-navn/standard/frasky.
+
+I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapper, "prod" og "test".
+
+# Sett inn bilde her
+	
+## 5. Opprette mappestruktur på stammen
+
+For at innlasting til ISEE skal fungere så trengs det noen spesifikke mapper på stammen.
+
+## 6 MoveIT og lasting til ISEE
+
+Nå som vi har satt opp mappestrukturene som trengs så har vi en positiv overraskelse, det neste steget er enkelt for deg som statistikkansvarlig.
+
+Først skal du opprette skjemaet i ISEE. Det skal hete RA-XXXXA3. Deretter skal du sende en mail til kundeservice. I den skal du:
+- si at du trenger en MoveIt overføring fra cloudsync/standard/undersøkelse/altinn/prod/ og til din stamme sin wk24/datafangst/gSdv/ mappe.
+- og at du trenger opplasting fra datafangst/gSdv mappen din til ISEE.
+
+Du kan ta utgangspunkt i malen nedenfor.
+
+```
+Hei!
+
+Trenger to moveit jobber og innlasting til ISEE fra stammen.
+
+En jobb som flytter fra:
+/ssb/cloud_sync/primaer-j-skjema/standard/frasky/hagebruk/test/altinn/
+Til:
+/ssb/stamme02/jordbruk/sbhagebruk/test/wk24/datafangst/gSdv
+
+En jobb som flytter fra:
+/ssb/cloud_sync/primaer-j-skjema/standard/frasky/hagebruk/prod/altinn/
+Til:
+/ssb/stamme02/jordbruk/sbhagebruk/wk24/datafangst/gSdv
+
+Trenger også at det opprettes lastejobb fra wk24 og test/wk24 til DB1P og DB1T.
+
+```
+
+Når disse jobbene er satt opp så får du data inn i ISEE!
+
+## 7. Detaljer, detaljer, detaljer
+
+Du burde nå få data lastet inn i tabellene ISEE er bygd på, men sannsynligvis er det en jobb igjen.
+
+Det er mange detaljer som skal stemme for at dataene som lastes inn skal dukke opp riktig i ISEE. Du må sjekke at kodelister eksisterer for variablene dine, at disse matcher variabelverdiene som kommer fra altinn3 og at eventuelle endringer i altinn3 skjemaet er hensyntatt i skjemavisningen i ISEE.
+Vær oppmerksom på at ofte vil noen kodelister som benyttes i altinn3 skjemaet skille seg fra det som ble brukt i altinn2, som vil kreve noen endringer i skjemabyggeren.
+
+Stort sett må du bare fikse på skjemabyggeren i ISEE og mapping i process_source_data.py, resten av løpet er du ferdig med.
+
+
+
+
