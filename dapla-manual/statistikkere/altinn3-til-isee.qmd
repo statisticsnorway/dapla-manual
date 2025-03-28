@@ -1,18 +1,24 @@
+---
+title: Altinn3 til ISEE
+date-modified: "04/02/2025"
+---
+
 # Altinn3 til ISEE
 Her skal vi gå gjennom det du trenger for å få i gang lasting av altinn3 skjemaer til ISEE, steg for steg.
 
 Måten vi gjør det ved å gå gjennom hvordan prosessen er satt opp for en hagebruksundersøkelsen, så har du et konkret eksempel å se på underveis.
 Det kan stort sett kopieres så lenge du endrer filstiene til å passe egen undersøkelse
-Eksemplene som vises er for å laste produksjonsdata, dersom du ønsker å sende ned skjemaer fra test-altinn (tt02) kan du se på tegningen. Prosessen er identisk, men filstiene er ulike.
+
+Eksemplene som vises er for å laste produksjonsdata, dersom du ønsker å sende ned skjemaer fra test-altinn (tt02) til DB1T kan du se på tegningen av den overordnede flyten.
+    - Prosessen er identisk, men filstiene er ulike.
+
 # Er det innafor å si at de isåfall må kontakte kundeservice og få åpnet mulighet for å ta altinn-staging inn i prod teamet???
 
 Vi kommer til å være innom Transfer service og Kildomaten, men det er ikke krav om forkunnskaper for å komme gjennom denne veiledningen.
 
 Når prosessen er satt opp for en undersøkelse så vil det i de fleste tilfeller ikke være behov for å endre på det, så det er vanligvis en engangsjobb å få på plass.
 
-I prosessen er det en del overføringer som må settes opp, men de kjøres automatisk når det først er i gang.
-
-Før vi går detaljert gjennom hvert steg så kan det være greit å få et overblikk av hva vi skal begi oss ut på. Helt overordnet ser flyten som skal settes opp slik ut
+I prosessen er det en del overføringer som må settes opp, men de kjøres automatisk når det først er i gang. Stegene vi skal gjennom er:
 
     1. Overføring fra datamottak til din kildebøtte
     2. Kildomaten
@@ -20,7 +26,9 @@ Før vi går detaljert gjennom hvert steg så kan det være greit å få et over
     4. Overføring fra sky til bakken (cloud_sync)
     5. Overføring fra cloud_sync til stammen
     6. Lasting til ISEE
+    7. Prosessen er satt opp, hva nå?
 
+Før vi går detaljert gjennom hvert steg så kan det være greit å få et overblikk av hva vi skal begi oss ut på. Helt overordnet ser flyten som skal settes opp slik ut
 
 ![Mappestruktur på cloud_sync](../images/altinn3-isee-flow.svg)
 
@@ -29,9 +37,29 @@ Før vi går detaljert gjennom hvert steg så kan det være greit å få et over
 
 Det første du skal gjøre er å sette opp transfer service fra datamottaket til din kildebøtte. Du kommer til å være godt kjent med å sette opp transfer service når vi er ferdige med dette, og det er en del detaljer som må stemme. Så det er bare å holde hodet kaldt, dobbeltsjekke at alt stemmer, prøve seg frem og be om hjelp hvis du står fast.
 
-Se på bildene for å se hvordan det skal se ut.
+Siden det første steget involverer kildebøtta så trenger du å være data-admin på teamet ditt (du kan sjekke rollene dine i dapla ctrl https://dapla-ctrl.intern.ssb.no/) og søke om midlertidig tilgang (https://jitaccess.dapla.ssb.no/).
 
-Det er lurt å skrive tydelig i "Description" feltet før jobben lages hvilken undersøkelse det gjelder og hva transfer jobben gjør. Det sparer andre i teamet (og deg selv) forvirring senere. 
+For å komme seg til vinduet hvor du kan sette opp en transfer service går du først inn på denne lenken: https://console.cloud.google.com/
+
+Deretter skal du klikke øverst til venstre, like til høyre for GoogleCloud og få opp menyen hvor du velger hvilket prosjekt du skal jobbe med
+
+Her skal du velge ditt team, du kan se teamnavnet i dapla-ctrl. Du skal inn på prosjektet som har ditt-teamnavn*-kilde-p* i navnet sitt.
+
+![Skjermbilde som viser hvor du skal velge prosjekt](../images/altinn3-isee-finne-prosjekt.png)
+
+Når du er inne på prosjektet ditt kan du klikke i søkefeltet på toppen av siden og søke på "Storage transfer" og velge den.
+
+Nå skal vi inn på "Transfer jobs" og klikke på "CREATE TRANSFER JOB".
+
+Noter deg hvordan du fant denne menyen, for litt senere i prosessen skal vi inn på et annet prosjekt og sette opp flere transfer jobs.
+
+Se på bildene for å se hvordan innstillingene for jobben skal se ut.
+
+Det er lurt å skrive tydelig i "Description" feltet før du trykker "CREATE" hvilken undersøkelse det gjelder og hva transfer jobben gjør. Det sparer andre i teamet (og deg selv) forvirring senere.
+
+Et lite tips er å la denne jobben kjøre ofte, siden det vil gjøre at skjemaene behandles fortløpende i kildomaten istedenfor å komme i store overføringer.
+    - Andre overføringer trenger ikke kjøre mer enn en gang om dagen.
+    - Her skal ikke filer slettes. 
 
 ::: panel-tabset
 ## Get started
@@ -51,7 +79,12 @@ Det er lurt å skrive tydelig i "Description" feltet før jobben lages hvilken u
 :::
 
 ## 2. Kildomaten
+
 Nå skal vi gå løs på den mest tekniske delen av oppsettet. Her blir det nok mye prøving og feiling for å få alt til å fungere, så ikke mist motet.
+
+Kildomaten er en tjeneste som automatiserer bearbeiding av data som kommer inn i kildebøtta. Etter at den er satt opp så vil den automatisk bearbeide filer som havner i mappen den er stilt inn til å følge med på. Den vil enkelt forklart bearbeide hvert enkelt skjema hver for seg, og sende videre til produkt bøtta.
+For mer informasjon om kildomaten kan du se her # https://manual.dapla.ssb.no/statistikkere/kildomaten.html
+    - Se spesielt på "Rull ut tjenesten"
 
 I første omgang holder vi det enkelt og setter opp rammen som vi senere skal fylle ut.
 
@@ -84,7 +117,7 @@ def main(source_file):
             raise ValueError (f'source_filen sitt navn inneholder verken altinn/test/ eller altinn/prod/: {source_file}')
 ```
 
-Filstiene må du endre nå, mappingen kan du utsette til du er ferdig med å sette opp resten av overføringene.
+Filstiene i process_source_data.py må du endre nå, mappingen kan du utsette til du er ferdig med å sette opp resten av overføringene.
 
 Det er vanskelig å sjekke om mappingen din stemmer uten å ha forsøkt innlasting til ISEE, så det kan være greit å ordne resten av løpet først.
 
@@ -92,11 +125,13 @@ Mapping brukes for å omkode nytt variabelnavn fra altinn3 til ISEE feltnavn og 
 
 ## 3. Transfer service fra din produkt bøtte til frasky bøtten
 
-Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. Før filene kan sendes til bakken, så skal de innom frasky-bøtta.
+Her skal vi starte med å flytte filene som kildomaten vår lager til bakken. Før filene kan sendes til bakken, så skal de innom frasky-bøtta. Det betyr at flyttingen ned til bakken involverer to transfer jobs.
+
+Først skal du skifte hvilket prosjekt du jobber i. Nå skal vi være i teamet som heter ditt-teamnavn-p, altså det som ikke har kilde i navnet sitt.
+
+Deretter skal transfer jobs settes opp på samme måte, se på skjermbildene for å se hvordan det skal se ut.
 
 OBS! Det er viktig at filene slettes fra kilden etter flytting. Hvis det ikke slettes, så overføres samme skjema flere ganger og skaper enormt mange dubletter i ISEE.
-
-Se på skjermbildene for å se hvordan det skal se ut.
 
 ::: panel-tabset
 ## Get started
@@ -116,6 +151,8 @@ Se på skjermbildene for å se hvordan det skal se ut.
 :::
 
 ## 4. Transfer service fra din frasky bøtte til bakken
+
+I dette steget skal du fortsatt være i "ditt-teamnavn-p" prosjektet.
 
 Nå flytter vi filene ned til bakken. Måten mottaket på bakken er lagt opp er at det finnes en mappe på linux for ditt dapla team under området cloud_sync.
     - Det vil ha filstien cloud_sync/team-navn/...
@@ -141,7 +178,11 @@ Måten du skal sette opp transfer service kan du se her:
 ![](../images/altinn3-isee-frasky-bakken-5.png){width=80%}
 :::
 
-Her finnes det et mottak for kildedata og ett for annen data, det er sistnevnte mottak vi skal bruke. Det vil si at vi skal forholde oss til cloud_sync/team-navn/standard/frasky.
+Når du har satt opp transfer service så skal du ned på bakken og opprette noen mapper på linux. Samme sted som stammene ligger så finnes også et område som heter cloud_sync, det er dit vi skal nå.
+
+Ditt dapla team vil ha en egen mappe i cloud_sync som du skal finne. 
+
+På bakken er det ett mottak for kildedata (mappen som heter kilde) og ett for annen data (mappen som heter standard). Det er "standard" vi skal bruke. Det vil si at vi skal forholde oss til cloud_sync/ditt-teamnavn/standard/frasky.
 
 ::: {layout="columns"}
 ::: {width="50%"}
@@ -152,8 +193,6 @@ I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapp
 ![Mappestruktur på cloud_sync](../images/altinn3-isee-mapper-cloud_sync.png)
 :::
 :::
-
-
 
 ## 5. Opprette mappestruktur på stammen
 
@@ -171,7 +210,7 @@ For at innlasting til ISEE skal fungere så trengs det noen spesifikke mapper p�
 
 Nå som vi har satt opp mappestrukturene som trengs så har vi en positiv overraskelse, det neste steget er enkelt for deg som statistikkansvarlig.
 
-Først skal du opprette skjemaet i ISEE. Det skal hete RA-XXXXA3.
+Først skal du opprette skjemaet i SFU og ISEE. Det skal hete RA-XXXXA3.
 
 Deretter skal du sende en mail til kundeservice. I den skal du:
     - si at du trenger en MoveIt overføring fra cloudsync/standard/undersøkelse/altinn/prod/ og til din stamme sin wk24/datafangst/gSdv/ mappe.
@@ -184,12 +223,14 @@ Hei!
 
 Trenger to moveit jobber og innlasting til ISEE fra stammen.
 
-En jobb som flytter fra:
+Jeg skal overføre RA-XXXXA3 til ISEE, delregisternummer 123456
+
+MoveIt som flytter fra:
 /ssb/cloud_sync/primaer-j-skjema/standard/frasky/hagebruk/test/altinn/
 Til:
 /ssb/stamme02/jordbruk/sbhagebruk/test/wk24/datafangst/gSdv
 
-En jobb som flytter fra:
+MoveIt som flytter fra: <- Denne jobben trenger du bare hvis du skal sette opp test-løpet også.
 /ssb/cloud_sync/primaer-j-skjema/standard/frasky/hagebruk/prod/altinn/
 Til:
 /ssb/stamme02/jordbruk/sbhagebruk/wk24/datafangst/gSdv
@@ -206,8 +247,12 @@ Når disse jobbene er satt opp så får du data inn i ISEE!
 Du burde nå få data lastet inn i tabellene ISEE er bygd på, som er et godt stykke men likevel er det en del jobb igjen.
 
 Det er mange detaljer som skal stemme for at dataene som lastes inn skal dukke opp riktig i ISEE. Du må sjekke at kodelister eksisterer for variablene dine, at disse matcher variabelverdiene som kommer fra altinn3 og at eventuelle endringer i altinn3 skjemaet er hensyntatt i skjemavisningen i ISEE.
+    - Ved behov kan du opprette nye kodelister som passer altinn3 dataene dine i klass-forvaltning.
 
 Vær oppmerksom på at ofte vil noen kodelister som benyttes i altinn3 skjemaet skille seg fra det som ble brukt i altinn2, som vil kreve noen endringer i skjemabyggeren.
+
+Det er mulig å abonnere på rapporter fra ISEE også hvis du går inn på Administrasjon -> Oversikt datafangst -> Datafangstrapporter -> Legg inn epostadressen din.
+    - Du kan også få varsler om noe skulle gå galt underveis i lastingen til ISEE.
 
 Her er det en samling av ressurser som kan være til hjelp med å ferdigstille opplegget ditt:
 
