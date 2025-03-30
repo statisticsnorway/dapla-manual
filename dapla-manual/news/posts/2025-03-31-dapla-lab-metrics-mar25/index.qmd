@@ -1,0 +1,111 @@
+---
+title: Aktivitet på Dapla Lab i mars 2025
+subtitle: Oversikt over antall brukere
+categories:
+  - Dapla Lab
+  - Metrikker
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "03/31/2025"
+date-modified: "03/31/2025"
+image: ../../../images/dapla-long.png
+image-alt: "Bilde av Dapla-logoen"
+lightbox: true
+draft: false
+freeze: true
+---
+
+
+::: {.column-page}
+
+Fom. 15. februar 2025 har [Dapla Lab](../../../statistikkere/dapla-lab.qmd) vært arbeidsbenken for SSB-ere som jobber med data på Dapla. I dette viser vi noen interessante tall om hvor mange som jobber på plattformen. 
+
+@fig-plot-daily viser antall maksimalt antall unike brukere av Dapla Lab ila en dag. Figuren er en oversikt over perioden **25. februar** tom. **29. mars 2025**. 
+
+```{python}
+#| echo: false
+#| label: fig-plot-daily
+#| fig-cap: "Maks antall daglige brukere på Dapla Lab"
+import pandas as pd
+import altair as alt
+
+# Load your data
+file_path = "/buckets/produkt/temp/prometheus"
+df = pd.read_csv(f"{file_path}/unique-users_p2025-03-29_v1.csv", parse_dates=["Time"])
+
+# Extract date and calculate daily max
+df["Date"] = df["Time"].dt.date
+daily_max = df.groupby("Date", as_index=False)["Antall"].max()
+
+# Convert back to datetime for plotting
+daily_max["Date"] = pd.to_datetime(daily_max["Date"])
+
+# Altair chart of daily max
+chart = (
+    alt.Chart(daily_max)
+    .mark_line(point=True, color="#1a9d49")
+    .encode(
+        x=alt.X("Date:T", title="Dato", axis=alt.Axis(format="%d%b")),  # 👈 Custom date format
+        y=alt.Y("Antall:Q", title="Antall brukere"),
+        tooltip=["Date:T", "Antall:Q"],
+    )
+    .properties(width=1000, height=400)
+)
+
+chart
+```
+:::
+
+  
+
+::: {.column-page}
+
+@fig-plot-hourly viser antall unike brukere ila dagen på Dapla Lab. Hver linje i figuren er en dag i perioden **25. februar** tom. **29. mars 2025**. Dermed gir figuren et bilde av hvilket tidspunkt på dagen brukerne jobber. Den 27. mars 2025 endret vi tidspunktet for automatisk pausing av tjenester fra **kl 22.00 til 17.00**, og dette er vist figuren ved at dager etter 26. mars vises med grønne linjer og resten med grå linjer. Av figuren ser vi dermed at det ganske få som jobber på Dapla Lab etter kl 17.00. 
+
+```{python}
+#| echo: false
+#| label: fig-plot-hourly
+#| fig-cap: "Antall brukere gjennom dagen"
+import pandas as pd
+import altair as alt
+
+# Load data
+file_path = "/buckets/produkt/temp/prometheus"
+df = pd.read_csv(f"{file_path}/unique-users_p2025-03-29_v1.csv", parse_dates=["Time"])
+
+# Extract date and time-of-day
+df["Date"] = df["Time"].dt.normalize()
+df["TimeOfDayDT"] = pd.to_datetime(df["Time"].dt.strftime("2000-01-01 %H:%M:%S"))
+
+# Create period grouping
+cutoff = pd.to_datetime("2025-03-27")
+df["Period"] = df["Date"].apply(lambda d: "Før 27. mars" if d < cutoff else "Etter 26. mars")
+
+# Plot: one line per day, color by period
+chart2 = (
+    alt.Chart(df)
+    .mark_line(opacity=0.8)
+    .encode(
+        x=alt.X("TimeOfDayDT:T", title="Tid på dagen", axis=alt.Axis(format="%H:%M")),
+        y=alt.Y("Antall:Q", title="Antall brukere"),
+        color=alt.Color("Period:N", title="Periode", scale=alt.Scale(
+            domain=["Før 27. mars", "Etter 26. mars"],
+            range=["#b0b0b0", "#1a9d49"]
+        )),
+        detail="Date:T",  # 👈 One line per date
+        tooltip=["Date:T", "Time:T", "Antall:Q"]
+    )
+    .properties(
+        width=1000,
+        height=400
+    )
+)
+
+chart2
+```
+:::
+
+
