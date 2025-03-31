@@ -9,15 +9,15 @@ Her skal vi gå gjennom det du trenger for å få i gang lasting av altinn3 skje
 Måten vi gjør det ved å gå gjennom hvordan prosessen er satt opp for en hagebruksundersøkelsen, så har du et konkret eksempel å se på underveis. 
 Det kan stort sett kopieres så lenge du endrer filstier og navn fra hagebruk til å passe egen undersøkelse
 
-Eksemplene som vises er for å laste produksjonsdata, dersom du ønsker å sende ned skjemaer fra test-altinn (tt02) til DB1T kan du se på tegningen av den overordnede flyten.
-    - Prosessen er identisk, men filstiene er ulike.
-    - Det anbefales å sette opp test-løpet, så du slipper å potesnielt lage rot i DB1P.
-
-For å sette opp testløpet er det foreløpig nødvendig å kontakte kundeservice for å åpne litt på tilganger, slik at du kan overføre filer altinn-staging til prod teamet ditt. Til vanlig så har du kun tilgang til altinn-staging fra test-teamet, men siden test-teamet ikke kan overføre filer til bakken så er det ikke mulig å teste innlasting til ISEE uten å bruke prod-teamet.
-
 Vi kommer til å være innom Transfer service og Kildomaten, men det er ikke krav om forkunnskaper for å komme gjennom denne veiledningen.
 
 Når prosessen er satt opp for en undersøkelse så vil det i de fleste tilfeller ikke være behov for å endre på det, så det er vanligvis en engangsjobb å få på plass.
+
+Eksemplene som vises er for å laste produksjonsdata, dersom du ønsker å sende ned skjemaer fra test-altinn (tt02) til DB1T kan du se på tegningen av den overordnede flyten.
+    - Prosessen er identisk, men filstiene er ulike. Se skjermbilde for flyten og eget avsnitt.
+    - Det anbefales å sette opp test-løpet, så du slipper å lage rot i DB1P.
+
+## Overblikk over prosessen. 
 
 I prosessen er det en del overføringer som må settes opp, men de kjøres automatisk når det først er i gang. Stegene vi skal gjennom er:
 
@@ -29,9 +29,18 @@ I prosessen er det en del overføringer som må settes opp, men de kjøres autom
     6. Lasting til ISEE
     7. Prosessen er satt opp, hva nå?
 
-Før vi går detaljert gjennom hvert steg så kan det være greit å få et overblikk av hva vi skal begi oss ut på. Helt overordnet ser flyten som skal settes opp slik ut
+Testløpet krever at du gjør alle stegene nedenfor dobbelt opp. Én gang for prod, én gang for test. Det er viktig å ikke blande disse løpene i hverandre, og at filstiene skrives henvisning til prod eller test mappen. Se flytdiagrammet nedenfor.
 
-![Mappestruktur på cloud_sync](../images/altinn3-isee-flow.svg)
+::: {.callout-important}
+## Overføring mellom altinn-staging og prod
+
+For å sette opp testløpet er det foreløpig nødvendig å kontakte kundeservice for å åpne på tilganger, slik at du kan overføre filer altinn-staging til prod teamet ditt. Til vanlig så har du kun tilgang til altinn-staging fra test-teamet, men siden test-teamet ikke kan overføre filer til bakken så er det ikke mulig å teste innlasting til ISEE med skjemaer fra tt02 uten denne tilgangen.
+:::
+
+
+
+![Flytdiagram for prosessen](../images/altinn3-isee-flow.svg)
+
 
 
 ## 1. Transfer service fra datamottak til din kildebøtte.
@@ -191,33 +200,41 @@ Når du har satt opp transfer service så skal du ned på bakken og opprette noe
 
 Ditt dapla team vil ha en egen mappe i cloud_sync som du skal finne. 
 
+:::: {.columns}
+::: {.column width="50%"}
 På bakken er det ett mottak for kildedata (mappen som heter kilde) og ett for annen data (mappen som heter standard). Det er "standard" vi skal bruke. Det vil si at vi skal forholde oss til cloud_sync/ditt-teamnavn/standard/frasky.
 
-::: {layout="columns"}
-::: {width="50%"}
 I den mappen skal du opprette mappen "altinn" og den skal inneholde to undermapper, "prod" og "test".
-
+:::
+::: {.column width="5%"}
 
 :::
 
-::: {width="50%"}
+::: {.column width="45%"}
 ![Mappestruktur på cloud_sync](../images/altinn3-isee-mapper-cloud_sync.png)
 :::
-:::
+::::
 
 ## 5. Opprette mappestruktur på stammen
 
-::: {layout="columns"}
-::: {width="50%"}
+:::: {.columns}
+::: {.column width="50%"}
 For at innlasting til ISEE skal fungere så trengs det noen spesifikke mapper på stammen.
 
 Dette er nødvendig for at den automatiske lastejobben skal fungere, og så lenge du følger dette oppsettet så burde selve innlastingen gå fint.
+
+I skjermbildet vises det oppsett som inkluderer mappene som trengs for test-løpet. Dette løpet må settes opp separat fra prod-løpet.
+
+Se skjermbildet med overordnet flyt øverst på siden for å se forskjellen på filstiene. 
+:::
+::: {.column width="5%"}
+
 :::
 
-::: {width="50%"}
+::: {.column width="45%"}
 ![Mappestruktur på stammen](../images/altinn3-isee-mapper-stamme.png)
 :::
-:::
+::::
 
 ## 6 MoveIT og lasting til ISEE
 
