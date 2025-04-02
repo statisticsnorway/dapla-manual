@@ -3,9 +3,91 @@ title: "Standards"
 last-modified: "2025-02-04"
 ---
 
-## Navnestandard validering
+## Navnestandardvalidering
 
-Modulen `standards` i `dapla-toolbelt-metadata` har funksjonalitet 
-https://manual.dapla.ssb.no/statistikkere/navnestandard.html
-sjekke om filene i bøttene følger navnestandarden. Metoden check_naming_standard kan validere alt fra en enkel filsti til en hel bøtte og returnerer lister med eventuelle brudd på navnestandarden. I tillegg er det mulig å hente ut en enkel oppsummering med generate_validation_report. Det er laget en notebook med eksempler https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/standards/navnestandard.ipynb.
-Kommer snart
+Modulen `standards` tilbyr metoder for å sjekke om filer i en bøtte bryter med den definerte [navnestandard](https://manual.dapla.ssb.no/statistikkere/navnestandard.html).
+
+Du kan validere alt fra en enkel filsti til en hel bøtte. 
+
+Under valideringen sjekkes det om bøtte-, mappe- eller filnavn faktisk eksisterer. 
+Hvis du benytter en full filsti, er det også mulig å validere filer som ennå ikke er opprettet. 
+I slike tilfeller vil resultatet inkludere følgende melding: `"Filen eksisterer ikke. Validerer uansett."`
+
+For å effektivisere validering av bøtter med store mengder filer, benytter metoden asynkronitet.
+
+### Kjøre navnestandardvalidering
+
+Begynn med å importere metoden som skal benyttes:
+
+```{.python filename="Notebook"}
+from dapla_metadata.standards.standard_validators import check_naming_standard
+```
+Siden metoden bruker asynkrone kall, må nøkkelordet `await` brukes foran metodenavnet.
+
+Angi filstien til bøtte, mappe eller fil i anførselstegn, og kjør deretter valideringen.
+
+Variabelen `results` vil inneholde en liste med resultater:
+
+```{.python filename="Notebook"}
+results = await check_naming_standard("Skriv inn filsti her")) 
+```
+
+#### Resultat
+Hvert resultat i listen er et objekt som inneholder informasjon om valideringen, 
+blant annet om den var vellykket og hvilke navnestandardkonvensjoner som eventuelt ble brutt.
+
+Eksempel på valideringsresultat:
+```{.python}
+ValidationResult(
+    success=False, 
+    file_path="/buckets/produkt/stat/inndata/bil_v1.parquet", 
+    messages=[
+        "Det er oppdaget brudd på SSB-navnestandard:"
+    ], 
+    violations=[
+        "Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn"
+    ]
+)
+```
+
+Her er et forslag til kode for å skrive ut resultatet på en lesbar måte:
+
+```{.python filename="Notebook"}
+violations = [r for r in results if not r.success]
+
+if not violations:
+    print("Gratulerer, ingen feil å vise")
+else:
+    for v in violations:
+        print(v.file_path)
+        print("\t" + "\n\t".join(v.messages))
+        print("\t\t" + "\n\t\t".join(v.violations) + "\n")
+```
+
+
+### Produsere en oppsummering
+
+Hvis du ønsker en kort oppsummering og vurdering av resultatet, kan du importere følgende metode:
+
+```{.python filename="Notebook"}
+from dapla_metadata.standards.standard_validators import generate_validation_report
+```
+Metoden tar en liste med valideringsresultater som input:
+
+```{.python filename="Notebook"}
+report = generate_validation_report(results)
+```
+Og hvis alt ser bra ut:
+ sette inn bilde
+
+
+
+### GitHub
+
+Ønsker du å laste opp notebooks med metoder i eget repo kan det være pre-commit hooks som vil feile på grunn av bruk av nøkkelordet `await` utenfor asynkron funksjon.
+Dette er imdlertidig ikke noe problem i Notebooks og kan trygt ignoreres. 
+For eksempel med en `# noqa: F704` på samme kodelinje som `await`.
+
+```{.python filename="Notebook"}
+results = await check_naming_standard("Skriv inn filsti til bøtte, mappe eller fil her") # noqa: F704
+``` 
