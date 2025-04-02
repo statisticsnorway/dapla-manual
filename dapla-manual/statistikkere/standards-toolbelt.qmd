@@ -3,7 +3,7 @@ title: "Standards"
 last-modified: "2025-02-04"
 ---
 
-## Navnestandardvalidering
+## Navnestandard-validering
 
 Modulen `standards` tilbyr metoder for å sjekke om filer i en bøtte bryter med den definerte [navnestandard](https://manual.dapla.ssb.no/statistikkere/navnestandard.html).
 
@@ -15,7 +15,7 @@ I slike tilfeller vil resultatet inkludere følgende melding: `"Filen eksisterer
 
 For å effektivisere validering av bøtter med store mengder filer, benytter metoden asynkronitet.
 
-### Kjøre navnestandardvalidering
+### Kjøre navnestandard-validering
 
 Begynn med å importere metoden som skal benyttes:
 
@@ -78,15 +78,16 @@ Metoden tar en liste med valideringsresultater som input:
 report = generate_validation_report(results)
 ```
 Og hvis alt ser bra ut:
- sette inn bilde
 
-
+![Suksessfull validering](../images/dapla-toolbelt-metadata-standards-suksess.png){fig-width=20%}
 
 ### GitHub
 
-Ønsker du å laste opp notebooks med metoder i eget repo kan det være pre-commit hooks som vil feile på grunn av bruk av nøkkelordet `await` utenfor asynkron funksjon.
-Dette er imdlertidig ikke noe problem i Notebooks og kan trygt ignoreres. 
-For eksempel med en `# noqa: F704` på samme kodelinje som `await`.
+Hvis du ønsker å laste opp notebooks med metoder til et eget repo, kan **pre-commit** hooks feile på grunn av bruken av nøkkelordet await utenfor en asynkron funksjon.
+
+Dette er imidlertid ikke et problem i Notebooks og kan trygt ignoreres.
+
+En enkel løsning er å legge til # noqa: F704 på samme linje som await, slik:
 
 ```{.python filename="Notebook"}
 results = await check_naming_standard("Skriv inn filsti til bøtte, mappe eller fil her") # noqa: F704
