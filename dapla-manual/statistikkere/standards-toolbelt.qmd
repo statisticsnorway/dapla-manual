@@ -3,39 +3,33 @@ title: "Standards"
 last-modified: "2025-02-04"
 ---
 
-## Navnestandard-validering
 
-Modulen `standards` tilbyr metoder for å sjekke om filer i en bøtte bryter med den definerte [navnestandard](https://manual.dapla.ssb.no/statistikkere/navnestandard.html).
+Modulen `standards` i [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) tilbyr metoder for å sjekke om filer i bøtter er i tråd med SSBs definerte [navnestandard](https://manual.dapla.ssb.no/statistikkere/navnestandard.html). Metodene inkluderer:
 
-Du kan validere alt fra en enkel filsti til en hel bøtte. 
-
-Under valideringen sjekkes det om bøtte-, mappe- eller filnavn faktisk eksisterer. 
-Hvis du benytter en full filsti, er det også mulig å validere filer som ennå ikke er opprettet. 
-I slike tilfeller vil resultatet inkludere følgende melding: `"Filen eksisterer ikke. Validerer uansett."`
+- Validere at bøtter, mapper og filer eksisterer
+- Validere at filstier som ikke eksisterer følger navnestandard^[Når man validerer en filsti som ikke eksisterer så får man beskjed om at `Filen eksisterer ikke. Validerer uansett.`.]
+- Informasjon om hva som bryter med navnestandarden.
 
 For å effektivisere validering av bøtter med store mengder filer, benytter metoden asynkronitet.
 
-### Kjøre navnestandard-validering
+## Funksjonalitet
 
-Begynn med å importere metoden som skal benyttes:
+`standards` tilbyr to typer av funksjonalitet. Den første er å sjekke om en bøtte, mappe eller fil følger standarden. Den andre er å produsere en rapport som oppsummerer resultatet av valideringen.
+
+### Validering
+
+For å sjekke om en bøtte, mappe eller fil følger navnestandarden kan man benytte funksjonen `check_naming_standard()`. Den returnerer en liste med resultater for alle objektene du har bedt om å få validert.
+
 
 ```{.python filename="Notebook"}
 from dapla_metadata.standards.standard_validators import check_naming_standard
+
+results = await check_naming_standard("<bøttenavn/mappe/filsti>"))
+results
 ```
-Siden metoden bruker asynkrone kall, må nøkkelordet `await` brukes foran metodenavnet.
+::: {.callout-caution collapse="true"}
+## Output fra validering av enkeltfil
 
-Angi filstien til bøtte, mappe eller fil i anførselstegn, og kjør deretter valideringen.
-Variabelen `results` vil inneholde en liste med resultater:
-
-```{.python filename="Notebook"}
-results = await check_naming_standard("Skriv inn filsti her")) 
-```
-
-#### Resultat
-Hvert resultat i listen er et objekt som inneholder informasjon om valideringen, 
-blant annet om den var vellykket og hvilke navnestandardkonvensjoner som eventuelt ble brutt.
-
-Eksempel på valideringsresultat:
 ```{.python}
 ValidationResult(
     success=False, 
@@ -48,14 +42,17 @@ ValidationResult(
     ]
 )
 ```
+:::
 
-For å få tilgang til spesifikke deler av resultatet, kan du bruke punktnotasjon (.). 
-Hvis du for eksempel ønsker å hente ut listen med regelbrudd fra det første valideringsresultatet, kan du gjøre følgende:
+Siden metoden bruker asynkrone kall, må nøkkelordet `await` brukes foran metodenavnet.
+
+For å få tilgang til spesifikke deler av resultatet, kan du bruke punktnotasjon `.`. Hvis du for eksempel ønsker å hente ut listen med regelbrudd fra det første valideringsresultatet, kan du gjøre følgende:
+
 ```{.python}
 results[0].violations
 ```
 
-Her er et forslag til kode for å skrive ut resultatet på en lesbar måte:
+Hvis du har validert et stort antall filer så kan du benytte følgende kode for å få ut resultatene på en mer lesbar form:
 
 ```{.python filename="Notebook"}
 violations = [r for r in results if not r.success]
@@ -69,25 +66,136 @@ else:
         print("\t\t" + "\n\t\t".join(v.violations) + "\n")
 ```
 
+::: {.callout-caution collapse="true"}
+## Eksempel på output fra validering av mange filer
 
-### Produsere en oppsummering
+```{.python}
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/butikker_kongsvinger.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/butikkbygg_kongsvinger.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/butikkbygg_oslo.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/noen_boliger_kongsvinger.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/noen_boliger_oslo.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/butikker_oslo.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/noen_boligbygg_oslo.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/noen_boligbygg_kongsvinger.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/NVE_Trafostasjon_punkt_p2023.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/enkle_kommuner.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/bygg_kongsvinger.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/veger_kongsvinger.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/noen_tettsteder_2023.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/bygg_oslo.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/veger_oslo.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+		Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+		Filnavn mangler versjon ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/ABAS_kommune_flate_p2024_v1.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/SSB_tettsted_flate_p2022_v1.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+
+gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata/SSB_tettsted_flate_p2023_v1.parquet
+	Det er oppdaget brudd på SSB-navnestandard:
+		Mappe for datatilstand mangler ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#obligatoriske-mapper
+```
+:::
+
+
+
+
+### Rapport
+
+
 
 Hvis du ønsker en kort oppsummering og vurdering av resultatet, kan du importere følgende metode:
 
 ```{.python filename="Notebook"}
 from dapla_metadata.standards.standard_validators import generate_validation_report
+
+report = generate_validation_report(results)
 ```
 Metoden tar en liste med valideringsresultater som input:
 
-```{.python filename="Notebook"}
-report = generate_validation_report(results)
-```
 Og hvis alt ser bra ut:
 
-![Suksessfull validering](../images/dapla-toolbelt-metadata-standards-suksess.png)
+![](../images/dapla-toolbelt-metadata-standards-suksess.png)
 
-For å få tilgang til spesifikke deler av rapporten, kan du bruke punktnotasjon (.). 
+For å få tilgang til spesifikke deler av rapporten, kan du bruke punktnotasjon `.`. 
 Hvis du for eksempel ønsker å hente ut kun suksess raten i prosent, kan du gjøre følgende:
+
 ```{.python}
 report.success_rate()
 ```
@@ -98,14 +206,12 @@ report.num_success
 report.num_failures
 ```
 
-### GitHub
+::: {.callout-tip}
+## Bruk av validering i statistikkproduksjon
 
-Hvis du ønsker å laste opp notebooks med metoder til et eget repo, kan **pre-commit** hooks feile på grunn av bruken av nøkkelordet `await` utenfor en asynkron funksjon.
-
-Dette er imidlertid ikke et problem i Notebooks og kan trygt ignoreres.
-
-En enkel løsning er å legge til # noqa: F704 på samme linje som await, slik:
+Hvis man ønsker å benytte valideringsfunksjonaliteten i koden som kjøres i en statistikkproduksjon, så kan **pre-commit hooks** feile på grunn av nøkkelordet `await` benyttes utenfor en asynkron funksjon. En enkel løsning er å legge til # noqa: F704 på samme linje som await, slik:
 
 ```{.python filename="Notebook"}
 results = await check_naming_standard("") # noqa: F704
 ``` 
+:::
