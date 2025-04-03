@@ -25,7 +25,6 @@ from dapla_metadata.standards.standard_validators import check_naming_standard
 Siden metoden bruker asynkrone kall, må nøkkelordet `await` brukes foran metodenavnet.
 
 Angi filstien til bøtte, mappe eller fil i anførselstegn, og kjør deretter valideringen.
-
 Variabelen `results` vil inneholde en liste med resultater:
 
 ```{.python filename="Notebook"}
@@ -48,6 +47,12 @@ ValidationResult(
         "Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn"
     ]
 )
+```
+
+For å få tilgang til spesifikke deler av resultatet, kan du bruke punktnotasjon (.). 
+Hvis du for eksempel ønsker å hente ut listen med regelbrudd fra det første valideringsresultatet, kan du gjøre følgende:
+```{.python}
+results[0].violations
 ```
 
 Her er et forslag til kode for å skrive ut resultatet på en lesbar måte:
@@ -81,14 +86,26 @@ Og hvis alt ser bra ut:
 
 ![Suksessfull validering](../images/dapla-toolbelt-metadata-standards-suksess.png){fig-width=20%}
 
+For å få tilgang til spesifikke deler av rapporten, kan du bruke punktnotasjon (.). 
+Hvis du for eksempel ønsker å hente ut kun suksess raten i prosent, kan du gjøre følgende:
+```{.python}
+report.success_rate()
+```
+Eller hvis du ønsker direkte tilgang til tallene:
+```{.python}
+report.num_files_validated
+report.num_success
+report.num_failures
+```
+
 ### GitHub
 
-Hvis du ønsker å laste opp notebooks med metoder til et eget repo, kan **pre-commit** hooks feile på grunn av bruken av nøkkelordet await utenfor en asynkron funksjon.
+Hvis du ønsker å laste opp notebooks med metoder til et eget repo, kan **pre-commit** hooks feile på grunn av bruken av nøkkelordet `await` utenfor en asynkron funksjon.
 
 Dette er imidlertid ikke et problem i Notebooks og kan trygt ignoreres.
 
 En enkel løsning er å legge til # noqa: F704 på samme linje som await, slik:
 
 ```{.python filename="Notebook"}
-results = await check_naming_standard("Skriv inn filsti til bøtte, mappe eller fil her") # noqa: F704
+results = await check_naming_standard("") # noqa: F704
 ``` 
