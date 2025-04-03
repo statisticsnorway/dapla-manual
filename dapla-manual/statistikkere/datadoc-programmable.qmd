@@ -1,0 +1,26 @@
+---
+title: Datadoc
+date-modified: "01/31/2025"
+---
+
+[Datadoc](./datadoc.qmd) er SSBs system for dokumentasjon av datasett. Første gang man skal dokumentere et datasett i Datadoc så er det anbefalt å bruke det grafiske grensesnittet i [Datadoc-editor](./datadoc-editor.qmd). I løpende produksjon er det dermed anbefalt å benytte en programmatisk tilnærming gjennom `Datadoc`-klassen i Python-pakken [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
+
+### Dokumentere ny periode
+
+Hvis man har dokumentert datasett for *periode t* med [Datadoc-editor](./datadoc-editor.qmd), så kan man programmatisk dokumentere *periode t+1* ved å benytte `Datadoc`-klassen i dapla-toolbelt-metadata. Det forutsetter at det kun nye data som har kommet til og at det er den eneste endringen i dataene. Da kan man dokumentere den nye perioden på følgende måte:
+
+``` {.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1.parquet",             # <1>
+    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2021_v1__DOC.json", # <2>
+)
+meta.write_metadata_document() # <3>
+```
+
+1.  `dataset_path` angir det nye datasettet som skal dokumenteres.
+2.  `metadata_document_path` angir sti til tidligere periodes metadata.
+3.  `write_metadata_document` er kommandoen som produserer de nye metadataene og skriver de til filen `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`.
+
+Det veldig viktig at man ikke bruker denne metoden hvis det er endringer i hvilke kolonner som finnes i datasettet eller andre større endringer. Metoden over antar at den eneste informasjonen som har endret seg er den som kan leses ut av filstien. Ved større endringer i selve dataene bør man heller gjøre en manuell gjennomgang av metadataene med [Datadoc-editor](./datadoc-editor.qmd)
