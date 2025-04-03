@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -73,11 +107,15 @@ ul.task-list li input[type="checkbox"] {
 
 <meta property="og:title" content="Standards – Dapla-manualen">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-toolbelt-metadata-standards-suksess.png">
 <meta property="og:site_name" content="Dapla-manualen">
+<meta property="og:image:height" content="206">
+<meta property="og:image:width" content="600">
 <meta name="twitter:title" content="Standards – Dapla-manualen">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-toolbelt-metadata-standards-suksess.png">
+<meta name="twitter:image-height" content="206">
+<meta name="twitter:image-width" content="600">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -617,8 +655,18 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link active" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
+  <ul class="collapse">
+  <li><a href="#validering" id="toc-validering" class="nav-link" data-scroll-target="#validering">Validering</a></li>
+  <li><a href="#rapport" id="toc-rapport" class="nav-link" data-scroll-target="#rapport">Rapport</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/standards-toolbelt.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/standards-toolbelt.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -642,11 +690,238 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Kommer snart</p>
+<p>Modulen <code>standards</code> i <a href="https://pypi.org/project/dapla-toolbelt-metadata/">dapla-toolbelt-metadata</a> tilbyr metoder for å sjekke om filer i bøtter er i tråd med SSBs definerte <a href="https://manual.dapla.ssb.no/statistikkere/navnestandard.html">navnestandard</a>. Metodene inkluderer:</p>
+<ul>
+<li>Validere at bøtter, mapper og filer eksisterer</li>
+<li>Validere at filstier som ikke eksisterer følger navnestandard<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Informasjon om hva som bryter med navnestandarden.</li>
+</ul>
+<p>For å effektivisere validering av bøtter med store mengder filer, benytter metoden asynkronitet.</p>
+<section id="funksjonalitet" class="level2">
+<h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
+<p><code>standards</code> tilbyr to typer av funksjonalitet. Den første er å sjekke om en bøtte, mappe eller fil følger standarden. Den andre er å produsere en rapport som oppsummerer resultatet av valideringen.</p>
+<section id="validering" class="level3">
+<h3 class="anchored" data-anchor-id="validering">Validering</h3>
+<p>For å sjekke om en bøtte, mappe eller fil følger navnestandarden kan man benytte funksjonen <code>check_naming_standard()</code>. Den returnerer en liste med resultater for alle objektene du har bedt om å få validert.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.standards.standard_validators <span class="im">import</span> check_naming_standard</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> <span class="cf">await</span> check_naming_standard(<span class="st">"&lt;bøttenavn/mappe/filsti&gt;"</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Output fra validering av enkeltfil
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ValidationResult(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    success<span class="op">=</span><span class="va">False</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    file_path<span class="op">=</span><span class="st">"/buckets/produkt/stat/inndata/bil_v1.parquet"</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    messages<span class="op">=</span>[</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Det er oppdaget brudd på SSB-navnestandard:"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    ], </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    violations<span class="op">=</span>[</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Filnavn mangler gyldighetsperiode ref: https://manual.dapla.ssb.no/statistikkere/navnestandard.html#filnavn"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>Siden metoden bruker asynkrone kall, må nøkkelordet <code>await</code> brukes foran metodenavnet.</p>
+<p>For å få tilgang til spesifikke deler av resultatet, kan du bruke punktnotasjon <code>.</code>. Hvis du for eksempel ønsker å hente ut listen med regelbrudd fra det første valideringsresultatet, kan du gjøre følgende:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>results[<span class="dv">0</span>].violations</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Hvis du har validert et stort antall filer så kan du benytte følgende kode for å få ut resultatene på en mer lesbar form:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb4" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>violations <span class="op">=</span> [r <span class="cf">for</span> r <span class="kw">in</span> results <span class="cf">if</span> <span class="kw">not</span> r.success]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> violations:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Gratulerer, ingen feil å vise"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> v <span class="kw">in</span> violations:</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(v.file_path)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n\t</span><span class="st">"</span>.join(v.messages))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t\t</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n\t\t</span><span class="st">"</span>.join(v.violations) <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Eksempel på output fra validering av mange filer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>butikker_kongsvinger.parquet</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>butikkbygg_kongsvinger.parquet</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>butikkbygg_oslo.parquet</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>noen_boliger_kongsvinger.parquet</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>noen_boliger_oslo.parquet</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>butikker_oslo.parquet</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>noen_boligbygg_oslo.parquet</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>noen_boligbygg_kongsvinger.parquet</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>NVE_Trafostasjon_punkt_p2023.parquet</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>enkle_kommuner.parquet</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>bygg_kongsvinger.parquet</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>veger_kongsvinger.parquet</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>noen_tettsteder_2023.parquet</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>bygg_oslo.parquet</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>veger_oslo.parquet</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler gyldighetsperiode ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>        Filnavn mangler versjon ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#filnavn</span></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>ABAS_kommune_flate_p2024_v1.parquet</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>SSB_tettsted_flate_p2022_v1.parquet</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>gs:<span class="op">//</span>ssb<span class="op">-</span>dapla<span class="op">-</span>felles<span class="op">-</span>data<span class="op">-</span>produkt<span class="op">-</span>prod<span class="op">/</span>GIS<span class="op">/</span>testdata<span class="op">/</span>SSB_tettsted_flate_p2023_v1.parquet</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>    Det er oppdaget brudd på SSB<span class="op">-</span>navnestandard:</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>        Mappe <span class="cf">for</span> datatilstand mangler ref: https:<span class="op">//</span>manual.dapla.ssb.no<span class="op">/</span>statistikkere<span class="op">/</span>navnestandard.html<span class="co">#obligatoriske-mapper</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="rapport" class="level3">
+<h3 class="anchored" data-anchor-id="rapport">Rapport</h3>
+<p>Hvis du ønsker en kort oppsummering og vurdering av resultatet, kan du importere følgende metode:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.standards.standard_validators <span class="im">import</span> generate_validation_report</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>report <span class="op">=</span> generate_validation_report(results)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Metoden tar en liste med valideringsresultater som input:</p>
+<p>Og hvis alt ser bra ut:</p>
+<p><img src="../images/dapla-toolbelt-metadata-standards-suksess.png" class="img-fluid"></p>
+<p>For å få tilgang til spesifikke deler av rapporten, kan du bruke punktnotasjon <code>.</code>. Hvis du for eksempel ønsker å hente ut kun suksess raten i prosent, kan du gjøre følgende:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>report.success_rate()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Eller hvis du ønsker direkte tilgang til tallene:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>report.num_files_validated</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>report.num_success</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>report.num_failures</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Bruk av validering i statistikkproduksjon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hvis man ønsker å benytte valideringsfunksjonaliteten i koden som kjøres i en statistikkproduksjon, så kan <strong>pre-commit hooks</strong> feile på grunn av nøkkelordet <code>await</code> benyttes utenfor en asynkron funksjon. En enkel løsning er å legge til # noqa: F704 på samme linje som await, slik:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb9" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> <span class="cf">await</span> check_naming_standard(<span class="st">""</span>) <span class="co"># noqa: F704</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 
 
+</section>
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>Når man validerer en filsti som ikke eksisterer så får man beskjed om at <code>Filen eksisterer ikke. Validerer uansett.</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -1084,7 +1359,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/standards-toolbelt.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/standards-toolbelt.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/standards-toolbelt.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/standards-toolbelt.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
