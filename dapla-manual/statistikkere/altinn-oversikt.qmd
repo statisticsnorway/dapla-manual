@@ -1,6 +1,6 @@
 ---
 title: Oversikt
-date-modified: 03/28/2025
+date-modified: 04/04/2025
 lightbox: true
 ---
 
@@ -19,19 +19,19 @@ I resten av kapitlet gis en oversikt over hvordan statistikkteam kan jobbe med d
 
 ## Ansvarsfordeling
 
-Team SU-V har ansvaret for datafangst fra Altinn3 til SSB. Deretter tilgjengeliggjør de dette for statistikkteamet som skal jobbe videre med dataene for å prodsuere statistikk. 
+Team SU-V har ansvaret for datafangst fra Altinn3 til SSB. Deretter tilgjengeliggjør de dette for statistikkteamet som skal jobbe videre med dataene for å produsere statistikk. 
 
 Det er statistikteamet som lagrer dataene som sin kildedata som er ansvarlig for dataene og at disse håndteres på riktig måte. Av den grunn er det statistikteamet som setter opp jobben for å synkronisere data fra bøtta til Team SU-V til sin kildebøtte, slik at de kan organisere dataene som de ønsker. I tillegg vil backup av data bli håndtert i kildebøtta til statistikkteamet.
 
 ## Tilgangsstyring
 
-Skjemaer fra Altinn 3 hentes inn til SSB av team SU-V og lagres i delt-bøtter som SU-V administrerer. SU-V kan deretter gi tilgang til statistikkteam slik at de hente data fra bøttene og lagre det i sine kildebøtter. Sine tilgangsstyring mellom **prod**- og **test**-miljøet fungerer ulikt så forklarer vi hver av de under.
+Skjemaer fra Altinn 3 hentes inn til SSB av team SU-V og lagres i delt-bøtter som SU-V administrerer. SU-V kan deretter gi tilgang til statistikkteam slik at de hente data fra bøttene og lagre det i sine kildebøtter. Siden tilgangsstyring mellom **prod**- og **test**-miljøet fungerer ulikt så forklarer vi hver av de under.
 
 ### Prod
 
 Tilgang til bøtter med skjemadata i prod-miljøet gis kun til [Transfer Service](./transfer-service.qmd) for kildeprosjektet til statistikkteamet, og aldri direkte til brukere. Dvs. at team SU-V gir tilgang til Transfer Service til statistikkteamet, og deretter kan statistikkteamet sette opp en automatisk jobb med Transfer Service som synkroniserer data fra SU-V sin delt-bøtte og over til statistikkteamets kildebøtte.
 
-Siden tilgangsstyringen til data i prod er ganske restriktiv, så anbefaler vi at statistikere gjør seg kjent med sine skjemadata i test-miljøet før de starter arbeidet i prod. Les mer om tilgangsstyring test-miljøet i neste kapittel.
+Siden tilgangsstyringen til data i prod er ganske restriktiv, så anbefaler vi at statistikere gjør seg kjent med sine skjemadata i test-miljøet (se under) før de starter arbeidet i prod. 
 
 ### Test
 
@@ -91,15 +91,15 @@ Hvert skjema som leveres inn av en oppgavegiver blir lagret som en separat xml-f
 :::
 
 
-Filstien til filene i team SUV-V sine bøtter følger en streng navnestandard. @fig-altinn-path viser et eksempel på hvordan filstien til et fiktivt skjema kan se ut i bøtta til team SU-V. Filstien har egenskapen at den er globalt unik og inneholder metadata om skjemaet.  
+Filstien til filene i team SUV-V sine delt-bøtter følger en streng navnestandard. @fig-altinn-path viser et eksempel på hvordan filstien til et fiktivt skjema kan se ut i bøtta til team SU-V. Filstien har egenskapen at den er globalt unik og inneholder informasjon om tidspunktet skjemaet ble innkvittert i SSB sine systemer.  
 
-![Typisk filsti for et Altinn3-skjema.](../images/altinn_filsti.png){fig-alt="Bilde av en typisk filsti som forklarer hva de ulike komponentene av stien betyr" #fig-altinn-path}
+![Typisk filsti for et Altinn3-skjema.](../images/altinn_filsti.png){fig-alt="Bilde av en typisk filsti som forklarer hva de ulike komponentene av stien betyr" #fig-altinn-path} 
 
-Av @fig-altinn-path  
+Skjemanavnet du ser i @fig-altinn-path er unike. Dvs. at hvis en oppgavegiver sender inn flere skjemaer på samme dag, så er fortsatt skjemanavnet unikt. Det er viktig å være klar over når man bruker [automatiseringstjenesten for kildedata](./kildomaten.html) senere. Siden tjenesten trigges per fil, og man er avhengig av unike navn for å ikke skrive over filer, så er det nyttig å vite at man kan videreføre skjemanavnet i overgangen fra kildedata til inndata. 
 
 
 ### Metadata
-For hver ny innsending fra Altinn3 (i test og prod)- tilrettelegger SU-V nå en ekstra fil med metadata. Filen inneholder foreløpig to variabler:
+For hver ny innsending fra Altinn3 i test- og prod-miljøet, så tilrettelegger team SU-V en json-fil med metadata om innsedningen. Filen inneholder foreløpig to variabler:
 
 - **Referansenummeret** som oppgavegiver får ved innsending.
 - **Tidspunkt** for når skjema er levert i Altinn3.
@@ -117,24 +117,52 @@ Filen ligger i bøttene sammen med xml/pdf (og eventuelle vedlegg). Team T-Rex v
 
 ![Metadata fra Altinn](../images/altinn-jobbe-med-altinn3-innsending-meta.png){fig-alt="Illustrasjon som viser innsending med metadata fra Altinn." #fig-altinn-jobbe-med-altinn3-innsending-meta}
 
-## Forberedelse
+## Synkronisering av data
 
-Når skjema-dataene kommer inn fra Altinn 3 til Team SU-V sitt lagringsområde, så er det en del ting som er verdt å tenke på:
+Når et statistikkteam har fått beskjed av team SU-V at data er tilgjengelig deres delt-bøtte og at statistikkteamets Transfer Service har fått tilgang, så kan man sette opp synkronisering av data fra team SU-V til statistikkteamets kildebøtte. 
 
-- **Hvordan er filene organisert hos Team SU-V?**  
-Filstrukturen der Team SU-V lagrer dataene som kommer inn fra Altinn 3, har en klar struktur. Du kan selv gå inn å kikke på dataene, enten [fra Jupyter](./jobbe-med-data.html) eller [Google Cloud Console](./gcc.html), og bli bedre kjent med strukturen^[Du kan gå inn i [Google Cloud Console](./gcc.html) og søke opp prosjektet til Team SU-V som de bruker for å dele data. Det heter **suv-altinn-data-p**, og du finner bøttene ved å klikke deg inn på **Cloud Storage**]. @fig-altinn-path viser en hvordan en typisk filsti ser ut på lagringsområdet til Team SU-V. Det starter med navnet til bøtta som Team SU-V har opprettet for skjemaet. Deretter viser den innvitteringsdato, deretter et teknisk navn, og til slutt selve skjemanavnet. 
+Når man synkroniserer data fra team SU-V til egen kildebøtte er det anbefalt å gjøre følgende:
+
+**Lag en mappe per skjema**  
+Før man setter opp synkroniseringen bør man opprette en mappe per datakilde som teamet har. Dette inkluderer både Altinn-kilder og andre kilder. Hvis teamet har flere skjemaer fra Altinn så kan man f.eks. bruke skjemanummer som øverste mappenivå i kildebøtta, og synkronisere hvert skjema til sin egen undermappe.
+
+::: {.callout-caution collapse="true"}
+## Eksempel på mappestruktur
+
+```{.bash}
+ssb-dapla-felles-data-kilde-prod
+├── altinn
+│   ├── ra0678
+│   └── ra0778
+└── andrekilder
+
+```
+:::
 
 
+**Behold mappestrukturen til team SU-V**  
+Når vi bruker Transfer Service til å synkronisere innholdet i Team SU-V sitt lagringsområde til Dapla-teamet sin kildebøtte, så er det anbefalt å fortsette å bruke mappe-strukturen som Team SU-V har for å sikre at ingen filer blir overskrevet på grunn av at de har identiske navn. 
 
-- **Hvordan organisere dataene i din kildebøtte?**  
-Når vi bruker Transfer Service til å synkronisere innholdet i Team SU-V sitt lagringsområde til Dapla-teamet sitt lagringsområde, så er det mest hensiktmessig å fortsette å bruke mappe-strukturen som Team SU-V har. Grunnen er at vi ikke kan legge på noe logikk som lager en ny struktur. Tjenesten bare kopierer over data. Men du kan kan lage et nytt toppnivå-mappe som du ønsker at dataene skal synkroniseres til. F.eks. at alle Altinn-dataene legger seg inn i en mappe som heter `altinn`. Det er spesielt nyttig hvis du har flere datakilder som skal ligge i samme kildebøtte.
+::: {.callout-caution collapse="true"}
+## Eksempel på mappestruktur for ra0678
 
-- **Unike skjemanavn**  
-Skjemanavnet du ser i @fig-altinn-path er unike. Dvs. at hvis en oppgavegiver sender inn flere skjemaer på samme dag, så er fortsatt skjemanavnet unikt. Det er viktig å være klar over når man bruker [automatiseringstjenesten for kildedata](./kildomaten.html) senere. Siden tjenesten trigges per fil, og man er avhengig av unike navn for å ikke skrive over filer, så er det nyttig å vite at man kan videreføre skjemanavnet i overgangen fra kildedata til inndata. 
+```{.bash}
+ssb-dapla-felles-data-kilde-prod
+├── altinn
+│   ├── ra0678
+│   │   └── 2026
+│   │       └── 3
+│   │           └── 28
+│   │               └── b66abe1880cc_a35bceb7-950d-4e9b-a4a0-caea736ab270
+│   │                   └── form_b66abe1880cc.xml
+│   └── ra0778
+└── andrekilder
+```
+:::
 
-## Transfer Service
+### Transfer Service
 
-Når vi skal overføre filer fra Team SU-V sin bøtte til vår kildebøtte, så kan vi gjøre det manuelt fra Jupyter [som forklart her.](./altinn3.qmd#kopiere-filer-manuelt). Men det er en bedre løsning å bruke en tjeneste som gjør dette for deg. [Transfer Service](./transfer-service.html) er en tjeneste som kan brukes til å synkronisere innholdet mellom bøtter på Dapla, samt mellom bakke og sky. Når du skal ta i bruk tjenesten for å overføre data mellom en bøtte fra Team SU-V sitt prosjekt **suv-altinn-data-p**, til en kildedata-bøtte i Dapla-teamet ditt, så gjør du følgende: 
+Når vi skal overføre filer fra Team SU-V sin bøtte til vår kildebøtte, så kan vi gjøre det manuelt fra Jupyter som forklart her.. Men det er en bedre løsning å bruke en tjeneste som gjør dette for deg. [Transfer Service](./transfer-service.html) er en tjeneste som kan brukes til å synkronisere innholdet mellom bøtter på Dapla, samt mellom bakke og sky. Når du skal ta i bruk tjenesten for å overføre data mellom en bøtte fra Team SU-V sitt prosjekt **suv-altinn-data-p**, til en kildedata-bøtte i Dapla-teamet ditt, så gjør du følgende: 
 
 1. Følg denne beskrivelsen hvordan man [setter opp overføringsjobber](./transfer-service.html#overføring-av-data).
 2. Etter at du har trykket på `Create Transfer Job` velger du **Google Cloud Storage** på begge alternativene under **Get Started**. Deretter går du videre ved å klikke på **Next Step**.
@@ -152,14 +180,12 @@ Når vi skal overføre filer fra Team SU-V sin bøtte til vår kildebøtte, så 
 
 Til slutt trykker du **Create** for å aktivere tjenesten. Den vil da sjekke Team SU-V sin bøtte hver time og kopiere over alle filer som ikke allerede eksisterer statistikkteamets kildebøtte. 
 
-## Automatiseringstjeneste for kildedata
-Når du har satt opp Transfer Service til å kopiere over filer fra Team SU-V sin bøtte til statistikkteamets kildebøtte, så vil det potensielt komme inn nye skjemaer hver time. Disse kan du lese inn i **Jupyter** og jobbe med hvis du er kildedata-ansvarlig i teamet. Hvis du ikke er det så må du vente til dataene er tilgjengeliggjort i produkt-bøtta til teamet. 
-
-Siden få personer innehar rollen som kildedata-ansvarlig så er det laget en automatiseringstjeneste som kan bearbeide alle filer som kommer inn i kildebøtta. Den lar deg kjøre et python-script på alle filer som kommer inn i kildebøtta. 
+## Kildomaten
+Når du har satt opp Transfer Service til å kopiere over filer fra Team SU-V sin bøtte til statistikkteamets kildebøtte, så vil det potensielt komme inn nye skjemaer hver time. Siden ingen på statistikkteamet har tilgang til kildebøtta som standard^[Kun data-admins i teamet kan aktivere tilgang ved behov], så er neste steg å prosessere dataene med [Kildomaten](./kildomaten.qmd) og lagre dataene i produktbøtta hvot alle i teamet har tilgang. 
 
 [Les mer om hvordan du kan bruker tjenesten her.](./kildomaten.html)
 
-## Overføre Altinn3-filer til ISEE
+## Altinn3 til ISEE
 Det er utviklet en [Altinn3-pakke](https://statistics-norway.atlassian.net/wiki/spaces/altinnpython/overview#Python-pakken-ssb-altinn-python-for-utflating-av-XML-filer) i Python som flater ut mottatte XML-filer og som lager en csv-fil som er på ISEE-format av innholdet.
 
 [Dokumentasjon](https://statisticsnorway.github.io/ssb-altinn-python/) og [reference guide](https://statisticsnorway.github.io/ssb-altinn-python/reference.html) av pakken.
