@@ -13,9 +13,15 @@ Lenker:
 ## Testoverføring fra STAGING - faktisk oppdatering fra PROD
 Statistikkbanken opererer med ulike databaser for testing og produksjonssetting. Om du vil at tallene faktisk skal oppdateres på nettsidene så må du sende til Statistikkbankens "PROD"-database. Om du kun vil teste innsending skal du sende til databasen "TEST".
 Disse databasene har de samme lastebrukerne, men passordene er ulike. Om du vil teste innsending må du derfor skaffe deg "test-passordet" til den lastebrukeren som du har tilgjengelig.
-For å gjøre tester via pakken må du være i *staging* på dapla: https://jupyter.dapla-staging.ssb.no/ eller *staging* i prodosonen: https://sl-jupyter-t.ssb.no/
 Om du faktisk vil sende inn data til publisering i Statistikkbanken må du være i dapla-prod (den vanlige): https://jupyter.dapla.ssb.no/ eller i prodsonen på: https://sl-jupyter-p.ssb.no/
-For å teste er det fint å skaffe seg noe data fra fjorårets publisering på et produksjonsløp man kjenner fra før. Evt. kan man hente data fra Statistikkbanken og sende disse tilbake snudd rett, og med riktig antall prikke-kolonner lagt til.
+For å sende til TEST-databasen til statbanken, så må du enten være i *staging* på dapla eller *prod* på dapla.
+Staging finer du på disse adressene: https://jupyter.dapla-staging.ssb.no/ eller *staging* i prodosonen: https://sl-jupyter-t.ssb.no/
+For å sende fra dapla-prod til statbankens TEST-database, må du bruke versjon 1.3.0+ av statbankpakken, og sende parameteret `use_db` inn når du oppretter clienten:
+```{.python filename="notebook"}
+# For å sende fra dapla-prod til statbankens test-database
+client = StatbankClient(use_db="TEST")
+```
+For å teste tidlige i omlegging og sende inn til TEST-databasen, er det fint å skaffe seg noe data fra fjorårets publisering på et produksjonsløp man kjenner fra før. Evt. kan man hente data fra Statistikkbanken og sende disse tilbake snudd rett, og med riktig antall prikke-kolonner lagt til.
 
 
 ## Kode-eksempler 
@@ -84,3 +90,46 @@ data_07495 = filbeskrivelse.round_data(data_07495)  # For å ta vare på endring
 - Uthenting av logg fra klienten
 - Henting av publisert data fra statbanken
 - Rotering av tabeller fra statbanken
+
+
+
+# Avansert bruk ved mellomlagring av filbeskrivelsene (mindre innskrivinger av passord / oppdeling i flere notebooks)
+Filbeskrivelsene kan lagres som json med en metode, og åpnes med en annen (uten å bruke passord).
+Om man skal jobbe med mange statbanktabeller i ett løp, så kan en ok inndeling av notebooks være:
+1. Enkelt notebook for å hente alle filbeskrivelser (krever lastepassord)
+2. Ett notebook per statbanktabell som omformer fra "statistikkfil" til det som skal sendes til statbanken. Kan bruke filbeskrivelsen til avrunding, validering. (krever ikke lastepassord)
+3. Enkelt notebook for å sende alle tabellene til statbanken (krever lastepassord)
+
+Man kan i teorien lagre filbeskrivelses-jsonfilene hvor man vil, de er ikke å anse som sensitive, men de kan utløpe på dato når metadata i statbanken blri oppdatert. 
+Det kan derfor anbefales at du lagrer dem i Dapla-lab instansen din, dvs. i /work utenfor git-repoet du har klonet. De vil da bli slettet når du sletter tjenesten din, og det kan være ønskelig så de må hentes på nytt neste gang.
+
+Ett eksempel på dette ligger i [Vgogjen-produksjonsløpet](https://github.com/statisticsnorway/stat-utd-vg-vgogjen/tree/main/src/notebooks/06_banktabeller).
+
+Nøkkelfunksjonalitet i dette er:
+```{.python filename="notebook"}
+# Notebook for å hente alle filbeskrivelser
+client = StatbankClient()  # Krever passord
+for tab_id in config.statbanktabell_ider:
+    filbesk = client.get_description(tab_nr)
+    filbesk.to_json(f"~/work/filbesk/{tab_nr}.json")  # Sørg for at mappe finnes først kanskje
+
+# Notebooks for alle statbanktabeller 
+tab_nr = "12958"
+filbesk = StatbankClient.read_description_json(f"filbesk/{tab_nr}.json")  # Krever ikke passord
+data = filbesk.transferdata_template(tab_ut)
+filbesk.validate(data)
+data = filbesk.round_data(data)
+for datfil in filbesk.subtables.keys():
+    path = (path_root + "VG_gjforing/" + datfil).replace(".dat", ".parquet")
+    data[datfil].to_parquet(path)
+
+# Notebook for å laste alle tabellene 
+client = StatbankClient(date=config.publiseringsdato)  # Krever passord
+for tab_id in config.statbanktabell_ider:
+    filbesk = client.read_description_json(f"~/work/filbesk/{tab_nr}.json")
+    data = {}
+    for datfil in filbesk.subtables.keys():
+        fil = (path_root + "VG_gjforing/" + datfil).replace(".dat", ".parquet")
+        data[datfil] = pd.read_parquet(fil)
+        client.transfer(data, tabell)
+```
