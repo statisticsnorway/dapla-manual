@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Metodebiblioteket – Dapla-manualen</title>
+<title>System for utvalgsadministrasjon (SFU) – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../statistikkere/gcc.html" rel="next">
-<link href="../statistikkere/transfer-service.html" rel="prev">
+<link href="../statistikkere/dashboard.html" rel="next">
+<link href="../statistikkere/altinn-skjema-administrasjon.html" rel="prev">
 <link href="../images/dapla-favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -71,17 +105,13 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<meta property="og:title" content="Metodebiblioteket – Dapla-manualen">
+<meta property="og:title" content="System for utvalgsadministrasjon (SFU) – Dapla-manualen">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/metodebib-logo.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:height" content="463">
-<meta property="og:image:width" content="483">
-<meta name="twitter:title" content="Metodebiblioteket – Dapla-manualen">
+<meta name="twitter:title" content="System for utvalgsadministrasjon (SFU) – Dapla-manualen">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/metodebib-logo.png">
-<meta name="twitter:image-height" content="463">
-<meta name="twitter:image-width" content="483">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -223,7 +253,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/kildomaten.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/metodebibliotek.html">Metodebiblioteket</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/altinn-oversikt.html">Altinn 3</a></li><li class="breadcrumb-item"><a href="../statistikkere/altinn-sfu.html">SFU</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -455,11 +485,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datatjenester</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/altinn-dapla-suv-tools.html" class="sidebar-item-text sidebar-link">
@@ -545,7 +575,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/metodebibliotek.html" class="sidebar-item-text sidebar-link active">
+  <a href="../statistikkere/metodebibliotek.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Metodebiblioteket</span></a>
   </div>
 </li>
@@ -561,11 +591,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Altinn 3</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
@@ -586,7 +616,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/altinn-sfu.html" class="sidebar-item-text sidebar-link">
+  <a href="../statistikkere/altinn-sfu.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">SFU</span></a>
   </div>
 </li>
@@ -656,15 +686,26 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link active" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
+  <ul class="collapse">
+  <li><a href="#hente-utvalg-fra-sfu" id="toc-hente-utvalg-fra-sfu" class="nav-link" data-scroll-target="#hente-utvalg-fra-sfu">Hente utvalg fra SFU</a></li>
+  <li><a href="#hente-enhetsinformasjon-fra-sfu" id="toc-hente-enhetsinformasjon-fra-sfu" class="nav-link" data-scroll-target="#hente-enhetsinformasjon-fra-sfu">Hente enhetsinformasjon fra SFU</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/altinn-sfu.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/altinn-sfu.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/kildomaten.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/metodebibliotek.html">Metodebiblioteket</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/altinn-oversikt.html">Altinn 3</a></li><li class="breadcrumb-item"><a href="../statistikkere/altinn-sfu.html">SFU</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Metodebiblioteket</h1>
+<h1 class="title">System for utvalgsadministrasjon (SFU)</h1>
 </div>
 
 
@@ -673,6 +714,12 @@ ul.task-list li input[type="checkbox"] {
 
     
   
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">January 21, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -681,12 +728,117 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="https://statisticsnorway.github.io/ssb-metodebiblioteket/">Metodebiblioteket</a> er SSBs bibliotek for statistiske metode funksjoner. Biblioteket finner du her : <a href="https://statisticsnorway.github.io/ssb-metodebiblioteket/">https://statisticsnorway.github.io/ssb-metodebiblioteket/</a>.</p>
-<p>Metodene er organisert som en liste av funksjoner skrevet i R eller Python. Funksjonene kan kjøres på både på Dapla og i bakke-miljøene. Alle funksjoner er testet av Seksjon for Metode for bruk i produksjon av offisiell statistikk, og alle er brukt i minst ett produksjonsløp eller i SSBs interne metodekurs. Funksjonene er både utviklet internt og hentet fra godkjente eksterne pakker.</p>
-<p>Metodebiblioteket kan søkes i enten via en <a href="https://statisticsnorway.github.io/ssb-metodebiblioteket/catalog.html">generell liste</a> eller gjennom steg i <a href="https://statisticsnorway.github.io/ssb-metodebiblioteket/prosess.html">prosessmodellen</a>.</p>
-<p><img src="../images/metodebib-logo.png" class="img-fluid" width="100"></p>
+<p>Denne kapitlet beskriver hvordan man kan bruke <a href="./altinn-dapla-suv-tools.html">dapla-suv-tools pakken</a> for å hente utvalg og enhetsinformasjon fra SFU i Dapla-miljøet.</p>
+<p>Det finnes fortsatt avhengigheter til bakkesystemene for å kunne kjøre et fullstendig produksjonsløp på Dapla. SU-V har laget integrasjoner mellom bakke- og skyløsninger der det er behov for dette. Administrasjon av utvalg og enheter skjer fortsatt fra SFU på bakke.</p>
+<section id="forberedelser" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
+<p>For å kunne hente enhetsinformasjon fra SFU må brukeren din ha tilgang til delregisteret i riktig miljø (DB1T/DB1P). Ta kontakt med Kundeservice dersom du opplever problemer med tilganger.</p>
+<p>I tillegg må <code>dapla-suv-tools</code> være installert i en tjeneste på <a href="../statistikkere/dapla-lab.html">Dapla Lab</a>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add dapla-suv-tools</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="funksjonalitet" class="level2">
+<h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
+<p>Under finner du eksempler på funksjonalitet som tilbys i <code>dapla-suv-tools</code> for å jobbe med SFU fra Dapla Lab.</p>
+<section id="hente-utvalg-fra-sfu" class="level3">
+<h3 class="anchored" data-anchor-id="hente-utvalg-fra-sfu">Hente utvalg fra SFU</h3>
+<p>For å hente utvalg fra SFU, bruk metoden <code>get_utvalg_from_sfu</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig delregisternummer og RA-nummer for utvalget. Dersom utvalget er delt inn i puljer kan du oppgi pulje som parameter.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.get_utvalg_from_sfu(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    delreg_nr<span class="op">=</span><span class="dv">49430224</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ra_nummer<span class="op">=</span><span class="st">'RA-0666A3'</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    pulje<span class="op">=</span><span class="st">'2'</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(response, indent<span class="op">=</span><span class="dv">4</span>))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="hente-enhetsinformasjon-fra-sfu" class="level3">
+<h3 class="anchored" data-anchor-id="hente-enhetsinformasjon-fra-sfu">Hente enhetsinformasjon fra SFU</h3>
+<p>For å hente enhetsinformajon fra SFU, bruk metoden <code>get_enhet_from_sfu</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig delregisternummer og organisajonsnummer.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.get_enhet_from_sfu(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    delreg_nr<span class="op">=</span><span class="dv">49430224</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    orgnr<span class="op">=</span><span class="st">'123456789'</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(response, indent<span class="op">=</span><span class="dv">4</span>))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vis output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb4"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"delreg_nr"</span><span class="fu">:</span> <span class="dv">49430224</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"ident_nr"</span><span class="fu">:</span> <span class="st">"A3TF0019"</span><span class="fu">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"orgnr"</span><span class="fu">:</span> <span class="st">"123456789"</span><span class="fu">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"enhets_type"</span><span class="fu">:</span> <span class="st">"FRTK"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"foretak"</span><span class="fu">:</span> <span class="st">"A3TF0019"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"orgnr_foretak"</span><span class="fu">:</span> <span class="st">"123456789"</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"flv"</span><span class="fu">:</span> <span class="st">"0"</span><span class="fu">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"navn1"</span><span class="fu">:</span> <span class="st">"MITT REGNSKAP"</span><span class="fu">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"navn2"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"navn3"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"f_adresse1"</span><span class="fu">:</span> <span class="st">"Testvegen 19"</span><span class="fu">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"f_adresse2"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"f_adresse3"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"f_postnr"</span><span class="fu">:</span> <span class="st">"0019"</span><span class="fu">,</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"f_poststed"</span><span class="fu">:</span> <span class="st">"OSLO"</span><span class="fu">,</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"maalform"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kontaktperson"</span><span class="fu">:</span> <span class="st">"OLA NORDMANN"</span><span class="fu">,</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kont_telefon"</span><span class="fu">:</span> <span class="st">"12121212"</span><span class="fu">,</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kont_mobiltlf"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kont_epost"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"h_var1_n"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"h_var2_n"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"h_var3_n"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"h_var1_a"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"h_var2_a"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"h_var3_a"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"utvalgsstatus"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"pulje_nr"</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"vedtak_tvmulkt"</span><span class="fu">:</span> <span class="st">"N"</span><span class="fu">,</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"sendt_si"</span><span class="fu">:</span> <span class="st">"N"</span><span class="fu">,</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"status"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"org_form"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"sn07_1"</span><span class="fu">:</span> <span class="st">"17.120"</span><span class="fu">,</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"str_kode"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"viktig_enhet"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kommentar_int"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kommentar_ekst"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"test_pulje"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"prosedyre"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"felles_oppgave"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1108,13 +1260,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../statistikkere/transfer-service.html" class="pagination-link" aria-label="Transfer Service">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Transfer Service</span>
+      <a href="../statistikkere/altinn-skjema-administrasjon.html" class="pagination-link" aria-label="Administrasjon av skjema">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Administrasjon av skjema</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../statistikkere/gcc.html" class="pagination-link" aria-label="Google Cloud Console (GCC)">
-        <span class="nav-page-text">Google Cloud Console (GCC)</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../statistikkere/dashboard.html" class="pagination-link" aria-label="Appendix">
+        <span class="nav-page-text">Appendix</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1126,7 +1278,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/metodebibliotek.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/metodebibliotek.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/altinn-sfu.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/altinn-sfu.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
