@@ -1,0 +1,170 @@
+---
+title: dapla-statbank-client
+date-modified: 04/04/2025
+lightbox: true
+---
+
+[dapla-statbank-client](https://pypi.org/project/dapla-statbank-client/) er en Python-pakke som lar SSB-ere laste inn og hente ut data fra **Statistikkbanken** fra Dapla Lab^[Pakken fungerer også på treningsarenaen til Dapla; Jupyter i prodsonen]. Pakken tilbyr ulik funksjonalitet som gjør det enkelt å jobbe mot Statistikkbanken:
+
+- hente filbeskrivelse
+- laste tabeller for publisering
+- lese inn publiserte data fra Statistikkbanken API
+- lese inn data fra intern Statistikkbank
+- validere data lokalt mot en filbeskrivelse
+
+
+## Tilgangsstyring
+
+Tilgang til funksjonalitet i **Statistikkbanken** styres av *brukernavn* og *passord* som brukeren må oppgi. Tilgang til data som skal lastes inn i banken krever at man representerer teamet som har tilgang til dataene når man starter Dapla Lab.
+
+Statistikkbanken har et prod- og testmiljø. Brukere har tilgang til begge deler fra [Dapla Lab sitt prod-miljø](https://lab.dapla.ssb.no/).  
+
+## Forberedelser
+
+For å bruke **dapla-statbank-client** i Dapla Lab eller prodsonen må man opprette et [ssb-project](./ssb-project.qmd) og installere pakken på følgende måte:
+
+```{.bash filename="Terminal"}
+poetry add dapla-statbank-client
+```
+
+
+## Funksjonalitet
+
+I denne delen beskrives den viktigste funksjonalitet som tilbys i *dapla-statbank-client*. Det finnes også noe funksjonalitet som kun er [beskrevet her](https://github.com/statisticsnorway/dapla-statbank-client?tab=readme-ov-file#dapla-statbank-client).
+
+### Filbeskrivelse
+
+Man kan hente ut filbeskrivelsen til en statistikkbanktabell fra Statistikkbanken med følgende kode:
+
+```{.python filename="Notebook"}
+from statbank import StatbankClient
+stat_client = StatbankClient()
+
+tabell = "06339"
+filbeskrivelse = stat_client.get_description(tableid=tabell)
+print(filbeskrivelse)
+```
+I eksempelet over henter vi filsbeskrivelsen til statistikkbanktabell **06339** og printer ut det ut. Beskrivelsen inneholder alle formelle krav til dataene som kan lastes inn i denne tabellen.
+
+### Laste tabeller
+
+Man kan laste data inn i Statistikkbanken med dapla-statbank-client. Dataene som skal lastes inn må sendes inn som en *dictionary* av [Pandas dataframes](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html). Under er et eksempel på at en tabell lastes for publisering 1. januar 2050:
+
+```{.python filename="Notebook"}
+from statbank import StatbankClient
+
+stat_client = StatbankClient(
+    date="2050-01-01",
+    overwrite=True,
+    approve=2
+)
+
+stat_client.transfer({"deltabellfilnavn.dat" : df_06399},
+                     "06339")
+```
+
+I eksempelet over ser vi også at vi sender inn parametere om vi ønsker at eksisterende tabeller skal overskrives, og at godkjenning skal skje *Just-in-Time*. 
+
+Under er et eksempel på lasting av flere tabeller samtidig. 
+
+
+```{.python filename="Notebook"}
+from statbank import StatbankClient
+stat_client = StatbankClient(
+    date="2050-01-01",
+    overwrite=True,
+    approve=2
+)
+
+data_07495 = {"kargrs01fylker1.dat" : df_07495_fylker,
+              "kargrs01landet1.dat" : df_07495_landet,}
+
+stat_client.transfer(data_07495, tableid="07495")
+```
+
+#### Avrunding av desimaltall
+
+Metoden `round_data()` lar brukeren avrunde desimaltall iht filbeskrivelsen til en statistikkbanktabell. Dette kan være nyttig siden R og Python håndterer avrunding annerledes enn det mange forventer (se boks under).
+
+I eksempelet under har vi en dataframe med navn **data_07495** som inneholder data som skal lastes i Statistikkbanken. For å avrunde denne og oppdatere den datasettet, så lagrer vi resultatet tilbake til den opprinnelige dataframe'n.  
+
+```{.python filename="Notebook"}
+from statbank import StatbankClient
+stat_client = StatbankClient()
+
+# Hente filbeskrivelse
+tabell = "07495"
+filbeskrivelse = stat_client.get_description(tableid=tabell)
+
+# For å ta vare på endringene, så må du skrive tilbake til datasettet
+data_07495 = filbeskrivelse.round_data(data_07495)
+```
+
+::: {.callout-important}
+# Avrunding i Python og R
+Avrunding av desimaltall i **Python** og **R** gjøres *mot nærmeste partall*. Dvs. at 2,5 blir avrundet til 2, og 1,5 blir også avrundet til 2^[Grunnen til at R og Python runder av desimaltall nærmeste partall er at det reduserer bias i en retning for en kolonne. Dersom alle tall rundes opp vil summen av en kolonne *dras oppover**. ]. Dette er ulikt hvordan tall blir avrundet i **SAS** og **Excel**, der 2,5 blir til 3, og 1,5 blir til 2. Bruker man `round_data()` i *dapla-statbank-client* så er det sistnevnte metode som benyttes.     
+:::
+
+#### Laste til test
+
+Statistikkbanken har et test-miljø som kan benyttes hvis man ønsker. Det er åpnet for å laste til Statistikkbankens test-miljøet fra både [Dapla Lab prod](https://lab.dapla.ssb.no/) og [Dapla Lab test](https://lab.dapla-test.ssb.no/). 
+
+Hvis man ønsker å laste til Statistikkbankens test-miljø fra Dapla Lab prod, så må man eksplisitt angi dette i argumententet til `StatbankClient(use_db='TEST')`. Det er derimot ikke mulig å laste til Statistikkbankens prod-miljø fra Dapla Lab test. 
+
+
+### Validering
+
+Metoden `validate()` lar brukeren validere en dataframe mot en filbeskrivelsen. Dette er nyttig siden man kan få tilbakemelding om eventuelle feil før man sender over data til Statistikkbanken. 
+
+```{.python filename="Notebook"}
+from statbank import StatbankClient
+stat_client = StatbankClient()
+
+# Hente filbeskrivelse
+tabell = "07495"
+filbeskrivelse = stat_client.get_description(tableid=tabell)
+
+# For å ta vare på endringene, så må du skrive tilbake til datasettet
+data_07495 = filbeskrivelse.validate(data_07495)
+```
+
+### Publiserte tabeller
+
+Man kan hente ut publiserte data fra Statistikkbankens åpne API med dapla-statbank-client. 
+
+```{.python filename="Notebook"}
+from statbank import apidata_all
+
+df_06339 = apidata_all("06339", include_id=True)
+```
+
+`apidata_all()` henter all informasjon i en tabell. Hvis man spesifiserer `include_id=True` så prøver funksjonen å rydde litt reponsen for å gjøre den lettere å jobbe med. 
+
+Man kan også spesifisere akkurat hvilken informasjon man ønsker fra en tabell:
+
+```{.python filename="Notebook"}
+from statbank import apidata
+
+query = {'query': [{'code': 'Region', 'selection': {'filter': 'vs:Landet', 'values': ['0']}}, {'code': 'Alder', 'selection': {'filter': 'vs:AldGrupp19', 'values': ['000', '001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017', '018', '019', '020', '021', '022', '023', '024', '025', '026', '027', '028', '029', '030', '031', '032', '033', '034', '035', '036', '037', '038', '039', '040', '041', '042', '043', '044', '045', '046', '047', '048', '049', '050', '051', '052', '053', '054', '055', '056', '057', '058', '059', '060', '061', '062', '063', '064', '065', '066', '067', '068', '069', '070', '071', '072', '073', '074', '075', '076', '077', '078', '079', '080', '081', '082', '083', '084', '085', '086', '087', '088', '089', '090', '091', '092', '093', '094', '095', '096', '097', '098', '099', '100', '101', '102', '103', '104', '105', '106', '107', '108', '109', '110', '111', '112', '113', '114', '115', '116', '117', '118', '119+']}}, {'code': 'Statsbrgskap', 'selection': {'filter': 'vs:Statsborgerskap', 'values': ['000']}}, {'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2022']}}], 'response': {'format': 'json-stat2'}}
+
+df_folkemengde = apidata("https://i.ssb.no/pxwebi/api/v0/no/prod_24v_intern/START/be/be01/folkemengde/Rd0002Aa",
+                         query,
+                         include_id = True
+)
+```
+
+
+
+### Intern statistikkbank
+
+SSB-brukere kan hente data fra SSBs interne Statistikkbank:
+
+```{.python filename="Notebook"}
+from statbank import apidata
+
+uri = "https://i.ssb.no/pxwebi/api/v0/no/prod_24v_intern/START/be/be01/folkemengde/Rd0002Aa"
+
+query = {'query': [{'code': 'Region', 'selection': {'filter': 'vs:Landet', 'values': ['0']}}, {'code': 'Alder', 'selection': {'filter': 'vs:AldGrupp19', 'values': ['000', '001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012', '013', '014', '015', '016', '017', '018', '019', '020', '021', '022', '023', '024', '025', '026', '027', '028', '029', '030', '031', '032', '033', '034', '035', '036', '037', '038', '039', '040', '041', '042', '043', '044', '045', '046', '047', '048', '049', '050', '051', '052', '053', '054', '055', '056', '057', '058', '059', '060', '061', '062', '063', '064', '065', '066', '067', '068', '069', '070', '071', '072', '073', '074', '075', '076', '077', '078', '079', '080', '081', '082', '083', '084', '085', '086', '087', '088', '089', '090', '091', '092', '093', '094', '095', '096', '097', '098', '099', '100', '101', '102', '103', '104', '105', '106', '107', '108', '109', '110', '111', '112', '113', '114', '115', '116', '117', '118', '119+']}}, {'code': 'Statsbrgskap', 'selection': {'filter': 'vs:Statsborgerskap', 'values': ['000']}}, {'code': 'Tid', 'selection': {'filter': 'item', 'values': ['2022']}}], 'response': {'format': 'json-stat2'}}
+
+df_folkemengde = apidata(uri, query, include_id = True)
+```
