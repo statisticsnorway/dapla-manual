@@ -1,24 +1,26 @@
 ---
-title: Utvalg fra SFU
+title: System for utvalgsadministrasjon (SFU)
 date-modified: 01/21/2025
 lightbox: true
 ---
 
-Denne siden beskriver hvordan du bruker [dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) for å hente utvalg og enhetsinformasjon fra SFU i Dapla-miljøet.
+Denne kapitlet beskriver hvordan man kan bruke [dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) for å hente utvalg og enhetsinformasjon fra SFU i Dapla-miljøet.
 
 Det finnes fortsatt avhengigheter til bakkesystemene for å kunne kjøre et fullstendig produksjonsløp på Dapla. SU-V har laget integrasjoner mellom bakke- og skyløsninger der det er behov for dette. Administrasjon av utvalg og enheter skjer fortsatt fra SFU på bakke.
 
-## Forutsetninger
+## Forberedelser
 
-::: {.callout-important}
-## Tilgang til bakkesystemer
+For å kunne hente enhetsinformasjon fra SFU må brukeren din ha tilgang til delregisteret i riktig miljø (DB1T/DB1P). Ta kontakt med Kundeservice dersom du opplever problemer med tilganger. 
 
-For å kunne hente enhetsinformasjon fra SFU må du ha tilgang til delregisteret i riktig miljø (DB1T/DB1P).
-:::
+I tillegg må `dapla-suv-tools` være installert i en tjeneste på [Dapla Lab](./dapla-lab.qmd):
 
-## Kodeeksempler
+```{.bash filename="terminal"}
+poetry add dapla-suv-tools
+```
 
-Eksemplene viser hvordan du henter utvalg og enhetsinformasjon fra SFU. 
+## Funksjonalitet
+
+Under finner du eksempler på funksjonalitet som tilbys i `dapla-suv-tools` for å jobbe med SFU fra Dapla Lab. 
 
 ### Hente utvalg fra SFU
 
@@ -50,9 +52,8 @@ response = client.get_enhet_from_sfu(
 
 print(json.dumps(response, indent=4))
 ```
-### Eksempel på output
-
-Resultatet returneres i en json struktur
+::: {.callout-caution collapse="true"}
+## Vis output
 
 ```json
 {
@@ -99,6 +100,5 @@ Resultatet returneres i en json struktur
 }
 ```
 
-
-
+:::
 
