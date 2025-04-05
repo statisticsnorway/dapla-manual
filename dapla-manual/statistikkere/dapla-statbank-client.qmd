@@ -7,17 +7,18 @@ lightbox: true
 [dapla-statbank-client](https://pypi.org/project/dapla-statbank-client/) er en Python-pakke som lar SSB-ere laste inn og hente ut data fra **Statistikkbanken** fra Dapla Lab^[Pakken fungerer også på treningsarenaen til Dapla; Jupyter i prodsonen]. Pakken tilbyr ulik funksjonalitet som gjør det enkelt å jobbe mot Statistikkbanken:
 
 - hente filbeskrivelse
+- validere data lokalt mot en filbeskrivelse
 - laste tabeller for publisering
 - lese inn publiserte data fra Statistikkbanken API
-- lese inn data fra intern Statistikkbank
-- validere data lokalt mot en filbeskrivelse
+- lese inn upublisert data fra intern Statistikkbank
+
 
 
 ## Tilgangsstyring
 
-Tilgang til funksjonalitet i **Statistikkbanken** styres av *brukernavn* og *passord* som brukeren må oppgi. Tilgang til data som skal lastes inn i banken krever at man representerer teamet som har tilgang til dataene når man starter Dapla Lab.
+Tilgang til funksjonalitet i **Statistikkbanken** styres av *brukernavn* ("lastebruker") og *passord* ("lastepassord") som brukeren må oppgi. Tilgang til data som skal lastes inn i banken krever at man representerer teamet som har tilgang til dataene når man starter Dapla Lab.
 
-Statistikkbanken har et prod- og testmiljø. Brukere har tilgang til begge deler fra [Dapla Lab sitt prod-miljø](https://lab.dapla.ssb.no/).  
+Statistikkbanken har en prod- og testdatabase. Brukere har tilgang til å publisere til begge deler fra [Dapla Lab sitt prod-miljø](https://lab.dapla.ssb.no/). Fra Daplas testmiljø, kan man kun publisere til Statistikkbankens testdatabase.
 
 ## Forberedelser
 
@@ -38,17 +39,17 @@ Man kan hente ut filbeskrivelsen til en statistikkbanktabell fra Statistikkbanke
 
 ```{.python filename="Notebook"}
 from statbank import StatbankClient
-stat_client = StatbankClient()
+stat_client = StatbankClient()  # Ber om lastebruker og lastepassord
 
 tabell = "06339"
 filbeskrivelse = stat_client.get_description(tableid=tabell)
 print(filbeskrivelse)
 ```
-I eksempelet over henter vi filsbeskrivelsen til statistikkbanktabell **06339** og printer ut det ut. Beskrivelsen inneholder alle formelle krav til dataene som kan lastes inn i denne tabellen.
+I eksempelet over henter vi filbeskrivelsen til statistikkbanktabell **06339** og printer den ut. Beskrivelse-objektet inneholder alle formelle krav til dataene som kan lastes inn i denne tabellen.
 
 ### Laste tabeller
 
-Man kan laste data inn i Statistikkbanken med dapla-statbank-client. Dataene som skal lastes inn må sendes inn som en *dictionary* av [Pandas dataframes](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html). Under er et eksempel på at en tabell lastes for publisering 1. januar 2050:
+Man kan laste data inn i Statistikkbankens databaser med dapla-statbank-client. Dataene som skal lastes inn må sendes inn som en *dictionary* med deltabellnavn som nøkler, og [Pandas dataframes](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) som verdier. Under er et eksempel på at en tabell lastes for publisering 1. januar 2050:
 
 ```{.python filename="Notebook"}
 from statbank import StatbankClient
@@ -63,9 +64,9 @@ stat_client.transfer({"deltabellfilnavn.dat" : df_06399},
                      "06339")
 ```
 
-I eksempelet over ser vi også at vi sender inn parametere om vi ønsker at eksisterende tabeller skal overskrives, og at godkjenning skal skje *Just-in-Time*. 
+I eksempelet over ser vi også at vi sender inn parametere, om vi ønsker at eksisterende tabeller skal overskrives, og at godkjenning skal skje *Just-in-Time*. I tillegg har vi spesifiser en publiseringsdato (merk at statbanken kun godtar publiseringer en viss antall måneder frem i tid).
 
-Under er et eksempel på lasting av flere tabeller samtidig. 
+Under er et eksempel på lasting av flere deltabeller samtidig. 
 
 
 ```{.python filename="Notebook"}
@@ -84,9 +85,10 @@ stat_client.transfer(data_07495, tableid="07495")
 
 #### Avrunding av desimaltall
 
-Metoden `round_data()` lar brukeren avrunde desimaltall iht filbeskrivelsen til en statistikkbanktabell. Dette kan være nyttig siden R og Python håndterer avrunding annerledes enn det mange forventer (se boks under).
+Metoden `round_data()` lar brukeren avrunde desimaltall iht filbeskrivelsen til en statistikkbanktabell. Dette kan være nyttig siden, antall desimaler som skal beholdes ligger markert i filbeskrivelsen, og R og Python håndterer avrunding annerledes enn det mange forventer (se boks under).
 
-I eksempelet under har vi en dataframe med navn **data_07495** som inneholder data som skal lastes i Statistikkbanken. For å avrunde denne og oppdatere den datasettet, så lagrer vi resultatet tilbake til den opprinnelige dataframe'n.  
+I eksempelet under har vi en dataframe med navn **data_07495** som inneholder data som skal lastes i Statistikkbanken. For å avrunde denne og lagre endringene, så lagrer vi resultatet tilbake til den opprinnelige dictionaryen'n.
+Ved dags dato er det smart å runde av ETTER man validerer, siden validate() ikke tar høyde for at dataene kan være avrundet allerede.
 
 ```{.python filename="Notebook"}
 from statbank import StatbankClient
@@ -96,7 +98,10 @@ stat_client = StatbankClient()
 tabell = "07495"
 filbeskrivelse = stat_client.get_description(tableid=tabell)
 
-# For å ta vare på endringene, så må du skrive tilbake til datasettet
+# Pakk datasettet i dictionaryen (navnet på deltabellen ligger i filbeskrivelsen)
+data_07495 = filbeskrivelse.transferdata_template(df_07495)
+
+# For å ta vare på endringene, så må du skrive tilbake til datasettet i dictionaryen
 data_07495 = filbeskrivelse.round_data(data_07495)
 ```
 
@@ -114,7 +119,7 @@ Hvis man ønsker å laste til Statistikkbankens test-miljø fra Dapla Lab prod, 
 
 ### Validering
 
-Metoden `validate()` lar brukeren validere en dataframe mot en filbeskrivelsen. Dette er nyttig siden man kan få tilbakemelding om eventuelle feil før man sender over data til Statistikkbanken. 
+Metoden `validate()` lar brukeren validere en dataframe mot en filbeskrivelsen. Dette er nyttig siden man kan få tilbakemelding om eventuelle feil før man sender over data til Statistikkbanken. Spesielt er dette interessant under utvikling av en statistikkbanklevering i nytt kodespråk, hvor validate() kan gi deg tilbakemelding på hva du har gjort feil hittils med formen på dataene.
 
 ```{.python filename="Notebook"}
 from statbank import StatbankClient
@@ -124,13 +129,16 @@ stat_client = StatbankClient()
 tabell = "07495"
 filbeskrivelse = stat_client.get_description(tableid=tabell)
 
-# For å ta vare på endringene, så må du skrive tilbake til datasettet
-data_07495 = filbeskrivelse.validate(data_07495)
+# Pakk deltabeller i en dict før validering
+data_07495 = filbeskrivelse.transferdata_template(df_07495)
+
+# Vi tar ikke vare på valideringene, men de kan raise errors, eller printes ut.
+filbeskrivelse.validate(data_07495)
 ```
 
 ### Publiserte tabeller
 
-Man kan hente ut publiserte data fra Statistikkbankens åpne API med dapla-statbank-client. 
+Man kan hente ut publiserte data fra Statistikkbankens åpne API med dapla-statbank-client. `apidata_all()` henter all data i tabellen, uten å spesifisere noe filter:
 
 ```{.python filename="Notebook"}
 from statbank import apidata_all
@@ -138,9 +146,9 @@ from statbank import apidata_all
 df_06339 = apidata_all("06339", include_id=True)
 ```
 
-`apidata_all()` henter all informasjon i en tabell. Hvis man spesifiserer `include_id=True` så prøver funksjonen å rydde litt reponsen for å gjøre den lettere å jobbe med. 
+Hvis man spesifiserer `include_id=True` så fletter funksjonen id-kolonner (variabel-koder) for klassifikasjonsvariablene etter "label-kolonner".
 
-Man kan også spesifisere akkurat hvilken informasjon man ønsker fra en tabell:
+Man kan også spesifisere akkurat hvilken informasjon man ønsker fra en tabell, dette "query" objektet kan man kopiere ut av statstikkbankens nettsider, etter å ha filtrert en tabell så ligger det under "API-spørring for denne tabellen" i det andre feltet. Dette kan du copy-paste ut og assigne til variabelen "query" her. I følgende kodebit henter vi også fra intern statbank (upublisert?) ved å spesifisere hele adressen, ikke kun numerisk statbank-id.
 
 ```{.python filename="Notebook"}
 from statbank import apidata
