@@ -1,0 +1,69 @@
+---
+title: Hvordan laste mange tabeller i Statistikkbanken?
+subtitle: Triks for å laste smart i et produksjonsløp
+categories:
+  - statistikkbanken
+  - python
+  - dapla-statbank-python
+author:
+  - name: Carl Franklin Corneil
+    affiliation:
+      - name: Seksjon for utdannings- og kulturstatistikk (360)
+        email: cfc@ssb.no
+image: ./statbank-utd.png
+image-alt: Bilde av statistikkbanktabell
+date: 04/04/2025
+date-modified: 04/04/2025
+draft: false
+---
+
+Filbeskrivelsene kan lagres som json med en metode, og åpnes med en annen (uten å bruke passord).
+Om man skal jobbe med mange statbanktabeller i ett løp, så kan en ok inndeling av notebooks være:
+
+1. Enkelt notebook for å hente alle filbeskrivelser (krever lastepassord)
+2. Ett notebook per statbanktabell som omformer fra "statistikkfil" til det som skal sendes til statbanken. Kan bruke filbeskrivelsen til avrunding, validering. (krever ikke lastepassord)
+3. Enkelt notebook for å sende alle tabellene til statbanken (krever lastepassord)
+
+Man kan i teorien lagre filbeskrivelses-jsonfilene hvor man vil, de er ikke å anse som sensitive, men de kan utløpe på dato når metadata i statbanken blir oppdatert. 
+Det kan derfor anbefales at du lagrer dem i Dapla-lab instansen din, dvs. i /work utenfor git-repoet du har klonet. De vil da bli slettet når du sletter tjenesten din, og det kan være ønskelig så de må hentes på nytt neste gang.
+
+Ett eksempel på dette ligger i [Vgogjen-produksjonsløpet](https://github.com/statisticsnorway/stat-utd-vg-vgogjen/tree/main/src/notebooks/06_banktabeller).
+
+Først oppretter du en notebook for å hente alle filbeskrivelser:
+
+```{.python filename="notebook"}
+# Notebook for å hente alle filbeskrivelser
+client = StatbankClient()  # Krever passord
+for tab_id in config.statbanktabell_ider:
+    filbesk = client.get_description(tab_nr)
+    filbesk.to_json(f"~/work/filbesk/{tab_nr}.json")  # Sørg for at mappe finnes først kanskje
+```
+Deretter kan du opprette en notebook per statistikkbanktabell. Under er et eksempel på hvordan en slik notebook kan se ut:
+
+```{.python filename="notebook"}
+# Notebooks for alle statbanktabeller 
+tab_nr = "12958"
+filbesk = StatbankClient.read_description_json(f"filbesk/{tab_nr}.json")  # Krever ikke passord
+data = filbesk.transferdata_template(tab_ut)
+filbesk.validate(data)
+data = filbesk.round_data(data)
+for datfil in filbesk.subtables.keys():
+    path = (path_root + "VG_gjforing/" + datfil).replace(".dat", ".parquet")
+    data[datfil].to_parquet(path)
+```
+
+Til slutt oppretter du en egen notebook som laster alle tabellene til Statistikkbanken:
+
+```{.python filename="notebook"}
+# Notebook for å laste alle tabellene 
+client = StatbankClient(date=config.publiseringsdato)  # Krever passord
+for tab_id in config.statbanktabell_ider:
+    filbesk = client.read_description_json(f"~/work/filbesk/{tab_nr}.json")
+    data = {}
+    for datfil in filbesk.subtables.keys():
+        fil = (path_root + "VG_gjforing/" + datfil).replace(".dat", ".parquet")
+        data[datfil] = pd.read_parquet(fil)
+        client.transfer(data, tabell)
+```
+
+
