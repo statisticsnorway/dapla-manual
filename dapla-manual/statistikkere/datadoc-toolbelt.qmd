@@ -1,14 +1,28 @@
 ---
 title: Datadoc
-last-modified: "2025-02-04"
+date-modified: "04/10/2025"
+lightbox: true
 ---
 
+[Datadoc](./datadoc.qmd) er SSBs system for dokumentasjon av datasett. Datadoc lagrer dokumentasjonen i et strukturert format ved siden av dataene. Man kan jobbe programmatisk med metadataene til Datadoc med Datadoc-delen av [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
 
-[Datadoc](./datadoc.qmd) er SSBs system for dokumentasjon av datasett. Første gang man skal dokumentere et datasett i Datadoc så er det anbefalt å bruke det grafiske grensesnittet i [Datadoc-editor](./datadoc-editor.qmd). I løpende produksjon er det dermed anbefalt å benytte en programmatisk tilnærming gjennom `Datadoc`-klassen i Python-pakken [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
+Første gang man skal dokumentere et datasett i Datadoc så er det anbefalt å bruke det grafiske grensesnittet i [Datadoc-editor](./datadoc-editor.qmd). I løpende produksjon er det dermed anbefalt å benytte en programmatisk tilnærming gjennom `Datadoc`-delen av Python-pakken [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
 
-### Dokumentere ny periode
+## Forberedelser
 
-Hvis man har dokumentert datasett for *periode t* med [Datadoc-editor](./datadoc-editor.qmd), så kan man programmatisk dokumentere *periode t+1* ved å benytte `Datadoc`-klassen i dapla-toolbelt-metadata. Det forutsetter at det kun nye data som har kommet til og at det er den eneste endringen i dataene. Da kan man dokumentere den nye perioden på følgende måte:
+For å benytte Datadoc-delen av [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) må man først installere pakken i et [ssb-project](./ssb-project.qmd):
+
+```{.bash filename="Terminal"}
+poetry add dapla-toolbelt-metadata
+```
+
+## Funksjonalitet
+
+Under finner du hvilken funksjonalitet som tilbys for Datadoc i dapla-toolbelt-metadata.
+
+### Kopiere fra forrige periode uten endringer
+
+Hvis man har dokumentert datasett for *periode t* med [Datadoc-editor](./datadoc-editor.qmd), så kan man programmatisk dokumentere *periode t+1* ved å benytte `Datadoc`-klassen i dapla-toolbelt-metadata. Det forutsetter at det ikke er noen endringer i kolonnene i datasettet, og at eneste endring er at nye observasjoner. Da kan man dokumentere den nye perioden på følgende måte:
 
 ``` {.python filename="Notebook"}
 from dapla_metadata.datasets import Datadoc
@@ -24,4 +38,846 @@ meta.write_metadata_document() # <3>
 2.  `metadata_document_path` angir sti til tidligere periodes metadata.
 3.  `write_metadata_document` er kommandoen som produserer de nye metadataene og skriver de til filen `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`.
 
-Det veldig viktig at man ikke bruker denne metoden hvis det er endringer i hvilke kolonner som finnes i datasettet eller andre større endringer. Metoden over antar at den eneste informasjonen som har endret seg er den som kan leses ut av filstien. Ved større endringer i selve dataene bør man heller gjøre en manuell gjennomgang av metadataene med [Datadoc-editor](./datadoc-editor.qmd)
+Det veldig viktig at man ikke bruker denne metoden hvis det er endringer i hvilke kolonner som finnes i datasettet eller andre større endringer. Metoden over antar at den eneste informasjonen som har endret seg er den som kan leses ut av filstien. Ved større endringer i selve dataene bør man heller gjøre en manuell gjennomgang av metadataene med [Datadoc-editor](./datadoc-editor.qmd), eller bruke metoden som beskrives i neste avsnitt. 
+
+### Kopiere fra forrige periode med endringer
+
+Hvis det har skjedd noen endringer i datasettet ditt, men mange av kolonnene har matchende navn og likt innhold, så kan man lage et nytt metadatadokument basert metadataene til en annen fil. 
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/dataset-to-document_p2022_v1.parquet",
+    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/existing-metadata__DOC.json",
+    errors_as_warnings=True,
+)
+```
+I koden over angir vi det nye datasettet som skal dokumenteres i `dataset_path=`. Deretter angir vi filstien til metadatadokumentet i `metadata_document_path=` som det delvis skal kopieres metadata fra. Til slutt angir vi at feilmeldinger skal behandles som advarsler med argumentet `errors_as_warnings=True`. 
+
+Med dette utgangspunktet kan man deretter gjøre endringer på evt. nye eller eksisterende kolonner ved å enten bruke [Datadoc-editor], eller en programmatisk tilnærming som forklart senere i kapitlet. 
+
+### Opprette metadata for ny fil
+
+Det er i de fleste tilfeller anbefalt å opprette metadata for en ny fil med [Datadoc-editor](./datadoc-editor.qmd) fordi den har et er mer brukervennlig grensesnitt. Men i noen tilfeller kan det være nyttig å opprette et metadatadokument for Datadoc programmatisk. 
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path = "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2022-12-31_v1.parquet",
+)
+
+meta.write_metadata_document()
+```
+I koden over så genererer vi et metadatadokument for en gitt parquet-fil og skriver den til samme filstien som filen som dokumenteres med `write_metadata_document()`. Metdatadokumentet blir i eksempelet over skrevet til:  
+
+`/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1__DOC.json`
+
+Ved generering av metadataene blir all informasjon som kan genereres automatisk, faktisk generert. Dette fungerer på samme måte som når man åpner et udokumentert datasett i [Datadoc-editor](./datadoc-editor.qmd). I boksen under ser man et eksempel på json-filen som blir generert ved å kjøre koden over. 
+
+::: {.callout-caution collapse="true"}
+## Eksempel på et generert metadatadokument i json-format
+```{.json}
+{
+  "document_version": "0.0.1",
+  "datadoc": {
+    "percentage_complete": 66,
+    "document_version": "4.0.0",
+    "dataset": {
+      "short_name": "person_testdata",
+      "assessment": "PROTECTED",
+      "dataset_status": "DRAFT",
+      "dataset_state": "PROCESSED_DATA",
+      "name": null,
+      "description": null,
+      "data_source": null,
+      "population_description": null,
+      "version": "1",
+      "version_description": null,
+      "unit_type": null,
+      "temporality_type": null,
+      "subject_field": null,
+      "keyword": null,
+      "spatial_coverage_description": [
+        {
+          "languageCode": "nb",
+          "languageText": "Norge"
+        },
+        {
+          "languageCode": "nn",
+          "languageText": "Noreg"
+        },
+        {
+          "languageCode": "en",
+          "languageText": "Norway"
+        }
+      ],
+      "contains_personal_data": false,
+      "use_restriction": null,
+      "use_restriction_date": null,
+      "custom_type": null,
+      "id": "a7be0245-8d58-48b2-9158-3df338406cc7",
+      "owner": "dapla-felles",
+      "file_path": "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+      "metadata_created_date": "2025-04-09T18:10:26.185913Z",
+      "metadata_created_by": "obr@ssb.no",
+      "metadata_last_updated_date": "2025-04-09T18:10:26.185349Z",
+      "metadata_last_updated_by": "obr@ssb.no",
+      "contains_data_from": "2021-12-31",
+      "contains_data_until": "2023-12-31"
+    },
+    "variables": [
+      {
+        "short_name": "fnr",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "cf8a0c60-4a62-4a93-bbbe-143053b3bf5f",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "sivilstand",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "f25d96d6-4a49-472d-b1f0-4805a1546daf",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "bostedskommune",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "cf139119-4a97-4b1f-a793-a2501285c81b",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "inntekt",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "INTEGER",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "c9357b37-ff1a-4f83-a332-a5239aaa3cf6",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "bankinnskudd",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "INTEGER",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "38f67ddf-bd07-4bdb-8ea0-411b0aaf511e",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "dato",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "33353e56-7f5f-409f-915a-644949137228",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      }
+    ]
+  },
+  "pseudonymization": null
+}
+```
+:::
+
+### Endre enkeltfelt
+
+I noen tilfeller kan det være nyttig å endre enkeltelementer i en metadatadokument på en programmatisk. F.eks. hvis det eneste som endrer seg ved hver periode er informasjonen i et felt, så kan man kopiere inn forrige periodes metadatadokument, og deretter endre verdien til det ene feltet som har endret seg. Det er også nyttig i de tilfellene der man ønsker å [opprette metadata for ny fil](./datadoc-toolbelt.qmd#opprette-metadata-for-ny-fil).
+
+I kodeeksempelet under så ønsker vi å oppdatere feltet `multiplication_factor` siden det ikke har noen verdi fra før. Først henter vi inn metadataene til en filen i objektet `meta`. 
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+# Leser inn metadataene
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+#Oppdaterer verdien
+meta.variables_lookup[
+    "inntekt"
+].multiplication_factor = 1000  # Variable expressed in thousands of kroner
+
+#Skriver de nye metadataene til dokumentet
+meta.write_metadata_document()
+``` 
+
+Etter at vi har hentet inn metadataene i koden over, så oppdaterer vi verdien til `multiplication_factor = 1000`, og til slutt skriver vi tilbake til metadatadokumentet som er lagret sammen med datasettet.
+
+Noen informasjonelementer i metadatadokumentet lagres som lister av *dictionaries*. F.eks. så lagres elementet `spatial_coverage_description` (*Geografisk dekningsområde* på norsk) på denne måten siden den er flerspråklig. Denne har en litt mer kompleks syntaks for oppdatering:
+
+```{.python filename="Notebook"}
+from dapla_metadata import datadoc_model as model
+from dapla_metadata.datasets import Datadoc
+
+# Leser inn metadataene
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+#Oppdaterer verdien
+meta.dataset.spatial_coverage_description = model.LanguageStringType(
+    root=[
+        model.LanguageStringTypeItem(languageCode="nb", languageText="Test persondata"),
+        model.LanguageStringTypeItem(languageCode="nn", languageText="Testar persondata"),
+        model.LanguageStringTypeItem(languageCode="en", languageText="Test of persondata")
+    ]
+)
+
+#Skriver de nye metadataene til dokumentet
+meta.write_metadata_document()
+``` 
+
+I koden over ser vi at oppdatering av flerspråklige informasjonselementer gjøres med å først indentifisere feltet vi ønsker å endre, `meta.dataset.spatial_coverage_description`. Dette kan leses som at vi ønsker å endre `meta`-objektet, under `dataset`-delen, og feltet `spatial_coverage_description`. Deretter kommer en syntax som er lik for alle flerspråklige felt. 
+
+I boksen under finnes flere eksempler på hvordan man endrer informasjon i enkeltfelter. 
+
+::: {.callout-caution collapse="true"}
+## Flere eksempler på hvordan man endrer enkeltfelter
+```{.python filename="Notebook"}
+from dapla_metadata import datadoc_model as model
+from dapla_metadata.datasets import Datadoc
+
+# Importerer/genererer et metadataobjekt
+meta = Datadoc(
+    dataset_path="resources/sykefratot/klargjorte_data/person_testdata_p2022_v1.parquet",
+)
+
+# Endre "name" på datasettnivå
+meta.dataset.name = model.LanguageStringType(
+    root=[
+        model.LanguageStringTypeItem(languageCode="nb", languageText="Test persondata"),
+        model.LanguageStringTypeItem(languageCode="nn", languageText="Test persondata"),
+        model.LanguageStringTypeItem(
+            languageCode="en", languageText="Test personal data"
+        ),
+    ],
+)
+
+# Endre "description" på datasettnivå (flerspråklig)
+meta.dataset.description = model.LanguageStringType(
+    root=[
+        model.LanguageStringTypeItem(
+            languageCode="nb",
+            languageText="Data er kun for test formål",
+        ),
+        model.LanguageStringTypeItem(
+            languageCode="nn",
+            languageText="Data er kun for test formål",
+        ),
+        model.LanguageStringTypeItem(
+            languageCode="en",
+            languageText="For testing purposes only",
+        ),
+    ],
+)
+
+# Endre "data_source" på datasettnivå
+meta.dataset.data_source = (
+    "23"  # Refers to code in https://www.ssb.no/klass/klassifikasjoner/712
+)
+
+#Endre "use_restriction" på dataettsnivp
+meta.dataset.use_restriction = model.UseRestriction.PROCESS_LIMITATIONS
+
+# Endre "name" på variabelnivå for variabelen "inntekt" (flerspråklig)
+meta.variables_lookup["inntekt"].name = model.LanguageStringType(
+    root=[
+        model.LanguageStringTypeItem(languageCode="nb", languageText="Inntekt"),
+        model.LanguageStringTypeItem(languageCode="nn", languageText="Inntekt"),
+        model.LanguageStringTypeItem(
+            languageCode="en",
+            languageText="Income",
+        ),
+    ],
+)
+
+# Endre "multiplication_factor" på variabelnivå for variabelen "inntekt"
+meta.variables_lookup[
+    "inntekt"
+].multiplication_factor = 1000  # Variable expressed in thousands of kroner
+
+# # Endre "is_personal_data" på variabelnivå for variabelen "inntekt"
+meta.variables_lookup[
+    "inntekt"
+].is_personal_data = model.IsPersonalData.NOT_PERSONAL_DATA
+
+```
+:::
+
+
+### Lese ut informasjon
+
+Siden metadataene som er laget med Datadoc lagres ved siden av filen som dokumenteres som en json-fil, så kan man lese inn hele filen i en notebook og printe den ut hvis man ønsker det:
+
+```{.python filename="Notebook"}
+import json
+
+file_path = "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1__DOC.json"
+
+with open(file_path, "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+print(json.dumps(data, indent=2, ensure_ascii=False))
+```
+::: {.callout-caution collapse="true"}
+## Output fra eksempelfil
+
+```{.json}
+{
+  "document_version": "0.0.1",
+  "datadoc": {
+    "percentage_complete": 66,
+    "document_version": "4.0.0",
+    "dataset": {
+      "short_name": "person_testdata",
+      "assessment": "PROTECTED",
+      "dataset_status": "DRAFT",
+      "dataset_state": "PROCESSED_DATA",
+      "name": null,
+      "description": null,
+      "data_source": null,
+      "population_description": null,
+      "version": "1",
+      "version_description": null,
+      "unit_type": null,
+      "temporality_type": null,
+      "subject_field": null,
+      "keyword": null,
+      "spatial_coverage_description": [
+        {
+          "languageCode": "nb",
+          "languageText": "Test persondata"
+        },
+        {
+          "languageCode": "nn",
+          "languageText": "Testar persondata"
+        },
+        {
+          "languageCode": "en",
+          "languageText": "Test of persondata"
+        }
+      ],
+      "contains_personal_data": false,
+      "use_restriction": null,
+      "use_restriction_date": null,
+      "custom_type": null,
+      "id": "a7be0245-8d58-48b2-9158-3df338406cc7",
+      "owner": "dapla-felles",
+      "file_path": "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+      "metadata_created_date": "2025-04-09T18:10:26.185913Z",
+      "metadata_created_by": "obr@ssb.no",
+      "metadata_last_updated_date": "2025-04-09T18:58:28.808974Z",
+      "metadata_last_updated_by": "obr@ssb.no",
+      "contains_data_from": "2021-12-31",
+      "contains_data_until": "2023-12-31"
+    },
+    "variables": [
+      {
+        "short_name": "fnr",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "cf8a0c60-4a62-4a93-bbbe-143053b3bf5f",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "sivilstand",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "f25d96d6-4a49-472d-b1f0-4805a1546daf",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "bostedskommune",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "cf139119-4a97-4b1f-a793-a2501285c81b",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "inntekt",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "INTEGER",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": 1000,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "c9357b37-ff1a-4f83-a332-a5239aaa3cf6",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "bankinnskudd",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "INTEGER",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "38f67ddf-bd07-4bdb-8ea0-411b0aaf511e",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      },
+      {
+        "short_name": "dato",
+        "data_element_path": null,
+        "name": null,
+        "data_type": "STRING",
+        "variable_role": "MEASURE",
+        "definition_uri": null,
+        "is_personal_data": "NOT_PERSONAL_DATA",
+        "data_source": null,
+        "population_description": null,
+        "comment": null,
+        "temporality_type": null,
+        "measurement_unit": null,
+        "multiplication_factor": null,
+        "format": null,
+        "classification_uri": null,
+        "special_value": null,
+        "invalid_value_description": null,
+        "custom_type": null,
+        "id": "33353e56-7f5f-409f-915a-644949137228",
+        "contains_data_from": "2021-12-31",
+        "contains_data_until": "2023-12-31"
+      }
+    ]
+  },
+  "pseudonymization": null
+}
+```
+:::
+
+
+Man kan lese ut metadata fra Datadoc-dokumenterte datasett med dapla-toolbelt-metadata. I eksempelet under henter vi ut metadataene til en fil og printer ut informasjonen på datasettnivå:
+
+```{.python filename="Notebook"}
+from pprint import pprint
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+pprint(vars(meta.dataset))
+```
+
+::: {.callout-caution collapse="true"}
+## Output fra eksempelfil
+```{.python}
+{'assessment': 'PROTECTED',
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'contains_personal_data': False,
+ 'custom_type': None,
+ 'data_source': None,
+ 'dataset_state': 'PROCESSED_DATA',
+ 'dataset_status': 'DRAFT',
+ 'description': None,
+ 'file_path': '/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet',
+ 'id': UUID('a7be0245-8d58-48b2-9158-3df338406cc7'),
+ 'keyword': None,
+ 'metadata_created_by': 'obr@ssb.no',
+ 'metadata_created_date': datetime.datetime(2025, 4, 9, 18, 10, 26, 185913, tzinfo=TzInfo(UTC)),
+ 'metadata_last_updated_by': 'obr@ssb.no',
+ 'metadata_last_updated_date': datetime.datetime(2025, 4, 9, 18, 10, 26, 185349, tzinfo=TzInfo(UTC)),
+ 'name': None,
+ 'owner': 'dapla-felles',
+ 'population_description': None,
+ 'short_name': 'person_testdata',
+ 'spatial_coverage_description': LanguageStringType(root=[LanguageStringTypeItem(languageCode='nb', languageText='Norge'), LanguageStringTypeItem(languageCode='nn', languageText='Noreg'), LanguageStringTypeItem(languageCode='en', languageText='Norway')]),
+ 'subject_field': None,
+ 'temporality_type': None,
+ 'unit_type': None,
+ 'use_restriction': None,
+ 'use_restriction_date': None,
+ 'version': '1',
+ 'version_description': None}
+```
+:::
+
+Over hentet vi ut fra `datasets`-delen av dokumentet med Python sin innebygde funksjon `vars()` for å få output'en mer lesevennlig. Vi kan også printe ut informasjon fra `variables`-delen av dokumentet:
+
+```{.python filename="Notebook"}
+from pprint import pprint
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+# Formattere en pen print
+for var in meta.variables:
+    pprint(vars(var))
+    print("-" * 60)
+```
+
+::: {.callout-caution collapse="true"}
+## Output fra eksempelfil
+
+```{.python}
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'STRING',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('cf8a0c60-4a62-4a93-bbbe-143053b3bf5f'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': None,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'fnr',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+------------------------------------------------------------
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'STRING',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('f25d96d6-4a49-472d-b1f0-4805a1546daf'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': None,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'sivilstand',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+------------------------------------------------------------
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'STRING',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('cf139119-4a97-4b1f-a793-a2501285c81b'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': None,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'bostedskommune',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+------------------------------------------------------------
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'INTEGER',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('c9357b37-ff1a-4f83-a332-a5239aaa3cf6'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': 1000,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'inntekt',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+------------------------------------------------------------
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'INTEGER',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('38f67ddf-bd07-4bdb-8ea0-411b0aaf511e'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': None,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'bankinnskudd',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+------------------------------------------------------------
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'STRING',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('33353e56-7f5f-409f-915a-644949137228'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': None,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'dato',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+------------------------------------------------------------
+```
+:::
+
+Nå som vi har sett alle informasjonselementer i metadatadokumentet, så kan vi velge hente ut spesifikke elementer som vi er interessert i. Under leses variabelen **inntekt** inn og all informasjon printes ut:
+
+```{.python filename="Notebook"}
+from pprint import pprint
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+inntekt = meta.variables_lookup["inntekt"]
+
+pprint(vars(inntekt))
+```
+::: {.callout-caution collapse="true"}
+## Output fra eksempelfil
+
+```{.python}
+{'classification_uri': None,
+ 'comment': None,
+ 'contains_data_from': datetime.date(2021, 12, 31),
+ 'contains_data_until': datetime.date(2023, 12, 31),
+ 'custom_type': None,
+ 'data_element_path': None,
+ 'data_source': None,
+ 'data_type': 'INTEGER',
+ 'definition_uri': None,
+ 'format': None,
+ 'id': UUID('c9357b37-ff1a-4f83-a332-a5239aaa3cf6'),
+ 'invalid_value_description': None,
+ 'is_personal_data': 'NOT_PERSONAL_DATA',
+ 'measurement_unit': None,
+ 'multiplication_factor': 1000,
+ 'name': None,
+ 'population_description': None,
+ 'short_name': 'inntekt',
+ 'special_value': None,
+ 'temporality_type': None,
+ 'variable_role': 'MEASURE'}
+```
+:::
+
+Videre kan vi hente ut verdien til feltet `multiplication_factor` for variabelen **inntekt** med følgende kode:
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+meta.variables_lookup[
+    "inntekt"
+].multiplication_factor
+```
+
+Videre kan vi hente Dapla-teamet som eier datasettet ved hente ut verdien til feltet `owner` i `dataset`-delen av dokumentet:
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+)
+
+meta.dataset.owner
+```
