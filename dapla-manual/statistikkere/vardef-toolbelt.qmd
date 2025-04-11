@@ -127,35 +127,261 @@ For å hente ut informasjon fra Vardef finnes det ulike *notebooks* avhengig av 
 
 ## Arbeide med YAML-filer
 
-### YAML-filens struktur
+::: {.callout-caution}
+NB! syntaks highlightning kan variere, farger på yaml kode er kun veiledende
+::: 
 
-Alle YAML-filer vil ha samme struktur. 
-Hvert felt for `variabeldefinisjon` vil ha en blokk med over feltnavnet
-med beskrivelse av feltet og 
+Alle yaml-filer følger samme struktur. 
 
-#### Feltnavn
+Overskrifter
 
-#### beskrivelser
+```{.YAML .code}
+# --- Variabeldefinisjon mal ---
+```
+Dette er en yaml-fil som genereres for å opprette en ny variabeldefinisjon. 
 
+::: {.callout-note collapse="true"}
+### Filnavn mal
+Lagres som `variable_definition_template_<timestamp>.yaml`
+:::
+
+
+::: {.callout-caution collapse=True}
+#### NB! Innholder placeholder tekst som må endres
+
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            generert tittel
+        nn:
+        en:
+```
+::: 
+
+```{.YAML .code}
+# --- Variabeldefinisjon ---
+```
+
+Dette er en yaml fil fra lagret variabeldefinisjon
+
+::: {.callout-note collapse="true"}
+### Filnavn variabeldefinisjon
+Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
+:::
+
+::: {.callout-note collapse="true"}
+### Informative underoverskrifter
+```{.YAML .code}
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+```
+:::
+
+::: {.callout-note collapse="true"}
+## Felt blokk
+```{.YAML .code}
+# ! Obligatorisk felt !
+# Variabelens navn. Dette skal ikke være en mer “teknisk” forkortelse, men et navn som er forståelig for mennesker.
+# -------------------------
+# >>> EKSEMPEL:
+# name:
+#   nb: |-
+#       Lønnsinntekter
+name:
+    nb: |-
+        Navn
+    nn:
+    en:
+```
+:::
+
+Hvis feltet er markert som valgfritt trenger det ikke lagres noe verdi.
+```{.YAML .code}
+# ~ Valgfritt felt ~
+```
+
+Oligatoriske  felt må alltid ha verdi, men verdi kan være satt fra systemet.
+Som for eksempel `variable-status`som alltid er `DRAFT` når man oppretter ny variabeldefinisjon og endres ikke før man publiserer.
+```{.YAML .code}
+# ! Obligatorisk felt !
+```
+Beskrivelser 
+som er basert på modell beskrivelse ref
+Lenke modell
+```{.YAML .code}
+# Statistikkområder som variabelen brukes innenfor. For eksempel tilhører variabelen “Sivilstand” statistikkområdet “Befolkning”.
+# Verdier skal være koder fra https://www.ssb.no/klass/klassifikasjoner/618.
+```
+
+Eksempler 
+Tydeligjøre format og hvilken verdi som forventes.
+
+::: {.callout-tip collapse=True}
 #### Eksempler
+Datoformat
+```{.YAML .code}
+# >>> EKSEMPEL: 1999-01-30
+```
+Klassifikasjonsreferanse
+```{.YAML .code}
+# >>> EKSEMPEL: "19"
+```
 
-#### Kategorier
+::: 
 
-### Generere filer
+Feltnavn (nøkkel)
+```{.YAML .code}
+subject_fields:
+```
 
-Template
-Variabeldefinisjon
 
 ### Redigere YAML-filen
 
 #### Enkle verdier
+::: {.callout-note}
+Format er `DoubleQuotedScalar`. All tekst må være omkranset av doble fnutter. `""`
+:::
 
-#### Jobbe med flerspråklige Funksjonalitet
+Beregnet for kort tekst som ikke skal lagre formattering ikke skal lagres.
+Feltet `kortnavn`:
+```{.YAML .code}
+short_name: "landbak"
 
-#### Jobbe med lister
+```
 
-### Eksempler på vanlige feil
+#### Flerspråklige felt
+::: {.callout-caution collapse=True}
+##### Flerspråklige felt har nøstede nøkler. 
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            generert tittel
+        nn:
+        en:
+    email: generert@ssb.no
+```
+:::
+
+::: {.callout-note}
+Format er `DoubleQuotedScalar`. All tekst må være omkranset av doble fnutter. `""`
+:::
+
+::: {.callout-warning}
+Streng indentering. Tekst må begynne direkte under plassering av blokk symbol `|`
+::: 
+
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            generert tittel
+        nn:
+        en:
+    email: generert@ssb.no
+```
+##### Formattere 
+
+#### Lister
+Lagre som tekst strenger. Bruker doble.
+
+::: {.callout-warning}
+Streng indentering. Hvert listeelement må.
+::: 
+
+::: {.callout-note}
+Format er `DoubleQuotedScalar`. All tekst må være omkranset av doble fnutter. `""`
+:::
+
+```{.YAML .code}
+unit_types:
+    - "20"
+```
+
+### Eksempler yaml
 
 
+::: {.callout-warning collapse=True}
+#### Feil indentering
+```{.YAML .code}
+name:
+    nb: |-
+Her er teksten ikke indentert og vil føre til feil når du lagrer.
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-tip collapse=True}
+#### Korrekt indentering
+```{.YAML .code}
+name:
+    nb: |-
+        Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.
+    nn:
+    en:
+```
+::: 
 
 
+::: {.callout-caution collapse=True}
+#### Uønsket formattering
+```{.YAML .code}
+name:
+    nb: |-
+        Her er deles teksten opp
+        plutselig. Og den vil lagres akku-
+        rat slik du ser den.
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-tip collapse=True}
+#### Lagre avsnitt
+```{.YAML .code}
+comment:
+    nb: |-
+        Her er det en god plan, først er det en beskrivelse som innledning.
+
+        Deretter bevisst en blank linje:
+          - Og en liste med punkter
+          - Flere
+    nn:
+    en:
+```
+::: 
+
+
+Feil verdi
+
+Feil syntaks highlightning
+
+<style>
+code span.co {
+    color:#408080;
+    font-style: inherit;
+}
+code span.fu{
+  color: #88f;
+}
+code span.cp{
+  color: #a2f;
+}
+code span.c12{
+  color: #ba2121;
+}
+code span.st{
+  color: #ba2121;
+}
+pre code.sourceCode > span{
+  color:rgba(8, 8, 8, 0.99);
+}
+#cb2-4{
+  background-color: yellow;
+}
+</style>
