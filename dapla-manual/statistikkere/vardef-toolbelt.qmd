@@ -128,23 +128,23 @@ For å hente ut informasjon fra Vardef finnes det ulike *notebooks* avhengig av 
 ## Arbeide med YAML-filer
 
 ::: {.callout-caution}
-NB! syntaks highlightning kan variere, farger på yaml kode er kun veiledende
+NB! syntaks highlightning kan variere fra, farger på yaml kode i eksempler er kun veiledende
 ::: 
 
-Alle yaml-filer følger samme struktur. 
+### Yaml fil struktur
+YAML-filene følger samme struktur med noen små variasjoner.
 
-Overskrifter
+#### Mal
+Denne filen genereres når man vil opprette en ny variabeldefinisjon. 
 
 ```{.YAML .code}
 # --- Variabeldefinisjon mal ---
 ```
-Dette er en yaml-fil som genereres for å opprette en ny variabeldefinisjon. 
 
-::: {.callout-note collapse="true"}
-### Filnavn mal
+::: {.callout-note}
+#### Filnavn mal
 Lagres som `variable_definition_template_<timestamp>.yaml`
 :::
-
 
 ::: {.callout-caution collapse=True}
 #### NB! Innholder placeholder tekst som må endres
@@ -159,30 +159,24 @@ contact:
 ```
 ::: 
 
+#### Variabeldefinisjon
+
+Dette er en yaml fil som inneholder alle lagrede verdier for en variabeldefinisjon.
+
 ```{.YAML .code}
 # --- Variabeldefinisjon ---
 ```
 
-Dette er en yaml fil fra lagret variabeldefinisjon
-
-::: {.callout-note collapse="true"}
-### Filnavn variabeldefinisjon
+::: {.callout-note}
+#### Filnavn variabeldefinisjon
 Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
 :::
 
-::: {.callout-note collapse="true"}
-### Informative underoverskrifter
-```{.YAML .code}
-# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+#### Felt blokk
+Alle felt for 
+Informasjonsseksjon på topp.
+Inneholder informasjon om feltet er obligatorisk, beskrivelser av innhold og eksempler. 
 
-# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
-
-# --- Maskin-genererte felt. Ikke rediger. ---
-```
-:::
-
-::: {.callout-note collapse="true"}
-## Felt blokk
 ```{.YAML .code}
 # ! Obligatorisk felt !
 # Variabelens navn. Dette skal ikke være en mer “teknisk” forkortelse, men et navn som er forståelig for mennesker.
@@ -192,12 +186,7 @@ Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
 #   nb: |-
 #       Lønnsinntekter
 name:
-    nb: |-
-        Navn
-    nn:
-    en:
 ```
-:::
 
 Hvis feltet er markert som valgfritt trenger det ikke lagres noe verdi.
 ```{.YAML .code}
@@ -209,133 +198,90 @@ Som for eksempel `variable-status`som alltid er `DRAFT` når man oppretter ny va
 ```{.YAML .code}
 # ! Obligatorisk felt !
 ```
-Beskrivelser 
-som er basert på modell beskrivelse ref
-Lenke modell
-```{.YAML .code}
-# Statistikkområder som variabelen brukes innenfor. For eksempel tilhører variabelen “Sivilstand” statistikkområdet “Befolkning”.
-# Verdier skal være koder fra https://www.ssb.no/klass/klassifikasjoner/618.
-```
-
-Eksempler 
-Tydeligjøre format og hvilken verdi som forventes.
-
-::: {.callout-tip collapse=True}
-#### Eksempler
-Datoformat
-```{.YAML .code}
-# >>> EKSEMPEL: 1999-01-30
-```
-Klassifikasjonsreferanse
-```{.YAML .code}
-# >>> EKSEMPEL: "19"
-```
-
-::: 
-
-Feltnavn (nøkkel)
-```{.YAML .code}
-subject_fields:
-```
-
-
 ### Redigere YAML-filen
 
 #### Enkle verdier
-::: {.callout-note}
-Format er `DoubleQuotedScalar`. All tekst må være omkranset av doble fnutter. `""`
+
+Består av en nøkkel og en verdi.
+
+::: {.callout-note collapse=True}
+##### Gjelder feltene:
+  - `classification_reference`
+  - `measurement_type`
+  - `external_reference_uri`
+  - `owner.team`
 :::
 
-Beregnet for kort tekst som ikke skal lagre formattering ikke skal lagres.
-Feltet `kortnavn`:
+Dette er felt der vi forventer kort tekst uten formattering.
+Typen vi bruker er `DoubleQuotedScalar`. 
+All tekst må være omkranset av doble fnutter. `""`. 
+
+Verdien skrives på samme linje som nøkkelen
+
+::: {.callout-tip}
+#### Korrekt
 ```{.YAML .code}
 short_name: "landbak"
 
+measurement_type: "03"
 ```
-
-#### Flerspråklige felt
-::: {.callout-caution collapse=True}
-##### Flerspråklige felt har nøstede nøkler. 
-```{.YAML .code}
-contact:
-    title:
-        nb: |-
-            generert tittel
-        nn:
-        en:
-    email: generert@ssb.no
-```
-:::
-
-::: {.callout-note}
-Format er `DoubleQuotedScalar`. All tekst må være omkranset av doble fnutter. `""`
-:::
-
-::: {.callout-warning}
-Streng indentering. Tekst må begynne direkte under plassering av blokk symbol `|`
 ::: 
-
-```{.YAML .code}
-contact:
-    title:
-        nb: |-
-            generert tittel
-        nn:
-        en:
-    email: generert@ssb.no
-```
-##### Formattere 
-
-#### Lister
-Lagre som tekst strenger. Bruker doble.
-
-::: {.callout-warning}
-Streng indentering. Hvert listeelement må.
-::: 
-
-::: {.callout-note}
-Format er `DoubleQuotedScalar`. All tekst må være omkranset av doble fnutter. `""`
-:::
-
-```{.YAML .code}
-unit_types:
-    - "20"
-```
-
-### Eksempler yaml
-
 
 ::: {.callout-warning collapse=True}
-#### Feil indentering
+#### Feil plassering
 ```{.YAML .code}
-name:
-    nb: |-
-Her er teksten ikke indentert og vil føre til feil når du lagrer.
-    nn:
-    en:
+measurement_type: 
+"03"
+
+short_name"landbak"
 ```
 ::: 
 
+::: {.callout-warning collapse=True}
+#### Fjernet `:`
+```{.YAML .code}
+short_name"landbak"
+```
+::: 
+
+::: {.callout-warning collapse=True}
+#### Feil type
+Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.
+```{.YAML .code}
+measurement_type: 03
+```
+::: 
+
+#### Flerspråklige felt
+
+
+::: {.callout-note collapse=True}
+##### Gjelder feltene:
+  - `name`
+  - `definition`
+  - `comment`
+  - `contact.title`
+:::
+
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            generert tittel
+        nn:
+        en:
+    email: generert@ssb.no
+```
+
+Format er `LiteralScalar`. Et blokk symbol `|-` følger nøkkel. Format lagres.
+Streng indentering. Tekst må begynne direkte under plassering av blokk symbol `|`
+
 ::: {.callout-tip collapse=True}
-#### Korrekt indentering
+#### Korrekt
 ```{.YAML .code}
 name:
     nb: |-
         Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.
-    nn:
-    en:
-```
-::: 
-
-
-::: {.callout-caution collapse=True}
-#### Uønsket formattering
-```{.YAML .code}
-name:
-    nb: |-
-        Her er deles teksten opp
-        plutselig. Og den vil lagres akku-
-        rat slik du ser den.
     nn:
     en:
 ```
@@ -356,10 +302,117 @@ comment:
 ```
 ::: 
 
+::: {.callout-warning collapse=True}
+#### Feil indentering
+```{.YAML .code}
+name:
+    nb: |-
+Her er teksten ikke indentert og vil føre til feil når du lagrer.
+    nn:
+    en:
+```
+::: 
 
-Feil verdi
+::: {.callout-caution collapse=True}
+#### Uønsket formattering
+```{.YAML .code}
+name:
+    nb: |-
+        Her er deles teksten opp
+        plutselig. Og den vil lagres akku-
+        rat slik du ser den.
+    nn:
+    en:
+```
+::: 
 
-Feil syntaks highlightning
+
+::: {.callout-tip collapse=True}
+#### Spesialtegn
+```{.YAML .code}
+comment:
+    nb: |-
+        Her er det en god plan, først er det en beskrivelse som innledning:
+
+        Deretter bevisst en blank linje:
+          - Og en liste med punkter
+          - Flere
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-note collapse=True}
+#### Feil syntaks highlightning
+```{.YAML .code}
+name:
+    nb: |-
+        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaks
+    nn:
+    en:
+```
+:::
+
+::: {.callout-warning collapse=True}
+#### Spesialtegn
+```{.YAML .code}
+comment:
+    nb: Her er blokk symbolet fjernet og kolon tolkes som ny nøkkel-verdi par: ved lagring
+    nn:
+    en:
+```
+::: 
+
+#### Lister
+Lagre som tekst strenger. Bruker doble.
+
+::: {.callout-note collapse=True}
+##### Gjelder feltene:
+  - `unit_types`
+  - `subject_fields`
+  - `related_variable_definition_uris`
+  - `owner.groups`
+:::
+
+::: {.callout-note}
+Lister bruker også type `DoubleQuotedScalar`. 
+All tekst må være omkranset av doble fnutter. `""`
+:::
+
+::: {.callout-tip}
+#### Korrekt type
+```{.YAML .code}
+unit_types:
+    - "20"
+```
+:::
+
+::: {.callout-warning collapse=True}
+#### Feil type
+```{.YAML .code}
+unit_types:
+    - 01
+    - 02
+```
+::: 
+
+::: {.callout-warning collapse=True}
+#### Feil indentering
+```{.YAML .code}
+unit_types:
+- "20"
+```
+::: 
+
+::: {.callout-tip collapse=True}
+#### Korrekt indentering
+```{.YAML .code}
+unit_types:
+    - "20"
+```
+:::
+
+#### Andre
 
 <style>
 code span.co {
