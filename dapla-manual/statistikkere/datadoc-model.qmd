@@ -1,27 +1,33 @@
 ---
-title: Informasjon i Datadoc
-date-modified: 04/11/2025
+title: Datamodell
+date-modified: 04/14/2025
 lightbox: true
 code-links:
-    - text: Dataset
+    - text: Datasett
       icon: box-arrow-up-right
       href: https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3039133732/DataDoc+-+Krav+til+dokumentasjon+av+datasett+p+Dapla
-    - text: Variables
+      target: "_blank"
+    - text: Variabler
       icon: box-arrow-up-right
       href: https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3042869256/Variabelforekomst
+      target: "_blank"
 language:
-    code-links-title: "Teknisk datamodell"
+    code-links-title: "Teknisk dokumentasjon"
 ---
 
-I dette kapitlet beskrives informasjonselementene i Datadoc. Siden noen gjelder for **datasett** og andre gjelder for **variabler**, så er kapitlet delt inn i disse to delene.
+I dette kapitlet beskrives informasjonselementene i **Datadoc**. Siden noen gjelder for **datasett** og andre gjelder for **variabler**, så er kapitlet delt inn etter disse. 
 
-Nevne inndata
+For hvert informasjonselement angis det om informasjonen er obligatorisk✅ for gitte [datatilstander](./datatilstander.qmd). Siden [inndata](./datatilstander.qmd#inndata) ikke er en obligatorisk datatilstand, og kildedata ikke er mulig å dokumentere enda, så angis de ikke. Men hvis man lagrer inndata i en statistikkproduksjon, så er de samme feltene obligatorisk som for [klargjorte data](./datatilstander.qmd#klargjorte-data).
 
-✅ = obligatorisk, ⚠️ = anbefalt, 🌐 = internasjonalt, ⚙️ = maskingenerert, 🔍 = Utledet
+Det angis også hva det internasjonale🌐 navnet er, som er navnet som faktisk benyttes i Datadoc-filene som genereres. 
+
+Noen informasjonselementer er kun relevant for noen typer av data, og det er derfor kun obligatorisk hvis man har denne typen data. Dette angis med ⚠️. 
+
+✅ = obligatorisk, ⚠️ = hvis relevant, 🌐 = internasjonalt
+
+<br>
 
 ## Datasett
-
-Her beskrives informasjonselementene i Datadoc som gjelder hele datasettet.
 
 ### Navn
 🌐 *name*  
@@ -32,12 +38,17 @@ kun forkortelser) slik at det er søkbart. Navnet skal fylles ut på bokmål
 eller nynorsk. Det er valgfritt om en også vil fylle ut på den andre norske 
 målformen og engelsk.
 
+---
+
 ### Beskrivelse
 🌐 *description*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅  
 
-En kort beskrivelse av hva datasettet inneholder, f.eks. 
-*Inneholder data om bruk av helsetjenester (Levekårsundersøkelsen)*.
+En kort beskrivelse av hva datasettet inneholder, f.eks.:
+
+> Inneholder data om bruk av helsetjenester (Levekårsundersøkelsen).
+
+---
 
 ### Inneholder personopplysninger
 🌐 *contains_personal_data*  
@@ -52,6 +63,8 @@ Se flere eksempler på personopplysninger i liste laget i **PAPIS**-prosjektet:
 
 Næringsdata og enkeltpersonforetak (ENK) blir ikke regnet som personopplysninger.
 
+---
+
 ### Verdivurdering
 🌐 *assessment*   
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
@@ -62,19 +75,25 @@ Utledes automatisk basert på datasettets [datatilstand](./datatilstander.qmd), 
 - skjermet -> inndata, klargjorte data og statistikkdata
 - åpen -> utdata
 
+---
+
 ### Bruksrestriksjon
 🌐 *use_restriction*  
 klargjorte data ✅ | statistikkdata ✅
 
 Fylles ut dersom datasettet har bruksrestriksjoner. Datasett uten brukrestriksjoner trenger ikke å fylle ut feltet. Følgende verdier er tillatt for datasett med bruksrestriksjoner:
 
-- *DELETION_ANONYMIZATION*  
-SLETTING/ANONYMISERING
-- *PROCESS_LIMITATIONS*  
-BEHANDLINGSBEGRENSNINGER
-- *SECONDARY_USE_RESTRICTIONS*
-SEKUNDÆRBRUKSRESTRIKSJONER  
+#### Sletting/anonymisering
+🌐 *DELETION_ANONYMIZATION*
 
+#### Behandlingsbegrensninger
+🌐 *PROCESS_LIMITATIONS*
+
+#### Sekundærbruksrestriksjoner
+🌐 *SECONDARY_USE_RESTRICTIONS*
+
+
+---
 
 ### Bruksrestriksjonsdato
 🌐 *use_restriction_date*  
@@ -82,38 +101,66 @@ klargjorte data ✅ | statistikkdata ✅
 
 Fylles kun ut dersom det er knyttet [bruksrestriksjoner](#bruksrestriksjon) til datasettet, og det finnes en "tiltaksdato". En tiltaksdato kan f.eks. være at et datasett skal slettes eller anonymiseres på en gitt dato. Noen datasett med Bruksrestriksjon vil ikke ha en slik dato, f.eks. vil en behandlingsbegrensning normalt være permanent/tidsuavhengig, og da skal ikke dette feltet fylles ut. 
 
-Dato fylles ut på [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.). F.eks. **2024-12-31** eller **2022-09-27 18:00:00.000**. 
+Dato fylles ut på [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.). F.eks. **2024-12-31** eller **2022-09-27 18:00:00.000**.
+
+---
 
 ### Datatilstand
 🌐 *dataset_state*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Datasettets datatilstand er en av følgende: kildedata, inndata, klargjorte 
-data, statistikk eller utdata. Tilstanden settes automatisk ved at den 
-utledes fra mappe/katalog-strukturen til datasettet i “data-bøtta”, men 
-det er mulig å overstyre dette ved å velge en datatilstand fra menyen.
+Utledes automatisk fra filstien hvis datasettet som dokumenteres er lagret iht [Navnestandarden](./navnestandard.qmd), men kan overstyres. Datasettets [datatilstand](./datatilstander.qmd) er en av følgende:
+
+- kildedata
+- inndata 
+- klargjorte data 
+- statistikk
+- utdata
+
+---
 
 ### Status
+🌐 *dataset_status*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Statusen viser hvor metadataene er i livssyklusen og velges fra meny. Følgende kategorier kan velges:
+Angir hvor metadataene er i livssyklusen. Følgende kategorier kan velges:
 
-1. **Utkast**  
+#### Utkast
+🌐 *DRAFT*  
 Arbeid med data og metadata pågår, dvs. ikke delt internt eller 
-eksternt
-2. **Intern**  
+eksternt.
+
+#### Intern
+🌐 *INTERNAL*  
 Metadata er godkjent for intern bruk, men data med 
 verdivurdering “skjermet” kan kun brukes/deles med ansatte med 
 tjenstlig behov for tilgang
-3. **Ekstern**  
+
+#### Ekstern
+🌐 *EXTERNAL*   
 Metadata er godkjent for både intern og eksternt bruk, men 
 data kan kun deles med alle eksterne hvis datatilstanden er 
-“utdata” (verdivurdering=åpen). Andre datatilstander kan deles f.eks. 
+“utdata” (verdivurdering=åpen). Andre datatilstander kan deles f.eks. med forskere etter søknad og godkjenning.
+
+#### Utgått
+🌐 *DEPRECATED*   
+Utgått, avsluttet eller erstattet av noe annet.
+
+---
 
 ### Enhetstype
+🌐 *unit_type*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Her fyller en inn enhetstypen («objektet»)  som datasettet inneholder 
+Her fyller en inn enhetstypen («objektet») som datasettet inneholder 
 informasjon om. Eksempler på enhetstyper er «person», «foretak» og 
-«bruksenhet». Disse velges fra en meny. Dersom datasettet inneholder 
+«bruksenhet».
+
+[Kodeliste i Klass](https://www.ssb.no/klass/klassifikasjoner/702) for tillatte verdier. 
+
+::: {.callout-note}
+# Fremtidig funksjonalitet i Datadoc-editor
+Dersom datasettet inneholder 
 informasjon om flere enhetstyper, kan disse enhetstypene dokumenteres 
 for de aktuelle variablene under Variabler-fanen. Vi anbefaler da  at den 
 hyppigst forekommende enhetstypen velges i dette feltet. I noen tilfeller 
@@ -125,29 +172,46 @@ ofte vil bestå av aggregerte data.  Et unntak her vil være Kostra, som
 også har aggregerte data, men der disse er aggregert på kommune- eller 
 fylkes nivå, og det vil da være naturlig å bruke enhetstypen 
 «kommune(forvaltning)» eller «fylke(forvaltning)».
+:::
+
+---
 
 ### Populasjon
+🌐 *population_description*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Her skal en skrive inn populasjonen som datasettet dekker(fritekst). En 
 populasjon sier hvilken enhetstype(er) som finnes i datasettet, geografisk 
 dekningsområde og tidsperiode, f.eks. alle (bosatte) personer i Norge per 
 31.12.2024 eller alle foretak i Oslo per 01.03.2025.
+
 Dersom noen av variablene i datasettet har en annen populasjon, kan 
 dette dokumenteres for de aktuelle variablene under Variabler-fanen.
 
+---
+
 ### Versjon
+🌐 *version*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Dersom datasettet følger navnestandarden, settes versjonsnummeret 
 automatisk. Dersom datasettet ikke følger navnestandarden (det er f.eks. 
-ikke et krav at kildedata skal gjøre det), settes det manuelt. Se mer om 
-versjoner: Dapla-manual-versjonering
+ikke et krav at kildedata skal gjøre det), settes det manuelt. Les mer om [versjoner i Dapla-manualen](./navnestandard.qmd#versjonering-av-datasett).
+
+---
 
 ### Versjonsbeskrivelse
+🌐 *version_description*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Her beskriver man kort årsaken til at en ny versjon ble laget. For versjon 
 1 kan en bare skrive «Opprinnelig versjon».
 
+---
+
 ### Inneholder data f.o.m.
+🌐 *contains_data_from*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Dersom datasettet følger navnestandarden, settes denne datoen 
 automatisk. Dersom datasettet ikke følger navnestandarden (det er f.eks. 
@@ -157,7 +221,11 @@ settes den eldste datoen her. Under variabler-fanen kan en sette korrekt
 «Inneholder data f.o.m.» for variabler som avviker fra datoen som settes 
 her.
 
+---
+
 ### Inneholder data t.o.m.
+🌐 *contains_data_until*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Dersom datasettet følger navnestandarden, settes denne datoen 
 automatisk. Dersom datasettet ikke følger navnestandarden (det er f.eks. 
@@ -167,54 +235,95 @@ settes den nyeste datoen her. Under variabler-fanen kan en sette korrekt
 «Inneholder data t.o.m.» for variabler som avviker fra datoen som settes 
 her.
 
+---
+
 ### Datakilde
+🌐 *data_source*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Her oppgis kilden til dataene (på etats-/organisasjonsnivå). Denne velges 
 fra menyen. Dersom variablene i datasettet har ulike datakilder, kan disse
 presiseres for de aktuelle variablene under Variabler-fanen. I dette 
 tilfellet velges den hyppigst forekommende datakilden her.
 
-### Temporalitetstype
+[Klass-kodelist](https://www.ssb.no/klass/klassifikasjoner/712) for tillatte verdier.
 
-Temporalitetstypen sier noe om tidsdimensjonen i datasettet. «Fast» er 
-data med verdier som ikke endres over tid, f.eks. fødselsdato. 
-«Tverrsnitt» er data som er målt på et bestemt tidspunkt. «Akkumulert» 
+---
+
+### Temporalitetstype
+🌐 *TEMPORALITY_TYPE*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
+
+Temporalitetstypen sier noe om tidsdimensjonen i datasettet. Følgende verdier er tillatt:
+
+#### **Fast** 
+🌐 *FIXED*    
+Data med verdier som ikke endres over tid, f.eks. fødselsdato.
+
+#### **Tverrsnitt**
+🌐 *STATUS*  
+«Tverrsnitt» er data som er målt på et bestemt tidspunkt.
+
+#### **Akkumulert**
+🌐 *ACCUMULATED*    
 er data som er samlet over en viss tidsperiode, f.eks. inntekt gjennom et 
-år. «Hendelse/forløp» registrerer tidspunkt og tidsperiode for ulike 
-hendelser/tilstander, f.eks. (skifte av) bosted. Dersom variablene i 
-datasettet har ulike temporalitetstyper, kan disse presiseres for de 
+år.
+
+#### **Hendelse/forløp**
+🌐 *EVENT*  
+«Hendelse/forløp» registrerer tidspunkt og tidsperiode for ulike 
+hendelser/tilstander, f.eks. (skifte av) bosted.
+
+Dersom variablene i datasettet har ulike temporalitetstyper, kan disse presiseres for de 
 aktuelle variablene under Variabler-fanen. I dette tilfellet, velges den 
 hyppigst forekommende temporalitetstypen her.
 
+---
+
 ### Statistikkområdet
+🌐 *subject_field*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
+
 Her skal det primære statistikkområdet som datasettet tilhører, velges fra
 menyen.
 
+---
+
 ### Nøkkelord
+🌐 *keyword*  
+klargjorte data ⚠️ | statistikkdata ⚠️ | utdata ⚠️ 
 
 Her kan en legge inn nøkkelord som beskriver datasettet, og som dermed
 kan brukes i søk. Nøkkelordene må legges inn som kommaseparert 
 streng, f.eks. «befolkning, skatt, arbeidsledighet».
 
+---
+
 ### Geografisk dekningsområde
+🌐 *spatial_coverage_description*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Oppgi datasettets geografiske dekningsområde. Norge er default.
 
+---
+
+<br>
+
 ## Variabler
 
-Her beskrives informasjonselementene i Datadoc som gjelder hele variabler.
 
 ### Navn
+🌐 *name*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Navnet på variabelen. Navnet skal være forståelig for mennesker (ikke 
 kortnavn/teknisk navn) slik at det er søkbart. Navnet skal fylles ut på 
-bokmål eller nynorsk. Dette feltet fylles bare ut dersom «Definisjons 
-URI»-feltet ikke er utfylt. Dersom det er utfylt, vil navnefeltet automatisk 
-fylles med navnet til Vardef-variabelen som det lenkes til. Det er mulig å 
-endre Vardef-navnet i Datadoc-editor dersom det er relevant.
-Et eksempel på navn er «Personidentifikator». Det tilhørende kortnavnet 
-(navnet i datasettet) vil være «pers_id».
-De fleste variabler skal dokumenters i Vardef, og dermed kunne pekes til 
+bokmål eller nynorsk. 
+
+Et eksempel på navn er **Personidentifikator**. Det tilhørende kortnavnet 
+(navnet i datasettet) vil være **pers_id**.
+
+De fleste variabler skal dokumenters i [Vardef](./vardef.qmd), og dermed kunne pekes til 
 fra Datadoc-editor. Men hvis datasettet inneholder noen variabler som 
 kun brukes i dette datasettet, og dermed ikke skal gjenbrukes, trenger 
 de ikke å dokumenteres i Vardef . Det kan f.eks. dreie seg om variabler 
@@ -224,34 +333,81 @@ definisjonen og eventuelt tilhørende kodeverk skal dokumenteres hhv. i
 feltet Kommentar og Kodeverkets URI. (Når en fyller ut «Definisjons 
 URI»-feltet, vil en også få lenke til ev. kodeverk via Vardef-variabelen).
 
-### Definisjons-URI (Definition URI)
+::: {.callout-note}
+## Sammenkobling med Vardef
 
-Her oppgis lenken til tilhørende variabel i Vardef. Dersom kortnavnet på 
-variabelen er det samme som kortnavnet til en variabel i Vardef, vil denne
-Vardef-URI-en komme opp som forslag i dette feltet.
+Når [Vardef](./vardef.qmd) kommer i produksjon må **Navn**-feltet bare fylles ut dersom [Definisjons-URI](./datadoc-model.qmd#definisjons-uri-definition-uri)-feltet ikke er utfylt. Dersom det er utfylt, vil navnefeltet automatisk fylles med navnet til Vardef-variabelen som det lenkes til. Det er også mulig å endre Vardef-navnet i Datadoc-editor dersom det er relevant.
+:::
+
+---
+
+### Definisjons-URI
+🌐 *definition_uri*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
+
+Her oppgis lenken til tilhørende variabel i Vardef. 
+
+::: {.callout-note}
+## Sammenkobling med Vardef
+
+Når [Vardef](./vardef.qmd) kommer i produksjon vil Datadoc-editor bruke kortnavnet i datasettet til å søke etter variabler med samme kortnavn i Vardef, og brukeren kan velge å benytte denne informasjonen eller ikke for sine data.
+:::
+
+---
 
 ### Er personopplysning
+🌐 *is_personal_data*  
+klargjorte data ✅
 
-«Ikke personopplysning» er default i dette feltet. Hvis variabelen 
-imidlertid er en personopplysning, må en oppgi om den er 
-pseudonymisert/kryptert eller ikke. Disse kategoriene velges fra menyen. 
+Angir om variabelen er en personopplysning eller ikke, og hvis det er det, er den anonymisert eller ikke. Følgende verdier er tillatt:
+
+#### Ikke personopplysning (default)
+🌐 *NOT_PERSONAL_DATA*  
+Variabelforekomsten er ikke en personopplysning
+
+#### Pseudonymisert/kryptert personopplysning
+🌐 *PSEUDONYMISED_ENCRYPTED_PERSONAL_DATA*  
+Variabelforekomsten er en personopplysning som er pseudonymisert/kryptert. Eksempelvis pseudonymisert fødselsnummer eller kryptert person-navn
+
+#### Ikke-pseudonymisert/ikke-kryptert personopplysning 
+🌐 *NON_PSEUDONYMISED_ENCRYPTED_PERSONAL_DATA*  
+Variabelforekomsten er en personopplysning som ikke er pseudonymisert/kryptert. Eksempelvis fødselsnummer eller navn i klartekst.
+
 Personopplysninger er alle opplysninger som entydig kan knyttes til en 
 fysisk person (f.eks. fødselsnummer, ulike adresser og 
 bankkontonummer). Se flere eksempler på personopplysninger i liste 
-laget i PAPIS-prosjektet PAPIS - Variabelliste.docx . Næringsdata og 
-enkeltpersonforetak (ENK) blir ikke regnet som personopplysninger.
+laget av PAPIS-prosjektet:
+
+[PAPIS - Variabelliste.docx](https://ssbno.sharepoint.com/:w:/r/sites/A19-GDPRiSSB/_layouts/15/Doc.aspx?sourcedoc=%7B6A778B7D-6ABE-4ECE-AF2D-8CBA0F5F5765%7D&file=PAPIS%20-%20Variabelliste.docx&wdLOR=c3C119C1B-F019-4D1A-B6E0-F21712898841&action=default&mobileredirect=true)
+
+Næringsdata og enkeltpersonforetak (ENK) blir ikke regnet som personopplysninger.
+
+---
 
 ### Måleenhet
+🌐 *measurement_unit*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Dersom variabelen er kvantitativ, skal den ha en måleenhet, f.eks. 
-«kroner» eller «tonn». Måleenheten velges fra menyen.
-Multiplikasjonsfaktor
+«kroner» eller «tonn».
+
+[Klass-kodeliste](https://www.ssb.no/klass/klassifikasjoner/303/koder) for tillatte måleeneheter.
+
+---
+
+### Multiplikasjonsfaktor
+🌐 *multiplication_factor*   
+
 Multiplikasjonsfaktor er den numeriske verdien som multipliseres med 
 måleenheten, f.eks. hvis det er store tall i datasettet. En kan f.eks. velge 
 multiplikasjonsfaktor 1000, og  måleenhet «kroner» slik at verdiene vises 
 i 1000 kroner.
 
+---
+
 ### Variabelens rolle
+🌐 *variable_role*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Her skal en oppgi variabelens rolle i datasettet (velge fra menyen). De 
 ulike rollene er «identifikator» (identifiserer de ulike enhetene i et 
@@ -264,7 +420,11 @@ hendelser som har et forløp) og «attributt» (som kan brukes dersom en
 ønsker å utvide datasettet med informasjon knyttet til gitte variabler, 
 f.eks. vedrørende datakvalitet eller editering).
 
+---
+
 ### Kodeverkets URI
+🌐 *classification_uri*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Lenke (URI) til gyldig kodeverk (klassifikasjon eller kodeliste) i Klass. 
 Dette feltet vil sjelden benyttes siden variabelen i all hovedsak vil knyttes 
@@ -278,7 +438,10 @@ Standard for næringsgruppering (SN). For variabelen i datasettet kan en
 da f.eks. lenke til en variant av SN som kun inkluderer næringene som er 
 aktuelle for egen statistikk, hvis dette er ønskelig).
 
+---
+
 ### Kommentar
+🌐 *comment*  
 
 Kommentar-feltet kan brukes på to måter. Den første er at en kan legge 
 inn ytterligere informasjon om variabelen, f.eks. hvis en ønsker å utdype 
@@ -288,62 +451,107 @@ unnlate å dokumentere en variabel i Vardef dersom den kun brukes i ett
 datasettet, dvs. at den aldri gjenbrukes (se mer info under feltet «Navn»).
 I et slikt tilfelle må variabelen defineres i Kommentar-feltet.  (NB 
 variabler som kun brukes i ett datasett, kan godt dokumenters i Vardef i 
-stedet for i  kommentar-feltet dersom en ønsker det).
+stedet for i kommentar-feltet dersom en ønsker det).
+
+---
 
 ### Datakilde
+🌐 *data_source*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Datakilde settes vanligvis på datasettnivå, men dersom datasettet består 
 av variabler med ulike datakilder, kan datakilde på variabelnivå velges i 
 dette feltet (på etats-og organisasjonsnivå, velges fra meny).
 
+---
+
 ### Temporalitetstype
+🌐 *temporality_type*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅  
 
 Temporalitetstype settes vanligvis på datasettnivå, men dersom 
 datasettet består av variabler med ulike temporalitetstyper, kan 
 temporalitetstype på variabelnivå velges i dette feltet.
-Temporalitetstypen sier noe om tidsdimensjonen til variabelen. «Fast» er 
-data med verdier som ikke endres over tid, f.eks. fødselsdato. 
-«Tverrsnitt» er data som er målt på et bestemt tidspunkt. «Akkumulert» 
-er data som er samlet over en viss tidsperiode, f.eks. inntekt gjennom et 
-år. «Hendelse/forløp» registrerer tidspunkt og tidsperiode for ulike 
+Temporalitetstypen sier noe om tidsdimensjonen til variabelen. Følgende er tillatte verdier:
+
+#### Fast 
+🌐 *FIXED*    
+Data med verdier som ikke endres over tid, f.eks. fødselsdato.
+
+#### Tverrsnitt
+🌐 *STATUS*  
+«Tverrsnitt» er data som er målt på et bestemt tidspunkt.
+
+#### Akkumulert
+🌐 *ACCUMULATED*    
+Data som er samlet over en viss tidsperiode, f.eks. inntekt gjennom et 
+år.
+
+#### Hendelse/forløp
+🌐 *EVENT*  
+«Hendelse/forløp» registrerer tidspunkt og tidsperiode for ulike 
 hendelser/tilstander, f.eks. (skifte av) bosted.
 
+---
+
 ### Populasjon
+🌐 *population_description*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Populasjon settes vanligvis på datasettnivå, men dersom datasettet består
 av variabler med ulike populasjoner, kan populasjonen dokumenteres på 
 variabelnivå i dette feltet.
+
 En populasjon sier hvilken enhetstype(er) som finnes i datasettet, 
 geografisk dekningsområde og tidsperiode, f.eks. alle (bosatte) personer i
 Norge per 31.12.2024 eller alle foretak i Oslo per 01.03.2025.
 
+---
+
 ### Format
+🌐 *format*  
 
 Dette feltet kan benyttes som en ytterligere presisering av datatype i 
 tilfellene der det er relevant. En kan fylle inn verdienes format (fysisk 
 format eller regulært uttrykk) i maskinlesbar form i forbindelse med 
 validering, f.eks. ISO 8601 som datoformat.
 
+---
+
 ### Inneholder data f.o.m.
+🌐 *contains_data_from*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Denne datoen settes vanligvis på datasettenivå, men dersom variablene i 
 datasettet inneholder data med ulike startdatoer, kan startdato 
 dokumenteres på variabelnivå i dette feltet.
 
+---
+
 ### Inneholder data t.o.m.
+🌐 *contains_data_until*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Denne datoen settes vanligvis på datasettenivå, men dersom variablene i 
 datasettet inneholder data med ulike sluttdatoer, kan sluttdato 
 dokumenteres på variabelnivå i dette feltet.
 
+---
+
 ### Datatype
+🌐 *data_type*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Her dokumenterer en datatype ved å velge en av følgende kategorier i 
 menyen: «tekst», «heltall», «desimaltall»,» datotid» eller «boolsk» 
 (sant/usant). Dersom variabelen er knyttet til et kodeverk i Klass, 
 benyttes verdien «tekst».
 
+---
+
 ### Dataelementsti
+🌐 *data_element_path*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Denne skal kun brukes for hierarkiske datasett (JSON) hvor det er 
 nødvendig å oppgi sti til dataelementet. Bruk “dot-notasjon” (JsonPath-
@@ -351,7 +559,10 @@ lignende syntaks) til å peke til variabelen (dataelementet). Dette er en
 generisk/teknologinøytral måte å peke til elementer i både JSON, XML og 
 andre hierarkiske datastrukturer.
 
+---
+
 ### Ugyldige verdier
+🌐 *invalid_value_description*  
 
 Dette feltet er et fritekstfelt, og brukes til å beskrive ugyldige verdier som
 inngår i variabelen. Et eksempel kan være variabelen 
@@ -359,15 +570,29 @@ inngår i variabelen. Et eksempel kan være variabelen
 enpersonsforetak mangler et siffer i fødselsnummeret eller egentlig er 
 passnummer.
 
+---
+
 ### Kortnavn
+🌐 *short_name*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Dette er navnet som brukes på variabelen i datasettet, denne 
 maskingenereres i Datadoc-editor.
 
+---
+
 ### Id
+🌐 *id*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Dette er en unik SSB-identifikator for variabelen i datasettet. Denne 
 maskingenereres i Datadoc.
 
+---
+
 ## Pseudonymisering
+
+Kommer snart. 
+
+
 
