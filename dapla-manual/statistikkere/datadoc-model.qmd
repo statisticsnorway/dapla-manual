@@ -1,10 +1,21 @@
 ---
-title: Datadoc datamodell
-date-modified: 04/10/2025
+title: Informasjon i Datadoc
+date-modified: 04/11/2025
 lightbox: true
+code-links:
+    - text: Dataset
+      icon: box-arrow-up-right
+      href: https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3039133732/DataDoc+-+Krav+til+dokumentasjon+av+datasett+p+Dapla
+    - text: Variables
+      icon: box-arrow-up-right
+      href: https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3042869256/Variabelforekomst
+language:
+    code-links-title: "Teknisk datamodell"
 ---
 
 I dette kapitlet beskrives informasjonselementene i Datadoc. Siden noen gjelder for **datasett** og andre gjelder for **variabler**, så er kapitlet delt inn i disse to delene.
+
+Nevne inndata
 
 ✅ = obligatorisk, ⚠️ = anbefalt, 🌐 = internasjonalt, ⚙️ = maskingenerert, 🔍 = Utledet
 
@@ -29,34 +40,53 @@ En kort beskrivelse av hva datasettet inneholder, f.eks.
 *Inneholder data om bruk av helsetjenester (Levekårsundersøkelsen)*.
 
 ### Inneholder personopplysninger
+🌐 *contains_personal_data*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅  
 
-Her skal det krysses av hvis datasettet inneholder personopplysninger, 
+Velges hvis datasettet inneholder identifiserende personopplysninger, 
 dvs. alle opplysninger som entydig kan knyttes til en fysisk person (f.eks. 
-fødselsnummer, ulike adresser og bankkontonummer). Se flere eksempler
-på personopplysninger i liste laget i PAPIS-prosjektet PAPIS - 
-Variabelliste.docx Næringsdata og enkeltpersonforetak (ENK) blir ikke 
-regnet som personopplysninger
+fødselsnummer, ulike adresser og bankkontonummer). 
+
+Se flere eksempler på personopplysninger i liste laget i **PAPIS**-prosjektet:  
+[PAPIS-Variabelliste.docx](https://ssbno.sharepoint.com/:w:/r/sites/A19-GDPRiSSB/_layouts/15/Doc.aspx?sourcedoc=%7B6A778B7D-6ABE-4ECE-AF2D-8CBA0F5F5765%7D&file=PAPIS%20-%20Variabelliste.docx&wdLOR=c3C119C1B-F019-4D1A-B6E0-F21712898841&action=default&mobileredirect=true) 
+
+Næringsdata og enkeltpersonforetak (ENK) blir ikke regnet som personopplysninger.
 
 ### Verdivurdering
+🌐 *assessment*   
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Denne settes automatisk ut fra datasettets datatilstand. Kildedata har 
-verdivurdering «sensitiv»; inndata, klargjorte data og statistikk 
-«skjermet» og utdata «åpen».
+Utledes automatisk basert på datasettets [datatilstand](./datatilstander.qmd), og informasjon om datatilstand hentes fra filstien (se [Navnestandarden](./navnestandard.qmd)). Verdivurdering settes med følgende regler:
 
+- sensitiv -> kildedata
+- skjermet -> inndata, klargjorte data og statistikkdata
+- åpen -> utdata
 
-### Bruksrestriksjon⚙️
+### Bruksrestriksjon
+🌐 *use_restriction*  
+klargjorte data ✅ | statistikkdata ✅
 
-Dette feltet fylles kun ut dersom det er knyttet bruksrestriksjoner til 
-datasettet. Bruksrestriksjon velges fra menyen.
+Fylles ut dersom datasettet har bruksrestriksjoner. Datasett uten brukrestriksjoner trenger ikke å fylle ut feltet. Følgende verdier er tillatt for datasett med bruksrestriksjoner:
+
+- *DELETION_ANONYMIZATION*  
+SLETTING/ANONYMISERING
+- *PROCESS_LIMITATIONS*  
+BEHANDLINGSBEGRENSNINGER
+- *SECONDARY_USE_RESTRICTIONS*
+SEKUNDÆRBRUKSRESTRIKSJONER  
+
 
 ### Bruksrestriksjonsdato
+🌐 *use_restriction_date*  
+klargjorte data ✅ | statistikkdata ✅
 
-Dersom det er knyttet bruksrestriksjoner til datasettet, kan en her oppgi 
-eventuell «tiltaksdato», f.eks. når et datasett skal slettes eller 
-anonymiseres. Noen bruksrestriksjoner vil ikke ha en slik dato, f.eks. vil 
-en behandlingsbegrensning normalt være permanent/tidsuavhengig.
+Fylles kun ut dersom det er knyttet [bruksrestriksjoner](#bruksrestriksjon) til datasettet, og det finnes en "tiltaksdato". En tiltaksdato kan f.eks. være at et datasett skal slettes eller anonymiseres på en gitt dato. Noen datasett med Bruksrestriksjon vil ikke ha en slik dato, f.eks. vil en behandlingsbegrensning normalt være permanent/tidsuavhengig, og da skal ikke dette feltet fylles ut. 
+
+Dato fylles ut på [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.). F.eks. **2024-12-31** eller **2022-09-27 18:00:00.000**. 
 
 ### Datatilstand
+🌐 *dataset_state*  
+klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Datasettets datatilstand er en av følgende: kildedata, inndata, klargjorte 
 data, statistikk eller utdata. Tilstanden settes automatisk ved at den 
