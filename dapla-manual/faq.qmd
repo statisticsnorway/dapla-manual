@@ -174,7 +174,7 @@ Husk at det er kun [data-admins](./statistikkere/hva-er-dapla-team.html#data-adm
 
 Når man skrur på en *[feature](./features.html)* på Dapla, så er det verktøyet **Atlantis** som ruller ut infrastrukturen på GCP. I mange tilfeller kan det hjelpe å skrive `atlantis plan` i kommentarfeltet til PR'en, slik at Atlantis får kjørt planen en gang til. Hvis den da ikke viser noen feil, så kan du skrive `atlantis apply` i kommentarfeltet og endringene vil bli effektuert. Får du fortsatt feilmeldinger etter å ha kjørt `atlantis plan` på nytt, så bør du kontakte Kundeservice for hjelp.
 
-### Jeg får meldingen *Account already exists* når jeg prøver å logge meg inn på Dapla. Hvordan løser jeg det?
+### Jeg får meldingen **Account already exists** når jeg prøver å logge meg inn på Dapla. Hvordan løser jeg det?
 
 :::: {.columns}
 
@@ -418,3 +418,28 @@ Dette er miljøvariablene som alltid vil være tilgjengelig i Jupyterlab, Rstudi
 | STATBANK_TEST_BASE_URL          | URL til statistikkbanken (i test)                                     |
 | STATBANK_TEST_ENCRYPT_URL       | URL til 'statbank-authenticator (i test)' sitt krypteringsendepunkt   |
 
+### Hvorfor får jeg feilmelding når jeg prøver å slette en delt-bøtte? Jeg får melding om at **Error trying to delete bucket <bøttenavn> objects without 'force destroy' set to true**  når jeg prøver å slette en delt-bøtte ved å fjerne den fra *shared-buckets.yaml*
+
+En delt-bøtte kan kun slettes hvis den er helt tom for data. Det betyr at:
+
+- Alle filer og mapper må være slettet. 
+- Siden filer versjoneres i delt-bøtter må også alle gamle versjoner av filer også være slettet (såkalt *non-current* objekter).
+
+Hvis man har prøvd å slette en delt-bøtte ved fjerne bøtten fra [shared-buckets.yaml](./statistikkere/deling-av-data.qmd#opprettelse-av-bøtte), kjøre `atlantis apply` og deretter fått feilmeldingen `Error trying to delete bucket <bøttenavn> objects without 'force destroy' set to true`, så betyr det at det fortsatt ligger data i bøtta. Da kan du gjøre følgende for å få slettet bøtta: 
+
+1. Legg til delt-bøtta i buckets-shared.yaml igjen og kjør `atlantis apply` etter å ha fått godkjenning.
+
+2. Kjør følgende Python-script i en tjeneste på Dapla Lab som er startet med teamets **developers**-gruppe og `google-cloud-storage` er installert:
+
+```{.python filename="Notebook"}
+import google.cloud.storage as storage
+
+client = storage.Client()
+
+for blob in client.list_blobs("FULLT NAVN PÅ DELT-BØTTE", versions=True):
+    blob.delete()
+```
+
+3. Fjern delt-bøtta fra buckets-shared.yaml igjen og kjør `atlantis apply` etter godkjenning.
+
+Fungerer ikke det så kan man ta kontakt med Kundeservice og få hjelp.
