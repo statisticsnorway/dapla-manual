@@ -1,0 +1,189 @@
+---
+title: Antall delt-bøtter å Dapla
+subtitle: Oversikt over bøtter i test og prod
+categories:
+  - dapla lab
+  - datadeling
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "04/22/2025"
+date-modified: "04/22/2025"
+image: ../../../images/dapla-long.png
+image-alt: "Bilde av Dapla-logoen"
+lightbox: true
+draft: false
+freeze: true
+jupyter: python3
+---
+
+```{python}
+# | include: false
+
+import pandas as pd
+from datetime import date
+import altair as alt
+from itables import show
+
+
+df_buckets_gcloud = pd.read_csv(
+    "/buckets/produkt/temp/dapla-team-api/shared-buckets_2025-04-21_gcloud.csv"
+)
+
+# Regner ut noen verdier
+today = date.today()
+formatted_date = today.strftime("%-d. %B %Y")
+no_of_shared_buckets = df_buckets_gcloud['bucket_name'].nunique()
+
+```
+
+::: {.column-page}
+
+Per  **`{python} formatted_date`** er det **`{python} no_of_shared_buckets`** delt-bøtter på Dapla. @tbl-plot-daily viser alle bøttene, deres kortnavn, hvilket team som eier bøtta og hvilken seksjon som er ansvarlig for teamet. 
+
+```{python}
+# | title: Oppdatert via Gloud 21. april 2025
+# | label: tbl-plot-daily
+# | echo: false
+
+inndata_path = "/buckets/produkt/kildetilgang/inndata"
+
+df_teams = pd.read_parquet(f"{inndata_path}/dapla-team_v0.parquet")
+
+df_buckets_gcloud = pd.read_csv(
+    "/buckets/produkt/temp/dapla-team-api/shared-buckets_2025-04-21_gcloud.csv"
+)
+
+df_bøtter_renamed = df_buckets_gcloud.rename(
+    columns={
+        "bucket_name": "Fullt navn",
+        "bucket_name_short": "Kortnavn",
+        "team_name": "Team",
+        "env": "Miljø"
+    }
+)[["Team", "Kortnavn", "Miljø", "Fullt navn"]]
+
+# Henter inn seksjonsnummer for teamet
+df_merged_buck_team = df_bøtter_renamed.merge(
+    df_teams[["uniform_name", "section_code"]],
+    left_on="Team",
+    right_on="uniform_name",
+    how="left",
+)
+
+# Drop the redundant 'uniform_name' column after the join
+df_merged_buck_team.drop(columns=["uniform_name"], inplace=True)
+
+
+show(df_merged_buck_team, buttons=["csv", "excel"], column_filters="header")
+
+```
+
+En test av @fig-buckets-dep:
+
+```{python}
+# | title: Antall delt-bøtter per avdeling og miljø
+# | label: fig-buckets-dep
+# | echo: false
+
+# Lag Avdeling-kolonnen
+df_merged_buck_team["Avdeling"] = df_merged_buck_team["section_code"].astype(str).str[0] + "00"
+
+# Aggregerer antall rader per Avdeling og Miljø
+avdeling_miljo_counts = (
+    df_merged_buck_team
+    .groupby(["Avdeling", "Miljø"])
+    .size()
+    .reset_index(name="Count")
+)
+
+# Sørg for riktig datatype og sortering
+avdeling_miljo_counts["Avdeling"] = avdeling_miljo_counts["Avdeling"].astype(int)
+avdeling_miljo_counts = avdeling_miljo_counts.sort_values("Avdeling")
+
+# Lag det horisontale stablede stolpediagrammet
+chart = alt.Chart(avdeling_miljo_counts).mark_bar().encode(
+    y=alt.Y("Avdeling:O", sort=None, title="Avdeling"),
+    x=alt.X("Count:Q", title="Antall"),
+    color=alt.Color("Miljø:N", title="Miljø", scale=alt.Scale(domain=["prod", "test"], range=["#90cc93", "#83c1e9"])),
+    tooltip=["Avdeling", "Miljø", "Count"]
+).properties(
+    title="Antall delt-bøtter per avdeling og miljø",
+    width=800,
+    height=300
+)
+
+chart
+
+```
+
+Prøver å vise teamene også
+
+```{python}
+# | title: Antall delt-bøtter per team og miljø
+# | label: fig-buckets-team
+# | echo: false
+
+# 1. Lag mapping mellom Team og section_code
+team_to_section = (
+    df_merged_buck_team[["Team", "section_code"]]
+    .drop_duplicates()
+    .set_index("Team")
+)
+
+# 2. Lag ny kolonne med Team-navn inkludert section_code
+df_merged_buck_team["Team_label"] = df_merged_buck_team["Team"].map(
+    lambda t: f"{t} ({team_to_section.loc[t, 'section_code']})"
+)
+
+# 3. Aggreger antall rader per Team, Team_label og Miljø
+team_miljo_counts = (
+    df_merged_buck_team
+    .groupby(["Team", "Team_label", "Miljø"])
+    .size()
+    .reset_index(name="Count")
+)
+
+# 4. Legg til section_code eksplisitt for tooltip
+team_miljo_counts["section_code"] = team_miljo_counts["Team"].map(team_to_section["section_code"])
+
+# 5. Finn de 10 teamene med flest totalt antall
+top_teams = (
+    team_miljo_counts
+    .groupby("Team")["Count"]
+    .sum()
+    .nlargest(10)
+    .index
+)
+
+# 6. Filtrer til kun de 10 største teamene
+top_team_data = team_miljo_counts[team_miljo_counts["Team"].isin(top_teams)]
+
+# 7. Lag diagrammet
+chart = alt.Chart(top_team_data).mark_bar().encode(
+    y=alt.Y("Team_label:N", sort="-x", title="Team (section_code)"),
+    x=alt.X("Count:Q", title="Antall"),
+    color=alt.Color(
+        "Miljø:N",
+        title="Miljø",
+        scale=alt.Scale(domain=["prod", "test"], range=["#90cc93", "#83c1e9"])
+    ),
+    tooltip=["Team", "Miljø", "Count", "section_code"]
+).properties(
+    title="Antall rader per team og miljø (topp 10)",
+    width=800,
+    height=400
+)
+
+chart
+
+
+
+```
+
+:::
+
+
+
