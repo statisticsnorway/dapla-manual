@@ -174,8 +174,6 @@ Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
 
 #### Feltblokker
 Hver nøkkel (felt) i YAML-filen har sin egen kommentarseksjon rett over seg.
-Denne blokken beskriver om feltet er obligatorisk eller valgfritt, gir forklaring og viser eventuelle eksempler.
-
 
 ```{.YAML .code}
 # ! Obligatorisk felt !
@@ -211,7 +209,7 @@ variable_status: DRAFT
 
 
 ::: {.callout-note collapse=True}
-##### Gjelder feltene:
+##### Felt med enkle verdier
   - `classification_reference`
   - `measurement_type`
   - `external_reference_uri`
@@ -219,7 +217,7 @@ variable_status: DRAFT
 :::
 
 ::: {.callout-tip}
-##### Korrekt
+##### Korrekt plassering og format
 ```{.YAML .code}
 short_name: "landbak"
 
@@ -230,31 +228,29 @@ measurement_type: "03"
 ##### Vanlige feil enkle verdier
 
 ::: {.callout-warning}
-###### Feil plassering
+###### Feil plassering av verdi
 ```{.YAML .code}
 measurement_type: 
 "03"
 ```
 ::: 
 
-::: {.callout-warning collapse=True}
-###### Feil intendering
+::: {.callout-warning}
+###### Feil innrykk mellom nøkkel og verdi
 ```{.YAML .code}
-# Mangler mellomrom mellom nøkkel og verdi
 classification_reference:"91"
 ```
 ::: 
 
 ::: {.callout-warning}
-###### Mangler tegn 
+###### Mangler kolon
 ```{.YAML .code}
-# Mangler `:` mellom nøkkel og verdi
 short_name"landbak"
 ```
 ::: 
 
 ::: {.callout-warning}
-###### Feil type
+###### Feil verdi type
 ```{.YAML .code}
 # Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.
 measurement_type: 03
@@ -271,7 +267,7 @@ measurement_type: 03
 
 
 ::: {.callout-note collapse=True}
-##### Gjelder feltene:
+##### Flerspråklige felt
   - `name`
   - `definition`
   - `comment`
@@ -279,7 +275,7 @@ measurement_type: 03
 :::
 
 ::: {.callout-tip collapse=True}
-###### Korrekt plassering av tekst
+###### Korrekt plassering av tekst under blokk-symbol
 ```{.YAML .code}
 contact:
     title:
@@ -292,7 +288,7 @@ contact:
 ::: 
 
 ::: {.callout-tip collapse=True}
-#### Lagre avsnitt
+#### Korrekt lagring av avsnitt
 ```{.YAML .code}
 comment:
     nb: |-
@@ -320,7 +316,7 @@ name:
 ##### Vanlige feil flerspråklige felt
 
 ::: {.callout-caution collapse=True}
-###### Uønsket formattering
+###### Uønsket tekstoppsett (linjeskift midt i ord)
 ```{.YAML .code}
 name:
     nb: |-
@@ -333,7 +329,7 @@ name:
 ::: 
 
 ::: {.callout-warning collapse=True}
-###### Feil indentering
+###### Feil indentering (mangler korrekt innrykk)
 ```{.YAML .code}
 name:
     nb: |-
@@ -344,7 +340,7 @@ Her er teksten ikke indentert og vil føre til feil når du lagrer.
 ::: 
 
 ::: {.callout-warning collapse=True}
-###### Mangler blokk symbol
+###### Mangler blokk-symbolet
 ```{.YAML .code}
 comment:
     nb: Her er blokk symbolet fjernet og tekst med ':' vil feile.
@@ -361,7 +357,7 @@ comment:
 - Bruk doble fnutter `""`
 
 ::: {.callout-note collapse=True}
-##### Gjelder feltene:
+##### Felt med lister
   - `unit_types`
   - `subject_fields`
   - `related_variable_definition_uris`
@@ -369,7 +365,7 @@ comment:
 :::
 
 ::: {.callout-tip}
-#### Korrekt
+#### Korrekt listeformat og plassering
 ```{.YAML .code}
 unit_types:
     - "20"
@@ -379,7 +375,7 @@ unit_types:
 ##### Vanlige feil lister
 
 ::: {.callout-warning}
-###### Feil type
+###### Feil type i listeelementer
 ```{.YAML .code}
 unit_types:
     - 01
@@ -388,7 +384,7 @@ unit_types:
 ::: 
 
 ::: {.callout-warning}
-###### Feil indentering liste-symbol
+###### Feil indentering på liste-symbol
 ```{.YAML .code}
 unit_types:
 - "20"
@@ -396,7 +392,7 @@ unit_types:
 ::: 
 
 ::: {.callout-warning}
-###### Feil indentering vedri
+###### Feil índentering ved listeverdi
 ```{.YAML .code}
 subject_fields:
   -"bf"
