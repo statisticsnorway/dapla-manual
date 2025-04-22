@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -683,6 +717,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#patch" id="toc-patch" class="nav-link" data-scroll-target="#patch">Patch</a></li>
   <li><a href="#lese-ut-informasjon" id="toc-lese-ut-informasjon" class="nav-link" data-scroll-target="#lese-ut-informasjon">Lese ut informasjon</a></li>
   </ul></li>
+  <li><a href="#arbeide-med-yaml-filer" id="toc-arbeide-med-yaml-filer" class="nav-link" data-scroll-target="#arbeide-med-yaml-filer">Arbeide med YAML-filer</a>
+  <ul class="collapse">
+  <li><a href="#yaml-filstruktur" id="toc-yaml-filstruktur" class="nav-link" data-scroll-target="#yaml-filstruktur">YAML-filstruktur</a></li>
+  <li><a href="#redigere-yaml-filen" id="toc-redigere-yaml-filen" class="nav-link" data-scroll-target="#redigere-yaml-filen">Redigere YAML-filen</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/vardef-toolbelt.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/vardef-toolbelt.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div><div class="quarto-code-links"><h2>Notebooks</h2><ul><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/lese_en_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>lese_en_variabel_definisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/lese_variabel_definisjoner.ipynb" target="_blank"><i class="bi bi-file-code"></i>lese_variabel_definisjoner.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/migrere_variabel_definisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>migrere_variabel_definisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/opprette_gyldighetsperiode.ipynb" target="_blank"><i class="bi bi-file-code"></i>oprette_gyldighetsperiode.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/opprette_utkast.ipynb" target="_blank"><i class="bi bi-file-code"></i>oprette_utkast.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publisere_variabel_definisjon_eksternt.ipynb" target="_blank"><i class="bi bi-file-code"></i>publisere_eksternt.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publisere_variabel_definisjon_internt.ipynb" target="_blank"><i class="bi bi-file-code"></i>publisere_internt.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/redigere_publisert_variabel_definisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>redigere_publisert_variabel.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/redigere_utkast.ipynb" target="_blank"><i class="bi bi-file-code"></i>redigere_utkast.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_om_kortnavn_er_ledig.ipynb" target="_blank"><i class="bi bi-file-code"></i>sjekk_om_kortnavn_er_ledig.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/slette_utkast.ipynb" target="_blank"><i class="bi bi-file-code"></i>slette_utkast.ipynb</a></li></ul></div></nav>
     </div>
@@ -793,6 +832,525 @@ Warning
 <section id="ledige-kortnavn" class="level4">
 <h4 class="anchored" data-anchor-id="ledige-kortnavn">Ledige kortnavn</h4>
 <p><em>Notebooken</em> <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_om_kortnavn_er_ledig.ipynb" target="_blank">sjekk_om_kortnavn_er_ledig.ipynb</a> lar deg sjekke om et kortnavn er tatt eller ikke. Kortnavn i Vardef må være unikem, så det kan være lurt å sjekke om ønsket kortnavn er ledig før man prøver å publisere.</p>
+</section>
+</section>
+</section>
+<section id="arbeide-med-yaml-filer" class="level2">
+<h2 class="anchored" data-anchor-id="arbeide-med-yaml-filer">Arbeide med YAML-filer</h2>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fargene i YAML-eksemplene er kun veiledende og kan variere fra verktøy til verktøy, ettersom de settes av automatisk syntaksutheving.</p>
+</div>
+</div>
+<section id="yaml-filstruktur" class="level3">
+<h3 class="anchored" data-anchor-id="yaml-filstruktur">YAML-filstruktur</h3>
+<p>YAML-filene følger samme grunnstruktur, med små variasjoner avhengig av bruk.</p>
+<section id="mal" class="level4">
+<h4 class="anchored" data-anchor-id="mal">Mal</h4>
+<p>Denne filen genereres når du vil opprette en ny variabeldefinisjon.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon mal ---</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Filnavn mal
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lagres som <code>variable_definition_template_&lt;timestamp&gt;.yaml</code></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+NB! Innholder eksempelverdier som må endres
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            generert tittel</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="variabeldefinisjon" class="level4">
+<h4 class="anchored" data-anchor-id="variabeldefinisjon">Variabeldefinisjon</h4>
+<p>Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Filnavn variabeldefinisjon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lagres som <code>variable_definition_&lt;kortnavn&gt;_&lt;id&gt;_&lt;timestamp&gt;.yaml</code></p>
+</div>
+</div>
+</section>
+<section id="feltblokker" class="level4">
+<h4 class="anchored" data-anchor-id="feltblokker">Feltblokker</h4>
+<p>Hvert felt i YAML-filen har sin egen kommentarseksjon rett over seg.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ! Obligatorisk felt !</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Variabelens navn. Dette skal ikke være en mer “teknisk” forkortelse, men et navn som er forståelig for mennesker.</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># -------------------------</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; EKSEMPEL:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># name:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   nb: |-</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#       Lønnsinntekter</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Felt markert med ~ Valgfritt felt ~ trenger ikke ha en verdi. De kan utelates dersom de ikke er relevante.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ~ Valgfritt felt ~</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Felt markert med ! Obligatorisk felt ! må alltid ha en gyldig verdi.</p>
+<p>I noen tilfeller settes verdien automatisk av systemet. For eksempel:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ! Obligatorisk felt !</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Livssyklus for variabelen.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="redigere-yaml-filen" class="level3">
+<h3 class="anchored" data-anchor-id="redigere-yaml-filen">Redigere YAML-filen</h3>
+<section id="enkle-verdier" class="level4">
+<h4 class="anchored" data-anchor-id="enkle-verdier">Enkle verdier</h4>
+<ul>
+<li>Type: <code>DoubleQuotedScalar</code></li>
+<li>Verdien skrives på samme linje som feltnavn (nøkkel)</li>
+<li>Bruk doble fnutter <code>""</code></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Felt med enkle verdier
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>classification_reference</code></li>
+<li><code>measurement_type</code></li>
+<li><code>external_reference_uri</code></li>
+<li><code>owner.team</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt plassering og format
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb7"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"landbak"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"03"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<section id="vanlige-feil-enkle-verdier" class="level5">
+<h5 class="anchored" data-anchor-id="vanlige-feil-enkle-verdier">Vanlige feil enkle verdier</h5>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil plassering av verdi
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb8"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">"03"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil innrykk mellom nøkkel og verdi
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb9"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="at">classification_reference:"91"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mangler kolon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb10"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">short_name"landbak"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil verdi type
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb11"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="dv">03</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="flerspråklige-felt" class="level4">
+<h4 class="anchored" data-anchor-id="flerspråklige-felt">Flerspråklige felt</h4>
+<ul>
+<li>Type: <code>LiteralScalar</code>.</li>
+<li>Et blokk symbol <code>|-</code> følger nøkkel.</li>
+<li>Teksten må starte rett under blokk-symbolet</li>
+<li>Riktig innrykk er viktig</li>
+<li>Formattering (avsnitt/linjeskift) lagres.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Flerspråklige felt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>name</code></li>
+<li><code>definition</code></li>
+<li><code>comment</code></li>
+<li><code>contact.title</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt plassering av tekst under blokk-symbol
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb12"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>            Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> generert@ssb.no</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt lagring av avsnitt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb13"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        Her er det en god plan, først er det en beskrivelse som innledning.</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        Deretter bevisst en blank linje:</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>          - Liste-element 1</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>          - Liste-element 2</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Bruk av spesialtegn
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb14"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaksutheving.</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="vanlige-feil-flerspråklige-felt" class="level5">
+<h5 class="anchored" data-anchor-id="vanlige-feil-flerspråklige-felt">Vanlige feil flerspråklige felt</h5>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Uønsket tekstoppsett (linjeskift midt i ord)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb15"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        Her deles teksten opp</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        plutselig. Og den vil lagres akku-</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        rat slik du ser den.</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil indentering (mangler korrekt innrykk)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb16"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="at">Her er teksten ikke indentert og vil føre til feil når du lagrer.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mangler blokk-symbolet
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb17"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nb</span><span class="kw">:</span><span class="at"> Her er blokk symbolet fjernet og tekst med ':' vil feile.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span><span class="at"> Also text with paragraphs</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="at">    will not be saved correctly.</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lister" class="level4">
+<h4 class="anchored" data-anchor-id="lister">Lister</h4>
+<ul>
+<li>Type: <code>DoubleQuotedScalar</code></li>
+<li>Verdien skrives på samme linje som liste-symbol <code>-</code></li>
+<li>Bruk doble fnutter <code>""</code></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Felt med lister
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>unit_types</code></li>
+<li><code>subject_fields</code></li>
+<li><code>related_variable_definition_uris</code></li>
+<li><code>owner.groups</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt listeformat og indentering
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb18"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"20"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<section id="vanlige-feil-lister" class="level5">
+<h5 class="anchored" data-anchor-id="vanlige-feil-lister">Vanlige feil lister</h5>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil type i listeelementer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb19"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="dv">01</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="dv">02</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil indentering på liste-symbol
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb20"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="st">"20"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil indentering ved listeverdi
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb21"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="at">  -"bf"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="andre-typer" class="level4">
+<h4 class="anchored" data-anchor-id="andre-typer">Andre typer</h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dato
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb22"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2003-01-01</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Boolean
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb23"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Variabel status
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb24"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_EXTERNAL</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<style>
+code span.co {
+    color:#408080;
+    font-style: inherit;
+}
+code span.fu{
+  color: #88f;
+}
+code span.cp{
+  color: #a2f;
+}
+code span.c12{
+  color: #ba2121;
+}
+code span.st{
+  color: #ba2121;
+}
+pre code.sourceCode > span{
+  color:rgba(8, 8, 8, 0.99);
+}
+#cb2-4{
+  background-color: yellow;
+}
+</style>
 
 
 </section>
