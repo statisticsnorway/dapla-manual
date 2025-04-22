@@ -128,14 +128,14 @@ For å hente ut informasjon fra Vardef finnes det ulike *notebooks* avhengig av 
 ## Arbeide med YAML-filer
 
 ::: {.callout-caution}
-NB! syntaks highlightning kan variere fra, farger på yaml kode i eksempler er kun veiledende
+Fargene i YAML-eksemplene er kun veiledende og kan variere fra verktøy til verktøy, ettersom de settes av automatisk syntaksutheving.
 ::: 
 
-### Yaml fil struktur
-YAML-filene følger samme struktur med noen små variasjoner.
+### YAML-filstruktur
+YAML-filene følger samme grunnstruktur, med små variasjoner avhengig av bruk.
 
 #### Mal
-Denne filen genereres når man vil opprette en ny variabeldefinisjon. 
+Denne filen genereres når du vil opprette en ny variabeldefinisjon. 
 
 ```{.YAML .code}
 # --- Variabeldefinisjon mal ---
@@ -147,7 +147,7 @@ Lagres som `variable_definition_template_<timestamp>.yaml`
 :::
 
 ::: {.callout-caution collapse=True}
-#### NB! Innholder placeholder tekst som må endres
+#### NB! Innholder eksempelverdier som må endres
 
 ```{.YAML .code}
 contact:
@@ -161,7 +161,7 @@ contact:
 
 #### Variabeldefinisjon
 
-Dette er en yaml fil som inneholder alle lagrede verdier for en variabeldefinisjon.
+Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.
 
 ```{.YAML .code}
 # --- Variabeldefinisjon ---
@@ -172,10 +172,10 @@ Dette er en yaml fil som inneholder alle lagrede verdier for en variabeldefinisj
 Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
 :::
 
-#### Felt blokk
-Alle felt for 
-Informasjonsseksjon på topp.
-Inneholder informasjon om feltet er obligatorisk, beskrivelser av innhold og eksempler. 
+#### Feltblokker
+Hver nøkkel (felt) i YAML-filen har sin egen kommentarseksjon rett over seg.
+Denne blokken beskriver om feltet er obligatorisk eller valgfritt, gir forklaring og viser eventuelle eksempler.
+
 
 ```{.YAML .code}
 # ! Obligatorisk felt !
@@ -187,22 +187,27 @@ Inneholder informasjon om feltet er obligatorisk, beskrivelser av innhold og eks
 #       Lønnsinntekter
 name:
 ```
-
-Hvis feltet er markert som valgfritt trenger det ikke lagres noe verdi.
+Felt markert med ~ Valgfritt felt ~ trenger ikke ha en verdi. De kan utelates dersom de ikke er relevante.
 ```{.YAML .code}
 # ~ Valgfritt felt ~
 ```
 
-Oligatoriske  felt må alltid ha verdi, men verdi kan være satt fra systemet.
-Som for eksempel `variable-status`som alltid er `DRAFT` når man oppretter ny variabeldefinisjon og endres ikke før man publiserer.
+Felt markert med ! Obligatorisk felt ! må alltid ha en gyldig verdi.
+I noen tilfeller settes verdien automatisk av systemet. For eksempel:
 ```{.YAML .code}
-# ! Obligatorisk felt !
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+# ~ Valgfritt felt ~
+# Livssyklus for variabelen.
+variable_status: DRAFT
 ```
 ### Redigere YAML-filen
 
 #### Enkle verdier
 
-Består av en nøkkel og en verdi.
+- Type: `DoubleQuotedScalar`
+- Verdien skrives på samme linje som feltnavn (nøkkel)
+- Bruk doble fnutter `""`
+
 
 ::: {.callout-note collapse=True}
 ##### Gjelder feltene:
@@ -211,12 +216,6 @@ Består av en nøkkel og en verdi.
   - `external_reference_uri`
   - `owner.team`
 :::
-
-Dette er felt der vi forventer kort tekst uten formattering.
-Typen vi bruker er `DoubleQuotedScalar`. 
-All tekst må være omkranset av doble fnutter. `""`. 
-
-Verdien skrives på samme linje som nøkkelen
 
 ::: {.callout-tip}
 #### Korrekt
@@ -232,13 +231,11 @@ measurement_type: "03"
 ```{.YAML .code}
 measurement_type: 
 "03"
-
-short_name"landbak"
 ```
 ::: 
 
 ::: {.callout-warning collapse=True}
-#### Fjernet `:`
+#### Mangler `:`
 ```{.YAML .code}
 short_name"landbak"
 ```
@@ -254,6 +251,12 @@ measurement_type: 03
 
 #### Flerspråklige felt
 
+- Type: `LiteralScalar`. 
+- Et blokk symbol `|-` følger nøkkel. 
+- Teksten må starte rett under blokk-symbolet
+- Riktig innrykk er viktig
+- Formattering (avsnitt/linjeskift) lagres.
+
 
 ::: {.callout-note collapse=True}
 ##### Gjelder feltene:
@@ -263,27 +266,16 @@ measurement_type: 03
   - `contact.title`
 :::
 
+::: {.callout-tip collapse=True}
+#### Korrekt
 ```{.YAML .code}
 contact:
     title:
         nb: |-
-            generert tittel
+            Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.
         nn:
         en:
     email: generert@ssb.no
-```
-
-Format er `LiteralScalar`. Et blokk symbol `|-` følger nøkkel. Format lagres.
-Streng indentering. Tekst må begynne direkte under plassering av blokk symbol `|`
-
-::: {.callout-tip collapse=True}
-#### Korrekt
-```{.YAML .code}
-name:
-    nb: |-
-        Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.
-    nn:
-    en:
 ```
 ::: 
 
@@ -295,8 +287,8 @@ comment:
         Her er det en god plan, først er det en beskrivelse som innledning.
 
         Deretter bevisst en blank linje:
-          - Og en liste med punkter
-          - Flere
+          - Liste-element 1
+          - Liste-element 2
     nn:
     en:
 ```
@@ -364,7 +356,10 @@ comment:
 ::: 
 
 #### Lister
-Lagre som tekst strenger. Bruker doble.
+
+- Type: `DoubleQuotedScalar`
+- Verdien skrives på samme linje som liste-symbol `-`
+- Bruk doble fnutter `""`
 
 ::: {.callout-note collapse=True}
 ##### Gjelder feltene:
@@ -372,11 +367,6 @@ Lagre som tekst strenger. Bruker doble.
   - `subject_fields`
   - `related_variable_definition_uris`
   - `owner.groups`
-:::
-
-::: {.callout-note}
-Lister bruker også type `DoubleQuotedScalar`. 
-All tekst må være omkranset av doble fnutter. `""`
 :::
 
 ::: {.callout-tip}
