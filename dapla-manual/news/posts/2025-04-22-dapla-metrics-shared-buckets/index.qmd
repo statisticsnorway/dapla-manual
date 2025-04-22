@@ -1,6 +1,6 @@
 ---
-title: Antall delt-bøtter å Dapla
-subtitle: Oversikt over bøtter i test og prod
+title: Statistikk over datadeling på Dapla
+subtitle: 118 delt-bøtter opprettet det siste året
 categories:
   - dapla lab
   - datadeling
@@ -11,7 +11,7 @@ author:
         email: obr@ssb.no
 date: "04/22/2025"
 date-modified: "04/22/2025"
-image: ../../../images/dapla-long.png
+image: ./visualization.png
 image-alt: "Bilde av Dapla-logoen"
 lightbox: true
 draft: false
@@ -27,6 +27,10 @@ from datetime import date
 import altair as alt
 from itables import show
 
+inndata_path = "/buckets/produkt/kildetilgang/inndata"
+
+#Leser inn data vi trenger
+df_teams = pd.read_parquet(f"{inndata_path}/dapla-team_v0.parquet")
 
 df_buckets_gcloud = pd.read_csv(
     "/buckets/produkt/temp/dapla-team-api/shared-buckets_2025-04-21_gcloud.csv"
@@ -36,64 +40,78 @@ df_buckets_gcloud = pd.read_csv(
 today = date.today()
 formatted_date = today.strftime("%-d. %B %Y")
 no_of_shared_buckets = df_buckets_gcloud['bucket_name'].nunique()
-
+no_of_teams = df_buckets_gcloud['team_name'].nunique()
 ```
+
+Ett år etter at Dapla-team kunne opprette delt-bøtter selvbetjent på Dapla, så er det tilsammen opprettet **`{python} no_of_shared_buckets`** bøtter per **`{python} formatted_date`**. **83** av disse er i prod-miljøet til teamene, mens **35** er i test-miljøet.
+
+Av de **171** teamene totalt på Dapla, så er det **`{python} no_of_teams`** av disse som har opprettet en eller flere delt-bøtter. 
+
+@tbl-all-shared-buckets viser en oversikt over alle delt-bøtter som er opprettet^[Helt presist viser tabellen alle delt-bøtter som er opprettet gjennom [*shared-buckets*-featuren](../../../statistikkere/deling-av-data.qmd#opprettelse-av-bøtte).], dens kortnavn, hvilket team som er eier den, hvilket miljø den finnes i, og hvilken seksjon som er ansvarlig for teamet. 
+
+@tbl-all-shared-buckets viser mer informasjon enn hva som er tilgjengelig i dag i [Dapla Ctrl](https://dapla-ctrl.intern.ssb.no/). Grunnen er at det i @tbl-all-shared-buckets også inkluderes delt-bøtter i test-miljøet, samt at Dapla Ctrl kun viser delt-bøtter hvor andre team faktisk har blitt gitt tilgang. I fremtiden vil denne informasjonen kunne inspiseres i en datakatalog, med mye mer detaljert informasjon om dataene som deles. 
+
+---
 
 ::: {.column-page}
 
-Per  **`{python} formatted_date`** er det **`{python} no_of_shared_buckets`** delt-bøtter på Dapla. @tbl-plot-daily viser alle bøttene, deres kortnavn, hvilket team som eier bøtta og hvilken seksjon som er ansvarlig for teamet. 
 
 ```{python}
 # | title: Oppdatert via Gloud 21. april 2025
-# | label: tbl-plot-daily
+# | fig-cap: "Tabell som viser alle delt-bøtter på Dapla per 22. april 2025"
+# | label: tbl-all-shared-buckets
 # | echo: false
 
-inndata_path = "/buckets/produkt/kildetilgang/inndata"
-
-df_teams = pd.read_parquet(f"{inndata_path}/dapla-team_v0.parquet")
-
-df_buckets_gcloud = pd.read_csv(
-    "/buckets/produkt/temp/dapla-team-api/shared-buckets_2025-04-21_gcloud.csv"
-)
-
-df_bøtter_renamed = df_buckets_gcloud.rename(
-    columns={
-        "bucket_name": "Fullt navn",
-        "bucket_name_short": "Kortnavn",
-        "team_name": "Team",
-        "env": "Miljø"
-    }
-)[["Team", "Kortnavn", "Miljø", "Fullt navn"]]
+df_buckets2 = df_buckets_gcloud.copy(deep=True)
+df_teams2 = df_teams.copy(deep=True)
 
 # Henter inn seksjonsnummer for teamet
-df_merged_buck_team = df_bøtter_renamed.merge(
-    df_teams[["uniform_name", "section_code"]],
-    left_on="Team",
+df_merged_buck_team = df_buckets2.merge(
+    df_teams2[["uniform_name", "section_code"]],
+    left_on="team_name",
     right_on="uniform_name",
     how="left",
 )
 
-# Drop the redundant 'uniform_name' column after the join
-df_merged_buck_team.drop(columns=["uniform_name"], inplace=True)
+df_bøtter_renamed2 = df_merged_buck_team.rename(
+    columns={
+        "bucket_name": "Fullt navn",
+        "bucket_name_short": "Kortnavn",
+        "team_name": "Team",
+        "env": "Miljø",
+        "section_code": "Seksjon"
+    }
+)[["Team", "Kortnavn", "Miljø", "Fullt navn", "Seksjon"]]
 
-
-show(df_merged_buck_team, buttons=["csv", "excel"], column_filters="header")
-
+show(df_bøtter_renamed2,
+     buttons=["csv", "excel"],
+     column_filters="header",
+     columnDefs=[{"className": "dt-left", "targets": "_all"}],
+     classes="display nowrap compact cell-borde"
+     )
 ```
 
-En test av @fig-buckets-dep:
+:::
+---
+
+ @fig-buckets-dep viser at det er avdeling 200 som har opprettet flest bøtter, i alt **52** delt-bøtter. Deretter følger avdeling 300 med **26** bøtter. 
+ 
+ Av @fig-buckets-team, som viser hvilke 10 team som har flest delt-bøtter, så ser vi at **48** av de **52** bøttene i avdeling 200 kommer fra [team Kostra](https://dapla-ctrl.intern.ssb.no/kostra). Vi ser også at [team arbmark-register](https://dapla-ctrl.intern.ssb.no/arbmark-register) har opprettet **9** av totalt **26** bøtter i avdeling 300. 
+
+---
 
 ```{python}
 # | title: Antall delt-bøtter per avdeling og miljø
+# | fig-cap: "Antall delt-bøtter per avdeling og miljø"
 # | label: fig-buckets-dep
 # | echo: false
 
 # Lag Avdeling-kolonnen
-df_merged_buck_team["Avdeling"] = df_merged_buck_team["section_code"].astype(str).str[0] + "00"
+df_bøtter_renamed2["Avdeling"] = df_bøtter_renamed2["Seksjon"].astype(str).str[0] + "00"
 
 # Aggregerer antall rader per Avdeling og Miljø
 avdeling_miljo_counts = (
-    df_merged_buck_team
+    df_bøtter_renamed2
     .groupby(["Avdeling", "Miljø"])
     .size()
     .reset_index(name="Count")
@@ -111,7 +129,7 @@ chart = alt.Chart(avdeling_miljo_counts).mark_bar().encode(
     tooltip=["Avdeling", "Miljø", "Count"]
 ).properties(
     title="Antall delt-bøtter per avdeling og miljø",
-    width=800,
+    width=500,
     height=300
 )
 
@@ -119,35 +137,38 @@ chart
 
 ```
 
-Prøver å vise teamene også
+---
+
+
 
 ```{python}
 # | title: Antall delt-bøtter per team og miljø
+# | fig-cap: "Antall delt-bøtter per team og miljø"
 # | label: fig-buckets-team
 # | echo: false
 
 # 1. Lag mapping mellom Team og section_code
 team_to_section = (
-    df_merged_buck_team[["Team", "section_code"]]
+    df_bøtter_renamed2[["Team", "Seksjon"]]
     .drop_duplicates()
     .set_index("Team")
 )
 
 # 2. Lag ny kolonne med Team-navn inkludert section_code
-df_merged_buck_team["Team_label"] = df_merged_buck_team["Team"].map(
-    lambda t: f"{t} ({team_to_section.loc[t, 'section_code']})"
+df_bøtter_renamed2["Team_label"] = df_bøtter_renamed2["Team"].map(
+    lambda t: f"{t} ({team_to_section.loc[t, 'Seksjon']})"
 )
 
 # 3. Aggreger antall rader per Team, Team_label og Miljø
 team_miljo_counts = (
-    df_merged_buck_team
+    df_bøtter_renamed2
     .groupby(["Team", "Team_label", "Miljø"])
     .size()
     .reset_index(name="Count")
 )
 
 # 4. Legg til section_code eksplisitt for tooltip
-team_miljo_counts["section_code"] = team_miljo_counts["Team"].map(team_to_section["section_code"])
+team_miljo_counts["Seksjon"] = team_miljo_counts["Team"].map(team_to_section["Seksjon"])
 
 # 5. Finn de 10 teamene med flest totalt antall
 top_teams = (
@@ -163,27 +184,19 @@ top_team_data = team_miljo_counts[team_miljo_counts["Team"].isin(top_teams)]
 
 # 7. Lag diagrammet
 chart = alt.Chart(top_team_data).mark_bar().encode(
-    y=alt.Y("Team_label:N", sort="-x", title="Team (section_code)"),
+    y=alt.Y("Team_label:N", sort="-x", title="Team (Seksjon)"),
     x=alt.X("Count:Q", title="Antall"),
     color=alt.Color(
         "Miljø:N",
         title="Miljø",
         scale=alt.Scale(domain=["prod", "test"], range=["#90cc93", "#83c1e9"])
     ),
-    tooltip=["Team", "Miljø", "Count", "section_code"]
+    tooltip=["Team", "Miljø", "Count", "Seksjon"]
 ).properties(
-    title="Antall rader per team og miljø (topp 10)",
-    width=800,
+    title="Antall delt-bøtter per team og miljø (topp 10)",
+    width=500,
     height=400
 )
 
 chart
-
-
-
 ```
-
-:::
-
-
-
