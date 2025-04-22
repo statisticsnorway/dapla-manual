@@ -136,3 +136,330 @@ For å hente ut informasjon fra Vardef finnes det ulike *notebooks* avhengig av 
 #### Ledige kortnavn
 
 *Notebooken* [sjekk_om_kortnavn_er_ledig.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_om_kortnavn_er_ledig.ipynb){target="_blank"} lar deg sjekke om et kortnavn er tatt eller ikke. Kortnavn i Vardef må være unikem, så det kan være lurt å sjekke om ønsket kortnavn er ledig før man prøver å publisere. 
+
+## Arbeide med YAML-filer
+
+::: {.callout-caution}
+Fargene i YAML-eksemplene er kun veiledende og kan variere fra verktøy til verktøy, ettersom de settes av automatisk syntaksutheving.
+::: 
+
+### YAML-filstruktur
+YAML-filene følger samme grunnstruktur, med små variasjoner avhengig av bruk.
+
+#### Mal
+Denne filen genereres når du vil opprette en ny variabeldefinisjon. 
+
+```{.YAML .code}
+# --- Variabeldefinisjon mal ---
+```
+
+::: {.callout-note}
+#### Filnavn mal
+Lagres som `variable_definition_template_<timestamp>.yaml`
+:::
+
+::: {.callout-caution}
+#### NB! Innholder eksempelverdier som må endres
+
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            generert tittel
+        nn:
+        en:
+```
+::: 
+
+#### Variabeldefinisjon
+
+Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.
+
+```{.YAML .code}
+# --- Variabeldefinisjon ---
+```
+
+::: {.callout-note}
+#### Filnavn variabeldefinisjon
+Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
+:::
+
+#### Feltblokker
+Hvert felt i YAML-filen har sin egen kommentarseksjon rett over seg.
+
+```{.YAML .code}
+# ! Obligatorisk felt !
+# Variabelens navn. Dette skal ikke være en mer “teknisk” forkortelse, men et navn som er forståelig for mennesker.
+# -------------------------
+# >>> EKSEMPEL:
+# name:
+#   nb: |-
+#       Lønnsinntekter
+name:
+```
+
+Felt markert med ~ Valgfritt felt ~ trenger ikke ha en verdi. De kan utelates dersom de ikke er relevante.
+```{.YAML .code}
+# ~ Valgfritt felt ~
+```
+
+Felt markert med ! Obligatorisk felt ! må alltid ha en gyldig verdi.
+
+I noen tilfeller settes verdien automatisk av systemet. For eksempel:
+```{.YAML .code}
+# ! Obligatorisk felt !
+# Livssyklus for variabelen.
+variable_status: DRAFT
+```
+### Redigere YAML-filen
+
+#### Enkle verdier
+
+- Type: `DoubleQuotedScalar`
+- Verdien skrives på samme linje som feltnavn (nøkkel)
+- Bruk doble fnutter `""`
+
+
+::: {.callout-note collapse=True}
+##### Felt med enkle verdier
+  - `classification_reference`
+  - `measurement_type`
+  - `external_reference_uri`
+  - `owner.team`
+:::
+
+::: {.callout-tip}
+##### Korrekt plassering og format
+```{.YAML .code}
+short_name: "landbak"
+
+measurement_type: "03"
+```
+::: 
+
+##### Vanlige feil enkle verdier
+
+::: {.callout-warning}
+###### Feil plassering av verdi
+```{.YAML .code}
+measurement_type: 
+"03"
+```
+::: 
+
+::: {.callout-warning}
+###### Feil innrykk mellom nøkkel og verdi
+```{.YAML .code}
+classification_reference:"91"
+```
+::: 
+
+::: {.callout-warning}
+###### Mangler kolon
+```{.YAML .code}
+short_name"landbak"
+```
+::: 
+
+::: {.callout-warning}
+###### Feil verdi type
+```{.YAML .code}
+# Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.
+measurement_type: 03
+```
+::: 
+
+#### Flerspråklige felt
+
+- Type: `LiteralScalar`. 
+- Et blokk symbol `|-` følger nøkkel. 
+- Teksten må starte rett under blokk-symbolet
+- Riktig innrykk er viktig
+- Formattering (avsnitt/linjeskift) lagres.
+
+
+::: {.callout-note collapse=True}
+##### Flerspråklige felt
+  - `name`
+  - `definition`
+  - `comment`
+  - `contact.title`
+:::
+
+::: {.callout-tip collapse=True}
+###### Korrekt plassering av tekst under blokk-symbol
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.
+        nn:
+        en:
+    email: generert@ssb.no
+```
+::: 
+
+::: {.callout-tip collapse=True}
+#### Korrekt lagring av avsnitt
+```{.YAML .code}
+comment:
+    nb: |-
+        Her er det en god plan, først er det en beskrivelse som innledning.
+
+        Deretter bevisst en blank linje:
+          - Liste-element 1
+          - Liste-element 2
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-note collapse=True}
+##### Bruk av spesialtegn
+```{.YAML .code}
+name:
+    nb: |-
+        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaksutheving.
+    nn:
+    en:
+```
+:::
+
+##### Vanlige feil flerspråklige felt
+
+::: {.callout-caution collapse=True}
+###### Uønsket tekstoppsett (linjeskift midt i ord)
+```{.YAML .code}
+name:
+    nb: |-
+        Her deles teksten opp
+        plutselig. Og den vil lagres akku-
+        rat slik du ser den.
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-warning collapse=True}
+###### Feil indentering (mangler korrekt innrykk)
+```{.YAML .code}
+name:
+    nb: |-
+Her er teksten ikke indentert og vil føre til feil når du lagrer.
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-warning collapse=True}
+###### Mangler blokk-symbolet
+```{.YAML .code}
+comment:
+    nb: Her er blokk symbolet fjernet og tekst med ':' vil feile.
+    nn:
+    en: Also text with paragraphs
+    will not be saved correctly.
+```
+::: 
+
+#### Lister
+
+- Type: `DoubleQuotedScalar`
+- Verdien skrives på samme linje som liste-symbol `-`
+- Bruk doble fnutter `""`
+
+::: {.callout-note collapse=True}
+##### Felt med lister
+  - `unit_types`
+  - `subject_fields`
+  - `related_variable_definition_uris`
+  - `owner.groups`
+:::
+
+::: {.callout-tip}
+#### Korrekt listeformat og indentering
+```{.YAML .code}
+unit_types:
+    - "20"
+```
+:::
+
+##### Vanlige feil lister
+
+::: {.callout-warning}
+###### Feil type i listeelementer
+```{.YAML .code}
+unit_types:
+    - 01
+    - 02
+```
+::: 
+
+::: {.callout-warning}
+###### Feil indentering på liste-symbol
+```{.YAML .code}
+unit_types:
+- "20"
+```
+::: 
+
+::: {.callout-warning}
+###### Feil indentering ved listeverdi
+```{.YAML .code}
+subject_fields:
+  -"bf"
+```
+::: 
+
+#### Andre typer
+
+::: {.callout-tip}
+#### Dato
+```{.YAML .code}
+valid_from: 2003-01-01
+```
+:::
+
+::: {.callout-tip}
+#### Boolean
+```{.YAML .code}
+contains_special_categories_of_personal_data: true
+```
+:::
+
+::: {.callout-tip}
+#### Variabel status
+```{.YAML .code}
+
+variable_status: DRAFT
+
+variable_status: PUBLISHED_INTERNAL
+
+variable_status: PUBLISHED_EXTERNAL
+```
+:::
+
+<style>
+code span.co {
+    color:#408080;
+    font-style: inherit;
+}
+code span.fu{
+  color: #88f;
+}
+code span.cp{
+  color: #a2f;
+}
+code span.c12{
+  color: #ba2121;
+}
+code span.st{
+  color: #ba2121;
+}
+pre code.sourceCode > span{
+  color:rgba(8, 8, 8, 0.99);
+}
+#cb2-4{
+  background-color: yellow;
+}
+</style>
