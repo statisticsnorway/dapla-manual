@@ -146,7 +146,7 @@ Denne filen genereres når du vil opprette en ny variabeldefinisjon.
 Lagres som `variable_definition_template_<timestamp>.yaml`
 :::
 
-::: {.callout-caution collapse=True}
+::: {.callout-caution}
 #### NB! Innholder eksempelverdier som må endres
 
 ```{.YAML .code}
@@ -187,16 +187,17 @@ Denne blokken beskriver om feltet er obligatorisk eller valgfritt, gir forklarin
 #       Lønnsinntekter
 name:
 ```
+
 Felt markert med ~ Valgfritt felt ~ trenger ikke ha en verdi. De kan utelates dersom de ikke er relevante.
 ```{.YAML .code}
 # ~ Valgfritt felt ~
 ```
 
 Felt markert med ! Obligatorisk felt ! må alltid ha en gyldig verdi.
+
 I noen tilfeller settes verdien automatisk av systemet. For eksempel:
 ```{.YAML .code}
-# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
-# ~ Valgfritt felt ~
+# ! Obligatorisk felt !
 # Livssyklus for variabelen.
 variable_status: DRAFT
 ```
@@ -218,7 +219,7 @@ variable_status: DRAFT
 :::
 
 ::: {.callout-tip}
-#### Korrekt
+##### Korrekt
 ```{.YAML .code}
 short_name: "landbak"
 
@@ -226,8 +227,10 @@ measurement_type: "03"
 ```
 ::: 
 
-::: {.callout-warning collapse=True}
-#### Feil plassering
+##### Vanlige feil enkle verdier
+
+::: {.callout-warning}
+###### Feil plassering
 ```{.YAML .code}
 measurement_type: 
 "03"
@@ -235,16 +238,25 @@ measurement_type:
 ::: 
 
 ::: {.callout-warning collapse=True}
-#### Mangler `:`
+###### Feil intendering
 ```{.YAML .code}
+# Mangler mellomrom mellom nøkkel og verdi
+classification_reference:"91"
+```
+::: 
+
+::: {.callout-warning}
+###### Mangler tegn 
+```{.YAML .code}
+# Mangler `:` mellom nøkkel og verdi
 short_name"landbak"
 ```
 ::: 
 
-::: {.callout-warning collapse=True}
-#### Feil type
-Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.
+::: {.callout-warning}
+###### Feil type
 ```{.YAML .code}
+# Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.
 measurement_type: 03
 ```
 ::: 
@@ -267,7 +279,7 @@ measurement_type: 03
 :::
 
 ::: {.callout-tip collapse=True}
-#### Korrekt
+###### Korrekt plassering av tekst
 ```{.YAML .code}
 contact:
     title:
@@ -294,19 +306,21 @@ comment:
 ```
 ::: 
 
-::: {.callout-warning collapse=True}
-#### Feil indentering
+::: {.callout-note collapse=True}
+##### Bruk av spesialtegn
 ```{.YAML .code}
 name:
     nb: |-
-Her er teksten ikke indentert og vil føre til feil når du lagrer.
+        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaksutheving.
     nn:
     en:
 ```
-::: 
+:::
+
+##### Vanlige feil flerspråklige felt
 
 ::: {.callout-caution collapse=True}
-#### Uønsket formattering
+###### Uønsket formattering
 ```{.YAML .code}
 name:
     nb: |-
@@ -318,40 +332,25 @@ name:
 ```
 ::: 
 
-
-::: {.callout-tip collapse=True}
-#### Spesialtegn
+::: {.callout-warning collapse=True}
+###### Feil indentering
 ```{.YAML .code}
-comment:
+name:
     nb: |-
-        Her er det en god plan, først er det en beskrivelse som innledning:
-
-        Deretter bevisst en blank linje:
-          - Og en liste med punkter
-          - Flere
+Her er teksten ikke indentert og vil føre til feil når du lagrer.
     nn:
     en:
 ```
 ::: 
 
-::: {.callout-note collapse=True}
-#### Feil syntaks highlightning
-```{.YAML .code}
-name:
-    nb: |-
-        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaks
-    nn:
-    en:
-```
-:::
-
 ::: {.callout-warning collapse=True}
-#### Spesialtegn
+###### Mangler blokk symbol
 ```{.YAML .code}
 comment:
-    nb: Her er blokk symbolet fjernet og kolon tolkes som ny nøkkel-verdi par: ved lagring
+    nb: Her er blokk symbolet fjernet og tekst med ':' vil feile.
     nn:
-    en:
+    en: Also text with paragraphs
+    will not be saved correctly.
 ```
 ::: 
 
@@ -370,15 +369,17 @@ comment:
 :::
 
 ::: {.callout-tip}
-#### Korrekt type
+#### Korrekt
 ```{.YAML .code}
 unit_types:
     - "20"
 ```
 :::
 
-::: {.callout-warning collapse=True}
-#### Feil type
+##### Vanlige feil lister
+
+::: {.callout-warning}
+###### Feil type
 ```{.YAML .code}
 unit_types:
     - 01
@@ -386,47 +387,45 @@ unit_types:
 ```
 ::: 
 
-::: {.callout-tip collapse=True}
-#### Korrekt indentering
-```{.YAML .code}
-unit_types:
-    - "20"
-```
-:::
-
-::: {.callout-warning collapse=True}
-#### Feil indentering
+::: {.callout-warning}
+###### Feil indentering liste-symbol
 ```{.YAML .code}
 unit_types:
 - "20"
 ```
 ::: 
 
+::: {.callout-warning}
+###### Feil indentering vedri
+```{.YAML .code}
+subject_fields:
+  -"bf"
+```
+::: 
+
 #### Andre typer
 
 ::: {.callout-tip}
-#### Korrekt dato
+#### Dato
 ```{.YAML .code}
 valid_from: 2003-01-01
 ```
 :::
 
 ::: {.callout-tip}
-#### Korrekt boolean
+#### Boolean
 ```{.YAML .code}
 contains_special_categories_of_personal_data: true
 ```
 :::
 
 ::: {.callout-tip}
-#### Korrekt variabel status
+#### Variabel status
 ```{.YAML .code}
 
 variable_status: DRAFT
 
-
 variable_status: PUBLISHED_INTERNAL
-
 
 variable_status: PUBLISHED_EXTERNAL
 ```
