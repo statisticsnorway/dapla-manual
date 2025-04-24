@@ -1,10 +1,8 @@
 ---
-title: Beslutning om Transfer Service fra testmiljøet på Dapla til bakken
-subtitle: Ikke lenger mulig å bruke Transfer Service mot bakken fra testmiljø
+title: Endring i opprettelse og administrasjon av delt-bøtter
+subtitle: Ny versjon av shared-buckets.yaml
 categories:
-  - transfer service
-  - altinn
-  - testmiljø
+  - datadeling
 author:
   - name: Øyvind Bruer-Skarsbø
     affiliation: 
@@ -12,93 +10,20 @@ author:
         email: obr@ssb.no
 date: "04/24/2025"
 date-modified: "04/24/2025"
-image: ./thumbnail.png
+image: ./viz.png
 image-alt: "Bilde av Iac-repo"
 lightbox: true
 draft: false
-mermaid:
-    theme: neutral
 ---
 
-Mange brukere har bedt om å kunne overføre data fra et Dapla-team sitt test-miljø til bakken. Dette er spesielt relevant for team har datafangst fra Altinn 3 på Dapla, men som skal prosessere dataene på bakken. 
+Vi ruller nå ut en endring i hvordan brukere kan opprette og gi tilganger til delt-bøtter. Den nye fremgangsmåten er [dokumentert i Dapla-manualen](https://manual.dapla.ssb.no/statistikkere/deling-av-data.html). Endringen vil skje gradvis de neste dagene, og vil fullføres ila et par dager. 
 
-Det er nå besluttet at det ikke skal åpnes for å kunne overføre data fra test-miljø på Dapla til bakken. Årsaken er at det ikke finnes noe test-miljøet på bakken, og derfor lager dette en åpning for å overføre data mellom prod- og test-miljøene på Dapla. En slik åpning er problematisk og derfor er det nå besluttet at dette ikke skal være mulig. 
+Årsaken til endringen er at Dapla nå skal støtte en ny type delt-bøtte kalt **Delomat**. Denne bøttetypen er spesielt konfigurert for en ny tjeneste for datadeling som utvikles med navnet **Delomaten**. 
 
-Løsningen for team som har datafangst med **Altinn3**, og får test-data fra team SU-V, blir derfor å bruke Transfer Service fra prod-miljøet til teamet for å overføre til bakken. **Team SU-V** har nå gitt Transfer Service i prod-miljøet til alle team med datafangst fra Altinn 3 tilgang til test-bøtta for data, slik som vist i @fig-mermaid. 
+En direkte konsekvens av endringen er at brukere ikke lenger trenger å forholde seg `iam.yaml` for å gi tilganger slik som tidligere. Både opprettelse av bøtter og tilgangstyring skjer nå i samme fil `shared-buckets.yaml`. @fig-shared-buckets viser hvordan den nye strukturen ser ut. 
 
-Team som allerede har fått satt opp muligheten til å overføre data fra test-miljøet til bakken, vil bli kontaktet av team Skyinfra for endre dette til løsningen vist i @fig-mermaid. 
+Utrullingen av den nye funksjonaliteten medfører ikke at brukere trenger å gjøre noe, siden alle tidligere `shared-buckets.yaml` og `iam.yaml` blir migrert inn til det nye formatet. Hvis noen skulle oppleve endringer i tilganger til delt-bøtter, så kan man kontakte Kundeservice for å få hjelp. 
 
-::: {#fig-mermaid}
+![Bilde av det nye oppsettet for delt-bøtter.](./viz.png){fig-alt="Bilde av shared-buckets.yaml" #fig-shared-buckets}
 
-```{mermaid}
-
-flowchart LR 
-
-    subgraph suv-altinn-data-t
-        id_suv_bucket_t[(ssb-suv-altinn-raXXXX-YY-test)]
-    end
-
-    subgraph ssb-teamnavn-kilde-t
-        id_stat_kilde_bucket_t[(data-kilde)]
-    end
-    id_suv_bucket_t <-- Transfer service read/write --> id_stat_kilde_bucket_t
-
-    subgraph ssb-teamnavn-t
-        id_stat_produkt_bucket_t[(data-produkt)]
-    end
-    id_stat_kilde_bucket_t -- Kildomaten --> id_stat_produkt_bucket_t
-
-    subgraph suv-altinn-data-p
-        id_suv_bucket_p[(ssb-suv-altinn-raXXXX-YY-prod)]
-    end
-
-    subgraph ssb-teamnavn-kilde-p
-        id_stat_kilde_bucket_p[(data-kilde<br>/altinn/prod/)]
-        id_stat_kilde_bucket_pt[(data-kilde<br>/altinn/test/)]
-    end
-    id_suv_bucket_p <-- Transfer service read/write --> id_stat_kilde_bucket_p
-    id_suv_bucket_t -- Transfer service read --> id_stat_kilde_bucket_pt
-
-    subgraph ssb-teamnavn-p
-        id_stat_produkt_bucket_p[(data-produkt<br>/inndata/altinn/)]
-        id_stat_produkt_bucket_pt[(data-produkt<br>/temp/test/altinn/)]
-
-        id_stat_kilde_bucket_p -- Kildomaten --> id_stat_produkt_bucket_p
-        id_stat_kilde_bucket_pt -- Kildomaten --> id_stat_produkt_bucket_pt
-
-        id_stat_frasky_bucket_p[(frasky<br>/altinn/prod)]
-        id_stat_frasky_bucket_pt[(frasky<br>/altinn/test)]
-
-        id_stat_produkt_bucket_p -- Transfer service --> id_stat_frasky_bucket_p
-        id_stat_produkt_bucket_pt -- Transfer service --> id_stat_frasky_bucket_pt
-    end
-
-    subgraph linux on-prem
-        id_cloudsync_p[(cloud_sync<br>/frasky/altinn/prod)]
-        id_cloudsync_pt[(cloud_sync<br>/frasky/altinn/test)]
-
-        id_stat_frasky_bucket_p -- Transfer service --> id_cloudsync_p
-        id_stat_frasky_bucket_pt -- Transfer service --> id_cloudsync_pt
-
-        id_stammekat_p[(stammekatalog<br>/wk24/datafangst/gSdv/)]
-        id_stammekat_pt[(stammekatalog<br>/test/wk24/datafangst/gSdv/)]
-
-        id_cloudsync_p -- MoveIT --> id_stammekat_p 
-        id_cloudsync_pt -- MoveIT --> id_stammekat_pt 
-    end
-
-    subgraph Oracle DB1P
-        id_isee_p[(ISEE Prod)]
-    end
-    id_stammekat_p -- crontab --> id_isee_p
-
-    subgraph Oracle DB1T
-        id_isee_t[(ISEE Test)]
-    end
-    id_stammekat_pt -- crontab --> id_isee_t
-
-```
-
-Figur som viser dataflyt for statistikkproduksjon på Dapla og Dapla/ISEE.
-:::
 
