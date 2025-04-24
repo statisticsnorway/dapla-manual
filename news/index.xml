@@ -42,7 +42,7 @@
 <item>
   <title>Endring i opprettelse og administrasjon av delt-bøtter</title>
   <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-04-24-update-shared-buckets/</link>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/</link>
   <description><![CDATA[ 
 
 
@@ -56,7 +56,7 @@
 <div id="fig-shared-buckets" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av shared-buckets.yaml">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-shared-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./viz.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Bilde av det nye oppsettet for delt-bøtter."><img src="https://manual.dapla.ssb.no/news/posts/2025-04-24-update-shared-buckets/viz.png" class="img-fluid figure-img" alt="Bilde av shared-buckets.yaml"></a>
+<a href="./viz.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Bilde av det nye oppsettet for delt-bøtter."><img src="https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/viz.png" class="img-fluid figure-img" alt="Bilde av shared-buckets.yaml"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shared-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;1: Bilde av det nye oppsettet for delt-bøtter.
@@ -68,9 +68,119 @@ Figur&nbsp;1: Bilde av det nye oppsettet for delt-bøtter.
 
  ]]></description>
   <category>datadeling</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/</guid>
+  <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/viz.png" medium="image" type="image/png" height="102" width="144"/>
+</item>
+<item>
+  <title>Beslutning om Transfer Service fra testmiljøet på Dapla til bakken</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-04-24-update-shared-buckets/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Mange brukere har bedt om å kunne overføre data fra et Dapla-team sitt test-miljø til bakken. Dette er spesielt relevant for team har datafangst fra Altinn 3 på Dapla, men som skal prosessere dataene på bakken.</p>
+<p>Det er nå besluttet at det ikke skal åpnes for å kunne overføre data fra test-miljø på Dapla til bakken. Årsaken er at det ikke finnes noe test-miljøet på bakken, og derfor lager dette en åpning for å overføre data mellom prod- og test-miljøene på Dapla. En slik åpning er problematisk og derfor er det nå besluttet at dette ikke skal være mulig.</p>
+<p>Løsningen for team som har datafangst med <strong>Altinn3</strong>, og får test-data fra team SU-V, blir derfor å bruke Transfer Service fra prod-miljøet til teamet for å overføre til bakken. <strong>Team SU-V</strong> har nå gitt Transfer Service i prod-miljøet til alle team med datafangst fra Altinn 3 tilgang til test-bøtta for data, slik som vist i Figur&nbsp;1.</p>
+<p>Team som allerede har fått satt opp muligheten til å overføre data fra test-miljøet til bakken, vil bli kontaktet av team Skyinfra for endre dette til løsningen vist i Figur&nbsp;1.</p>
+<div id="fig-mermaid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mermaid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR 
+
+    subgraph suv-altinn-data-t
+        id_suv_bucket_t[(ssb-suv-altinn-raXXXX-YY-test)]
+    end
+
+    subgraph ssb-teamnavn-kilde-t
+        id_stat_kilde_bucket_t[(data-kilde)]
+    end
+    id_suv_bucket_t &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_t
+
+    subgraph ssb-teamnavn-t
+        id_stat_produkt_bucket_t[(data-produkt)]
+    end
+    id_stat_kilde_bucket_t -- Kildomaten --&gt; id_stat_produkt_bucket_t
+
+    subgraph suv-altinn-data-p
+        id_suv_bucket_p[(ssb-suv-altinn-raXXXX-YY-prod)]
+    end
+
+    subgraph ssb-teamnavn-kilde-p
+        id_stat_kilde_bucket_p[(data-kilde&lt;br&gt;/altinn/prod/)]
+        id_stat_kilde_bucket_pt[(data-kilde&lt;br&gt;/altinn/test/)]
+    end
+    id_suv_bucket_p &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_p
+    id_suv_bucket_t -- Transfer service read --&gt; id_stat_kilde_bucket_pt
+
+    subgraph ssb-teamnavn-p
+        id_stat_produkt_bucket_p[(data-produkt&lt;br&gt;/inndata/altinn/)]
+        id_stat_produkt_bucket_pt[(data-produkt&lt;br&gt;/temp/test/altinn/)]
+
+        id_stat_kilde_bucket_p -- Kildomaten --&gt; id_stat_produkt_bucket_p
+        id_stat_kilde_bucket_pt -- Kildomaten --&gt; id_stat_produkt_bucket_pt
+
+        id_stat_frasky_bucket_p[(frasky&lt;br&gt;/altinn/prod)]
+        id_stat_frasky_bucket_pt[(frasky&lt;br&gt;/altinn/test)]
+
+        id_stat_produkt_bucket_p -- Transfer service --&gt; id_stat_frasky_bucket_p
+        id_stat_produkt_bucket_pt -- Transfer service --&gt; id_stat_frasky_bucket_pt
+    end
+
+    subgraph linux on-prem
+        id_cloudsync_p[(cloud_sync&lt;br&gt;/frasky/altinn/prod)]
+        id_cloudsync_pt[(cloud_sync&lt;br&gt;/frasky/altinn/test)]
+
+        id_stat_frasky_bucket_p -- Transfer service --&gt; id_cloudsync_p
+        id_stat_frasky_bucket_pt -- Transfer service --&gt; id_cloudsync_pt
+
+        id_stammekat_p[(stammekatalog&lt;br&gt;/wk24/datafangst/gSdv/)]
+        id_stammekat_pt[(stammekatalog&lt;br&gt;/test/wk24/datafangst/gSdv/)]
+
+        id_cloudsync_p -- MoveIT --&gt; id_stammekat_p 
+        id_cloudsync_pt -- MoveIT --&gt; id_stammekat_pt 
+    end
+
+    subgraph Oracle DB1P
+        id_isee_p[(ISEE Prod)]
+    end
+    id_stammekat_p -- crontab --&gt; id_isee_p
+
+    subgraph Oracle DB1T
+        id_isee_t[(ISEE Test)]
+    end
+    id_stammekat_pt -- crontab --&gt; id_isee_t
+
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mermaid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Figur som viser dataflyt for statistikkproduksjon på Dapla og Dapla/ISEE.
+</figcaption>
+</figure>
+</div>
+
+
+
+ ]]></description>
+  <category>transfer service</category>
+  <category>altinn</category>
+  <category>testmiljø</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2025-04-24-update-shared-buckets/</guid>
   <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/news/posts/2025-04-24-update-shared-buckets/viz.png" medium="image" type="image/png" height="102" width="144"/>
+  <media:content url="https://manual.dapla.ssb.no/news/posts/2025-04-24-update-shared-buckets/thumbnail.png" medium="image" type="image/png" height="102" width="144"/>
 </item>
 <item>
   <title>Statistikk over datadeling på Dapla</title>
@@ -1060,37 +1170,6 @@ Figur&nbsp;1: Ulik visning av informasjon basert på om man velger developers el
  ]]></description>
   <category>dapla lab</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/</guid>
-  <pubDate>Tue, 18 Mar 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
-</item>
-<item>
-  <title>Nytt utseende for Klass-siden på ssb.no</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-03-18-klass-web-upgrade/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Den <strong>18. mars 2025</strong> ble nettsiden som lar brukere utforske i kodeverk i Klass på <a href="https://www.ssb.no/klass/">www.ssb.no/klass</a> oppdatert. Brukere vil merke at utseende nå er oppdatert og mer i tråd med utseendet på resten av <a href="https://www.ssb.no/">www.ssb.no</a>. I tillegg har selve applikasjonen blitt oppgradert og migrert til å kjøre på SSBs nye applikasjonsplattform <strong>NAIS</strong>.</p>
-<p>Figur&nbsp;1 viser hvordan den nye nettsiden ser ut. <br> <br></p>
-<div id="fig-klass-web" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av ny nettside for Klass">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-klass-web-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="https://manual.dapla.ssb.no/news/posts/2025-03-18-klass-web-upgrade/klass-web.png" class="img-fluid figure-img" alt="Bilde av ny nettside for Klass">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-klass-web-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1: Den nye nettsiden på ssb.no for Klass.
-</figcaption>
-</figure>
-</div>
-
-
-
- ]]></description>
-  <category>klass</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-03-18-klass-web-upgrade/</guid>
   <pubDate>Tue, 18 Mar 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
