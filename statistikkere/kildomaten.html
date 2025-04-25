@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>kildomaten – Dapla-manualen</title>
+<title>Kildomaten – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -76,6 +76,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-0207fab1b9e58ba195972ae5c21007b9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,14 +108,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<meta property="og:title" content="Dapla-manualen">
+<meta property="og:title" content="Kildomaten – Dapla-manualen">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://manual.dapla.ssb.no/images/checks_passed.png">
 <meta property="og:site_name" content="Dapla-manualen">
 <meta property="og:image:alt" content="Suksessfulle tester på GitHub">
 <meta property="og:image:height" content="671">
 <meta property="og:image:width" content="1979">
-<meta name="twitter:title" content="Dapla-manualen">
+<meta name="twitter:title" content="Kildomaten – Dapla-manualen">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://manual.dapla.ssb.no/images/checks_passed.png">
 <meta name="twitter:image:alt" content="Suksessfulle tester på GitHub">
@@ -714,9 +717,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#kildomaten" id="toc-kildomaten" class="nav-link active" data-scroll-target="#kildomaten">Kildomaten</a>
-  <ul class="collapse">
-  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link active" data-scroll-target="#forberedelser">Forberedelser</a></li>
   <li><a href="#sette-opp-tjenesten" id="toc-sette-opp-tjenesten" class="nav-link" data-scroll-target="#sette-opp-tjenesten">Sette opp tjenesten</a>
   <ul class="collapse">
   <li><a href="#klone-iac-repoet" id="toc-klone-iac-repoet" class="nav-link" data-scroll-target="#klone-iac-repoet">Klone IaC-repoet</a></li>
@@ -738,18 +739,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#endre-skript" id="toc-endre-skript" class="nav-link" data-scroll-target="#endre-skript">Endre skript</a></li>
   <li><a href="#endre-config.yaml" id="toc-endre-config.yaml" class="nav-link" data-scroll-target="#endre-config.yaml">Endre config.yaml</a></li>
   </ul></li>
-  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/kildomaten.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/kildomaten.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Kildomaten</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="kildomaten" class="level1">
-<h1>Kildomaten</h1>
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">April 26, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
 <p><em>Kildomaten</em> er en tjeneste for å automatisere overgangen fra <a href="./datatilstander.html#kildedata">kildedata</a> til <a href="./datatilstander.html#inndata">inndata</a>. Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjonn til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.</p>
 <p>Prosessering som skal skje i overgangen fra kildedata til inndata har SSB definert til å være:</p>
 <ul>
@@ -1081,7 +1101,7 @@ Pseudonymisering kan <strong>ikke</strong> kjøres fra en IDE i prod-miljøet
 <div id="fig-passing-checks" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Suksessfulle tester på GitHub">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-passing-checks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/checks_passed.png" class="img-fluid figure-img" alt="Suksessfulle tester på GitHub">
+<a href="../images/checks_passed.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Suksessfulle tester på GitHub"><img src="../images/checks_passed.png" class="img-fluid figure-img" alt="Suksessfulle tester på GitHub"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-passing-checks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;1: Suksessfulle tester på GitHub
@@ -1142,7 +1162,7 @@ Sjekke logger
 <p>Det er anbefalt å se på Kildomaten-loggene i Logs Explorer. Det kan man enkelt gjøre ved å trykke på “View in Logs Explorer” som vist på bildet under:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../images/kildomaten-logger.png" class="img-fluid figure-img" style="width:100.0%" alt="Bilde som viser hvordan man åpner Logs Explorer"></p>
+<p><a href="../images/kildomaten-logger.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Åpne Kildomaten-loggene i Logs Explorer"><img src="../images/kildomaten-logger.png" class="img-fluid figure-img" style="width:100.0%" alt="Bilde som viser hvordan man åpner Logs Explorer"></a></p>
 <figcaption>Åpne Kildomaten-loggene i Logs Explorer</figcaption>
 </figure>
 </div>
@@ -1217,6 +1237,19 @@ Sjekke logger
 <section id="trigge-kilde-manuelt" class="level3">
 <h3 class="anchored" data-anchor-id="trigge-kilde-manuelt">Trigge kilde manuelt</h3>
 <p>Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. Men noen ganger er det nødvendig å trigge kjøring av filer for en gitt kilde på nytt. Dette kan gjøres med en funksjon i Python-pakken <a href="https://github.com/statisticsnorway/dapla-toolbelt">dapla-toolbelt</a>.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Logg inn som developers i Dapla Lab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Trigging av kilder manuelt kan kun gjøres av <em>developers</em> på Dapla Lab. Årsaken til dette er at vi ønsker at alle på teamet skal ha denne muligheten, og siden brukere som er medlem av tilgangsgruppen <em>data-admins</em> også kan være medlemmer av gruppen <em>developers</em>, så må man logge seg inn som <em>developers</em> i Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn.</p>
+</div>
+</div>
 <p>Før du kan gjøre dette trenger du følgende informasjon:</p>
 <ol type="1">
 <li><strong>project-id</strong> for <em>standardprosjektet</em>. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>. Merk at dette ikke er kilde-prosjektet!</li>
@@ -1269,7 +1302,6 @@ Sjekke logger
 <p>En endring i config.yaml krever at tjenesten rulles ut på nytt og tar derfor litt mer tid enn en endring i Python-skriptet.</p>
 
 
-</section>
 </section>
 </section>
 
@@ -1725,6 +1757,38 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
