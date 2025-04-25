@@ -1,0 +1,87 @@
+---
+title: Bruk av funksjoner
+subtitle: God kodepraksis å bruke funksjoner
+categories:
+  - kvakk
+author:
+  - name: Arne Sørli
+    affiliation: 
+      - name: Seksjon for IT-partner (703)
+        email: arne.sorli@ssb.no
+date: "04/25/2025"
+date-modified: "04/25/2025"
+image: functions.png
+image-alt: "Bilde av blogginnlegg om bruk av funksjoner"
+draft: false
+---
+
+Mange er godt i gang med å kode produksjonsløpene sine python og R.
+Mye virker og er bra, men fortsatt er det mange steder lite bruk av funksjoner.
+Fra KVAKK sin side vil vi oppfordre til å bruke funksjoner mer.
+
+## Hvorfor bruke funksjoner?
+
+Profesjonell kode, bortsett fra i skript, skrives nesten utelukkende innenfor
+funksjoner^[Med funksjoner menes her også metoder i klasser.] og klasser.
+Noen av årsakene til dette er:
+
+- **Gjenbruk:**
+    Ting som gjøres flere ganger bør skilles ut til funksjoner for å unngå duplisert kode.
+    Da kan retting og forbedring gjøres ett sted, i stedet for flere steder.
+
+- **Muliggjør automatisert testing:**
+    Kode utenfor funksjoner er det vanskelig å lage automatiserte tester for.
+    Kode du ønsker å teste automatisk bør derfor ligge i funksjoner.
+    På sikt bør vi erstatte mest mulig av manuell testing med automatiske tester.
+
+- **Enklere å forstå og forklare:**
+    Når koden er organisert i små funksjoner med tydelige navn,
+    blir det lettere for deg og kollegaene dine å forstå hva koden gjør, og hver bit blir mindre kompleks.
+    Tenk på funksjoner som «byggeklosser»: én funksjon gjør én ting, og navnet på funksjonen forteller tydelig hva denne tingen er.
+    Det blir som å skrive en god innholdsfortegnelse i et dokument, slik at du raskt ser hva hvert avsnitt handler om.
+
+- **Automatisert kjøring av mange notebooks:**
+    Bygger du opp koden din med funksjoner så kan du automatisere kjøring av alt sammen,
+    uten å bruke Papermill, som har problemer med ytelse.
+
+## Hvordan endre fra "vanlig" notebook til bruk av funksjoner?
+
+KVAKK har laget en beskrivelse som viser hvordan du kan gå fra en "vanlig" notebook, hvor
+koden kjøres fra topp til bunn, uten bruk av funksjoner, og automatisert ved bruk av Papermill,
+og til en tilsvarende notebook med bruk av funksjoner.
+
+Se [Hvordan automatisere Jupyter notebooks ved bruk av funksjoner].
+
+
+## Verktøy for å sjekke funksjonsbruk
+
+Tech-coachene på seksjon IT-partner har laget et skript, [analyze_function_use.py],
+du kan bruke til å sjekke hvor mye bruk av funksjoner det er i python-koden i et repo.
+Det gir deg andelen av koden som ligger utenfor funksjoner, samt antall funksjoner.
+
+Skriptet har ingen avhengigheter, så du kan kjøre det uten å installere noe ekstra.
+
+Skriptet analyserer python-filer i et clonet GitHub-repo.
+For hver fil teller den opp antall kodelinjer som er innenfor en funksjonsblokk
+(eller metode, som er det navnet som brukes på funksjoner som hører til en klasse),
+og også totalt antall kodelinjer i filen.
+Dette summerer den for alle filer i repoet og beregner andelen av koden som er utenfor funksjonsblokker.
+Den dropper blanke linjer, kommentarer og filer som ligger tests-katalogen.
+I tillegg teller den opp antall funksjoner i repoet.
+
+## Eksempler
+
+Et par eksempler på statistikk-repoer som er gode til å bruke funksjoner er
+[stat-bygganlprod] og [stat-mnd-el] på seksjon 422.
+Ta gjerne en titt på disse. Den første har kun 4 % av koden utenfor funksjoner og er liten,
+mens den andre har 634 funksjoner og er en større statistikk.
+
+Ta gjerne også en titt på [tech-coach-stat]-repoet, som er en  eksempelstatistikk som tech-coach'ene har begynt på,
+og som viser mye god kodepraksis.
+
+
+[analyze_function_use.py]: https://github.com/statisticsnorway/tech-coach-scripts/blob/main/src/scripts/analyze_function_use.py
+[stat-bygganlprod]: https://github.com/statisticsnorway/stat-bygganlprod/
+[stat-mnd-el]: https://github.com/statisticsnorway/stat-mnd-el
+[tech-coach-stat]: https://github.com/statisticsnorway/tech-coach-stat/?tab=readme-ov-file#tech-coach-stat
+[Hvordan automatisere Jupyter notebooks ved bruk av funksjoner]: https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3925147685/Hvordan+automatisere+Jupyter+notebooks+ved+bruk+av+funksjoner
