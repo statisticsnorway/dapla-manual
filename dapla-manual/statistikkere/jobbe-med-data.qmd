@@ -360,6 +360,7 @@ dt_1987 <- read.csv2(file_path)
 For å lese inn en json-fil kan skrive følgende:
 
 ```{.r filename="notebook"}
+library(jsonlite)
 
 # Filsti
 file_path = "/buckets/produkt/dapla-manual-examples/test.json"
@@ -392,7 +393,16 @@ df = pd.read_excel("gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-example
 
 ## {{< fa brands r-project >}}
 
-Kommer snart
+XLSX-filer kan lese inn med funksjonen [read.xlsx](https://www.rdocumentation.org/packages/openxlsx/versions/4.2.8/topics/read.xlsx) fra pakken [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html).
+
+```{.r filename="notebook"}
+library(openxlsx)
+
+file_path = "/buckets/produkt/dapla-manual-examples/purchases.xlsx"
+
+data <- openxlsx::read.xlsx(file_path)
+
+```
 
 :::
 
@@ -414,13 +424,15 @@ dp.read_pandas(file_path, file_format="sas7bdat", encoding="latin1")
 
 ## {{< fa brands r-project >}}
 
-Siden innlesing av sas7bdat-filer ikke er støttet i [fellesr](https://statisticsnorway.github.io/ssb-fellesr/articles/vignette__DAPLA_jukseark.html), så kan vi bruke R-pakken reticulate for å benytte oss av funksjonaliteten i Python-pakken dapla-toolbelt. Dette fordrer at man kjører R i et kjøremiljø som også har Python installert slik som Jupyter. Reticulate-pakken støttes ikke i Rstudio på Dapla. 
+For å lese sas7bdat-filer i R kan man bruke funksjonen [read_sas](https://haven.tidyverse.org/reference/read_sas.html) fra pakken [haven](https://cran.r-project.org/web/packages/haven/index.html) (som ligger i ´tidyverse´).
 
 ```{.r filename="notebook"}
-library(reticulate)
-dp <- import("dapla")
-file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/statbank_ledstill.sas7bdat"
-dp$read_pandas(file_path, file_format="sas7bdat", encoding="latin1")
+library(tidyverse)
+
+# Filsti
+file_path = "/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"
+
+data <- haven::read_sas(file_path)
 ```
 
 :::
@@ -445,15 +457,13 @@ fs.rm(file_path)
 ```
 
 ## {{< fa brands r-project >}}
-Funksjonen `gc_delete_object` kan brukes til å slette data på lagringsområdet.
+Funksjonen `file.remove` kan brukes til å slette data på lagringsområdet.
 
 ```{.r filename="notebook"}
-library(fellesr)
-
 # Skriv inn full filsti til filen som skal slettes
 file_path = ""
 
-gcs_delete_object(file.path(file_path))
+file.remove(file_path)
 ```
 
 :::
