@@ -260,6 +260,9 @@ ssb-prod-team-personstatistikk-data-produkt-prod/
 Eksempelet over viser at siste versjon av en fil kan lagres med og uten versjonsnummer for å gjøre det lettere å lese inn nyeste versjon.
 
 #### Eksempelkode med pakken ssb-fagfunksjoner
+::: {.panel-tabset}
+
+## Python {{< fa brands python >}}
 
 ```python{.yaml filename="Python kode fra SSB-fagfunksjoner for finne neste filversjon"}
 # importer funksjonen next_version_path() fra ssb-fagfunksjoner
@@ -272,13 +275,33 @@ ny_filsti = next_version_path(filsti)
 print(ny_filsti)
 # vil returnere:
 # 'gs://ssb-prod-team-personstatistikk-data-produkt-prod/befolkningsframskrivninger/klargjorte-data/framskrevne-befolkningsendringer_p2019_p2050_v4.parquet'
-
 ```
+
 ssb-fagfunksjoner har også følgende funksjoner for å gjøre versjonering lettere:
 
 * `get_fileversions()` # Retrieves a list of file versions matching a specified pattern.
 * `latest_version_number()` # Function for finding latest version in use for a file.
 * `latest_version_path()` # Finds the path to the latest version of a specified file.
+
+
+## {{< fa brands r-project >}}
+```{.r filename="R-kode fra fellesr for finne neste filversjon"}
+library(fellesr)
+fil = "/buckets/produkt/dapla-manual-examples/testdata_p2025-Q2_v1.parquet"
+ny_filsti = lag_versjonert_filsti(fil, versjon = "ny")
+print(ny_filsti)
+
+# Vil returnere: "/buckets/produkt/dapla-manual-examples/testdata_p2025-Q2_v2.parquet"
+
+```
+fellesr har også følgende funksjoner for å gjøre versjonering lettere:
+* `finn_fileversjoner(fil)` # Skaffer en liste over filversjoner som matcher filnavn (KOMMER).
+* `finn_versjon(lag_versjonert_filsti(fil, versjon = "siste"))` # Nøstet funksjon som finner nummeret til en riktig versjonert fil.
+* `lag_versjonert_filsti(fil, versjon = "siste")` # Finner stien til den siste versjonen av en spesifisert fil.
+
+:::
+
+
 
 ::: {.callout-important}
 ## Permanente data skal ikke endres eller slettes 
