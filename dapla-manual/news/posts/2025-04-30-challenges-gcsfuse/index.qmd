@@ -1,0 +1,25 @@
+---
+title: Deling av data og `/buckets` 
+categories:
+  - dapla Lab
+  - datadeling
+  - gcsfuse
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "04/30/2025"
+date-modified: "04/30/2025"
+image: ../../../images/Dapla-Logo1.png
+image-alt: "Dapla-logo"
+draft: false
+---
+
+Etter noen måneder med erfaring med tilgjengeliggjøring av bøtter som filsystem i Dapla Lab, har vi erfart at funksjonaliteten i noen tilfeller har noen utfordringer. 
+
+En utfordring oppstår når team skriver data til delt-bøtter direkte via Transfer Service, uten å logge seg inn på Dapla Lab etterpå. Hvis det delende teamet aldri åpner en tjeneste på Dapla Lab etter at dataene er delt, så vil ikke de dataene vises for konsumentene av dataene under /buckets/ i Dapla Lab. 
+
+Årsaken er at opprettelsen av mapper krever skrivetilgang til bøtta, og det har ikke konsumenten av delte-data. Konsumentene vil kunne se dataene via `gs://`-stien, men ikke `/buckets/`-stien. Hvis data derimot deles ved at de produseres direkte fra en tjeneste på Dapla Lab, så vil ikke dette være en problemstilling. 
+
+Vi jobber med å løse dette problemet, og finner forhåpentligvis en løsning innen kort tid. 
