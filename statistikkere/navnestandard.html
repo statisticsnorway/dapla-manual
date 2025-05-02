@@ -78,6 +78,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-199c0f716a0383a39b16cbc979109fc4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -1120,6 +1122,10 @@ Unntak til versjonering: nyeste versjon og temporære data
 <p>Eksempelet over viser at siste versjon av en fil kan lagres med og uten versjonsnummer for å gjøre det lettere å lese inn nyeste versjon.</p>
 <section id="eksempelkode-med-pakken-ssb-fagfunksjoner" class="level4">
 <h4 class="anchored" data-anchor-id="eksempelkode-med-pakken-ssb-fagfunksjoner">Eksempelkode med pakken ssb-fagfunksjoner</h4>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Python kode fra SSB-fagfunksjoner for finne neste filversjon</strong></pre>
@@ -1141,6 +1147,23 @@ Unntak til versjonering: nyeste versjon og temporære data
 <li><code>latest_version_number()</code> # Function for finding latest version in use for a file.</li>
 <li><code>latest_version_path()</code> # Finds the path to the latest version of a specified file.</li>
 </ul>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>R-kode fra fellesr for finne neste filversjon</strong></pre>
+</div>
+<div class="sourceCode" id="cb7" data-filename="R-kode fra fellesr for finne neste filversjon"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fellesr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fil <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/testdata_p2025-Q2_v1.parquet"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ny_filsti <span class="ot">=</span> <span class="fu">lag_versjonert_filsti</span>(fil, <span class="at">versjon =</span> <span class="st">"ny"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ny_filsti)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Vil returnere: "/buckets/produkt/dapla-manual-examples/testdata_p2025-Q2_v2.parquet"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>fellesr har også følgende funksjoner for å gjøre versjonering lettere: * <code>finn_fileversjoner(fil)</code> # Skaffer en liste over filversjoner som matcher filnavn (KOMMER). * <code>finn_versjon(lag_versjonert_filsti(fil, versjon = "siste"))</code> # Nøstet funksjon som finner nummeret til en riktig versjonert fil. * <code>lag_versjonert_filsti(fil, versjon = "siste")</code> # Finner stien til den siste versjonen av en spesifisert fil.</p>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
