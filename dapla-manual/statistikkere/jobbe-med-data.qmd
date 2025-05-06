@@ -492,7 +492,7 @@ fs.cp(f"{bucket}/{from_folder}/data.parquet",
       f"{bucket}/{to_folder}/data_copy.parquet")
 
 ```
-Det fungerer også for å kopiere filer mellom bøtter. 
+Dette fungerer også for å kopiere filer mellom bøtter. 
 
 Et annet scenario vi ofte vil støte på er at vi ønsker å kopiere en fil fra vårt Jupyter-filsystem til en mappe på lagringsområdet. Her kan vi bruke `fs.put`-metoden. 
 
@@ -527,7 +527,24 @@ fs.get(<from_bucket>,
 
 ## {{< fa brands r-project >}}
 
-Kommer snart
+```{.r filename="Console"}
+# Skriv inn filnavn på filen som skal flytte og navn på bøtta hvor filen ligger. 
+file_name = "purchases.csv"
+bucket_path_gammel = "/buckets/produkt/dapla_manual-examples/"
+
+#Skriv inn ny (hvis ikke bøtta finnes må den opprettes - se Opprette mapper under)
+bucket_path_ny = "/buckets/produkt/dapla_manual-examples/ny_mappe/"
+
+#Hvis du bare vil endre plassering skriver du:
+file.copy(from = paste0(bucket_path_gammel,file_name), to = paste0(bucket_path_ny,file_name))
+
+#Hvis du også vil endre navnet på filen kan du skrive:
+new_name = "innkjoep.csv"
+file.copy(from = paste0(bucket_path_gammel,file_name), to = paste0(bucket_path_ny,new_name))
+
+```
+
+Merk at funksjonen file.copy() bevarer den opprinnelige filen. Hvis du heller ønsker å flytte filen (dvs å kopiere og slette den opprinnelige filen) velg file.rename().
 
 :::
 
@@ -551,7 +568,25 @@ fs.mv(f"{bucket}/{from_folder}/data.parquet", f"{bucket}/{to_folder}/data.parque
 
 ## {{< fa brands r-project >}}
 
-Kommer snart
+```{.r filename="Console"}
+# Skriv inn filnavn på filen som skal flyttes og navn på bøtta hvor filen ligger nå. 
+file_name = "purchases.csv"
+bucket_path_gammel = "/buckets/produkt/dapla_manual-examples/"
+
+#Skriv inn navn på den nye plasseringen (hvis ikke bøtta finnes må den opprettes - se Opprette mapper under)
+bucket_path_ny = "/buckets/produkt/dapla_manual-examples/ny_mappe/"
+
+#Hvis du bare vil endre plassering skriver du:
+file.rename(from = paste0(bucket_path_gammel,file_name), to = paste0(bucket_path_ny,file_name))
+
+#Hvis du også vil endre navnet på filen kan du skrive:
+new_name = "innkjoep.csv"
+file.rename(from = paste0(bucket_path_gammel,file_name), to = paste0(bucket_path_ny,new_name))
+
+```
+
+Merk at funksjonen file.rename() sletter den opprinnelige filen. Hvis du bare vil kopiere uten å slette den opprinnelige filen velg file.copy().
+
 
 :::
 
@@ -577,7 +612,11 @@ fs.touch(f"{bucket}/{folder}/testmappe/")
 
 ## {{< fa brands r-project >}}
 
-Kommer snart
+```{.r filename="Console"}
+# Skriv inn navnet på den nye mappen. 
+ny_mappe = "/buckets/produkt/dapla_manual-examples/testmappe/)
+dir.create(ny_mappe)
+```
 
 :::
 
