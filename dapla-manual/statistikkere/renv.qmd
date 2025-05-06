@@ -1,20 +1,22 @@
 ---
 title: Pakkehåndtering i R
 date-modified: 01/16/2025
+execute: 
+  eval: false
 ---
 
 R-pakken, [`renv`](https://rstudio.github.io/renv/articles/renv.html), er et verktøy som lar oss opprette et miljø for R og installere pakker. Det er anbefalt å bruke renv for å sikre at alle som jobber med prosjektet har samme versjon av pakkene. I tillegg er det enkelt å dele prosjektet med andre.
 
 ### Hvor skal jeg kjøre kommandoer for renv?
-Når du oppretter et renv-miljø, installerer eller oppdaterer pakker må du kjøre noen kommandoer. Hvor disse skal skjøres er avhengig av om du bruker RStudio, eller Jupyter. 
+Når du oppretter et renv-miljø, installerer eller oppdaterer pakker må du kjøre noen kommandoer. Hvor disse skal kjøres er avhengig av om du bruker RStudio, eller Jupyter. 
 
 ::: {.panel-tabset}
 
 ## Jupyter
-I jupyter anbefaler vi oppretting av renv-miljø og installering av pakker fra R i terminalen for å få riktig oppsett. For å starte R i terminalen:
+I jupyter anbefaler vi at du oppretter renv-miljøet og installerer pakker fra R i terminalen. For å starte R i terminalen:
 
 1.  Åpne en terminal fra Launcher
-2.  Stå i mappen der du vil aktivere det virtuelle miljøet/installere pakker, dvs prosjekt mappen.
+2.  Stå i mappen der du vil aktivere det virtuelle miljøet/installere pakker, dvs. prosjekt mappen.
 3.  Starte R ved å skrive in `R`
 
 Her er en kort video (uten lyd) for å vise dette:
@@ -23,14 +25,14 @@ Her er en kort video (uten lyd) for å vise dette:
 
 
 ## RStudio
-I Rstudio kan du fint kjøre kommandoer direkt i *console*. Du finner *console* vanligvis nederste på venstre.
+I Rstudio kan du fint kjøre kommandoene direkte i *console*. Du finner *console* vanligvis nederste på venstre i RStudio.
 
 :::
 
 
 ### Starte renv i et eksisterende prosjekt
 
-For å installere dine egne R-pakker må du opprette et renv-miljø med **renv**. Dette kan gjøres ved å kjøre:
+For å installere R-pakker må du opprette et renv-miljø med **renv**. Dette kan gjøres ved å kjøre:
 
 ```{.r}
 renv::init()
@@ -40,7 +42,7 @@ renv::init()
 
 ## Jupyter
 
-For å opprette et renv-miljø i Jupyter, navigerer først til hovedmappen for prosjektet i terminalen og starter R. Derette `renv::init()`. 
+For å opprette et renv-miljø i Jupyter, navigere først til hovedmappen for prosjektet i terminalen og starter R. Etterpå, kan du kjøre `renv::init()`. 
 
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094706?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="init"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
@@ -50,15 +52,15 @@ Initialisere renv-miljø i RStudio med `renv::init()` i *console*.
 
 ::: callout-warning
 
-For at renv skal fungere i RStudio er det viktig å jobbe i et **R-project**. Dvs. at du har et prosjekt-fil (.Rproj) i GitHub repoen din. 
+For at renv skal fungere i RStudio er det viktig å jobbe i et **R-project**. Dvs. at du har en prosjekt-fil (.Rproj) i GitHub repoen din. 
 
-Hvis du ikke har det, kan du opprette en ved å velge File > New Project... > Version Control > Git > og lim inn git adressen for å clone ned repo på nytt. Da vil det også kommer en .Rproj fil. 
-
-:::
+Hvis du ikke har det, kan du opprette en ved å velge File > New Project... > Version Control > Git > og lim inn git adressen for å clone ned repoen på nytt. Da vil det også kommer en .Rproj fil. Denne kan fint ligger på repoen.
 
 :::
 
-Kommandoen aktiverer et renv-miljø i mappen du står i. Hvis du jobber i Jupyter, sjekk at du står i root av repoen (hovedmappen til repository).
+:::
+
+Kommandoen `renv::init()` setter opp et renv-miljø i mappen du står i. Hvis du jobber i Jupyter, sjekk at du står i root av repoen (hovedmappen til repository).
 
 Rent praktisk vil det si at du fikk følgende filer/mapper i mappen din:
 
@@ -77,7 +79,7 @@ Rent praktisk vil det si at du fikk følgende filer/mapper i mappen din:
 
 For å ta i bruk et renv-miljø må det aktiveres før koden kjøres. Dette gjøres automatisk i både Jupyter og RStudio ved hjelp av *renv/activate.R* filen. 
 
-
+For at renv-miljø kan brukes i Jupyter må også følgende pakke installeres.
 
 ::: {.panel-tabset}
 
@@ -107,7 +109,7 @@ renv::install("PxWebApiData")
 
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927097853?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-pakke"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
-For å installere R-pakker som ligger på 'statisticsnorway' området på github må det spesifiseres foran pakkenavnet:
+For å installere R-pakker som ligger på 'statisticsnorway' området på GitHub må det spesifiseres foran pakkenavnet:
 
 ```{.r}
 renv::install("statisticsnorway/ssb-klassr")
@@ -123,16 +125,12 @@ renv::install("PxWebApiData@0.4.0")
 
 For å lagre versjonsnummer av de nye pakkene som er installerte til *renv.lock* filen, kjør:
 ```{.r}
-`renv::snapshot()`
+renv::snapshot()
 ```
 
 ### Dele prosjektet og renv-miljøet med andre
 
-Før du deler prosjektet forsikre det om at *renv.lock*-filen er oppdatert. Dette kan gjøres ved å kjøre:
-
-```{.r}
-renv::snapshot()
-```
+Før du deler prosjektet forsikre det om at *renv.lock*-filen er oppdatert. Dette kan gjøres ved å kjøre `renv::snapshot()`.
 
 For at en pakke skal lagres i *renv.lock* må pakken benyttes ved `library()` et sted i prosjektet (på en .R eller .ipynb fil). 
 
@@ -141,7 +139,7 @@ For å dele renv-miljøet som en del av prosjektet skal følgende filene være p
 
 ### Ta i bruk et prosjekt og renv-miljø fra andre
 
-Hvis prosjektet er opprettet av noen andre, og har blitt delt med deg, kan alle pakkene i prosjektet installeres samtidig. Clone repository og start deretter R i terminalen. Kjør følgende for å installere alle nødvendige pakker:
+Hvis prosjektet er opprettet av noen andre, og har blitt delt med deg, kan alle pakkene i prosjektet installeres samtidig. Clone repository kjør følgende for å installere alle nødvendige pakker:
 
 ```{.r}
 renv:restore()
@@ -184,7 +182,7 @@ Husk å ta en `snapshot()` etterpå for å lagre endringer til *renv.lock*-filen
 renv::snapshot()
 ```
 
-### Oppgradering av R (produksjonssone)
+### Oppgradering av R (kun produksjonssone på bakken)
 
 Versjonen av R i produksjonssone oppgraderes jevnlig, i både Jupyter og RStudio. Dette er fordi operativsystemet og programmer som R er avhengig skal holdes oppdatert. For at R skal fungere optimalt må det oppgraderes ofte. Dette skaper noen utfordringer for renv-miljøer som er avhengig av en spesifikk versjon av R.
 
@@ -215,12 +213,12 @@ For mer informasjon kan du lese denne [artikkelen om oppdatering av renv her](ht
 
 ### Ta det lang tid til å starte et renv-miljø?
 
-Ved å aktivere et renv-miljø ved oppstart, søker R i alle programfiler for å sjekke at alle pakker som benyttes er installerte. Hvis du har en veldig stor repository kan dette ta lang tid. En løsning er å opprette en *.renvignore* fil som spesifisere hvilke filer skal ignoreres. For eksempel om alle R kode ligger i .R filer kan *.renvignore* inneholder linjen `*.ipynb` for å ignorere all notebook filer om de finnes.
+Ved å aktivere et renv-miljø ved oppstart, søker R i alle programfiler for å sjekke at alle pakker som benyttes er installerte. Hvis du har en veldig stor repository kan dette ta lang tid. En løsning er å opprette en *.renvignore* fil som spesifisere hvilke filer skal ignoreres. For eksempel om alle R kode ligger i .R filer kan *.renvignore* inneholder linjen `*.ipynb` for å ignorere all notebookene om de finnes.
 
 <div style="padding:56.75% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/927094915?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="renvignore"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 ### Flytting mellom Jupyter på bakken og Dapla
-Pakker installeres fra ulike sted når vi jobber på Dapla vs jupyter på bakken. For å bruke et renv-miljø i en repo som var laget på bakken, på Dapla, må vi endre adressen hvor pakkene skal installeres fra i *renv.lock*. Addressen skal se slik ut:
+R-pakker installeres fra ulike sted når vi jobber på Dapla vs produksjonssone på bakken. For å bruke et renv-miljø i en repo som var laget på bakken, på Dapla, må vi endre adressen hvor pakkene skal installeres fra i *renv.lock*. Addressen skal se slik ut:
 
 ```{.json filename="renv.lock"}
 "Repositories": [
@@ -233,24 +231,44 @@ Pakker installeres fra ulike sted når vi jobber på Dapla vs jupyter på bakken
 
 ### Kjøring mellom RStudio og Jupyter (prodsone)
 
-Hvis du bytter mellom Jupyter og RStudio i prodsone, må du også endre noen detaljer i *renv.lock*-filen. Disse to miljø kan har ulike versjoner av R og/eller ulike adresser å hente pakker fra. Det er anbefalt å holde deg til Jupyter eller RStudio om mulig.
+Hvis du bytter mellom Jupyter og RStudio i prodsone, må du også endre adressen hvor pakkene skal installeres fra i *renv.lock*-filen. Disse to miljø kan har ulike versjoner av R og/eller ulike adresser å hente pakker fra. Det er anbefalt å holde deg til Jupyter eller RStudio om mulig.
 
 
-### Hvordan å løse problemer med pakkeinstallering i produksjonssone (bakken)
+### Hvordan å løse problemer med pakkeinstallering i produksjonssone på bakken
 
--arrow versjon 17.0.0.1 i RStudio og 18.xx i Jupyter
--oracle problem
+Prosessen med å installere R-pakker på bakken er det samme som på Dapla. Noen pakker (for eksempel `arrow` og `ROracle`) kan være vanskelig å installere på grunn av 3. parti avhengigheter. 
 
-Prosessen med å installere pakker for R på bakken er det samme som på Dapla. Noen pakker (for eksempel `arrow` og `ROracle`) kan være vanskelig å installere på grunn av 3. parti avhengigheter. 
+**arrow**
 
-*arrow*
-Hvis du sliter med installering av `arrow` for eksempel kan du prøve å spesifisere versjonen som skal installeres. Det er foreløpige ulike versjoner i RStudio og Jupyter som er anbefalt pga de ulike system og avhengigheter. I RStudio server er det best å installer versjon `17.0.0.1` mens i Jupyter i produksjonssone (på bakken) er det `18.1.0.1`.
+Hvis du sliter med installering av `arrow` kan du prøve å spesifisere versjonen som skal installeres. Det er foreløpige ulike versjoner av avhengigheter i RStudio og Jupyter pga de ulike systemer og oppsett.
 
-*ROracle* 
-Pakken `ROracle` har også systemavhengigheter som betyr at det kan være vanskelig å installere i produksjonssone i et renv-miljø. Hvis du opplever problemer, prøv å installere pakken fra en lokal versjon med følgende kommando i R:
+::: {.panel-tabset}
+
+## Jupyter
+
+```{r}
+renv::install("arrow@18.1.0.1")
+```
+Pakken er ganske stor, så det kan ta tid å installere den.
+
+## RStudio
+
+```{r}
+renv::install("arrow@17.0.0.1")
+```
+Pakken er ganske stor, så det kan ta tid å installere den.
+
+:::
+
+**ROracle**
+
+Pakken `ROracle` har systemavhengigheter som betyr at det kan være vanskelig å installere i produksjonssone på bakken i et renv-miljø. Hvis du opplever problemer, prøv å installere pakken fra en lokal versjon med følgende kommando i R:
 
 ```{.r}
-install.packages("/ssb/bruker/felles/R_pakker/ROracle_1.4-1_R_x86_64-unknown-linux-gnu.tar.gz",
-                repos = NULL,
-                type = "source")
+ROracle_pakke <- "/ssb/bruker/felles/R_pakker/ROracle_1.4-1_R_x86_64-unknown-linux-gnu.tar.gz"
+
+install.packages(
+  ROracle_pakke,
+  repos = NULL,
+  type = "source")
 ```
