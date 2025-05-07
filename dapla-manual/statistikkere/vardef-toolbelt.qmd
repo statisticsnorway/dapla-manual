@@ -173,64 +173,8 @@ contact:
 
 I noen tilfeller settes verdien automatisk av systemet. For eksempel:
 ```{.YAML .code}
-# ! Obligatorisk felt !
-# Livssyklus for variabelen.
 variable_status: DRAFT
 ```
-
-#### Eksempel korrekt utfylt YAML-fil på norsk bokmål
-
-```{.YAML .code style="font-size: 0.9em;"}
-# --- Variabeldefinisjon mal ---
-name:
-    nb: |-
-        Landbakgrunn
-    nn:
-    en:
-short_name: "landbak"
-definition:
-    nb: |-
-        v,vhjh
-    nn:
-    en:
-classification_reference:
-unit_types:
-    - ""
-subject_fields:
-    - ""
-contains_special_categories_of_personal_data: false
-measurement_type:
-valid_from: 1000-01-01
-valid_until:
-external_reference_uri:
-comment:
-related_variable_definition_uris:
-contact:
-    title:
-        nb: |-
-            generert tittel
-        nn:
-        en:
-    email: generert@ssb.no
-
-# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
-variable_status: DRAFT
-
-# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
-owner:
-    team: "default team"
-    groups:
-        - "default group"
-
-# --- Maskin-genererte felt. Ikke rediger. ---
-id: ""
-patch_id: 0
-created_at: 1000-01-01 00:00:00
-created_by: ""
-last_updated_at: 1000-01-01 00:00:00
-last_updated_by: ""
-````
-
 #### Variabeldefinisjon
 
 Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.
@@ -243,82 +187,6 @@ Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.
 #### Filnavn variabeldefinisjon
 Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
 :::
-
-#### Eksempel korrekt utfylt YAML-fil status publisert på alle språk
-
-```{.YAML .code style="font-size: 0.9em;"}
-# --- Variabeldefinisjon ---
-name:
-    nb: |-
-        Inntektsstatistikk for husholdninger   
-    nn: |-
-        Inntektsstatistikk for husholdninger
-    en: |-
-        Inntektsstatistikk for husholdninger
-short_name: "inntekt_hus"
-definition:
-    nb: |-
-        For personer født i utlandet, er dette (med noen få unntak) eget 
-        fødeland. 
-        For personer født i Norge er det foreldrenes fødeland. I de tilfeller der 
-        foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. 
-        Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes 
-        landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen 
-        mormor, morfar, farmor eller farfar.
-    nn: |-
-        For personar fødd i utlandet, er dette (med nokre få unntak) eige fødeland. 
-        For personar fødd i Noreg er det fødelandet til foreldra. 
-        I dei tilfella der foreldra har ulikt fødeland, er det fødelandet til mora som blir valt. Viss ikkje personen sjølv eller nokon av foreldra er utenlandsfødt, blir henta landsbakgrunn frå dei første utenlandsfødte ein treffar på i rekkjefølgja mormor, morfar, farmor eller farfar.
-    en: |-
-        Country background is the person's own, the mother's or possibly the father's country of birth. 
-        Persons without an immigrant background always have Norway as country background. In cases where the parents have different countries of birth the mother's country of birth is chosen. If neither the person nor the parents are born abroad, country background is chosen from the first person born abroad in the order mother's mother, mother's father, father's mother, father's father.
-classification_reference: "91"
-unit_types:
-    - "01"
-    - "02"
-subject_fields:
-    - "he04"
-contains_special_categories_of_personal_data: true
-measurement_type:
-valid_from: 2003-01-01
-valid_until:
-external_reference_uri: ""
-comment:
-    nb: |-
-        Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.
-    nn: |-
-        Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland.
-    en: |-
-        As of 1 January 2003, the definition was changed to also include the grandparents' country of birth.
-related_variable_definition_uris:
-    - "https://example.com/"
-contact:
-    title:
-        nb: |-
-            Seksjon for befolkningsstatistikk
-        nn: |-
-            Seksjon for befolkningsstatistikk
-        en: |-
-            Division for population statistics
-    email: s320@ssb.no
-
-# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
-variable_status: DRAFT
-
-# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
-owner:
-    team: "team-a"
-    groups:
-        - "team-a-developers"
-
-# --- Maskin-genererte felt. Ikke rediger. ---
-id: "wypvb3wd"
-patch_id: 1
-created_at: 2024-06-11 08:15:19.038000+00:00
-created_by: "ano@ssb.no"
-last_updated_at: 2024-06-11 08:15:19.038000+00:00
-last_updated_by: "ano@ssb.no"
-````
 
 ### Redigere YAML-filen
 
@@ -379,7 +247,7 @@ measurement_type: 03
 
 #### Flerspråklige felt
 
-- Et blokk symbol `|-` følger nøkkel. 
+- Et blokk symbol `|-` følger feltnavn(nøkkel). 
 - Teksten må starte rett under blokk-symbolet
 - Riktig innrykk er viktig
 - Formattering (avsnitt/linjeskift) lagres.
@@ -471,7 +339,7 @@ comment:
 
 #### Lister
 
-- Verdien skrives på samme linje som liste-symbol `-`
+- Verdien skrives på samme linje som liste-symbolet `-`
 - Bruk doble fnutter `""`
 
 ::: {.callout-note collapse=True}
@@ -544,6 +412,284 @@ variable_status: PUBLISHED_INTERNAL
 variable_status: PUBLISHED_EXTERNAL
 ```
 :::
+
+
+### YAML-fil: Ny variabeldefinisjon
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon mal ---
+name:
+    nb: |-
+        Buss
+    nn:
+    en:
+short_name: "bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.
+    nn:
+    en:
+classification_reference:
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+contains_special_categories_of_personal_data: false
+measurement_type:
+valid_from: 2025-04-01
+valid_until:
+external_reference_uri:
+comment:
+related_variable_definition_uris:
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn:
+        en:
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: DRAFT
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 1
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-01-11 08:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+### YAML-fil: Redigere utkast
+
+Endre: 
+
+- `short_name`
+- `contains_special_categories_of_personal_data`
+
+Legge til:
+
+- `classification_reference`
+- `external_reference_uri`
+- `subject_fields`
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon ---
+name:
+    nb: |-
+        Buss
+    nn:
+    en:
+short_name: "reg_bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.
+    nn:
+    en:
+classification_reference: "111"
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+    - "tr04"
+contains_special_categories_of_personal_data: true
+measurement_type:
+valid_from: 2025-01-01
+valid_until:
+external_reference_uri: "https://www.norges-motorvignforbund.no"
+comment:
+related_variable_definition_uris:
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn:
+        en:
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: DRAFT
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 1
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-01-11 08:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+### YAML-fil: Redigere publisert
+
+Endre:
+
+- Rette skrivefeil i `external_reference_uri`
+
+Legge til:
+
+- verdier på norsk nynorsk og engelsk:
+    -  `name`
+    - `definition`
+    - `contact.title`
+- `owner.groups`
+- `related_variable_definition_uris`
+- `measurement_type`
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon ---
+name:
+    nb: |-
+        Buss 
+    nn: |-
+        Buss
+    en: |-
+        Bus
+short_name: "reg_bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.
+    nn: |-
+        Buss er eit køyretøy som er spesialkonstruert for å frakte mange passasjerar.
+    en: |-
+        A bus is a motor vehicle that is specially designed to carry many passengers.
+classification_reference: "111"
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+    - "tr04"
+contains_special_categories_of_personal_data: true
+measurement_type: "02"
+valid_from: 2025-01-01
+valid_until:
+external_reference_uri: "https://www.norges-motorvognforbund.no"
+comment:
+related_variable_definition_uris:
+    - "https://example.com/"
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn: |-
+            Seksjon for Nærings- og miljøstatistikk
+        en: |-
+            Section for Industrial and Environmental Statistics
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: PUBLISHED_INTERNAL
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+        - "arbmark-aku-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 1
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-03-25 10:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+
+### YAML-fil: Ny gyldighetsperiode
+
+Legge til:
+
+- `comment`
+
+Endre:
+
+- `valid_from`
+- `definition` 
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon ---
+name:
+    nb: |-
+        Buss 
+    nn: |-
+        Buss
+    en: |-
+        Bus
+short_name: "reg_bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte flere enn 
+        16 passasjerer.
+    nn: |-
+        Buss er eit køyretøy som er spesialkonstruert for å frakte flere enn 
+        16 passasjerar.
+    en: |-
+        A bus is a motor vehicle that is specially designed to carry more than 
+        16 passengers.
+classification_reference: "111"
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+    - "tr04"
+contains_special_categories_of_personal_data: true
+measurement_type: ""
+valid_from: 2025-06-01
+valid_until:
+external_reference_uri: "https://www.norges-motorvognforbund.no"
+comment:
+    nb: |-
+        Krav til spesifikasjon av antall passasjerer i en buss for å skille "buss" fra "minibuss".
+    nn: |-
+        Krav til spesifikasjon av talet på passasjerar i ein buss for å skilje 
+        mellom «buss» og «minibuss».
+    en: |-
+        Requirements for specification of the number of passengers in a bus to distinguish 
+        "bus" from "minibus".
+related_variable_definition_uris:
+    - "https://example.com/"
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn: |-
+            Seksjon for Nærings- og miljøstatistikk
+        en: |-
+            Section for Industrial and Environmental Statistics
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: PUBLISHED_INTERNAL
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+        - "arbmark-aku-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 2
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-04-05 11:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
 
 <style>
 code span.co {
