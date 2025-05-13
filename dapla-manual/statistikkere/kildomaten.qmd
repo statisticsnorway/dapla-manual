@@ -449,6 +449,23 @@ trigger_source_data_processing(project_id, source_name, folder_prefix, kuben=Tru
 I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på alle undermapper av  
 `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/`. 
 
+Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde
+```{.python filename="notebook"}
+from dapla import trigger_source_data_processing
+
+project_id = "dapla-example-p"
+source_name = "altinn"
+file_paths = [
+    'ledstill/altin/ra0678/data1.parquet',
+    'ledstill/altin/ra0678/data2.parquet',
+    'ledstill/altin/ra0678/data3.parquet'
+]
+for file in file_paths:
+    trigger_source_data_processing(project_id, source_name, file_paths, kuben=True)
+```
+I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på de tre spesifike filene 
+`ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data1.parquet`, `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data2.parquet` og `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data3.parquet`.
+
 ## Vedlikehold
 
 Når tjenesten er rullet ut så vil den kjøre automatisk på alle filer som dukker opp i filsti i kildebøtta. Etter hvert vil det være behov for å endre på skript, endre filstier som skal trigge tjenesten, eller prosessere alle filer på nytt. I denne delen forklarer vi hvordan du går frem for å gjøre dette. 
