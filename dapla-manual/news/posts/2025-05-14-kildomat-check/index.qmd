@@ -1,23 +1,99 @@
 ---
-title: Årets Dapla-dager er i gang
-subtitle: Delta på spennende presentasjoner og workshops 
+title: Validere at filer er prosessert i Kildomaten
+subtitle: Eksempelkode som kan benyttes etter driftstans 
 categories:
-  - dapladag
+  - kildomaten
 author:
   - name: Øyvind Bruer-Skarsbø
     affiliation: 
       - name: Seksjon for dataplattform (724)
         email: obr@ssb.no
-date: "05/13/2025"
-date-modified: "05/13/2025"
+date: "05/14/2025"
+date-modified: "05/14/2025"
 image: ../../../images/dapla-long.png
 image-alt: "Dapla-logo"
 draft: false
 lightbox: true
 ---
 
-![](dapladag-2025.jpg){style="max-width: 40%; float: right;" fig-alt="Presentasjon på Dapladag"}
+Ifm driftstansen i [Kildomaten](../../../statistikkere/kildomaten.qmd) fra **12. mai kl. 15.00** til **13. mai kl. 12.00** så kan det være team som ønsker å sjekke om det kom inn filer i kildebøtta som ikke trigget Kildomaten. I denne artikkelen så finner man eksempelkode for å gjøre denne sjekken. 
 
-Onsdag forrige uke ble årets Dapladag gjennomført i SSBs lokaler i Oslo. Her kunne ansatte få med seg Frokost med Geir, ulike presentasjoner om Dapla for ulike målgrupper, ny runde med Dapla-grunnkurs og avslutning med pizzafest og quiz. I morgen, onsdag 14. mai 2025, arrangeres Dapla-dagen i Kongsvinger. 
+## Sjekke kildebøtta
 
-[Se året program og påmelding her.](https://ssbno.sharepoint.com/sites/byraanettet/SitePages/%C3%85rets-Dapladag---n%C3%A5-ogs%C3%A5-med-grunnkurs-i-Dapla.aspx)
+Det første man bør gjøre er å sjekke om det, i tidsintevallet for driftsstansen, har blitt skrevet filer til mapper i kildebøtta som vanligvis trigger Kildomaten-jobber. Det kan gjøres av en [data-admins](../../../statistikkere/hva-er-dapla-team.qmd#data-admins) på teamet på følgende måte:
+
+1. Åpne Jupyter på [Dapla Lab](https://lab.dapla.ssb.no/)
+2. Under tjenestekonfigurasjonen for Jupyter velger du å representere data-admins for det aktuelle teamet
+3. Åpne en notebook og velg en kernel som har Python-pakken [gcsfs](https://pypi.org/project/gcsfs/) installert. Hvis du ikke har en slik kernel kan du opprette et [ssb-project](../../../statistikkere/ssb-project.qmd) fra terminalen med kommandoen `ssb-project create test`, gå inn i mappen og installere pakken ved å skrive `poetry add gcsfs`. Da vil kernelen du skal velge hete **test**.
+4. Kjør denne koden etter at du har endret verdiene til variablene `source_bucket` og `source_folder`:  
+```{.python filename="Notebook"}
+from datetime import datetime
+from gcsfs import GCSFileSystem
+import pytz
+
+utc = pytz.UTC
+
+source_bucket = "gs://ssb-dapla-felles-kilde-prod"
+source_folder = "freg"
+
+filter_start_date = datetime(year=2025, month= 5, day=12, hour=15)
+filter_end_date = datetime(year=2025, month=5, day=13, hour=12)
+
+
+
+def is_file_modified_on_date(file_path: str) -> bool:
+    """
+    Returns True if file at file path was modified on the date "filter_date", returns False otherwise
+    """
+    file_info = GCSFileSystem().info(path=file_path)
+    modified_date: datetime | None = file_info.get("mtime")
+    if not isinstance(modified_date, datetime):
+        return False
+
+    return modified_date < utc.localize(
+        filter_end_date
+    ) and modified_date > utc.localize(filter_start_date)
+
+
+source_files = GCSFileSystem().find(
+    path=f"{source_bucket}/{source_folder}", maxdepth=None, withdirs=False
+)
+source_files_at_date = [f for f in source_files if is_file_modified_on_date(f) is True]
+
+print(f"Source files found between date {str(filter_start_date)} and {str(filter_end_date)}:")
+print(source_files_at_date)
+```
+
+Hvis man kjører koden under og den returnerer en tom liste så har man verifisert at det ble skrevet noen filer i den aktuelle perioden. Hvis koden returnerer en liste med filnavn så bør man undersøke om filene ble prosessert av Kildomaten eller ikke.
+
+## Trigge prosessering manuelt
+
+Hvis koden i forrige avsnitt returnerte en liste med filer, så kan man [manuelt trigge prosessering](../../../statistikkere/kildomaten.qmd#trigge-kilde-manuelt) av disse filene med Kildomaten.
+
+::: {.callout-important}
+## Logg deg inn som data-admins for trigge Kildomaten manuelt
+
+For å trigge Kildomaten manuelt må man være logget inn som **data-admins** i en Dapla Lab tjeneste. Det betyr at man kan liste ut alle filer som ble skrevet i et gitt tidspunkt, og trigge prosesseringen av disse i samme notebook eller script. Men man må oppgi `project_id` for standardprosjektet (ikke kildeprosjektet) i koden under, noe som kan være forvirrende for brukeren. Dette er planlagt endret slik at det blir lettere bruke fremover.   
+:::
+
+
+Koden i forrige avsnitt returnerte en liste med alle filer som heter `source_files_at_date`, og vi kan loope over disse og trigge prosesseringen. For å gjøre dette må du først fylle inn riktig verdier for `project-id` og `source_name`. 
+
+1. **project-id** for *standardprosjektet*. [Slik finner du prosjekt-id](../../../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id). Merk at dette ikke er kilde-prosjektet!
+2. **source_name** er navnet på mappen i iac-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team **dapla-example** var  `altinn`. 
+
+```{.python filename="Notebook"}
+from dapla import trigger_source_data_processing
+
+# Brukeren fyller inn her
+project_id = ""
+source_name = ""
+
+# Fjerner bøttenavn fra filstier
+stripped_paths = [path.split('/', 1)[1] if '/' in path else path for path in source_files_at_date]
+
+# Trigger prosessering for alle filer i listen
+for file in stripped_paths:
+    trigger_source_data_processing(project_id, source_name, file, kuben=True)
+```
+
