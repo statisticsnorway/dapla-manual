@@ -15,9 +15,9 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.7.31</generator>
-<lastBuildDate>Tue, 13 May 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 14 May 2025 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>Årets Dapla-dager er i gang</title>
+  <title>Validere at filer er prosessert i Kildomaten</title>
   <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
   <link>https://manual.dapla.ssb.no/news/posts/2025-05-13-dapladag-2025/</link>
   <description><![CDATA[ 
@@ -26,7 +26,345 @@
 
 
 
-<p><a href="dapladag-2025.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://manual.dapla.ssb.no/news/posts/2025-05-13-dapladag-2025/dapladag-2025.jpg" class="img-fluid" style="max-width: 40%; float: right;" alt="Presentasjon på Dapladag"></a></p>
+<p>Ifm driftstansen i <a href="../../../statistikkere/kildomaten.html">Kildomaten</a> fra <strong>12. mai kl. 15.00</strong> til <strong>13. mai kl. 12.00</strong> så kan det være team som ønsker å sjekke om det kom inn filer i kildebøtta som ikke trigget Kildomaten. I denne artikkelen så finner man eksempelkode for å gjøre denne sjekken.</p>
+<section id="sjekke-kildebøtta" class="level2">
+<h2 class="anchored" data-anchor-id="sjekke-kildebøtta">Sjekke kildebøtta</h2>
+<p>Det første man bør gjøre er å sjekke om det, i tidsintevallet for driftsstansen, har blitt skrevet filer til mapper i kildebøtta som vanligvis trigger Kildomaten-jobber. Det kan gjøres av en <a href="../../../statistikkere/hva-er-dapla-team.html#data-admins">data-admins</a> på teamet på følgende måte:</p>
+<ol type="1">
+<li>Åpne Jupyter på <a href="https://lab.dapla.ssb.no/">Dapla Lab</a></li>
+<li>Under tjenestekonfigurasjonen for Jupyter velger du å representere data-admins for det aktuelle teamet</li>
+<li>Åpne en notebook og velg en kernel som har Python-pakken <a href="https://pypi.org/project/gcsfs/">gcsfs</a> installert. Hvis du ikke har en slik kernel kan du opprette et <a href="../../../statistikkere/ssb-project.html">ssb-project</a> fra terminalen med kommandoen <code>ssb-project create test</code>, gå inn i mappen og installere pakken ved å skrive <code>poetry add gcsfs</code>. Da vil kernelen du skal velge hete <strong>test</strong>.</li>
+<li>Kjør denne koden etter at du har endret verdiene til variablene <code>source_bucket</code> og <code>source_folder</code>:<br>
+</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="Notebook" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> datetime</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> gcsfs <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> GCSFileSystem</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pytz</span>
+<span id="cb1-4"></span>
+<span id="cb1-5">utc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pytz.UTC</span>
+<span id="cb1-6"></span>
+<span id="cb1-7">source_bucket <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gs://ssb-dapla-felles-kilde-prod"</span></span>
+<span id="cb1-8">source_folder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"freg"</span></span>
+<span id="cb1-9"></span>
+<span id="cb1-10">filter_start_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> datetime(year<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2025</span>, month<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, day<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>, hour<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>)</span>
+<span id="cb1-11">filter_end_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> datetime(year<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2025</span>, month<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, day<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">13</span>, hour<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>)</span>
+<span id="cb1-12"></span>
+<span id="cb1-13"></span>
+<span id="cb1-14"></span>
+<span id="cb1-15"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> is_file_modified_on_date(file_path: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">bool</span>:</span>
+<span id="cb1-16">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb1-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    Returns True if file at file path was modified on the date "filter_date", returns False otherwise</span></span>
+<span id="cb1-18"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb1-19">    file_info <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GCSFileSystem().info(path<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>file_path)</span>
+<span id="cb1-20">    modified_date: datetime <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> file_info.get(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mtime"</span>)</span>
+<span id="cb1-21">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">isinstance</span>(modified_date, datetime):</span>
+<span id="cb1-22">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span></span>
+<span id="cb1-23"></span>
+<span id="cb1-24">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> modified_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> utc.localize(</span>
+<span id="cb1-25">        filter_end_date</span>
+<span id="cb1-26">    ) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> modified_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> utc.localize(filter_start_date)</span>
+<span id="cb1-27"></span>
+<span id="cb1-28"></span>
+<span id="cb1-29">source_files <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GCSFileSystem().find(</span>
+<span id="cb1-30">    path<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>source_bucket<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>source_folder<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, maxdepth<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, withdirs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span></span>
+<span id="cb1-31">)</span>
+<span id="cb1-32">source_files_at_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [f <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> source_files <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> is_file_modified_on_date(f) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">is</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>]</span>
+<span id="cb1-33"></span>
+<span id="cb1-34"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Source files found between date </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(filter_start_date)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> and </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>(filter_end_date)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">:"</span>)</span>
+<span id="cb1-35"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(source_files_at_date)</span></code></pre></div>
+</div>
+<p>Hvis man kjører koden under og den returnerer en tom liste så har man verifisert at det ble skrevet noen filer i den aktuelle perioden. Hvis koden returnerer en liste med filnavn så bør man undersøke om filene ble prosessert av Kildomaten eller ikke.</p>
+</section>
+<section id="trigge-prosessering-manuelt" class="level2">
+<h2 class="anchored" data-anchor-id="trigge-prosessering-manuelt">Trigge prosessering manuelt</h2>
+<p>Hvis koden i forrige avsnitt returnerte en liste med filer, så kan man <a href="../../../statistikkere/kildomaten.html#trigge-kilde-manuelt">manuelt trigge prosessering</a> av disse filene med Kildomaten.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Logg deg inn som data-admins for trigge Kildomaten manuelt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For å trigge Kildomaten manuelt må man være logget inn som <strong>data-admins</strong> i en Dapla Lab tjeneste. Det betyr at man kan liste ut alle filer som ble skrevet i et gitt tidspunkt, og trigge prosesseringen av disse i samme notebook eller script. Men man må oppgi <code>project_id</code> for standardprosjektet (ikke kildeprosjektet) i koden under, noe som kan være forvirrende for brukeren. Dette er planlagt endret slik at det blir lettere bruke fremover.</p>
+</div>
+</div>
+<p>Koden i forrige avsnitt returnerte en liste med alle filer som heter <code>source_files_at_date</code>, og vi kan loope over disse og trigge prosesseringen. For å gjøre dette må du først fylle inn riktig verdier for <code>project-id</code> og <code>source_name</code>.</p>
+<ol type="1">
+<li><strong>project-id</strong> for <em>standardprosjektet</em>. <a href="../../../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>. Merk at dette ikke er kilde-prosjektet!</li>
+<li><strong>source_name</strong> er navnet på mappen i iac-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team <strong>dapla-example</strong> var <code>altinn</code>.</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="Notebook" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dapla <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> trigger_source_data_processing</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Brukeren fyller inn her</span></span>
+<span id="cb2-4">project_id <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span></span>
+<span id="cb2-5">source_name <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span></span>
+<span id="cb2-6"></span>
+<span id="cb2-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Fjerner bøttenavn fra filstier</span></span>
+<span id="cb2-8">stripped_paths <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [path.split(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/'</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'/'</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> path <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> path <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> path <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> source_files_at_date]</span>
+<span id="cb2-9"></span>
+<span id="cb2-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Trigger prosessering for alle filer i listen</span></span>
+<span id="cb2-11"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> stripped_paths:</span>
+<span id="cb2-12">    trigger_source_data_processing(project_id, source_name, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>, kuben<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span></code></pre></div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>dapladag</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-05-13-dapladag-2025/</guid>
+  <pubDate>Wed, 14 May 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
+<item>
+  <title>Årets Dapla-dager er i gang</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-05-14-kildomat-check/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="dapladag-2025.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="https://manual.dapla.ssb.no/news/posts/2025-05-14-kildomat-check/dapladag-2025.jpg" class="img-fluid" style="max-width: 40%; float: right;" alt="Presentasjon på Dapladag"></a></p>
 <p>Onsdag forrige uke ble årets Dapladag gjennomført i SSBs lokaler i Oslo. Her kunne ansatte få med seg Frokost med Geir, ulike presentasjoner om Dapla for ulike målgrupper, ny runde med Dapla-grunnkurs og avslutning med pizzafest og quiz. I morgen, onsdag 14. mai 2025, arrangeres Dapla-dagen i Kongsvinger.</p>
 <p><a href="https://ssbno.sharepoint.com/sites/byraanettet/SitePages/%C3%85rets-Dapladag---n%C3%A5-ogs%C3%A5-med-grunnkurs-i-Dapla.aspx">Se året program og påmelding her.</a></p>
 
@@ -34,7 +372,7 @@
 
  ]]></description>
   <category>dapladag</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-05-13-dapladag-2025/</guid>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-05-14-kildomat-check/</guid>
   <pubDate>Tue, 13 May 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
@@ -856,29 +1194,6 @@ Figur&nbsp;1: Bilde av tjeneste som er pauset.
   <guid>https://manual.dapla.ssb.no/news/posts/2025-04-07-altinn-to-isee/</guid>
   <pubDate>Mon, 07 Apr 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/news/posts/2025-04-07-altinn-to-isee/altinn-part.png" medium="image" type="image/png"/>
-</item>
-<item>
-  <title>Dokumentasjon av lasting til Statistikkbanken er oppdatert</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-04-06-update-statbank-client/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p><a href="../../../statistikkere/dapla-statbank-client.html">Kapitlet om dapla-statbank-client</a> i Dapla-manualen er skrevet om og url-en er endret til: <a href="https://manual.dapla.ssb.no/statistikkere/dapla-statbank-client.html" class="uri">https://manual.dapla.ssb.no/statistikkere/dapla-statbank-client.html</a>.</p>
-<p>I tillegg har <a href="../../../blog/posts/2025-04-04-laste-til-statbank/index.html">Carl Corneil skrevet et blogginnlegg</a> hvor han beskriver en optimal fremgangsmåte for å laste til flere statistikkbanktabeller i et produksjonsløp.</p>
-
-
-
- ]]></description>
-  <category>python</category>
-  <category>dapla-statbank-client</category>
-  <category>statistikkbanken</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-04-06-update-statbank-client/</guid>
-  <pubDate>Sun, 06 Apr 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/news/posts/2025-04-06-update-statbank-client/dapla-statbank-page.png" medium="image" type="image/png" height="89" width="144"/>
 </item>
 </channel>
 </rss>

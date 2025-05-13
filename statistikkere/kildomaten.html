@@ -1262,11 +1262,11 @@ Sjekke logger
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Logg inn som developers i Dapla Lab
+Logg inn som data-admins i Dapla Lab
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Trigging av kilder manuelt kan kun gjøres av <em>developers</em> på Dapla Lab. Årsaken til dette er at vi ønsker at alle på teamet skal ha denne muligheten, og siden brukere som er medlem av tilgangsgruppen <em>data-admins</em> også kan være medlemmer av gruppen <em>developers</em>, så må man logge seg inn som <em>developers</em> i Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn.</p>
+<p>Trigging av kilder manuelt kan kun gjøres av <em>data-admins</em> på Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn.</p>
 </div>
 </div>
 <p>Før du kan gjøre dette trenger du følgende informasjon:</p>
@@ -1291,6 +1291,24 @@ Logg inn som developers i Dapla Lab
 </div>
 <p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på alle undermapper av<br>
 <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/</code>.</p>
+<p>Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb14" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> trigger_source_data_processing</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>file_paths <span class="op">=</span> [</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data1.parquet'</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data2.parquet'</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data3.parquet'</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> file_paths:</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    trigger_source_data_processing(project_id, source_name, file_paths, kuben<span class="op">=</span><span class="va">True</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på de tre spesifike filene <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data1.parquet</code>, <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data2.parquet</code> og <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data3.parquet</code>.</p>
 </section>
 </section>
 <section id="vedlikehold" class="level2">
