@@ -2,6 +2,10 @@
 
 Dette repoet er ment å være en enkel beskrivelse av hvordan man tar i bruk SSB sin nye skyplattform DAPLA. Besøk hjemmesiden på denne adressen: https://manual.dapla.ssb.no/
 
+## Installasjon av avhengigheter
+
+For å kunne åpne dapla-manualen lokalt trenger man `quarto`. Hvis du bruker Nix kan du få dette gjennom `nix develop .#` kommandoen i rotmappen.
+
 ## Bidra
 
 Kjør følgende kommando for å se preview av manualen mens du jobber: `quarto preview dapla-manual`.
