@@ -26,10 +26,24 @@
 
 
 
-<p>Ifm driftstansen i <a href="../../../statistikkere/kildomaten.html">Kildomaten</a> fra <strong>12. mai kl. 15.00</strong> til <strong>13. mai kl. 12.00</strong> så kan det være team som ønsker å sjekke om det kom inn filer i kildebøtta som ikke trigget Kildomaten. I denne artikkelen så finner man eksempelkode for å gjøre denne sjekken.</p>
+<p>Ifm. driftstansen, og driftsproblemene i etterkant, i <a href="../../../statistikkere/kildomaten.html">Kildomaten</a> fra <strong>12. mai kl. 15.00</strong> til <strong>14. mai kl. 13.00</strong> så kan det være team som ønsker å sjekke om det kom inn filer i kildebøtta som ikke trigget Kildomaten. I denne artikkelen så finner man eksempelkode for å gjøre denne sjekken.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Støtte fra Kundeservice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Hvis teamet ønsker hjelp til å validere om Kildomaten har prosessert alle filer, så kan man <a href="https://ssb.pureservice.com/login">ta kontakt med Kundeservice</a>.</p>
+</div>
+</div>
 <section id="sjekke-kildebøtta" class="level2">
 <h2 class="anchored" data-anchor-id="sjekke-kildebøtta">Sjekke kildebøtta</h2>
-<p>Det første man bør gjøre er å sjekke om det, i tidsintevallet for driftsstansen, har blitt skrevet filer til mapper i kildebøtta som vanligvis trigger Kildomaten-jobber. Det kan gjøres av en <a href="../../../statistikkere/hva-er-dapla-team.html#data-admins">data-admins</a> på teamet på følgende måte:</p>
+<p>Det første man bør gjøre er å sjekke om det, i tidsintevallet for driftsstansen, har blitt skrevet filer til mapper i kildebøtta som vanligvis trigger Kildomaten-jobber. Har det ikke skjedd blitt skrevet filer, så trenger man ikke å gjøre noe mer.</p>
+<p>Sjekken kan gjøres av en <a href="../../../statistikkere/hva-er-dapla-team.html#data-admins">data-admins</a> på teamet på følgende måte:</p>
 <ol type="1">
 <li>Åpne Jupyter på <a href="https://lab.dapla.ssb.no/">Dapla Lab</a></li>
 <li>Under tjenestekonfigurasjonen for Jupyter velger du å representere data-admins for det aktuelle teamet</li>
@@ -103,11 +117,11 @@ font-style: inherit;">5</span>, day<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">13</span>, hour<span class="op" style="color: #5E5E5E;
+font-style: inherit;">14</span>, hour<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">12</span>)</span>
+font-style: inherit;">13</span>)</span>
 <span id="cb1-12"></span>
 <span id="cb1-13"></span>
 <span id="cb1-14"></span>
@@ -249,6 +263,222 @@ font-style: inherit;">print</span>(source_files_at_date)</span></code></pre></di
 </div>
 <p>Hvis man kjører koden over og den returnerer en tom liste så har man verifisert at det ikke ble skrevet noen filer til mappen under driftsstansen. Hvis koden returnerer en liste med filnavn så bør man undersøke om filene ble prosessert av Kildomaten eller ikke.</p>
 </section>
+<section id="verifisere-produktbøtta" class="level2">
+<h2 class="anchored" data-anchor-id="verifisere-produktbøtta">Verifisere produktbøtta</h2>
+<p>Når man har en liste med filnavn som ble skrevet til kildebøtta i tidsperioden med driftsstans, så må man verifisere om filene ble skrevet til produktbøtta som forventet. Hvordan man gjør dette vil avhenge av logikken i teamets kildomaten-skript. Hvis Kildomaten-skriptet skriver en fil til produktbøtta med samme filnavn som er brukt i kildebøtta, så kan man verfisere at samme fil også finne i kildebøtta. Hvis Kildomaten-skriptet endrer navnet, så må man først gjenskape det nye navnet, og deretter verifisere.</p>
+<p>For å verifisere om filen er prosessert må man gjøre følgende:</p>
+<ol type="1">
+<li>hente ut liste med filer fra forrige steg (krever innloggin som <em>data-admins</em> i Dapla Lab)</li>
+<li>åpne en ny tjeneste i Dapla Lab som <em>developers</em> og kopiere over listen fra tjenesten man åpnet som <em>data-admins</em>.</li>
+<li>åpne en notebook og velg en kernel som har Python-pakken <a href="https://pypi.org/project/gcsfs/">gcsfs</a> installert. Hvis du ikke har en slik kernel kan du opprette et <a href="../../../statistikkere/ssb-project.html">ssb-project</a> fra terminalen med kommandoen <code>ssb-project create test</code>, gå inn i mappen og installere pakken ved å skrive <code>poetry add gcsfs</code>. Da vil kernelen du skal velge hete <strong>test</strong>.</li>
+<li>Kjør koden under, der <code>source_files_at_date</code> er listen du kopierte over fra Sjekke kildebøtta-delen. I tillegg må du oppgi hvilken bøtte som skal sjekkes under <code>bucket</code>, og hvilken undermappe i bøtta som det skal søkes gjennom i <code>folder</code>.</li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> gcsfs <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> GCSFileSystem</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Denne listen inneholder filnavnene vi identifiserte tidligere</span></span>
+<span id="cb2-4">source_files_at_date <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb2-5">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'ssb-etlev-data-kilde-prod/kildetilgang/access-grant_abc.json'</span>,  </span>
+<span id="cb2-6">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'ssb-etlev-data-kilde-prod/kildetilgang/access-grant_def.json'</span>,]</span>
+<span id="cb2-7"></span>
+<span id="cb2-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Disse variablene må brukeren oppgi selv  </span></span>
+<span id="cb2-9">bucket <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gs://my-bucket-name"</span></span>
+<span id="cb2-10">folder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"my/folder/name"</span></span>
+<span id="cb2-11"></span>
+<span id="cb2-12"></span>
+<span id="cb2-13"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> find_missing_files(bucket_name: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, folder_name: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, source_files: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>]) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>]:</span>
+<span id="cb2-14">    file_names <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [f.split(sep<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/"</span>)[<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>].split(sep<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"."</span>)[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> source_files]</span>
+<span id="cb2-15"></span>
+<span id="cb2-16">    fs_prefix <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gs://"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> bucket_name <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gs://"</span></span>
+<span id="cb2-17">    fs_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>fs_prefix<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}{</span>bucket_name<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>folder_name<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb2-18">    fs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GCSFileSystem()</span>
+<span id="cb2-19"></span>
+<span id="cb2-20">    missing_files <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb2-21"></span>
+<span id="cb2-22">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> i, f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(file_names):</span>
+<span id="cb2-23">        found <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fs.glob(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>fs_path<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">/**/</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>f<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">.*"</span>)</span>
+<span id="cb2-24">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(found) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>:</span>
+<span id="cb2-25">            source_file <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"gs://</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>source_files[i]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gs://"</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> source_files[i] <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> source_files[i]</span>
+<span id="cb2-26">            missing_files.append(source_file)</span>
+<span id="cb2-27">    </span>
+<span id="cb2-28">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> missing_files</span>
+<span id="cb2-29"></span>
+<span id="cb2-30">find_missing_files(</span>
+<span id="cb2-31">  bucket_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>bucket,</span>
+<span id="cb2-32">  folder_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>folder,</span>
+<span id="cb2-33">  source_files<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>source_files_at_date)</span></code></pre></div>
+<p>Funksjonen over returnerer alle filer den ikke finner på den oppgitte stien, og som derfor ikke er prosessert av Kildomaten. I kapitlet som heter Trigge prosessering manuelt finner du en beskrivelse av hvordan man <em>trigger</em> prosesseringen av disse filene manuelt.</p>
+</section>
+<section id="fra-altinn3-til-isee" class="level2">
+<h2 class="anchored" data-anchor-id="fra-altinn3-til-isee">Fra Altinn3 til ISEE</h2>
+<p>Statistikkproduksjoner som har datafangst fra Altinn3 og synkroniserer filer prosessert med Kildomaten ned til ISEE, må selv hente ut en liste over hvilke filer som er lastet til ISEE. En fremgangsmåte er sammenligne hvilke filer som innkvittert i SFU med hva som ligger i ISEE-databasen. Disse kan identifiseres ved deres unike referansenummer i SFU. Hvis man har en liste med referansenummer som finnes i SFU, men ikke i ISEE, så kan søke etter disse filene i kildebøtta.</p>
+<p>Ta kontakt med Kundeservice dersom man ønsker hjelp til dette.</p>
+</section>
 <section id="trigge-prosessering-manuelt" class="level2">
 <h2 class="anchored" data-anchor-id="trigge-prosessering-manuelt">Trigge prosessering manuelt</h2>
 <p>Hvis koden i forrige avsnitt returnerte en liste med filer, så kan man <a href="../../../statistikkere/kildomaten.html#trigge-kilde-manuelt">manuelt trigge prosessering</a> av disse filene med Kildomaten.</p>
@@ -274,30 +504,30 @@ Logg deg inn som data-admins for trigge Kildomaten manuelt
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb2" data-filename="Notebook" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+<div class="sourceCode" id="cb3" data-filename="Notebook" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> dapla <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> trigger_source_data_processing</span>
-<span id="cb2-2"></span>
-<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+<span id="cb3-2"></span>
+<span id="cb3-3"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Brukeren fyller inn her</span></span>
-<span id="cb2-4">project_id <span class="op" style="color: #5E5E5E;
+<span id="cb3-4">project_id <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
-<span id="cb2-5">source_name <span class="op" style="color: #5E5E5E;
+<span id="cb3-5">source_name <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span></span>
-<span id="cb2-6"></span>
-<span id="cb2-7"><span class="co" style="color: #5E5E5E;
+<span id="cb3-6"></span>
+<span id="cb3-7"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Fjerner bøttenavn fra filstier</span></span>
-<span id="cb2-8">stripped_paths <span class="op" style="color: #5E5E5E;
+<span id="cb3-8">stripped_paths <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [path.split(<span class="st" style="color: #20794D;
 background-color: null;
@@ -323,11 +553,11 @@ font-style: inherit;">for</span> path <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> source_files_at_date]</span>
-<span id="cb2-9"></span>
-<span id="cb2-10"><span class="co" style="color: #5E5E5E;
+<span id="cb3-9"></span>
+<span id="cb3-10"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Trigger prosessering for alle filer i listen</span></span>
-<span id="cb2-11"><span class="cf" style="color: #003B4F;
+<span id="cb3-11"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">for</span> <span class="bu" style="color: null;
@@ -336,7 +566,7 @@ font-style: inherit;">file</span> <span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
 font-style: inherit;">in</span> stripped_paths:</span>
-<span id="cb2-12">    trigger_source_data_processing(project_id, source_name, <span class="bu" style="color: null;
+<span id="cb3-12">    trigger_source_data_processing(project_id, source_name, <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">file</span>, kuben<span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -776,7 +1006,7 @@ Figur&nbsp;1: Bilde av det nye oppsettet for delt-bøtter.
 <hr>
 <div class="column-page">
 <div class="cell" title="Oppdatert via Gloud 21. april 2025" data-execution_count="2">
-<div id="tbl-all-shared-buckets" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2" title="Oppdatert via Gloud 21. april 2025">
+<div id="tbl-all-shared-buckets" class="cell quarto-float quarto-figure quarto-figure-center anchored" title="Oppdatert via Gloud 21. april 2025" data-execution_count="2">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-all-shared-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabell&nbsp;1
