@@ -26,15 +26,15 @@ Flere i SSB bruker produksjonssonen for å skrive produksjonssløp i Python og R
 
 #### Hvordan flytter man data fra produksjonssonen til Google Cloud Storage?
 
-##### Steg 1. Finn dataene du skal flytte
+##### 1. Finn dataene du skal flytte
 
 Bestem deg for hvilke data du skal begynne å jobbe med. Vi anbefaler å begynne med inndata. Kildedata kan overføres når man setter i gang med [kildomaten](kildomaten.qmd).
 
-##### Steg 2. Klargjør dataene for flytting (filformat og filnavn)
+##### 2. Klargjør dataene for flytting (filformat og filnavn)
 
 Les filene inn i Python i jupyter i produksjonssonen og lagre de som .parquet-filer med filnavn som følger [navnestandard for datalagring](navnestandard.qmd).
 
-##### Steg 3. Flytt dataene til ssb/cloud_sync/<dapla-team>/standard/tilsky/
+##### 3. Flytt dataene til ssb/cloud_sync/<dapla-team>/standard/tilsky/
 
 Flytt så dataene til *ssb/cloud_sync/<dapla-team>/standard/tilsky/* på linux.
 Hvordan dette gjøres spørs på hvor dataene ligger. Ligger dataene på linux kan man enkelt kopiere og lime ved å bruke `cp`
@@ -51,7 +51,7 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 
 :::
 
-##### Steg 4: Finn frem til Transfer service-området på Google Cloud Platform
+##### 4: Finn frem til Transfer service-området på Google Cloud Platform
 
 1. Gå inn på [Google Cloud Console](https://console.cloud.google.com) i en nettleser.
 2. Sjekk, øverst i høyre hjørne, at du er logget inn med din SSB-konto (xxx@ssb.no).
@@ -62,7 +62,7 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 4. Etter at du har valgt prosjekt kan du søke etter **Transfer jobs** eller **Storage transfer** i søkefeltet øverst på siden, og gå inn på siden *Transfer jobs*
 
 
-##### Steg 5: Lag en transfer job for flytting fra bakke til sky
+##### 5: Lag en transfer job for flytting fra bakke til sky
 
 * Trykk så på `CREATE TRANSFER JOB`-knappen.
 * Velg *POSIX filesystem* under source type, og *Google Cloud Storage* under Destination type
@@ -74,11 +74,11 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 * Skriv en kort beskrivelse (eks. 'Bakke til sky - engangskjøring')
 * Voilà! 
 
-##### Steg 6: Kjør transfer job!
+##### 6: Kjør transfer job!
 
 Gå tilbake til transfer jobs-siden og kjør din nye transfer-job vewd å trykke på jobb-navnet og ~Start a run*
 
-### Steg 7: Lag repo med SSB-project
+### Steg 3: Lag repo med SSB-project
 
 Neste steg er å lage et repository for statistikken du skal jobbe med! Ifølge navnestandarden skal reponavnet begynne med *stat-*.
 
@@ -90,7 +90,7 @@ Les mer i [artikkelen vår om SSB-project](ssb-project.qmd)!
 Nysgjerrig på hvordan et SSB-project repo ser ut? Sjekk ut [`stat-eksempel`](https://github.com/statisticsnorway/stat-eksempel) på GitHub - et fiktivt produksjonsløp utviklet av A200 støtteteam.
 :::
 
-### Steg 8: Tegn dagens produksjonssystem
+### Steg 4: Tegn dagens produksjonssystem
 
 Skal vi lage bedre produksjonssystemer på Dapla må vi kunne analysere dagens systemer for å unngå å kopiere systemene vi har i dag.
 
@@ -100,7 +100,7 @@ For å forenkle denne prosessen og ha en felles forståelse av både nåværende
  
 Kort fortalt innebærer dette at statistikkprodusenter selv fyller inn informasjon om hvilke systemer og datasett som er i bruk, hvordan dataene transformeres underveis, og i hvilken rekkefølge de ulike stegene finner sted. Thomas Bjørnskau kan bistå med dette og konverterer skjemaet til dataflytdiagrammer ved hjelp av Tableau.
 
-### Steg 9: Jobb deg gjennom datatilstandene 
+### Steg 5: Jobb deg gjennom datatilstandene 
 
 Når alt annet er på plass kan man begynne å lage det nye produksjonssystemet - en datatilstand om gangen. Det er slik vi har gjort det i [stat-eksempel](https://github.com/statisticsnorway/stat-eksempel).
 
