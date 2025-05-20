@@ -474,12 +474,6 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../statistikkere/vardef.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Vardef</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -972,7 +966,7 @@ Flere enhetstyper i samme datasett
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dersom datasettet inneholder informasjon om flere enhetstyper, kan disse enhetstypene dokumenteres for de aktuelle variablene under Variabler-fanen. Vi anbefaler da at den hyppigst forekommende enhetstypen velges i Enhetstype- feltet på Datasett-nivå.</p>
+<p>Dersom datasettet inneholder informasjon om flere enhetstyper, vil disse enhetstypene i fremtiden kunne dokumenteres for hver variabel under Variabler-fanen. Men dette er fremtidig funksjonalitet og støttes ikke i Datadoc i dag.</p>
 </div>
 </div>
 <hr>
@@ -1100,7 +1094,7 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
 <p>Angir navnet til variabelen. Navnet skal være forståelig for mennesker (ikke kortnavn/teknisk navn) slik at det er søkbart. Navnet skal fylles ut på bokmål eller nynorsk.</p>
 <p>Et eksempel på navn er <strong>Personidentifikator</strong>. Det tilhørende kortnavnet (navnet i datasettet) vil være <strong>pers_id</strong>.</p>
-<p>De fleste variabler skal dokumenters i <a href="../statistikkere/vardef.html">Vardef</a>, og dermed kunne pekes til fra Datadoc-editor. Men hvis datasettet inneholder noen variabler som kun brukes i dette datasettet, og dermed ikke skal gjenbrukes, trenger de ikke å dokumenteres i Vardef . Det kan f.eks. dreie seg om variabler som brukes i en spesiell beregning eller kontroll. Disse dokumenteres da i Datadoc-editor. Navnet skal dokumenteres i dette feltet, mens definisjonen og eventuelt tilhørende kodeverk skal dokumenteres hhv. i feltet Kommentar og Kodeverkets URI. (Når en fyller ut «Definisjons URI»-feltet, vil en også få lenke til ev. kodeverk via Vardef-variabelen).</p>
+<p>De fleste variabler skal dokumenters i <a href="../statistikkere/vardef.html">Vardef</a>, og dermed kunne pekes til fra Datadoc-editor. Men hvis datasettet inneholder noen variabler som kun brukes i dette datasettet, og dermed ikke skal gjenbrukes, trenger de ikke å dokumenteres i Vardef . Det kan f.eks. dreie seg om variabler som brukes i en spesiell beregning eller kontroll. Disse dokumenteres da i Datadoc-editor. Navnet skal dokumenteres i dette feltet, mens definisjonen og eventuelt tilhørende kodeverk skal dokumenteres hhv. i feltet <a href="#kommentar">Kommentar</a> og <a href="#kodeverkets-uri">Kodeverkets URI</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1181,14 +1175,26 @@ klargjorte data (valgfritt) | statistikkdata (valgfritt) | utdata (valgfritt)</p
 <h3 class="anchored" data-anchor-id="variabelens-rolle">Variabelens rolle</h3>
 <p>🌐 <em>variable_role</em><br>
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
-<p>Angir lenke (URI) til gyldig kodeverk (klassifikasjon eller kodeliste) i Klass. Dette feltet vil sjelden benyttes siden variabelen i all hovedsak vil knyttes til tilhørende kodeverk via variabeldefinisjon i Vardef. Unntaksvis kan den imidlertid knyttes direkte til Klass via dette feltet i tilfeller der variabelen ikke defineres i Vardef (se nærmere info under feltet «Navn»). Via dette feltet kan en også lenke til en variant av et kodeverk dersom en ønsker å spesifisere kodeverket som er knyttet til variabeldefinisjonen i Vardef (eksempelvis variabelen “næring” som i Vardef er knyttet til Standard for næringsgruppering (SN). For variabelen i datasettet kan en da f.eks. lenke til en variant av SN som kun inkluderer næringene som er aktuelle for egen statistikk, hvis dette er ønskelig).</p>
+<p>Angir variabelens rolle i datasettet. Gyldige verdier/roller er:</p>
+<ul>
+<li><p><strong>identifikator</strong><br>
+Identifiserer de ulike enhetene i et datasett, f.eks. fødselsnummer som identifiserer personer og organisasjonsnummer som identifiserer foretak.</p></li>
+<li><p><strong>målevariabler</strong><br>
+Beskriver det vi måler, dvs. egenskaper som sivilstand eller omsetning.</p></li>
+<li><p><strong>startdato</strong><br>
+Beskriver startdato for hendelser som har et forløp, eller måletidspunkt for tverrsnittdata.</p></li>
+<li><p><strong>stoppdato</strong><br>
+Beskriver stoppdato for hendelser som har et forløp.</p></li>
+<li><p><strong>attributt</strong><br>
+Benyttes dersom en ønsker å utvide datasettet med informasjon knyttet til gitte variabler, f.eks. vedrørende datakvalitet eller editering.</p></li>
+</ul>
 <hr>
 </section>
 <section id="kodeverkets-uri" class="level3">
 <h3 class="anchored" data-anchor-id="kodeverkets-uri">Kodeverkets URI</h3>
 <p>🌐 <em>classification_uri</em><br>
 klargjorte data ⚠️ | statistikkdata ⚠️ | utdata ⚠️</p>
-<p>Lenke (URI) til gyldig kodeverk (klassifikasjon eller kodeliste) i Klass. Dette feltet vil sjelden benyttes siden variabelen i all hovedsak vil knyttes til tilhørende kodeverk via relevant variabeldefinisjon i Vardef. Unntaksvis kan den imidlertid knyttes direkte til Klass via dette feltet i tilfeller der variabelen ikke defineres i Vardef (se nærmere info under feltet «Navn»). Via dette feltet kan en også lenke til en variant av et kodeverk dersom en ønsker å spesifisere kodeverket som er knyttet til variabeldefinisjonen i Vardef (eksempelvis variabelen “næring” som i Vardef er knyttet til Standard for næringsgruppering (SN). For variabelen i datasettet kan en da f.eks. lenke til en variant av SN som kun inkluderer næringene som er aktuelle for egen statistikk, hvis dette er ønskelig).</p>
+<p>Angir lenke (URI) til gyldig kodeverk (klassifikasjon eller kodeliste) i Klass. Dette feltet vil sjelden benyttes siden variabelen i all hovedsak vil knyttes til tilhørende kodeverk via relevant variabeldefinisjon i Vardef. Unntaksvis kan den imidlertid knyttes direkte til Klass via dette feltet i tilfeller der variabelen ikke defineres i Vardef (se nærmere info under feltet «Navn»). Via dette feltet kan en også lenke til en variant av et kodeverk dersom en ønsker å spesifisere kodeverket som er knyttet til variabeldefinisjonen i Vardef (eksempelvis variabelen “næring” som i Vardef er knyttet til Standard for næringsgruppering (SN). For variabelen i datasettet kan en da f.eks. lenke til en variant av SN som kun inkluderer næringene som er aktuelle for egen statistikk, hvis dette er ønskelig).</p>
 <hr>
 </section>
 <section id="kommentar" class="level3">
