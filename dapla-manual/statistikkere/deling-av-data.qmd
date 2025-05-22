@@ -1,4 +1,8 @@
-# Deling av data
+---
+title: Deling av data
+date-modified: 04/23/2025
+lightbox: true
+---
 
 Dapla-team kan dele data mellom team via såkalte delt-bøtter. Hvert team kan opprette de delt-bøttene de har behov for, og deretter gi tilgang til grupper i andre team. Opprettelse av bøtter skal følge [retningslinjene som er definert her](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3613786151/Deling+av+data+p+Dapla).
 
@@ -37,20 +41,41 @@ projects:
 
 ::::
 
+## Typer av delt-bøtter
+
+Det finnes to typer av delt-bøtter som team kan opprette: 
+
+1. **Standard**  
+Standard er en type delt-bøtte som teamet selv har lese- og skriverettigheter til bøtta. Dvs. at den er ment for deling av data som det delende team også har tilgang til i produkt-bøtta.
+
+2. **Delomat**  
+Delomat er en type delt-bøtte som kan benyttes med Delomaten-tjenesten. Denne benyttes når delende teamet skal dele personidentifiserende informasjon (PII) på en annen måte enn de selv har tilgang til. F.eks. hvis et team som jobber med pseudonymisert PII, men må dele en versjon av datasettet hvor PII er i klartekst.
+
+Hvilken type delt-bøtte som skal opprettes vil avgjøres av om *delende* og *konsumerende* behandler PII likt eller ikke. 
+
+
 ## Opprettelse av bøtte
 
-Opprettelse av delt-bøtter gjøres i teamets IaC-repo. For å opprette en delt-bøtte må man legge til en linje i fila `./infra/projects/<teamnavn>-prod/buckets-shared.yaml`. Du legger bare til kortnavnet for bøtta, altså den delen av bøtte-navnet som teamet kan styre selv. For å opprette en bøtte med kortnavn `freg`, så fyller man bare inn følgende:
+Opprettelse av delt-bøtter gjøres i teamets IaC-repo. For å opprette en delt-bøtte må man legge til en linje i fila `./infra/projects/<teamnavn>-prod/buckets-shared.yaml`. Du legger bare til kortnavnet for bøtta, altså den delen av bøtte-navnet som teamet kan styre selv, og hvilken type bøtte som ønskes. 
 
 ```{.yml filename=buckets-shared.yaml code-line-numbers="true"}
-# Use this file to create new buckets for sharing data easily.
-# Simply add a line with a dash and your new shared bucket's name:
-# - my-shared-data
-# This will create a bucket with the name ssb-arbmark-register-data-delt-my-shared-data-prod
-- freg
+version: kuben/v1
+kind: SharedBuckets
+buckets:
+- name: ameld
+  type: standard
+- name: ledstill
+  type: standard
+- name: ameld-pii
+  type: delomat
 ```
-De 5 første linjene er bare kommentarer som forteller hvordan man oppretter bøttene. På linje 6 ser vi hva som måtte fylles ut for å opprette en bøtte med kortnavn `freg`, som igjen får bøttenavnet:
+I eksempelet over så opprettes to standardbøtter med navn `ameld` og `ledstill`. I tillegg opprettes bøtta `ameld-pii` for å dele en versjon av `ameld` der PII er i klartekst. Sistnevnte må deles via Delomaten, siden delende team ikke skal ha tilgang til disse dataene. 
 
-`ssb-<teamnavn>-data-delt-freg-prod`
+De fulle bøttenavnene som blir opprettet fra eksempelet over vil være:
+
+- ssb-<teamnavn>-data-delt-ameld-prod
+- ssb-<teamnavn>-data-delt-ledstill-prod
+- ssb-<teamnavn>-data-delt-delomat-ameld-pii-prod
 
 Etter at endringen er gjort i `buckets-shared.yaml`, så gjør du følgende:
 
@@ -73,20 +98,31 @@ Navngivning av bøtter følger [RFC 1123](https://kubernetes.io/docs/concepts/ov
 
 ## Tilgangsstyring
 
-Tilgangsstyringen til delt-bøtta kan gjøres av teamet som eier bøtta. Hvem som har tilgang blir definert i fila `./infra/projects/<teamnavn>-prod/iam.yaml` i IaC-repoet til teamet. Under ser man strukturen på `iam.yaml` for å gi tilgang til delt-bøtter:
+Tilgangsstyring kan skje i samme steg som opprettelse av bøtta, men her beskrives det som et eget steg for de tilfellene der man ønsker å gi nye tilganger til eksisterende delt-bøtter. 
 
-```{.yml filename=iam.yaml code-line-numbers="true"}
+Tilganger til delt-bøtter kan gis av teamet som eier bøtta. Hvem som har tilgang blir definert i fila `./infra/projects/<teamnavn>-prod/shared-buckets.yaml` i IaC-repoet til teamet. Det er den samme filen som hvor selve bøtta ble opprettet. 
+
+Hvem som skal ha tilgang angis under `sharedWith` for hver bøtte, og dette gir tilgangsgruppen som oppgis lesetilgang til filene i bøtta. 
+
+```{.yml filename=buckets-shared.yaml code-line-numbers="true"}
+version: kuben/v1
+kind: SharedBuckets
 buckets:
-  ssb-dapla-example-data-delt-freg-prod:
-    team-alpha-data-admins:
-    - ssb.bucket.read
-    team-alpha-developers:
-    - ssb.bucket.read
-
-  ssb-dapla-example-data-delt-ameld-prod:
-    team-beta-developers:
-    - ssb.bucket.read
+- name: ameld
+  type: standard
+  sharedWith:
+  - play-obr-b-developers
+- name: ledstill
+  type: standard
+  sharedWith:
+  - play-obr-b-developers  
+- name: ameld-pii
+  type: delomat
+  sharedWith:
+  - dapla-felles-developers
 ```
+
+Av eksempelet over ser vi at det spesifisert tilgang til **play-obr-b-developers** for standardbøttene `ameld` og `ledstill`. For delomat-bøtta `ameld-pii` er det spedisfisert tilgang for **dapla-felles-developers**. 
 
 Over ser vi at teamet **dapla-example** har to delt-bøtter:
 

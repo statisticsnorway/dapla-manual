@@ -1,0 +1,717 @@
+---
+title: Vardef 
+date-modified: "01/31/2025"
+
+code-links:
+    - text: les_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjon.ipynb
+      target: "_blank"
+    - text: les_variabeldefinisjoner.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjoner.ipynb
+      target: "_blank"
+    - text: migrer_variabeldefinisjoner.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/migrer_variabeldefinisjoner.ipynb
+      target: "_blank"
+    - text: ny_gyldighetsperiode_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_gyldighetsperiode_variabeldefinisjon.ipynb
+      target: "_blank"
+    - text: ny_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_variabeldefinisjon.ipynb
+      target: "_blank"
+    - text: publiser_variabeldefinisjon_eksternt.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_eksternt.ipynb
+      target: "_blank"
+    - text: publiser_variabeldefinisjon_internt.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_internt.ipynb
+      target: "_blank"
+    - text: rediger_publisert_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_publisert_variabeldefinisjon.ipynb
+      target: "_blank"
+    - text: rediger_utkast_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_utkast_variabeldefinisjon.ipynb
+      target: "_blank"
+    - text: sjekk_kortnavn_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_kortnavn_variabeldefinisjon.ipynb
+      target: "_blank"
+    - text: slett_utkast_variabeldefinisjon.ipynb
+      icon: file-code
+      href: https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/slett_utkast_variabeldefinisjon.ipynb
+      target: "_blank"
+language:
+    code-links-title: "Notebooks"
+---
+
+
+::: {.callout-warning}
+Vardef er foreløpig kun tilgjengelig i test-miljøet og er ikke i produksjon.
+:::
+
+
+[Vardef](./vardef.qmd) er SSBs system for dokumentasjon av variabler. Vardef består av et sentralt datalager som man kan interagere med [via et API](https://vardef.intern.test.ssb.no/){target="_blank"}. Statistikere og forskere i SSB kan interagere med systemet gjennom Vardef-delen av Python-pakken [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/){target="_blank"}.
+
+Brukerdokumentasjonen for Vardef er skrevet i *notebooks* som er ferdig installert i tjenesten [Vardef-forvaltning](./vardef-forvaltning.qmd) i [Dapla Lab](./dapla-lab.qmd). Det er opprette egne *notebooks* for typiske arbeidsoppgaver man ønsker å gjøre i Vardef, og brukeren kan kjøre disse uten å skrive kode selv. I *notebooks*-ene finner man ferdigskrevet kode som bruker **dapla-toolbelt-metadata** for å jobbe med Vardef. Hvis man ønsker å se innholdet i *notebooks* uten å starte tjenesten [Vardef-forvaltning](./vardef-forvaltning.qmd), så kan gå inn på lenkene til høyre på denne siden.   
+
+På denne siden dokumenteres hvordan *notebooks*'ene i **Vardef-forvaltning** kan benyttes for å gjøre ulike arbeidsoppgaver knyttet til Vardef. 
+
+## Forberedelser
+
+For å jobbe med Vardef i [Vardef-forvaltning](./vardef-forvaltning.qmd) må man først gjøre følgende:
+
+1. Logge deg inn [Dapla Lab](https://lab.dapla.ssb.no/){target="_blank"}
+2. Åpne **Tjenestekatalog** og trykke **Start** for [Vardef-forvaltning](./vardef-forvaltning.qmd)
+3. Under **Data** velger du hvilket team og tilgangsgruppe du skal representere i tjenesten. 
+4. Trykk **Start**
+
+Siden det er Dapla-team og tilgangsgrupper i teamene som forvalter variabeldefinisjoner i Vardef, så er det svært viktig at man velger riktig under punkt 3. Hvis man skal opprette en ny definisjon så er det teamet man logger seg inn med i [Vardef-forvaltning](./vardef-forvaltning.qmd) som blir automatisk satt som eier av definisjonen. Tilsvarende er tilfellet for endringer; man må logge seg inn som det teamet som forvalter en variabeldefinisjon for å kunne gjøre endringer. 
+
+## Funksjonalitet
+
+Under finner dere beskrivelser av hvordan man gjør typiske operasjoner mot Vardef.
+
+### Migrere fra Vardok
+
+Ønsker man å migrere en eller flere variabeldefinisjoner kan man kjøre notebooken [migrer_variabeldefinisjoner.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/migrer_variabeldefinisjoner.ipynb){target="_blank"}. 
+
+I variabelen **min_id_liste** som du finner i cellen nedenfor overskriften "Hente variabeldefinisjoner fra Vardok", må det settes inn en eller flere variabeldefinisjons-ID'er. Alle seksjonsledere har oversikt over hvilke ID'er fra Vardok som deres seksjon er ansvarlig for. Kjør deretter gjennom *notebook*'en. Det vil skrives ut en oppsummering over hva som blir migrert.
+
+Når *notebook*'en er kjørt gjennom så er variabeldefinisjonene migrert fra Vardok til Vardef, der de får status **Utkast**. I denne prosessen oppdaterer *dapla-toolbelt-metadata* all informasjon som kan utledes automatisk, og deretter må brukeren oppdatere gjenværende informasjon før de publiserer den internt eller eksternt. 
+
+#### Oppdatere utkast
+
+Et utkast kan oppdateres ved å kjøre notebooken [rediger_utkast_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_utkast_variabeldefinisjon.ipynb){target="_blank"}. Den skriver variabeldefinisjonen ned til en fil som brukeren kan gjøre endringer i. Når endringene er gjort, så kan man oppdatere utkastet i slutten av notebooken.
+
+#### Publisere utkast
+
+Når brukeren er fornøyd med utkastet og ønsker å publisere, så kan man velge å publisere internt eller eksternt. Ved migrering av tidligere eksternt publiserte definisjoner fra Vardok, så er hovedregelen at også man publiserer variabeldefinisjonen eksternt i Vardef. 
+
+Man kan publisere en variabeldefinisjon **eksternt** ved å kjøre *notebook*'en [publiser_variabeldefinisjon_eksternt.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_eksternt.ipynb){target="_blank"}.
+
+Man kan publisere en variabeldefinisjon **internt** ved å kjøre *notebook*'en [publiser_variabeldefinisjon_internt.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_internt.ipynb){target="_blank"}.
+
+
+### Ny variabeldefinisjon
+
+For å opprette en ny variabeldefinisjon må man først opprette et utkast, deretter redigere utkastet og til slutt publisere. Da vil man bruke følgende *notebooks*:
+
+1. [ny_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_variabeldefinisjon.ipynb){target="_blank"}
+2. [rediger_utkast_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_utkast_variabeldefinisjon.ipynb){target="_blank"}
+3. [publiser_variabeldefinisjon_internt.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_internt.ipynb) eller [publiser_variabeldefinisjon_eksternt.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_eksternt.ipynb){target="_blank"}
+
+
+### Ny gyldighetsperiode
+
+Ny gyldighetsperiode i Vardef betyr at man ønsker å gjøre endringer i en eksisterende variabeldefinisjon som gjør at den får en ny betydning. Dette betyr at definisjonsteksten endres, og denne endringen krever at den får en ny gyldighetsperiode. Dette kan kun gjøres på variabeldefinisjoner som allerede er publisert internt eller eksternt.
+
+For opprette en ny gyldighetsperiode kan man kjøre gjennom notebooken [ny_gyldighetsperiode_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_gyldighetsperiode_variabeldefinisjon.ipynb){target="_blank"}.
+
+Her blir man bedt om å oppgi kortnavnet til variabeldefinisjonen som skal ha ny gyldighetsperiode, deretter skrives den til en fil hvor endringer kan gjøres. Til slutt oppdateres variabeldefinisjonen i Vardef. 
+
+
+### Patch
+
+En *patch* i Vardef er en mindre endring som ikke endrer betydningen av variabeldefinisjonen. Man kan opprette en *patch* ved å kjøre *notebook*'en [rediger_publisert_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_publisert_variabeldefinisjon.ipynb){target="_blank"}.
+
+### Lese ut informasjon
+
+For å hente ut informasjon fra Vardef finnes det ulike *notebooks* avhengig av hva man ønsker å hente ut. 
+
+#### En variabeldefinisjon
+
+*Notebooken* [les_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjon.ipynb){target="_blank"} lar deg hente ut informasjon om en konkret variabeldefinisjon. Man kan hente ut all informasjon om variabeldefinisjonen, eller hente ut noen få informasjonselementer. 
+
+#### Alle variabeldefinisjoner
+
+*Notebooken* [les_variabeldefinisjoner.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjoner.ipynb){target="_blank"} lar deg hente ut informasjon om alle variabeldefinisjoner og filtrere disse basert på ulike kriterier.
+
+#### Ledige kortnavn
+
+*Notebooken* [sjekk_kortnavn_variabeldefinisjon.ipynb](https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_kortnavn_variabeldefinisjon.ipynb){target="_blank"} lar deg sjekke om et kortnavn er tatt eller ikke. Kortnavn i Vardef må være unikem, så det kan være lurt å sjekke om ønsket kortnavn er ledig før man prøver å publisere. 
+
+## Arbeide med YAML-filer
+
+::: {.callout-caution}
+Fargene i YAML-eksemplene er kun veiledende og kan variere fra verktøy til verktøy, ettersom de settes av automatisk syntaksutheving.
+::: 
+
+### YAML-filstruktur
+YAML-filene følger samme grunnstruktur, med små variasjoner avhengig av bruk.
+
+#### Mal
+Denne filen genereres når du vil opprette en ny variabeldefinisjon. 
+
+```{.YAML .code}
+# --- Variabeldefinisjon mal ---
+```
+
+::: {.callout-note}
+#### Filnavn mal
+Lagres som `variable_definition_template_<timestamp>.yaml`
+:::
+
+::: {.callout-caution}
+#### NB! Innholder eksempelverdier som må endres
+
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            generert tittel
+        nn:
+        en:
+```
+::: 
+
+I noen tilfeller settes verdien automatisk av systemet. For eksempel:
+```{.YAML .code}
+variable_status: DRAFT
+```
+#### Variabeldefinisjon
+
+Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.
+
+```{.YAML .code}
+# --- Variabeldefinisjon ---
+```
+
+::: {.callout-note}
+#### Filnavn variabeldefinisjon
+Lagres som `variable_definition_<kortnavn>_<id>_<timestamp>.yaml`
+:::
+
+### Redigere YAML-filen
+
+#### Enkle verdier
+
+- Verdien skrives på samme linje som feltnavn (nøkkel)
+- Bruk doble fnutter `""`
+
+
+::: {.callout-note collapse=True}
+##### Felt med enkle verdier
+  - `classification_reference`
+  - `measurement_type`
+  - `external_reference_uri`
+  - `owner.team`
+:::
+
+::: {.callout-tip}
+##### Korrekt plassering og format
+```{.YAML .code}
+short_name: "landbak"
+
+measurement_type: "03"
+```
+::: 
+
+##### Vanlige feil enkle verdier
+
+::: {.callout-warning}
+###### Feil plassering av verdi
+```{.YAML .code}
+measurement_type: 
+"03"
+```
+::: 
+
+::: {.callout-warning}
+###### Feil innrykk mellom nøkkel og verdi
+```{.YAML .code}
+classification_reference:"91"
+```
+::: 
+
+::: {.callout-warning}
+###### Mangler kolon
+```{.YAML .code}
+short_name"landbak"
+```
+::: 
+
+::: {.callout-warning}
+###### Feil verdi type
+```{.YAML .code}
+# Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.
+measurement_type: 03
+```
+::: 
+
+#### Flerspråklige felt
+
+- Et blokk symbol `|-` følger feltnavn(nøkkel). 
+- Teksten må starte rett under blokk-symbolet
+- Riktig innrykk er viktig
+- Formattering (avsnitt/linjeskift) lagres.
+
+
+::: {.callout-note collapse=True}
+##### Flerspråklige felt
+  - `name`
+  - `definition`
+  - `comment`
+  - `contact.title`
+:::
+
+::: {.callout-tip collapse=True}
+###### Korrekt plassering av tekst under blokk-symbol
+```{.YAML .code}
+contact:
+    title:
+        nb: |-
+            Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.
+        nn:
+        en:
+    email: generert@ssb.no
+```
+::: 
+
+::: {.callout-tip collapse=True}
+#### Korrekt lagring av avsnitt
+```{.YAML .code}
+comment:
+    nb: |-
+        Her er det en god plan, først er det en beskrivelse som innledning.
+
+        Deretter bevisst en blank linje:
+          - Liste-element 1
+          - Liste-element 2
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-note collapse=True}
+##### Bruk av spesialtegn
+```{.YAML .code}
+name:
+    nb: |-
+        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaksutheving.
+    nn:
+    en:
+```
+:::
+
+##### Vanlige feil flerspråklige felt
+
+::: {.callout-caution collapse=True}
+###### Uønsket tekstoppsett (linjeskift midt i ord)
+```{.YAML .code}
+name:
+    nb: |-
+        Her deles teksten opp
+        plutselig. Og den vil lagres akku-
+        rat slik du ser den.
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-warning collapse=True}
+###### Feil indentering (mangler korrekt innrykk)
+```{.YAML .code}
+name:
+    nb: |-
+Her er teksten ikke indentert og vil føre til feil når du lagrer.
+    nn:
+    en:
+```
+::: 
+
+::: {.callout-warning collapse=True}
+###### Mangler blokk-symbolet
+```{.YAML .code}
+comment:
+    nb: Her er blokk symbolet fjernet og tekst med ':' vil feile.
+    nn:
+    en: Also text with paragraphs
+    will not be saved correctly.
+```
+::: 
+
+#### Lister
+
+- Verdien skrives på samme linje som liste-symbolet `-`
+- Bruk doble fnutter `""`
+
+::: {.callout-note collapse=True}
+##### Felt med lister
+  - `unit_types`
+  - `subject_fields`
+  - `related_variable_definition_uris`
+  - `owner.groups`
+:::
+
+::: {.callout-tip}
+#### Korrekt listeformat og indentering
+```{.YAML .code}
+unit_types:
+    - "20"
+```
+:::
+
+##### Vanlige feil lister
+
+::: {.callout-warning}
+###### Feil type i listeelementer
+```{.YAML .code}
+unit_types:
+    - 01
+    - 02
+```
+::: 
+
+::: {.callout-warning}
+###### Feil indentering på liste-symbol
+```{.YAML .code}
+unit_types:
+- "20"
+```
+::: 
+
+::: {.callout-warning}
+###### Feil indentering ved listeverdi
+```{.YAML .code}
+subject_fields:
+  -"bf"
+```
+::: 
+
+#### Andre typer
+
+::: {.callout-tip}
+#### Dato
+```{.YAML .code}
+valid_from: 2003-01-01
+```
+:::
+
+::: {.callout-tip}
+#### Boolean
+```{.YAML .code}
+contains_special_categories_of_personal_data: true
+```
+:::
+
+::: {.callout-tip}
+#### Variabel status
+```{.YAML .code}
+
+variable_status: DRAFT
+
+variable_status: PUBLISHED_INTERNAL
+
+variable_status: PUBLISHED_EXTERNAL
+```
+:::
+
+
+### YAML-fil: Ny variabeldefinisjon
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon mal ---
+name:
+    nb: |-
+        Buss
+    nn:
+    en:
+short_name: "bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.
+    nn:
+    en:
+classification_reference:
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+contains_special_categories_of_personal_data: false
+measurement_type:
+valid_from: 2025-04-01
+valid_until:
+external_reference_uri:
+comment:
+related_variable_definition_uris:
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn:
+        en:
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: DRAFT
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 1
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-01-11 08:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+### YAML-fil: Redigere utkast
+
+Endre: 
+
+- `short_name`
+- `contains_special_categories_of_personal_data`
+
+Legge til:
+
+- `classification_reference`
+- `external_reference_uri`
+- `subject_fields`
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon ---
+name:
+    nb: |-
+        Buss
+    nn:
+    en:
+short_name: "reg_bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.
+    nn:
+    en:
+classification_reference: "111"
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+    - "tr04"
+contains_special_categories_of_personal_data: true
+measurement_type:
+valid_from: 2025-01-01
+valid_until:
+external_reference_uri: "https://www.norges-motorvignforbund.no"
+comment:
+related_variable_definition_uris:
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn:
+        en:
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: DRAFT
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 1
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-01-11 08:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+### YAML-fil: Redigere publisert
+
+Endre:
+
+- Rette skrivefeil i `external_reference_uri`
+
+Legge til:
+
+- verdier på norsk nynorsk og engelsk:
+    -  `name`
+    - `definition`
+    - `contact.title`
+- `owner.groups`
+- `related_variable_definition_uris`
+- `measurement_type`
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon ---
+name:
+    nb: |-
+        Buss 
+    nn: |-
+        Buss
+    en: |-
+        Bus
+short_name: "reg_bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.
+    nn: |-
+        Buss er eit køyretøy som er spesialkonstruert for å frakte mange passasjerar.
+    en: |-
+        A bus is a motor vehicle that is specially designed to carry many passengers.
+classification_reference: "111"
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+    - "tr04"
+contains_special_categories_of_personal_data: true
+measurement_type: "02"
+valid_from: 2025-01-01
+valid_until:
+external_reference_uri: "https://www.norges-motorvognforbund.no"
+comment:
+related_variable_definition_uris:
+    - "https://example.com/"
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn: |-
+            Seksjon for Nærings- og miljøstatistikk
+        en: |-
+            Section for Industrial and Environmental Statistics
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: PUBLISHED_INTERNAL
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+        - "arbmark-aku-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 1
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-03-25 10:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+
+### YAML-fil: Ny gyldighetsperiode
+
+Legge til:
+
+- `comment`
+
+Endre:
+
+- `valid_from`
+- `definition` 
+
+```{.YAML .code style="font-size: 0.9em;"}
+# --- Variabeldefinisjon ---
+name:
+    nb: |-
+        Buss 
+    nn: |-
+        Buss
+    en: |-
+        Bus
+short_name: "reg_bus"
+definition:
+    nb: |-
+        Buss er en motorvogn som er spesialkonstruert for å frakte flere enn 
+        16 passasjerer.
+    nn: |-
+        Buss er eit køyretøy som er spesialkonstruert for å frakte flere enn 
+        16 passasjerar.
+    en: |-
+        A bus is a motor vehicle that is specially designed to carry more than 
+        16 passengers.
+classification_reference: "111"
+unit_types:
+    - "15"
+subject_fields:
+    - "tr01"
+    - "tr04"
+contains_special_categories_of_personal_data: true
+measurement_type: ""
+valid_from: 2025-06-01
+valid_until:
+external_reference_uri: "https://www.norges-motorvognforbund.no"
+comment:
+    nb: |-
+        Krav til spesifikasjon av antall passasjerer i en buss for å skille "buss" fra "minibuss".
+    nn: |-
+        Krav til spesifikasjon av talet på passasjerar i ein buss for å skilje 
+        mellom «buss» og «minibuss».
+    en: |-
+        Requirements for specification of the number of passengers in a bus to distinguish 
+        "bus" from "minibus".
+related_variable_definition_uris:
+    - "https://example.com/"
+contact:
+    title:
+        nb: |-
+            Seksjon for Nærings- og miljøstatistikk
+        nn: |-
+            Seksjon for Nærings- og miljøstatistikk
+        en: |-
+            Section for Industrial and Environmental Statistics
+    email: s400@ssb.no
+
+# --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---
+variable_status: PUBLISHED_INTERNAL
+
+# --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---
+owner:
+    team: "aordning-register"
+    groups:
+        - "aordning-register-developers"
+        - "arbmark-aku-developers"
+
+# --- Maskin-genererte felt. Ikke rediger. ---
+id: "wypvb3wd"
+patch_id: 2
+created_at: 2025-01-11 08:15:19.038000+00:00
+created_by: "ano@ssb.no"
+last_updated_at: 2025-04-05 11:15:19.038000+00:00
+last_updated_by: "ano@ssb.no"
+````
+
+<style>
+code span.co {
+    color:#408080;
+    font-style: inherit;
+}
+code span.fu{
+  color: #88f;
+}
+code span.cp{
+  color: #a2f;
+}
+code span.c12{
+  color: #ba2121;
+}
+code span.st{
+  color: #ba2121;
+}
+pre code.sourceCode > span{
+  color:rgba(8, 8, 8, 0.99);
+}
+#cb2-4{
+  background-color: yellow;
+}
+</style>

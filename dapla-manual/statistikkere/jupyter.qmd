@@ -1,6 +1,7 @@
 ---
 title: Jupyter
-date-modified: "11/25/2024"
+date-modified: "02/09/2025"
+lightbox: true
 ---
 
 ![](../images/dapla-lab-jupyter-service.png){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
@@ -28,7 +29,7 @@ Før man åpner en tjeneste kan man konfigurere hvor mye ressurser man ønsker, 
 
 ### Data
 
-Under **Data**-menyen kan man velge hvilket team og tilgangsgruppe man skal representere. Man gjør dette ved å velge navnet på tilgangsgruppen, og denne er alltid på formen `<teamnavn>-<tilgangsgruppe>`. @fig-dapla-lab-konf-buckets viser at brukeren har valgt tilgangsgruppen *dapla-felles-developers*, dvs. at de representerer tilgangsgruppen *developers* for teamet *dapla-felles*. 
+Under **Data**-menyen kan man velge hvilket team og tilgangsgruppe man skal representere, som igjen bestemmer hvilke data man får tilgang til. Man gjør dette ved å velge navnet på tilgangsgruppen, og denne er alltid på formen `<teamnavn>-<tilgangsgruppe>`. @fig-dapla-lab-konf-buckets viser at brukeren har valgt tilgangsgruppen *dapla-felles-developers*, dvs. at de representerer tilgangsgruppen *developers* for teamet *dapla-felles*.
 
 ![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
 
@@ -38,13 +39,46 @@ Under **Team og tilgangsgruppe** kan brukeren også velge å representere tilgan
 
 ![Aktivere tilgang til kildedata for data-admins.](../images/dapla-lab-konf-buckets-data-admin.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets-data-admins}
 
+Når man åpner tjeneste, og representerer et team, så tilgjengeliggjøres det teamets bøtter inne i tjenesten under filstien `/buckets/`. Men et team kan også ha tilgang til andre sine delt-bøtter og ønske å tilgjengliggjøre disse også. @fig-dapla-lab-shared-buckets viser hvordan man spesifiserer hvilke delt-bøtter man ønsker å tilgjengeliggjøre inne i tjenesten. Man gjør det ved å spesifisere det tekniske teamnavnet til teamet som eier dataene, og spesifiserer kortnavnet for delt-bøtta^[Kortnavnet til en delt-bøtte kan leses ut av Dapla Ctrl eller hentes fra selve bøttenavnet. F.eks. er det kortnavnet til delt-bøtta `ssb-vof-data-delt-rollebase-fnr-prod` bare `rollebase-fnr`. Det tekniske teamnavnet er `vof`.]. 
+
+![Konfigurer hvilke delt-bøtter fra andre som skal tilgjengeliggjøres i tjenesten.](../images/dapla-lab-shared-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-shared-buckets}
+
+::: {.callout-caution collapse="true"}
+## Hvor finner jeg filene inne i tjenesten?
+
+Bøtter som tilgjengeliggjøres inne tjenesten finner du alltid under filstien `/buckets/` i tjenesten. Under er et eksempel som vil være vanlig for et statistikkteam:
+
+```{.bash filename="Filsystem"}
+/buckets/
+├── produkt/
+│   ├── inndata/
+│   └── klargjorte data/
+├── frasky/
+├── tilsky/
+├── delt-ledstill/
+├── delt-freg/
+└── shared/
+    ├── arbmark-register/
+    │   └── ameld/
+    └── vof/
+        └── rollebasen/
+
+```
+Bøttene som eies av teamet (`produkt`, `frasky`, `tilsky`, `delt-ledstill` og `delt-freg`) tilgjengeliggjøres rett under filstien `/buckets/`, mens andre team sine delt-bøtter tilgjengeliggjøres under `/buckets/shared/<teamnavn>/<kortnavn for bøtte>`. Teamets egne delt-bøtter får et `delt`-prefiks slik at en delt-bøtte med kortnavn `ledstill` blir tilgjengeliggjort som `delt-ledstill`.
+
+:::
+
+Man kan også velge å jobbe direkte mot bøttene, og da trenger man ikke å tilgjengeliggjøre bøttene i filsystemet. Under tjenestekonfigurasjonen **Avansert** kan man skru av tilgjengeliggjøringen av bøtter i filsystemet. 
+
 ### Git/GitHub
 
 Under menyen **Git/GitHub** kan man konfigurere Git og GitHub slik at det blir lettere å jobbe med inne i tjenesten. Som standard arves informasjonen som er lagret under [*Min konto*-*Git* i Dapla Lab](./dapla-lab.html#git). Informasjonen under tjenestekonfigurasjonen blir tilgjengeliggjort som miljøvariabler i tjenesten. Informasjonen blir også lagt i `$HOME/.netrc` slik at man kan benytte ikke trenger å gjøre noe mer for å jobbe mot GitHub fra tjenesten.  
 
 ![Konfigurasjon av Git og GitHub for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-konf-git.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-git}
 
-@fig-dapla-lab-konf-git viser at brukeren som standard får aktivert **Aktiver Git**. Dette innebærer at Git-brukernavn, Git e-post og GitHub-token arves fra brukerkonfigurasjonen. I tillegg så opprettes SSBs standard Git-konfigurasjon i `~/.gitconfig`. 
+@fig-dapla-lab-konf-git viser at brukeren som standard får aktivert **Aktiver Git**. Dette innebærer at Git-brukernavn, Git e-post og GitHub-token arves fra brukerkonfigurasjonen. I tillegg så opprettes SSBs standard Git-konfigurasjon i `~/.gitconfig`.
+
+Man kan også velge at [`ssb-project build`](./jobbe-med-kode.qmd#bygg-eksisterende-ssb-project) skal kjøres på repoet under oppstart av tjenesten. Det fører til litt lengre oppstartstid, men er alle pakker installert og en kernel opprettet når tjenesten er klar. 
 
 ### Python/R
 
@@ -65,6 +99,12 @@ Under menyen **Resources** kan man velge hvor mye CPU og RAM man ønsker i tjene
 Som default får alle som starter en instans av Jupyter-tjenesten en lokal disk på **10GB** inne i tjenesten. Under *Diskplass*-menyen kan man velge å øke størrelsen på disken eller ikke noe disk i det hele tatt. Siden lokal disk i tjenesten hovedsakelig skal benyttes til å lagre en lokal kopi av koden som lagres på GitHub mens man gjør endringer bør ikke størrelsen på disken være stor. @fig-dapla-lab-persistence viser valgene som kan gjøres under Diskplass-fanen. 
 
 ![Konfigurasjon av lokal disk for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-persistence.png){fig-alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-persistence}
+
+### Avansert
+
+Under **Avansert** kan man velge å ikke tilgjengeliggjøre bøtter som filsystem inne i tjenesten. Konsekvensen av dette er at man må lese og skrive filer ved å referere til bøttene direkte. 
+
+![Avansert konfigurasjon for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-conf-advanced.png){fig-alt="Viser Resources-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-conf-advanced}
 
 ## Datatilgang
 

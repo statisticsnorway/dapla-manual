@@ -1,55 +1,28 @@
-# dapla-toolbelt-metadata
+---
+title: dapla-toolbelt-metadata
+date-modified: "01/31/2025"
+lightbox: true
+---
 
-> Verktøy og klienter for å jobbe med Metadata på Dapla.
+[dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) er en Python-pakke for å jobbe med metadatasystemene på Dapla. Pakken gir brukeren et Python-grensesnitt for å jobbe mot [Datadoc](./datadoc.qmd) og [Vardef](./vardef.qmd).
 
-## Lenker
+## Forberedelser
 
-- PyPI pakke: <https://pypi.org/project/dapla-toolbelt-metadata/>
-- API dokumentasjon: <https://statisticsnorway.github.io/dapla-toolbelt-metadata/>
-- GitHub repo: <https://github.com/statisticsnorway/dapla-toolbelt-metadata>
+dapla-toolbelt-metadata kan installeres i tjenester på Dapla Lab. Siden det er en Python-pakke så må den installeres i en tjeneste der Python er installert. Deretter gjør du følgende:
 
-## Installasjon
+1.  Åpne en tjeneste på [Dapla Lab](https://lab.dapla.ssb.no/) med Python installert. Før du åpner tjenesten må du velge å representere team og tilgangsgruppe som har tilgang til dataene som skal dokumenteres.
+2.  Installer pakken i et [ssb-project](./ssb-project.qmd) på følgende måte:
 
-#### Pip
-
-```{.bash filename="Terminal"}
-pip install dapla-toolbelt-metadata
-```
-
-#### Poetry
-
-```{.bash filename="Terminal"}
+``` {.bash filename="Terminal"}
 poetry add dapla-toolbelt-metadata
 ```
 
-## Datasett
+Etter det er du klar for bruke funksjonaliteten i *dapla-toolbelt-metadata* i en notebook.
 
-Den anbefalte måten å skape metadata for et nytt datasett er med [Datadoc brukergrensesnittet](./datadoc.qmd). Men det finnes tilfeller hvor det kan være tungvint å bruke og man ønsker å jobbe med metadata ved hjelp av kodespråk. Det kan man gjøre med `Datadoc` klassen i `dapla-toolbelt-metadata` pakken.
+::: {.callout-caution}
+## Dapla Lab og dapla-toolbelt-metadata
+I Dapla Lab velger man hvilket team og tilgangsgruppe man skal representere før man åpner en tjeneste. Hvis man f.eks. skal dokumentere et datasett i datatilstanden [inndata](./datatilstander.qmd#inndata) for et team som heter **dapla-felles**, så må man logge seg inn i en tjeneste som **dapla-felles-developers**, hvis ikke har man ikke tilgang til datasettet. 
 
-### Brukstilfeller
-
-#### Nye tidsperioder
-
-Det primære brukstilfelle er å skape metadata for datasett skapt for nye tidsperioder som en del av produksjonsløp.
-
-I dette tilfelle er Datadoc brukergrensesnittet brukt for å skape det første metadatadokumentet. Man kan deretter bruke metadatadokumentet som en utgangspunkt for nye tidsperioder. `Datadoc` klassen utleder oppdatert informasjon fra filstien til datasettene for nye tidsperioder og oppdaterer metadataen til å stemme.
-
-::: {.callout-note}
-Dette forutsetter at strukturen av datasettet og betydningen av variablene er lik mellom tidsperiodene. Om det finnes uforventede avvik så kastes en `InconsistentDatasetsError` med detaljer om avviket.
+I tillegg så benytter Vardef bl.a. informasjon om hvilket team og tilgangsgruppe du logget deg inn som, for definere hvilket team som blir eier av en nyopprettet variabeldefinisjon. På samme måte bruker Vardef denne informasjonen til å avgjøre om en bruker har tilgang til å endre en definisjon. F.eks. vil en bruker som logger seg inn som **dapla-felles-developers** og oppretter en ny definisjon, så vil **dapla-felles** stå som eier av definisjonen og det vil kun være medlemmer av dette teamet som kan gjøre endringer i definisjonen.  
 :::
 
-##### Kodeeksempel
-
-```{.python filename="Notebook"}
-from dapla_metadata.datasets import Datadoc
-
-meta = Datadoc(
-    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1.parquet",             # <1>
-    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2021_v1__DOC.json", # <2>
-)
-meta.write_metadata_document() # <3>
-```
-
-1. En ny tidsperiode av et datasett
-2. Eksisterende metadatadokument
-3. Skaper et nytt metadatadokument med filsti som stemmer med datasettet, i dette tilfellet `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`
