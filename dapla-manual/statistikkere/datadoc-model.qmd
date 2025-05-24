@@ -41,7 +41,7 @@ Angir navnet til datasettet. Navnet skal være forståelig for mennesker (ikke k
 
 Eksempel 1:
 
-> Flyttehistoriefil variabel del
+> Levekårsundersøkelsen
 
 :::
 
@@ -130,7 +130,16 @@ klargjorte data ⚠️ | statistikkdata ⚠️
 
 Angis kun dersom det er knyttet [bruksrestriksjoner](#bruksrestriksjon) til datasettet, og det finnes en “tiltaksdato”. En tiltaksdato kan f.eks. være at et datasett skal slettes eller anonymiseres på en gitt dato. Noen datasett med Bruksrestriksjon vil ikke ha en slik dato, f.eks. vil en behandlingsbegrensning normalt være permanent/tidsuavhengig, og da skal ikke dette feltet fylles ut. I json-utskriften vil verdien i dette feltet da vises som “null”.
 
-Dato fylles ut på [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.). F.eks. **2024-12-31** eller **2022-09-27 18:00:00.000**.
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel 1:
+
+> 2024-12-31
+
+:::
 
 ---
 
@@ -140,11 +149,22 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Utledes automatisk fra filstien hvis datasettet som dokumenteres er lagret iht [Navnestandarden](./navnestandard.qmd), men kan overstyres. Datasettets [datatilstand](./datatilstander.qmd) er en av følgende:
 
-- kildedata
-- inndata 
-- klargjorte data 
-- statistikk
-- utdata
+#### KILDEDATA
+🌐 *SOURCE_DATA*
+
+#### INNDATA
+🌐 *INPUT_DATA*
+
+#### KLARGJORTE DATA
+🌐 *PROCESSED_DATA* 
+
+#### STATISTIKK
+🌐 *STATISTICS*
+
+#### UTDATA
+🌐 *OUTPUT_DATA* 
+
+
 
 ---
 
@@ -227,6 +247,8 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Utledes automatisk dersom datasettet følger [navnestandarden](./navnestandard.qmd). Dersom datasettet ikke følger navnestandarden (det er f.eks. ikke et krav at kildedata skal gjøre det), settes denne datoen manuelt. Dersom variablene i datasettet inneholder data med ulike startdatoer, settes den eldste datoen her. Under variabler-fanen kan en sette korrekt *Inneholder data f.o.m.* for variabler som avviker fra datoen som settes her.
 
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
 ---
 
 ### Inneholder data t.o.m.
@@ -234,6 +256,8 @@ Utledes automatisk dersom datasettet følger [navnestandarden](./navnestandard.q
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Utledes automatisk dersom datasettet følger [navnestandarden](./navnestandard.qmd). Dersom datasettet ikke følger navnestandarden (det er f.eks. ikke et krav at kildedata skal gjøre det), settes denne datoen manuelt. Dersom variablene i datasettet inneholder data med ulike sluttdatoer, settes den nyeste datoen her. Under variabler-fanen kan en sette korrekt «Inneholder data t.o.m.» for variabler som avviker fra datoen som settes her.
+
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
 
 ---
 
@@ -414,20 +438,26 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angir variabelens rolle i datasettet. Gyldige verdier/roller er: 
 
-- **identifikator**  
+#### IDENTIFIKATOR
+🌐 *IDENTIFIER*  
 Identifiserer de ulike enhetene i et datasett, f.eks. fødselsnummer som identifiserer personer og organisasjonsnummer som identifiserer foretak.
 
-- **målevariabler**  
-Beskriver det vi måler, dvs. egenskaper som sivilstand eller omsetning. 
+#### MÅLEVARIABEL
+🌐 *MEASURE*  
+Beskriver det vi måler, dvs. egenskaper som sivilstand eller omsetning.
 
-- **startdato**  
+#### STARTTID
+🌐 *START_TIME*  
 Beskriver startdato for hendelser som har et forløp, eller måletidspunkt for tverrsnittdata.
 
-- **stoppdato**  
+#### STOPPTID
+🌐 *STOP_TIME*  
 Beskriver stoppdato for hendelser som har et forløp.
-
-- **attributt**  
+ 
+#### ATTRIBUTT 
+🌐 *ATTRIBUTE*  
 Benyttes dersom en ønsker å utvide datasettet med informasjon knyttet til gitte variabler, f.eks. vedrørende datakvalitet eller editering.
+
 
 ---
 
@@ -536,6 +566,8 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholder data med ulike startdatoer, kan startdato dokumenteres på variabelnivå i dette feltet.
 
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
 ---
 
 ### Inneholder data t.o.m.
@@ -543,6 +575,8 @@ Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholde
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholder data med ulike sluttdatoer, kan sluttdato dokumenteres på variabelnivå i dette feltet.
+
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
 
 ---
 
