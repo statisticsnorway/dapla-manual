@@ -28,15 +28,15 @@ Hvis man har dokumentert datasett for *periode t* med [Datadoc-editor](./datadoc
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1.parquet",             # <1>
-    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2021_v1__DOC.json", # <2>
+    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet",             # <1>
+    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2021_v1__DOC.json", # <2>
 )
 meta.write_metadata_document() # <3>
 ```
 
 1.  `dataset_path` angir det nye datasettet som skal dokumenteres.
 2.  `metadata_document_path` angir sti til tidligere periodes metadata.
-3.  `write_metadata_document` er kommandoen som produserer de nye metadataene og skriver de til filen `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/person_testdata_p2022_v1__DOC.json`.
+3.  `write_metadata_document` er kommandoen som produserer de nye metadataene og skriver de til filen `gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1__DOC.json`.
 
 Det veldig viktig at man ikke bruker denne metoden hvis det er endringer i hvilke kolonner som finnes i datasettet eller andre større endringer. Metoden over antar at den eneste informasjonen som har endret seg er den som kan leses ut av filstien. Ved større endringer i selve dataene bør man heller gjøre en manuell gjennomgang av metadataene med [Datadoc-editor](./datadoc-editor.qmd), eller bruke metoden som beskrives i neste avsnitt. 
 
@@ -48,7 +48,7 @@ Hvis det har skjedd noen endringer i datasettet ditt, men mange av kolonnene har
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte_data/dataset-to-document_p2022_v1.parquet",
+    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/dataset-to-document_p2022_v1.parquet",
     metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/existing-metadata__DOC.json",
     errors_as_warnings=True,
 )
@@ -65,14 +65,14 @@ Det er i de fleste tilfeller anbefalt å opprette metadata for en ny fil med [Da
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path = "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2022-12-31_v1.parquet",
+    dataset_path = "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2022-12-31_v1.parquet",
 )
 
 meta.write_metadata_document()
 ```
 I koden over så genererer vi et metadatadokument for en gitt parquet-fil og skriver den til samme filstien som filen som dokumenteres med `write_metadata_document()`. Metdatadokumentet blir i eksempelet over skrevet til:  
 
-`/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1__DOC.json`
+`/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1__DOC.json`
 
 Ved generering av metadataene blir all informasjon som kan genereres automatisk, faktisk generert. Dette fungerer på samme måte som når man åpner et udokumentert datasett i [Datadoc-editor](./datadoc-editor.qmd). I boksen under ser man et eksempel på json-filen som blir generert ved å kjøre koden over. 
 
@@ -119,7 +119,7 @@ Ved generering av metadataene blir all informasjon som kan genereres automatisk,
       "custom_type": null,
       "id": "a7be0245-8d58-48b2-9158-3df338406cc7",
       "owner": "dapla-felles",
-      "file_path": "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+      "file_path": "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
       "metadata_created_date": "2025-04-09T18:10:26.185913Z",
       "metadata_created_by": "obr@ssb.no",
       "metadata_last_updated_date": "2025-04-09T18:10:26.185349Z",
@@ -283,7 +283,7 @@ I kodeeksempelet under så ønsker vi å oppdatere feltet `multiplication_factor
 from dapla_metadata.datasets import Datadoc
 # Leser inn metadataene
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 #Oppdaterer verdien
@@ -305,7 +305,7 @@ from dapla_metadata.datasets import Datadoc
 
 # Leser inn metadataene
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 #Oppdaterer verdien
@@ -333,7 +333,7 @@ from dapla_metadata.datasets import Datadoc
 
 # Importerer/genererer et metadataobjekt
 meta = Datadoc(
-    dataset_path="resources/sykefratot/klargjorte_data/person_testdata_p2022_v1.parquet",
+    dataset_path="resources/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet",
 )
 
 # Endre "name" på datasettnivå
@@ -406,7 +406,7 @@ Siden metadataene som er laget med Datadoc lagres ved siden av filen som dokumen
 ```{.python filename="Notebook"}
 import json
 
-file_path = "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1__DOC.json"
+file_path = "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1__DOC.json"
 
 with open(file_path, "r", encoding="utf-8") as f:
     data = json.load(f)
@@ -457,7 +457,7 @@ print(json.dumps(data, indent=2, ensure_ascii=False))
       "custom_type": null,
       "id": "a7be0245-8d58-48b2-9158-3df338406cc7",
       "owner": "dapla-felles",
-      "file_path": "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+      "file_path": "/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
       "metadata_created_date": "2025-04-09T18:10:26.185913Z",
       "metadata_created_by": "obr@ssb.no",
       "metadata_last_updated_date": "2025-04-09T18:58:28.808974Z",
@@ -619,7 +619,7 @@ from pprint import pprint
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 pprint(vars(meta.dataset))
@@ -637,7 +637,7 @@ pprint(vars(meta.dataset))
  'dataset_state': 'PROCESSED_DATA',
  'dataset_status': 'DRAFT',
  'description': None,
- 'file_path': '/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet',
+ 'file_path': '/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet',
  'id': UUID('a7be0245-8d58-48b2-9158-3df338406cc7'),
  'keyword': None,
  'metadata_created_by': 'obr@ssb.no',
@@ -666,7 +666,7 @@ from pprint import pprint
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 # Formattere en pen print
@@ -821,7 +821,7 @@ from pprint import pprint
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 inntekt = meta.variables_lookup["inntekt"]
@@ -862,7 +862,7 @@ Videre kan vi hente ut verdien til feltet `multiplication_factor` for variabelen
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 meta.variables_lookup[
@@ -876,7 +876,7 @@ Videre kan vi hente Dapla-teamet som eier datasettet ved hente ut verdien til fe
 from dapla_metadata.datasets import Datadoc
 
 meta = Datadoc(
-    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
+    dataset_path="/buckets/produkt/datadoc/brukertest/3/sykefratot/klargjorte-data/person_testdata_p2021-12-31_p2023-12-31_v1.parquet",
 )
 
 meta.dataset.owner
