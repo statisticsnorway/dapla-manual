@@ -1,45 +1,46 @@
 ---
 title: Hordan komme i gang med overgangen til Dapla?
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .qmd
-      format_name: quarto
-      format_version: '1.0'
-      jupytext_version: 1.17.0
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
 ---
 
 Jobber du med å få over en statistikk? 
-I denne artikkelen beskriver vi hvordan man bør jobbe for å få en statistikk over på Dapla, både overordnede prinsipper og en steg-for-steg veiledning.
+I denne artikkelen beskriver vi hva man bør gjøre og hvordan man bør jobbe for å få en statistikk over på Dapla. Rekkefølgen punktene er i er ikke tilfeldig men med unntak av første punkt - planlegging - kan rekkefølgen på hvordan man gjør ting variere.
 
-### Steg 1: Opprette Dapla team
+### Planlegg overgangen og tegn dagens produksjonssystem
 
-Det første man må gjøre når man skal få en statistikk over på Dapla er å opprette et Dapla team. Et Dapla team gir en tilgang til Google Cloud. Det er anbefalt praksis å ha ett team per seksjon. Seksjon for Prisstatistikk (s240) har eksempelvis team-navnet `prisstat`.
+Når man skal legge en statistikk over på Dapla bør man planlegge godt. En del av dette er å analysere dagens systemer for å identifisere forbedringspunkter. Derfor anbefales det at man lager en oversikt over dagens produksjonssystem. 
+ 
+For å forenkle denne prosessen og ha en felles forståelse av både nåværende («as-is») og framtidige («to-be») produksjonsløp, er det laget et helhetlig opplegg som kombinerer et Excel-skjema med automatisk generering av visualiseringer i Tableau.
+ 
+Kort fortalt innebærer dette at statistikkprodusenter selv fyller inn informasjon om hvilke systemer og datasett som er i bruk, hvordan dataene transformeres underveis, og i hvilken rekkefølge de ulike stegene finner sted. Thomas Bjørnskau kan bistå med dette og konverterer skjemaet til dataflytdiagrammer ved hjelp av Tableau.
+
+I tillegg kan man få veiledning fra Seksjon for Operasjonell forretningsstøtte (s821), støtteteamene og Tech Coachene. Det anbefales det sterkeste å ta kontakt med de nevnte instansene i det man setter i gang med omleggingen av produksjonssystem(ene).
+
+Veien blir til mens man går så det forventes ikke at man har en helhetlig plan for produksjonssløpene før man setter i gang med det konkrete.
+
+### Opprette Dapla team
+
+Å bestemme teamstruktur er en naturlig fortsettelse av planleggingen. Her er det først og fremst sikkerhetshensyn som legger føring for hvor mange team man skal ha per seksjon da Dapla-team er knyttet til tilgansstyring. Vi anbefaler å ta kontakt med støtteapparatene som ble nevnt i forrige punkt her og. Hvor mange team man har varierer mellom avdelinger og seksjoner.
 
 ::: {.callout-tip}
 # Hvordan oppretter du et team?
-I [applikasjonen Dapla-Ctrl](https://dapla-ctrl.intern.ssb.no/)! Dette må gjøres av seksjonsleder. Les brukerveiledning i [artikkelen vår om Dapla-Ctrl](https://manual.dapla.ssb.no/statistikkere/dapla-ctrl.html#opprette-team) om du trenger hjelp.
+I [applikasjonen Dapla-Ctrl](https://dapla-ctrl.intern.ssb.no/). Dette må gjøres av seksjonsleder. Les brukerveiledning i [artikkelen vår om Dapla-Ctrl](https://manual.dapla.ssb.no/statistikkere/dapla-ctrl.html#opprette-team) om du trenger hjelp med det tekniske, men husk å ta den endelige avgjørelsen i samarbeid med støtteapparatene.
 :::
 
-### Steg 2: Klargjør og flytt data til Dapla!
+### Flytt data til Dapla!
 
-En av de viktigste delene av å få en statistikk over på Dapla er å jobbe på Dapla. Derfor bør man flytte noe data som man kan bruke til å bygge et produksjonsløp. Samtidig bør man begynne å skape seg en oversikt over hvilke data som i dag finnes på bakken og hvordan disse dataene er organisert. Det vil for mange ta lang tid å få oversikt over eksisterende data og hva/hvordan man skal arkivere men det er lurt å begynne på det helt fra starten
+En av de viktigste delene av å få en statistikk over på Dapla er å faktisk jobbe på Dapla. Derfor bør man flytte noe data som man kan bruke til å bygge deler av produksjonsløpet. Her kan man enten lage testdata eller bruke fjorårets data. Det anbefales å begynne med *inndata* da man mest sannsynlig ikke har datafangst på plass når man begynner å legge om et løp.
+
+Når man flytter data bør man begynne å skape seg en oversikt over hvilke data som finnes på bakken og hvordan disse dataene er organisert. Det vil for mange ta lang tid å få oversikt over eksisterende data og hva/hvordan man skal arkivere men det er lurt å begynne å tenke på dette fra første stund.
 
 I tillegg er det viktig at man begynner å tenke på hvordan man skal organisere dataene på Dapla i henhold til [navnestandard for datalagring](https://manual.dapla.ssb.no/statistikkere/navnestandard.html#mappestruktur).
 
-Flere i SSB bruker produksjonssonen for å skrive produksjonssløp i Python og R. Det er ikke anbefalt. Det er tre hovedgrunner til dette:
+Flere i SSB bruker produksjonssonen for å skrive produksjonssløp i Python og R. Det er ikke anbefalt med mindre man har avhengigheter på bakken. Selv om man har avhengigheter på bakken er den generelle anbefalingen at man lager test-data eller flytter inndata fra bakke til sky og utviler produksjonsløpet fra inndata og ut. Her er noen av grunnene til at vi fraråder å utvikle løpene på bakken:
 
 * Jobber man på bakken isolerer man seg fra ny og viktig Dapla-funksjonalitet
 * Det tar tid å flytte et produksjonsløp fra bakken til sky!
 * Jupyter på bakken er ikke skalert for å håndtere produksjonssløp
 
-Har man avhengigheter på bakken (f.eks en database) kan det gi mening å jobbe prodsonen, men da er det også en mulighet å eksportere og sende over noe data til Dapla.
-
-
+Produksjonssonen er likevel et bra sted for å gjøre seg kjent med python og R men så fort man skal faktisk bygge et løp anbefaler vi å gjøre det i skyen.
 
 :::{.callout-note collapse=true}
 #### Hvordan flytter man data fra produksjonssonen til Google Cloud Storage?
@@ -97,9 +98,9 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 Gå tilbake til transfer jobs-siden og kjør din nye transfer-job ved å trykke på jobb-navnet og *Start a run*
 :::
 
-### Steg 3: Lag repo med SSB-project
+### Lag repo med SSB-project
 
-Neste steg er å lage et repository for statistikken du skal jobbe med! Ifølge [navnestandarden](https://manual.dapla.ssb.no/statistikkere/navnestandard.html#mappestruktur) skal reponavnet begynne med *stat-*.
+Man bør også lage et repository for statistikken man skal jobbe med tidlig i prosessen. Ifølge [navnestandarden](https://manual.dapla.ssb.no/statistikkere/navnestandard.html#mappestruktur) skal reponavnet begynne med *stat-*.
 
 Kort fortalt gjør man det ved å kjøre `ssb-project create <repo-navn> --github --github-token='<din token>'`. Dette forutsetter at man har konfigurert GitHub-bruker. Les om hvordan man gjør det i [vår artikkel om Git og Github]().
 
@@ -109,38 +110,26 @@ Les mer i [artikkelen vår om SSB-project](ssb-project.qmd)!
 Nysgjerrig på hvordan et SSB-project repo ser ut? Sjekk ut [`stat-eksempel`](https://github.com/statisticsnorway/stat-eksempel) på GitHub - et fiktivt produksjonsløp utviklet av A200 støtteteam.
 :::
 
-### Steg 4: Planlegg overgangen og tegn dagens produksjonssystem
+### Jobb deg gjennom datatilstandene 
 
-Skal vi lage bedre produksjonssystemer på Dapla må vi kunne analysere dagens systemer for å unngå å kopiere systemene vi har i dag.
+Når alt annet er på plass kan man begynne å lage det nye produksjonssystemet - en datatilstand om gangen. Det er slik vi har gjort det i [stat-eksempel](https://github.com/statisticsnorway/stat-eksempel). Vi har et kapittel om standarder med flere nyttige artikler, deriblant [artikkelen  om datatilstander]()
 
-Derfor er det lurt å lage en oversikt over hvordan data flyter gjennom ulike systemer i dagens produksjonsopplegg. Dette kan gjelde alle stegene fra datainnsamling og klargjøring til analyse og publisering. 
- 
-For å forenkle denne prosessen og ha en felles forståelse av både nåværende («as-is») og framtidige («to-be») produksjonsløp, er det laget et helhetlig opplegg som kombinerer et Excel-skjema med automatisk generering av visualiseringer i Tableau.
- 
-Kort fortalt innebærer dette at statistikkprodusenter selv fyller inn informasjon om hvilke systemer og datasett som er i bruk, hvordan dataene transformeres underveis, og i hvilken rekkefølge de ulike stegene finner sted. Thomas Bjørnskau kan bistå med dette og konverterer skjemaet til dataflytdiagrammer ved hjelp av Tableau.
+### Og så må du finne din egen vei.... Men her har du noen tips! (og ting å tenke på)
 
-I tillegg tilbyr Seksjon for Operasjonell forretningsstøtte (s821) veiledning. Det anbefales på det sterkeste å kontakte både Thomas og s821 for bistand.
-
-### Steg 5: Jobb deg gjennom datatilstandene 
-
-Når alt annet er på plass kan man begynne å lage det nye produksjonssystemet - en datatilstand om gangen. Det er slik vi har gjort det i [stat-eksempel](https://github.com/statisticsnorway/stat-eksempel).
-
-### Og så må du finne din egen vei.... Men her har du noen tips!! (og ting å tenke på)
-
-#### 1. Ta finpussen til slutt!
+#### Ta finpussen til slutt!
 
 * Ref. [First Rule Of Optimization](https://wiki.c2.com/?FirstRuleOfOptimization)
 * Ikke heng deg opp i finpuss som detaljert dokumentasjon, visualiseringer og nice-to-haves
     -> God dokumentasjon underveis er viktig, men vi anbefaler å ta detaljene til slutt
 
-#### 2. Bruk [ssb-fagfunksjoner](https://github.com/statisticsnorway/ssb-fagfunksjoner) - en python-pakke med masse fellesfunksjonalitet
+#### Bruk [ssb-fagfunksjoner](https://github.com/statisticsnorway/ssb-fagfunksjoner) - en python-pakke med masse fellesfunksjonalitet
 
 * ... som for eksempel funksjoner for versjonering vist frem i [navnestandard-artikkelen vår](navnestandard.qmd).
 
-#### 3. Gjør det godt kjent med krav og standarder
+#### Gjør det godt kjent med krav og standarder
 
 * Investerer man tid i å standardene og kravene til statistikkproduksjon på Dapla i starten av en overgang vil man unngå hodebry i fremtiden og spare mye tid. Les artiklene våre om  [standarder](https://manual.dapla.ssb.no/statistikkere/standarder.html).
 
-#### 4. Be om hjelp!
+#### Be om hjelp!
 
 * Bruk støtteteamene, statistikktjenester, viva engage og andre kanaler
