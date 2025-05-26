@@ -584,15 +584,26 @@ Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](h
 🌐 *data_type*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Angir variabelens datatype. Følgende er verdier er tillat:
+Angir variabelens Datadoc-datatype. Utledes automatisk basert på datatype i Parquet-filen som dokumenteres, men kan endres manuelt av den som dokumenterer. Følgende er verdier er tillat:
 
-- tekst
-- heltall
-- desimaltall
-- datotid
-- boolsk (sant/usant). 
+#### TEKST 
+🌐 *STRING*  
+Datadoc-datatypen `STRING` utledes automatisk hvis variabelen er lagret som en `BYTE_ARRAY` i Parquet-filen.  
 
-Dersom variabelen er knyttet til et kodeverk i Klass, benyttes verdien *tekst*.
+#### HELTALL 
+🌐 *INTEGER*  
+Datadoc-datatypen `INTEGER` utledes automatisk hvis variabelen er lagret som en `INT32` eller `INT64` i Parquet-filen. 
+
+#### DESIMALTALL
+🌐 *FLOAT*  
+Datadoc-datatypen `FLOAT` utledes automatisk hvis variabelen er lagret som en `FLOAT` eller `DOUBLE` i Parquet-filen. 
+
+#### DATOTID
+🌐 *DATETIME*
+
+#### BOOLSK
+🌐 *BOOLEAN*  
+Datadoc-datatypen *BOOLEAN* utledes automatisk hvis variabelen er lagret som en *BOOLEAN* i Parquet-filen.   
 
 ---
 
