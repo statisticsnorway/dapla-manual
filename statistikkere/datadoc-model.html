@@ -1348,30 +1348,36 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
 <h3 class="anchored" data-anchor-id="datatype">Datatype</h3>
 <p>🌐 <em>data_type</em><br>
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
-<p>Angir variabelens Datadoc-datatype. Utledes automatisk basert på datatype i Parquet-filen som dokumenteres, men kan endres manuelt av den som dokumenterer. Følgende er verdier er tillat:</p>
+<p>Angir variabelens Datadoc-datatype. Utledes automatisk basert på <a href="https://arrow.apache.org/docs/python/api/datatypes.html">PyArrow-datatype</a> når Parquet-filen blir lest inn av Datadoc. Den som dokumenterer kan manuelt endre den utledede Datadoc-dataypen. Følgende er verdier er tillat:</p>
 <section id="tekst" class="level4">
 <h4 class="anchored" data-anchor-id="tekst">TEKST</h4>
 <p>🌐 <em>STRING</em><br>
-Datadoc-datatypen <code>STRING</code> utledes automatisk hvis variabelen er lagret som en <code>BYTE_ARRAY</code> i Parquet-filen.</p>
+Datadoc-datatype <code>STRING</code> utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:<br>
+| <code>string</code> | <code>large_string</code> | <code>bytes</code> |</p>
 </section>
 <section id="heltall" class="level4">
 <h4 class="anchored" data-anchor-id="heltall">HELTALL</h4>
 <p>🌐 <em>INTEGER</em><br>
-Datadoc-datatypen <code>INTEGER</code> utledes automatisk hvis variabelen er lagret som en <code>INT32</code> eller <code>INT64</code> i Parquet-filen.</p>
+Datadoc-datatype <code>INTEGER</code> utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:<br>
+| <code>int8</code> | <code>int16</code> | <code>int32</code> | <code>int64</code> | <code>uint8</code> | <code>uint16</code> | <code>uint32</code> | <code>uint64</code> |</p>
 </section>
 <section id="desimaltall" class="level4">
 <h4 class="anchored" data-anchor-id="desimaltall">DESIMALTALL</h4>
 <p>🌐 <em>FLOAT</em><br>
-Datadoc-datatypen <code>FLOAT</code> utledes automatisk hvis variabelen er lagret som en <code>FLOAT</code> eller <code>DOUBLE</code> i Parquet-filen.</p>
+Datadoc-datatype <code>FLOAT</code> utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:<br>
+| <code>float16</code> | <code>float32</code> | <code>float64</code> |</p>
 </section>
 <section id="datotid" class="level4">
 <h4 class="anchored" data-anchor-id="datotid">DATOTID</h4>
-<p>🌐 <em>DATETIME</em></p>
+<p>🌐 <em>DATETIME</em><br>
+Datadoc-datatype <code>DATETIME</code> utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:<br>
+| <code>timestamp('s')</code> | <code>timestamp('ms')</code> | <code>timestamp('us')</code> | <code>timestamp('ns')</code> | <code>date32()</code> | <code>date64()</code> | <code>time32('s')</code> |</p>
 </section>
 <section id="boolsk" class="level4">
 <h4 class="anchored" data-anchor-id="boolsk">BOOLSK</h4>
 <p>🌐 <em>BOOLEAN</em><br>
-Datadoc-datatypen <em>BOOLEAN</em> utledes automatisk hvis variabelen er lagret som en <em>BOOLEAN</em> i Parquet-filen.</p>
+Datadoc-datatype <code>BOOLEAN</code> utledes automatisk dersom variabelen har følgende PyArrow-datatype:<br>
+| <code>bool</code> |</p>
 <hr>
 </section>
 </section>
