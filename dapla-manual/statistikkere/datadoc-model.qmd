@@ -584,26 +584,32 @@ Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](h
 🌐 *data_type*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Angir variabelens Datadoc-datatype. Utledes automatisk basert på datatype i Parquet-filen som dokumenteres, men kan endres manuelt av den som dokumenterer. Følgende er verdier er tillat:
+Angir variabelens Datadoc-datatype. Utledes automatisk basert på [PyArrow-datatype](https://arrow.apache.org/docs/python/api/datatypes.html) når Parquet-filen blir lest inn av Datadoc. Den som dokumenterer kan manuelt endre den utledede Datadoc-dataypen. Følgende er verdier er tillat:
 
 #### TEKST 
 🌐 *STRING*  
-Datadoc-datatypen `STRING` utledes automatisk hvis variabelen er lagret som en `BYTE_ARRAY` i Parquet-filen.  
+Datadoc-datatype `STRING` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `string` | `large_string` | `bytes` |
 
 #### HELTALL 
 🌐 *INTEGER*  
-Datadoc-datatypen `INTEGER` utledes automatisk hvis variabelen er lagret som en `INT32` eller `INT64` i Parquet-filen. 
+Datadoc-datatype `INTEGER` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `int8` | `int16` | `int32` | `int64` | `uint8` | `uint16` | `uint32` | `uint64` |
 
 #### DESIMALTALL
 🌐 *FLOAT*  
-Datadoc-datatypen `FLOAT` utledes automatisk hvis variabelen er lagret som en `FLOAT` eller `DOUBLE` i Parquet-filen. 
+Datadoc-datatype `FLOAT` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `float16` | `float32` | `float64`  |
 
 #### DATOTID
-🌐 *DATETIME*
+🌐 *DATETIME*  
+Datadoc-datatype `DATETIME` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `timestamp('s')` | `timestamp('ms')` | `timestamp('us')` | `timestamp('ns')` | `date32()` | `date64()` | `time32('s')` |
 
 #### BOOLSK
 🌐 *BOOLEAN*  
-Datadoc-datatypen *BOOLEAN* utledes automatisk hvis variabelen er lagret som en *BOOLEAN* i Parquet-filen.   
+Datadoc-datatype `BOOLEAN` utledes automatisk dersom variabelen har følgende PyArrow-datatype:  
+| `bool` |
 
 ---
 
