@@ -74,9 +74,20 @@ Det eneste unntaket er at du skal skrive *sftp://sl-sas-compute-2* som vert, ikk
 - Dra excel-filen inn i filstrukturen i Jupyterlab
 - Kjør følgende kode fra .py-fil i samme område:
 
-```{python}
-print(123)
+```{}
+ import shutil
+ import os
+
+ kilde_fil = 'min_fil_lastet_inn_i_jupyerlab.xlsx'
+ dest_fil = '/buckets/tilsky/test/min_fil_lastet_inn_i_jupyerlab.xlsx'
+
+ folder = os.path.dirname(dest_fil)
+ os.makedirs(folder, exist_ok=True)
+
+ shutil.copy(kilde_fil, dest_fil)
 ```
+
+- slett excel-filen i Jupyterlab
 :::
 
 ##### 4: Finn frem til Transfer service-området på Google Cloud Platform
