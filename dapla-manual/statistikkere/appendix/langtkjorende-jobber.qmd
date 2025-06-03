@@ -2,19 +2,19 @@
 title: Kjøre tidkrevende jobber på Dapla
 subtitle: -> Ved bruk av tmux!
 date: "05/21/2025"
-date-modified: "05/21/2025"
+date-modified: "06/02/2025"
 lightbox: true
 draft: false
 ---
 
-For å kjøre tidkrevende jobber på Dapla Lab må man bruke et verktøysom heter tmux. Hvis ikke risikerer kjøringen å avbrytes etter noen timer. 
+For å kjøre tidkrevende jobber på Dapla Lab må man bruke et verktøy som heter tmux. Hvis ikke risikerer kjøringen å avbrytes etter noen timer. 
 Feilen har også oppstått når brukeren har lukket nettleser-fanen eller maskinen til brukeren har gått i dvale, selv om dette ikke i teorien skulle påvirke kjøringen. Årsaken virker å være IDE-ene (Jupyter, VS Code og RStudio) pauser jobbene når de blir pauset. 
 
-For å unngå denne oppførselen er terminal-verktøyet [tmux](https://github.com/tmux/tmux/wiki) installert i Jupyter, VS Code og RStudio. tmux er *terminal multiplexer* som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (>12h) kjører koden i en tmux-session.
+For å unngå denne oppførselen er terminal-verktøyet [tmux](https://github.com/tmux/tmux/wiki) installert i Jupyter, VS Code og RStudio. tmux er *terminal multiplexer* som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (>12t) kjører koden i en tmux-session.
 
 Du kan kjøre ditt Python-script ved å kjøre følgende:
 
-```{.bash filename="Terminal"}
+```{.bash filename="Terminal"
 tmux new -s minsesjon
 ```
 I koden over startes en session med navn **minsesjon**. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med `python`-kommandoen i en terminal, så kan du kjøre kommandoen:
@@ -29,7 +29,7 @@ Nå kan du kjøre scriptet ditt på følgende måte:
 python mittskript.py
 ```
 
-Deretter kan du lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 17 hver dag, så hvis du ikke ønsker det må du også følge [denne oppskriften](dapla-lab.qmd#automatisk-pausing).
+Deretter kan du lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 17 hver dag, så hvis du ikke ønsker det må du også følge [denne oppskriften](../dapla-lab.qmd#automatisk-pausing).
 
 tmux operer med konsepter som *session*, *window* og *panes*. Over startet vi en *session* med navnet **minsesjon**. Dette er et komplett arbeidsmiljø hvor man kan ha flere *windows* og splitte de opp i *panes*. 
 
@@ -47,7 +47,7 @@ tmux attach -t minsesjon
 
 Du vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist @fig-dapla-lab-tmux-status.
 
-![Statusbar for en tmux-sesjon](../images/dapla-lab-tmux-status.png){fig-alt="Viser tmux statusbar" #fig-dapla-lab-tmux-status}
+![Statusbar for en tmux-sesjon](../../images/dapla-lab-tmux-status.png){fig-alt="Viser tmux statusbar" #fig-dapla-lab-tmux-status}
 
 Du kan koble fra en sesjon (*detach*) ved å skrive **CTRL B** og deretter **d**, eller skrive følgende i terminalen:
 
