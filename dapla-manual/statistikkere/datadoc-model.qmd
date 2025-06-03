@@ -41,7 +41,7 @@ Angir navnet til datasettet. Navnet skal være forståelig for mennesker (ikke k
 
 Eksempel 1:
 
-> Flyttehistoriefil variabel del
+> Levekårsundersøkelsen
 
 :::
 
@@ -130,7 +130,16 @@ klargjorte data ⚠️ | statistikkdata ⚠️
 
 Angis kun dersom det er knyttet [bruksrestriksjoner](#bruksrestriksjon) til datasettet, og det finnes en “tiltaksdato”. En tiltaksdato kan f.eks. være at et datasett skal slettes eller anonymiseres på en gitt dato. Noen datasett med Bruksrestriksjon vil ikke ha en slik dato, f.eks. vil en behandlingsbegrensning normalt være permanent/tidsuavhengig, og da skal ikke dette feltet fylles ut. I json-utskriften vil verdien i dette feltet da vises som “null”.
 
-Dato fylles ut på [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.). F.eks. **2024-12-31** eller **2022-09-27 18:00:00.000**.
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel 1:
+
+> 2024-12-31
+
+:::
 
 ---
 
@@ -140,11 +149,22 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Utledes automatisk fra filstien hvis datasettet som dokumenteres er lagret iht [Navnestandarden](./navnestandard.qmd), men kan overstyres. Datasettets [datatilstand](./datatilstander.qmd) er en av følgende:
 
-- kildedata
-- inndata 
-- klargjorte data 
-- statistikk
-- utdata
+#### KILDEDATA
+🌐 *SOURCE_DATA*
+
+#### INNDATA
+🌐 *INPUT_DATA*
+
+#### KLARGJORTE DATA
+🌐 *PROCESSED_DATA* 
+
+#### STATISTIKK
+🌐 *STATISTICS*
+
+#### UTDATA
+🌐 *OUTPUT_DATA* 
+
+
 
 ---
 
@@ -198,10 +218,38 @@ Dersom datasettet inneholder informasjon om flere enhetstyper, vil disse enhetst
 🌐 *population_description*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Angir populasjonen som datasettet dekker(fritekst). En populasjon sier hvilken enhetstype(er) som finnes i datasettet, geografisk dekningsområde og tidsperiode, f.eks. alle (bosatte) personer i Norge per 31.12.2024 eller alle foretak i Oslo per 01.03.2025.
+Angir populasjonen som datasettet dekker(fritekst).
 
-Dersom noen av variablene i datasettet har en annen populasjon, kan 
-dette dokumenteres for de aktuelle variablene under Variabler-fanen.
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel 1:
+
+> Alle bosatte personer
+
+Eksempel 2:
+
+> Alle studenter ved universitet og høgskole
+
+Eksempel 3:
+
+> Alle aktive bedrifter innenfor bergverksdrift, olje- og gassutvinning, industri og kraftforsyning
+
+Eksempel 4:
+
+> Alle museer som er åpne for publikum, og som har minst et fast lønnet årsverk
+
+Eksempel 5:
+
+> Alle personer bosatt i Norge som har hatt ett eller flere sykehusopphold eller behandling
+
+Eksempel 6:
+
+> Alle verdipapirfond som har konsesjon fra Finanstilsynet
+
+:::
+
+Dersom noen av variablene i datasettet har en annen populasjon, er dette dokumentert under [Populasjon](#populasjon-1) for den aktuelle variabelen.
 
 ---
 
@@ -227,6 +275,8 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Utledes automatisk dersom datasettet følger [navnestandarden](./navnestandard.qmd). Dersom datasettet ikke følger navnestandarden (det er f.eks. ikke et krav at kildedata skal gjøre det), settes denne datoen manuelt. Dersom variablene i datasettet inneholder data med ulike startdatoer, settes den eldste datoen her. Under variabler-fanen kan en sette korrekt *Inneholder data f.o.m.* for variabler som avviker fra datoen som settes her.
 
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
 ---
 
 ### Inneholder data t.o.m.
@@ -234,6 +284,8 @@ Utledes automatisk dersom datasettet følger [navnestandarden](./navnestandard.q
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
 Utledes automatisk dersom datasettet følger [navnestandarden](./navnestandard.qmd). Dersom datasettet ikke følger navnestandarden (det er f.eks. ikke et krav at kildedata skal gjøre det), settes denne datoen manuelt. Dersom variablene i datasettet inneholder data med ulike sluttdatoer, settes den nyeste datoen her. Under variabler-fanen kan en sette korrekt «Inneholder data t.o.m.» for variabler som avviker fra datoen som settes her.
+
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
 
 ---
 
@@ -414,20 +466,26 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angir variabelens rolle i datasettet. Gyldige verdier/roller er: 
 
-- **identifikator**  
+#### IDENTIFIKATOR
+🌐 *IDENTIFIER*  
 Identifiserer de ulike enhetene i et datasett, f.eks. fødselsnummer som identifiserer personer og organisasjonsnummer som identifiserer foretak.
 
-- **målevariabler**  
-Beskriver det vi måler, dvs. egenskaper som sivilstand eller omsetning. 
+#### MÅLEVARIABEL
+🌐 *MEASURE*  
+Beskriver det vi måler, dvs. egenskaper som sivilstand eller omsetning.
 
-- **startdato**  
+#### STARTTID
+🌐 *START_TIME*  
 Beskriver startdato for hendelser som har et forløp, eller måletidspunkt for tverrsnittdata.
 
-- **stoppdato**  
+#### STOPPTID
+🌐 *STOP_TIME*  
 Beskriver stoppdato for hendelser som har et forløp.
-
-- **attributt**  
+ 
+#### ATTRIBUTT 
+🌐 *ATTRIBUTE*  
 Benyttes dersom en ønsker å utvide datasettet med informasjon knyttet til gitte variabler, f.eks. vedrørende datakvalitet eller editering.
+
 
 ---
 
@@ -536,6 +594,8 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholder data med ulike startdatoer, kan startdato dokumenteres på variabelnivå i dette feltet.
 
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
 ---
 
 ### Inneholder data t.o.m.
@@ -544,21 +604,40 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholder data med ulike sluttdatoer, kan sluttdato dokumenteres på variabelnivå i dette feltet.
 
+Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
 ---
 
 ### Datatype
 🌐 *data_type*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Angir variabelens datatype. Følgende er verdier er tillat:
+Angir variabelens Datadoc-datatype. Utledes automatisk basert på [PyArrow-datatype](https://arrow.apache.org/docs/python/api/datatypes.html) når Parquet-filen blir lest inn av Datadoc. Den som dokumenterer kan manuelt endre den utledede Datadoc-dataypen. Følgende er verdier er tillat:
 
-- tekst
-- heltall
-- desimaltall
-- datotid
-- boolsk (sant/usant). 
+#### TEKST 
+🌐 *STRING*  
+Datadoc-datatype `STRING` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `string` | `large_string` | `bytes` |
 
-Dersom variabelen er knyttet til et kodeverk i Klass, benyttes verdien *tekst*.
+#### HELTALL 
+🌐 *INTEGER*  
+Datadoc-datatype `INTEGER` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `int8` | `int16` | `int32` | `int64` | `uint8` | `uint16` | `uint32` | `uint64` |
+
+#### DESIMALTALL
+🌐 *FLOAT*  
+Datadoc-datatype `FLOAT` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `float16` | `float32` | `float64`  |
+
+#### DATOTID
+🌐 *DATETIME*  
+Datadoc-datatype `DATETIME` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `timestamp('s')` | `timestamp('ms')` | `timestamp('us')` | `timestamp('ns')` | `date32()` | `date64()` | `time32('s')` |
+
+#### BOOLSK
+🌐 *BOOLEAN*  
+Datadoc-datatype `BOOLEAN` utledes automatisk dersom variabelen har følgende PyArrow-datatype:  
+| `bool` |
 
 ---
 
