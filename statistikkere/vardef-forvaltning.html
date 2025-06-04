@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -714,11 +749,37 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link active" data-scroll-target="#forberedelser">Forberedelser</a></li>
   <li><a href="#konfigurasjon" id="toc-konfigurasjon" class="nav-link" data-scroll-target="#konfigurasjon">Konfigurasjon</a></li>
+  <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
+  <ul>
+  <li><a href="#migrere-fra-vardok" id="toc-migrere-fra-vardok" class="nav-link" data-scroll-target="#migrere-fra-vardok">Migrere fra Vardok</a>
+  <ul class="collapse">
+  <li><a href="#oppdatere-utkast" id="toc-oppdatere-utkast" class="nav-link" data-scroll-target="#oppdatere-utkast">Oppdatere utkast</a></li>
+  <li><a href="#publisere-utkast" id="toc-publisere-utkast" class="nav-link" data-scroll-target="#publisere-utkast">Publisere utkast</a></li>
+  </ul></li>
+  <li><a href="#ny-variabeldefinisjon" id="toc-ny-variabeldefinisjon" class="nav-link" data-scroll-target="#ny-variabeldefinisjon">Ny variabeldefinisjon</a></li>
+  <li><a href="#ny-gyldighetsperiode" id="toc-ny-gyldighetsperiode" class="nav-link" data-scroll-target="#ny-gyldighetsperiode">Ny gyldighetsperiode</a></li>
+  <li><a href="#mindre-endringer-patch" id="toc-mindre-endringer-patch" class="nav-link" data-scroll-target="#mindre-endringer-patch">Mindre endringer (patch)</a></li>
+  <li><a href="#lese-ut-informasjon" id="toc-lese-ut-informasjon" class="nav-link" data-scroll-target="#lese-ut-informasjon">Lese ut informasjon</a>
+  <ul class="collapse">
+  <li><a href="#en-variabeldefinisjon" id="toc-en-variabeldefinisjon" class="nav-link" data-scroll-target="#en-variabeldefinisjon">En variabeldefinisjon</a></li>
+  <li><a href="#alle-variabeldefinisjoner" id="toc-alle-variabeldefinisjoner" class="nav-link" data-scroll-target="#alle-variabeldefinisjoner">Alle variabeldefinisjoner</a></li>
+  <li><a href="#ledige-kortnavn" id="toc-ledige-kortnavn" class="nav-link" data-scroll-target="#ledige-kortnavn">Ledige kortnavn</a></li>
+  </ul></li>
+  <li><a href="#arbeide-med-yaml-filer" id="toc-arbeide-med-yaml-filer" class="nav-link" data-scroll-target="#arbeide-med-yaml-filer">Arbeide med YAML-filer</a>
+  <ul class="collapse">
+  <li><a href="#yaml-filstruktur" id="toc-yaml-filstruktur" class="nav-link" data-scroll-target="#yaml-filstruktur">YAML-filstruktur</a></li>
+  <li><a href="#redigere-yaml-filen" id="toc-redigere-yaml-filen" class="nav-link" data-scroll-target="#redigere-yaml-filen">Redigere YAML-filen</a></li>
+  <li><a href="#yaml-fil-ny-variabeldefinisjon" id="toc-yaml-fil-ny-variabeldefinisjon" class="nav-link" data-scroll-target="#yaml-fil-ny-variabeldefinisjon">YAML-fil: Ny variabeldefinisjon</a></li>
+  <li><a href="#yaml-fil-redigere-utkast" id="toc-yaml-fil-redigere-utkast" class="nav-link" data-scroll-target="#yaml-fil-redigere-utkast">YAML-fil: Redigere utkast</a></li>
+  <li><a href="#yaml-fil-redigere-publisert" id="toc-yaml-fil-redigere-publisert" class="nav-link" data-scroll-target="#yaml-fil-redigere-publisert">YAML-fil: Redigere publisert</a></li>
+  <li><a href="#yaml-fil-ny-gyldighetsperiode" id="toc-yaml-fil-ny-gyldighetsperiode" class="nav-link" data-scroll-target="#yaml-fil-ny-gyldighetsperiode">YAML-fil: Ny gyldighetsperiode</a></li>
+  </ul></li>
+  </ul></li>
   <li><a href="#slette-tjenesten" id="toc-slette-tjenesten" class="nav-link" data-scroll-target="#slette-tjenesten">Slette tjenesten</a></li>
   <li><a href="#pause-tjenesten" id="toc-pause-tjenesten" class="nav-link" data-scroll-target="#pause-tjenesten">Pause tjenesten</a></li>
   <li><a href="#monitorering" id="toc-monitorering" class="nav-link" data-scroll-target="#monitorering">Monitorering</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/vardef-forvaltning.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/vardef-forvaltning.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/vardef-forvaltning.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/vardef-forvaltning.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div><div class="quarto-code-links"><h2>Notebooks</h2><ul><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>les_variabeldefinisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjoner.ipynb" target="_blank"><i class="bi bi-file-code"></i>les_variabeldefinisjoner.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/migrer_variabeldefinisjoner.ipynb" target="_blank"><i class="bi bi-file-code"></i>migrer_variabeldefinisjoner.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_gyldighetsperiode_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>ny_gyldighetsperiode_variabeldefinisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>ny_variabeldefinisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_eksternt.ipynb" target="_blank"><i class="bi bi-file-code"></i>publiser_variabeldefinisjon_eksternt.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_internt.ipynb" target="_blank"><i class="bi bi-file-code"></i>publiser_variabeldefinisjon_internt.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_publisert_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>rediger_publisert_variabeldefinisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_utkast_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>rediger_utkast_variabeldefinisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_kortnavn_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>sjekk_kortnavn_variabeldefinisjon.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/sjekk_migrerte_variabeldefinisjoner.ipynb" target="_blank"><i class="bi bi-file-code"></i>sjekk_migrerte_variabeldefinisjoner.ipynb</a></li><li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/slett_utkast_variabeldefinisjon.ipynb" target="_blank"><i class="bi bi-file-code"></i>slett_utkast_variabeldefinisjon.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -737,7 +798,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">April 9, 2025</p>
+      <p class="date-modified">June 4, 2025</p>
     </div>
   </div>
     
@@ -761,9 +822,9 @@ Warning
 <p>Denne siden er under arbeid frem til Vardef er i produksjon.</p>
 </div>
 </div>
-<p><a href="../images/vardef-forvaltning-service.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/vardef-forvaltning-service.png" class="img-fluid" style="max-width: 40%; float: right;" alt="Jupyter Service"></a></p>
+<p><a href="../images/vardef-forvaltning-service.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/vardef-forvaltning-service.png" class="img-fluid" style="max-width: 35%; float: right;" alt="Jupyter Service"></a></p>
 <p><strong>Vardef-forvaltning</strong> er en tjeneste på <a href="../statistikkere/dapla-lab.html">Dapla Lab</a> som lar brukere forvalte informasjon i <a href="../statistikkere/vardef.html">Vardef</a> med ferdiglagde <em>notebooks</em> i en instans av Jupyterlab. Tjenesten kommer med Python, <a href="../statistikkere/dapla-toolbelt-metadata.html">dapla-toolbelt-metadata</a> og tilhørende avhengigheter ferdig installert. I tillegg er det opprettet en kernel med navn <strong>variable_definitions</strong> som lar brukerne jobbe med Vardef uten noen ytterligere oppsett.</p>
-<p><em>Notebooks</em>’ene som ligger inne i tjenesten inneholder dokumentasjon for vanlige brukerflyter i Vardef. Les mer <em>notebooks</em>’ene under <a href="../statistikkere/vardef-toolbelt.html">Vardef i dapla-toolbelt-metadata</a>.</p>
+<p><em>Notebooks</em>’ene som ligger inne i tjenesten inneholder dokumentasjon for vanlige brukerflyter i Vardef. Les mer <em>notebooks</em>’ene under <a href="#funksjonalitet">Funksjonalitet</a> senere i artikkelen.</p>
 <section id="forberedelser" class="level2">
 <h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
 <p>Før man starter <strong>Vardef-forvaltning</strong> bør man ha lest <a href="./dapla-lab.html">kapitlet om Dapla Lab</a> og gjort seg godt kjent med <a href="../statistikkere/vardef.html">dokumentasjonen til Vardef</a>. Deretter gjør du følgende:</p>
@@ -771,13 +832,843 @@ Warning
 <li>Logg deg inn på <a href="https://lab.dapla.ssb.no/">Dapla Lab</a></li>
 <li>Under <strong>Tjenestekatalog</strong> trykker du på <strong>Start</strong>-knappen for <strong>Vardef-forvaltning</strong></li>
 <li>Gi tjenesten et navn</li>
-<li>Definer ønsket konfigurasjon</li>
+<li>Velg hvilket team og tilgangsgruppe du ønsker å representere (se <a href="#konfigurasjon">Konfigurasjon</a>)</li>
 <li>Trykk <strong>Start</strong> når du er klar for å starte tjenesten</li>
 </ol>
 </section>
 <section id="konfigurasjon" class="level2">
 <h2 class="anchored" data-anchor-id="konfigurasjon">Konfigurasjon</h2>
-<p>Konfigurasjonen av <strong>Vardef-forvaltning</strong> er identisk som for <a href="../statistikkere/jupyter.html">Jupyter-tjenesten</a>. Men siden variabeldefinisjoner forvaltes av team, så må man velge riktig team og tilgangsgruppe under <strong>Data</strong> i tjenestekonfigurasjonen før man starter tjenesten. F.eks. hvis <strong>dapla-felles-developers</strong> forvalter variabeldefinisjonen <strong>fnr</strong>, så må jeg velge <em>dapla-felles-developers</em> under <strong>Data</strong> før jeg starter tjenesten. Og tilsvarende hvis jeg ønsker å opprette en ny variabeldefinisjon, så må jeg representere det teamet jeg ønsker at skal forvalte variabeldefinisjonen før jeg oppretter den.</p>
+<p>Den eneste konfigurasjonen som må gjøres i <strong>Vardef-forvaltning</strong> er å velge hvilket team og tilgangsgruppe man ønsker å representere når man jobber i tjenesten. Dette er måten Vardef håndterer tilgangsstyring og det er viktig å være klar over når man jobber med Vardef fra Dapla Lab. Siden variabeldefinisjoner i Vardef forvaltes av team, så må man velge riktig team og tilgangsgruppe under <strong>Data</strong> i tjenestekonfigurasjonen før man starter tjenesten. F.eks. hvis <strong>dapla-felles-developers</strong> forvalter variabeldefinisjonen <strong>fnr</strong>, så må jeg velge <em>dapla-felles-developers</em> under <strong>Data</strong> før jeg starter tjenesten. Og tilsvarende hvis jeg ønsker å opprette en ny variabeldefinisjon, så må jeg representere det teamet jeg ønsker at skal forvalte variabeldefinisjonen før jeg oppretter den.</p>
+</section>
+<section id="funksjonalitet" class="level2">
+<h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
+<p><em>Vardef-forvaltning</em> er en tilrettelagt variant av <a href="../statistikkere/jupyter.html">Jupyter</a>. Når man åpner tjenesten så er følgende tilrettelagt for brukeren:</p>
+<ul>
+<li><a href="../statistikkere/dapla-toolbelt-metadata.html">dapla-toolbelt-metadata</a> er installert</li>
+<li>en <em>kernel</em> med navnet <strong>variable_definitions</strong> er opprettet</li>
+<li>flere ferdigskrevne <em>notebooks</em> er installert (lenke i høyre marg)</li>
+</ul>
+<p><em>Notebooks</em>’ene består av kode og beskrivelser for vanlige brukerflyter i Vardef. F.eks. migrere fra Vardok, opprette ny variabeldefinisjon, redigere utkast, osv.. I hver <em>notebook</em> benyttes <a href="../statistikkere/vardef-toolbelt.html">dapla-toolbelt-vardef</a> til å jobbe mot Vardef. På den måten slipper brukerne i stor grad å skrive kode selv, og de kan benytte koden som finnes til utvikling av ny kode.</p>
+<section id="migrere-fra-vardok" class="level3">
+<h3 class="anchored" data-anchor-id="migrere-fra-vardok">Migrere fra Vardok</h3>
+<p>Ønsker man å migrere en eller flere variabeldefinisjoner kan man kjøre notebooken <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/migrer_variabeldefinisjoner.ipynb" target="_blank">migrer_variabeldefinisjoner.ipynb</a>.</p>
+<p>I variabelen <strong>min_id_liste</strong> som du finner i cellen nedenfor overskriften “Hente variabeldefinisjoner fra Vardok”, må det settes inn en eller flere variabeldefinisjons-ID’er. Alle seksjonsledere har oversikt over hvilke ID’er fra Vardok som deres seksjon er ansvarlig for. Kjør deretter gjennom <em>notebook</em>’en. Det vil skrives ut en oppsummering over hva som blir migrert.</p>
+<p>Når <em>notebook</em>’en er kjørt gjennom så er variabeldefinisjonene migrert fra Vardok til Vardef, der de får status <strong>Utkast</strong>. I denne prosessen oppdaterer <em>dapla-toolbelt-metadata</em> all informasjon som kan utledes automatisk, og deretter må brukeren oppdatere gjenværende informasjon før de publiserer den internt eller eksternt.</p>
+<section id="oppdatere-utkast" class="level4">
+<h4 class="anchored" data-anchor-id="oppdatere-utkast">Oppdatere utkast</h4>
+<p>Et utkast kan oppdateres ved å kjøre notebooken <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_utkast_variabeldefinisjon.ipynb" target="_blank">rediger_utkast_variabeldefinisjon.ipynb</a>. Den skriver variabeldefinisjonen ned til en fil som brukeren kan gjøre endringer i. Når endringene er gjort, så kan man oppdatere utkastet i slutten av notebooken.</p>
+</section>
+<section id="publisere-utkast" class="level4">
+<h4 class="anchored" data-anchor-id="publisere-utkast">Publisere utkast</h4>
+<p>Når brukeren er fornøyd med utkastet og ønsker å publisere, så kan man velge å publisere internt eller eksternt. Ved migrering av tidligere eksternt publiserte definisjoner fra Vardok, så er hovedregelen at også man publiserer variabeldefinisjonen eksternt i Vardef.</p>
+<p>Man kan publisere en variabeldefinisjon <strong>eksternt</strong> ved å kjøre <em>notebook</em>’en <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_eksternt.ipynb" target="_blank">publiser_variabeldefinisjon_eksternt.ipynb</a>.</p>
+<p>Man kan publisere en variabeldefinisjon <strong>internt</strong> ved å kjøre <em>notebook</em>’en <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_internt.ipynb" target="_blank">publiser_variabeldefinisjon_internt.ipynb</a>.</p>
+</section>
+</section>
+<section id="ny-variabeldefinisjon" class="level3">
+<h3 class="anchored" data-anchor-id="ny-variabeldefinisjon">Ny variabeldefinisjon</h3>
+<p>For å opprette en ny variabeldefinisjon må man først opprette et utkast, deretter redigere utkastet og til slutt publisere. Da vil man bruke følgende <em>notebooks</em>:</p>
+<ol type="1">
+<li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_variabeldefinisjon.ipynb" target="_blank">ny_variabeldefinisjon.ipynb</a></li>
+<li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_utkast_variabeldefinisjon.ipynb" target="_blank">rediger_utkast_variabeldefinisjon.ipynb</a></li>
+<li><a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_internt.ipynb">publiser_variabeldefinisjon_internt.ipynb</a> eller <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/publiser_variabeldefinisjon_eksternt.ipynb" target="_blank">publiser_variabeldefinisjon_eksternt.ipynb</a></li>
+</ol>
+</section>
+<section id="ny-gyldighetsperiode" class="level3">
+<h3 class="anchored" data-anchor-id="ny-gyldighetsperiode">Ny gyldighetsperiode</h3>
+<p>Ny gyldighetsperiode i Vardef betyr at man ønsker å gjøre endringer i en eksisterende variabeldefinisjon som gjør at den får en ny betydning. Dette betyr at definisjonsteksten endres, og denne endringen krever at den får en ny gyldighetsperiode. Dette kan kun gjøres på variabeldefinisjoner som allerede er publisert internt eller eksternt.</p>
+<p>For opprette en ny gyldighetsperiode kan man kjøre gjennom notebooken <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/ny_gyldighetsperiode_variabeldefinisjon.ipynb" target="_blank">ny_gyldighetsperiode_variabeldefinisjon.ipynb</a>.</p>
+<p>Her blir man bedt om å oppgi kortnavnet til variabeldefinisjonen som skal ha ny gyldighetsperiode, deretter skrives den til en fil hvor endringer kan gjøres. Til slutt oppdateres variabeldefinisjonen i Vardef.</p>
+</section>
+<section id="mindre-endringer-patch" class="level3">
+<h3 class="anchored" data-anchor-id="mindre-endringer-patch">Mindre endringer (patch)</h3>
+<p>En <em>patch</em> i Vardef er en mindre endring som ikke endrer betydningen av variabeldefinisjonen. Man kan opprette en <em>patch</em> ved å kjøre <em>notebook</em>’en <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/rediger_publisert_variabeldefinisjon.ipynb" target="_blank">rediger_publisert_variabeldefinisjon.ipynb</a>.</p>
+</section>
+<section id="lese-ut-informasjon" class="level3">
+<h3 class="anchored" data-anchor-id="lese-ut-informasjon">Lese ut informasjon</h3>
+<p>For å hente ut informasjon fra Vardef finnes det ulike <em>notebooks</em> avhengig av hva man ønsker å hente ut.</p>
+<section id="en-variabeldefinisjon" class="level4">
+<h4 class="anchored" data-anchor-id="en-variabeldefinisjon">En variabeldefinisjon</h4>
+<p><em>Notebooken</em> <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjon.ipynb" target="_blank">les_variabeldefinisjon.ipynb</a> lar deg hente ut informasjon om en konkret variabeldefinisjon. Man kan hente ut all informasjon om variabeldefinisjonen, eller hente ut noen få informasjonselementer.</p>
+</section>
+<section id="alle-variabeldefinisjoner" class="level4">
+<h4 class="anchored" data-anchor-id="alle-variabeldefinisjoner">Alle variabeldefinisjoner</h4>
+<p><em>Notebooken</em> <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/les_variabeldefinisjoner.ipynb" target="_blank">les_variabeldefinisjoner.ipynb</a> lar deg hente ut informasjon om alle variabeldefinisjoner og filtrere disse basert på ulike kriterier.</p>
+</section>
+<section id="ledige-kortnavn" class="level4">
+<h4 class="anchored" data-anchor-id="ledige-kortnavn">Ledige kortnavn</h4>
+<p><em>Notebooken</em> <a href="https://github.com/statisticsnorway/dapla-toolbelt-metadata/blob/main/demo/variable_definitions/sjekk_kortnavn_variabeldefinisjon.ipynb" target="_blank">sjekk_kortnavn_variabeldefinisjon.ipynb</a> lar deg sjekke om et kortnavn er tatt eller ikke. Kortnavn i Vardef må være unikem, så det kan være lurt å sjekke om ønsket kortnavn er ledig før man prøver å publisere.</p>
+</section>
+</section>
+<section id="arbeide-med-yaml-filer" class="level3">
+<h3 class="anchored" data-anchor-id="arbeide-med-yaml-filer">Arbeide med YAML-filer</h3>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fargene i YAML-eksemplene er kun veiledende og kan variere fra verktøy til verktøy, ettersom de settes av automatisk syntaksutheving.</p>
+</div>
+</div>
+<section id="yaml-filstruktur" class="level4">
+<h4 class="anchored" data-anchor-id="yaml-filstruktur">YAML-filstruktur</h4>
+<p>YAML-filene følger samme grunnstruktur, med små variasjoner avhengig av bruk.</p>
+<section id="mal" class="level5">
+<h5 class="anchored" data-anchor-id="mal">Mal</h5>
+<p>Denne filen genereres når du vil opprette en ny variabeldefinisjon.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon mal ---</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Filnavn mal
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lagres som <code>variable_definition_template_&lt;timestamp&gt;.yaml</code></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+NB! Innholder eksempelverdier som må endres
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            generert tittel</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>I noen tilfeller settes verdien automatisk av systemet. For eksempel:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="variabeldefinisjon" class="level5">
+<h5 class="anchored" data-anchor-id="variabeldefinisjon">Variabeldefinisjon</h5>
+<p>Dette er en YAML-fil med alle lagrede verdier for en variabeldefinisjon.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Filnavn variabeldefinisjon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lagres som <code>variable_definition_&lt;kortnavn&gt;_&lt;id&gt;_&lt;timestamp&gt;.yaml</code></p>
+</div>
+</div>
+</section>
+</section>
+<section id="redigere-yaml-filen" class="level4">
+<h4 class="anchored" data-anchor-id="redigere-yaml-filen">Redigere YAML-filen</h4>
+<section id="enkle-verdier" class="level5">
+<h5 class="anchored" data-anchor-id="enkle-verdier">Enkle verdier</h5>
+<ul>
+<li>Verdien skrives på samme linje som feltnavn (nøkkel)</li>
+<li>Bruk doble fnutter <code>""</code></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Felt med enkle verdier
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>classification_reference</code></li>
+<li><code>measurement_type</code></li>
+<li><code>external_reference_uri</code></li>
+<li><code>owner.team</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt plassering og format
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb5"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"landbak"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"03"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<section id="vanlige-feil-enkle-verdier" class="level6">
+<h6 class="anchored" data-anchor-id="vanlige-feil-enkle-verdier">Vanlige feil enkle verdier</h6>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil plassering av verdi
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb6"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">"03"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil innrykk mellom nøkkel og verdi
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb7"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="at">classification_reference:"91"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mangler kolon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb8"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="at">short_name"landbak"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil verdi type
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb9"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hvis fnuttene fjernes vil verdien tolkes som et tall og validering vil feile.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="dv">03</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="flerspråklige-felt" class="level5">
+<h5 class="anchored" data-anchor-id="flerspråklige-felt">Flerspråklige felt</h5>
+<ul>
+<li>Et blokk symbol <code>|-</code> følger feltnavn(nøkkel).</li>
+<li>Teksten må starte rett under blokk-symbolet</li>
+<li>Riktig innrykk er viktig</li>
+<li>Formattering (avsnitt/linjeskift) lagres.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Flerspråklige felt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>name</code></li>
+<li><code>definition</code></li>
+<li><code>comment</code></li>
+<li><code>contact.title</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt plassering av tekst under blokk-symbol
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb10"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            Her starter teksten akkurat under blokk symbolet og vil lagres uten feil.</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> generert@ssb.no</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt lagring av avsnitt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb11"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        Her er det en god plan, først er det en beskrivelse som innledning.</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        Deretter bevisst en blank linje:</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>          - Liste-element 1</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>          - Liste-element 2</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Bruk av spesialtegn
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb12"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        Her er kan vi lagre spesialtegn som : men det kan føre til feil syntaksutheving.</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="vanlige-feil-flerspråklige-felt" class="level6">
+<h6 class="anchored" data-anchor-id="vanlige-feil-flerspråklige-felt">Vanlige feil flerspråklige felt</h6>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Uønsket tekstoppsett (linjeskift midt i ord)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb13"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        Her deles teksten opp</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        plutselig. Og den vil lagres akku-</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        rat slik du ser den.</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil indentering (mangler korrekt innrykk)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb14"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">Her er teksten ikke indentert og vil føre til feil når du lagrer.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mangler blokk-symbolet
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb15"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nb</span><span class="kw">:</span><span class="at"> Her er blokk symbolet fjernet og tekst med ':' vil feile.</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span><span class="at"> Also text with paragraphs</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="at">    will not be saved correctly.</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="lister" class="level5">
+<h5 class="anchored" data-anchor-id="lister">Lister</h5>
+<ul>
+<li>Verdien skrives på samme linje som liste-symbolet <code>-</code></li>
+<li>Bruk doble fnutter <code>""</code></li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Felt med lister
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>unit_types</code></li>
+<li><code>subject_fields</code></li>
+<li><code>related_variable_definition_uris</code></li>
+<li><code>owner.groups</code></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Korrekt listeformat og indentering
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb16"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"20"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<section id="vanlige-feil-lister" class="level6">
+<h6 class="anchored" data-anchor-id="vanlige-feil-lister">Vanlige feil lister</h6>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil type i listeelementer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb17"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="dv">01</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="dv">02</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil indentering på liste-symbol
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb18"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="st">"20"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Feil indentering ved listeverdi
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb19"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="at">  -"bf"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="andre-typer" class="level5">
+<h5 class="anchored" data-anchor-id="andre-typer">Andre typer</h5>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dato
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb20"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2003-01-01</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Boolean
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb21"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Variabel status
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb22"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_EXTERNAL</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="yaml-fil-ny-variabeldefinisjon" class="level4">
+<h4 class="anchored" data-anchor-id="yaml-fil-ny-variabeldefinisjon">YAML-fil: Ny variabeldefinisjon</h4>
+<div class="sourceCode" id="cb23" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon mal ---</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"bus"</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-04-01</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="yaml-fil-redigere-utkast" class="level4">
+<h4 class="anchored" data-anchor-id="yaml-fil-redigere-utkast">YAML-fil: Redigere utkast</h4>
+<p>Endre:</p>
+<ul>
+<li><code>short_name</code></li>
+<li><code>contains_special_categories_of_personal_data</code></li>
+</ul>
+<p>Legge til:</p>
+<ul>
+<li><code>classification_reference</code></li>
+<li><code>external_reference_uri</code></li>
+<li><code>subject_fields</code></li>
+</ul>
+<div class="sourceCode" id="cb24" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-01-01</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvignforbund.no"</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="yaml-fil-redigere-publisert" class="level4">
+<h4 class="anchored" data-anchor-id="yaml-fil-redigere-publisert">YAML-fil: Redigere publisert</h4>
+<p>Endre:</p>
+<ul>
+<li>Rette skrivefeil i <code>external_reference_uri</code></li>
+</ul>
+<p>Legge til:</p>
+<ul>
+<li>verdier på norsk nynorsk og engelsk:
+<ul>
+<li><code>name</code></li>
+<li><code>definition</code></li>
+<li><code>contact.title</code></li>
+</ul></li>
+<li><code>owner.groups</code></li>
+<li><code>related_variable_definition_uris</code></li>
+<li><code>measurement_type</code></li>
+</ul>
+<div class="sourceCode" id="cb25" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        Buss </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        Bus</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>        Buss er eit køyretøy som er spesialkonstruert for å frakte mange passasjerar.</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        A bus is a motor vehicle that is specially designed to carry many passengers.</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"02"</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-01-01</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvognforbund.no"</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"https://example.com/"</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a><span class="fu">        nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="fu">        en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>            Section for Industrial and Environmental Statistics</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"arbmark-aku-developers"</span></span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-03-25 10:15:19.038000+00:00</span></span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="yaml-fil-ny-gyldighetsperiode" class="level4">
+<h4 class="anchored" data-anchor-id="yaml-fil-ny-gyldighetsperiode">YAML-fil: Ny gyldighetsperiode</h4>
+<p>Legge til:</p>
+<ul>
+<li><code>comment</code></li>
+</ul>
+<p>Endre:</p>
+<ul>
+<li><code>valid_from</code></li>
+<li><code>definition</code></li>
+</ul>
+<div class="sourceCode" id="cb26" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        Buss </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        Bus</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte flere enn </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        16 passasjerer.</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        Buss er eit køyretøy som er spesialkonstruert for å frakte flere enn </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        16 passasjerar.</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        A bus is a motor vehicle that is specially designed to carry more than </span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        16 passengers.</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">""</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-06-01</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvognforbund.no"</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>        Krav til spesifikasjon av antall passasjerer i en buss for å skille "buss" fra "minibuss".</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>        Krav til spesifikasjon av talet på passasjerar i ein buss for å skilje </span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>        mellom «buss» og «minibuss».</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>        Requirements for specification of the number of passengers in a bus to distinguish </span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>        "bus" from "minibus".</span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"https://example.com/"</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a><span class="fu">        nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="fu">        en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>            Section for Industrial and Environmental Statistics</span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
+<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"arbmark-aku-developers"</span></span>
+<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb26-65"><a href="#cb26-65" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb26-66"><a href="#cb26-66" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb26-67"><a href="#cb26-67" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-04-05 11:15:19.038000+00:00</span></span>
+<span id="cb26-68"><a href="#cb26-68" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<style>
+code span.co {
+    color:#408080;
+    font-style: inherit;
+}
+code span.fu{
+  color: #88f;
+}
+code span.cp{
+  color: #a2f;
+}
+code span.c12{
+  color: #ba2121;
+}
+code span.st{
+  color: #ba2121;
+}
+pre code.sourceCode > span{
+  color:rgba(8, 8, 8, 0.99);
+}
+#cb2-4{
+  background-color: yellow;
+}
+</style>
+</section>
+</section>
 </section>
 <section id="slette-tjenesten" class="level2">
 <h2 class="anchored" data-anchor-id="slette-tjenesten">Slette tjenesten</h2>
