@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Øyvind Bruer-Skarsbø">
-<meta name="dcterms.date" content="2025-04-30">
+<meta name="dcterms.date" content="2025-06-06">
 
-<title>Deling av data og /buckets – Dapla-manualen</title>
+<title>Viktig melding om endringer i Dapla Lab – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -89,18 +89,18 @@ background: #274247;
 </style>
 
 
-<meta property="og:title" content="Deling av data og /buckets – Dapla-manualen">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/Dapla-Logo1.png">
+<meta property="og:title" content="Viktig melding om endringer i Dapla Lab – Dapla-manualen">
+<meta property="og:description" content="Nytt kjøretidsmiljø for Dapla Lab">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:height" content="720">
-<meta property="og:image:width" content="720">
+<meta property="og:image:height" content="403">
+<meta property="og:image:width" content="863">
 <meta property="og:image:alt" content="Dapla-logo">
-<meta name="twitter:title" content="Deling av data og /buckets – Dapla-manualen">
-<meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/Dapla-Logo1.png">
-<meta name="twitter:image-height" content="720">
-<meta name="twitter:image-width" content="720">
+<meta name="twitter:title" content="Viktig melding om endringer i Dapla Lab – Dapla-manualen">
+<meta name="twitter:description" content="Nytt kjøretidsmiljø for Dapla Lab">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
+<meta name="twitter:image-height" content="403">
+<meta name="twitter:image-width" content="863">
 <meta name="twitter:image:alt" content="Dapla-logo">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -243,11 +243,10 @@ background: #274247;
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Deling av data og <code>/buckets</code></h1>
+      <h1 class="title">Viktig melding om endringer i Dapla Lab</h1>
+            <p class="subtitle lead">Nytt kjøretidsmiljø for Dapla Lab</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">dapla lab</div>
-                <div class="quarto-category">datadeling</div>
-                <div class="quarto-category">gcsfuse</div>
               </div>
                   </div>
   </div>
@@ -272,14 +271,14 @@ background: #274247;
       <div>
       <div class="quarto-title-meta-heading">Opprettet</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 30, 2025</p>
+        <p class="date">June 6, 2025</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Sist endret</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">April 30, 2025</p>
+        <p class="date-modified">June 6, 2025</p>
       </div>
     </div>
       
@@ -289,7 +288,13 @@ background: #274247;
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#endring-i-prod" id="toc-endring-i-prod" class="nav-link active" data-scroll-target="#endring-i-prod">Endring i prod</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-06-06-new-cluster/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-06-06-new-cluster/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -302,12 +307,16 @@ background: #274247;
 
 
 
-<p>Etter noen måneder med erfaring med tilgjengeliggjøring av bøtter som filsystem i Dapla Lab, har vi erfart at funksjonaliteten i noen tilfeller har noen utfordringer.</p>
-<p>En utfordring oppstår når team skriver data til delt-bøtter direkte via Transfer Service, uten å logge seg inn på Dapla Lab etterpå. Hvis det delende teamet aldri åpner en tjeneste på Dapla Lab etter at dataene er delt, så vil ikke de dataene vises for konsumentene av dataene under /buckets/ i Dapla Lab.</p>
-<p>Årsaken er at opprettelsen av mapper krever skrivetilgang til bøtta, og det har ikke konsumenten av delte-data. Konsumentene vil kunne se dataene via <code>gs://</code>-stien, men ikke <code>/buckets/</code>-stien. Hvis data derimot deles ved at de produseres direkte fra en tjeneste på Dapla Lab, så vil ikke dette være en problemstilling.</p>
-<p>Vi jobber med å løse dette problemet, og finner forhåpentligvis en løsning innen kort tid.</p>
+<p><strong>Tirsdag 10. juni 2025 kl 15.00</strong> vil team Skyinfrastruktur gjennomføre en endring i <strong>testmiljøet</strong> til Dapla Lab (<a href="https://lab.dapla-test.ssb.no/" class="uri">https://lab.dapla-test.ssb.no/</a>). Endringen innebærer at brukere må slette alle eksisterende tjenester de har kjørende før kl. <strong>15.00</strong>. Før tjenesten slettes så må man lagre alt man ønsker å beholde, siden dette også slettes når tjenesten slettes. F.eks. skal kode lagres på GitHub og data lagres i bøtter.</p>
+<p>Endringen gjennomføres ila av noen minutter, og man kan derfor starte opp en ny tjeneste og fortsette arbeidet kl. 15.05.</p>
+<p>Hvis man ikke har mulighet til å slette tjenesten kl 15.00, så kan man i en periode få tilgang til gamle tjenester på følgende url: <a href="https://legacy-lab.dapla-test.ssb.no/" class="uri">https://legacy-lab.dapla-test.ssb.no/</a>.</p>
+<p>Ta kontakt med Kundeservice dersom man har spørsmål eller trenger hjelp til noe.</p>
+<section id="endring-i-prod" class="level2">
+<h2 class="anchored" data-anchor-id="endring-i-prod">Endring i prod</h2>
+<p>Tilsvarende endring vil gjennomføres i <strong>prodmiljøet</strong> til Dapla Lab den <strong>17. juni kl. 15.00</strong>.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -717,7 +726,7 @@ background: #274247;
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-04-30-challenges-gcsfuse/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-04-30-challenges-gcsfuse/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-06-06-new-cluster/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-06-06-new-cluster/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
