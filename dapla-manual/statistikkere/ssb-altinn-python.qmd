@@ -50,7 +50,7 @@ tags = ['SkjemaData', 'Kontakt']
 isee_transform(file, mapping, tag_list=tags)
 ```
 
-Det er mulig å flate ut checkbox-felter ved å legge feltene man ønsker å flate ut i en liste, og så bruke denne i funksjonskallet til isee_transform (checkbox_vars), Det er også mulig å legge ved en boolsk variabel (unique_code) som spesifiserer om kodene i checkboxfeltene man ønsker utflatet er unike eller ikke (True, False). Settes denne til False så blir det nye feltnavnet lik det opprinnelige feltnavnet + koden som flates ut. Settes den til True, så blir det nye feltnavnet kun koden som flates ut. False er defaultverdi på unique_code. Det blir dannet en ny rad for hver kode som står i checkboxfeltet man ønsker utflatet, og den opprinnelige raden slettes.
+Det er mulig å flate ut checkbox-felter ved å legge feltene man ønsker å flate ut i en liste, og så bruke denne i funksjonskallet til isee_transform (`checkbox_vars`). Det er også mulig å legge ved en boolsk variabel (`unique_code`) som spesifiserer om kodene i checkboxfeltene man ønsker utflatet er unike eller ikke (True, False). Settes denne til False blir det nye feltnavnet lik det opprinnelige feltnavnet + koden som flates ut. Settes den til True, så blir det nye feltnavnet kun koden som flates ut. False er defaultverdi på unique_code. Det blir dannet en ny rad for hver kode som står i checkboxfeltet man ønsker utflatet, og den opprinnelige raden slettes.
 
 ```{.python}
 from altinn import isee_transform
@@ -92,13 +92,13 @@ xml_transform(file)
 
 Dataframet som returneres fra funksjonen inneholder kolonnene FELTNAVN, FELTVERDI og LEVEL.
 
-FELTNAVN - inneholder også prefikset til området verdien er hentet fra, som Tidsbruk, Brukeropplevelse, Kontakt. Disse er ikke inkludert i isee_transform
+- FELTNAVN - inneholder også prefikset til området verdien er hentet fra, som Tidsbruk, Brukeropplevelse, Kontakt. Disse er ikke inkludert i isee_transform
 
-FELTVERDI - Verdien tilhørdende aktuelt FELTNAVN
+- FELTVERDI - Verdien tilhørdende aktuelt FELTNAVN
 
-LEVEL - En liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kolonnen kan være nyttig hvis skjemaet inneholder komplekse data, som Tabell-i-tabell og Tabell-i-tabell-i-tabell. Da kan man sammen med isee_transform()-funksjonen koble disse sammen og lage egentilpassede løpenumre på felter som skal inn i ISEE. 
+- LEVEL - En liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kolonnen kan være nyttig hvis skjemaet inneholder komplekse data, som Tabell-i-tabell og Tabell-i-tabell-i-tabell. Da kan man sammen med isee_transform()-funksjonen koble disse sammen og lage egentilpassede løpenumre på felter som skal inn i ISEE. 
 
-Siden det finnes mange ulike måter å bygge et skjema på, og ønske om å holde funskjonene så generiske som mulig uten for mange parametre, så må man i noen tilfeller tilfeller tilpasse lastefilen til ISEE med ekstra steg etter isee_transfom(). xml_transform kan være til hjelp for å se kompleksiteten i et skjema, og så benytte opplysningene i FELTNAVN/LEVEL-kolonnene for å lage spesialtipassede løpenr m.m.
+Siden det finnes mange ulike måter å bygge et skjema på, og ønske om å holde funskjonene så generiske som mulig uten for mange parametre, må man i noen tilfeller tilpasse lastefilen til ISEE med ekstra steg etter isee_transfom(). xml_transform kan være til hjelp for å se kompleksiteten i et skjema, og så benytte opplysningene i FELTNAVN/LEVEL-kolonnene for å lage spesialtipassede løpenr m.m.
 
 
 ## Lasting av Altinn3 data inn i ISEE
