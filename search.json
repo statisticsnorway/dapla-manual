@@ -1465,7 +1465,7 @@
     "href": "statistikkere/ssb-altinn-python.html",
     "title": "ssb-altinn-python",
     "section": "",
-    "text": "ssb-altinn-python er en Python-pakke som flater ut XML-filer fra Altinn3 for bruk i ISEE. Her finner du beskrivelse av funksjonalitet i denne pakken.",
+    "text": "ssb-altinn-python er en Python-pakke med funksjonalitet for å transformere XML-filer fra Altinn3 til et format som kan benyttes i ISEE.",
     "crumbs": [
       "Manual",
       "Datatjenester",
@@ -1477,7 +1477,7 @@
     "href": "statistikkere/ssb-altinn-python.html#installasjon",
     "title": "ssb-altinn-python",
     "section": "Installasjon",
-    "text": "Installasjon\nPakken er tilgjengelig i Kildomaten.\nMan kan også installere pakken i en tjeneste opprettet med ssb-project på DaplaLab hvis man ønsker å teste innlesning/mapping før produksjonsetting i Kildomaten:\npoetry add ssb-altinn-python",
+    "text": "Installasjon\nssb-altinn-python er en pakke for å transformere kildedata. Siden kildedata skal prosesseres i Kildomaten så er pakken er tilgjengeliggjort der. Alle pakker som er tilgjengelig i Kildomaten er ferdiginstallert.\nDet er også mulig å installere i et ssb-project på DaplaLab og bruke det direkte fra Jupyter. Det kan være nyttig for å teste ut at koden fungerer som forventet på testdata.\n\n\nTerminal\n\npoetry add ssb-altinn-python",
     "crumbs": [
       "Manual",
       "Datatjenester",
@@ -1489,7 +1489,7 @@
     "href": "statistikkere/ssb-altinn-python.html#funksjonalitet",
     "title": "ssb-altinn-python",
     "section": "Funksjonalitet",
-    "text": "Funksjonalitet\n\nisee_transform()\nFunksjonen isee_transform() flater ut XML-data til et pandas-dataframe med formatet som er nødvendig for å kunne laste data inn i ISEE.\nI den enkleste formen tar funksjonen kun en parameter - adressen til XML-filen som skal flates ut. Det er også mulig å mappe Altinn-feltnavn mot ønsket variabelnavn som benyttes i ISEE. En dictionary med variabelnavnene i Altinn som keys, og ønskede ISEE-variabelnavn som values. Denne dictionaryen settes så som en parameter i funksjonskallet til isee_transform().\nfrom altinn import isee_transform\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\nmapping = {'kontAmbulForeDispJaNei':'ISEE_VAR1',\n           'kontAmbulForeDispAnt':'ISEE_VAR2',\n           'kontAmbulForeDriftAnt':'ISEE_VAR3',}\n\nisee_transform(file, mapping)\nNoen har behov for å flate ut flere tema enn bare , dette er mulig ved å legge ved en liste med temaer man ønsker flatet ut i funksjonskallet (tag_list). Defaultverdi på denne parameteren er SkjemaData, så hvis man ikke har behov for andre temaer så trenger man ikke bruke denne parameteren. Eksemplet under flater ut [‘SkjemaData’, ‘Kontakt’] fra en XML-fil fra Altinn3:\nfrom altinn import isee_transform\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\nmapping = {'kontAmbulForeDispJaNei':'ISEE_VAR1',\n           'kontAmbulForeDispAnt':'ISEE_VAR2',\n           'kontAmbulForeDriftAnt':'ISEE_VAR3',}\n\ntags = ['SkjemaData', 'Kontakt']\n\nisee_transform(file, mapping, tag_list=tags)\nDet er mulig å flate ut checkbox-felter ved å legge feltene man ønsker å flate ut i en liste, og så bruke denne i funksjonskallet til isee_transform (checkbox_vars). Det er også mulig å legge ved en boolsk variabel (unique_code) som spesifiserer om kodene i checkboxfeltene man ønsker utflatet er unike eller ikke (True, False). Settes denne til False blir det nye feltnavnet lik det opprinnelige feltnavnet + koden som flates ut. Settes den til True, så blir det nye feltnavnet kun koden som flates ut. False er defaultverdi på unique_code. Det blir dannet en ny rad for hver kode som står i checkboxfeltet man ønsker utflatet, og den opprinnelige raden slettes.\nfrom altinn import isee_transform\n\nfile = 'gs://ra0187-01-altinn-data-staging-c629-ssb-altinn/2024/4/11/7d5b52259b89_de4a24aa-4948-48d8-b2e4-a0f2160a0bd0/form_7d5b52259b89.xml'\n\nmapping = {\n    \"storOkningOmsAarsak31\":\"ISEE_storOkningOmsAarsak31\",\n    \"storOkningOmsAarsak33\":\"ISEE_storOkningOmsAarsak33\",\n    \"omsForrigePerPrefill\":\"ISEE_omsForrigePerPrefill\",\n    }\n\ncheckboxList = [\"storOkningOmsAarsak\"]\n\nisee_transform(file=file, mapping=mapping, checkbox_vars=checkboxList, unique_code=False)\n\n\ncreate_isee_filename()\nDersom data skal overføres til ISEE, må csv-filen med dataene ha en spesifikk notasjon. Dette er noe funksjonen create_isee_filname(file) håndterer.\nfrom altinn import create_isee_filename\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\ncreate_isee_filename(file)\n\n\nxml_transform()\nFunksjonen flater ut hele XML-filen og legger innholdet i en Pandas DataFrame. Funksjonen kan være nyttig for de som skal jobbe med Altinn3-data på Dapla.\nfrom altinn import xml_transform\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\nxml_transform(file)\nDataframet som returneres fra funksjonen inneholder kolonnene FELTNAVN, FELTVERDI og LEVEL.\n\nFELTNAVN - inneholder også prefikset til området verdien er hentet fra, som Tidsbruk, Brukeropplevelse, Kontakt. Disse er ikke inkludert i isee_transform\nFELTVERDI - Verdien tilhørdende aktuelt FELTNAVN\nLEVEL - En liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kolonnen kan være nyttig hvis skjemaet inneholder komplekse data, som Tabell-i-tabell og Tabell-i-tabell-i-tabell. Da kan man sammen med isee_transform()-funksjonen koble disse sammen og lage egentilpassede løpenumre på felter som skal inn i ISEE.\n\nSiden det finnes mange ulike måter å bygge et skjema på, og ønske om å holde funskjonene så generiske som mulig uten for mange parametre, må man i noen tilfeller tilpasse lastefilen til ISEE med ekstra steg etter isee_transfom(). xml_transform kan være til hjelp for å se kompleksiteten i et skjema, og så benytte opplysningene i FELTNAVN/LEVEL-kolonnene for å lage spesialtipassede løpenr m.m.",
+    "text": "Funksjonalitet\n\nisee_transform()\nFunksjonen isee_transform() flater ut XML-data til et pandas-dataframe med formatet som er nødvendig for å kunne laste data inn i ISEE.\nI den enkleste formen tar funksjonen kun en parameter - adressen til XML-filen som skal flates ut. Det er også mulig å mappe Altinn-feltnavn mot ønsket variabelnavn som benyttes i ISEE. En dictionary med variabelnavnene i Altinn som keys, og ønskede ISEE-variabelnavn som values. Denne dictionary’en settes så som en parameter i funksjonskallet til isee_transform().\nfrom altinn import isee_transform\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\nmapping = {'kontAmbulForeDispJaNei':'ISEE_VAR1',\n           'kontAmbulForeDispAnt':'ISEE_VAR2',\n           'kontAmbulForeDriftAnt':'ISEE_VAR3',}\n\nisee_transform(file, mapping)\nNoen har behov for å flate ut flere tema enn bare SkjemaData, dette er mulig ved å legge ved en liste med temaer man ønsker flatet ut i funksjonskallet (tag_list). Defaultverdi på denne parameteren er SkjemaData, så hvis man ikke har behov for andre temaer så trenger man ikke bruke denne parameteren. Eksemplet under flater ut [‘SkjemaData’, ‘Kontakt’] fra en XML-fil fra Altinn3:\nfrom altinn import isee_transform\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\nmapping = {'kontAmbulForeDispJaNei':'ISEE_VAR1',\n           'kontAmbulForeDispAnt':'ISEE_VAR2',\n           'kontAmbulForeDriftAnt':'ISEE_VAR3',}\n\ntags = ['SkjemaData', 'Kontakt']\n\nisee_transform(file, mapping, tag_list=tags)\nDet er mulig å flate ut checkbox-felter ved å legge feltene man ønsker å flate ut i en liste, og så bruke denne i funksjonskallet til isee_transform (checkbox_vars). Det er også mulig å legge ved en boolsk variabel (unique_code) som spesifiserer om kodene i checkbox-feltene man ønsker utflatet er unike eller ikke (True, False). Settes denne til False blir det nye feltnavnet lik det opprinnelige feltnavnet + koden som flates ut. Settes den til True, så blir det nye feltnavnet kun koden som flates ut. False er defaultverdi på unique_code. Det blir dannet en ny rad for hver kode som står i checkboxfeltet man ønsker utflatet, og den opprinnelige raden slettes.\nfrom altinn import isee_transform\n\nfile = 'gs://ra0187-01-altinn-data-staging-c629-ssb-altinn/2024/4/11/7d5b52259b89_de4a24aa-4948-48d8-b2e4-a0f2160a0bd0/form_7d5b52259b89.xml'\n\nmapping = {\n    \"storOkningOmsAarsak31\":\"ISEE_storOkningOmsAarsak31\",\n    \"storOkningOmsAarsak33\":\"ISEE_storOkningOmsAarsak33\",\n    \"omsForrigePerPrefill\":\"ISEE_omsForrigePerPrefill\",\n    }\n\ncheckboxList = [\"storOkningOmsAarsak\"]\n\nisee_transform(file=file, mapping=mapping, checkbox_vars=checkboxList, unique_code=False)\n\n\ncreate_isee_filename()\nDersom data skal overføres til ISEE, må csv-filen med dataene ha en spesifikk notasjon. Dette er noe funksjonen create_isee_filname() håndterer.\nfrom altinn import create_isee_filename\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\ncreate_isee_filename(file)\n\n\nxml_transform()\nFunksjonen flater ut hele XML-filen og legger innholdet i en Pandas DataFrame. Funksjonen kan være nyttig for de som skal jobbe med Altinn3-data på Dapla.\nfrom altinn import xml_transform\n\nfile = \"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml\"\n\nxml_transform(file)\nDataframet som returneres fra funksjonen inneholder følgende kolonner:\nFELTNAVN\nInneholder også prefikset til området verdien er hentet fra, som Tidsbruk, Brukeropplevelse, Kontakt. Disse er ikke inkludert i isee_transform\nFELTVERDI\nVerdien tilhørende aktuelt FELTNAVN\nLEVEL\nEn liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kolonnen kan være nyttig hvis skjemaet inneholder komplekse data, som Tabell-i-tabell og Tabell-i-tabell-i-tabell. Da kan man sammen med isee_transform()-funksjonen koble disse sammen og lage egentilpassede løpenumre på felter som skal inn i ISEE.\nSiden det finnes mange ulike måter å bygge et skjema på, og ønske om å holde funskjonene så generiske som mulig uten for mange parametre, må man i noen tilfeller tilpasse lastefilen til ISEE med ekstra steg etter isee_transfom(). xml_transform() kan være til hjelp for å se kompleksiteten i et skjema, og så benytte opplysningene i FELTNAVN/LEVEL-kolonnene for å lage spesialtipassede løpenr m.m.",
     "crumbs": [
       "Manual",
       "Datatjenester",
@@ -1497,23 +1497,11 @@
     ]
   },
   {
-    "objectID": "statistikkere/ssb-altinn-python.html#lasting-av-altinn3-data-inn-i-isee",
-    "href": "statistikkere/ssb-altinn-python.html#lasting-av-altinn3-data-inn-i-isee",
+    "objectID": "statistikkere/ssb-altinn-python.html#lasting-til-isee",
+    "href": "statistikkere/ssb-altinn-python.html#lasting-til-isee",
     "title": "ssb-altinn-python",
-    "section": "Lasting av Altinn3 data inn i ISEE",
-    "text": "Lasting av Altinn3 data inn i ISEE\nDet er utarbeidet en utfyllende Blogg-post i Dapla-manualen som beskriver prosessen med lasting av Altinn 3 skjemaer til ISEE, steg for steg - Fra Altinn 3 til ISEE",
-    "crumbs": [
-      "Manual",
-      "Datatjenester",
-      "ssb-altinn-python"
-    ]
-  },
-  {
-    "objectID": "statistikkere/ssb-altinn-python.html#dokumentasjon-og-reference-guide",
-    "href": "statistikkere/ssb-altinn-python.html#dokumentasjon-og-reference-guide",
-    "title": "ssb-altinn-python",
-    "section": "Dokumentasjon og reference guide",
-    "text": "Dokumentasjon og reference guide\n\nSSB Altinn Python documentation\nReference - SSB Altinn Python documentation",
+    "section": "Lasting til ISEE",
+    "text": "Lasting til ISEE\nDet er skrevet en utfyllende blogg-post i Dapla-manualen som beskriver prosessen med lasting av Altinn 3 skjemaer til ISEE.",
     "crumbs": [
       "Manual",
       "Datatjenester",
@@ -2157,88 +2145,88 @@
     "text": "I 2025 skal SSB for fullt ta i bruk Navs applikasjonsplattform, NAIS.\n\nMed Nais er mange gjennomtenkte valg allerede tatt. Det blir lettere for applikasjonsutviklere i SSB å gå fra idé til implementering, samtidig som vi slipper utvikling og vedlikehold som ellers måtte gjøre selv.\n\nLes mer i denne SSB-interne saken."
   },
   {
-    "objectID": "news/posts/2025-04-07-altinn-part/index.html",
-    "href": "news/posts/2025-04-07-altinn-part/index.html",
-    "title": "Blogginnlegg om Altinn 3 og ISEE",
+    "objectID": "news/posts/2024-11-08-endring-cpu-ram/index.html",
+    "href": "news/posts/2024-11-08-endring-cpu-ram/index.html",
+    "title": "Endring i default-maskinkraft på Dapla Lab",
     "section": "",
-    "text": "Magnus Theodor Engh har skrevet et blogginnlegg som forklarer hvordan man kan integrere datafangst med Altinn 3 på Dapla, med lasting til ISEE i prodsonen. Les innlegget her."
+    "text": "Førstkommende mandag gjør vi en endring i hvor mye RAM og CPU programmeringsmiljøene på Dapla Lab har som default. Vi endrer antall millicores (M) CPU fra 2000M til 200M, og mengden RAM fra 8GB til 4GB. Dvs. at brukeren aktivt må øke ressursene i tjenestekonfigurasjonen (se Figur 1) før oppstart hvis de ønsker mer enn dette.\nÅrsaken til at vi gjør endringen er at vi har observert at flere brukere reserverer ressurser som ikke benyttes, og at dette skaper unødvendige kostnader for SSB.\nEndringen gjelder tjenestene Jupyter, Jupyter-playground, Vscode og Rstudio.\n\n\n\n\n\n\nFigur 1: Bilde av Ressurser-fanen under tjenestekonfigurasjonen til Jupyter"
   },
   {
-    "objectID": "news/posts/2025-04-06-update-statbank-client/index.html",
-    "href": "news/posts/2025-04-06-update-statbank-client/index.html",
-    "title": "Dokumentasjon av lasting til Statistikkbanken er oppdatert",
+    "objectID": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
+    "href": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
+    "title": "Delt-bøtter støttes i Dapla Lab",
     "section": "",
-    "text": "Kapitlet om dapla-statbank-client i Dapla-manualen er skrevet om og url-en er endret til: https://manual.dapla.ssb.no/statistikkere/dapla-statbank-client.html.\nI tillegg har Carl Corneil skrevet et blogginnlegg hvor han beskriver en optimal fremgangsmåte for å laste til flere statistikkbanktabeller i et produksjonsløp."
+    "text": "Man kan nå tilgjengeliggjøre delt-bøtter fra andre team inne i Jupyter, Vscode-python og Rstudio. Les dokumentasjon her, eller se videoen under:"
   },
   {
-    "objectID": "news/posts/2024-11-25-referansegruppe-dapla-lab/index.html",
-    "href": "news/posts/2024-11-25-referansegruppe-dapla-lab/index.html",
-    "title": "Når skrus ‘gamle’ jupyter av?",
+    "objectID": "news/posts/2024-11-09-data-admins-developers/index.html",
+    "href": "news/posts/2024-11-09-data-admins-developers/index.html",
+    "title": "Data-admins i developers-gruppa",
     "section": "",
-    "text": "Under forrige DaplaNytt ble 15. januar 2025 nevt som en mulig sluttdato for ‘gamle’ jupyter, altså https://jupyter.dapla.ssb.no, og dermed en endelig overgang til Dapla Lab.\nDenne datoen er tentativ. Sluttdato for gamle jupyter vil bli endeliggjort etter møtet med referansegruppen for statistikktjenester 6. desember 2024. Referansegruppen har representanter fra hver statistikkavdeling.\nI mellomtiden ber vi brukere om å henvende seg til sine respektive støtteteam, nærmeste leder eller medlemmene av referansegruppen for innvendinger eller innspill til når vi kan gjennomføre en endelig overgang til Dapla Lab."
+    "text": "Det er bestemt at medlemmer av tilgangsgruppen data-admins også skal være medlem av developers-gruppa. Det er på denne måten at data-admins også får tilgang til standardprosjektet til teamet. Dette er en beslutning om arkitekturen rundt tilgangsstyring på Dapla, der medlemskap i de to gruppene gir helt forskjellige tilganger. Medlemskap i data-admins-gruppa vil da vanligvis innebære de samme tilgangene som developers-gruppa, med mindre de aktiverer de forhåndsgodkjente tilgangene til kildedata."
   },
   {
-    "objectID": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
-    "href": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
-    "title": "Forbedring av konfigurasjon i Dapla Lab",
+    "objectID": "news/posts/2025-03-05-daplanytt-feb25/index.html",
+    "href": "news/posts/2025-03-05-daplanytt-feb25/index.html",
+    "title": "DaplaNytt-møte 5.3.2025",
     "section": "",
-    "text": "Den 18. mars 2025 rullet vi ut en endring i tjenestekonfigurasjonene til alle tjenester på Dapla Lab. Under Data-fanen er ikke lenger mulig å starte en tjeneste som data-admins uten å oppgi en begrunnelse. I tillegg vises feltene for Begrunnelse og Varighet nå kun hvis man har valgt data-admins under Team og tilgangsgruppe.\nFigur 1 viser hvordan tjenestekonfigurasjonen ser ut etter endringen. Figur 1 (a) viser hvordan Data-fanen ser ut hvis man velger å representere developers, mens Figur 1 (b) viser valgene hvis man velger data-admins.\n\n\n\n\n\n\n\n\n\n\n\n(a) developers\n\n\n\n\n\n\n\n\n\n\n\n(b) data-admins\n\n\n\n\n\n\n\nFigur 1: Ulik visning av informasjon basert på om man velger developers eller data-admins"
+    "text": "DaplaNytt for februar 2025 ble avholdt som Teams-møte 5. mars 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
   },
   {
-    "objectID": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
-    "href": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
-    "title": "Nytt tidspunkt for automatisk pausing på Dapla Lab",
+    "objectID": "news/posts/2024-11-29-kvakk-chapter/index.html",
+    "href": "news/posts/2024-11-29-kvakk-chapter/index.html",
+    "title": "Nytt kapittel om Kvalitet i kode og koding (KVAKK)",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab blir pauset kl 22.00 hver dag. I forbindelse med at vi nå tilbyr brukere å melde seg ut av den automatiske pausingen ved behov, så endrer vi nå tidspunktet for pausing fra 22.00 til 17.00 fra og med torsdag 27. mars.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
+    "text": "Vi har skrevet et kapittel i Dapla-manualen om Kvalitet i kode og koding (KVAKK). Sjekk det ut her.\nKapittelet er foreløpig kort og henviser til confluence. Vi har planer om å skrive mer utfyllende om KVAKK i manualen."
   },
   {
-    "objectID": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
-    "href": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
-    "title": "Skru av automatisk pausing for en tjeneste",
+    "objectID": "news/posts/2025-04-28-function-use/index.html",
+    "href": "news/posts/2025-04-28-function-use/index.html",
+    "title": "Blogginnlegg om bruk av funksjoner",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab pauses hver kveld kl. 22:00, slik som forklart i dokumentasjonen. Nå er det mulig å skru av pausing for enkelttjenester ved å skrive [nosuspend] på slutten av visningsnavnet til tjenesten, slik som vist i videoen under:\n\nDenne funksjonaliteten kan skrus av og på etter at tjenesten er startet."
+    "text": "Arne Sørli har skrevet et blogginnlegg som oppfordrer til mer bruk av funksjoner i statistikkproduksjonskode. Innlegget sier litt om hvorfor, hvordan man kan gjøre det og kommer med noen eksempler. Det har også et skript du kan bruke til å sjekke hvor mye bruk av funksjoner det er i ditt repo.\nLes innlegget her."
   },
   {
-    "objectID": "news/posts/2025-03-09-epost-dapla-lab/index.html",
-    "href": "news/posts/2025-03-09-epost-dapla-lab/index.html",
-    "title": "E-postvarslinger om “gamle” tjenester fra Dapla Lab",
+    "objectID": "news/posts/2024-12-03-refresh-buckets/index.html",
+    "href": "news/posts/2024-12-03-refresh-buckets/index.html",
+    "title": "refresh-buckets kommando i Dapla Lab",
     "section": "",
-    "text": "Fra og med mandag 10. mars 2025 implementeres automatisk utsending av e-post til brukere som har tjenester som ble startet for mer enn 7 dager siden. Formålet med varslingen er å bevisstgjøre brukerne på viktigheten av å slette tjenester med jevne mellomrom, og starte en ny slik at man kjører på siste versjon.\n\n\n\n\n\n\nEksempel på e-post\n\n\n\nHei Nordmann, Ola\nDu har en eller flere tjenester i Dapla Lab som ble startet for mer enn 7 dager siden. Se oversikt i tabellen under.\nVi anbefaler deg å slette tjenester som ble startet for mer enn 7 dager siden. Når tjenesten slettes, og du senere starter den opp igjen, får du med deg eventuelle forbedringer som er gjort i tjenesten.\n\n\n\n\n\nTjeneste\n\n\nNavn\n\n\nAntall dager\n\n\n\n\n\n\nvscode-python\n\n\nvscode-etlev\n\n\n25\n\n\n\n\nvscode-python\n\n\nvscode-detlev\n\n\n8\n\n\n\n\nHusk å pushe kode til GitHub, og ta vare på andre filer som ligger i tjenestens filsystem, før du sletter. Vær oppmerksom på alle filer på hjemmeområdet ditt slettes når tjenesten slettes.\nLes mer om hvordan man bruker Git og GitHub i SSB."
+    "text": "Nå kan man kjøre kommandoen refresh-buckets fra terminalen i en tjeneste på Dapla Lab for å oppdatere visningen av en bøttene i filsystemet. Dette kan være nyttig hvis det blir opprettet mapper med dapla-toolbelt eller Kildomaten, og ikke via buckets-mappen i filsystemet. Les mer i kapitlet om Dapla Lab."
   },
   {
-    "objectID": "news/posts/2025-04-10-datadoc-update/index.html",
-    "href": "news/posts/2025-04-10-datadoc-update/index.html",
-    "title": "Oppdatert dokumentasjon for Datadoc",
+    "objectID": "news/posts/2024-11-08-collector-chapter/index.html",
+    "href": "news/posts/2024-11-08-collector-chapter/index.html",
+    "title": "Nytt kapittel om Data Collector",
     "section": "",
-    "text": "Dokumentasjonen for Datadoc-delen av dapla-toolbelt-metadata er skrevet om og inkluderer nå flere eksempler på hvordan man jobbe programmatisk med metadata.\nLes kapitlet her."
+    "text": "Vi har skrevet et kapittel i Dapla-manualen som beskriver hvordan man bruker Data Collector. Sjekk det ut her."
   },
   {
-    "objectID": "news/posts/2025-01-15-overgang-dapla-lab/index.html",
-    "href": "news/posts/2025-01-15-overgang-dapla-lab/index.html",
-    "title": "Overgang til Dapla Lab",
+    "objectID": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
+    "href": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
+    "title": "Nye tidspunkter for pausing på Dapla Lab",
     "section": "",
-    "text": "Innen 15. februar må alle brukere av dagens Jupyter-miljø flytte over til Dapla Lab, SSBs nye arbeidsbenk for staistikkproduksjon og forskning. Innen fristen må kode, filer og kjøringer flyttes fra det gamle miljøet over til Dapla Lab.\nMigreringsguide\nhttps://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4398678345/Migreringsguide+for+Dapla+Lab\nDokumentasjon for Dapla Lab\nhttps://manual.dapla.ssb.no/statistikkere/dapla-lab.html\nDokumentasjon for tjenestene på Dapla Lab\nhttps://manual.dapla.ssb.no/statistikkere/jupyter.html"
+    "text": "Alle tjenester på Dapla Lab blir automatisk pauset kl 17.00 hver dag, med mindre man har meldt seg ut av pausingen. Basert på erfaring ser vi at det startes en del tjenester etter kl 17, og siden disse ikke pauses automatisk, så kan de stå og kjøre til kl 17 dagen etter hvis brukeren glemmer å pause disse. Dette kan medføre unødvendige ressursbruk og kostnader for SSB.\nDerfor innfører vi en ny automatisk rutine for pausing av tjenester på Dapla Lab. I tillegg til pausingen som skjer kl 17 hver, så vil vi fom. 14. april 2025 pause tjenester også hver hele time i tidsintervallet 18.00-05.00. Den nye rutinen vil fortsatt respektere de som meldt seg ut av pausingen. De som har meldt seg ut av pausingen må selv ta ansvar for å manuelt pause tjenesten når den ikke er i bruk.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
   },
   {
-    "objectID": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
-    "href": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
-    "title": "Dapla Lab støtter Statbank",
+    "objectID": "news/posts/2025-05-07-datadoc-editor-update/index.html",
+    "href": "news/posts/2025-05-07-datadoc-editor-update/index.html",
+    "title": "Ny versjon av Datadoc-editor",
     "section": "",
-    "text": "Fra og med forrige uke støtter Statbank-pakken lasting fra Dapla Lab. Dette er i forbindelse med ny versjon av Python-pakken dapla-statbank-client.\nLes mer om dette i innlegget til Carl Corneil på Viva Engage."
+    "text": "I den nye versjonen varsles brukeren når det avdekkes avvik mellom datasettet og eksisterende metadata slik at man kan korrigere metadataene.\nEn liten feil rapportert av Østhus, Andreas er blitt fikset av Corneil, Carl Franklin: Vi nå kun ta hensyn til primær plassering av en statistikk i et statistikkområde når det utledes mens før tok vi det første vi fant, som førte til merarbeid på korrigering i en del tilfeller. Fasiten for å utlede dette er det som statistikkbanken benytter for kategorisering av statistikk og den ligger her for de som er interessert: www.ssb.no/xp/_/service/mimir/subjectStructurStatistics\nI tillegg har vi migrert prosjektet til uv fra Poetry. Det er ikke noe brukerne skal merke, men vi kan melde om en stor forbedring på utvikleropplevelsen.\nRelease Notes: https://github.com/statisticsnorway/datadoc-editor/releases/tag/v1.0.13"
   },
   {
-    "objectID": "news/posts/2025-05-13-dapladag-2025/index.html",
-    "href": "news/posts/2025-05-13-dapladag-2025/index.html",
-    "title": "Årets Dapla-dager er i gang",
+    "objectID": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
+    "href": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
+    "title": "Endring i tjenestekonfigurasjon på Dapla Lab",
     "section": "",
-    "text": "Onsdag forrige uke ble årets Dapladag gjennomført i SSBs lokaler i Oslo. Her kunne ansatte få med seg Frokost med Geir, ulike presentasjoner om Dapla for ulike målgrupper, ny runde med Dapla-grunnkurs og avslutning med pizzafest og quiz. I morgen, onsdag 14. mai 2025, arrangeres Dapla-dagen i Kongsvinger.\nSe året program og påmelding her."
+    "text": "Tjenestekonfigurasjonen i Dapla Lab har endret seg. Dette er altså menyen man får opp når man starter opp en ny tjeneste, for eksempel en ny instans av Jupyter eller VSCode. Parameterne man kan konfigurere er derimot uendret. Følgende artikler i manualen har derfor blitt oppdatert: jupyter, jupyter-pyspark, jupyter-playground, VSCode-python, RStudio, Datadoc, JDemetra og artikkelen om Dapla Lab.\n\n\n\n\n\n\nFigur 1: Tjenestekonfigurasjon for jupyter"
   },
   {
-    "objectID": "news/posts/2025-04-01-daplanytt-mar25/index.html",
-    "href": "news/posts/2025-04-01-daplanytt-mar25/index.html",
-    "title": "DaplaNytt-møte 1.4.2025",
+    "objectID": "news/posts/2025-06-07-ssb-altinn-python/index.html",
+    "href": "news/posts/2025-06-07-ssb-altinn-python/index.html",
+    "title": "Ny artikkel - ssb-altinn-python",
     "section": "",
-    "text": "DaplaNytt for mars 2025 ble avholdt som Teams-møte 1. april 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
+    "text": "Vi har skrevet ny artikkel om python-pakken ssb-altinn-python. Trykk her for å lese den!"
   },
   {
     "objectID": "news/posts/2025-04-24-update-shared-buckets/index.html",
@@ -2402,88 +2390,88 @@
     "text": "DaplaNytt for januar 2025 ble avholdt som Teams-møte 5. februar 2025.\nSe opptaket her (intern lenke).\n\n\n\nSkjembilde fra Teams-møte"
   },
   {
-    "objectID": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
-    "href": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
-    "title": "Endring i tjenestekonfigurasjon på Dapla Lab",
+    "objectID": "news/posts/2025-04-01-daplanytt-mar25/index.html",
+    "href": "news/posts/2025-04-01-daplanytt-mar25/index.html",
+    "title": "DaplaNytt-møte 1.4.2025",
     "section": "",
-    "text": "Tjenestekonfigurasjonen i Dapla Lab har endret seg. Dette er altså menyen man får opp når man starter opp en ny tjeneste, for eksempel en ny instans av Jupyter eller VSCode. Parameterne man kan konfigurere er derimot uendret. Følgende artikler i manualen har derfor blitt oppdatert: jupyter, jupyter-pyspark, jupyter-playground, VSCode-python, RStudio, Datadoc, JDemetra og artikkelen om Dapla Lab.\n\n\n\n\n\n\nFigur 1: Tjenestekonfigurasjon for jupyter"
+    "text": "DaplaNytt for mars 2025 ble avholdt som Teams-møte 1. april 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
   },
   {
-    "objectID": "news/posts/2025-05-07-datadoc-editor-update/index.html",
-    "href": "news/posts/2025-05-07-datadoc-editor-update/index.html",
-    "title": "Ny versjon av Datadoc-editor",
+    "objectID": "news/posts/2025-05-13-dapladag-2025/index.html",
+    "href": "news/posts/2025-05-13-dapladag-2025/index.html",
+    "title": "Årets Dapla-dager er i gang",
     "section": "",
-    "text": "I den nye versjonen varsles brukeren når det avdekkes avvik mellom datasettet og eksisterende metadata slik at man kan korrigere metadataene.\nEn liten feil rapportert av Østhus, Andreas er blitt fikset av Corneil, Carl Franklin: Vi nå kun ta hensyn til primær plassering av en statistikk i et statistikkområde når det utledes mens før tok vi det første vi fant, som førte til merarbeid på korrigering i en del tilfeller. Fasiten for å utlede dette er det som statistikkbanken benytter for kategorisering av statistikk og den ligger her for de som er interessert: www.ssb.no/xp/_/service/mimir/subjectStructurStatistics\nI tillegg har vi migrert prosjektet til uv fra Poetry. Det er ikke noe brukerne skal merke, men vi kan melde om en stor forbedring på utvikleropplevelsen.\nRelease Notes: https://github.com/statisticsnorway/datadoc-editor/releases/tag/v1.0.13"
+    "text": "Onsdag forrige uke ble årets Dapladag gjennomført i SSBs lokaler i Oslo. Her kunne ansatte få med seg Frokost med Geir, ulike presentasjoner om Dapla for ulike målgrupper, ny runde med Dapla-grunnkurs og avslutning med pizzafest og quiz. I morgen, onsdag 14. mai 2025, arrangeres Dapla-dagen i Kongsvinger.\nSe året program og påmelding her."
   },
   {
-    "objectID": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
-    "href": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
-    "title": "Nye tidspunkter for pausing på Dapla Lab",
+    "objectID": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
+    "href": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
+    "title": "Dapla Lab støtter Statbank",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab blir automatisk pauset kl 17.00 hver dag, med mindre man har meldt seg ut av pausingen. Basert på erfaring ser vi at det startes en del tjenester etter kl 17, og siden disse ikke pauses automatisk, så kan de stå og kjøre til kl 17 dagen etter hvis brukeren glemmer å pause disse. Dette kan medføre unødvendige ressursbruk og kostnader for SSB.\nDerfor innfører vi en ny automatisk rutine for pausing av tjenester på Dapla Lab. I tillegg til pausingen som skjer kl 17 hver, så vil vi fom. 14. april 2025 pause tjenester også hver hele time i tidsintervallet 18.00-05.00. Den nye rutinen vil fortsatt respektere de som meldt seg ut av pausingen. De som har meldt seg ut av pausingen må selv ta ansvar for å manuelt pause tjenesten når den ikke er i bruk.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
+    "text": "Fra og med forrige uke støtter Statbank-pakken lasting fra Dapla Lab. Dette er i forbindelse med ny versjon av Python-pakken dapla-statbank-client.\nLes mer om dette i innlegget til Carl Corneil på Viva Engage."
   },
   {
-    "objectID": "news/posts/2024-11-08-collector-chapter/index.html",
-    "href": "news/posts/2024-11-08-collector-chapter/index.html",
-    "title": "Nytt kapittel om Data Collector",
+    "objectID": "news/posts/2025-01-15-overgang-dapla-lab/index.html",
+    "href": "news/posts/2025-01-15-overgang-dapla-lab/index.html",
+    "title": "Overgang til Dapla Lab",
     "section": "",
-    "text": "Vi har skrevet et kapittel i Dapla-manualen som beskriver hvordan man bruker Data Collector. Sjekk det ut her."
+    "text": "Innen 15. februar må alle brukere av dagens Jupyter-miljø flytte over til Dapla Lab, SSBs nye arbeidsbenk for staistikkproduksjon og forskning. Innen fristen må kode, filer og kjøringer flyttes fra det gamle miljøet over til Dapla Lab.\nMigreringsguide\nhttps://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4398678345/Migreringsguide+for+Dapla+Lab\nDokumentasjon for Dapla Lab\nhttps://manual.dapla.ssb.no/statistikkere/dapla-lab.html\nDokumentasjon for tjenestene på Dapla Lab\nhttps://manual.dapla.ssb.no/statistikkere/jupyter.html"
   },
   {
-    "objectID": "news/posts/2024-12-03-refresh-buckets/index.html",
-    "href": "news/posts/2024-12-03-refresh-buckets/index.html",
-    "title": "refresh-buckets kommando i Dapla Lab",
+    "objectID": "news/posts/2025-04-10-datadoc-update/index.html",
+    "href": "news/posts/2025-04-10-datadoc-update/index.html",
+    "title": "Oppdatert dokumentasjon for Datadoc",
     "section": "",
-    "text": "Nå kan man kjøre kommandoen refresh-buckets fra terminalen i en tjeneste på Dapla Lab for å oppdatere visningen av en bøttene i filsystemet. Dette kan være nyttig hvis det blir opprettet mapper med dapla-toolbelt eller Kildomaten, og ikke via buckets-mappen i filsystemet. Les mer i kapitlet om Dapla Lab."
+    "text": "Dokumentasjonen for Datadoc-delen av dapla-toolbelt-metadata er skrevet om og inkluderer nå flere eksempler på hvordan man jobbe programmatisk med metadata.\nLes kapitlet her."
   },
   {
-    "objectID": "news/posts/2025-04-28-function-use/index.html",
-    "href": "news/posts/2025-04-28-function-use/index.html",
-    "title": "Blogginnlegg om bruk av funksjoner",
+    "objectID": "news/posts/2025-03-09-epost-dapla-lab/index.html",
+    "href": "news/posts/2025-03-09-epost-dapla-lab/index.html",
+    "title": "E-postvarslinger om “gamle” tjenester fra Dapla Lab",
     "section": "",
-    "text": "Arne Sørli har skrevet et blogginnlegg som oppfordrer til mer bruk av funksjoner i statistikkproduksjonskode. Innlegget sier litt om hvorfor, hvordan man kan gjøre det og kommer med noen eksempler. Det har også et skript du kan bruke til å sjekke hvor mye bruk av funksjoner det er i ditt repo.\nLes innlegget her."
+    "text": "Fra og med mandag 10. mars 2025 implementeres automatisk utsending av e-post til brukere som har tjenester som ble startet for mer enn 7 dager siden. Formålet med varslingen er å bevisstgjøre brukerne på viktigheten av å slette tjenester med jevne mellomrom, og starte en ny slik at man kjører på siste versjon.\n\n\n\n\n\n\nEksempel på e-post\n\n\n\nHei Nordmann, Ola\nDu har en eller flere tjenester i Dapla Lab som ble startet for mer enn 7 dager siden. Se oversikt i tabellen under.\nVi anbefaler deg å slette tjenester som ble startet for mer enn 7 dager siden. Når tjenesten slettes, og du senere starter den opp igjen, får du med deg eventuelle forbedringer som er gjort i tjenesten.\n\n\n\n\n\nTjeneste\n\n\nNavn\n\n\nAntall dager\n\n\n\n\n\n\nvscode-python\n\n\nvscode-etlev\n\n\n25\n\n\n\n\nvscode-python\n\n\nvscode-detlev\n\n\n8\n\n\n\n\nHusk å pushe kode til GitHub, og ta vare på andre filer som ligger i tjenestens filsystem, før du sletter. Vær oppmerksom på alle filer på hjemmeområdet ditt slettes når tjenesten slettes.\nLes mer om hvordan man bruker Git og GitHub i SSB."
   },
   {
-    "objectID": "news/posts/2024-11-29-kvakk-chapter/index.html",
-    "href": "news/posts/2024-11-29-kvakk-chapter/index.html",
-    "title": "Nytt kapittel om Kvalitet i kode og koding (KVAKK)",
+    "objectID": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
+    "href": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
+    "title": "Skru av automatisk pausing for en tjeneste",
     "section": "",
-    "text": "Vi har skrevet et kapittel i Dapla-manualen om Kvalitet i kode og koding (KVAKK). Sjekk det ut her.\nKapittelet er foreløpig kort og henviser til confluence. Vi har planer om å skrive mer utfyllende om KVAKK i manualen."
+    "text": "Alle tjenester på Dapla Lab pauses hver kveld kl. 22:00, slik som forklart i dokumentasjonen. Nå er det mulig å skru av pausing for enkelttjenester ved å skrive [nosuspend] på slutten av visningsnavnet til tjenesten, slik som vist i videoen under:\n\nDenne funksjonaliteten kan skrus av og på etter at tjenesten er startet."
   },
   {
-    "objectID": "news/posts/2025-03-05-daplanytt-feb25/index.html",
-    "href": "news/posts/2025-03-05-daplanytt-feb25/index.html",
-    "title": "DaplaNytt-møte 5.3.2025",
+    "objectID": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
+    "href": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
+    "title": "Nytt tidspunkt for automatisk pausing på Dapla Lab",
     "section": "",
-    "text": "DaplaNytt for februar 2025 ble avholdt som Teams-møte 5. mars 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
+    "text": "Alle tjenester på Dapla Lab blir pauset kl 22.00 hver dag. I forbindelse med at vi nå tilbyr brukere å melde seg ut av den automatiske pausingen ved behov, så endrer vi nå tidspunktet for pausing fra 22.00 til 17.00 fra og med torsdag 27. mars.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
   },
   {
-    "objectID": "news/posts/2024-11-09-data-admins-developers/index.html",
-    "href": "news/posts/2024-11-09-data-admins-developers/index.html",
-    "title": "Data-admins i developers-gruppa",
+    "objectID": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
+    "href": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
+    "title": "Forbedring av konfigurasjon i Dapla Lab",
     "section": "",
-    "text": "Det er bestemt at medlemmer av tilgangsgruppen data-admins også skal være medlem av developers-gruppa. Det er på denne måten at data-admins også får tilgang til standardprosjektet til teamet. Dette er en beslutning om arkitekturen rundt tilgangsstyring på Dapla, der medlemskap i de to gruppene gir helt forskjellige tilganger. Medlemskap i data-admins-gruppa vil da vanligvis innebære de samme tilgangene som developers-gruppa, med mindre de aktiverer de forhåndsgodkjente tilgangene til kildedata."
+    "text": "Den 18. mars 2025 rullet vi ut en endring i tjenestekonfigurasjonene til alle tjenester på Dapla Lab. Under Data-fanen er ikke lenger mulig å starte en tjeneste som data-admins uten å oppgi en begrunnelse. I tillegg vises feltene for Begrunnelse og Varighet nå kun hvis man har valgt data-admins under Team og tilgangsgruppe.\nFigur 1 viser hvordan tjenestekonfigurasjonen ser ut etter endringen. Figur 1 (a) viser hvordan Data-fanen ser ut hvis man velger å representere developers, mens Figur 1 (b) viser valgene hvis man velger data-admins.\n\n\n\n\n\n\n\n\n\n\n\n(a) developers\n\n\n\n\n\n\n\n\n\n\n\n(b) data-admins\n\n\n\n\n\n\n\nFigur 1: Ulik visning av informasjon basert på om man velger developers eller data-admins"
   },
   {
-    "objectID": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
-    "href": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
-    "title": "Delt-bøtter støttes i Dapla Lab",
+    "objectID": "news/posts/2024-11-25-referansegruppe-dapla-lab/index.html",
+    "href": "news/posts/2024-11-25-referansegruppe-dapla-lab/index.html",
+    "title": "Når skrus ‘gamle’ jupyter av?",
     "section": "",
-    "text": "Man kan nå tilgjengeliggjøre delt-bøtter fra andre team inne i Jupyter, Vscode-python og Rstudio. Les dokumentasjon her, eller se videoen under:"
+    "text": "Under forrige DaplaNytt ble 15. januar 2025 nevt som en mulig sluttdato for ‘gamle’ jupyter, altså https://jupyter.dapla.ssb.no, og dermed en endelig overgang til Dapla Lab.\nDenne datoen er tentativ. Sluttdato for gamle jupyter vil bli endeliggjort etter møtet med referansegruppen for statistikktjenester 6. desember 2024. Referansegruppen har representanter fra hver statistikkavdeling.\nI mellomtiden ber vi brukere om å henvende seg til sine respektive støtteteam, nærmeste leder eller medlemmene av referansegruppen for innvendinger eller innspill til når vi kan gjennomføre en endelig overgang til Dapla Lab."
   },
   {
-    "objectID": "news/posts/2024-11-08-endring-cpu-ram/index.html",
-    "href": "news/posts/2024-11-08-endring-cpu-ram/index.html",
-    "title": "Endring i default-maskinkraft på Dapla Lab",
+    "objectID": "news/posts/2025-04-06-update-statbank-client/index.html",
+    "href": "news/posts/2025-04-06-update-statbank-client/index.html",
+    "title": "Dokumentasjon av lasting til Statistikkbanken er oppdatert",
     "section": "",
-    "text": "Førstkommende mandag gjør vi en endring i hvor mye RAM og CPU programmeringsmiljøene på Dapla Lab har som default. Vi endrer antall millicores (M) CPU fra 2000M til 200M, og mengden RAM fra 8GB til 4GB. Dvs. at brukeren aktivt må øke ressursene i tjenestekonfigurasjonen (se Figur 1) før oppstart hvis de ønsker mer enn dette.\nÅrsaken til at vi gjør endringen er at vi har observert at flere brukere reserverer ressurser som ikke benyttes, og at dette skaper unødvendige kostnader for SSB.\nEndringen gjelder tjenestene Jupyter, Jupyter-playground, Vscode og Rstudio.\n\n\n\n\n\n\nFigur 1: Bilde av Ressurser-fanen under tjenestekonfigurasjonen til Jupyter"
+    "text": "Kapitlet om dapla-statbank-client i Dapla-manualen er skrevet om og url-en er endret til: https://manual.dapla.ssb.no/statistikkere/dapla-statbank-client.html.\nI tillegg har Carl Corneil skrevet et blogginnlegg hvor han beskriver en optimal fremgangsmåte for å laste til flere statistikkbanktabeller i et produksjonsløp."
   },
   {
-    "objectID": "news/posts/2025-05-14-kildomaten-change/index.html",
-    "href": "news/posts/2025-05-14-kildomaten-change/index.html",
-    "title": "Ny artikkel - ssb-altinn-python",
+    "objectID": "news/posts/2025-04-07-altinn-part/index.html",
+    "href": "news/posts/2025-04-07-altinn-part/index.html",
+    "title": "Blogginnlegg om Altinn 3 og ISEE",
     "section": "",
-    "text": "Vi har skrevet ny artikkel om python-pakken ssb-altinn-python. Trykk her for å lese den!"
+    "text": "Magnus Theodor Engh har skrevet et blogginnlegg som forklarer hvordan man kan integrere datafangst med Altinn 3 på Dapla, med lasting til ISEE i prodsonen. Les innlegget her."
   },
   {
     "objectID": "news/posts/2025-05-14-kildomat-check/index.html",
