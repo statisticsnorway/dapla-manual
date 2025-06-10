@@ -18,7 +18,61 @@ image: metadata-maalbilde.png
 image-alt: "Visualisering av målbilde for metadata"
 draft: false
 lightbox: true
+number-sections: true
 ---
 
-I denne artikkelen gis det en kjapp veiledning til å migrere en variabeldefinisjon fra Vardok til Vardef. 
+I denne artikkelen gis det en kjapp veiledning for migrerering av en variabeldefinisjon fra Vardok til Vardef. Mer detaljerte ressurser finnes her: 
+
+- [Migreringsplan](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4128276501/Migreringsplan+fra+Vardok+til+Vardef)
+- [Dokumentasjon for Vardef-forvaltning](../../../statistikkere/vardef-forvaltning.qmd)
+- [Dokumentasjon av Vardef](../../../statistikkere/vardef.qmd)
+
+## Finn fram Vardok-ID 
+
+Alle seksjonsledere har fått tilsendt en oversikt over hvilke variabeldefinisjoner i Vardok som din seksjon er ansvarlig for. I oversikten finner man også ID-ene til variabeldefinisjonene, og man må vite Vardok-ID'en til variabeldefinisjonen man skal migrere før man begynner.
+
+## Avgjør eierskap
+
+Diskuter før migreringen hvilket Dapla-team på seksjonen som skal "eie" variabeldefinisjonen. Det er kun ett team som kan være ansvarlig, og man definerer hvilket team det skal være når man velger team og tilgangsgruppe ved oppstart av Vardef-forvaltning (forklart i neste steg). 
+
+## Starte Vardef-forvaltning
+
+![](vardef-forvaltning-service.png){style="max-width: 40%; float: right;" fig-alt="Visualisering av deltbøtter og team"}
+
+Selve migreringen gjøres fra en tjeneste som heter [Vardef-forvaltning](../../../statistikkere/vardef-forvaltning.qmd) i Dapla Lab. Ønsker man å teste litt hvordan systemet fungerer uten fare for å gjøre noe galt, så kan man åpne tjenesten i test-miljøet på Dapla Lab: <https://lab.dapla-test.ssb.no/>. Her jobber man mot en test-versjon av Vardef-basen som blir slettet med jevne mellomrom, og ingen informasjon blir eksponert for eksterne. Ønsker man å migrere "på ekte", så logger seg man inn i prodmiljøet: <https://lab.dapla.ssb.no/>. 
+
+## Selve migrering
+
+Inne tjenesten **Vardef-forvaltning** så ligger det ferdige notebooks for vanlige arbeidsflyter i Vardef. For å migrere fra Vardok til Vardef så åpner du notebooken `migrerer_variabeldefinisjoner.ipynb` under mappen `./variable_definitions/`.
+
+For å migrere variabeldefinisjonen med ID'en **10** i Vardok, så gjør du følgende:
+
+1. Kjør første kodecelle
+2. I andre kodecelle så fyller du inn Vardok-ID i variabelen `min_id_liste`. Under har jeg fylt inn `10`: 
+
+```{.python filename="Notebook"}
+min_id_liste = [10]
+print(f"✅ {len(min_id_liste)} vil bli migrert")
+```
+3. Deretter kjører du cellen. 
+4. Når du kjører den neste cellen så skjer selve migreringen. Hvis den vellykket så får du følgende beskjed i notebooken: `INFO: ✅ Successfully migrated variable definition 'wkapinnt' with ID 'LlT6N-cz'`, bare at kortnavn og ID er unikt for din variabel. **VIKTIG: Husk kortnavnet siden du trenger det i neste steg**. 
+
+Og med det så er variabelen migrert fra Vardok til Vardef. Variabeldefinisjonen har nå fått utledet alle informasjon automatisk som er mulig å utlede, og resten må brukeren fylle inn selv. Husk at definisjonen nå er lagret i databasen til Vardef, men med status `UTKAST`. Dvs. at man kan endre på all informasjon og den er ikke publisert enda. For å publisere må man redigere innholdet i utkastet, og deretter kjøre en annen notebook som gjør selve publiseringen. Dette er forklart under.  
+
+## Rediger innhold
+
+For å redigere innholdet i et utkast i Vardef så kan man kjøre notebooken `rediger_utkast_variabeldefinisjon.ipynb`. Da gjør man følgende:
+
+1. Åpne notebooken `rediger_utkast_variabeldefinisjon.ipynb`
+2. Kjør gjennom de to første cellene og skriv inn kortnavnet til den migrerte variabelen (ble printet ut når du migrerte).
+3. Etter kjøringen over ble det skrevet en yaml-fil med innholdet i variabeldefinisjonen. Her kan du gjøre endringer direkte i fila.
+4. Når du er ferdig med å gjøre endringer så kan du kjøre den siste kodecellen for å lagre arbeidet ditt i et nytt utkast. Husk at du bør lagre ofte og man kan redigere utkast så mange ganger man vil.  
+
+Når en variabeldefinisjon er migrert fra Vardok til et utkast i Vardef, så kan man begynne å redigere innholdet. Det er obligatorisk å gå gjennom all informasjon og kvalitetssikre innholdet. Hvis det er behov for å avklare innholdet med andre i SSB, så skal dette gjøres før den publiseres. Når en variabel først er publsiert eksternt i Vardef så kan den ikke endres, kun opprette nye gyldighetsperioder eller gjøre mindre endringer.  
+
+## Publiser
+
+Når man er ferdig med redigere innholdet i variabeldefinisjonen og har publisert det til utkast, så kan man bruke notebooks til å publisere internt (`publiser_variabeldefinisjon_internt.ipynb`), eller publisere eksternt (`publiser_variabeldefinisjon_eksternt.ipynb`). 
+
+🥳Gratulerer! Du har nå migrert en variabeldefinisjon fra Vardok til Vardef. 
 
