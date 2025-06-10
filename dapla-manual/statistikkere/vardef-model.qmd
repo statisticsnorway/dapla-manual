@@ -1,17 +1,22 @@
 ---
 title: Datamodell
-date-modified: 05/02/2025
+date-modified: 06/10/2025
 lightbox: true
 ---
 
-I dette kapitlet beskrives informasjonselementene i [Vardef](./vardef.qmd). Felter markert med ✅ betyr at det er obligatorisk informasjon.  
+For hvert informasjonselement angis det om informasjonen er obligatorisk✅ Det angis også hva det internasjonale🌐 navnet er, det er dette navnet som benyttes i Vardef. Noen informasjonselementer er kun relevante for noen variabler, og de er derfor kun obligatoriske hvis man har denne typen variabler, f.eks. er «Kodeverkets URI» kun obligatorisk å fylle ut dersom det er en kvalitativ variabel . Dette angis med ⚠️. Felter som er valgfrie, angis ved (valgfritt).
+
+Det angis også om informasjonsfeltet kan endres (patches) etter publisering. Publisering gjelder her både intern og ekstern publisering.
+
 
 ### Navn
 🌐 *name*  
-**nb** | **nn** | **en**  
+**nb** | **nn** | **en**    
 ✅  
 
-Angir navnet til variabelen. Navnet skal være forståelig for mennesker (ikke kun forkortelser) slik at det er søkbart. Navnet skal fylles ut på både bokmål, nynorsk og engelsk. 
+Angir navnet til variabelen. Navnet skal være forståelig for mennesker (ikke kun forkortelser) slik at det er søkbart. Navnet skal fylles ut på både bokmål, nynorsk og engelsk.
+
+Navn kan endres etter publisering (f.eks. for å korrigere skrivefeil), men generelt bør navneendring unngås etter publisering. Dersom navnet endres, men variabelen ellers er den samme, bør en heller lage en ny gyldighetsperiode (se forklaring under definisjon) for variabelen. 
 
 ::: {.callout-tip collapse="true"}
 ## Eksempler
@@ -26,7 +31,7 @@ Eksempel 2:
 
 Eksempel 3:
 
-> Totalt standard dekningsbidrag for jordbruksbedriften
+> Ordretilgang, bygg og anlegg
 
 :::
 
@@ -37,14 +42,20 @@ Eksempel 3:
 🌐 *short_name*  
 ✅
 
-Angir variabelens kortnavn. Kortnavn er som regel et teknisk forkortet navn som er egnet som kolonnenavn i et datasett. Følgende krav stilles til kortnavn i Vardef:
+Angir variabelens kortnavn. Kortnavn er som regel et teknisk forkortet navn som er egnet som variabel(kolonne)navn i et datasett. Følgende retningslinjer foreslås for kortnavn i Vardef:
 
-- må være unikt
-- minimumslengde på 2 tegn
-- kun små bokstaver (a-z)
-- kan inneholde tall (0-9)
-- kan inneholde _ (understrek)
-- æ, ø og å er IKKE tillat. Anbefalt at disse erstattes med ae, oe og aa
+- må være unikt.
+- minimumslengde på 2 tegn.
+- kun små bokstaver (a-z).
+- kan inneholde tall (0-9).
+- kan inneholde _ (understrek).
+- æ, ø og å er IKKE tillat. Anbefalt at disse erstattes med ae, oe og aa.
+- dersom det brukes generiske navn som «kilde» eller «kode» skal variabelen spesifisere vha. suffiks, f.eks. kilde_innt
+- prefiks og suffiks kan brukes for å gjøre et kortnavn unikt, f.eks. pers_innt og hush_innt.
+
+Retningslinjene for kortnavn skal opp i Standardutvalget i september.
+
+Kortnavnet kan ikke endres etter publisering.
 
 
 ::: {.callout-tip collapse="true"}
@@ -67,23 +78,30 @@ Eksempel på kortnavn for variabeldefinisjonen med [Navn](#navn) *Landbakgrunn*:
 **nb** | **nn** | **en**   
 ✅
 
-Kort beskrivelse av hva variabelen betyr. En definisjon beskriver hva variabelen betyr på en så kort og presis måte som mulig. Mer utfyllende opplysninger kan legges i [Merknad](#merknad)-feltet.
+Angir hva variabelen betyr på en så kort og presis måte som mulig. Mer utfyllende opplysninger kan legges i Merknad-feltet.
+
+Definisjon kan endres etter publisering (f.eks. korrigering av skrivefeil).
+
+Hvis det legges inn større endring i definisjonen, skal det opprettes en ny gyldighetsperiode. Dette gjøres ved å sette en ny gyldig f.o.m.-dato. Da vil gyldig t.o.m. for foregående gyldighetsperiode automatisk settes til  gyldig f.o.m.-dato (ny gyldighetsperiode) minus en dag.
+
+Et eksempel på en større endring som skaper en ny gyldighetsperiode, er variabelen «landbakgrunn» som i gyldighetsperioden f.o.m. 1994-01-01, kun har foreldrenes fødeland med i definisjonen, men som i gyldighetsperioden f.o.m. 2003-01-01 også har med besteforeldrenes fødeland.
+
 
 
 ::: {.callout-tip collapse="true"}
 ## Eksempler
 
-Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *Landbakgrunn*:
+Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *Sivilstand*:
 
-> For personer født i utlandet, er dette (med noen få unntak) eget fødeland. For personer født i Norge er det foreldrenes fødeland. I de tilfeller der foreldrene har ulikt fødeland, er det morens fødeland som blir valgt. Hvis ikke personen selv eller noen av foreldrene er utenlandsfødt, hentes landbakgrunn fra de første utenlandsfødte en treffer på i rekkefølgen mormor, morfar, farmor eller farfar.
+> Viser en persons stilling i henhold til ekteskapslovgivningen.
 
-Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *Skattefrie overføringer*:
+Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *Kapitalinntekter*:
 
-> Skattefrie overføringer omfatter barnetrygd, bostøtte, studiestipend, sosialhjelp, grunn- og hjelpestønad med flere.
+> Omfatter renteinntekter, aksjeutbytte, realisasjonsgevinster og andre kapitalinntekter i løpet av kalenderåret. Til fradrag kommer årets realisasjonstap
 
-Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *SStandard dekningsbidrag*:
+Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *Ordretilgangen, bygg og anlegg*:
 
-> Standard dekningsbidrag (SDB) er differansen mellom standardverdien av produksjonen og standardverdien av visse spesifiserte kostnader. SDB fastsettes på regionnivå per arealenhet (dekar, kvm) og per dyr for relevante plante- og husdyrproduksjoner. SDB for en produksjon er SDB per dekar/kvm/husdyr multiplisert med antall dekar/kvm/husdyr av vedkommende produksjon. Totalt SDB for en jordbruksbedrift er summen av dekningsbidragene for alle plante- og husdyrproduksjoner som drives av bedriften.
+> Verdien av nye ordrer bedriften har mottatt i løpet av kvartalet. Inkluderer også ordrer fullførte i løpet av samme kvartal. Verdien er kontraktsummen eksklusive merverdiavgifter, men inklusive eventuelle produksjons- og omsetningsavgifter.
 
 
 :::
@@ -91,10 +109,13 @@ Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *SStandard dekn
 ---
 
 ### Kodeverkets URI 
-🌐 *classification_uri*  
+🌐 *classification_reference*  
 ✅  
 
-Inneholder referanse til til kodeverk (klassifikasjon eller kodeliste) i KLASS som beskriver verdiene variabelen kan ha. F.eks. vil variabelen “Sivilstand” ha kodeverks-URI Standard for sivilstand.
+Angir referansen til kodeverk (klassifikasjon eller kodeliste) i [Klass](https://www.ssb.no/klass/) som beskriver verdiene variabelen kan ha. En skal ikke legge inn hele URI-en, kun id-en for kodeverket.
+
+Kodeverkets URI kan endres etter publisering.
+
 
 ::: {.callout-tip collapse="true"}
 ## Eksempler
@@ -110,56 +131,102 @@ Eksempel på Klass-referanse for variabeldefinisjonen med [Navn](#navn) *Landbak
 :::
 
 ### Enhetstyper 
-🌐 *unit_types*  
-**nb** | **nn** | **en**  
+🌐 *unit_types*    
 ✅ 
 
-Angir hvilke enhetstyper denne variabelen er dekkende for. 
+Angir hvilke(n) enhetstype (r) variabelen sier noe om. De fleste variabler vil kun være knyttet til en enhetstype, men noen, kan være knyttet til flere (f.eks. foretak og bedrift). Enhetstyper velges fra meny.
 
 Gyldige verdier er definert i [denne Klass-kodelisten](https://www.ssb.no/klass/klassifikasjoner/702). Verdiene er også [beskrevet her](https://www.ssb.no/metadata/definisjoner-av-statistiske-enheter).
 
+Enhetstyper kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel på Klass-referanse for enhetstype for variabeldefinisjonen med [Navn](#navn) *Sivilstand*, der enhetstypen er *Person*, som har kode *91* i KlASS:
+
+> 91
+
+Eksempel på Klass-referanse for enhetstype for variabeldefinisjonen med [Navn](#navn) *Produsentpris for tjenester*, der enhetstypen *Foretak* og *Bedrift* i Klass:
+
+> 25
+
+:::
+
 ### Statistikkområder 
-🌐 *subject_fields*  
-**nb** | **nn** | **en**  
+🌐 *subject_fields*    
 ✅
 
-Angir hvilket statistikkområde variabelen benyttes innenfor. 
+Angir hvilke(t) statistikkområde(r) variabelen tilhører. Statistikkområde(r) kan enten være spesifisert på det overordnede nivå 1, eller det mer detaljerte statistikkområdet på nivå 2. F.eks. kan en variabeldefinisjon ha statistikkområdet «Befolkning»  på nivå 1, eller «Barn, familier og husholdninger» på nivå 2.
 
 Gyldige verdier er definert i [Kodeliste for statistikkområder i Statistikkbanken](https://www.ssb.no/klass/klassifikasjoner/618) i Klass. 
 
+Statistikkområder kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel på Klass-referanse for statistikkområde for variabeldefinisjonen med [Navn](#navn) *Sivilstand*, der området er **Befolkning**, som har kode **be** i KlASS:
+
+> "be"
+
+Eksempel på Klass-referanse for statistikkområde for variabeldefinisjonen med [Navn](#navn) *Kapitalinntekter*, der området er **Inntekt og forbruk**, som har kode **if** i Klass:
+
+> "if"
+
+:::
+
+
 ### Inneholder særlige kategorier av personopplysninger 
-🌐 *contains_sensitive_personal_information*  
-**nb** | **nn** | **en**  
-✅
+🌐 *contains_special_categories_of_personal_data*  
+⚠️
 
-Angir om variabelen inneholder spesielt sensitive personopplysninger, slik det er definert i [Lov om behandling av personopplysninger (personopplysningsloven) - KAPITTEL II Prinsipper - Lovdata)](https://lovdata.no/dokument/NL/lov/2018-06-15-38/KAPITTEL_gdpr-2#gdpr/a9). Eksempler på slike opplysninger er: 
+Angir om variabelen inneholder spesielt sensitive personopplysninger. En oversikt over hvilke opplysninger dette er, [finnes hos Datatilsynet](https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/om-behandlingsgrunnlag/spesielt-om-sarlige-kategorier-av-personopplysninger/#:~:text=I%20tillegg%20sier%20personopplysningsloven%20%C2%A7%C2%A7%206%2C%207%20og,eller%20historisk%20forskning%20eller%20for%20statistiske%20form%C3%A5l.%20).
 
-- opplysninger om etnisk opprinnelse
-- opplysninger om politisk oppfatning
-- opplysninger om religion
-- opplysninger om filosofisk overbevisning
-- opplysninger om fagforeningsmedlemskap
-- genetiske opplysninger
-- biometriske opplysninger med det formål å entydig identifisere noen
-- helseopplysninger
-- opplysninger om seksuelle forhold
-- opplysninger om seksuell legning
+Gyldige verdier er `true` og `false`.
 
-Gyldige verdier er `True` og `False`.
+
+*Inneholder særlige kategorier av personopplysninger* kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel 1: Fagforeningsmedlemskap
+
+> true
+
+:::
+
 
 ### Måletype 
-🌐 *measurement_type*  
-**nb** | **nn** | **en**  
+🌐 *measurement_type*   
 
-Angir måletypen til en kvantitativ variabel, f.eks. valuta, areal og volum. 
+Angir hvilken måletype variabelen tilhører, f.eks. om den sier noe om energi, valuta eller masse. Brukes ev. kun for kvantitative variabler. Verdiene velges fra meny.
+
+Måletype kan endres etter publisering.
+ 
 
 Gyldige verdier er definert i [denne Klass-kodelisten](https://www.ssb.no/klass/klassifikasjoner/303/koder).
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel på Klass-referanse for måletype for variabeldefinisjonen med [Navn](#navn) *Total produksjon av elektrisk kraft*, der måletypen er **energi**, som har kode **04** i Klass:
+
+> "04"
+
+:::
 
 ### Gyldig f.o.m. 
 🌐 *valid_from*  
 ✅
 
-Angir hvilken datoen variabeldefinisjonen er gyldig fra. 
+Angir datoen variabelens definisjon er gyldig f.o.m. Hvis det skjer en større endring i en definisjon, skal det lages en ny gyldighetsperiode for variabelen, og dette markeres ved at den får en ny gyldig f.o.m. dato.  Datoen må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
+
+Alle variabler som migreres fra Vardok, og som ikke har en gyldig f.o.m. dato, vil få satt gyldig f.o.m. dato til **1900-01-01**. Denne kan endres så lenge variabelen er et utkast.
+
+Gyldig f.o.m. dato kan ikke endres etter publisering, bortsett fra i det tilfellet at det lages en ny gyldighetsperiode.
+
 
 ::: {.callout-tip collapse="true"}
 ## Eksempler
@@ -174,12 +241,17 @@ Eksempel 2:
 
 :::
 
-Datoformatet må følge **ISO 8601 Date**. 
 
 ### Gyldig t.o.m. 
 🌐 *valid_until*  
+⚠️  
 
-Angir hvilken datoen variabeldefinisjonen er gyldig til. 
+Angir datoen variabelens definisjon er gyldig t.o.m. Datoen må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).  
+
+Når en ny variabel opprettes, vil gyldig t.o.m. dato oftest være tom (variabelen er gyldig). Dersom en variabel går ut av bruk, dvs. at nåværende gyldighetsperiode ikke erstattes av en ny gyldighetsperiode, settes denne datoen manuelt. Dersom gyldighetsperioden erstattes av en ny gyldighetsperiode, vil datoen settes automatisk til datoen før gyldig f.o.m.-datoen til den nye gyldighetsperioden.
+
+Gyldig t.o.m. dato kan endres etter publisering dersom variabelen slutter å være gyldig (ingen nye gyldighetsperioder).
+ 
 
 ::: {.callout-tip collapse="true"}
 ## Eksempler
@@ -195,33 +267,233 @@ Eksempel 2:
 :::
 
 ### URI til ekstern referanse 
-🌐 *xternal_reference_uri*
+🌐 *external_reference_uri*
 
-Angir ekstern URI for definisjon/dokumentasjon som er relevant for for variabelen.
+Angir ekstern definisjon/dokumentasjon, f.eks. en nettside
+som er relevant for variabelen.
+
+Ekstern referanse kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For har eksempel variabelen *Fagforeningskontigent* følgende ekstern referanse:
+
+> https://www.skatteetaten.no/person/skatt/hjelp-til-riktig-skatt/arbeid-trygd-og-pensjon/fagforeningsfradrag/
+
+:::
 
 ### Merknad 
-🌐 *comment*
+🌐 *comment*  
+**nb** | **nn** | **en**
 
-Angir tilleggsopplysninger som ikke hører hjemme i selve definisjonen.
+Angir eventuelle tilleggsopplysninger som ikke hører hjemme i selve definisjonen. 
+
+Merknad kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Variabelen **Landbakgrunn** for eksempel følgende merknad: 
+
+> "Fra og med 1.1.2003 ble definisjon endret til også å trekke inn besteforeldrenes fødeland."
+
+Variabelen **Skattefrie overføringer** har for eksempel følgende merknad:
+
+> "Alle mottatte overføringer gjelder i løpet av kalenderåret. Engangsstønaden ble innlemmet f.o.m. inntektsåret 1994. Kontantstøtten ble innlemmet fra august 1998. Forsørgerfradraget opphørte f.o.m. inntektsåret 2001.Skattefrie overføringer omfatter også samleposten "andre overføringer", se eksterne kommentarer knyttet til denne variabelen."
+
+:::
+
 
 ### URI til relevante variabeldefinisjoner 
 🌐 *related_variable_definition_uris*
 
-Angir URI til en eller flere relevante variabeldefinisjoner for variabelen. F.eks. er variabelen “Inntekt etter skatt” en beregnet variabel der “Yrkesinntekter” og “Kapitalinntekter” inngår i beregningen. En kan da legge inn deres URI-er i dette feltet.
+Angir URIer til andre Vardef-variabeldefinisjoner som er relevante.
+
+Kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Variabelen **Inntekt etter skatt** kan for eksempel lenke annen relevant variabeldefinisjon, f.eks. **Renteinntekter.
+
+:::
+
 
 ### ID 
-🌐 *id*
+🌐 *id*  
+✅
 
-Unik maskingenerert SSB-identifikator for variabeldefinisjonen.
+Angir den unike SSB-identifikatoren for variabelen. ID-en maskingenereres i Vardef.
+
+ID kan ikke endres.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel på en generert ID:
+
+> "5AlkmJ6x"
+
+:::
+
 
 ### Kontakt
 🌐 *contact*  
 **nb** | **nn** | **en**   
 ✅
 
-Angir tittel og e-post for person eller gruppe som kan svare på spørsmål knyttet til variabeldefinisjonen. Tittel oppgis på bokmål, nynorsk og engelsk.   
+Angir navn og epost for person eller gruppe som kan svare på spørsmål knyttet til variabeldefinisjonen. Tittel oppgis på bokmål, nynorsk og engelsk.
+
+Kontakt kan endres etter publisering
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan kontaktfeltet se slik ut:
+
+```{.yaml filename="yaml"}
+contact:
+    title:
+        nb: |-
+            Bedrifts- og foretaksregisteret
+        nn: |-
+            Bedrifts- og foretaksregisteret
+        en: |-
+            The Central Register of Establishments and Enterprises
+    email: bof@ssb.no
+```
+
+:::
 
 ### Sist oppdatert
-🌐 *last_updated_at*
+🌐 *last_updated_at*  
+✅
 
-Maskingenerert dato for når variabeldefinisjon sist ble oppdatert.
+Angir dato for siste oppdatering av variabelen (gjelder alle typer endringer). Datoen maskingenereres.
+
+Sist oppdatert – dato kan ikke endres.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan **Sist oppdatert** ha følgende verdi:
+
+> "2025-06-10T12: 30: 13.765000"
+
+:::
+
+### Eier
+🌐 *owner*  
+✅
+
+Angir eier av variabelen dvs. ansvarlig Dapla-team (statistikk-team) og informasjon om tilgangsstyringsgrupper. Team-tilhørighet og gruppe settes automatisk til det samme som team- og gruppetilhørigheten til den som oppretter variabelen.
+
+Eier kan endres etter publisering.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan eierfeltet se slik ut:
+
+```{.yaml filename="yaml"}
+owner:
+    team: "dapla-felles"
+    groups:
+        - "dapla-felles-developers"
+```
+
+:::
+
+### Variabelens status
+🌐 *variable_status*  
+✅
+
+Angir livssyklus for variabelen. Denne har tre kategorier: 
+
+#### **Utkast**  
+🌐 *DRAFT*  
+Utkast/kladd, dvs. under konstruksjon - "arbeid pågår" .
+
+#### **Publisert internt**  
+🌐 *PUBLISHED_INTERNAL*  
+Godkjent og publisert internt.
+
+#### **Publisert eksternt**  
+🌐 *PUBLISHED_INTERNAL*  
+Godkjent og publisert eksternt.
+
+ 
+Statusen «Publisert internt» kan kun endres til «Publisert eksternt». Slik unngår en at interne brukere mister tilgang til variabler som har vært publisert internt.
+
+Statusen «Publisert eksternt» kan ikke endres. Slik unngår en at eksterne brukere mister tilgang til variabler som har vært publisert eksternt.
+
+Det er mulig å kun publisere en variabel internt på bokmål eller nynorsk, og uten engelsk, men for å publisere eksternt, må alle relevante felt være oversatt til bokmål, nynorsk og engelsk (dvs. navn, definisjon og ev. merknad).
+
+### Opprettet av
+🌐 *created_by*  
+✅
+
+Angir epostadressen til personen (initialer) som har opprettet variabelen. Verdien er maskingenerert.
+
+**Opprettet av** kan ikke endres.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan **Opprettet av** ha følgende verdi:
+
+> "ini@ssb.no"
+
+:::
+
+### Opprettet
+🌐 *created_at*  
+✅
+
+Angir datoen variabelen ble opprettet. Maskingenereres ved opprettelsen av ny variabel.
+
+**Opprettet** kan ikke endres.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan **Opprettet** ha følgende verdi:
+
+> "2025-06-10T12: 30: 13.765000"
+
+:::
+
+### Sist oppdatert av
+🌐 *last_updated_by*  
+✅
+
+Angir e-posten til personen (initialer) som sist utførte en endring i variabelen. Maskingenereres av systemet ved alle typer endringer.
+
+**Sist oppdatert av** kan ikke endres.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan **Sist oppdatert av** ha følgende verdi:
+
+> "ini@ssb.no"
+
+:::
+
+### Endrings-ID
+🌐 *patch_id*  
+✅  
+
+Angir ID for endringer på en publisert variabel. ID-en settes automatisk av systemet, og viser på et gitt tidspunkt hvor mange ganger variabelen er endret. Ved første lagring av et utkast settes endrings-ID lik 1. Ved endringer på en publisert variabel vil hver endring øke endrings-ID med 1.
+
+Endring- id kan kun endres av systemet.
+
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+For eksempel kan **Endrings-ID** ha følgende verdi:
+
+> 2
+
+:::
