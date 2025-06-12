@@ -218,10 +218,38 @@ Dersom datasettet inneholder informasjon om flere enhetstyper, vil disse enhetst
 🌐 *population_description*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Angir populasjonen som datasettet dekker(fritekst). En populasjon sier hvilken enhetstype(er) som finnes i datasettet, geografisk dekningsområde og tidsperiode, f.eks. alle (bosatte) personer i Norge per 31.12.2024 eller alle foretak i Oslo per 01.03.2025.
+Angir populasjonen som datasettet dekker(fritekst).
 
-Dersom noen av variablene i datasettet har en annen populasjon, kan 
-dette dokumenteres for de aktuelle variablene under Variabler-fanen.
+::: {.callout-tip collapse="true"}
+## Eksempler
+
+Eksempel 1:
+
+> Alle bosatte personer
+
+Eksempel 2:
+
+> Alle studenter ved universitet og høgskole
+
+Eksempel 3:
+
+> Alle aktive bedrifter innenfor bergverksdrift, olje- og gassutvinning, industri og kraftforsyning
+
+Eksempel 4:
+
+> Alle museer som er åpne for publikum, og som har minst et fast lønnet årsverk
+
+Eksempel 5:
+
+> Alle personer bosatt i Norge som har hatt ett eller flere sykehusopphold eller behandling
+
+Eksempel 6:
+
+> Alle verdipapirfond som har konsesjon fra Finanstilsynet
+
+:::
+
+Dersom noen av variablene i datasettet har en annen populasjon, er dette dokumentert under [Populasjon](#populasjon-1) for den aktuelle variabelen.
 
 ---
 
@@ -584,15 +612,32 @@ Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](h
 🌐 *data_type*  
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅ 
 
-Angir variabelens datatype. Følgende er verdier er tillat:
+Angir variabelens Datadoc-datatype. Utledes automatisk basert på [PyArrow-datatype](https://arrow.apache.org/docs/python/api/datatypes.html) når Parquet-filen blir lest inn av Datadoc. Den som dokumenterer kan manuelt endre den utledede Datadoc-dataypen. Følgende er verdier er tillat:
 
-- tekst
-- heltall
-- desimaltall
-- datotid
-- boolsk (sant/usant). 
+#### TEKST 
+🌐 *STRING*  
+Datadoc-datatype `STRING` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `string` | `large_string` | `bytes` |
 
-Dersom variabelen er knyttet til et kodeverk i Klass, benyttes verdien *tekst*.
+#### HELTALL 
+🌐 *INTEGER*  
+Datadoc-datatype `INTEGER` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `int8` | `int16` | `int32` | `int64` | `uint8` | `uint16` | `uint32` | `uint64` |
+
+#### DESIMALTALL
+🌐 *FLOAT*  
+Datadoc-datatype `FLOAT` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `float16` | `float32` | `float64`  |
+
+#### DATOTID
+🌐 *DATETIME*  
+Datadoc-datatype `DATETIME` utledes automatisk dersom variabelen har en av de følgende PyArrow-datatypene:  
+| `timestamp('s')` | `timestamp('ms')` | `timestamp('us')` | `timestamp('ns')` | `date32()` | `date64()` | `time32('s')` |
+
+#### BOOLSK
+🌐 *BOOLEAN*  
+Datadoc-datatype `BOOLEAN` utledes automatisk dersom variabelen har følgende PyArrow-datatype:  
+| `bool` |
 
 ---
 

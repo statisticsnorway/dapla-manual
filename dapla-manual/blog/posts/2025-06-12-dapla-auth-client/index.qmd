@@ -1,0 +1,118 @@
+---
+title: "Separering av autentisering i Dapla: Introduksjon av `dapla-auth-client`"
+author: "Johnny Niklasson"
+date: "06/12/2025"
+format: html
+categories: [Dapla, Python, Autentisering]
+---
+
+## Innledning
+
+I dette blogginnlegget presenterer vi endringen der autentiseringsklassen er flyttet ut fra `dapla-toolbelt` og inn i en egen Python-pakke kalt `dapla-auth-client`. Hensikten er å gjøre det mulig å installere og bruke autentisering isolert, uten å måtte laste inn hele verktøykassen i `dapla-toolbelt`.
+
+## Hvorfor separere autentisering?
+
+1. **Redusere avhengigheter**  
+   Mange brukere trenger kun autentiseringsbiten for å hente tokens til Google Cloud eller Keycloak. Tidligere måtte man installere og importere hele `dapla-toolbelt`, selv om man bare trengte én liten del. Ved å splitte ut en egen pakke blir installasjonen lettere og mer strømlinjeformet:
+
+   ```toml
+    [project]
+    dependencies = [
+        "dapla-auth-client >=1.0.0",
+    ]
+   ```
+
+2. **Modularitet og enklere vedlikehold**  
+   Ved å holde autentiseringsflyten adskilt fra resten av `dapla-toolbelt`, kan vi lansere feilfikser og nye funksjoner for OAuth2/Keycloak uten å påvirke de andre modulene.
+
+3. **Lettvektskode for sluttbruker**  
+   Å importere `dapla-toolbelt` dro med seg en rekke avhengigheter. Med `dapla-auth-client` får man kun det som trengs for autentisering, og slipper unødvendige pakker.
+
+4. **Skalerbarhet for fremtidige utvidelser**  
+   En dedikert autentiseringspakke gir oss frihet til å legge til flere Identity Providers eller nye token-flows senere uten å måtte endre i `dapla-toolbelt`.
+
+## Overgang fra gammelt til nytt bruk
+
+### Gammelt oppsett
+
+```python
+from google.cloud import storage
+from dapla import AuthClient
+
+storage_client = storage.Client(
+    credentials=AuthClient.fetch_google_credentials()
+)
+```
+
+Her krevde vi eksplisitt innlasting av credentials via `AuthClient.fetch_google_credentials()` fra `dapla-toolbelt`. Det medførte at hele `dapla-toolbelt` ble installert, med alle avhengigheter.
+
+### Nytt oppsett
+
+```python
+from google.cloud import storage
+
+storage_client = storage.Client()
+```
+
+Nå håndteres Google-autentisering automatisk via Application Default Credentials (ADC). Vi trenger ikke lenger å kalle `AuthClient.fetch_google_credentials()`, og vi slipper å importere hele `dapla-toolbelt`.
+
+## Installere og ta i bruk dapla-auth-client
+
+1. **Installer pakken**
+
+```bash
+poetry add dapla-auth-client
+```
+
+2. **Bytt import**
+
+Dersom du tidligere importerte slik:
+
+```python
+from dapla import AuthClient
+```
+
+bytter du til:
+
+```python
+from dapla_auth_client import AuthClient
+```
+
+3. **Fjern eksplisitte kall til Google‐credentials**
+
+Bytt ut:
+
+```python
+storage_client = storage.Client(
+    credentials=AuthClient.fetch_google_credentials()
+)
+```
+
+med:
+
+```python
+storage_client = storage.Client()
+```
+
+For funksjonen `fetch_personal_token()` for Keycloak i Dapla Lab, importerer du tilsvarende fra `dapla_auth_client`, men API-et er identisk:
+
+```python
+from dapla_auth_client import AuthClient
+
+token = AuthClient.fetch_personal_token()
+```
+
+De deprecated-metodene (`fetch_google_credentials()`, `fetch_google_token()`, osv.) vil fortsatt være tilgjengelige i `dapla-auth-client` en stund til, men gir advarsler ved bruk og fjernes i kommende versjoner. Vi anbefaler å migrere til ADC-mønsteret så snart som mulig.
+
+For dere som bruker `dapla-toolbelt` og ikke har behov for å bruke `AuthClient` direkte, er det eneste dere trenger å gjøre å oppgradere `dapla-toolbelt` til nyeste versjon. Vi tar oss av alt det tekniske i bakgrunnen, slik at overgangen blir sømløs for dere.
+
+## Oppsummering
+
+Ved å skille autentiseringsklassen ut i `dapla-auth-client`:
+
+- Får brukerne en lettere installasjon når de kun trenger autentisering.
+- Unngår man unødvendige avhengigheter fra `dapla-toolbelt`.
+- Gjør vi koden mer modulær og enkel å vedlikeholde.
+- Kan man bruke standard `storage.Client()` eller lignende funksjoner for Google Cloud, uten å tenke på credentials-henting.
+
+Lykke til med migreringen!

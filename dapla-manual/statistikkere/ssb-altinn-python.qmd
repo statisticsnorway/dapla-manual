@@ -1,0 +1,109 @@
+---
+title: "ssb-altinn-python"
+date-modified: "06/03/2025"
+lightbox: true
+---
+
+[ssb-altinn-python](https://pypi.org/project/ssb-altinn-python/) er en Python-pakke med funksjonalitet for å transformere XML-filer fra Altinn3 til et format som kan benyttes i **ISEE**. 
+
+## Installasjon
+**ssb-altinn-python** er en pakke for å transformere [kildedata](./datatilstander.qmd#kildedata). Siden kildedata skal prosesseres i [Kildomaten](./kildomaten.qmd) så er pakken er tilgjengeliggjort der. Alle pakker som er tilgjengelig i Kildomaten er ferdiginstallert. 
+
+Det er også mulig å installere i et [ssb-project](./ssb-project.qmd) på DaplaLab og bruke det direkte fra Jupyter. Det kan være nyttig for å teste ut at koden fungerer som forventet på testdata.  
+
+```{.bash filename="Terminal"}
+poetry add ssb-altinn-python
+```
+
+## Funksjonalitet
+
+### `isee_transform()`
+Funksjonen `isee_transform()` flater ut XML-data til et pandas-dataframe med formatet som er nødvendig for å kunne laste data inn i ISEE. 
+
+I den enkleste formen tar funksjonen kun en parameter - adressen til XML-filen som skal flates ut. 
+Det er også mulig å mappe Altinn-feltnavn mot ønsket variabelnavn som benyttes i ISEE. En *dictionary* med variabelnavnene i Altinn som *keys*, og ønskede ISEE-variabelnavn som *values*. Denne *dictionary*'en settes så som en parameter i funksjonskallet til `isee_transform()`.
+
+```{.python}
+from altinn import isee_transform
+
+file = "gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"
+
+mapping = {'kontAmbulForeDispJaNei':'ISEE_VAR1',
+           'kontAmbulForeDispAnt':'ISEE_VAR2',
+           'kontAmbulForeDriftAnt':'ISEE_VAR3',}
+
+isee_transform(file, mapping)
+```
+
+Noen har behov for å flate ut flere tema enn bare **SkjemaData**, dette er mulig ved å legge ved en liste med temaer man ønsker flatet ut i funksjonskallet (`tag_list`). Defaultverdi på denne parameteren er SkjemaData, så hvis man ikke har behov for andre temaer så trenger man ikke bruke denne parameteren. Eksemplet under flater ut ['SkjemaData', 'Kontakt'] fra en XML-fil  fra Altinn3:
+
+```{.python}
+from altinn import isee_transform
+
+file = "gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"
+
+mapping = {'kontAmbulForeDispJaNei':'ISEE_VAR1',
+           'kontAmbulForeDispAnt':'ISEE_VAR2',
+           'kontAmbulForeDriftAnt':'ISEE_VAR3',}
+
+tags = ['SkjemaData', 'Kontakt']
+
+isee_transform(file, mapping, tag_list=tags)
+```
+
+Det er mulig å flate ut *checkbox*-felter ved å legge feltene man ønsker å flate ut i en liste, og så bruke denne i funksjonskallet til `isee_transform (checkbox_vars)`. Det er også mulig å legge ved en boolsk variabel (`unique_code`) som spesifiserer om kodene i *checkbox*-feltene man ønsker utflatet er unike eller ikke (`True`, `False`). Settes denne til False blir det nye feltnavnet lik det opprinnelige feltnavnet + koden som flates ut. Settes den til True, så blir det nye feltnavnet kun koden som flates ut. False er defaultverdi på unique_code. Det blir dannet en ny rad for hver kode som står i checkboxfeltet man ønsker utflatet, og den opprinnelige raden slettes.
+
+```{.python}
+from altinn import isee_transform
+
+file = 'gs://ra0187-01-altinn-data-staging-c629-ssb-altinn/2024/4/11/7d5b52259b89_de4a24aa-4948-48d8-b2e4-a0f2160a0bd0/form_7d5b52259b89.xml'
+
+mapping = {
+    "storOkningOmsAarsak31":"ISEE_storOkningOmsAarsak31",
+    "storOkningOmsAarsak33":"ISEE_storOkningOmsAarsak33",
+    "omsForrigePerPrefill":"ISEE_omsForrigePerPrefill",
+    }
+
+checkboxList = ["storOkningOmsAarsak"]
+
+isee_transform(file=file, mapping=mapping, checkbox_vars=checkboxList, unique_code=False)
+```
+
+### `create_isee_filename()`
+Dersom data skal overføres til ISEE, må csv-filen med dataene ha en spesifikk notasjon. Dette er noe funksjonen `create_isee_filname()` håndterer.
+
+```{.python}
+from altinn import create_isee_filename
+
+file = "gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"
+
+create_isee_filename(file)
+```
+
+### `xml_transform()`
+Funksjonen flater ut hele XML-filen og legger innholdet i en Pandas DataFrame. Funksjonen kan være nyttig for de som skal jobbe med Altinn3-data på Dapla.
+
+```{.python}
+from altinn import xml_transform
+
+file = "gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"
+
+xml_transform(file)
+```
+
+Dataframet som returneres fra funksjonen inneholder følgende kolonner:
+
+**FELTNAVN**  
+Inneholder også prefikset til området verdien er hentet fra, som Tidsbruk, Brukeropplevelse, Kontakt. Disse er ikke inkludert i isee_transform
+
+**FELTVERDI**  
+Verdien tilhørende aktuelt FELTNAVN
+
+**LEVEL**  
+En liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kolonnen kan være nyttig hvis skjemaet inneholder komplekse data, som Tabell-i-tabell og Tabell-i-tabell-i-tabell. Da kan man sammen med `isee_transform()`-funksjonen koble disse sammen og lage egentilpassede løpenumre på felter som skal inn i ISEE. 
+
+Siden det finnes mange ulike måter å bygge et skjema på, og ønske om å holde funskjonene så generiske som mulig uten for mange parametre, må man i noen tilfeller tilpasse lastefilen til ISEE med ekstra steg etter `isee_transfom()`. `xml_transform()` kan være til hjelp for å se kompleksiteten i et skjema, og så benytte opplysningene i FELTNAVN/LEVEL-kolonnene for å lage spesialtipassede løpenr m.m.
+
+
+## Lasting til ISEE
+Det er skrevet [en utfyllende blogg-post i Dapla-manualen](https://manual.dapla.ssb.no/blog/posts/2025-04-07-altinn3-til-isee/) som beskriver prosessen med lasting av Altinn 3 skjemaer til ISEE.
