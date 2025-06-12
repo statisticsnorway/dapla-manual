@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Apache Spark – Dapla-manualen</title>
+<title>Just-in-Time Access – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,66 +20,29 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../statistikkere/kartdata.html" rel="next">
-<link href="../statistikkere/jit.html" rel="prev">
-<link href="../images/dapla-favicon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-aa65cd192e579b25f59b24f35894e2e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
-<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../statistikkere/appendix/spark.html" rel="next">
+<link href="../../statistikkere/appendix/arkivering.html" rel="prev">
+<link href="../../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-aa65cd192e579b25f59b24f35894e2e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,19 +72,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<meta property="og:title" content="Apache Spark – Dapla-manualen">
+<meta property="og:title" content="Just-in-Time Access – Dapla-manualen">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/spark.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/appendix/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:alt" content="Apache Spark logo">
-<meta property="og:image:height" content="532">
-<meta property="og:image:width" content="1024">
-<meta name="twitter:title" content="Apache Spark – Dapla-manualen">
+<meta name="twitter:title" content="Just-in-Time Access – Dapla-manualen">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/spark.png">
-<meta name="twitter:image:alt" content="Apache Spark logo">
-<meta name="twitter:image-height" content="532">
-<meta name="twitter:image-width" content="1024">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/appendix/images/dapla-long.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -132,10 +89,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Dapla-manualen</span>
     </a>
   </div>
@@ -146,27 +103,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../statistikkere/index.html" aria-current="page"> 
+    <a class="nav-link active" href="../../statistikkere/index.html" aria-current="page"> 
 <span class="menu-text">Manual</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../utviklere/lenker.html"> 
+    <a class="nav-link" href="../../utviklere/lenker.html"> 
 <span class="menu-text">Utviklere</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../news/index.html"> 
+    <a class="nav-link" href="../../news/index.html"> 
 <span class="menu-text">Nyheter</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog/index.html"> 
+    <a class="nav-link" href="../../blog/index.html"> 
 <span class="menu-text">Blogg</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../notebooks/index.html"> 
+    <a class="nav-link" href="../../notebooks/index.html"> 
 <span class="menu-text">Eksempler</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../om-dapla.html"> 
+    <a class="nav-link" href="../../om-dapla.html"> 
 <span class="menu-text">Om Dapla</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -190,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Kundeservice</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../faq.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="dropdown-item" href="../../faq.html"><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="dropdown-text">FAQ</span></a>
   </li>  
@@ -263,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/dashboard.html">Appendix</a></li><li class="breadcrumb-item"><a href="../statistikkere/spark.html">Apache Spark</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../statistikkere/appendix/dashboard.html">Appendix</a></li><li class="breadcrumb-item"><a href="../../statistikkere/appendix/jit.html">Just-in-Time Access</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -277,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/index.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kom i gang</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -286,13 +243,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hurtigstart</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/dapla-overgang.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/dapla-overgang.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hvordan flytte statistikkproduksjon til Dapla?</span></a>
   </div>
 </li>
@@ -300,7 +257,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dapla-team</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -309,19 +266,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hva er Dapla-team?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/tilgangsstyring.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/tilgangsstyring.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tilgangsstyring</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/administrasjon-av-team.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/administrasjon-av-team.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Administrasjon av team</span></a>
   </div>
 </li>
@@ -329,7 +286,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -338,19 +295,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jobbe med data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/hva-er-botter.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/hva-er-botter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hva er bøtter?</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/deling-av-data.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/deling-av-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Deling av data</span></a>
   </div>
 </li>
@@ -358,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kode</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -367,25 +324,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Git og GitHub</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/ssb-project.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/ssb-project.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">SSB-project</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/poetry-ssb-project.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/poetry-ssb-project.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Pakkehåndtering i Python</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/renv.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/renv.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Pakkehåndtering i R</span></a>
   </div>
 </li>
@@ -393,7 +350,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Standarder</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -402,25 +359,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Standarder</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/datatilstander.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/datatilstander.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datatilstander</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/navnestandard.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/navnestandard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Navnestandard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/kvakk.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/kvakk.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kvalitet i kode og koding (KVAKK)</span></a>
   </div>
 </li>
@@ -428,7 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/dapla-lab.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/dapla-lab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dapla Lab</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -437,49 +394,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/datadoc-editor.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/datadoc-editor.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datadoc-editor</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jdemetra.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/jdemetra.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jdemetra</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jupyter.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/jupyter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jupyter</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jupyter-playground.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/jupyter-playground.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jupyter-playground</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jupyter-pyspark.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/jupyter-pyspark.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jupyter-pyspark</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/rstudio.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/rstudio.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Rstudio</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/vardef-forvaltning.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/vardef-forvaltning.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Vardef-forvaltning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/vscode-python.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/vscode-python.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Vscode-python</span></a>
   </div>
 </li>
@@ -487,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/metadata.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/metadata.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Metadata</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -496,7 +453,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/datadoc.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/datadoc.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datadoc</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -505,7 +462,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/datadoc-model.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/datadoc-model.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datamodell</span></a>
   </div>
 </li>
@@ -513,13 +470,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/klass.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/klass.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Klass</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/vardef.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/vardef.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Vardef</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -528,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/vardef-model.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/vardef-model.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datamodell</span></a>
   </div>
 </li>
@@ -538,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datatjenester</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -547,31 +504,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/altinn-dapla-suv-tools.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/altinn-dapla-suv-tools.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">dapla-suv-tools</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kildomaten</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/dapla-ctrl.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/dapla-ctrl.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dapla Ctrl</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/dapla-pseudo.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/dapla-pseudo.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">dapla-toolbelt-pseudo</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/dapla-toolbelt-metadata.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/dapla-toolbelt-metadata.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">dapla-toolbelt-metadata</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -580,19 +537,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/datadoc-toolbelt.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/datadoc-toolbelt.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datadoc</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/vardef-toolbelt.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/vardef-toolbelt.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Vardef</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/standards-toolbelt.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/standards-toolbelt.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Standards</span></a>
   </div>
 </li>
@@ -600,49 +557,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Maskinporten Guardian</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/dapla-statbank-client.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/dapla-statbank-client.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">dapla-statbank-client</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/data-collector.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/data-collector.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data-Collector</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/features.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/features.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Features</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/transfer-service.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/transfer-service.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Transfer Service</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/metodebibliotek.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/metodebibliotek.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Metodebiblioteket</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Google Cloud Console (GCC)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/ssb-altinn-python.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/ssb-altinn-python.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">ssb-altinn-python</span></a>
   </div>
 </li>
@@ -650,7 +607,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Altinn 3</span></a>
           <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -659,25 +616,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Oversikt</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/altinn-bygge-prefill.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/altinn-bygge-prefill.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Prefill</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/altinn-skjema-administrasjon.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/altinn-skjema-administrasjon.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Administrasjon av skjema</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/altinn-sfu.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/altinn-sfu.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">SFU</span></a>
   </div>
 </li>
@@ -685,7 +642,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../statistikkere/dashboard.html" class="sidebar-item-text sidebar-link">
+            <a href="../../statistikkere/appendix/dashboard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Appendix</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -694,50 +651,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/contribution.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/appendix/contribution.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Bidra til Dapla-manualen</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/arkivering.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/appendix/arkivering.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Arkivering</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/dashboard.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/appendix/dashboard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dash og dashboard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../statistikkere/innlogging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Innlogging</span></a>
-  </div>
-</li>
+ <span class="menu-text">statistikkere/appendix/innlogging.qmd</span>
+  </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jit.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/appendix/jit.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Just-in-Time Access</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/spark.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../statistikkere/appendix/spark.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Apache Spark</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/kartdata.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/appendix/kartdata.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kartdata</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/filinnsamling-moveit.html" class="sidebar-item-text sidebar-link">
+  <a href="../../statistikkere/appendix/filinnsamling-moveit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Filinnsamling via MoveIT</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../statistikkere/appendix/langtkjorende-jobber.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kjøre tidkrevende jobber på Dapla</span></a>
   </div>
 </li>
       </ul>
@@ -752,22 +712,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#spark-på-dapla" id="toc-spark-på-dapla" class="nav-link active" data-scroll-target="#spark-på-dapla">Spark på Dapla</a></li>
-  <li><a href="#spark-i-og-python" id="toc-spark-i-og-python" class="nav-link" data-scroll-target="#spark-i-og-python">Spark i <i class="fa-brands fa-r-project" aria-label="r-project"></i> og Python<i class="fa-brands fa-python" aria-label="python"></i></a>
-  <ul class="collapse">
-  <li><a href="#pyspark" id="toc-pyspark" class="nav-link" data-scroll-target="#pyspark">PySpark</a></li>
-  <li><a href="#sparkr" id="toc-sparkr" class="nav-link" data-scroll-target="#sparkr">SparkR</a></li>
-  </ul></li>
-  <li><a href="#lakehouse-arkitektur" id="toc-lakehouse-arkitektur" class="nav-link" data-scroll-target="#lakehouse-arkitektur">Lakehouse-arkitektur</a></li>
+  <li><a href="#hvordan-bruke-jit" id="toc-hvordan-bruke-jit" class="nav-link active" data-scroll-target="#hvordan-bruke-jit">Hvordan bruke JIT</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/spark.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/spark.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div><div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="../notebooks/spark/deltalake-intro-preview.html"><i class="bi bi-journal-code"></i>Introduksjon til Delta Lake</a></li><li><a href="../notebooks/spark/pyspark-intro-preview.html"><i class="bi bi-journal-code"></i>Introduksjon til PySpark</a></li><li><a href="../notebooks/spark/sparkr-intro-preview.html"><i class="bi bi-journal-code"></i>Introduksjon til SparkR</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/appendix/jit.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/appendix/jit.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/dashboard.html">Appendix</a></li><li class="breadcrumb-item"><a href="../statistikkere/spark.html">Apache Spark</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../statistikkere/appendix/dashboard.html">Appendix</a></li><li class="breadcrumb-item"><a href="../../statistikkere/appendix/jit.html">Just-in-Time Access</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Apache Spark</h1>
+<h1 class="title">Just-in-Time Access</h1>
 </div>
 
 
@@ -784,214 +738,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><img src="../images/spark.png" class="img-fluid" style="max-width: 30%; float: right;" alt="Apache Spark logo"></p>
-<p>Koding i <strong>R</strong> og <strong>Python</strong> har historisk sett foregått på en enkelt maskin og vært begrenset av minnet (RAM) og prosessorkraften på maskinen. For bearbeiding av små og mellomstore datasett er det sjelden et problem på kjøre på en enkelt maskin. Populære pakker som <code>dplyr</code> for <strong>R</strong>, og <code>pandas</code> for <strong>Python</strong>, blir ofte brukt i denne typen databehandling. I senere år har det også kommet pakker som er optimalisert for å kjøre kode parallelt på flere kjerner på en enkelt maskin, skrevet i minne-effektive språk som <strong>Rust</strong> og <strong>C++</strong>.</p>
-<p>Men selv om man kommer langt med å kjøre kode på en enkelt maskin, vil enkelte oppgaver kreve mer minne og prosessorkraft enn dette. For større datasett, eller store beregninger, kan det være nyttig å bruke et rammeverk som kan kjøre kode parallelt på flere maskiner. Et slikt rammeverk er <a href="https://spark.apache.org/">Apache Spark</a>.</p>
-<p>Apache Spark er et rammeverk for å kjøre kode parallelt på flere maskiner. Det er bygget for å håndtere store datasett og store beregninger. Det er derfor et nyttig verktøy for å løse problemer som er for store for å kjøre på en enkelt maskin. Men det finnes også andre bruksområder som er nyttige for Apache Spark. Her er noen eksempler:</p>
-<ul>
-<li><p><strong>Store datasett</strong>: Hvis du har et datasett som er for stort til å lese inn i minnet på en enkelt maskin, kan du bruke Apache Spark til å lese inn datasettet og kjøre kode på det.</p></li>
-<li><p><strong>Store beregninger</strong>: Hvis du har en beregning som er for stor til å kjøre på en enkelt maskin, kan du bruke Apache Spark til å kjøre beregningen.</p></li>
-<li><p><strong>Distribuert databehandling</strong>: Hvis du har en beregning som kan deles opp i flere deler, kan du bruke Apache Spark til å kjøre beregningen parallelt på flere maskiner på en effektiv måte.</p></li>
-<li><p><strong>Redusert kjøretid</strong>: Hvis du har kjøringer som tar lengre tid en du ønsker, så kan Apache Spark brukes til å redusere kjøretiden ved å kjøre kode parallelt på flere maskiner.</p></li>
-<li><p><strong>Datavarehus</strong>: Hvis du trenger database-funksjonalitet over Parquet-filer, så så kan Apache Spark sammen med for eksempel <a href="https://delta.io/">Delta Lake</a> brukes som et datavarehus.</p></li>
-<li><p><strong>Strømmende data</strong>: Hvis du trenger å prosessere strømmende data, så kan Apache Spark brukes til å prosessere data i sanntid.</p></li>
-</ul>
-<p>Dette er noen av bruksområdene der Spark kan løse problemer som er for store for å kjøre på en enkelt maskin med for eksempel Pandas eller dplyr.</p>
-<section id="spark-på-dapla" class="level2">
-<h2 class="anchored" data-anchor-id="spark-på-dapla">Spark på Dapla</h2>
-<p>Dapla kjører på et Kubernetes-kluster og er derfor er et svært egnet sted for å kjøre kode parallelt på flere maskiner. Jupyter på Dapla har også en flere klargjorte kernels for å kjøre kode i Apache Spark. Denne koden vil kjøre på et eget kluster av maskiner som er dedikert til Apache Spark, slik som vist i <a href="#fig-kernels" class="quarto-xref">Figur&nbsp;1</a>.</p>
-<div id="fig-kernels" class="quarto-layout-panel">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-kernels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-kernels" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-py-k8" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-py-k8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/spark-python-k8.png" class="img-fluid figure-img" data-ref-parent="fig-kernels">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-py-k8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a) PySpark på kubernetes
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-kernels" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-py-local" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-py-local-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/spark-python-local.png" class="img-fluid figure-img" data-ref-parent="fig-kernels">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-py-local-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b) PySpark på 1 maskin
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-kernels" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-r-k8" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-r-k8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/spark-r-k8.png" class="img-fluid figure-img" data-ref-parent="fig-kernels">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-r-k8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c) SparkR på kubernetes
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-kernels" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-r-local" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-r-local-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/spark-r-local.png" class="img-fluid figure-img" data-ref-parent="fig-kernels">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-r-local-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d) SparkR på 1 maskin
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kernels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1: Ferdigkonfigurerte kernels for Spark på Dapla.
-</figcaption>
-</figure>
-</div>
-<p><a href="#fig-py-k8" class="quarto-xref">Figur&nbsp;1 (a)</a> og <a href="#fig-r-k8" class="quarto-xref">Figur&nbsp;1 (c)</a> kan velges hvis du ønsker å bruke Spark for å kjøre store jobber på flere maskiner, for henholdsvis Python- og R-grensesnittene for Spark.</p>
-<p><a href="#fig-py-local" class="quarto-xref">Figur&nbsp;1 (b)</a> og <a href="#fig-r-local" class="quarto-xref">Figur&nbsp;1 (d)</a> bør du velge hvis du ønsker å bruke Spark av andre grunner enn å kjøre store jobber på flere maskiner. For eksempel hvis du ønsker å bruke en av de mange pakker som er bygget på Spark, eller hvis du ønsker å bruke Spark til å lese og skrive data fra Dapla.</p>
-<p>Hvis du ønsker å sette opp et eget virtuelt miljø for å kjøre Spark, så kan du bruke ssb-project. Se <a href="../jobbe-med-kode.html#ssb-project">ssb-project</a> for mer informasjon.</p>
-</section>
-<section id="spark-i-og-python" class="level2">
-<h2 class="anchored" data-anchor-id="spark-i-og-python">Spark i <i class="fa-brands fa-r-project" aria-label="r-project"></i> og Python<i class="fa-brands fa-python" aria-label="python"></i></h2>
-<p>Spark er implementert i programmeringsspråket <strong>Scala</strong>. Men det tilbys også mange grensesnitt for å bruke Spark fra andre språk. De mest populære grensesnittene er <a href="https://spark.apache.org/docs/latest/api/python/index.html">PySpark</a> for Python og <a href="https://spark.apache.org/docs/latest/sparkr.html">SparkR</a> for R. Disse grensesnittene er bygget på Spark, og gir tilgang til Spark-funksjonalitet fra Python og R.</p>
-<section id="pyspark" class="level3">
-<h3 class="anchored" data-anchor-id="pyspark">PySpark</h3>
-<p>PySpark er et Python-grensesnitt for Apache Spark. Det er en Python-pakke som gir tilgang til Spark-funksjonalitet fra Python. Det er enkelt å bruke, og har mange av de samme funksjonene som Pandas.</p>
-<p>Under ser du datasettet som benyttes for i vedlagt notebook <strong>pyspark-intro.ipynb</strong>. Den viser hvordan man kan gjøre vanlige databehandling med PySpark. I eksempelet brukes kernel som vist i <a href="#fig-py-local" class="quarto-xref">Figur&nbsp;1 (b)</a>.</p>
-<div class="quarto-embed-nb-cell">
-<div id="gen-df" class="cell" data-tags="[]" data-execution_count="5">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Legger til row index til DataFrame før join med dates_df</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data_df <span class="op">=</span> data_df.withColumn(<span class="st">"row_index"</span>, expr(<span class="st">"monotonically_increasing_id()"</span>))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Joiner de to datasettene</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> (</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    dates_df.withColumn(<span class="st">"row_index"</span>, expr(<span class="st">"monotonically_increasing_id()"</span>))</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    .join(data_df, <span class="st">"row_index"</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    .drop(<span class="st">"row_index"</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Legger til år, kvartal og mnd</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.withColumn(<span class="st">"Year"</span>, date_format(df.Date, <span class="st">"yyyy"</span>))</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.withColumn(<span class="st">"Quarter"</span>, expr(<span class="st">"quarter(Date)"</span>))</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.withColumn(<span class="st">"Month"</span>, date_format(df.Date, <span class="st">"MM"</span>))</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>df.select(<span class="st">"Date"</span>, <span class="st">"Year"</span>, <span class="st">"Quarter"</span>, <span class="st">"Month"</span>, <span class="st">"serie00"</span>, <span class="st">"serie01"</span>).show(<span class="dv">5</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>+----------+----+-------+-----+------------------+------------------+
-|      Date|Year|Quarter|Month|           serie00|           serie01|
-+----------+----+-------+-----+------------------+------------------+
-|2000-01-01|2000|      1|   01| 9.495232388801012|   19.016168503192|
-|2000-02-01|2000|      1|   02| 10.70952411634649|21.404467063442723|
-|2000-03-01|2000|      1|   03|11.118293927071951| 21.25035527677261|
-|2000-04-01|2000|      2|   04| 9.346911680164684|19.982136698759238|
-|2000-05-01|2000|      2|   05| 9.663303382177363|19.925236690504494|
-+----------+----+-------+-----+------------------+------------------+
-only showing top 5 rows
-</code></pre>
-</div>
-</div>
-<a class="quarto-notebook-link" id="nblink-1" href="../notebooks/spark/pyspark-intro-preview.html#cell-gen-df">Source: Introduksjon til PySpark</a></div>
-<p>Det finnes også et <a href="https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html">Pandas API/grensesnitt mot Spark</a>. Målet med en er å gjøre overgangen fra Pandas til Spark lettere for nybegynneren. Men hvis man skal gjøre litt mer avansert databehandling anbefales det at man bruker PySpark direkte og ikke Pandas API-et.</p>
-</section>
-<section id="sparkr" class="level3">
-<h3 class="anchored" data-anchor-id="sparkr">SparkR</h3>
-<p>SparkR er et R-grensesnitt for Apache Spark. Det er en R-pakke som gir tilgang til Spark-funksjonalitet fra R. Det er enkelt å bruke, og har mange av de samme funksjonene som dplyr. Se eksempel i notebook under:</p>
-<div class="quarto-embed-nb-cell">
-<div id="print-cell" class="cell" data-tags="[]" data-quarto-private-1="{&quot;key&quot;:&quot;vscode&quot;,&quot;value&quot;:{&quot;languageId&quot;:&quot;r&quot;}}" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>selectedColumns <span class="ot">&lt;-</span> <span class="fu">select</span>(file, <span class="st">"Date"</span>, <span class="st">"Year"</span>, <span class="st">"Quarter"</span>, <span class="st">"Month"</span>, <span class="st">"serie00"</span>, <span class="st">"serie01"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showDF</span>(selectedColumns, <span class="at">numRows =</span> <span class="dv">5</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>+----------+----+-------+-----+------------------+------------------+
-|      Date|Year|Quarter|Month|           serie00|           serie01|
-+----------+----+-------+-----+------------------+------------------+
-|2000-01-01|2000|      1|   01| 9.495232388801012|   19.016168503192|
-|2000-02-01|2000|      1|   02| 10.70952411634649|21.404467063442723|
-|2000-03-01|2000|      1|   03|11.118293927071951| 21.25035527677261|
-|2000-04-01|2000|      2|   04| 9.346911680164684|19.982136698759238|
-|2000-05-01|2000|      2|   05| 9.663303382177363|19.925236690504494|
-+----------+----+-------+-----+------------------+------------------+
-only showing top 5 rows</code></pre>
-</div>
-</div>
-<a class="quarto-notebook-link" id="nblink-2" href="../notebooks/spark/sparkr-intro-preview.html#cell-print-cell">Source: Introduksjon til SparkR</a></div>
-</section>
-</section>
-<section id="lakehouse-arkitektur" class="level2">
-<h2 class="anchored" data-anchor-id="lakehouse-arkitektur">Lakehouse-arkitektur</h2>
-<div class="callout callout-style-default callout-warning callout-titled">
+<p><em>Just-in-Time Access</em> (JIT) er en applikasjon der <a href="../../statistikkere/hva-er-dapla-team.html#data-admins">data-admins</a> kan gi seg selv midlertidig tilgang til <a href="../../statistikkere/datatilstander.html#kildedata">kildedata</a>. På Dapla benyttes for dette for å unngå at data-admins har permanent tilgang til sensitive data, siden all kildedata er definert som sensitiv informasjon. <em>data-admins</em> må bruke JIT-applikasjonen for å gi seg selv korte, begrunnede tilganger til kildedata ved behov. Den som er ansvarlig for teamet kan monitere i hvilken grad teamets data-admins benytter seg av denne muligheten.</p>
+<section id="hvordan-bruke-jit" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-bruke-jit">Hvordan bruke JIT</h2>
+<p>For å bruke JIT må du være <a href="../../statistikkere/hva-er-dapla-team.html#data-admins">data-admin</a> for teamet som eier kildedataene du ønsker tilgang til. Du aktiverer tilganger i JIT-appen ved gjøre følgende:</p>
+<ol type="1">
+<li>Gå inn på nettsiden <a href="https://jitaccess.dapla.ssb.no/" class="uri">https://jitaccess.dapla.ssb.no/</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Oppgi <a href="../../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Prosjekt-id</a> for prosjektet der kildedataene du ønsker tilgang til er lagret.</li>
+<li>Huk av hvilke tilgangsroller du ønsker aktivert. Se beskrivelse av roller i <a href="#tbl-jit-roles" class="quarto-xref">Tabell&nbsp;1</a>.</li>
+<li>Velg hvor lenge tilgangen du ønsker at tilgangen skal vare. Den kan maksimalt vare i 8 timer.</li>
+<li>Oppgi en begrunnelse for at aktiverer tilgangen.</li>
+<li>Til slutt trykker du på <strong>Request access</strong>.</li>
+</ol>
+<p>Tilgangen vil deretter være aktiv ila. noen minutter.</p>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning
+Hvordan bør begrunnelsen skrives?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I denne delen viser vi hvordan funksjonalitet som kan bli relevant for SSB å benytte seg av i fremtiden. Men det er fortsatt under testing og ta det i betraktning før man eventuelt implementerer dette i produksjon.</p>
+<p>Prøv å gjør begrunnelsen forståelig for andre enn deg selv på det tidspunktet. Den som er ansvarlig for teamet skal kunne forstå begrunnelsen når de ser på loggene. I tillegg vil sentralt i SSB monitere i hvilken grad Dapla-teamene benytter seg av tilgangene.</p>
 </div>
 </div>
-<p>En av utvidelsene som er laget rundt Apache Spark er den såkalte Lakehouse-arkitekturen. Kort fortalt kan den dekke behovene som et klassisk datavarehus har tatt seg av tidligere. I kontekst av SSB sine teknologier kan det også benyttes som et databaselag over Parquet-filer i bøtter. Det finnes flere open source løsninger for dette, men mest aktuelle er:</p>
-<ul>
-<li><a href="https://delta.io/">Delta Lake</a></li>
-<li><a href="https://hudi.apache.org/">Apache Hudi</a></li>
-<li><a href="https://iceberg.apache.org/">Apache Iceberg</a></li>
-</ul>
-<p>I det følgende omtaler vi hovedsakelig egenskapene til Delta Lake, men alle rammeverkene har mange av de samme egenskapene. Delta Lake kan også benyttes på Dapla nå.</p>
-<p>Sentrale egenskaper ved Delta Lake er:</p>
-<ul>
-<li><strong>ACID-transactions</strong> som sikrer data-integritet og stabilitet, også når det skjer feil.</li>
-<li><strong>Metadata</strong> som bli håndtert akkurat som all annen data og er veldig skalebar. Den støtter også egendefinert metadata.</li>
-<li><strong>Schema Enforcement and Evolution</strong> sikrer at skjemaet til dataene blir håndhevet, og den tillater også den kan endres over tid.</li>
-<li><strong>Time travel</strong> sikrer at alle versjoner av dataene er blitt lagret, og at du kan gå tilbake til tidligere versjoner av en fil.</li>
-<li><strong>Audit history</strong> sikrer at du kan få full oversikt over hvilke operasjoner som utført på dataene.</li>
-<li><strong>Inserts, updates and deletes</strong> betyr at du lettere kan manipulere data enn hva som er tilfellet med vanlige Parquet-filer.</li>
-<li><strong>Indexing</strong> er støttes for forbedre spørringer mot store datamengder.</li>
-</ul>
-<p>I vedlagt notebook <strong>deltalake-intro.ipynb</strong> finner du blant annet eksempler på hvordan du legger til følgende metadata i spesifikk versjon av en fil:</p>
-<div class="quarto-embed-nb-cell">
-<div id="cell-show-meta" class="cell" data-tags="[]" data-execution_count="20">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagrer egendefinert metadata i en json-fil</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> {</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"comment"</span>: <span class="st">"Kontaktet oppgavegiver og kranglet!"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"manueltEditert"</span>: <span class="st">"True"</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"maskineltEditert"</span>: <span class="st">"False"</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>metadata</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div id="show-meta" class="cell-output cell-output-display" data-execution_count="45">
-<pre><code>{'comment': 'Kontaktet oppgavegiver og kranglet!',
- 'manueltEditert': 'True',
- 'maskineltEditert': 'False'}</code></pre>
+<div id="tbl-jit-roles" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-jit-roles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: De mest relevante tilgangene som kan aktiveres i JIT-applikasjonen
+</figcaption>
+<div aria-describedby="tbl-jit-roles-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 72%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Roller</th>
+<th>Hva?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ssb.buckets.list</td>
+<td>Liste ut bøttene i kildeprosjektet.</td>
+</tr>
+<tr class="even">
+<td>storagetransfer.admin</td>
+<td>Sette opp jobb med Transfer Service i kildeprosjektet.</td>
+</tr>
+<tr class="odd">
+<td>ssb.bucket.write</td>
+<td>Lese og skrive til kildebøtta.</td>
+</tr>
+</tbody>
+</table>
 </div>
+</figure>
 </div>
-<a class="quarto-notebook-link" id="nblink-3" href="../notebooks/spark/deltalake-intro-preview.html#cell-show-meta">Source: Introduksjon til Delta Lake</a></div>
+<p>Skal du sette opp en Transfer Service overføring med kildedata så må du aktivere <strong>ssb.bucket.write</strong> og <strong>storagetransfer.admin</strong>. SKal du skrive og lese fra et miljø som Jupyter, så må du aktivere rollene <strong>ssb.bucket.write</strong> og <strong>ssb.buckets.list</strong>.</p>
 
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>Hvis du jobber fra hjemmekontor så må du være på VPN for å få tilgang til JIT-appen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1393,13 +1212,13 @@ Warning
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../statistikkere/jit.html" class="pagination-link" aria-label="Just-in-Time Access">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Just-in-Time Access</span>
+      <a href="../../statistikkere/appendix/arkivering.html" class="pagination-link" aria-label="Arkivering">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Arkivering</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../statistikkere/kartdata.html" class="pagination-link" aria-label="Kartdata">
-        <span class="nav-page-text">Kartdata</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../statistikkere/appendix/spark.html" class="pagination-link" aria-label="Apache Spark">
+        <span class="nav-page-text">Apache Spark</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1411,7 +1230,7 @@ Warning
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/spark.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/spark.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/appendix/jit.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/appendix/jit.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
