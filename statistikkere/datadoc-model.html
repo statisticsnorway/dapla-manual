@@ -755,8 +755,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#ugyldige-verdier" id="toc-ugyldige-verdier" class="nav-link" data-scroll-target="#ugyldige-verdier">Ugyldige verdier</a></li>
   <li><a href="#kortnavn" id="toc-kortnavn" class="nav-link" data-scroll-target="#kortnavn">Kortnavn</a></li>
   <li><a href="#id" id="toc-id" class="nav-link" data-scroll-target="#id">Id</a></li>
+  <li><a href="#pseudonymiseringstidspunkt" id="toc-pseudonymiseringstidspunkt" class="nav-link" data-scroll-target="#pseudonymiseringstidspunkt">Pseudonymiseringstidspunkt</a></li>
+  <li><a href="#stabil-identifikator-type" id="toc-stabil-identifikator-type" class="nav-link" data-scroll-target="#stabil-identifikator-type">Stabil identifikator type</a></li>
+  <li><a href="#stabil-identifikator-versjon" id="toc-stabil-identifikator-versjon" class="nav-link" data-scroll-target="#stabil-identifikator-versjon">Stabil identifikator versjon</a></li>
+  <li><a href="#krypteringsalgoritme" id="toc-krypteringsalgoritme" class="nav-link" data-scroll-target="#krypteringsalgoritme">Krypteringsalgoritme</a></li>
+  <li><a href="#krypteringsnøkkel-referanse" id="toc-krypteringsnøkkel-referanse" class="nav-link" data-scroll-target="#krypteringsnøkkel-referanse">Krypteringsnøkkel referanse</a></li>
+  <li><a href="#krypteringsalgoritme-parametre" id="toc-krypteringsalgoritme-parametre" class="nav-link" data-scroll-target="#krypteringsalgoritme-parametre">Krypteringsalgoritme-parametre</a></li>
   </ul></li>
-  <li><a href="#pseudonymisering" id="toc-pseudonymisering" class="nav-link" data-scroll-target="#pseudonymisering">Pseudonymisering</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/datadoc-model.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/datadoc-model.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div><div class="quarto-code-links"><h2>Teknisk dokumentasjon</h2><ul><li><a href="https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3039133732/DataDoc+-+Krav+til+dokumentasjon+av+datasett+p+Dapla" target="_blank"><i class="bi bi-box-arrow-up-right"></i>Datasett</a></li><li><a href="https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/3042869256/Variabelforekomst" target="_blank"><i class="bi bi-box-arrow-up-right"></i>Variabler</a></li></ul></div></nav>
     </div>
@@ -1472,14 +1477,41 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
 <p>🌐 <em>id</em><br>
 klargjorte data ✅ | statistikkdata ✅ | utdata ✅</p>
 <p>Utledes automatisk. Dette er en unik SSB-identifikator for variabelen, og denne maskingenereres av Datadoc.</p>
+</section>
+<section id="pseudonymiseringstidspunkt" class="level3">
+<h3 class="anchored" data-anchor-id="pseudonymiseringstidspunkt">Pseudonymiseringstidspunkt</h3>
+<p>🌐 <em>pseudonymization_time</em></p>
+<p>Angir tidspunkt for når variabelen ble pseudonymisert.</p>
+<p>Dato må være på formatet <strong>YYYY-MM-DD</strong> iht <a href="https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.">ISO 8601 Date and time format</a>.</p>
+</section>
+<section id="stabil-identifikator-type" class="level3">
+<h3 class="anchored" data-anchor-id="stabil-identifikator-type">Stabil identifikator type</h3>
+<p>🌐 <em>stable_identifier_type</em></p>
+<p>Angir om variabelen er transformert til en stabil identifikator før pseudonymisering, og hvilken identifikator som ble benyttet. F.eks. er en vanlig transformasjon i SSB at man konverterer fødselsnummer til SNR før pseudosnymisering.</p>
+</section>
+<section id="stabil-identifikator-versjon" class="level3">
+<h3 class="anchored" data-anchor-id="stabil-identifikator-versjon">Stabil identifikator versjon</h3>
+<p>🌐 <em>stable_identifier_version</em></p>
+<p>Angir hvilken versjon av stabil identifikator som variabelen ble transformert til før pseudonymisering.</p>
+</section>
+<section id="krypteringsalgoritme" class="level3">
+<h3 class="anchored" data-anchor-id="krypteringsalgoritme">Krypteringsalgoritme</h3>
+<p>🌐 <em>encryption_algorithm</em></p>
+<p>Angir krypteringsalgoritmen som ble benyttet for pseudonymisering. F.eks. <code>TINK-FPE</code> eller <code>DAEAD</code>.</p>
+</section>
+<section id="krypteringsnøkkel-referanse" class="level3">
+<h3 class="anchored" data-anchor-id="krypteringsnøkkel-referanse">Krypteringsnøkkel referanse</h3>
+<p>🌐 <em>encryption_key_reference</em></p>
+<p>Angir navn eller referanse til krypteringsnøkkelen som er benyttet for pseudonymisering.</p>
+</section>
+<section id="krypteringsalgoritme-parametre" class="level3">
+<h3 class="anchored" data-anchor-id="krypteringsalgoritme-parametre">Krypteringsalgoritme-parametre</h3>
+<p>🌐 <em>encryption_algorithm_parameters</em></p>
+<p>Angir eventuelle krypteringsalgoritme-parametre som ble benyttet utover <code>encryption_key_reference</code>.</p>
 <hr>
-</section>
-</section>
-<section id="pseudonymisering" class="level2">
-<h2 class="anchored" data-anchor-id="pseudonymisering">Pseudonymisering</h2>
-<p>Kommer snart.</p>
 
 
+</section>
 </section>
 
 
