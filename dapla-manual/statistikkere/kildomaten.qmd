@@ -264,19 +264,19 @@ Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiser
 Tilgang til kildedata i prod-miljøet er det kun gruppen **data-admins** som kan aktivere ved å bruke tilgangsstyringsløsningen [Just-in-Time Access (JIT)](https://jitaccess.dapla.ssb.no/). Les mer om hvordan [JIT-løsningen fungerer her](./jit.html). Ønsker man å kunne liste ut innhold fra bøtta må man aktivere rollen `ssb.buckets.list`. Ønsker man i tillegg å lese/skrive til bøtta må man også aktivere `ssb.bucket.write`. Tilgang til kildebøtta i test-miljøet krever ikke JIT-tilgang. 
 :::
 
-Før man ruller ut koden i tjenesten er det greit å teste at alt fungerer som det skal i Jupyterlab. Hvis vi tar utgangspunkt i eksempelet over så kan vi teste koden ved å kjøre følgende nederst i skriptet:
+Før man ruller ut koden i tjenesten er det greit å teste at alt fungerer som det skal i Jupyterlab. Hvis vi tar utgangspunkt i eksempelet over kan vi teste koden ved å kjøre følgende nederst i skriptet:
 
 ```{.python filename="process_source_data.py"}
 main("gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv")
 ```
 
-Når tjenesten er rullet ut så vil det være dette som kjøres når en fil dukker opp i `gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Ved å kjøre det manuelt på denne måten får vi sett at ting fungerer som det skal. 
+Når tjenesten er rullet ut vil det være dette som kjøres når en fil dukker opp i `gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Ved å kjøre det manuelt på denne måten får vi sett at ting fungerer som det skal. 
 
 Husk å fjerne kjøringen av koden før du ruller ut tjenesten. 
 
 ::: {.callout-note}
 # Pseudonymisering kan **ikke** kjøres fra en IDE i prod-miljøet
-Du kan teste kode fra Jupyter og andre IDE-er i prod-miljøet på Dapla. Men hvis prosesseringen innebærer bruk av pseudonymisering, så vil den ikke kunne kalles fra programmeringsmiljøer som Jupyter. Grunnen til dette er at det ikke er ønskelig å gjøre det lett å se upseudonymisert og pseudonymisert data samtidig. Hvis du ønsker å teste prosesseringen av pseudo-tjenesten, så kan du gjøre med testdata i test-miljøet. 
+Du kan teste kode fra Jupyter og andre IDE-er i prod-miljøet på Dapla med mindre prosesseringen innebærer bruk av pseudonymisering. Grunnen til dette er at det ikke er ønskelig å gjøre det lett å se upseudonymisert og pseudonymisert data samtidig. Hvis man ønsker å teste prosesseringen av pseudo-tjenesten kan man gjøre med testdata i test-miljøet. 
 :::
 
 ### Rull ut tjenesten
@@ -302,33 +302,33 @@ For å rulle ut tjenesten gjør du følgende;
 :::
 
 
-Etter at du har *merget* inn i *main* kan du følge med på utrullingen under *Actions*-fanen i repoet. Når den siste jobben lyser grønt er Kildomaten rullet ut og klar til bruk.
+Etter at du har *merget* inn i *main* kan du følge med på utrullingen under *Actions*-fanen i repoet. Når den siste jobben lyser grønt er kildomaten rullet ut og klar til bruk.
 
 ::: {.callout-note}
 # Vanlige feil ved utrulling
-For å gi raskt tilbakemelding på noen mulige feilsituasjoner, så kjøres det enkel validering på `config.yaml` og `process_source_data.py` når en *Pull request* er opprettet. Følgende validering gjennomføres:
+For å gi raskt tilbakemelding på noen mulige feilsituasjoner kjøres det enkel validering på `config.yaml` og `process_source_data.py` når en *Pull request* er opprettet. Følgende validering gjennomføres:
 
-- Er det et python-script kalt `process_source_data.py`?
-- Er det en `config.yaml` med en gyldig `folder_prefix:` definert?
-- Bruker `process_source_data.py` biblioteker som ikke [er installert i Kildomaten](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml)?
+- Heter python-skriptet `process_source_data.py`?
+- Finnes en `config.yaml` med gyldig `folder_prefix:`?
+- Bruker `process_source_data.py` biblioteker som ikke [er installert i kildomaten](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml)?
 - Har koden i `process_source_data.py` feil iht [Pyflakes](https://pypi.org/project/pyflakes/)?
 
-Det kan også forekomme at **Atlantis**, verktøyet for å rulle ut endringer fra IaC-repoet til GCP, feiler. Da kan du prøve å skrive `atlantis plan` i kommentarfeltet til *pull request*'en, og testene vil kjøre på nytt. Hvis det fortsatt ikke fungerer så kontakter man Dapla kundeservice. 
+Det kan også forekomme at **Atlantis**, verktøyet for å rulle ut endringer fra IaC-repoet til GCP, feiler. Da kan du prøve å skrive `atlantis plan` i kommentarfeltet til *pull request*'en, og testene vil kjøre på nytt. Hvis det fortsatt ikke fungerer kontakter man Dapla kundeservice. 
 :::
 
 ### Test tjenesten
 
-Når du har rullet ut tjenesten kan *teste* tjenesten ved at **data-admins** flytter en fil til en den filstien kildomaten er satt opp for. I eksempelet vi har brukt tidligere, gjør du følgende:
+Når du har rullet ut tjenesten kan du *teste* tjenesten ved at **data-admins** flytter en fil til en den filstien kildomaten er satt opp for. I eksempelet vi har brukt tidligere, gjør du følgende:
 1. Aktiverer JIT-tilgangen til kildedata (som beskrevet over).
 2. Kopier en fil over til filstien:  
 `gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/`
 3. Sjekk om filen ble skrevet til ønsket mappe i produktbøtta.
 
-Du kan også sjekke logger og monitorere kildomaten. Les mer i neste avsnitt.
+Du kan også sjekke logger og monitorere kildomaten.
 
 ### Monitorering og logging
 
-Når en kilde i kildomaten er satt opp og ruller ut, kan du monitere tjenesten i Google Cloud Console (GCC) ved å gjøre følgende:
+Når en kilde i kildomaten er satt opp og ruller ut kan tjenesten monitoreres i Google Cloud Console (GCC) ved å gjøre følgende:
 
 1. [Logg deg inn](https://console.cloud.google.com/) med SSB-bruker på GCC.
 2. Velg standardprosjektet i prosjektvelgeren^[Standardprosjektet har navnestrukturen `<teamnavn>-p`].
@@ -348,7 +348,7 @@ Det er anbefalt å se på Kildomaten-loggene i Logs Explorer. Det kan man enkelt
 
 ### Skalering
 
-kildomaten er satt opp for å kunne prosessere hver kilde i 100 parallelle instanser samtidig. F.eks. hvis det oppstår 110 nye filer i en mappe som trigger en kildomaten-kilde, så kan det prosesseres 100 filer samtidig. [Ta kontakt med Kundeservice](https://ssb.pureservice.com/#/categories/14/new) hvis man har behov for ytterlige skalering.  
+Kildomaten er satt opp for å kunne prosessere hver kilde i 100 parallelle instanser samtidig. F.eks. hvis det oppstår 110 nye filer i en mappe som trigger en kildomaten-kilde, kan det prosesseres 100 filer samtidig. [Ta kontakt med Kundeservice](https://ssb.pureservice.com/#/categories/14/new) hvis man har behov for ytterlige skalering.  
 
 ### Varsling på e-post
 
@@ -376,11 +376,11 @@ I eksempelet over ser vi det er to kilder: `altinn` og `ledstill`. Hver kilde tr
 
 ### Test-miljø
 
-I eksempelet som er brukt i dette kapitlet er Kildomaten satt opp i prodmiljøet til teamet. Mens egentlig burde man teste ut nye kilder i teamets test-miljø. Kildomaten er ikke satt opp i test-miljøet som standard, og derfor må det skrus på før man kan anvende det. Teamet kan gjøre det selv [ved å følge denne beskrivelsen](./features.html), eller de kan ta kontakt med Kundeservice og få hjelp til dette. 
+I eksempelet som er brukt i denne artiklen er kildomaten satt opp i prodmiljøet til teamet. Man bør egentlig teste ut nye kilder i teamets test-miljø. Kildomaten er ikke satt opp i test-miljøet som standard, og derfor må det skrus på før man kan anvende det. Teamet kan gjøre det selv [ved å følge denne beskrivelsen](./features.qmd) eller ta kontakt med kundeservice og få hjelp til dette. 
 
-En av de store fordelene med å sette opp kildomaten-kilder i test-miljøet før man gjør det i prod-miljøet, er at tilgangsstyringen til data er mye mindre streng. Det gjør det lettere for alle i teamet å utvikle koden som skal benyttes. 
+En av de store fordelene med å sette opp kildomaten-kilder i test-miljøet før man gjør det i prod-miljøet er at tilgangsstyringen til data er mye mindre streng. Det gjør det lettere for alle i teamet å utvikle koden som skal benyttes. 
 
-Når man skal sette opp kildomaten i test-miljøet så følger det samme oppskrift som vi har vist for prod-miljøet over. Den store forskjellen er at test-kilder skal legges under en egen mappe under  `automation/source-data/` i teamets IaC-repo. Eksempelet under med team **dapla-example** viser hvordan man kan sette opp kildene `altinn` og `ledstill` for både prod- og test-testmiljøet:
+Når man skal sette opp kildomaten i test-miljøet følger det samme oppskrift som vi har vist for prod-miljøet over. Den store forskjellen er at test-kilder skal legges under en egen mappe under  `automation/source-data/` i teamets IaC-repo. Eksempelet under med team **dapla-example** viser hvordan man kan sette opp kildene `altinn` og `ledstill` for både prod- og test-testmiljøet:
 
 ```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
 dapla-example-iac
@@ -403,14 +403,13 @@ dapla-example-iac
 │...           
 ```
 
-Som vi ser av mappestrukturen over så er det to mapper under  
+Som vi ser av mappestrukturen over er det to mapper under  
 `automation/source-data`:
 
 - dapla-example-prod
 - dapla-example-test
 
 Disse to mappene angir om det er henholdsvis prod- eller test-miljøet vi setter opp kilder for. 
-
 
 ### Trigge kilde manuelt
 
