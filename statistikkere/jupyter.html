@@ -791,7 +791,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 9, 2025</p>
+      <p class="date-modified">June 17, 2025</p>
     </div>
   </div>
     
@@ -963,7 +963,7 @@ Figur&nbsp;8: Konfigurasjon av lokal disk for Jupyter-tjenesten i Dapla Lab
 </section>
 <section id="avansert" class="level3">
 <h3 class="anchored" data-anchor-id="avansert">Avansert</h3>
-<p>Under <strong>Avansert</strong> kan man velge å ikke tilgjengeliggjøre bøtter som filsystem inne i tjenesten. Konsekvensen av dette er at man må lese og skrive filer ved å referere til bøttene direkte.</p>
+<p>Under <strong>Data</strong> i <strong>Avansert</strong> kan man velge å ikke tilgjengeliggjøre bøtter som filsystem inne i tjenesten. Konsekvensen av dette er at man må lese og skrive filer ved å referere til bøttene direkte.</p>
 <div id="fig-dapla-lab-conf-advanced" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser Resources-fanen i Jupyter-konfigurasjonen i Dapla Lab.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dapla-lab-conf-advanced-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -973,6 +973,57 @@ Figur&nbsp;8: Konfigurasjon av lokal disk for Jupyter-tjenesten i Dapla Lab
 Figur&nbsp;9: Avansert konfigurasjon for Jupyter-tjenesten i Dapla Lab
 </figcaption>
 </figure>
+</div>
+<p>Under <strong>Oppstartsskript</strong> kan man velge angi et bash-script som skal kjøres ved oppstart av tjenesten. Skriptet må ligge lagret på <strong>www.github.com/statisticsnorway</strong>, og under <strong>Bash-skript</strong>-delen oppgis kun navn på repo og sti i repoet, f.eks. <code>stat-ledstill/utilities/ledstill-startupscript.sh</code>. Hvis skriptet tar argumenter kan man oppgi disse under <strong>Argumenter</strong>.</p>
+<p>I oppstartsskriptet kan man gjøre alt som er mulig å gjøre i terminalen etter at tjenesten er startet. F.eks. kan man:</p>
+<ul>
+<li>definere miljøvariabler</li>
+<li>legge til ønsket konfigurasjon i <code>.bashrc</code></li>
+<li>konfigurere farger og andre innstillinger i Jupyter, VS Code og RStudio</li>
+</ul>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Eksempel på et oppstartskript
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>demo-script.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb2" data-filename="demo-script.sh"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Update .bashrc with environment variables and aliases</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>echo <span class="st">""</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"# Opprettet av mitt personlige startupscript:"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"export TEST=true"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"alias gs='git status'"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"alias ll='ls -alF'"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Jupyter-theme via settings file</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>THEME_NAME<span class="op">=</span><span class="st">"JupyterLab Dark"</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>SETTINGS_DIR<span class="op">=</span><span class="st">"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>SETTINGS_FILE<span class="op">=</span><span class="st">"$SETTINGS_DIR/themes.jupyterlab-settings"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="st">"$SETTINGS_DIR"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>cat <span class="op">&gt;</span> <span class="st">"$SETTINGS_FILE"</span> <span class="op">&lt;&lt;</span>EOF</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">//</span> Theme <span class="bu">set</span> <span class="im">from</span> init<span class="op">-</span>script</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theme"</span>: <span class="st">"$THEME_NAME"</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>EOF</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"[Init Script] JupyterLab theme set to '$THEME_NAME'"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 </div>
 </section>
 </section>
