@@ -93,17 +93,17 @@ I eksempelet over ser vi at det er mapper i IaC-repoet for kildene *altinn* og *
 
 ::: {.callout-important}
 # Alle kilder på samme nivå
-Et team kan sette opp mange kilder som skal prosesseres med ulike skript. Men kildomaten tillater bare et nivå under `automation/source-data-<teamnavn>-<miljø>/`. Det vil si at du ikke kan ha undermapper under en kilde. Det er også slik at man alltid må opprette en mappe for en kilde, selv om du kun har en kilde. F.eks. kan man ikke droppe mappen `altinn` i eksempelet over.  
+Et team kan sette opp forskjellige skript for forkskjellige kilder men kildomaten tillater bare ett nivå under `automation/source-data-<teamnavn>-<miljø>/`. Det vil si at du ikke kan ha undermapper under en kilde. Det er også slik at man alltid må opprette en mappe for en kilde, selv om du kun har en kilde. F.eks. kan man ikke droppe mappen `altinn` i eksempelet over.
 :::
 
 ### Konfigurasjon og skript
 
-Når mappestrukturen er opprettet kan man legge til filene som beskriver hvilke filer som skal prosesseres, og python-skriptet med koden som skal prosessere filene. Det er to filer som må eksistere for at tjenesten skal fungere:
+Når mappestrukturen er opprettet kan man legge til konfigurasjonsfilen som beskriver hvilke filer som skal prosesseres, og python-skriptet med koden som skal prosessere filene. Det er to filer for hver datakilde:
 
 1. En konfigurasjonsfil
 2. Et Python-skript
 
-Når du har opprettet de skal de ligge på denne måten i IaC-repoet:
+Her ser du hvordan IaC-repoet ser ut med én kilde (altinn):
 
 ```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
 dapla-example-iac
@@ -123,7 +123,7 @@ Kildomaten trigges ved at det oppstår nye filer i kildebøtta til teamet. Hvorv
 Hvis vi fortsetter eksempelet vårt fra tidligere med `dapla-example` kan vi tenke oss at teamet ønsker at kildomaten skal trigges på alle filer som oppstår i kildebøtta under filstien:  
 `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`.
 
-For å konfigurere tjenesten i kildomaten må vi legge til en fil som heter `config.yaml` under `automation/source-data/dapla-example-prod/altinn/` slik som vist i forrige kapitel. I dette tilfellet vil den ha innholdet som vist til venstre under:  
+For å konfigurere tjenesten i kildomaten må vi legge til en fil som heter `config.yaml` under `automation/source-data/dapla-example-prod/altinn/` slik som vist tidligere. I dette tilfellet vil den ha innholdet som vist til venstre under:  
 
 :::: {.columns}
 
@@ -154,11 +154,12 @@ memory_size: 1  # GiB
 ::::
 
 
-Mappestrukturen i kildebøtta er illustrert ti høyre, mens `config.yaml`-fila til venstre viser hvordan vi angir at kildomaten kun skal trigges på nye filer som oppstår i undermappen `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Vi bruker nøkkelen `folder_prefix` for å angi hvilken sti i kildebøtta som tjenesten skal trigges på. Nøkkelen `memory_size` lar brukeren angi hvor mye minne og CPU hver prosessering skal få. Vil du at alle filer skal trigge kildomaten? Da setter du `folder_prefix` til `""`.
+Mappestrukturen i kildebøtta er illustrert til høyre, mens `config.yaml`-fila til venstre viser hvordan vi angir at kildomaten kun skal trigges på nye filer som oppstår i undermappen `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Vi bruker nøkkelen `folder_prefix` for å angi hvilken sti i kildebøtta som tjenesten skal trigges på. Nøkkelen `memory_size` lar brukeren angi hvor mye minne og CPU hver prosessering skal få. Vil du at alle filer skal trigge kildomaten? Da setter du `folder_prefix` til `""`.
 
 
-::: {.callout-note}
+::: {.callout-note collapse=True}
 # Hvor mye minne og CPU er mulig?
+
 Som standard får hver prosessering med kildomaten 1 CPU-kjerne og 512MB minne/RAM. Hvis man skal gjøre mye prossesering, eller filene som prosesseres er veldig store, kan man sette `memory_size` opp til max 32GB minne. Antall CPU-kjerner blir satt implisitt ut i fra valg av `memory_size` iht til [begrensningene som Google setter for Cloud Run](https://cloud.google.com/run/docs/configuring/services/memory-limits#cpu-minimum). Se de [nøyaktige verdiene](https://github.com/statisticsnorway/terraform-dapla-source-data-processor/blob/b7655776258c79a91e97dd0da4c5c1e6f3631796/modules/processor-instance/locals.tf#L2) som blir satt her. 
 :::
 
@@ -166,24 +167,23 @@ Som standard får hver prosessering med kildomaten 1 CPU-kjerne og 512MB minne/R
 
 ::: {.callout-important}
 # Husk dette når du skriver skriptet ditt
-Når du skal skrive et Python-skript for Kildomaten er det spesielt viktig å huske på 2 ting:
 
 1. Skriptet ditt kommer til å bli kjørt på en-og-en fil. 
 2. Skriptet ditt må skrive ut et unikt navn på filen som skal skrives til produktbøtta, ellers risikerer du at filer blir overskrevet.
 3. Python-pakkene som kan benyttes [er definert her](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml). Ved behov for andre pakker, [ta kontakt med Kundeservice](https://ssb.pureservice.com/#/categories/14/new).  
 :::
 
-Python-skriptet er der teamet kan angi hva slags kode som skal kjøre på hver fil som dukker opp i den angitte mappen i kildebøtta. For at dette skal være mulig må koden følge disse reglene:
+Python-skriptet er der teamet angir hva slags kode som skal kjøre på hver fil som dukker opp i den angitte mappen i kildebøtta. For at dette skal være mulig må koden følge disse reglene:
 
 1. Koden må ligge i en fil som heter `process_source_data.py`. 
 2. Koden må pakkes inn i en funksjon som heter `main()`. 
 
-`main()` er en funksjon med ett parameter som heter `source_file` som du alltid får av kildomaten når en fil blir prosessert. Når du skriver koden kan man derfor anta at dette parameteret blir gitt til funksjonen, og du kan benytte det inne i `main`-funksjonen. 
+`main()` er en funksjon med ett parameter som heter `source_file` som du alltid får av kildomaten når en fil blir prosessert. Når man skriver koden kan man derfor anta at dette parameteret blir gitt til funksjonen, og du kan benytte det inne i `main`-funksjonen. 
 
-`source_file`-parameteret gir `main()` en ferdig definert filsti til filen som skal prosesseres. For eksempel så kan `source_file` ha verdien  
+`source_file`-parameteret gir `main()` en ferdig definert filsti til filen som skal prosesseres. For eksempel kan `source_file` ha verdien  
 `gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv` hvis filen `test20231010.csv` dukker opp i `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. 
 
-Hvis vi fortsetter eksempelet fra tidligere så ser mappen i IaC-repoet vårt slik ut nå: 
+Hvis vi fortsetter eksempelet fra tidligere ser mappen i IaC-repoet vårt slik ut nå: 
 
 ```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
 ├── automation/
@@ -253,13 +253,13 @@ def main(source_file):
 
 ::::
 
-De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta. 
+De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta. 
 
-Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier så kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.
+Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.
 
 ::: {.callout-note}
 # Hvilke Python-biblioteker kan jeg bruke?
-Du kan kun bruke biblioteker som er forhåndsinstallert i Kildomaten. Du kan se en [liste over disse bibliotekene her](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml). Ønsker du andre biblioteker må du ta kontakt med Kunderservice.
+Du kan kun bruke biblioteker som er forhåndsinstallert i kildomaten. Du kan se en [liste over disse bibliotekene her](https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml). Ønsker du andre biblioteker må du ta kontakt med Kunderservice.
 :::
 
 ### Test koden
