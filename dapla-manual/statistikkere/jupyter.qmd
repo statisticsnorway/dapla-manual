@@ -1,6 +1,6 @@
 ---
 title: Jupyter
-date-modified: "02/09/2025"
+date-modified: "06/17/2025"
 lightbox: true
 ---
 
@@ -102,9 +102,49 @@ Som default får alle som starter en instans av Jupyter-tjenesten en lokal disk 
 
 ### Avansert
 
-Under **Avansert** kan man velge å ikke tilgjengeliggjøre bøtter som filsystem inne i tjenesten. Konsekvensen av dette er at man må lese og skrive filer ved å referere til bøttene direkte. 
+Under **Data** i **Avansert** kan man velge å ikke tilgjengeliggjøre bøtter som filsystem inne i tjenesten. Konsekvensen av dette er at man må lese og skrive filer ved å referere til bøttene direkte. 
 
 ![Avansert konfigurasjon for Jupyter-tjenesten i Dapla Lab](../images/dapla-lab-conf-advanced.png){fig-alt="Viser Resources-fanen i Jupyter-konfigurasjonen i Dapla Lab." #fig-dapla-lab-conf-advanced}
+
+Under **Oppstartsskript** kan man velge angi et bash-script som skal kjøres ved oppstart av tjenesten. Skriptet må ligge lagret på **www.github.com/statisticsnorway**, og under **Bash-skript**-delen oppgis kun navn på repo og sti i repoet, f.eks. `stat-ledstill/utilities/ledstill-startupscript.sh`. Hvis skriptet tar argumenter kan man oppgi disse under **Argumenter**.
+
+I oppstartsskriptet kan man gjøre alt som er mulig å gjøre i terminalen etter at tjenesten er startet. F.eks. kan man:
+
+- definere miljøvariabler
+- legge til ønsket konfigurasjon i `.bashrc`
+- konfigurere farger og andre innstillinger i Jupyter, VS Code og RStudio
+
+::: {.callout-caution collapse="true"}
+## Eksempel på et oppstartskript
+
+```{.python filename="demo-script.sh"}
+#!/bin/bash
+
+# Update .bashrc with environment variables and aliases
+echo "" >> "$HOME/.bashrc"
+echo "# Opprettet av mitt personlige startupscript:" >> "$HOME/.bashrc"
+echo "export TEST=true" >> "$HOME/.bashrc"
+echo "alias gs='git status'" >> "$HOME/.bashrc"
+echo "alias ll='ls -alF'" >> "$HOME/.bashrc"
+
+# Set Jupyter-theme via settings file
+THEME_NAME="JupyterLab Dark"
+SETTINGS_DIR="$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension"
+SETTINGS_FILE="$SETTINGS_DIR/themes.jupyterlab-settings"
+
+mkdir -p "$SETTINGS_DIR"
+
+cat > "$SETTINGS_FILE" <<EOF
+{
+    // Theme set from init-script
+    "theme": "$THEME_NAME"
+}
+EOF
+
+echo "[Init Script] JupyterLab theme set to '$THEME_NAME'"
+```
+:::
+
 
 ## Datatilgang
 
