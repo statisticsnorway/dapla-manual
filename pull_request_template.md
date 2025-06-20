@@ -1,0 +1,1 @@
+PR opprettet! Har du husket å lese gjennom [contribution.qml](dapla-manual/statistikkere/appendix/contribution.qml)? Nyhetsinnlegg er viktig - les om det i contribution.qml
