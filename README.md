@@ -18,3 +18,5 @@ For å legge til nye elementer i menyen må filen `dapla-manual/_quarto.yml` opp
 ```shell
 git config --local include.path ../.gitconfig
 ```
+
+Les om hvordan du kan bidra til manualen her: https://manual.dapla.ssb.no/statistikkere/appendix/contribution.html
