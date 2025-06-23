@@ -202,38 +202,6 @@ result.metadata
 result.to_polars()
 ```
 
-### Filbasert prosessering
-
-Selv om mange av eksemplene i dette kapitlet viser hvordan man bruker *dapla-toolbelt-pseudo* ved å gi funksjonene et datasett fra minnet, så støtter den også å prosessere filer som er lagret på disk/bøtter. Dette kan være en fordel hvis dataene er for store for Kildomaten (>32GB RAM) eller de har en dyp hierarkisk struktur (f.eks. json-filer). 
-
-*dapla-toolbelt-pseudo* støtter følgende filtyper:
-
-- csv
-- json
-
-
-Her er et eksempel på hvordan man pseudonymiserer en fil som ligger lagret på disk:
-
-```{.python filename="Notebook"}
-from dapla_pseudo import Pseudonymize
-from dapla import AuthClient
-
-
-file_path = "gs://bucket/pseudo-examples/andeby_personer.csv"
-
-options = {
-    "dtypes": {"fnr": pl.Utf8, "fornavn": pl.Utf8, "etternavn": pl.Utf8, "kjonn": pl.Categorical, "fodselsdato": pl.Utf8}
-}
-
-result_df = (
-    Pseudonymize.from_file(file_path)
-    .on_fields("fnr")
-    .with_default_encryption()
-    .run()
-    .to_polars(**options)
-)
-```
-
 Se flere [eksempler i dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#read-from-file-systems).
 
 #### Wildcards
