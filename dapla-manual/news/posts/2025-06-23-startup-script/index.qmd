@@ -1,0 +1,59 @@
+---
+title: Personliggjør dine tjenester på Dapla Lab
+subtitle: Støtte for oppstartsskript i Dapla Lab
+categories:
+  - dapla lab
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "06/23/2025"
+date-modified: "06/23/2025"
+image: ./image.png
+draft: false
+lightbox: true
+---
+
+Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et **bash-script** og det må ligger lagret i et repo på [www.github.com/statisticsnorway](https://github.com/statisticsnorway). Brukeren kan deretter referere til skriptet under **Avansert** i tjenestekonfigurasjonen på Dapla Lab, slik som vist @fig-dapla-lab-conf-adv.
+
+![Avansert-fanen til en tjeneste på Dapla Lab](./image.png){fig-alt="Advanced configuration for Dapla Lab" #fig-dapla-lab-conf-adv}
+
+Eksempelt i @fig-dapla-lab-conf-adv viser en bruker som ber om å få kjørt et skript (**personal-init.sh**) som ligger lagret i [https://github.com/statisticsnorway/obr-test](https://github.com/statisticsnorway/obr-test). 
+
+Oppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.
+
+Under er et eksempel på et oppstartsskript hvor det gjøres noen endringer i `$HOME/.bashrc` og *theme* i Jupyter defineres. 
+
+::: {.callout-note}
+## Eksempel på et oppstartskript
+
+```{.python filename="demo-script.sh"}
+#!/bin/bash
+
+# Update .bashrc with environment variables and aliases
+echo "" >> "$HOME/.bashrc"
+echo "# Opprettet av mitt personlige startupscript:" >> "$HOME/.bashrc"
+echo "export TEST=true" >> "$HOME/.bashrc"
+echo "alias gs='git status'" >> "$HOME/.bashrc"
+echo "alias ll='ls -alF'" >> "$HOME/.bashrc"
+
+# Set Jupyter-theme via settings file
+THEME_NAME="JupyterLab Dark"
+SETTINGS_DIR="$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension"
+SETTINGS_FILE="$SETTINGS_DIR/themes.jupyterlab-settings"
+
+mkdir -p "$SETTINGS_DIR"
+
+cat > "$SETTINGS_FILE" <<EOF
+{
+    // Theme set from init-script
+    "theme": "$THEME_NAME"
+}
+EOF
+
+echo "[Init Script] JupyterLab theme set to '$THEME_NAME'"
+```
+:::
+
+Hvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: `$HOME/personal_init_script.log`.
