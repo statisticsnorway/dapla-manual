@@ -1,0 +1,61 @@
+---
+title: dapla-auth-client
+date-modified: 06/23/2025
+lightbox: true
+---
+
+[dapla-auth-client](./https://pypi.org/project/dapla-auth-client/) er et Python-bibliotek for å autentisere brukere på [Dapla Lab](./dapla-lab.qmd) mot tjenester på NAIS. Bibliotekets returnerer et JWT-token (med varighet på en time) som blant annet inneholder hvilke tilgangsgrupper brukeren er medlem av. 
+
+## Forberedelser
+
+Biblioteket kan benyttes i tjenester på Dapla Lab der Python er installert. Den kan installeres med følgende kommando i et [ssb-project](./ssb-project.qmd):
+
+```{.bash filename="Terminal"}
+poetry add dapla-auth-client
+```
+
+## Funksjonalitet
+
+Biblioteket er ment for å støtte autentisering mot NAIS fra Dapla Lab. I tillegg kan brukere hente ut informasjon om hvilke tilgangsgrupper brukeren er medlem av fra tokenet. 
+
+### Hente ut token
+
+For å hente ut et JWT-token med varighet på en time kan brukeren skrive følgende:
+
+```{.python filename="Notebook"}
+from dapla_auth_client import AuthClient
+
+AuthClient.fetch_personal_token()
+```
+
+Koden over returnerer et JWT-token med informasjon om hvilken tilgangsgruppe brukeren representerer i tjenesten. 
+
+### Liste ut tilgangsgrupper
+
+Man kan også dekode tokenet og liste ut alle tilgangsgrupper brukeren er medlem av. I koden under brukes [Python-biblioteket PyJWT](https://pypi.org/project/PyJWT/) til å dekode tokenet: 
+
+```{.python filename="Notebook"}
+from dapla_auth_client import AuthClient
+
+token = AuthClient.fetch_personal_token(["all_groups", "current_group"])
+decoded = jwt.decode(token, options={"verify_signature": False})
+print(decoded)
+```
+
+Output vil da være på denne formen:
+
+```{.json}
+{
+    "dapla.group": "team-a-developers",
+    "dapla.groups": [
+        "team-a-data-admins",
+        "team-a-developers",
+        "team-b-developers"
+    ],
+    "exp": 1750687898,
+    "iat": 1750684298,
+    "iss": "https://labid.lab.dapla-external.ssb.no",
+    "scope": "all_groups,current_group",
+    "sub": "ini"
+}
+```
