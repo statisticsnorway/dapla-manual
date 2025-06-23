@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Johnny Niklasson">
-<meta name="dcterms.date" content="2025-06-12">
+<meta name="author" content="Øyvind Bruer-Skarsbø">
+<meta name="dcterms.date" content="2025-06-23">
 
-<title>Blogginnlegg om dapla-auth-client – Dapla-manualen</title>
+<title>Personliggjør dine tjenester på Dapla Lab – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -43,6 +78,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-aa65cd192e579b25f59b24f35894e2e1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -89,13 +127,17 @@ background: #274247;
 </style>
 
 
-<meta property="og:title" content="Blogginnlegg om dapla-auth-client – Dapla-manualen">
-<meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/news/posts/2025-06-12-auth-client-blogginnlegg/images/dapla-long.png">
+<meta property="og:title" content="Personliggjør dine tjenester på Dapla Lab – Dapla-manualen">
+<meta property="og:description" content="Støtte for oppstartsskript i Dapla Lab">
+<meta property="og:image" content="https://manual.dapla.ssb.no/news/posts/2025-06-23-startup-script/image.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta name="twitter:title" content="Blogginnlegg om dapla-auth-client – Dapla-manualen">
-<meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/news/posts/2025-06-12-auth-client-blogginnlegg/images/dapla-long.png">
+<meta property="og:image:height" content="311">
+<meta property="og:image:width" content="950">
+<meta name="twitter:title" content="Personliggjør dine tjenester på Dapla Lab – Dapla-manualen">
+<meta name="twitter:description" content="Støtte for oppstartsskript i Dapla Lab">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/news/posts/2025-06-23-startup-script/image.png">
+<meta name="twitter:image-height" content="311">
+<meta name="twitter:image-width" content="950">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -237,12 +279,10 @@ background: #274247;
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Blogginnlegg om dapla-auth-client</h1>
+      <h1 class="title">Personliggjør dine tjenester på Dapla Lab</h1>
+            <p class="subtitle lead">Støtte for oppstartsskript i Dapla Lab</p>
                                 <div class="quarto-categories">
-                <div class="quarto-category">blogg</div>
-                <div class="quarto-category">dapla-toolbelt</div>
-                <div class="quarto-category">dapla-auth-client</div>
-                <div class="quarto-category">python</div>
+                <div class="quarto-category">dapla lab</div>
               </div>
                   </div>
   </div>
@@ -252,7 +292,7 @@ background: #274247;
     <div class="quarto-title-meta-heading">Tilhører</div>
     
       <div class="quarto-title-meta-contents">
-      <p class="author">Johnny Niklasson </p>
+      <p class="author">Øyvind Bruer-Skarsbø </p>
     </div>
     <div class="quarto-title-meta-contents">
           <p class="affiliation">
@@ -267,14 +307,14 @@ background: #274247;
       <div>
       <div class="quarto-title-meta-heading">Opprettet</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">June 12, 2025</p>
+        <p class="date">June 23, 2025</p>
       </div>
     </div>
     
       <div>
       <div class="quarto-title-meta-heading">Sist endret</div>
       <div class="quarto-title-meta-contents">
-        <p class="date-modified">June 12, 2025</p>
+        <p class="date-modified">June 23, 2025</p>
       </div>
     </div>
       
@@ -297,7 +337,62 @@ background: #274247;
 
 
 
-<p>Autentiseringsklassen for dapla er flyttet fra python-pakken <code>dapla-toolbelt</code> til <code>dapla-auth-client</code>. Les mer om dette i <a href="../../../blog/posts/2025-06-12-dapla-auth-client/index.html">denne blogg-artikkelen</a>.</p>
+<p>Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et <strong>bash-script</strong> og det må ligger lagret i et repo på <a href="https://github.com/statisticsnorway">www.github.com/statisticsnorway</a>. Brukeren kan deretter referere til skriptet under <strong>Avansert</strong> i tjenestekonfigurasjonen på Dapla Lab, slik som vist <a href="#fig-dapla-lab-conf-adv" class="quarto-xref">Figur&nbsp;1</a>.</p>
+<div id="fig-dapla-lab-conf-adv" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Advanced configuration for Dapla Lab">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-conf-adv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Avansert-fanen til en tjeneste på Dapla Lab"><img src="./image.png" class="img-fluid figure-img" alt="Advanced configuration for Dapla Lab"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-conf-adv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Avansert-fanen til en tjeneste på Dapla Lab
+</figcaption>
+</figure>
+</div>
+<p>Eksempelt i <a href="#fig-dapla-lab-conf-adv" class="quarto-xref">Figur&nbsp;1</a> viser en bruker som ber om å få kjørt et skript (<strong>personal-init.sh</strong>) som ligger lagret i <a href="https://github.com/statisticsnorway/obr-test">https://github.com/statisticsnorway/obr-test</a>.</p>
+<p>Oppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.</p>
+<p>Under er et eksempel på et oppstartsskript hvor det gjøres noen endringer i <code>$HOME/.bashrc</code> og <em>theme</em> i Jupyter defineres.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Eksempel på et oppstartskript
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>demo-script.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="demo-script.sh"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Update .bashrc with environment variables and aliases</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>echo <span class="st">""</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"# Opprettet av mitt personlige startupscript:"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"export TEST=true"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"alias gs='git status'"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"alias ll='ls -alF'"</span> <span class="op">&gt;&gt;</span> <span class="st">"$HOME/.bashrc"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Jupyter-theme via settings file</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>THEME_NAME<span class="op">=</span><span class="st">"JupyterLab Dark"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>SETTINGS_DIR<span class="op">=</span><span class="st">"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension"</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>SETTINGS_FILE<span class="op">=</span><span class="st">"$SETTINGS_DIR/themes.jupyterlab-settings"</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>mkdir <span class="op">-</span>p <span class="st">"$SETTINGS_DIR"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>cat <span class="op">&gt;</span> <span class="st">"$SETTINGS_FILE"</span> <span class="op">&lt;&lt;</span>EOF</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">//</span> Theme <span class="bu">set</span> <span class="im">from</span> init<span class="op">-</span>script</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"theme"</span>: <span class="st">"$THEME_NAME"</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>EOF</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>echo <span class="st">"[Init Script] JupyterLab theme set to '$THEME_NAME'"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>Hvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: <code>$HOME/personal_init_script.log</code>.</p>
 
 
 
@@ -709,12 +804,44 @@ background: #274247;
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-06-12-auth-client-blogginnlegg/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-06-12-auth-client-blogginnlegg/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-06-23-startup-script/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-06-23-startup-script/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

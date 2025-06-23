@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Jupyter-playground – Dapla-manualen</title>
+<title>dapla-auth-client – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../statistikkere/jupyter-pyspark.html" rel="next">
-<link href="../statistikkere/jupyter.html" rel="prev">
+<link href="../statistikkere/dapla-ctrl.html" rel="next">
+<link href="../statistikkere/altinn-dapla-suv-tools.html" rel="prev">
 <link href="../images/dapla-favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -72,19 +107,13 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<meta property="og:title" content="Jupyter-playground – Dapla-manualen">
+<meta property="og:title" content="dapla-auth-client – Dapla-manualen">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-lab-jupyter-play.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:alt" content="Jupyter Service">
-<meta property="og:image:height" content="236">
-<meta property="og:image:width" content="335">
-<meta name="twitter:title" content="Jupyter-playground – Dapla-manualen">
+<meta name="twitter:title" content="dapla-auth-client – Dapla-manualen">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-lab-jupyter-play.png">
-<meta name="twitter:image:alt" content="Jupyter Service">
-<meta name="twitter:image-height" content="236">
-<meta name="twitter:image-width" content="335">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -226,7 +255,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/dapla-lab.html">Dapla Lab</a></li><li class="breadcrumb-item"><a href="../statistikkere/jupyter-playground.html">Jupyter-playground</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/kildomaten.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/dapla-auth-client.html">dapla-auth-client</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -393,11 +422,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../statistikkere/dapla-lab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Dapla Lab</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/datadoc-editor.html" class="sidebar-item-text sidebar-link">
@@ -418,7 +447,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/jupyter-playground.html" class="sidebar-item-text sidebar-link active">
+  <a href="../statistikkere/jupyter-playground.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Jupyter-playground</span></a>
   </div>
 </li>
@@ -503,11 +532,11 @@ ul.task-list li input[type="checkbox"] {
       <div class="sidebar-item-container"> 
             <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datatjenester</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/altinn-dapla-suv-tools.html" class="sidebar-item-text sidebar-link">
@@ -522,7 +551,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../statistikkere/dapla-auth-client.html" class="sidebar-item-text sidebar-link">
+  <a href="../statistikkere/dapla-auth-client.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">dapla-auth-client</span></a>
   </div>
 </li>
@@ -725,21 +754,20 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link active" data-scroll-target="#forberedelser">Forberedelser</a></li>
-  <li><a href="#konfigurasjon" id="toc-konfigurasjon" class="nav-link" data-scroll-target="#konfigurasjon">Konfigurasjon</a></li>
-  <li><a href="#datatilgang" id="toc-datatilgang" class="nav-link" data-scroll-target="#datatilgang">Datatilgang</a></li>
-  <li><a href="#installere-pakker" id="toc-installere-pakker" class="nav-link" data-scroll-target="#installere-pakker">Installere pakker</a></li>
-  <li><a href="#slette-tjenesten" id="toc-slette-tjenesten" class="nav-link" data-scroll-target="#slette-tjenesten">Slette tjenesten</a></li>
-  <li><a href="#pause-tjenesten" id="toc-pause-tjenesten" class="nav-link" data-scroll-target="#pause-tjenesten">Pause tjenesten</a></li>
-  <li><a href="#monitorering" id="toc-monitorering" class="nav-link" data-scroll-target="#monitorering">Monitorering</a></li>
+  <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
+  <ul class="collapse">
+  <li><a href="#hente-ut-token" id="toc-hente-ut-token" class="nav-link" data-scroll-target="#hente-ut-token">Hente ut token</a></li>
+  <li><a href="#liste-ut-tilgangsgrupper" id="toc-liste-ut-tilgangsgrupper" class="nav-link" data-scroll-target="#liste-ut-tilgangsgrupper">Liste ut tilgangsgrupper</a></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/jupyter-playground.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/jupyter-playground.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/dapla-auth-client.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/dapla-auth-client.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/dapla-lab.html">Dapla Lab</a></li><li class="breadcrumb-item"><a href="../statistikkere/jupyter-playground.html">Jupyter-playground</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/kildomaten.html">Datatjenester</a></li><li class="breadcrumb-item"><a href="../statistikkere/dapla-auth-client.html">dapla-auth-client</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Jupyter-playground</h1>
+<h1 class="title">dapla-auth-client</h1>
 </div>
 
 
@@ -748,6 +776,12 @@ ul.task-list li input[type="checkbox"] {
 
     
   
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">June 23, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -756,70 +790,63 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><img src="../images/dapla-lab-jupyter-play.png" class="img-fluid" style="max-width: 350%; float: right;" alt="Jupyter Service"></p>
-<p><strong>Jupyter-playground</strong> er en tjeneste på <a href="./dapla-lab.html">Dapla Lab</a> som er ment for nybegynnere og andre som vil komme raskt i gang med koding i <a href="https://docs.jupyter.org/en/latest/">Jupyterlab</a>. Den har mange likheter med <a href="./jupyter.html">Jupyter</a>-tjenesten på Dapla Lab med den forskjellen at mange flere pakker og <em>extensions</em> er ferdig installert i Jupyter-playground. Tjenesten har både <strong>R</strong> og <strong>Python</strong> installert.</p>
-<p>Siden tjenesten er ment for opplæring og utforskning så er det ikke anbefalt å bygge produksjonskode fra denne tjenesten. Grunnen til det er at det er flere avhengigheter mellom programvare enn nødvendig, noe som skaper mer komplisert kode enn nødvendig. Derimot er det et ideelt sted for å lære seg R eller Python siden man slipper kompleksiteten med å installere sine egne pakker og forholde seg til <a href="../statistikkere/jobbe-med-kode.html#ssb-project">ssb-project</a>. For de som skal utvikle produksjonskode anbefales det at koden heller utvikles fra <a href="./jupyter.html">Jupyter</a>-tjenesten.</p>
+<p><a href="./https://pypi.org/project/dapla-auth-client/">dapla-auth-client</a> er et Python-bibliotek for å autentisere brukere på <a href="../statistikkere/dapla-lab.html">Dapla Lab</a> mot tjenester på NAIS. Bibliotekets returnerer et JWT-token (med varighet på en time) som blant annet inneholder hvilke tilgangsgrupper brukeren er medlem av.</p>
 <section id="forberedelser" class="level2">
 <h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
-<p>Før man starter <strong>Jupyter-playground-tjenesten</strong> bør man ha lest <a href="./dapla-lab.html">kapitlet om Dapla Lab</a> og satt opp Git- og GitHub-konfigurasjonen under <strong>Min konto</strong>. Deretter gjør du følgende:</p>
-<ol type="1">
-<li>Logg deg inn på <a href="https://lab.dapla.ssb.no/">Dapla Lab</a></li>
-<li>Under <strong>Tjenestekatalog</strong> trykker du på <strong>Start</strong>-knappen for <strong>Jupyter</strong></li>
-<li>Gi tjenesten et navn</li>
-<li>Åpne <strong>Jupyter konfigurasjoner</strong></li>
-</ol>
-</section>
-<section id="konfigurasjon" class="level2">
-<h2 class="anchored" data-anchor-id="konfigurasjon">Konfigurasjon</h2>
-<p>Konfigurasjonen av <strong>Jupyter-playground</strong> er identisk som for Jupyter-tjenesten. Se <a href="../statistikkere/jupyter.html#konfigurasjon">dokumentasjonen for konfigurasjon av Jupyter</a>.</p>
-</section>
-<section id="datatilgang" class="level2">
-<h2 class="anchored" data-anchor-id="datatilgang">Datatilgang</h2>
-<p>Slik kan man inspisere dataene fra en terminal inne i tjenesten:</p>
-<ol type="1">
-<li>Åpne en instans av Jupyter med data fra bøtter</li>
-<li>Åpne en terminal inne i Jupyter</li>
-<li>Gå til mappen med bøttene ved å kjøre dette fra terminalen <code>cd /buckets</code></li>
-<li>Kjør <code>ls -ahl</code> i teminalen for å se på hvilke bøtter som er montert.</li>
-</ol>
-</section>
-<section id="installere-pakker" class="level2">
-<h2 class="anchored" data-anchor-id="installere-pakker">Installere pakker</h2>
-<p>Siden det nesten ikke er installert noen pakker i tjenesten så kan brukeren opprette et <a href="../statistikkere/jobbe-med-kode.html#ssb-project">ssb-project</a> og installere pakker som vanlig.</p>
-<p>For å <a href="../statistikkere/jobbe-med-kode.html#bygg-eksisterende-ssb-project">bygge et eksisterende ssb-project</a> så kan brukeren også bruke ssb-project.</p>
-<p>For å installere R-pakker følger man <a href="../statistikkere/jobbe-med-kode.html#r-og-renv">beskrivelsen for renv</a>.</p>
-</section>
-<section id="slette-tjenesten" class="level2">
-<h2 class="anchored" data-anchor-id="slette-tjenesten">Slette tjenesten</h2>
-<p>For å slette tjenesten kan man trykke på Slette-knappen i Dapla Lab under <strong>Mine tjenester</strong>. Når man sletter en tjeneste så sletter man hele disken inne i tjenesten og frigjør alle ressurser som er reservert. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.</p>
-</section>
-<section id="pause-tjenesten" class="level2">
-<h2 class="anchored" data-anchor-id="pause-tjenesten">Pause tjenesten</h2>
-<p>Man kan pause tjenesten ved å trykke på Pause-knappen i Dapla Lab under <strong>Mine tjenester</strong>. Når man pauser så slettes alt påden lokale disken som ikke er lagret under <code>$HOME/work</code>. Vi anbefaler at man avslutter heller pauser tjenester som ikke benyttes.</p>
-</section>
-<section id="monitorering" class="level2">
-<h2 class="anchored" data-anchor-id="monitorering">Monitorering</h2>
-<div class="columns">
-<div class="column" style="width:70%;">
-<p>Man kan moniterere en instans av Jupyter ved å trykke på Jupyter-teksten under Mine tjenester i Dapla Lab, slik som vist i <a href="#fig-dapla-lab-monitoring" class="quarto-xref">Figur&nbsp;1</a>.</p>
-<p>Denne funksjonaliteten er under arbeid og mer informasjon kommer snart.</p>
-</div><div class="column" style="width:5%;">
-<!-- empty column to create gap -->
-</div><div class="column" style="width:25%;">
-<div id="fig-dapla-lab-monitoring" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab.">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-dapla-lab-monitoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/dapla-lab-monitoring.png" class="img-fluid figure-img" alt="Viser Persitence-fanen i Jupyter-konfigurasjonen i Dapla Lab.">
+<p>Biblioteket kan benyttes i tjenester på Dapla Lab der Python er installert. Den kan installeres med følgende kommando i et <a href="../statistikkere/ssb-project.html">ssb-project</a>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-monitoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1: Monitorering av Jupyter-tjenesten i Dapla Lab
-</figcaption>
-</figure>
+<div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add dapla-auth-client</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="funksjonalitet" class="level2">
+<h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
+<p>Biblioteket er ment for å støtte autentisering mot NAIS fra Dapla Lab. I tillegg kan brukere hente ut informasjon om hvilke tilgangsgrupper brukeren er medlem av fra tokenet.</p>
+<section id="hente-ut-token" class="level3">
+<h3 class="anchored" data-anchor-id="hente-ut-token">Hente ut token</h3>
+<p>For å hente ut et JWT-token med varighet på en time kan brukeren skrive følgende:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
 </div>
+<div class="sourceCode" id="cb2" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_auth_client <span class="im">import</span> AuthClient</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>AuthClient.fetch_personal_token()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Koden over returnerer et JWT-token med informasjon om hvilken tilgangsgruppe brukeren representerer i tjenesten.</p>
+</section>
+<section id="liste-ut-tilgangsgrupper" class="level3">
+<h3 class="anchored" data-anchor-id="liste-ut-tilgangsgrupper">Liste ut tilgangsgrupper</h3>
+<p>Man kan også dekode tokenet og liste ut alle tilgangsgrupper brukeren er medlem av. I koden under brukes <a href="https://pypi.org/project/PyJWT/">Python-biblioteket PyJWT</a> til å dekode tokenet:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_auth_client <span class="im">import</span> AuthClient</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> AuthClient.fetch_personal_token([<span class="st">"all_groups"</span>, <span class="st">"current_group"</span>])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>decoded <span class="op">=</span> jwt.decode(token, options<span class="op">=</span>{<span class="st">"verify_signature"</span>: <span class="va">False</span>})</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(decoded)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Output vil da være på denne formen:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"dapla.group"</span><span class="fu">:</span> <span class="st">"team-a-developers"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"dapla.groups"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"team-a-data-admins"</span><span class="ot">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"team-a-developers"</span><span class="ot">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"team-b-developers"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"exp"</span><span class="fu">:</span> <span class="dv">1750687898</span><span class="fu">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"iat"</span><span class="fu">:</span> <span class="dv">1750684298</span><span class="fu">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"iss"</span><span class="fu">:</span> <span class="st">"https://labid.lab.dapla-external.ssb.no"</span><span class="fu">,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"scope"</span><span class="fu">:</span> <span class="st">"all_groups,current_group"</span><span class="fu">,</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"sub"</span><span class="fu">:</span> <span class="st">"ini"</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1224,13 +1251,13 @@ Figur&nbsp;1: Monitorering av Jupyter-tjenesten i Dapla Lab
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../statistikkere/jupyter.html" class="pagination-link" aria-label="Jupyter">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Jupyter</span>
+      <a href="../statistikkere/altinn-dapla-suv-tools.html" class="pagination-link" aria-label="dapla-suv-tools">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">dapla-suv-tools</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../statistikkere/jupyter-pyspark.html" class="pagination-link" aria-label="Jupyter-pyspark">
-        <span class="nav-page-text">Jupyter-pyspark</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../statistikkere/dapla-ctrl.html" class="pagination-link" aria-label="Dapla Ctrl">
+        <span class="nav-page-text">Dapla Ctrl</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -1242,7 +1269,7 @@ Figur&nbsp;1: Monitorering av Jupyter-tjenesten i Dapla Lab
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/jupyter-playground.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/jupyter-playground.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/dapla-auth-client.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/dapla-auth-client.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>

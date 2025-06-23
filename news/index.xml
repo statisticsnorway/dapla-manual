@@ -15,7 +15,154 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Thu, 12 Jun 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 23 Jun 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Personliggjør dine tjenester på Dapla Lab</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-06-23-startup-script/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et <strong>bash-script</strong> og det må ligger lagret i et repo på <a href="https://github.com/statisticsnorway">www.github.com/statisticsnorway</a>. Brukeren kan deretter referere til skriptet under <strong>Avansert</strong> i tjenestekonfigurasjonen på Dapla Lab, slik som vist Figur&nbsp;1.</p>
+<div id="fig-dapla-lab-conf-adv" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Advanced configuration for Dapla Lab">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dapla-lab-conf-adv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Avansert-fanen til en tjeneste på Dapla Lab"><img src="https://manual.dapla.ssb.no/news/posts/2025-06-23-startup-script/image.png" class="img-fluid figure-img" alt="Advanced configuration for Dapla Lab"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-conf-adv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Avansert-fanen til en tjeneste på Dapla Lab
+</figcaption>
+</figure>
+</div>
+<p>Eksempelt i Figur&nbsp;1 viser en bruker som ber om å få kjørt et skript (<strong>personal-init.sh</strong>) som ligger lagret i <a href="https://github.com/statisticsnorway/obr-test">https://github.com/statisticsnorway/obr-test</a>.</p>
+<p>Oppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.</p>
+<p>Under er et eksempel på et oppstartsskript hvor det gjøres noen endringer i <code>$HOME/.bashrc</code> og <em>theme</em> i Jupyter defineres.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Eksempel på et oppstartskript
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>demo-script.sh</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" data-filename="demo-script.sh" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/bin/bash</span></span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Update .bashrc with environment variables and aliases</span></span>
+<span id="cb1-4">echo <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$HOME/.bashrc"</span></span>
+<span id="cb1-5">echo <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"# Opprettet av mitt personlige startupscript:"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$HOME/.bashrc"</span></span>
+<span id="cb1-6">echo <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"export TEST=true"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$HOME/.bashrc"</span></span>
+<span id="cb1-7">echo <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alias gs='git status'"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$HOME/.bashrc"</span></span>
+<span id="cb1-8">echo <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alias ll='ls -alF'"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&gt;</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$HOME/.bashrc"</span></span>
+<span id="cb1-9"></span>
+<span id="cb1-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Set Jupyter-theme via settings file</span></span>
+<span id="cb1-11">THEME_NAME<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"JupyterLab Dark"</span></span>
+<span id="cb1-12">SETTINGS_DIR<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension"</span></span>
+<span id="cb1-13">SETTINGS_FILE<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$SETTINGS_DIR/themes.jupyterlab-settings"</span></span>
+<span id="cb1-14"></span>
+<span id="cb1-15">mkdir <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>p <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$SETTINGS_DIR"</span></span>
+<span id="cb1-16"></span>
+<span id="cb1-17">cat <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$SETTINGS_FILE"</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;&lt;</span>EOF</span>
+<span id="cb1-18">{</span>
+<span id="cb1-19">    <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//</span> Theme <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">set</span> <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> init<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>script</span>
+<span id="cb1-20">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"theme"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"$THEME_NAME"</span></span>
+<span id="cb1-21">}</span>
+<span id="cb1-22">EOF</span>
+<span id="cb1-23"></span>
+<span id="cb1-24">echo <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[Init Script] JupyterLab theme set to '$THEME_NAME'"</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<p>Hvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: <code>$HOME/personal_init_script.log</code>.</p>
+
+
+
+ ]]></description>
+  <category>dapla lab</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-06-23-startup-script/</guid>
+  <pubDate>Mon, 23 Jun 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/news/posts/2025-06-23-startup-script/image.png" medium="image" type="image/png" height="47" width="144"/>
+</item>
 <item>
   <title>Blogginnlegg om dapla-auth-client</title>
   <dc:creator>Johnny Niklasson</dc:creator>
@@ -31,11 +178,10 @@
 
 
  ]]></description>
-  <category>Blogg</category>
+  <category>blogg</category>
   <category>dapla-toolbelt</category>
   <category>dapla-auth-client</category>
   <category>python</category>
-  <category>autentisering</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2025-06-12-auth-client-blogginnlegg/</guid>
   <pubDate>Thu, 12 Jun 2025 00:00:00 GMT</pubDate>
 </item>
@@ -1021,116 +1167,6 @@ Figur&nbsp;2: Siden som viser hvem som har tilgang til en gitt delt-bøtte
   <guid>https://manual.dapla.ssb.no/news/posts/2025-04-24-config-files-in-template/</guid>
   <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/Dapla-Logo1.png" medium="image" type="image/png" height="144" width="144"/>
-</item>
-<item>
-  <title>Beslutning om Transfer Service fra testmiljøet på Dapla til bakken</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Mange brukere har bedt om å kunne overføre data fra et Dapla-team sitt test-miljø til bakken. Dette er spesielt relevant for team har datafangst fra Altinn 3 på Dapla, men som skal prosessere dataene på bakken.</p>
-<p>Det er nå besluttet at det ikke skal åpnes for å kunne overføre data fra test-miljø på Dapla til bakken. Årsaken er at det ikke finnes noe test-miljøet på bakken, og derfor lager dette en åpning for å overføre data mellom prod- og test-miljøene på Dapla. En slik åpning er problematisk og derfor er det nå besluttet at dette ikke skal være mulig.</p>
-<p>Løsningen for team som har datafangst med <strong>Altinn3</strong>, og får test-data fra team SU-V, blir derfor å bruke Transfer Service fra prod-miljøet til teamet for å overføre til bakken. <strong>Team SU-V</strong> har nå gitt Transfer Service i prod-miljøet til alle team med datafangst fra Altinn 3 tilgang til test-bøtta for data, slik som vist i Figur&nbsp;1.</p>
-<p>Team som allerede har fått satt opp muligheten til å overføre data fra test-miljøet til bakken, vil bli kontaktet av team Skyinfra for endre dette til løsningen vist i Figur&nbsp;1.</p>
-<div id="fig-mermaid" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-mermaid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR 
-
-    subgraph suv-altinn-data-t
-        id_suv_bucket_t[(ssb-suv-altinn-raXXXX-YY-test)]
-    end
-
-    subgraph ssb-teamnavn-kilde-t
-        id_stat_kilde_bucket_t[(data-kilde)]
-    end
-    id_suv_bucket_t &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_t
-
-    subgraph ssb-teamnavn-t
-        id_stat_produkt_bucket_t[(data-produkt)]
-    end
-    id_stat_kilde_bucket_t -- Kildomaten --&gt; id_stat_produkt_bucket_t
-
-    subgraph suv-altinn-data-p
-        id_suv_bucket_p[(ssb-suv-altinn-raXXXX-YY-prod)]
-    end
-
-    subgraph ssb-teamnavn-kilde-p
-        id_stat_kilde_bucket_p[(data-kilde&lt;br&gt;/altinn/prod/)]
-        id_stat_kilde_bucket_pt[(data-kilde&lt;br&gt;/altinn/test/)]
-    end
-    id_suv_bucket_p &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_p
-    id_suv_bucket_t -- Transfer service read --&gt; id_stat_kilde_bucket_pt
-
-    subgraph ssb-teamnavn-p
-        id_stat_produkt_bucket_p[(data-produkt&lt;br&gt;/inndata/altinn/)]
-        id_stat_produkt_bucket_pt[(data-produkt&lt;br&gt;/temp/test/altinn/)]
-
-        id_stat_kilde_bucket_p -- Kildomaten --&gt; id_stat_produkt_bucket_p
-        id_stat_kilde_bucket_pt -- Kildomaten --&gt; id_stat_produkt_bucket_pt
-
-        id_stat_frasky_bucket_p[(frasky&lt;br&gt;/altinn/prod)]
-        id_stat_frasky_bucket_pt[(frasky&lt;br&gt;/altinn/test)]
-
-        id_stat_produkt_bucket_p -- Transfer service --&gt; id_stat_frasky_bucket_p
-        id_stat_produkt_bucket_pt -- Transfer service --&gt; id_stat_frasky_bucket_pt
-    end
-
-    subgraph linux on-prem
-        id_cloudsync_p[(cloud_sync&lt;br&gt;/frasky/altinn/prod)]
-        id_cloudsync_pt[(cloud_sync&lt;br&gt;/frasky/altinn/test)]
-
-        id_stat_frasky_bucket_p -- Transfer service --&gt; id_cloudsync_p
-        id_stat_frasky_bucket_pt -- Transfer service --&gt; id_cloudsync_pt
-
-        id_stammekat_p[(stammekatalog&lt;br&gt;/wk24/datafangst/gSdv/)]
-        id_stammekat_pt[(stammekatalog&lt;br&gt;/test/wk24/datafangst/gSdv/)]
-
-        id_cloudsync_p -- MoveIT --&gt; id_stammekat_p 
-        id_cloudsync_pt -- MoveIT --&gt; id_stammekat_pt 
-    end
-
-    subgraph Oracle DB1P
-        id_isee_p[(ISEE Prod)]
-    end
-    id_stammekat_p -- crontab --&gt; id_isee_p
-
-    subgraph Oracle DB1T
-        id_isee_t[(ISEE Test)]
-    end
-    id_stammekat_pt -- crontab --&gt; id_isee_t
-
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mermaid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1: Figur som viser dataflyt for statistikkproduksjon på Dapla og Dapla/ISEE.
-</figcaption>
-</figure>
-</div>
-
-
-
- ]]></description>
-  <category>transfer service</category>
-  <category>altinn</category>
-  <category>testmiljø</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/</guid>
-  <pubDate>Thu, 24 Apr 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/news/posts/2025-04-24-transfer-service-onprem/thumbnail.png" medium="image" type="image/png" height="102" width="144"/>
 </item>
 </channel>
 </rss>
