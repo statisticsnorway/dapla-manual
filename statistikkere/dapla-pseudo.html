@@ -768,7 +768,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#stabil-id" id="toc-stabil-id" class="nav-link" data-scroll-target="#stabil-id">Stabil ID</a></li>
   <li><a href="#papis-pseudonym" id="toc-papis-pseudonym" class="nav-link" data-scroll-target="#papis-pseudonym">Papis-pseudonym</a></li>
   <li><a href="#validere-fødselsnummer" id="toc-validere-fødselsnummer" class="nav-link" data-scroll-target="#validere-fødselsnummer">Validere fødselsnummer</a></li>
-  <li><a href="#filbasert-prosessering" id="toc-filbasert-prosessering" class="nav-link" data-scroll-target="#filbasert-prosessering">Filbasert prosessering</a></li>
   <li><a href="#dataminimering" id="toc-dataminimering" class="nav-link" data-scroll-target="#dataminimering">Dataminimering</a></li>
   <li><a href="#algoritmer" id="toc-algoritmer" class="nav-link" data-scroll-target="#algoritmer">Algoritmer</a></li>
   <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
@@ -1126,38 +1125,6 @@ Hva betyr det å tilby samme pseudonym?
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Vis fødselsnummer som ikke fikk treff i SNR-katalogen som en Polars dataframe</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>result.to_polars()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="filbasert-prosessering" class="level3">
-<h3 class="anchored" data-anchor-id="filbasert-prosessering">Filbasert prosessering</h3>
-<p>Selv om mange av eksemplene i dette kapitlet viser hvordan man bruker <em>dapla-toolbelt-pseudo</em> ved å gi funksjonene et datasett fra minnet, så støtter den også å prosessere filer som er lagret på disk/bøtter. Dette kan være en fordel hvis dataene er for store for Kildomaten (&gt;32GB RAM) eller de har en dyp hierarkisk struktur (f.eks. json-filer).</p>
-<p><em>dapla-toolbelt-pseudo</em> støtter følgende filtyper:</p>
-<ul>
-<li>csv</li>
-<li>json</li>
-</ul>
-<p>Her er et eksempel på hvordan man pseudonymiserer en fil som ligger lagret på disk:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb8" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Pseudonymize</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://bucket/pseudo-examples/andeby_personer.csv"</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>options <span class="op">=</span> {</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"dtypes"</span>: {<span class="st">"fnr"</span>: pl.Utf8, <span class="st">"fornavn"</span>: pl.Utf8, <span class="st">"etternavn"</span>: pl.Utf8, <span class="st">"kjonn"</span>: pl.Categorical, <span class="st">"fodselsdato"</span>: pl.Utf8}</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>result_df <span class="op">=</span> (</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_file(file_path)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    .with_default_encryption()</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    .run()</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    .to_polars(<span class="op">**</span>options)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <p>Se flere <a href="https://github.com/statisticsnorway/dapla-toolbelt-pseudo#read-from-file-systems">eksempler i dokumentasjonen</a>.</p>
 <section id="wildcards" class="level4">
 <h4 class="anchored" data-anchor-id="wildcards">Wildcards</h4>
@@ -1192,24 +1159,24 @@ Hva betyr det å tilby samme pseudonym?
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="sourceCode" id="annotated-cell-19" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-19-1"><a href="#annotated-cell-19-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
-<span id="annotated-cell-19-2"><a href="#annotated-cell-19-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
-<span id="annotated-cell-19-3"><a href="#annotated-cell-19-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
-<span id="annotated-cell-19-4"><a href="#annotated-cell-19-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
-<span id="annotated-cell-19-5"><a href="#annotated-cell-19-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
-<span id="annotated-cell-19-6"><a href="#annotated-cell-19-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="annotated-cell-19-7"><a href="#annotated-cell-19-7" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-19-8" class="code-annotation-target"><a href="#annotated-cell-19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-19-9" class="code-annotation-target"><a href="#annotated-cell-19-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-17" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-17-1"><a href="#annotated-cell-17-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="annotated-cell-17-2"><a href="#annotated-cell-17-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
+<span id="annotated-cell-17-3"><a href="#annotated-cell-17-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
+<span id="annotated-cell-17-4"><a href="#annotated-cell-17-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
+<span id="annotated-cell-17-5"><a href="#annotated-cell-17-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
+<span id="annotated-cell-17-6"><a href="#annotated-cell-17-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-17-7"><a href="#annotated-cell-17-7" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-17-8" class="code-annotation-target"><a href="#annotated-cell-17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-17-9" class="code-annotation-target"><a href="#annotated-cell-17-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-19" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-17" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-19" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
+<span data-code-cell="annotated-cell-17" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
 </dd>
-<dt data-target-cell="annotated-cell-19" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-17" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-19" data-code-lines="9" data-code-annotation="2">Skriver metadata direkte til bøtte.</span>
+<span data-code-cell="annotated-cell-17" data-code-lines="9" data-code-annotation="2">Skriver metadata direkte til bøtte.</span>
 </dd>
 </dl>
 </div>
@@ -1220,35 +1187,35 @@ Hva betyr det å tilby samme pseudonym?
 <div class="code-with-filename-file">
 <pre><strong>Datadoc</strong></pre>
 </div>
-<div class="sourceCode" id="cb9" data-filename="Datadoc"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">{</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.0.1"</span><span class="fu">,</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">"datadoc"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="dt">"pseudonymization"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>    <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.1.0"</span><span class="fu">,</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>    <span class="dt">"pseudo_dataset"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a>    <span class="dt">"pseudo_variables"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a>      <span class="fu">{</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>        <span class="dt">"short_name"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span>   </span>
-<span id="cb9-10"><a href="#cb9-10"></a>        <span class="dt">"data_element_path"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a>        <span class="dt">"data_element_pattern"</span><span class="fu">:</span> <span class="st">"**"</span><span class="fu">,</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a>        <span class="dt">"stable_identifier_type"</span><span class="fu">:</span> <span class="st">"FREG_SNR"</span><span class="fu">,</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a>        <span class="dt">"stable_identifier_version"</span><span class="fu">:</span> <span class="st">"2023-08-31"</span><span class="fu">,</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>        <span class="dt">"encryption_algorithm"</span><span class="fu">:</span> <span class="st">"TINK-FPE"</span><span class="fu">,</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a>        <span class="dt">"encryption_key_reference"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span><span class="fu">,</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a>        <span class="dt">"encryption_algorithm_parameters"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a>          <span class="fu">{</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a>            <span class="dt">"keyId"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span></span>
-<span id="cb9-19"><a href="#cb9-19"></a>          <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb9-20"><a href="#cb9-20"></a>          <span class="fu">{</span></span>
-<span id="cb9-21"><a href="#cb9-21"></a>            <span class="dt">"strategy"</span><span class="fu">:</span> <span class="st">"SKIP"</span></span>
-<span id="cb9-22"><a href="#cb9-22"></a>          <span class="fu">}</span></span>
-<span id="cb9-23"><a href="#cb9-23"></a>        <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb9-24"><a href="#cb9-24"></a>        <span class="dt">"source_variable"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
-<span id="cb9-25"><a href="#cb9-25"></a>        <span class="dt">"source_variable_datatype"</span><span class="fu">:</span> <span class="kw">null</span></span>
-<span id="cb9-26"><a href="#cb9-26"></a>      <span class="fu">}</span></span>
-<span id="cb9-27"><a href="#cb9-27"></a>    <span class="ot">]</span></span>
-<span id="cb9-28"><a href="#cb9-28"></a>  <span class="fu">}</span></span>
-<span id="cb9-29"><a href="#cb9-29"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8" data-filename="Datadoc"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.0.1"</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"datadoc"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"pseudonymization"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.1.0"</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="dt">"pseudo_dataset"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="dt">"pseudo_variables"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>      <span class="fu">{</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>        <span class="dt">"short_name"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span>   </span>
+<span id="cb8-10"><a href="#cb8-10"></a>        <span class="dt">"data_element_path"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>        <span class="dt">"data_element_pattern"</span><span class="fu">:</span> <span class="st">"**"</span><span class="fu">,</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>        <span class="dt">"stable_identifier_type"</span><span class="fu">:</span> <span class="st">"FREG_SNR"</span><span class="fu">,</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>        <span class="dt">"stable_identifier_version"</span><span class="fu">:</span> <span class="st">"2023-08-31"</span><span class="fu">,</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>        <span class="dt">"encryption_algorithm"</span><span class="fu">:</span> <span class="st">"TINK-FPE"</span><span class="fu">,</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a>        <span class="dt">"encryption_key_reference"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span><span class="fu">,</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>        <span class="dt">"encryption_algorithm_parameters"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>          <span class="fu">{</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>            <span class="dt">"keyId"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>          <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>          <span class="fu">{</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a>            <span class="dt">"strategy"</span><span class="fu">:</span> <span class="st">"SKIP"</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a>          <span class="fu">}</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a>        <span class="dt">"source_variable"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a>        <span class="dt">"source_variable_datatype"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a>      <span class="fu">}</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a>    <span class="ot">]</span></span>
+<span id="cb8-28"><a href="#cb8-28"></a>  <span class="fu">}</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Av metadatene kan vi se fra <code>pseudo_variables</code> at det bare var feltet <code>fnr</code> som ble pseudonymisert. Vi ser også av <code>stable_identifier_type</code> ser vi at <code>fnr</code> ble oversatt til <code>snr</code>, og at versjonen av SNR-katalogen var fra <code>2023-08-31</code>. <code>encryption_algorithm</code> angir at det var det var den formatpreserverende algoritmen <code>TINK-FPE</code> som ble benyttet. <code>keyID: "papis-common-key-1"</code> angir hvilken nøkkel-id som ble benyttet. <code>strategy: "SKIP"</code> refererer til at den format-preserverende algoritmen skal “hoppe over” ugyldige karakterer og la de være som de er.</p>
 <p>Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data.</p>
@@ -1260,19 +1227,19 @@ Hva betyr det å tilby samme pseudonym?
 <div class="code-with-filename-file">
 <pre><strong>Metadata</strong></pre>
 </div>
-<div class="sourceCode" id="cb10" data-filename="Metadata"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'fnr'</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">'logs'</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="dv">999999</span><span class="er">*****'</span><span class="ot">,</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">XX'</span><span class="ot">,</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">X8b7k2*'</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="er">'metrics'</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MAPPED_SID'</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MISSING_SID'</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9" data-filename="Metadata"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'fnr'</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">'logs'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="dv">999999</span><span class="er">*****'</span><span class="ot">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">XX'</span><span class="ot">,</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">X8b7k2*'</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="er">'metrics'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MAPPED_SID'</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MISSING_SID'</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I Kildomaten kan det vært nyttig å printe denne informasjonen til loggene. Av eksempelet over ser vi at verdier som er over 6 karakterer lange blir maskert.</p>
 </section>
