@@ -35,186 +35,242 @@
     "text": "Vi har skrevet et kapittel i Dapla-manualen om Kvalitet i kode og koding (KVAKK). Sjekk det ut her.\nKapittelet er foreløpig kort og henviser til confluence. Vi har planer om å skrive mer utfyllende om KVAKK i manualen."
   },
   {
-    "objectID": "news/posts/2025-04-24-update-shared-buckets/index.html",
-    "href": "news/posts/2025-04-24-update-shared-buckets/index.html",
-    "title": "Endring i opprettelse og administrasjon av delt-bøtter",
+    "objectID": "news/posts/2025-06-24-dapla-toolbelt-update/index.html",
+    "href": "news/posts/2025-06-24-dapla-toolbelt-update/index.html",
+    "title": "Oppdater til versjon 4 av dapla-toolbelt",
     "section": "",
-    "text": "Vi ruller nå ut en endring i hvordan brukere kan opprette og gi tilganger til delt-bøtter. Den nye fremgangsmåten er dokumentert i Dapla-manualen. Endringen vil skje gradvis de neste dagene, og vil fullføres ila et par dager.\nÅrsaken til endringen er at Dapla nå skal støtte en ny type delt-bøtte kalt Delomat. Denne bøttetypen er spesielt konfigurert for en ny tjeneste for datadeling som utvikles med navnet Delomaten.\nEn direkte konsekvens av endringen er at brukere ikke lenger trenger å forholde seg iam.yaml for å gi tilganger slik som tidligere. Både opprettelse av bøtter og tilgangstyring skjer nå i samme fil shared-buckets.yaml. Figur 1 viser hvordan den nye strukturen ser ut.\nUtrullingen av den nye funksjonaliteten medfører ikke at brukere trenger å gjøre noe, siden alle tidligere shared-buckets.yaml og iam.yaml blir migrert inn til det nye formatet. Hvis noen skulle oppleve endringer i tilganger til delt-bøtter, så kan man kontakte Kundeservice for å få hjelp.\n\n\n\n\n\n\nFigur 1: Bilde av det nye oppsettet for delt-bøtter."
+    "text": "Team Statistikktjenester har sluppet versjon 4.0.0 av dapla-toolbelt. Den største endringen i versjon 4 er at AuthClient-delen av dapla-toolbelt nå er fjernet fra dapla-toolbelt og skilt ut i en egen pakke som heter dapla-auth-client. Funksjonene i dapla-toolbelt vil fortsatt fungerere som før, men dapla-toolbelt benytter seg av en ny pakke og måte for autentisering mot NAIS. Alle brukere bør derfor oppdatere til versjon 4 ved første anledning.\nFordelen med å skille ut autentisering i en egen pakke er at brukere som kun trengte dapla-toolbelt for autententisering mot NAIS, ikke lenger trenger å importere alle avhengighetene til dapla-toolbelt til sitt prosjekt.\nFormålet med å fortsatt tilby AuthClient i dapla-toolbelt er for å autentisere brukere mot Maskinporten Guardian og Data Collector på NAIS.\nDu kan lese dokumentasjonen til dapla-auth-client her, i tillegg er det skrevet et blogg-artikkel om endringen."
   },
   {
-    "objectID": "news/posts/2025-01-29-dapla-lab-dagene/index.html",
-    "href": "news/posts/2025-01-29-dapla-lab-dagene/index.html",
-    "title": "Åpen dag om Dapla Lab i Oslo og Kongsvinger",
+    "objectID": "news/posts/2025-04-01-daplanytt-mar25/index.html",
+    "href": "news/posts/2025-04-01-daplanytt-mar25/index.html",
+    "title": "DaplaNytt-møte 1.4.2025",
     "section": "",
-    "text": "10. og 11. februar arrangerer vi åpen dag om Dapla Lab for å hjelpe brukere med overgangen til Dapla Lab. Utviklere, tech-coacher og støtteteam stiller fysisk for å hjelpe deg med å flytte kode, filer, sette opp Git- og GitHub-konfigurasjon, eller svare på spørsmål/innspill man måtte ha ifm. overgangen. Vi håper at så mange som mulig tar turen innom for å få hjelp eller bare slå av en prat.\nArrangement i Oslo 10. februar kl. 12 i Auditoriet\nArrangement i Kongsvinger 11. februar kl. 12 i A005"
+    "text": "DaplaNytt for mars 2025 ble avholdt som Teams-møte 1. april 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
   },
   {
-    "objectID": "news/posts/2024-11-11-dapla-lab-source-data/index.html",
-    "href": "news/posts/2024-11-11-dapla-lab-source-data/index.html",
-    "title": "Kildedata tilgjengelig fra Dapla Lab",
+    "objectID": "news/posts/2025-05-07-datadoc-editor-update/index.html",
+    "href": "news/posts/2025-05-07-datadoc-editor-update/index.html",
+    "title": "Ny versjon av Datadoc-editor",
     "section": "",
-    "text": "Brukere i tilgangsgruppen data-admins kan nå aksessere kildedata fra tjenestene på Dapla Lab. Kravene for tilgangen er de samme som før:\nSom tidligere må de da velge hvilket team og tilgangsgruppe de ønsker å starte tjenesten som, og deretter oppgi begrunnelse og lengde på tilgang. Dette gjøres fra tjenestekonfigurasjonen i Dapla Lab, slik som vist i Figur 1."
+    "text": "I den nye versjonen varsles brukeren når det avdekkes avvik mellom datasettet og eksisterende metadata slik at man kan korrigere metadataene.\nEn liten feil rapportert av Østhus, Andreas er blitt fikset av Corneil, Carl Franklin: Vi nå kun ta hensyn til primær plassering av en statistikk i et statistikkområde når det utledes mens før tok vi det første vi fant, som førte til merarbeid på korrigering i en del tilfeller. Fasiten for å utlede dette er det som statistikkbanken benytter for kategorisering av statistikk og den ligger her for de som er interessert: www.ssb.no/xp/_/service/mimir/subjectStructurStatistics\nI tillegg har vi migrert prosjektet til uv fra Poetry. Det er ikke noe brukerne skal merke, men vi kan melde om en stor forbedring på utvikleropplevelsen.\nRelease Notes: https://github.com/statisticsnorway/datadoc-editor/releases/tag/v1.0.13"
   },
   {
-    "objectID": "news/posts/2024-11-11-dapla-lab-source-data/index.html#begrunnelse-gis-i-dapla-lab",
-    "href": "news/posts/2024-11-11-dapla-lab-source-data/index.html#begrunnelse-gis-i-dapla-lab",
-    "title": "Kildedata tilgjengelig fra Dapla Lab",
-    "section": "Begrunnelse gis i Dapla Lab",
-    "text": "Begrunnelse gis i Dapla Lab\nNår en bruker tidligere har aksessesert kildedata fra “gamle” Jupyter (https://jupyter.dapla.ssb.no/), så ble en JIT-applikasjon for å få midlertidig tilgang. Denne tilnærmingen vil fortsette å fungere for det “gamle” mijøet inntil det avvikles til fordel for Dapla Lab. Men på Dapla Lab kan begrunnelse og tidspunkt angis direkte i tjenestekonfigurasjonen."
-  },
-  {
-    "objectID": "news/posts/2024-11-11-dapla-lab-source-data/index.html#feil-ved-manglende-begrunnelse",
-    "href": "news/posts/2024-11-11-dapla-lab-source-data/index.html#feil-ved-manglende-begrunnelse",
-    "title": "Kildedata tilgjengelig fra Dapla Lab",
-    "section": "Feil ved manglende begrunnelse",
-    "text": "Feil ved manglende begrunnelse\nHvis man prøver å starte en tjeneste som data-admins uten å oppgi en begrunnelse, så vil man få feilmeldingen vist i Figur 2. Denne feilmeldingen er lite forklarende og er noe vi ønsker å forbedre etter hvert.\n\n\n\n\n\n\nFigur 2: Feilmelding ved manglende begrunnelse i Dapla Lab."
-  },
-  {
-    "objectID": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
-    "href": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
-    "title": "Delt-bøtter støttes i Dapla Lab",
+    "objectID": "news/posts/2025-04-10-datadoc-update/index.html",
+    "href": "news/posts/2025-04-10-datadoc-update/index.html",
+    "title": "Oppdatert dokumentasjon for Datadoc",
     "section": "",
-    "text": "Man kan nå tilgjengeliggjøre delt-bøtter fra andre team inne i Jupyter, Vscode-python og Rstudio. Les dokumentasjon her, eller se videoen under:"
+    "text": "Dokumentasjonen for Datadoc-delen av dapla-toolbelt-metadata er skrevet om og inkluderer nå flere eksempler på hvordan man jobbe programmatisk med metadata.\nLes kapitlet her."
   },
   {
-    "objectID": "news/posts/2025-01-14-dapla-ctrl-ny-url/index.html",
-    "href": "news/posts/2025-01-14-dapla-ctrl-ny-url/index.html",
-    "title": "Dapla Ctrl har fått ny nettadresse",
+    "objectID": "news/posts/2025-04-06-update-statbank-client/index.html",
+    "href": "news/posts/2025-04-06-update-statbank-client/index.html",
+    "title": "Dokumentasjon av lasting til Statistikkbanken er oppdatert",
     "section": "",
-    "text": "Nettadressen til Dapla Ctrl er nå endret fra https://ctrl.dapla.ssb.no/ til https://dapla-ctrl.intern.ssb.no/. Dette er gjort som en del av overgangen til NAIS-plattformen."
+    "text": "Kapitlet om dapla-statbank-client i Dapla-manualen er skrevet om og url-en er endret til: https://manual.dapla.ssb.no/statistikkere/dapla-statbank-client.html.\nI tillegg har Carl Corneil skrevet et blogginnlegg hvor han beskriver en optimal fremgangsmåte for å laste til flere statistikkbanktabeller i et produksjonsløp."
   },
   {
-    "objectID": "news/posts/2025-06-23-startup-script/index.html",
-    "href": "news/posts/2025-06-23-startup-script/index.html",
-    "title": "Personliggjør dine tjenester på Dapla Lab",
+    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html",
+    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html",
+    "title": "Endringer for økt stabilitet på Dapla Lab",
     "section": "",
-    "text": "Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et bash-script og det må ligger lagret i et repo på www.github.com/statisticsnorway. Brukeren kan deretter referere til skriptet under Avansert i tjenestekonfigurasjonen på Dapla Lab, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Avansert-fanen til en tjeneste på Dapla Lab\n\n\n\nEksempelt i Figur 1 viser en bruker som ber om å få kjørt et skript (personal-init.sh) som ligger lagret i https://github.com/statisticsnorway/obr-test.\nOppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.\nUnder er et eksempel på et oppstartsskript hvor det gjøres noen endringer i $HOME/.bashrc og theme i Jupyter defineres.\n\n\n\n\n\n\nEksempel på et oppstartskript\n\n\n\n\n\ndemo-script.sh\n\n#!/bin/bash\n\n# Update .bashrc with environment variables and aliases\necho \"\" &gt;&gt; \"$HOME/.bashrc\"\necho \"# Opprettet av mitt personlige startupscript:\" &gt;&gt; \"$HOME/.bashrc\"\necho \"export TEST=true\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias gs='git status'\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias ll='ls -alF'\" &gt;&gt; \"$HOME/.bashrc\"\n\n# Set Jupyter-theme via settings file\nTHEME_NAME=\"JupyterLab Dark\"\nSETTINGS_DIR=\"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension\"\nSETTINGS_FILE=\"$SETTINGS_DIR/themes.jupyterlab-settings\"\n\nmkdir -p \"$SETTINGS_DIR\"\n\ncat &gt; \"$SETTINGS_FILE\" &lt;&lt;EOF\n{\n    // Theme set from init-script\n    \"theme\": \"$THEME_NAME\"\n}\nEOF\n\necho \"[Init Script] JupyterLab theme set to '$THEME_NAME'\"\n\n\n\nHvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: $HOME/personal_init_script.log."
+    "text": "Etter overgangen til Dapla Lab februar 2025 har vi gjort erfaringer som tilsa at vi burde endre hvordan tjenestene er satt opp. Dette burde resultere i at brukere opplever færre avbrudd når de jobber i en tjeneste som Jupyter, og at det blir færre problemer knyttet til konkurerende minnebruk. Ofte er disse vurderingene en avveining mellom opplevd stabilitet og fleksibilitet vs kostnader for SSB. Det optimalet oppsettet er derfor noe vi må kontinuerlig justere etter hvert som vi får erfaring."
   },
   {
-    "objectID": "news/posts/2025-04-07-altinn-part/index.html",
-    "href": "news/posts/2025-04-07-altinn-part/index.html",
-    "title": "Blogginnlegg om Altinn 3 og ISEE",
-    "section": "",
-    "text": "Magnus Theodor Engh har skrevet et blogginnlegg som forklarer hvordan man kan integrere datafangst med Altinn 3 på Dapla, med lasting til ISEE i prodsonen. Les innlegget her."
+    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#færre-avbrudd",
+    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#færre-avbrudd",
+    "title": "Endringer for økt stabilitet på Dapla Lab",
+    "section": "Færre avbrudd",
+    "text": "Færre avbrudd\nBrukere som har jobbet i Jupyter, VS Code eller RStudio har rapportert at de plutselig kan oppleve avbrudd og at tjenesten ikke kan brukes på noen minutter. En refresh av nettsiden etter noen minutter har fikset problemet, men det oppleves ustabilt for brukeren. Vi har nå gjort endringer i den underliggende plattformen slik at dette ikke skal skje. Årsaken til avbruddene har vært at brukere har blitt omplassert på nye maskiner for å spare ressurser. Vi har nå økt toleransen for at brukere skal bli omplassert på ny maskin og dermed bør problemet forsvinne. For de som er interessert i mer detaljer så kan de lese neste avsnitt.\nNår en tjeneste startes i Dapla Lab bestemmer Kubernetes1 hvilken underliggende maskin (også kalt node) tjenesten skal starte på. Hvis det er for lite kapasitet vil Kubernetes starte en ny maskin. Denne skaleringen er grunnen til at oppstart av en tjeneste noen ganger kan ta ekstra tid. Skulle det vise seg at vi har flere maskiner enn nødvendig vil de overflødige maskinene bli skrudd av. Ved å kun kjøre det minste nødvendige antallet med maskiner får vi en mer kostnadseffektiv drift. En konsekvens av dette har vært at tjenester plutselig kan oppleve et midlertidig avbrudd mens tjenesten blir flyttet fra en maskin til en annen. Etter tilbakemelding fra brukerne har vi endret denne praksisen, og lar nå tjenestene kjøre videre på samme maskin, selv om det er ledig kapasitet på andre maskiner."
   },
   {
-    "objectID": "news/posts/2024-12-16-blogpost-pandera/index.html",
-    "href": "news/posts/2024-12-16-blogpost-pandera/index.html",
-    "title": "Nytt blogginnlegg om Pandera",
-    "section": "",
-    "text": "Manualens blogg har blitt oppdatert med en post om hvordan validere data i kode ved hjelp av Python pakken Pandera. Les mer her."
+    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#mindre-konkurrerende-minnebruk",
+    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#mindre-konkurrerende-minnebruk",
+    "title": "Endringer for økt stabilitet på Dapla Lab",
+    "section": "Mindre konkurrerende minnebruk",
+    "text": "Mindre konkurrerende minnebruk\n\nEnkelte brukere har opplevd at tjenesten i Dapla Lab kræsjer pga. minnebruk selv om minnebruken er mindre enn det som ble forespurt av brukeren. Dette skyldes at det er forskjell på forespurte og tilgjengelige ressurser i Kubernetes. Vi har nå endret oppsettet i Dapla Lab slik at brukerne alltid får det som forespørres, og derfor vil mangel på ressurser ikke forekomme lenger. Resultatet for brukeren er en mer stabil tjeneste og bedre brukeropplevelse. De som er interessert i flere detaljer rundt dette, kan lese avsnittet under.\nNår man som bruker i Dapla Lab konfigurerer en tjeneste med CPU og Minne/RAM, så blir det satt føringer som må overholdes av Kubernetes. Den ene føringen er en forespørsel - mengden CPU/minne man er garantert å få - og den andre er grensen/taket. Hvis man går over taket vil Kubernetes “drepe” tjenesten og starte den på nytt.\nI “tradisjonelle” applikasjoner (tenk f.eks. Klass sitt API) gir forespørsler og grenser mening, grunnet naturlig variasjon i belastning og trafikk, og at applikasjonene er designet for å kunne feile, starte på nytt ofte og kjøre flere instanser i parallel. Hvis den om og om igjen går over grensen sin tyder dette på en feil i applikasjonen (f.eks. minnelekkasje).\nKubernetes benytter seg av det forespurte minnet når den velger hvilken maskin tjenesten eller applikasjonen skal kjøre på. Det vil si at det er mulig å totalt ha en høyere minnegrense enn hva som er tilgjengelig på maskinen. Et eksempel på dette er hvis tjeneste A har minneforespørsel/-grense på 100GB/150GB, og tjeneste B har tilsvarende, men maskinen bare har 256GB med minne tilgjengelig. Da er vi i et scenario der maskinen ikke har nok minne hvis både tjeneste A og tjeneste B bruker opp til minnegrensen sin. I dette tilfellet vil en tjeneste på maskinen bli drept og startet på nytt. Merk at dette kan være en tilfeldig tjeneste på maskinen, ikke nødvendigvis den som bruker mest minne.\nVi har sett at det for tjenester på Dapla Lab ikke gir mening å differensiere på forespørsel og grense, som i tradisjonelle applikasjoner. Derfor er det nå innført en endring der forespørselen er lik grensen.Dette håper vi gjør det mer forutsigbart for brukeren hva de kan forvente av tilgjengelig minne, samtidig som stabiliteten for alle brukerne ved at “minnetunge” brukere ikke påvirker andre sine tjenester."
   },
   {
-    "objectID": "news/posts/2025-05-21-kildomaten-instances/index.html",
-    "href": "news/posts/2025-05-21-kildomaten-instances/index.html",
-    "title": "Økt ytelse i Kildomaten",
-    "section": "",
-    "text": "Kildomaten vil nå som standard prosessere 100 filer parallelt, mot 5 tidligere. Endringen vil spesielt forbedre ytelsen for team som mottar svært mange filer kildebøtta som skal prosesseres med en Kildomaten-jobb. Antall parallelle prosesser kan også økes over 100 som er standard, men vi ønsker da at teamet tar kontakt med Kundeservice slik at vi kan få erfaringer med hvordan andre systemer, som pseudonymisering, håndterer dette.\nForbedringen i ytelse påvirker i hovedsak Kildoamten sin evne til å prosessere mange små/mellomstore filer, og ikke hvordan den håndterer store filer. Team Statistikktjenester jobber kommer fremover til iverksette tiltak å øke kapasiteten på prosessering av store filer også.\nLes oppdatert dokumentasjon for Kildomaten her."
+    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#nye-maskiner",
+    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#nye-maskiner",
+    "title": "Endringer for økt stabilitet på Dapla Lab",
+    "section": "Nye maskiner",
+    "text": "Nye maskiner\nDet å velge korrekte maskiner er ikke nødvendigvis en enkel oppgave, da generell bruk av maskinen må veies opp mot kostnaden ved den. Kostnadsdriveren for maskinene Dapla Lab og tjenestene kjører på er minne. Den nysgjerrige kan ta en titt på pris-oversikten her:\nhttps://cloud.google.com/compute/all-pricing?hl=nb.\nPå Dapla Lab benyttes maskintype n2 (standard og highmem). Ved å monitorere og observere bruken av ressurser gjør vi nå også endringer i hvilke underliggende maskiner som kan kjøres opp. Fremover vil vi kjøre opp færre store maskiner enn flere små (fordi det finnes en basiskostnad for hver ekstra maskin), samtidig som vi nå innfører en maskintype som ikke har like mye minne som andre (n2-standard-80). Det vil være kostnadseffektivt for dem som trenger mye CPU men ikke nødvendigvis masse minne.\nDette vil være noe brukerne ikke merker eller vil ha et forhold til."
   },
   {
-    "objectID": "news/posts/2025-04-24-transfer-service-onprem/index.html",
-    "href": "news/posts/2025-04-24-transfer-service-onprem/index.html",
-    "title": "Beslutning om Transfer Service fra testmiljøet på Dapla til bakken",
-    "section": "",
-    "text": "Mange brukere har bedt om å kunne overføre data fra et Dapla-team sitt test-miljø til bakken. Dette er spesielt relevant for team har datafangst fra Altinn 3 på Dapla, men som skal prosessere dataene på bakken.\nDet er nå besluttet at det ikke skal åpnes for å kunne overføre data fra test-miljø på Dapla til bakken. Årsaken er at det ikke finnes noe test-miljøet på bakken, og derfor lager dette en åpning for å overføre data mellom prod- og test-miljøene på Dapla. En slik åpning er problematisk og derfor er det nå besluttet at dette ikke skal være mulig.\nLøsningen for team som har datafangst med Altinn3, og får test-data fra team SU-V, blir derfor å bruke Transfer Service fra prod-miljøet til teamet for å overføre til bakken. Team SU-V har nå gitt Transfer Service i prod-miljøet til alle team med datafangst fra Altinn 3 tilgang til test-bøtta for data, slik som vist i Figur 1.\nTeam som allerede har fått satt opp muligheten til å overføre data fra test-miljøet til bakken, vil bli kontaktet av team Skyinfra for endre dette til løsningen vist i Figur 1.\n\n\n\n\n\n\n\n\nflowchart LR \n\n    subgraph suv-altinn-data-t\n        id_suv_bucket_t[(ssb-suv-altinn-raXXXX-YY-test)]\n    end\n\n    subgraph ssb-teamnavn-kilde-t\n        id_stat_kilde_bucket_t[(data-kilde)]\n    end\n    id_suv_bucket_t &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_t\n\n    subgraph ssb-teamnavn-t\n        id_stat_produkt_bucket_t[(data-produkt)]\n    end\n    id_stat_kilde_bucket_t -- Kildomaten --&gt; id_stat_produkt_bucket_t\n\n    subgraph suv-altinn-data-p\n        id_suv_bucket_p[(ssb-suv-altinn-raXXXX-YY-prod)]\n    end\n\n    subgraph ssb-teamnavn-kilde-p\n        id_stat_kilde_bucket_p[(data-kilde&lt;br&gt;/altinn/prod/)]\n        id_stat_kilde_bucket_pt[(data-kilde&lt;br&gt;/altinn/test/)]\n    end\n    id_suv_bucket_p &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_p\n    id_suv_bucket_t -- Transfer service read --&gt; id_stat_kilde_bucket_pt\n\n    subgraph ssb-teamnavn-p\n        id_stat_produkt_bucket_p[(data-produkt&lt;br&gt;/inndata/altinn/)]\n        id_stat_produkt_bucket_pt[(data-produkt&lt;br&gt;/temp/test/altinn/)]\n\n        id_stat_kilde_bucket_p -- Kildomaten --&gt; id_stat_produkt_bucket_p\n        id_stat_kilde_bucket_pt -- Kildomaten --&gt; id_stat_produkt_bucket_pt\n\n        id_stat_frasky_bucket_p[(frasky&lt;br&gt;/altinn/prod)]\n        id_stat_frasky_bucket_pt[(frasky&lt;br&gt;/altinn/test)]\n\n        id_stat_produkt_bucket_p -- Transfer service --&gt; id_stat_frasky_bucket_p\n        id_stat_produkt_bucket_pt -- Transfer service --&gt; id_stat_frasky_bucket_pt\n    end\n\n    subgraph linux on-prem\n        id_cloudsync_p[(cloud_sync&lt;br&gt;/frasky/altinn/prod)]\n        id_cloudsync_pt[(cloud_sync&lt;br&gt;/frasky/altinn/test)]\n\n        id_stat_frasky_bucket_p -- Transfer service --&gt; id_cloudsync_p\n        id_stat_frasky_bucket_pt -- Transfer service --&gt; id_cloudsync_pt\n\n        id_stammekat_p[(stammekatalog&lt;br&gt;/wk24/datafangst/gSdv/)]\n        id_stammekat_pt[(stammekatalog&lt;br&gt;/test/wk24/datafangst/gSdv/)]\n\n        id_cloudsync_p -- MoveIT --&gt; id_stammekat_p \n        id_cloudsync_pt -- MoveIT --&gt; id_stammekat_pt \n    end\n\n    subgraph Oracle DB1P\n        id_isee_p[(ISEE Prod)]\n    end\n    id_stammekat_p -- crontab --&gt; id_isee_p\n\n    subgraph Oracle DB1T\n        id_isee_t[(ISEE Test)]\n    end\n    id_stammekat_pt -- crontab --&gt; id_isee_t\n\n\n\n\n\n\n\n\n\nFigur 1: Figur som viser dataflyt for statistikkproduksjon på Dapla og Dapla/ISEE."
+    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#footnotes",
+    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#footnotes",
+    "title": "Endringer for økt stabilitet på Dapla Lab",
+    "section": "Fotnoter",
+    "text": "Fotnoter\n\n\nKubernetes er systemet som brukes under panseret for å skalere opp og ned ressurser i Dapla Lab. Les mer om Kubernetes her.↩︎"
   },
   {
-    "objectID": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
-    "href": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
-    "title": "Forbedring av konfigurasjon i Dapla Lab",
+    "objectID": "news/posts/2024-12-23-standarder-chapter/index.html",
+    "href": "news/posts/2024-12-23-standarder-chapter/index.html",
+    "title": "Nytt kapittel om Standarder og standardutvalget",
     "section": "",
-    "text": "Den 18. mars 2025 rullet vi ut en endring i tjenestekonfigurasjonene til alle tjenester på Dapla Lab. Under Data-fanen er ikke lenger mulig å starte en tjeneste som data-admins uten å oppgi en begrunnelse. I tillegg vises feltene for Begrunnelse og Varighet nå kun hvis man har valgt data-admins under Team og tilgangsgruppe.\nFigur 1 viser hvordan tjenestekonfigurasjonen ser ut etter endringen. Figur 1 (a) viser hvordan Data-fanen ser ut hvis man velger å representere developers, mens Figur 1 (b) viser valgene hvis man velger data-admins.\n\n\n\n\n\n\n\n\n\n\n\n(a) developers\n\n\n\n\n\n\n\n\n\n\n\n(b) data-admins\n\n\n\n\n\n\n\nFigur 1: Ulik visning av informasjon basert på om man velger developers eller data-admins"
+    "text": "Vi har skrevet et kapittel i Dapla-manualen som gir et overblikk over standardutvalget og standardene på Dapla. Sjekk det ut her."
   },
   {
-    "objectID": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
-    "href": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
-    "title": "Dapla Lab støtter Statbank",
+    "objectID": "news/posts/2025-02-14-cost-in-dapla-lab/index.html",
+    "href": "news/posts/2025-02-14-cost-in-dapla-lab/index.html",
+    "title": "Estimerte kostnader i Dapla Lab",
     "section": "",
-    "text": "Fra og med forrige uke støtter Statbank-pakken lasting fra Dapla Lab. Dette er i forbindelse med ny versjon av Python-pakken dapla-statbank-client.\nLes mer om dette i innlegget til Carl Corneil på Viva Engage."
+    "text": "Du kan nå se et estimat for hvor mye din tjeneste koster under Ressurser-fanen i tjenestekonfigurasjonen på Dapla Lab. Dette er ikke et nøyaktig estimat, men kan gi brukeren en indikasjon på hvor mye ressursene vil koste ila en arbeidsdag."
   },
   {
-    "objectID": "news/posts/2025-01-08-metodebib-chapter/index.html",
-    "href": "news/posts/2025-01-08-metodebib-chapter/index.html",
-    "title": "Nytt kapittel om Metodebiblioteket",
+    "objectID": "news/posts/2024-11-14-kildedata-datadoc/index.html",
+    "href": "news/posts/2024-11-14-kildedata-datadoc/index.html",
+    "title": "Kildedata og Datadoc",
     "section": "",
-    "text": "Vi har skrevet et kapittel i Dapla-manualen om metodebiblioteket. Sjekk det ut her."
+    "text": "Datadoc støtter ikke dokumentasjon av datasett i datatilstanden kildedata enda. Det vil støttes på sikt, men foreløpig er det ikke funksjonalitet for dette.\nI Datadoc-applikasjonen i Dapla Lab får man nå valget med å logge seg inn i tjenesten som data-admins, og dermed en teknisk mulighet til å dokumentere kildedata. Siden dette ikke er støttet enda, så ber vi alle om å ikke gjøre dette. Det er ingen grunn til å aktivere sin kildedatatilgang når dette ikke støttes.\nLes mer i dokumentasjonen til Datadoc."
   },
   {
-    "objectID": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
-    "href": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
-    "title": "Skru av automatisk pausing for en tjeneste",
+    "objectID": "news/posts/2025-04-04-dapla-toolbelt-meta-python/index.html",
+    "href": "news/posts/2025-04-04-dapla-toolbelt-meta-python/index.html",
+    "title": "dapla-toolbelt-metadata støtter igjen Python 3.10",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab pauses hver kveld kl. 22:00, slik som forklart i dokumentasjonen. Nå er det mulig å skru av pausing for enkelttjenester ved å skrive [nosuspend] på slutten av visningsnavnet til tjenesten, slik som vist i videoen under:\n\nDenne funksjonaliteten kan skrus av og på etter at tjenesten er startet."
+    "text": "I dapla-toolbelt-metadata v0.5.0 ble støtte for Python 3.10 fjernet. Det gjorde at pakken ikke var kompatibel med mange prosjekter skapt vha. ssb-project. Endringen skapte problemer for flere prosjekter og derfor er støtte for Python 3.10 nå støttet i dapla-toolbelt-metadata v0.6.2."
   },
   {
-    "objectID": "news/posts/2025-01-16-manualen-omstrukturert/index.html",
-    "href": "news/posts/2025-01-16-manualen-omstrukturert/index.html",
-    "title": "Omstrukturering av manualen!",
+    "objectID": "news/posts/2025-04-29-change-data-admins/index.html",
+    "href": "news/posts/2025-04-29-change-data-admins/index.html",
+    "title": "Endring i tilganger for data-admins",
     "section": "",
-    "text": "Finner du ikke favorittartiklene dine? Det er fordi vi har omstrukturert manualen. Vi har delt opp det som tidligere var jobbe-med-kode inn i 3 forksjellige artikler: SSB-project, Pakkehåndtering i Python og Pakkehåndtering i R."
+    "text": "Ifm med utrulling av en ny type delt-bøtte ble det oppdaget at noen team hadde en feil i tilgangene for data-admins. Dette ble rettet i sammenheng med utrulling av de nye delt-bøttene. I praksis vil data-admins merke dette ved at de ikke lenger har tilgang til produkt-bøtta når de logger seg som data-admins i Dapla Lab."
   },
   {
-    "objectID": "news/posts/2025-03-05-daplanytt-feb25/index.html",
-    "href": "news/posts/2025-03-05-daplanytt-feb25/index.html",
-    "title": "DaplaNytt-møte 5.3.2025",
+    "objectID": "news/posts/2025-04-30-challenges-gcsfuse/index.html",
+    "href": "news/posts/2025-04-30-challenges-gcsfuse/index.html",
+    "title": "Deling av data og /buckets",
     "section": "",
-    "text": "DaplaNytt for februar 2025 ble avholdt som Teams-møte 5. mars 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
+    "text": "Etter noen måneder med erfaring med tilgjengeliggjøring av bøtter som filsystem i Dapla Lab, har vi erfart at funksjonaliteten i noen tilfeller har noen utfordringer.\nEn utfordring oppstår når team skriver data til delt-bøtter direkte via Transfer Service, uten å logge seg inn på Dapla Lab etterpå. Hvis det delende teamet aldri åpner en tjeneste på Dapla Lab etter at dataene er delt, så vil ikke de dataene vises for konsumentene av dataene under /buckets/ i Dapla Lab.\nÅrsaken er at opprettelsen av mapper krever skrivetilgang til bøtta, og det har ikke konsumenten av delte-data. Konsumentene vil kunne se dataene via gs://-stien, men ikke /buckets/-stien. Hvis data derimot deles ved at de produseres direkte fra en tjeneste på Dapla Lab, så vil ikke dette være en problemstilling.\nVi jobber med å løse dette problemet, og finner forhåpentligvis en løsning innen kort tid."
   },
   {
-    "objectID": "news/posts/2025-03-18-klass-web-upgrade/index.html",
-    "href": "news/posts/2025-03-18-klass-web-upgrade/index.html",
-    "title": "Nytt utseende for Klass-siden på ssb.no",
+    "objectID": "news/posts/2025-02-05-daplanytt-jan25/index.html",
+    "href": "news/posts/2025-02-05-daplanytt-jan25/index.html",
+    "title": "DaplaNytt-møte 5.2.2025",
     "section": "",
-    "text": "Den 18. mars 2025 ble nettsiden som lar brukere utforske i kodeverk i Klass på www.ssb.no/klass oppdatert. Brukere vil merke at utseende nå er oppdatert og mer i tråd med utseendet på resten av www.ssb.no. I tillegg har selve applikasjonen blitt oppgradert og migrert til å kjøre på SSBs nye applikasjonsplattform NAIS.\nFigur 1 viser hvordan den nye nettsiden ser ut.  \n\n\n\n\n\n\nFigur 1: Den nye nettsiden på ssb.no for Klass."
+    "text": "DaplaNytt for januar 2025 ble avholdt som Teams-møte 5. februar 2025.\nSe opptaket her (intern lenke).\n\n\n\nSkjembilde fra Teams-møte"
   },
   {
-    "objectID": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
-    "href": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
-    "title": "Nye tidspunkter for pausing på Dapla Lab",
+    "objectID": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
+    "href": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
+    "title": "Nytt tidspunkt for automatisk pausing på Dapla Lab",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab blir automatisk pauset kl 17.00 hver dag, med mindre man har meldt seg ut av pausingen. Basert på erfaring ser vi at det startes en del tjenester etter kl 17, og siden disse ikke pauses automatisk, så kan de stå og kjøre til kl 17 dagen etter hvis brukeren glemmer å pause disse. Dette kan medføre unødvendige ressursbruk og kostnader for SSB.\nDerfor innfører vi en ny automatisk rutine for pausing av tjenester på Dapla Lab. I tillegg til pausingen som skjer kl 17 hver, så vil vi fom. 14. april 2025 pause tjenester også hver hele time i tidsintervallet 18.00-05.00. Den nye rutinen vil fortsatt respektere de som meldt seg ut av pausingen. De som har meldt seg ut av pausingen må selv ta ansvar for å manuelt pause tjenesten når den ikke er i bruk.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
+    "text": "Alle tjenester på Dapla Lab blir pauset kl 22.00 hver dag. I forbindelse med at vi nå tilbyr brukere å melde seg ut av den automatiske pausingen ved behov, så endrer vi nå tidspunktet for pausing fra 22.00 til 17.00 fra og med torsdag 27. mars.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
   },
   {
-    "objectID": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
-    "href": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
-    "title": "Endring i tjenestekonfigurasjon på Dapla Lab",
+    "objectID": "news/posts/2024-12-03-refresh-buckets/index.html",
+    "href": "news/posts/2024-12-03-refresh-buckets/index.html",
+    "title": "refresh-buckets kommando i Dapla Lab",
     "section": "",
-    "text": "Tjenestekonfigurasjonen i Dapla Lab har endret seg. Dette er altså menyen man får opp når man starter opp en ny tjeneste, for eksempel en ny instans av Jupyter eller VSCode. Parameterne man kan konfigurere er derimot uendret. Følgende artikler i manualen har derfor blitt oppdatert: jupyter, jupyter-pyspark, jupyter-playground, VSCode-python, RStudio, Datadoc, JDemetra og artikkelen om Dapla Lab.\n\n\n\n\n\n\nFigur 1: Tjenestekonfigurasjon for jupyter"
+    "text": "Nå kan man kjøre kommandoen refresh-buckets fra terminalen i en tjeneste på Dapla Lab for å oppdatere visningen av en bøttene i filsystemet. Dette kan være nyttig hvis det blir opprettet mapper med dapla-toolbelt eller Kildomaten, og ikke via buckets-mappen i filsystemet. Les mer i kapitlet om Dapla Lab."
   },
   {
-    "objectID": "news/posts/2025-03-17-bucket-list/index.html",
-    "href": "news/posts/2025-03-17-bucket-list/index.html",
-    "title": "Tilgang til å liste bøttenavn på Dapla",
+    "objectID": "news/posts/2025-04-02-ssb-project-dapla-lab/index.html",
+    "href": "news/posts/2025-04-02-ssb-project-dapla-lab/index.html",
+    "title": "Enklere med ssb-project i Dapla Lab",
     "section": "",
-    "text": "Fra og med mandag 17. mars 2025 har alle SSB-brukere fått tilgangen bucket.list på alle GCS-bøtter på Dapla. Det betyr at de kan se navnene til bøttene, men ikke innholdet i bøttene. Formålet med å tillate dette er at alle skal kunne undersøke hvilke bøtter et team har via Google Cloud Console, noe som kan være nyttige i flere sammenhenger."
+    "text": "Mange brukere har etterspurt muligheten for å kunne angi et repo og at ssb-project build skal kjøres ved oppstart av nye Dapla Lab tjenester. Vi har nå lagt til støtte for dette i tjenestekonfigurasjonen. Brukere kan be om at ssb-project build kjøres ved oppstart, og brukeren vil da komme inn i en ny tjeneste med ferdiginstallerte biblioteker og opprettet kernel. Oppstartstiden for tjenesten blir litt lengre for de som benytter seg av dette.\nEn stor gevinst med denne endringen er at det vil gjør det lettere å slette tjenester jevnlig istedenfor å pause de, siden man kan lagre konfigurasjonen og komme til “dekka bord” neste gang man starter en ny tjeneste. Se eksempel på dette i videoen under.\nDokumentasjon finner du her."
   },
   {
-    "objectID": "news/posts/2025-01-22-filinnsamling-moveit/index.html",
-    "href": "news/posts/2025-01-22-filinnsamling-moveit/index.html",
-    "title": "Nytt kapittel om filinnsamling via MoveIT på Dapla",
+    "objectID": "news/posts/2025-05-20-dapla-overgang-101/index.html",
+    "href": "news/posts/2025-05-20-dapla-overgang-101/index.html",
+    "title": "Ny artikkel - Hvordan gjennomføre overgang til Dapla?",
     "section": "",
-    "text": "Mange statistikker mottar data fra eksterne som filer via MoveIT-systemet på bakken. Disse filene kan automatisk synkroniseres til kildebøtta på Dapla. Les mer om hvordan dette settes opp i dette kapitlet i Dapla-manualen."
+    "text": "Vi har skrevet en artikkel om hvordan man bør gjennomføre overgangen til Dapla. Les artikkelen her."
   },
   {
-    "objectID": "news/posts/2025-03-31-dapla-lab-metrics-mar25/index.html",
-    "href": "news/posts/2025-03-31-dapla-lab-metrics-mar25/index.html",
-    "title": "Aktivitet på Dapla Lab i mars 2025",
+    "objectID": "news/posts/2025-03-09-epost-dapla-lab/index.html",
+    "href": "news/posts/2025-03-09-epost-dapla-lab/index.html",
+    "title": "E-postvarslinger om “gamle” tjenester fra Dapla Lab",
     "section": "",
-    "text": "Fom. 15. februar 2025 har Dapla Lab vært arbeidsbenken for SSB-ere som jobber med data på Dapla. I dette viser vi noen interessante tall om hvor mange som jobber på plattformen.\nFigur 1 viser antall maksimalt antall unike brukere av Dapla Lab ila en dag. Figuren er en oversikt over perioden 25. februar tom. 29. mars 2025.\n\n\n\n\n\n\n\n\n\n\nFigur 1: Maks antall daglige brukere på Dapla Lab\n\n\n\n\n\n\nFigur 2 viser antall unike brukere ila dagen på Dapla Lab. Hver linje i figuren er en dag i perioden 25. februar tom. 29. mars 2025. Dermed gir figuren et bilde av hvilket tidspunkt på dagen brukerne jobber. Den 27. mars 2025 endret vi tidspunktet for automatisk pausing av tjenester fra kl 22.00 til 17.00, og dette er vist figuren ved at dager etter 26. mars vises med grønne linjer og resten med grå linjer. Av figuren ser vi dermed at det ganske få som jobber på Dapla Lab etter kl 17.00.\n\n\n\n\n\n\n\n\n\n\nFigur 2: Antall brukere gjennom dagen"
+    "text": "Fra og med mandag 10. mars 2025 implementeres automatisk utsending av e-post til brukere som har tjenester som ble startet for mer enn 7 dager siden. Formålet med varslingen er å bevisstgjøre brukerne på viktigheten av å slette tjenester med jevne mellomrom, og starte en ny slik at man kjører på siste versjon.\n\n\n\n\n\n\nEksempel på e-post\n\n\n\nHei Nordmann, Ola\nDu har en eller flere tjenester i Dapla Lab som ble startet for mer enn 7 dager siden. Se oversikt i tabellen under.\nVi anbefaler deg å slette tjenester som ble startet for mer enn 7 dager siden. Når tjenesten slettes, og du senere starter den opp igjen, får du med deg eventuelle forbedringer som er gjort i tjenesten.\n\n\n\n\n\nTjeneste\n\n\nNavn\n\n\nAntall dager\n\n\n\n\n\n\nvscode-python\n\n\nvscode-etlev\n\n\n25\n\n\n\n\nvscode-python\n\n\nvscode-detlev\n\n\n8\n\n\n\n\nHusk å pushe kode til GitHub, og ta vare på andre filer som ligger i tjenestens filsystem, før du sletter. Vær oppmerksom på alle filer på hjemmeområdet ditt slettes når tjenesten slettes.\nLes mer om hvordan man bruker Git og GitHub i SSB."
   },
   {
-    "objectID": "news/posts/2025-04-11-ssb-altinn-python-fix/index.html",
-    "href": "news/posts/2025-04-11-ssb-altinn-python-fix/index.html",
-    "title": "Ny versjon av ssb-altinn-python",
+    "objectID": "news/posts/2025-02-07-parquet-viewer/index.html",
+    "href": "news/posts/2025-02-07-parquet-viewer/index.html",
+    "title": "Parquet-utforsker i VS Code",
     "section": "",
-    "text": "Ny release av ssb-altinn-python v0.4.12 er sluppet i Kildomaten. Pakken håndterer nå problemet med at UTC-datoformat i feltet ALTINNTIDSPUNKTLEVERT ble trunkert når det sluttet på en eller flere nuller, som igjen forårsaket at utflating av XML’er stoppet/feilet ved konvertering til Oslo-tid."
+    "text": "Sjekk ut den nye Parquet-utforskeren i Vscode-python. Skrive SQL, filtrer,inspiser metadata uten bruk av Python eller R. Les mer i denne blogg-artikkelen."
   },
   {
-    "objectID": "news/posts/2025-04-26-kildomaten-docs/index.html",
-    "href": "news/posts/2025-04-26-kildomaten-docs/index.html",
-    "title": "Oppdatert beskrivelse av manuell trigging av Kildomaten-jobber",
+    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
+    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
+    "title": "Statistikk over datadeling på Dapla",
     "section": "",
-    "text": "Dapla-manualen er nå oppdatert med en bedre beskrivelse av hvordan man kan trigge Kildomaten manuelt. Brukere må logge seg inn som developers for å manuelt trigge en Kildomaten-jobb. Les mer i dokumentasjonen."
+    "text": "Ett år etter at Dapla-team kunne opprette delt-bøtter selvbetjent på Dapla, så er det tilsammen opprettet 118 bøtter per 22. April 2025. 83 av disse er i prod-miljøet til teamene, mens 35 er i test-miljøet.\nAv de 171 teamene totalt på Dapla, så er det 33 av disse som har opprettet en eller flere delt-bøtter.\nTabell 1 viser en oversikt over alle delt-bøtter som er opprettet1, dens kortnavn, hvilket team som er eier den, hvilket miljø den finnes i, og hvilken seksjon som er ansvarlig for teamet.\nTabell 1 viser mer informasjon enn hva som er tilgjengelig i dag i Dapla Ctrl. Grunnen er at det i Tabell 1 også inkluderes delt-bøtter i test-miljøet, samt at Dapla Ctrl kun viser delt-bøtter hvor andre team faktisk har blitt gitt tilgang. I fremtiden vil denne informasjonen kunne inspiseres i en datakatalog, med mye mer detaljert informasjon om dataene som deles.\nFigur 1 viser at det er avdeling 200 som har opprettet flest bøtter, i alt 52 delt-bøtter. Deretter følger avdeling 300 med 26 bøtter.\nAv Figur 2, som viser hvilke 10 team som har flest delt-bøtter, så ser vi at 48 av de 52 bøttene i avdeling 200 kommer fra team Kostra. Vi ser også at team arbmark-register har opprettet 9 av totalt 26 bøtter i avdeling 300.\nFigur 1: Antall delt-bøtter per avdeling og miljø\nFigur 2: Antall delt-bøtter per team og miljø"
+  },
+  {
+    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
+    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
+    "title": "Statistikk over datadeling på Dapla",
+    "section": "Fotnoter",
+    "text": "Fotnoter\n\n\nHelt presist viser tabellen alle delt-bøtter som er opprettet gjennom shared-buckets-featuren.↩︎"
+  },
+  {
+    "objectID": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
+    "href": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
+    "title": "Støtte for langtkjørende jobber på Dapla Lab",
+    "section": "",
+    "text": "Brukere som har behov for å kjøre jobber på Dapla Lab som tar mer enn 12 timer, har opplevd at kjøringene avbrytes etter noen timer uten noen åpenbar grunn. Feilen har også oppstått når brukeren har lukket nettleser-fanen eller maskinen til brukeren har gått i dvale, selv om dette ikke i teorien skulle påvirke kjøringen. Årsaken virker å være IDE-ene (Jupyter, VS Code og RStudio) pauser jobbene når de blir pauset.\nFor å unngå denne oppførselen er terminal-verktøyet tmux installert i Jupyter, VS Code og RStudio. tmux er terminal multiplexer som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (&gt;12h) kjører koden i en tmux-session.\nDu kan kjøre ditt Python-script ved å kjøre følgende:\n\n\nTerminal\n\ntmux new -s minsesjon\n\nI koden over startes en session med navn minsesjon. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med python-kommandoen i en terminal, så kan du kjøre kommandoen:\n\n\nTerminal\n\npoetry shell\n\nNå kan du kjøre scriptet ditt på følgende måte:\n\n\nTerminal\n\npython mittskript.py\n\nDeretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge denne oppskriften.\ntmux operer med konsepter som session, window og panes. Over startet vi en session med navnet minsesjon. Dette er et komplett arbeidsmiljø hvor man kan ha flere windows og splitte de opp i panes.\nEn av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en session kan være attached, at brukeren kan se sesjonen i terminalen, og detached, som betyr at den kan kjøre i bakgrunnen mens brukeren jobber med noe annet. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:\n\n\nTerminal\n\ntmux ls\n\nI eksempelet over så kan vi koble til (attach) til vår sesjon ved å skrive:\n\n\nTerminal\n\ntmux attach -t minsesjon\n\nDu vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Statusbar for en tmux-sesjon\n\n\n\nDu kan koble fra en sesjon (detach) ved å skrive CTRL B og deretter d, eller skrive følgende i terminalen:\n\n\nTerminal\n\ntmux detach -s minsesjon\n\nProsessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten."
+  },
+  {
+    "objectID": "news/posts/2025-05-01-dapla-lab-groups/index.html",
+    "href": "news/posts/2025-05-01-dapla-lab-groups/index.html",
+    "title": "Ny informasjon under Mine tjenester i Dapla Lab",
+    "section": "",
+    "text": "I dag er det lagt til visning av hvilken tilgangsgruppe som er valgt for åpnede tjenester i Dapla Lab. Det vil gjøre det lettere å vite hvilke data man tilgang til i ulike tjenester. Du finner under informasjonen under Group i tjenesteikonet under Mine tjenester. Informasjonen vises både når tjenesten er aktiv og når den er pauset."
+  },
+  {
+    "objectID": "news/posts/2025-05-06-kildomat-migration/index.html",
+    "href": "news/posts/2025-05-06-kildomat-migration/index.html",
+    "title": "Driftsbrudd for Kildomaten mandag 12. mai 2025",
+    "section": "",
+    "text": "I forbindelse med at pseudonymiseringstjenesten på Dapla skal migreres over til NAIS mandag den 12. mai 2025, så vil det bli en driftsstans i Kildomaten mellom 15.00-21.00 den dagen. Les mer i denne saken på Viva Engage."
+  },
+  {
+    "objectID": "news/posts/2025-05-14-kildomat-check/index.html",
+    "href": "news/posts/2025-05-14-kildomat-check/index.html",
+    "title": "Validere at filer er prosessert i Kildomaten",
+    "section": "",
+    "text": "Ifm. driftstansen, og driftsproblemene i etterkant, i Kildomaten fra 12. mai kl. 15.00 til 14. mai kl. 13.00 så kan det være team som ønsker å sjekke om det kom inn filer i kildebøtta som ikke trigget Kildomaten. I denne artikkelen så finner man eksempelkode for å gjøre denne sjekken."
+  },
+  {
+    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#sjekke-kildebøtta",
+    "href": "news/posts/2025-05-14-kildomat-check/index.html#sjekke-kildebøtta",
+    "title": "Validere at filer er prosessert i Kildomaten",
+    "section": "Sjekke kildebøtta",
+    "text": "Sjekke kildebøtta\nDet første man bør gjøre er å sjekke om det, i tidsintevallet for driftsstansen, har blitt skrevet filer til mapper i kildebøtta som vanligvis trigger Kildomaten-jobber. Har det ikke skjedd blitt skrevet filer, så trenger man ikke å gjøre noe mer.\nSjekken kan gjøres av en data-admins på teamet på følgende måte:\n\nÅpne Jupyter på Dapla Lab\nUnder tjenestekonfigurasjonen for Jupyter velger du å representere data-admins for det aktuelle teamet\nÅpne en notebook og velg en kernel som har Python-pakken gcsfs installert. Hvis du ikke har en slik kernel kan du opprette et ssb-project fra terminalen med kommandoen ssb-project create test, gå inn i mappen og installere pakken ved å skrive poetry add gcsfs. Da vil kernelen du skal velge hete test.\nKjør denne koden etter at du har endret verdiene til variablene source_bucket og source_folder:\n\n\n\n\nNotebook\n\nfrom datetime import datetime\nfrom gcsfs import GCSFileSystem\nimport pytz\n\nutc = pytz.UTC\n\nsource_bucket = \"gs://ssb-dapla-felles-kilde-prod\"\nsource_folder = \"freg\"\n\nfilter_start_date = datetime(year=2025, month= 5, day=12, hour=15)\nfilter_end_date = datetime(year=2025, month=5, day=14, hour=13)\n\n\n\ndef is_file_modified_on_date(file_path: str) -&gt; bool:\n    \"\"\"\n    Returns True if file at file path was modified on the date \"filter_date\", returns False otherwise\n    \"\"\"\n    file_info = GCSFileSystem().info(path=file_path)\n    modified_date: datetime | None = file_info.get(\"mtime\")\n    if not isinstance(modified_date, datetime):\n        return False\n\n    return modified_date &lt; utc.localize(\n        filter_end_date\n    ) and modified_date &gt; utc.localize(filter_start_date)\n\n\nsource_files = GCSFileSystem().find(\n    path=f\"{source_bucket}/{source_folder}\", maxdepth=None, withdirs=False\n)\nsource_files_at_date = [f for f in source_files if is_file_modified_on_date(f) is True]\n\nprint(f\"Source files found between date {str(filter_start_date)} and {str(filter_end_date)}:\")\nprint(source_files_at_date)\n\nHvis man kjører koden over og den returnerer en tom liste så har man verifisert at det ikke ble skrevet noen filer til mappen under driftsstansen. Hvis koden returnerer en liste med filnavn så bør man undersøke om filene ble prosessert av Kildomaten eller ikke."
+  },
+  {
+    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#verifisere-produktbøtta",
+    "href": "news/posts/2025-05-14-kildomat-check/index.html#verifisere-produktbøtta",
+    "title": "Validere at filer er prosessert i Kildomaten",
+    "section": "Verifisere produktbøtta",
+    "text": "Verifisere produktbøtta\nNår man har en liste med filnavn som ble skrevet til kildebøtta i tidsperioden med driftsstans, så må man verifisere om filene ble skrevet til produktbøtta som forventet. Hvordan man gjør dette vil avhenge av logikken i teamets kildomaten-skript. Hvis Kildomaten-skriptet skriver en fil til produktbøtta med samme filnavn som er brukt i kildebøtta, så kan man verfisere at samme fil også finne i kildebøtta. Hvis Kildomaten-skriptet endrer navnet, så må man først gjenskape det nye navnet, og deretter verifisere.\nFor å verifisere om filen er prosessert må man gjøre følgende:\n\nhente ut liste med filer fra forrige steg (krever innloggin som data-admins i Dapla Lab)\nåpne en ny tjeneste i Dapla Lab som developers og kopiere over listen fra tjenesten man åpnet som data-admins.\nåpne en notebook og velg en kernel som har Python-pakken gcsfs installert. Hvis du ikke har en slik kernel kan du opprette et ssb-project fra terminalen med kommandoen ssb-project create test, gå inn i mappen og installere pakken ved å skrive poetry add gcsfs. Da vil kernelen du skal velge hete test.\nKjør koden under, der source_files_at_date er listen du kopierte over fra Sjekke kildebøtta-delen. I tillegg må du oppgi hvilken bøtte som skal sjekkes under bucket, og hvilken undermappe i bøtta som det skal søkes gjennom i folder.\n\nfrom gcsfs import GCSFileSystem\n\n# Denne listen inneholder filnavnene vi identifiserte tidligere\nsource_files_at_date = [\n  'ssb-etlev-data-kilde-prod/kildetilgang/access-grant_abc.json',  \n  'ssb-etlev-data-kilde-prod/kildetilgang/access-grant_def.json',]\n\n# Disse variablene må brukeren oppgi selv  \nbucket = \"gs://my-bucket-name\"\nfolder = \"my/folder/name\"\n\n\ndef find_missing_files(bucket_name: str, folder_name: str, source_files: list[str]) -&gt; list[str]:\n    file_names = [f.split(sep=\"/\")[-1].split(sep=\".\")[0] for f in source_files]\n\n    fs_prefix = \"\" if \"gs://\" in bucket_name else \"gs://\"\n    fs_path = f\"{fs_prefix}{bucket_name}/{folder_name}\"\n    fs = GCSFileSystem()\n\n    missing_files = []\n\n    for i, f in enumerate(file_names):\n        found = fs.glob(f\"{fs_path}/**/{f}.*\")\n        if len(found) == 0:\n            source_file = f\"gs://{source_files[i]}\" if \"gs://\" not in source_files[i] else source_files[i]\n            missing_files.append(source_file)\n    \n    return missing_files\n\nfind_missing_files(\n  bucket_name=bucket,\n  folder_name=folder,\n  source_files=source_files_at_date)\nFunksjonen over returnerer alle filer den ikke finner på den oppgitte stien, og som derfor ikke er prosessert av Kildomaten. I kapitlet som heter Trigge prosessering manuelt finner du en beskrivelse av hvordan man trigger prosesseringen av disse filene manuelt."
+  },
+  {
+    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#fra-altinn3-til-isee",
+    "href": "news/posts/2025-05-14-kildomat-check/index.html#fra-altinn3-til-isee",
+    "title": "Validere at filer er prosessert i Kildomaten",
+    "section": "Fra Altinn3 til ISEE",
+    "text": "Fra Altinn3 til ISEE\nStatistikkproduksjoner som har datafangst fra Altinn3 og synkroniserer filer prosessert med Kildomaten ned til ISEE, må selv hente ut en liste over hvilke filer som er lastet til ISEE. En fremgangsmåte er sammenligne hvilke filer som innkvittert i SFU med hva som ligger i ISEE-databasen. Disse kan identifiseres ved deres unike referansenummer i SFU. Hvis man har en liste med referansenummer som finnes i SFU, men ikke i ISEE, så kan søke etter disse filene i kildebøtta.\nTa kontakt med Kundeservice dersom man ønsker hjelp til dette."
+  },
+  {
+    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#trigge-prosessering-manuelt",
+    "href": "news/posts/2025-05-14-kildomat-check/index.html#trigge-prosessering-manuelt",
+    "title": "Validere at filer er prosessert i Kildomaten",
+    "section": "Trigge prosessering manuelt",
+    "text": "Trigge prosessering manuelt\nHvis koden i forrige avsnitt returnerte en liste med filer, så kan man manuelt trigge prosessering av disse filene med Kildomaten.\n\n\n\n\n\n\nLogg deg inn som data-admins for trigge Kildomaten manuelt\n\n\n\nFor å trigge Kildomaten manuelt må man være logget inn som data-admins i en Dapla Lab tjeneste. Det betyr at man kan liste ut alle filer som ble skrevet i et gitt tidspunkt, og trigge prosesseringen av disse i samme notebook eller script. Men man må oppgi project_id for standardprosjektet (ikke kildeprosjektet) i koden under, noe som kan være forvirrende for brukeren. Dette er planlagt endret slik at det blir lettere bruke fremover.\n\n\nKoden i forrige avsnitt returnerte en liste med alle filer som heter source_files_at_date, og vi kan loope over disse og trigge prosesseringen. For å gjøre dette må du først fylle inn riktig verdier for project-id og source_name.\n\nproject-id for standardprosjektet. Slik finner du prosjekt-id. Merk at dette ikke er kilde-prosjektet!\nsource_name er navnet på mappen i iac-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team dapla-example var altinn.\n\n\n\nNotebook\n\nfrom dapla import trigger_source_data_processing\n\n# Brukeren fyller inn her\nproject_id = \"\"\nsource_name = \"\"\n\n# Fjerner bøttenavn fra filstier\nstripped_paths = [path.split('/', 1)[1] if '/' in path else path for path in source_files_at_date]\n\n# Trigger prosessering for alle filer i listen\nfor file in stripped_paths:\n    trigger_source_data_processing(project_id, source_name, file, kuben=True)"
+  },
+  {
+    "objectID": "news/posts/2025-06-23-vardef-publishing/index.html",
+    "href": "news/posts/2025-06-23-vardef-publishing/index.html",
+    "title": "Publisering i Vardef er midlertidig sperret",
+    "section": "",
+    "text": "Inntil eierskap av kortnavn er avklart vil det ikke være mulig å publisere variabeldefinisjoner i Vardef.\nDu kan fortsatt:\n\nopprette nye variabeldefinisjoner som utkast\nmigrere variabeldefinisjoner fra Vardok til Vardef\nredigere utkast\nteste publisering i Dapla Lab Test\n\nVi gir beskjed så snart publisering er tilgjengelig igjen."
   },
   {
     "objectID": "news/posts/2025-06-07-ssb-altinn-python/index.html",
@@ -4566,228 +4622,186 @@
     "text": "Når man har startet en tjeneste på Dapla Lab som data-admins, så har er tilgangen til data alltid tidsbegrenset. Tidligere har man ikke kunne starte tjenesten igjen når tilgangen har gått ut. Dette har skapt utfordringer for brukere som ikke har pushet koden til GitHub.\nNå vi gjort endriner i Dapla Lab slik at tjenesten også kan startes opp etter at datatilgangen har utgått. Formålet med dette er å la brukere pushe kode til GitHub, og det er ønskelig at brukere sletter disse tjenestene etter at det er gjort."
   },
   {
-    "objectID": "news/posts/2025-05-14-kildomat-check/index.html",
-    "href": "news/posts/2025-05-14-kildomat-check/index.html",
-    "title": "Validere at filer er prosessert i Kildomaten",
+    "objectID": "news/posts/2025-04-26-kildomaten-docs/index.html",
+    "href": "news/posts/2025-04-26-kildomaten-docs/index.html",
+    "title": "Oppdatert beskrivelse av manuell trigging av Kildomaten-jobber",
     "section": "",
-    "text": "Ifm. driftstansen, og driftsproblemene i etterkant, i Kildomaten fra 12. mai kl. 15.00 til 14. mai kl. 13.00 så kan det være team som ønsker å sjekke om det kom inn filer i kildebøtta som ikke trigget Kildomaten. I denne artikkelen så finner man eksempelkode for å gjøre denne sjekken."
+    "text": "Dapla-manualen er nå oppdatert med en bedre beskrivelse av hvordan man kan trigge Kildomaten manuelt. Brukere må logge seg inn som developers for å manuelt trigge en Kildomaten-jobb. Les mer i dokumentasjonen."
   },
   {
-    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#sjekke-kildebøtta",
-    "href": "news/posts/2025-05-14-kildomat-check/index.html#sjekke-kildebøtta",
-    "title": "Validere at filer er prosessert i Kildomaten",
-    "section": "Sjekke kildebøtta",
-    "text": "Sjekke kildebøtta\nDet første man bør gjøre er å sjekke om det, i tidsintevallet for driftsstansen, har blitt skrevet filer til mapper i kildebøtta som vanligvis trigger Kildomaten-jobber. Har det ikke skjedd blitt skrevet filer, så trenger man ikke å gjøre noe mer.\nSjekken kan gjøres av en data-admins på teamet på følgende måte:\n\nÅpne Jupyter på Dapla Lab\nUnder tjenestekonfigurasjonen for Jupyter velger du å representere data-admins for det aktuelle teamet\nÅpne en notebook og velg en kernel som har Python-pakken gcsfs installert. Hvis du ikke har en slik kernel kan du opprette et ssb-project fra terminalen med kommandoen ssb-project create test, gå inn i mappen og installere pakken ved å skrive poetry add gcsfs. Da vil kernelen du skal velge hete test.\nKjør denne koden etter at du har endret verdiene til variablene source_bucket og source_folder:\n\n\n\n\nNotebook\n\nfrom datetime import datetime\nfrom gcsfs import GCSFileSystem\nimport pytz\n\nutc = pytz.UTC\n\nsource_bucket = \"gs://ssb-dapla-felles-kilde-prod\"\nsource_folder = \"freg\"\n\nfilter_start_date = datetime(year=2025, month= 5, day=12, hour=15)\nfilter_end_date = datetime(year=2025, month=5, day=14, hour=13)\n\n\n\ndef is_file_modified_on_date(file_path: str) -&gt; bool:\n    \"\"\"\n    Returns True if file at file path was modified on the date \"filter_date\", returns False otherwise\n    \"\"\"\n    file_info = GCSFileSystem().info(path=file_path)\n    modified_date: datetime | None = file_info.get(\"mtime\")\n    if not isinstance(modified_date, datetime):\n        return False\n\n    return modified_date &lt; utc.localize(\n        filter_end_date\n    ) and modified_date &gt; utc.localize(filter_start_date)\n\n\nsource_files = GCSFileSystem().find(\n    path=f\"{source_bucket}/{source_folder}\", maxdepth=None, withdirs=False\n)\nsource_files_at_date = [f for f in source_files if is_file_modified_on_date(f) is True]\n\nprint(f\"Source files found between date {str(filter_start_date)} and {str(filter_end_date)}:\")\nprint(source_files_at_date)\n\nHvis man kjører koden over og den returnerer en tom liste så har man verifisert at det ikke ble skrevet noen filer til mappen under driftsstansen. Hvis koden returnerer en liste med filnavn så bør man undersøke om filene ble prosessert av Kildomaten eller ikke."
-  },
-  {
-    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#verifisere-produktbøtta",
-    "href": "news/posts/2025-05-14-kildomat-check/index.html#verifisere-produktbøtta",
-    "title": "Validere at filer er prosessert i Kildomaten",
-    "section": "Verifisere produktbøtta",
-    "text": "Verifisere produktbøtta\nNår man har en liste med filnavn som ble skrevet til kildebøtta i tidsperioden med driftsstans, så må man verifisere om filene ble skrevet til produktbøtta som forventet. Hvordan man gjør dette vil avhenge av logikken i teamets kildomaten-skript. Hvis Kildomaten-skriptet skriver en fil til produktbøtta med samme filnavn som er brukt i kildebøtta, så kan man verfisere at samme fil også finne i kildebøtta. Hvis Kildomaten-skriptet endrer navnet, så må man først gjenskape det nye navnet, og deretter verifisere.\nFor å verifisere om filen er prosessert må man gjøre følgende:\n\nhente ut liste med filer fra forrige steg (krever innloggin som data-admins i Dapla Lab)\nåpne en ny tjeneste i Dapla Lab som developers og kopiere over listen fra tjenesten man åpnet som data-admins.\nåpne en notebook og velg en kernel som har Python-pakken gcsfs installert. Hvis du ikke har en slik kernel kan du opprette et ssb-project fra terminalen med kommandoen ssb-project create test, gå inn i mappen og installere pakken ved å skrive poetry add gcsfs. Da vil kernelen du skal velge hete test.\nKjør koden under, der source_files_at_date er listen du kopierte over fra Sjekke kildebøtta-delen. I tillegg må du oppgi hvilken bøtte som skal sjekkes under bucket, og hvilken undermappe i bøtta som det skal søkes gjennom i folder.\n\nfrom gcsfs import GCSFileSystem\n\n# Denne listen inneholder filnavnene vi identifiserte tidligere\nsource_files_at_date = [\n  'ssb-etlev-data-kilde-prod/kildetilgang/access-grant_abc.json',  \n  'ssb-etlev-data-kilde-prod/kildetilgang/access-grant_def.json',]\n\n# Disse variablene må brukeren oppgi selv  \nbucket = \"gs://my-bucket-name\"\nfolder = \"my/folder/name\"\n\n\ndef find_missing_files(bucket_name: str, folder_name: str, source_files: list[str]) -&gt; list[str]:\n    file_names = [f.split(sep=\"/\")[-1].split(sep=\".\")[0] for f in source_files]\n\n    fs_prefix = \"\" if \"gs://\" in bucket_name else \"gs://\"\n    fs_path = f\"{fs_prefix}{bucket_name}/{folder_name}\"\n    fs = GCSFileSystem()\n\n    missing_files = []\n\n    for i, f in enumerate(file_names):\n        found = fs.glob(f\"{fs_path}/**/{f}.*\")\n        if len(found) == 0:\n            source_file = f\"gs://{source_files[i]}\" if \"gs://\" not in source_files[i] else source_files[i]\n            missing_files.append(source_file)\n    \n    return missing_files\n\nfind_missing_files(\n  bucket_name=bucket,\n  folder_name=folder,\n  source_files=source_files_at_date)\nFunksjonen over returnerer alle filer den ikke finner på den oppgitte stien, og som derfor ikke er prosessert av Kildomaten. I kapitlet som heter Trigge prosessering manuelt finner du en beskrivelse av hvordan man trigger prosesseringen av disse filene manuelt."
-  },
-  {
-    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#fra-altinn3-til-isee",
-    "href": "news/posts/2025-05-14-kildomat-check/index.html#fra-altinn3-til-isee",
-    "title": "Validere at filer er prosessert i Kildomaten",
-    "section": "Fra Altinn3 til ISEE",
-    "text": "Fra Altinn3 til ISEE\nStatistikkproduksjoner som har datafangst fra Altinn3 og synkroniserer filer prosessert med Kildomaten ned til ISEE, må selv hente ut en liste over hvilke filer som er lastet til ISEE. En fremgangsmåte er sammenligne hvilke filer som innkvittert i SFU med hva som ligger i ISEE-databasen. Disse kan identifiseres ved deres unike referansenummer i SFU. Hvis man har en liste med referansenummer som finnes i SFU, men ikke i ISEE, så kan søke etter disse filene i kildebøtta.\nTa kontakt med Kundeservice dersom man ønsker hjelp til dette."
-  },
-  {
-    "objectID": "news/posts/2025-05-14-kildomat-check/index.html#trigge-prosessering-manuelt",
-    "href": "news/posts/2025-05-14-kildomat-check/index.html#trigge-prosessering-manuelt",
-    "title": "Validere at filer er prosessert i Kildomaten",
-    "section": "Trigge prosessering manuelt",
-    "text": "Trigge prosessering manuelt\nHvis koden i forrige avsnitt returnerte en liste med filer, så kan man manuelt trigge prosessering av disse filene med Kildomaten.\n\n\n\n\n\n\nLogg deg inn som data-admins for trigge Kildomaten manuelt\n\n\n\nFor å trigge Kildomaten manuelt må man være logget inn som data-admins i en Dapla Lab tjeneste. Det betyr at man kan liste ut alle filer som ble skrevet i et gitt tidspunkt, og trigge prosesseringen av disse i samme notebook eller script. Men man må oppgi project_id for standardprosjektet (ikke kildeprosjektet) i koden under, noe som kan være forvirrende for brukeren. Dette er planlagt endret slik at det blir lettere bruke fremover.\n\n\nKoden i forrige avsnitt returnerte en liste med alle filer som heter source_files_at_date, og vi kan loope over disse og trigge prosesseringen. For å gjøre dette må du først fylle inn riktig verdier for project-id og source_name.\n\nproject-id for standardprosjektet. Slik finner du prosjekt-id. Merk at dette ikke er kilde-prosjektet!\nsource_name er navnet på mappen i iac-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team dapla-example var altinn.\n\n\n\nNotebook\n\nfrom dapla import trigger_source_data_processing\n\n# Brukeren fyller inn her\nproject_id = \"\"\nsource_name = \"\"\n\n# Fjerner bøttenavn fra filstier\nstripped_paths = [path.split('/', 1)[1] if '/' in path else path for path in source_files_at_date]\n\n# Trigger prosessering for alle filer i listen\nfor file in stripped_paths:\n    trigger_source_data_processing(project_id, source_name, file, kuben=True)"
-  },
-  {
-    "objectID": "news/posts/2025-05-06-kildomat-migration/index.html",
-    "href": "news/posts/2025-05-06-kildomat-migration/index.html",
-    "title": "Driftsbrudd for Kildomaten mandag 12. mai 2025",
+    "objectID": "news/posts/2025-04-11-ssb-altinn-python-fix/index.html",
+    "href": "news/posts/2025-04-11-ssb-altinn-python-fix/index.html",
+    "title": "Ny versjon av ssb-altinn-python",
     "section": "",
-    "text": "I forbindelse med at pseudonymiseringstjenesten på Dapla skal migreres over til NAIS mandag den 12. mai 2025, så vil det bli en driftsstans i Kildomaten mellom 15.00-21.00 den dagen. Les mer i denne saken på Viva Engage."
+    "text": "Ny release av ssb-altinn-python v0.4.12 er sluppet i Kildomaten. Pakken håndterer nå problemet med at UTC-datoformat i feltet ALTINNTIDSPUNKTLEVERT ble trunkert når det sluttet på en eller flere nuller, som igjen forårsaket at utflating av XML’er stoppet/feilet ved konvertering til Oslo-tid."
   },
   {
-    "objectID": "news/posts/2025-05-01-dapla-lab-groups/index.html",
-    "href": "news/posts/2025-05-01-dapla-lab-groups/index.html",
-    "title": "Ny informasjon under Mine tjenester i Dapla Lab",
+    "objectID": "news/posts/2025-03-31-dapla-lab-metrics-mar25/index.html",
+    "href": "news/posts/2025-03-31-dapla-lab-metrics-mar25/index.html",
+    "title": "Aktivitet på Dapla Lab i mars 2025",
     "section": "",
-    "text": "I dag er det lagt til visning av hvilken tilgangsgruppe som er valgt for åpnede tjenester i Dapla Lab. Det vil gjøre det lettere å vite hvilke data man tilgang til i ulike tjenester. Du finner under informasjonen under Group i tjenesteikonet under Mine tjenester. Informasjonen vises både når tjenesten er aktiv og når den er pauset."
+    "text": "Fom. 15. februar 2025 har Dapla Lab vært arbeidsbenken for SSB-ere som jobber med data på Dapla. I dette viser vi noen interessante tall om hvor mange som jobber på plattformen.\nFigur 1 viser antall maksimalt antall unike brukere av Dapla Lab ila en dag. Figuren er en oversikt over perioden 25. februar tom. 29. mars 2025.\n\n\n\n\n\n\n\n\n\n\nFigur 1: Maks antall daglige brukere på Dapla Lab\n\n\n\n\n\n\nFigur 2 viser antall unike brukere ila dagen på Dapla Lab. Hver linje i figuren er en dag i perioden 25. februar tom. 29. mars 2025. Dermed gir figuren et bilde av hvilket tidspunkt på dagen brukerne jobber. Den 27. mars 2025 endret vi tidspunktet for automatisk pausing av tjenester fra kl 22.00 til 17.00, og dette er vist figuren ved at dager etter 26. mars vises med grønne linjer og resten med grå linjer. Av figuren ser vi dermed at det ganske få som jobber på Dapla Lab etter kl 17.00.\n\n\n\n\n\n\n\n\n\n\nFigur 2: Antall brukere gjennom dagen"
   },
   {
-    "objectID": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
-    "href": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
-    "title": "Støtte for langtkjørende jobber på Dapla Lab",
+    "objectID": "news/posts/2025-01-22-filinnsamling-moveit/index.html",
+    "href": "news/posts/2025-01-22-filinnsamling-moveit/index.html",
+    "title": "Nytt kapittel om filinnsamling via MoveIT på Dapla",
     "section": "",
-    "text": "Brukere som har behov for å kjøre jobber på Dapla Lab som tar mer enn 12 timer, har opplevd at kjøringene avbrytes etter noen timer uten noen åpenbar grunn. Feilen har også oppstått når brukeren har lukket nettleser-fanen eller maskinen til brukeren har gått i dvale, selv om dette ikke i teorien skulle påvirke kjøringen. Årsaken virker å være IDE-ene (Jupyter, VS Code og RStudio) pauser jobbene når de blir pauset.\nFor å unngå denne oppførselen er terminal-verktøyet tmux installert i Jupyter, VS Code og RStudio. tmux er terminal multiplexer som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (&gt;12h) kjører koden i en tmux-session.\nDu kan kjøre ditt Python-script ved å kjøre følgende:\n\n\nTerminal\n\ntmux new -s minsesjon\n\nI koden over startes en session med navn minsesjon. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med python-kommandoen i en terminal, så kan du kjøre kommandoen:\n\n\nTerminal\n\npoetry shell\n\nNå kan du kjøre scriptet ditt på følgende måte:\n\n\nTerminal\n\npython mittskript.py\n\nDeretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge denne oppskriften.\ntmux operer med konsepter som session, window og panes. Over startet vi en session med navnet minsesjon. Dette er et komplett arbeidsmiljø hvor man kan ha flere windows og splitte de opp i panes.\nEn av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en session kan være attached, at brukeren kan se sesjonen i terminalen, og detached, som betyr at den kan kjøre i bakgrunnen mens brukeren jobber med noe annet. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:\n\n\nTerminal\n\ntmux ls\n\nI eksempelet over så kan vi koble til (attach) til vår sesjon ved å skrive:\n\n\nTerminal\n\ntmux attach -t minsesjon\n\nDu vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Statusbar for en tmux-sesjon\n\n\n\nDu kan koble fra en sesjon (detach) ved å skrive CTRL B og deretter d, eller skrive følgende i terminalen:\n\n\nTerminal\n\ntmux detach -s minsesjon\n\nProsessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten."
+    "text": "Mange statistikker mottar data fra eksterne som filer via MoveIT-systemet på bakken. Disse filene kan automatisk synkroniseres til kildebøtta på Dapla. Les mer om hvordan dette settes opp i dette kapitlet i Dapla-manualen."
   },
   {
-    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
-    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
-    "title": "Statistikk over datadeling på Dapla",
+    "objectID": "news/posts/2025-03-17-bucket-list/index.html",
+    "href": "news/posts/2025-03-17-bucket-list/index.html",
+    "title": "Tilgang til å liste bøttenavn på Dapla",
     "section": "",
-    "text": "Ett år etter at Dapla-team kunne opprette delt-bøtter selvbetjent på Dapla, så er det tilsammen opprettet 118 bøtter per 22. April 2025. 83 av disse er i prod-miljøet til teamene, mens 35 er i test-miljøet.\nAv de 171 teamene totalt på Dapla, så er det 33 av disse som har opprettet en eller flere delt-bøtter.\nTabell 1 viser en oversikt over alle delt-bøtter som er opprettet1, dens kortnavn, hvilket team som er eier den, hvilket miljø den finnes i, og hvilken seksjon som er ansvarlig for teamet.\nTabell 1 viser mer informasjon enn hva som er tilgjengelig i dag i Dapla Ctrl. Grunnen er at det i Tabell 1 også inkluderes delt-bøtter i test-miljøet, samt at Dapla Ctrl kun viser delt-bøtter hvor andre team faktisk har blitt gitt tilgang. I fremtiden vil denne informasjonen kunne inspiseres i en datakatalog, med mye mer detaljert informasjon om dataene som deles.\nFigur 1 viser at det er avdeling 200 som har opprettet flest bøtter, i alt 52 delt-bøtter. Deretter følger avdeling 300 med 26 bøtter.\nAv Figur 2, som viser hvilke 10 team som har flest delt-bøtter, så ser vi at 48 av de 52 bøttene i avdeling 200 kommer fra team Kostra. Vi ser også at team arbmark-register har opprettet 9 av totalt 26 bøtter i avdeling 300.\nFigur 1: Antall delt-bøtter per avdeling og miljø\nFigur 2: Antall delt-bøtter per team og miljø"
+    "text": "Fra og med mandag 17. mars 2025 har alle SSB-brukere fått tilgangen bucket.list på alle GCS-bøtter på Dapla. Det betyr at de kan se navnene til bøttene, men ikke innholdet i bøttene. Formålet med å tillate dette er at alle skal kunne undersøke hvilke bøtter et team har via Google Cloud Console, noe som kan være nyttige i flere sammenhenger."
   },
   {
-    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
-    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
-    "title": "Statistikk over datadeling på Dapla",
-    "section": "Fotnoter",
-    "text": "Fotnoter\n\n\nHelt presist viser tabellen alle delt-bøtter som er opprettet gjennom shared-buckets-featuren.↩︎"
-  },
-  {
-    "objectID": "news/posts/2025-02-07-parquet-viewer/index.html",
-    "href": "news/posts/2025-02-07-parquet-viewer/index.html",
-    "title": "Parquet-utforsker i VS Code",
+    "objectID": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
+    "href": "news/posts/2024-11-25-endring-i-tjenestekonfig/index.html",
+    "title": "Endring i tjenestekonfigurasjon på Dapla Lab",
     "section": "",
-    "text": "Sjekk ut den nye Parquet-utforskeren i Vscode-python. Skrive SQL, filtrer,inspiser metadata uten bruk av Python eller R. Les mer i denne blogg-artikkelen."
+    "text": "Tjenestekonfigurasjonen i Dapla Lab har endret seg. Dette er altså menyen man får opp når man starter opp en ny tjeneste, for eksempel en ny instans av Jupyter eller VSCode. Parameterne man kan konfigurere er derimot uendret. Følgende artikler i manualen har derfor blitt oppdatert: jupyter, jupyter-pyspark, jupyter-playground, VSCode-python, RStudio, Datadoc, JDemetra og artikkelen om Dapla Lab.\n\n\n\n\n\n\nFigur 1: Tjenestekonfigurasjon for jupyter"
   },
   {
-    "objectID": "news/posts/2025-03-09-epost-dapla-lab/index.html",
-    "href": "news/posts/2025-03-09-epost-dapla-lab/index.html",
-    "title": "E-postvarslinger om “gamle” tjenester fra Dapla Lab",
+    "objectID": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
+    "href": "news/posts/2025-04-14-pausing-dapla-lab/index.html",
+    "title": "Nye tidspunkter for pausing på Dapla Lab",
     "section": "",
-    "text": "Fra og med mandag 10. mars 2025 implementeres automatisk utsending av e-post til brukere som har tjenester som ble startet for mer enn 7 dager siden. Formålet med varslingen er å bevisstgjøre brukerne på viktigheten av å slette tjenester med jevne mellomrom, og starte en ny slik at man kjører på siste versjon.\n\n\n\n\n\n\nEksempel på e-post\n\n\n\nHei Nordmann, Ola\nDu har en eller flere tjenester i Dapla Lab som ble startet for mer enn 7 dager siden. Se oversikt i tabellen under.\nVi anbefaler deg å slette tjenester som ble startet for mer enn 7 dager siden. Når tjenesten slettes, og du senere starter den opp igjen, får du med deg eventuelle forbedringer som er gjort i tjenesten.\n\n\n\n\n\nTjeneste\n\n\nNavn\n\n\nAntall dager\n\n\n\n\n\n\nvscode-python\n\n\nvscode-etlev\n\n\n25\n\n\n\n\nvscode-python\n\n\nvscode-detlev\n\n\n8\n\n\n\n\nHusk å pushe kode til GitHub, og ta vare på andre filer som ligger i tjenestens filsystem, før du sletter. Vær oppmerksom på alle filer på hjemmeområdet ditt slettes når tjenesten slettes.\nLes mer om hvordan man bruker Git og GitHub i SSB."
+    "text": "Alle tjenester på Dapla Lab blir automatisk pauset kl 17.00 hver dag, med mindre man har meldt seg ut av pausingen. Basert på erfaring ser vi at det startes en del tjenester etter kl 17, og siden disse ikke pauses automatisk, så kan de stå og kjøre til kl 17 dagen etter hvis brukeren glemmer å pause disse. Dette kan medføre unødvendige ressursbruk og kostnader for SSB.\nDerfor innfører vi en ny automatisk rutine for pausing av tjenester på Dapla Lab. I tillegg til pausingen som skjer kl 17 hver, så vil vi fom. 14. april 2025 pause tjenester også hver hele time i tidsintervallet 18.00-05.00. Den nye rutinen vil fortsatt respektere de som meldt seg ut av pausingen. De som har meldt seg ut av pausingen må selv ta ansvar for å manuelt pause tjenesten når den ikke er i bruk.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
   },
   {
-    "objectID": "news/posts/2025-05-20-dapla-overgang-101/index.html",
-    "href": "news/posts/2025-05-20-dapla-overgang-101/index.html",
-    "title": "Ny artikkel - Hvordan gjennomføre overgang til Dapla?",
+    "objectID": "news/posts/2025-03-18-klass-web-upgrade/index.html",
+    "href": "news/posts/2025-03-18-klass-web-upgrade/index.html",
+    "title": "Nytt utseende for Klass-siden på ssb.no",
     "section": "",
-    "text": "Vi har skrevet en artikkel om hvordan man bør gjennomføre overgangen til Dapla. Les artikkelen her."
+    "text": "Den 18. mars 2025 ble nettsiden som lar brukere utforske i kodeverk i Klass på www.ssb.no/klass oppdatert. Brukere vil merke at utseende nå er oppdatert og mer i tråd med utseendet på resten av www.ssb.no. I tillegg har selve applikasjonen blitt oppgradert og migrert til å kjøre på SSBs nye applikasjonsplattform NAIS.\nFigur 1 viser hvordan den nye nettsiden ser ut.  \n\n\n\n\n\n\nFigur 1: Den nye nettsiden på ssb.no for Klass."
   },
   {
-    "objectID": "news/posts/2025-04-02-ssb-project-dapla-lab/index.html",
-    "href": "news/posts/2025-04-02-ssb-project-dapla-lab/index.html",
-    "title": "Enklere med ssb-project i Dapla Lab",
+    "objectID": "news/posts/2025-03-05-daplanytt-feb25/index.html",
+    "href": "news/posts/2025-03-05-daplanytt-feb25/index.html",
+    "title": "DaplaNytt-møte 5.3.2025",
     "section": "",
-    "text": "Mange brukere har etterspurt muligheten for å kunne angi et repo og at ssb-project build skal kjøres ved oppstart av nye Dapla Lab tjenester. Vi har nå lagt til støtte for dette i tjenestekonfigurasjonen. Brukere kan be om at ssb-project build kjøres ved oppstart, og brukeren vil da komme inn i en ny tjeneste med ferdiginstallerte biblioteker og opprettet kernel. Oppstartstiden for tjenesten blir litt lengre for de som benytter seg av dette.\nEn stor gevinst med denne endringen er at det vil gjør det lettere å slette tjenester jevnlig istedenfor å pause de, siden man kan lagre konfigurasjonen og komme til “dekka bord” neste gang man starter en ny tjeneste. Se eksempel på dette i videoen under.\nDokumentasjon finner du her."
+    "text": "DaplaNytt for februar 2025 ble avholdt som Teams-møte 5. mars 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
   },
   {
-    "objectID": "news/posts/2024-12-03-refresh-buckets/index.html",
-    "href": "news/posts/2024-12-03-refresh-buckets/index.html",
-    "title": "refresh-buckets kommando i Dapla Lab",
+    "objectID": "news/posts/2025-01-16-manualen-omstrukturert/index.html",
+    "href": "news/posts/2025-01-16-manualen-omstrukturert/index.html",
+    "title": "Omstrukturering av manualen!",
     "section": "",
-    "text": "Nå kan man kjøre kommandoen refresh-buckets fra terminalen i en tjeneste på Dapla Lab for å oppdatere visningen av en bøttene i filsystemet. Dette kan være nyttig hvis det blir opprettet mapper med dapla-toolbelt eller Kildomaten, og ikke via buckets-mappen i filsystemet. Les mer i kapitlet om Dapla Lab."
+    "text": "Finner du ikke favorittartiklene dine? Det er fordi vi har omstrukturert manualen. Vi har delt opp det som tidligere var jobbe-med-kode inn i 3 forksjellige artikler: SSB-project, Pakkehåndtering i Python og Pakkehåndtering i R."
   },
   {
-    "objectID": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
-    "href": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
-    "title": "Nytt tidspunkt for automatisk pausing på Dapla Lab",
+    "objectID": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
+    "href": "news/posts/2025-03-03-dapla-lab-nosuspend/index.html",
+    "title": "Skru av automatisk pausing for en tjeneste",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab blir pauset kl 22.00 hver dag. I forbindelse med at vi nå tilbyr brukere å melde seg ut av den automatiske pausingen ved behov, så endrer vi nå tidspunktet for pausing fra 22.00 til 17.00 fra og med torsdag 27. mars.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
+    "text": "Alle tjenester på Dapla Lab pauses hver kveld kl. 22:00, slik som forklart i dokumentasjonen. Nå er det mulig å skru av pausing for enkelttjenester ved å skrive [nosuspend] på slutten av visningsnavnet til tjenesten, slik som vist i videoen under:\n\nDenne funksjonaliteten kan skrus av og på etter at tjenesten er startet."
   },
   {
-    "objectID": "news/posts/2025-02-05-daplanytt-jan25/index.html",
-    "href": "news/posts/2025-02-05-daplanytt-jan25/index.html",
-    "title": "DaplaNytt-møte 5.2.2025",
+    "objectID": "news/posts/2025-01-08-metodebib-chapter/index.html",
+    "href": "news/posts/2025-01-08-metodebib-chapter/index.html",
+    "title": "Nytt kapittel om Metodebiblioteket",
     "section": "",
-    "text": "DaplaNytt for januar 2025 ble avholdt som Teams-møte 5. februar 2025.\nSe opptaket her (intern lenke).\n\n\n\nSkjembilde fra Teams-møte"
+    "text": "Vi har skrevet et kapittel i Dapla-manualen om metodebiblioteket. Sjekk det ut her."
   },
   {
-    "objectID": "news/posts/2025-04-30-challenges-gcsfuse/index.html",
-    "href": "news/posts/2025-04-30-challenges-gcsfuse/index.html",
-    "title": "Deling av data og /buckets",
+    "objectID": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
+    "href": "news/posts/2024-11-26-statbank-dapla-lab/index.html",
+    "title": "Dapla Lab støtter Statbank",
     "section": "",
-    "text": "Etter noen måneder med erfaring med tilgjengeliggjøring av bøtter som filsystem i Dapla Lab, har vi erfart at funksjonaliteten i noen tilfeller har noen utfordringer.\nEn utfordring oppstår når team skriver data til delt-bøtter direkte via Transfer Service, uten å logge seg inn på Dapla Lab etterpå. Hvis det delende teamet aldri åpner en tjeneste på Dapla Lab etter at dataene er delt, så vil ikke de dataene vises for konsumentene av dataene under /buckets/ i Dapla Lab.\nÅrsaken er at opprettelsen av mapper krever skrivetilgang til bøtta, og det har ikke konsumenten av delte-data. Konsumentene vil kunne se dataene via gs://-stien, men ikke /buckets/-stien. Hvis data derimot deles ved at de produseres direkte fra en tjeneste på Dapla Lab, så vil ikke dette være en problemstilling.\nVi jobber med å løse dette problemet, og finner forhåpentligvis en løsning innen kort tid."
+    "text": "Fra og med forrige uke støtter Statbank-pakken lasting fra Dapla Lab. Dette er i forbindelse med ny versjon av Python-pakken dapla-statbank-client.\nLes mer om dette i innlegget til Carl Corneil på Viva Engage."
   },
   {
-    "objectID": "news/posts/2025-04-29-change-data-admins/index.html",
-    "href": "news/posts/2025-04-29-change-data-admins/index.html",
-    "title": "Endring i tilganger for data-admins",
+    "objectID": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
+    "href": "news/posts/2025-03-18-dapla-lab-conf-locked-input-fields/index.html",
+    "title": "Forbedring av konfigurasjon i Dapla Lab",
     "section": "",
-    "text": "Ifm med utrulling av en ny type delt-bøtte ble det oppdaget at noen team hadde en feil i tilgangene for data-admins. Dette ble rettet i sammenheng med utrulling av de nye delt-bøttene. I praksis vil data-admins merke dette ved at de ikke lenger har tilgang til produkt-bøtta når de logger seg som data-admins i Dapla Lab."
+    "text": "Den 18. mars 2025 rullet vi ut en endring i tjenestekonfigurasjonene til alle tjenester på Dapla Lab. Under Data-fanen er ikke lenger mulig å starte en tjeneste som data-admins uten å oppgi en begrunnelse. I tillegg vises feltene for Begrunnelse og Varighet nå kun hvis man har valgt data-admins under Team og tilgangsgruppe.\nFigur 1 viser hvordan tjenestekonfigurasjonen ser ut etter endringen. Figur 1 (a) viser hvordan Data-fanen ser ut hvis man velger å representere developers, mens Figur 1 (b) viser valgene hvis man velger data-admins.\n\n\n\n\n\n\n\n\n\n\n\n(a) developers\n\n\n\n\n\n\n\n\n\n\n\n(b) data-admins\n\n\n\n\n\n\n\nFigur 1: Ulik visning av informasjon basert på om man velger developers eller data-admins"
   },
   {
-    "objectID": "news/posts/2025-04-04-dapla-toolbelt-meta-python/index.html",
-    "href": "news/posts/2025-04-04-dapla-toolbelt-meta-python/index.html",
-    "title": "dapla-toolbelt-metadata støtter igjen Python 3.10",
+    "objectID": "news/posts/2025-04-24-transfer-service-onprem/index.html",
+    "href": "news/posts/2025-04-24-transfer-service-onprem/index.html",
+    "title": "Beslutning om Transfer Service fra testmiljøet på Dapla til bakken",
     "section": "",
-    "text": "I dapla-toolbelt-metadata v0.5.0 ble støtte for Python 3.10 fjernet. Det gjorde at pakken ikke var kompatibel med mange prosjekter skapt vha. ssb-project. Endringen skapte problemer for flere prosjekter og derfor er støtte for Python 3.10 nå støttet i dapla-toolbelt-metadata v0.6.2."
+    "text": "Mange brukere har bedt om å kunne overføre data fra et Dapla-team sitt test-miljø til bakken. Dette er spesielt relevant for team har datafangst fra Altinn 3 på Dapla, men som skal prosessere dataene på bakken.\nDet er nå besluttet at det ikke skal åpnes for å kunne overføre data fra test-miljø på Dapla til bakken. Årsaken er at det ikke finnes noe test-miljøet på bakken, og derfor lager dette en åpning for å overføre data mellom prod- og test-miljøene på Dapla. En slik åpning er problematisk og derfor er det nå besluttet at dette ikke skal være mulig.\nLøsningen for team som har datafangst med Altinn3, og får test-data fra team SU-V, blir derfor å bruke Transfer Service fra prod-miljøet til teamet for å overføre til bakken. Team SU-V har nå gitt Transfer Service i prod-miljøet til alle team med datafangst fra Altinn 3 tilgang til test-bøtta for data, slik som vist i Figur 1.\nTeam som allerede har fått satt opp muligheten til å overføre data fra test-miljøet til bakken, vil bli kontaktet av team Skyinfra for endre dette til løsningen vist i Figur 1.\n\n\n\n\n\n\n\n\nflowchart LR \n\n    subgraph suv-altinn-data-t\n        id_suv_bucket_t[(ssb-suv-altinn-raXXXX-YY-test)]\n    end\n\n    subgraph ssb-teamnavn-kilde-t\n        id_stat_kilde_bucket_t[(data-kilde)]\n    end\n    id_suv_bucket_t &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_t\n\n    subgraph ssb-teamnavn-t\n        id_stat_produkt_bucket_t[(data-produkt)]\n    end\n    id_stat_kilde_bucket_t -- Kildomaten --&gt; id_stat_produkt_bucket_t\n\n    subgraph suv-altinn-data-p\n        id_suv_bucket_p[(ssb-suv-altinn-raXXXX-YY-prod)]\n    end\n\n    subgraph ssb-teamnavn-kilde-p\n        id_stat_kilde_bucket_p[(data-kilde&lt;br&gt;/altinn/prod/)]\n        id_stat_kilde_bucket_pt[(data-kilde&lt;br&gt;/altinn/test/)]\n    end\n    id_suv_bucket_p &lt;-- Transfer service read/write --&gt; id_stat_kilde_bucket_p\n    id_suv_bucket_t -- Transfer service read --&gt; id_stat_kilde_bucket_pt\n\n    subgraph ssb-teamnavn-p\n        id_stat_produkt_bucket_p[(data-produkt&lt;br&gt;/inndata/altinn/)]\n        id_stat_produkt_bucket_pt[(data-produkt&lt;br&gt;/temp/test/altinn/)]\n\n        id_stat_kilde_bucket_p -- Kildomaten --&gt; id_stat_produkt_bucket_p\n        id_stat_kilde_bucket_pt -- Kildomaten --&gt; id_stat_produkt_bucket_pt\n\n        id_stat_frasky_bucket_p[(frasky&lt;br&gt;/altinn/prod)]\n        id_stat_frasky_bucket_pt[(frasky&lt;br&gt;/altinn/test)]\n\n        id_stat_produkt_bucket_p -- Transfer service --&gt; id_stat_frasky_bucket_p\n        id_stat_produkt_bucket_pt -- Transfer service --&gt; id_stat_frasky_bucket_pt\n    end\n\n    subgraph linux on-prem\n        id_cloudsync_p[(cloud_sync&lt;br&gt;/frasky/altinn/prod)]\n        id_cloudsync_pt[(cloud_sync&lt;br&gt;/frasky/altinn/test)]\n\n        id_stat_frasky_bucket_p -- Transfer service --&gt; id_cloudsync_p\n        id_stat_frasky_bucket_pt -- Transfer service --&gt; id_cloudsync_pt\n\n        id_stammekat_p[(stammekatalog&lt;br&gt;/wk24/datafangst/gSdv/)]\n        id_stammekat_pt[(stammekatalog&lt;br&gt;/test/wk24/datafangst/gSdv/)]\n\n        id_cloudsync_p -- MoveIT --&gt; id_stammekat_p \n        id_cloudsync_pt -- MoveIT --&gt; id_stammekat_pt \n    end\n\n    subgraph Oracle DB1P\n        id_isee_p[(ISEE Prod)]\n    end\n    id_stammekat_p -- crontab --&gt; id_isee_p\n\n    subgraph Oracle DB1T\n        id_isee_t[(ISEE Test)]\n    end\n    id_stammekat_pt -- crontab --&gt; id_isee_t\n\n\n\n\n\n\n\n\n\nFigur 1: Figur som viser dataflyt for statistikkproduksjon på Dapla og Dapla/ISEE."
   },
   {
-    "objectID": "news/posts/2024-11-14-kildedata-datadoc/index.html",
-    "href": "news/posts/2024-11-14-kildedata-datadoc/index.html",
-    "title": "Kildedata og Datadoc",
+    "objectID": "news/posts/2025-05-21-kildomaten-instances/index.html",
+    "href": "news/posts/2025-05-21-kildomaten-instances/index.html",
+    "title": "Økt ytelse i Kildomaten",
     "section": "",
-    "text": "Datadoc støtter ikke dokumentasjon av datasett i datatilstanden kildedata enda. Det vil støttes på sikt, men foreløpig er det ikke funksjonalitet for dette.\nI Datadoc-applikasjonen i Dapla Lab får man nå valget med å logge seg inn i tjenesten som data-admins, og dermed en teknisk mulighet til å dokumentere kildedata. Siden dette ikke er støttet enda, så ber vi alle om å ikke gjøre dette. Det er ingen grunn til å aktivere sin kildedatatilgang når dette ikke støttes.\nLes mer i dokumentasjonen til Datadoc."
+    "text": "Kildomaten vil nå som standard prosessere 100 filer parallelt, mot 5 tidligere. Endringen vil spesielt forbedre ytelsen for team som mottar svært mange filer kildebøtta som skal prosesseres med en Kildomaten-jobb. Antall parallelle prosesser kan også økes over 100 som er standard, men vi ønsker da at teamet tar kontakt med Kundeservice slik at vi kan få erfaringer med hvordan andre systemer, som pseudonymisering, håndterer dette.\nForbedringen i ytelse påvirker i hovedsak Kildoamten sin evne til å prosessere mange små/mellomstore filer, og ikke hvordan den håndterer store filer. Team Statistikktjenester jobber kommer fremover til iverksette tiltak å øke kapasiteten på prosessering av store filer også.\nLes oppdatert dokumentasjon for Kildomaten her."
   },
   {
-    "objectID": "news/posts/2025-02-14-cost-in-dapla-lab/index.html",
-    "href": "news/posts/2025-02-14-cost-in-dapla-lab/index.html",
-    "title": "Estimerte kostnader i Dapla Lab",
+    "objectID": "news/posts/2024-12-16-blogpost-pandera/index.html",
+    "href": "news/posts/2024-12-16-blogpost-pandera/index.html",
+    "title": "Nytt blogginnlegg om Pandera",
     "section": "",
-    "text": "Du kan nå se et estimat for hvor mye din tjeneste koster under Ressurser-fanen i tjenestekonfigurasjonen på Dapla Lab. Dette er ikke et nøyaktig estimat, men kan gi brukeren en indikasjon på hvor mye ressursene vil koste ila en arbeidsdag."
+    "text": "Manualens blogg har blitt oppdatert med en post om hvordan validere data i kode ved hjelp av Python pakken Pandera. Les mer her."
   },
   {
-    "objectID": "news/posts/2024-12-23-standarder-chapter/index.html",
-    "href": "news/posts/2024-12-23-standarder-chapter/index.html",
-    "title": "Nytt kapittel om Standarder og standardutvalget",
+    "objectID": "news/posts/2025-04-07-altinn-part/index.html",
+    "href": "news/posts/2025-04-07-altinn-part/index.html",
+    "title": "Blogginnlegg om Altinn 3 og ISEE",
     "section": "",
-    "text": "Vi har skrevet et kapittel i Dapla-manualen som gir et overblikk over standardutvalget og standardene på Dapla. Sjekk det ut her."
+    "text": "Magnus Theodor Engh har skrevet et blogginnlegg som forklarer hvordan man kan integrere datafangst med Altinn 3 på Dapla, med lasting til ISEE i prodsonen. Les innlegget her."
   },
   {
-    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html",
-    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html",
-    "title": "Endringer for økt stabilitet på Dapla Lab",
+    "objectID": "news/posts/2025-06-23-startup-script/index.html",
+    "href": "news/posts/2025-06-23-startup-script/index.html",
+    "title": "Personliggjør dine tjenester på Dapla Lab",
     "section": "",
-    "text": "Etter overgangen til Dapla Lab februar 2025 har vi gjort erfaringer som tilsa at vi burde endre hvordan tjenestene er satt opp. Dette burde resultere i at brukere opplever færre avbrudd når de jobber i en tjeneste som Jupyter, og at det blir færre problemer knyttet til konkurerende minnebruk. Ofte er disse vurderingene en avveining mellom opplevd stabilitet og fleksibilitet vs kostnader for SSB. Det optimalet oppsettet er derfor noe vi må kontinuerlig justere etter hvert som vi får erfaring."
+    "text": "Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et bash-script og det må ligger lagret i et repo på www.github.com/statisticsnorway. Brukeren kan deretter referere til skriptet under Avansert i tjenestekonfigurasjonen på Dapla Lab, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Avansert-fanen til en tjeneste på Dapla Lab\n\n\n\nEksempelt i Figur 1 viser en bruker som ber om å få kjørt et skript (personal-init.sh) som ligger lagret i https://github.com/statisticsnorway/obr-test.\nOppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.\nUnder er et eksempel på et oppstartsskript hvor det gjøres noen endringer i $HOME/.bashrc og theme i Jupyter defineres.\n\n\n\n\n\n\nEksempel på et oppstartskript\n\n\n\n\n\ndemo-script.sh\n\n#!/bin/bash\n\n# Update .bashrc with environment variables and aliases\necho \"\" &gt;&gt; \"$HOME/.bashrc\"\necho \"# Opprettet av mitt personlige startupscript:\" &gt;&gt; \"$HOME/.bashrc\"\necho \"export TEST=true\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias gs='git status'\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias ll='ls -alF'\" &gt;&gt; \"$HOME/.bashrc\"\n\n# Set Jupyter-theme via settings file\nTHEME_NAME=\"JupyterLab Dark\"\nSETTINGS_DIR=\"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension\"\nSETTINGS_FILE=\"$SETTINGS_DIR/themes.jupyterlab-settings\"\n\nmkdir -p \"$SETTINGS_DIR\"\n\ncat &gt; \"$SETTINGS_FILE\" &lt;&lt;EOF\n{\n    // Theme set from init-script\n    \"theme\": \"$THEME_NAME\"\n}\nEOF\n\necho \"[Init Script] JupyterLab theme set to '$THEME_NAME'\"\n\n\n\nHvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: $HOME/personal_init_script.log."
   },
   {
-    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#færre-avbrudd",
-    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#færre-avbrudd",
-    "title": "Endringer for økt stabilitet på Dapla Lab",
-    "section": "Færre avbrudd",
-    "text": "Færre avbrudd\nBrukere som har jobbet i Jupyter, VS Code eller RStudio har rapportert at de plutselig kan oppleve avbrudd og at tjenesten ikke kan brukes på noen minutter. En refresh av nettsiden etter noen minutter har fikset problemet, men det oppleves ustabilt for brukeren. Vi har nå gjort endringer i den underliggende plattformen slik at dette ikke skal skje. Årsaken til avbruddene har vært at brukere har blitt omplassert på nye maskiner for å spare ressurser. Vi har nå økt toleransen for at brukere skal bli omplassert på ny maskin og dermed bør problemet forsvinne. For de som er interessert i mer detaljer så kan de lese neste avsnitt.\nNår en tjeneste startes i Dapla Lab bestemmer Kubernetes1 hvilken underliggende maskin (også kalt node) tjenesten skal starte på. Hvis det er for lite kapasitet vil Kubernetes starte en ny maskin. Denne skaleringen er grunnen til at oppstart av en tjeneste noen ganger kan ta ekstra tid. Skulle det vise seg at vi har flere maskiner enn nødvendig vil de overflødige maskinene bli skrudd av. Ved å kun kjøre det minste nødvendige antallet med maskiner får vi en mer kostnadseffektiv drift. En konsekvens av dette har vært at tjenester plutselig kan oppleve et midlertidig avbrudd mens tjenesten blir flyttet fra en maskin til en annen. Etter tilbakemelding fra brukerne har vi endret denne praksisen, og lar nå tjenestene kjøre videre på samme maskin, selv om det er ledig kapasitet på andre maskiner."
-  },
-  {
-    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#mindre-konkurrerende-minnebruk",
-    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#mindre-konkurrerende-minnebruk",
-    "title": "Endringer for økt stabilitet på Dapla Lab",
-    "section": "Mindre konkurrerende minnebruk",
-    "text": "Mindre konkurrerende minnebruk\n\nEnkelte brukere har opplevd at tjenesten i Dapla Lab kræsjer pga. minnebruk selv om minnebruken er mindre enn det som ble forespurt av brukeren. Dette skyldes at det er forskjell på forespurte og tilgjengelige ressurser i Kubernetes. Vi har nå endret oppsettet i Dapla Lab slik at brukerne alltid får det som forespørres, og derfor vil mangel på ressurser ikke forekomme lenger. Resultatet for brukeren er en mer stabil tjeneste og bedre brukeropplevelse. De som er interessert i flere detaljer rundt dette, kan lese avsnittet under.\nNår man som bruker i Dapla Lab konfigurerer en tjeneste med CPU og Minne/RAM, så blir det satt føringer som må overholdes av Kubernetes. Den ene føringen er en forespørsel - mengden CPU/minne man er garantert å få - og den andre er grensen/taket. Hvis man går over taket vil Kubernetes “drepe” tjenesten og starte den på nytt.\nI “tradisjonelle” applikasjoner (tenk f.eks. Klass sitt API) gir forespørsler og grenser mening, grunnet naturlig variasjon i belastning og trafikk, og at applikasjonene er designet for å kunne feile, starte på nytt ofte og kjøre flere instanser i parallel. Hvis den om og om igjen går over grensen sin tyder dette på en feil i applikasjonen (f.eks. minnelekkasje).\nKubernetes benytter seg av det forespurte minnet når den velger hvilken maskin tjenesten eller applikasjonen skal kjøre på. Det vil si at det er mulig å totalt ha en høyere minnegrense enn hva som er tilgjengelig på maskinen. Et eksempel på dette er hvis tjeneste A har minneforespørsel/-grense på 100GB/150GB, og tjeneste B har tilsvarende, men maskinen bare har 256GB med minne tilgjengelig. Da er vi i et scenario der maskinen ikke har nok minne hvis både tjeneste A og tjeneste B bruker opp til minnegrensen sin. I dette tilfellet vil en tjeneste på maskinen bli drept og startet på nytt. Merk at dette kan være en tilfeldig tjeneste på maskinen, ikke nødvendigvis den som bruker mest minne.\nVi har sett at det for tjenester på Dapla Lab ikke gir mening å differensiere på forespørsel og grense, som i tradisjonelle applikasjoner. Derfor er det nå innført en endring der forespørselen er lik grensen.Dette håper vi gjør det mer forutsigbart for brukeren hva de kan forvente av tilgjengelig minne, samtidig som stabiliteten for alle brukerne ved at “minnetunge” brukere ikke påvirker andre sine tjenester."
-  },
-  {
-    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#nye-maskiner",
-    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#nye-maskiner",
-    "title": "Endringer for økt stabilitet på Dapla Lab",
-    "section": "Nye maskiner",
-    "text": "Nye maskiner\nDet å velge korrekte maskiner er ikke nødvendigvis en enkel oppgave, da generell bruk av maskinen må veies opp mot kostnaden ved den. Kostnadsdriveren for maskinene Dapla Lab og tjenestene kjører på er minne. Den nysgjerrige kan ta en titt på pris-oversikten her:\nhttps://cloud.google.com/compute/all-pricing?hl=nb.\nPå Dapla Lab benyttes maskintype n2 (standard og highmem). Ved å monitorere og observere bruken av ressurser gjør vi nå også endringer i hvilke underliggende maskiner som kan kjøres opp. Fremover vil vi kjøre opp færre store maskiner enn flere små (fordi det finnes en basiskostnad for hver ekstra maskin), samtidig som vi nå innfører en maskintype som ikke har like mye minne som andre (n2-standard-80). Det vil være kostnadseffektivt for dem som trenger mye CPU men ikke nødvendigvis masse minne.\nDette vil være noe brukerne ikke merker eller vil ha et forhold til."
-  },
-  {
-    "objectID": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#footnotes",
-    "href": "news/posts/2025-03-20-stabilitet-dapla-lab/index.html#footnotes",
-    "title": "Endringer for økt stabilitet på Dapla Lab",
-    "section": "Fotnoter",
-    "text": "Fotnoter\n\n\nKubernetes er systemet som brukes under panseret for å skalere opp og ned ressurser i Dapla Lab. Les mer om Kubernetes her.↩︎"
-  },
-  {
-    "objectID": "news/posts/2025-04-06-update-statbank-client/index.html",
-    "href": "news/posts/2025-04-06-update-statbank-client/index.html",
-    "title": "Dokumentasjon av lasting til Statistikkbanken er oppdatert",
+    "objectID": "news/posts/2025-01-14-dapla-ctrl-ny-url/index.html",
+    "href": "news/posts/2025-01-14-dapla-ctrl-ny-url/index.html",
+    "title": "Dapla Ctrl har fått ny nettadresse",
     "section": "",
-    "text": "Kapitlet om dapla-statbank-client i Dapla-manualen er skrevet om og url-en er endret til: https://manual.dapla.ssb.no/statistikkere/dapla-statbank-client.html.\nI tillegg har Carl Corneil skrevet et blogginnlegg hvor han beskriver en optimal fremgangsmåte for å laste til flere statistikkbanktabeller i et produksjonsløp."
+    "text": "Nettadressen til Dapla Ctrl er nå endret fra https://ctrl.dapla.ssb.no/ til https://dapla-ctrl.intern.ssb.no/. Dette er gjort som en del av overgangen til NAIS-plattformen."
   },
   {
-    "objectID": "news/posts/2025-04-10-datadoc-update/index.html",
-    "href": "news/posts/2025-04-10-datadoc-update/index.html",
-    "title": "Oppdatert dokumentasjon for Datadoc",
+    "objectID": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
+    "href": "news/posts/2025-02-09-monter-delt-bøtter/index.html",
+    "title": "Delt-bøtter støttes i Dapla Lab",
     "section": "",
-    "text": "Dokumentasjonen for Datadoc-delen av dapla-toolbelt-metadata er skrevet om og inkluderer nå flere eksempler på hvordan man jobbe programmatisk med metadata.\nLes kapitlet her."
+    "text": "Man kan nå tilgjengeliggjøre delt-bøtter fra andre team inne i Jupyter, Vscode-python og Rstudio. Les dokumentasjon her, eller se videoen under:"
   },
   {
-    "objectID": "news/posts/2025-05-07-datadoc-editor-update/index.html",
-    "href": "news/posts/2025-05-07-datadoc-editor-update/index.html",
-    "title": "Ny versjon av Datadoc-editor",
+    "objectID": "news/posts/2024-11-11-dapla-lab-source-data/index.html",
+    "href": "news/posts/2024-11-11-dapla-lab-source-data/index.html",
+    "title": "Kildedata tilgjengelig fra Dapla Lab",
     "section": "",
-    "text": "I den nye versjonen varsles brukeren når det avdekkes avvik mellom datasettet og eksisterende metadata slik at man kan korrigere metadataene.\nEn liten feil rapportert av Østhus, Andreas er blitt fikset av Corneil, Carl Franklin: Vi nå kun ta hensyn til primær plassering av en statistikk i et statistikkområde når det utledes mens før tok vi det første vi fant, som førte til merarbeid på korrigering i en del tilfeller. Fasiten for å utlede dette er det som statistikkbanken benytter for kategorisering av statistikk og den ligger her for de som er interessert: www.ssb.no/xp/_/service/mimir/subjectStructurStatistics\nI tillegg har vi migrert prosjektet til uv fra Poetry. Det er ikke noe brukerne skal merke, men vi kan melde om en stor forbedring på utvikleropplevelsen.\nRelease Notes: https://github.com/statisticsnorway/datadoc-editor/releases/tag/v1.0.13"
+    "text": "Brukere i tilgangsgruppen data-admins kan nå aksessere kildedata fra tjenestene på Dapla Lab. Kravene for tilgangen er de samme som før:\nSom tidligere må de da velge hvilket team og tilgangsgruppe de ønsker å starte tjenesten som, og deretter oppgi begrunnelse og lengde på tilgang. Dette gjøres fra tjenestekonfigurasjonen i Dapla Lab, slik som vist i Figur 1."
   },
   {
-    "objectID": "news/posts/2025-04-01-daplanytt-mar25/index.html",
-    "href": "news/posts/2025-04-01-daplanytt-mar25/index.html",
-    "title": "DaplaNytt-møte 1.4.2025",
+    "objectID": "news/posts/2024-11-11-dapla-lab-source-data/index.html#begrunnelse-gis-i-dapla-lab",
+    "href": "news/posts/2024-11-11-dapla-lab-source-data/index.html#begrunnelse-gis-i-dapla-lab",
+    "title": "Kildedata tilgjengelig fra Dapla Lab",
+    "section": "Begrunnelse gis i Dapla Lab",
+    "text": "Begrunnelse gis i Dapla Lab\nNår en bruker tidligere har aksessesert kildedata fra “gamle” Jupyter (https://jupyter.dapla.ssb.no/), så ble en JIT-applikasjon for å få midlertidig tilgang. Denne tilnærmingen vil fortsette å fungere for det “gamle” mijøet inntil det avvikles til fordel for Dapla Lab. Men på Dapla Lab kan begrunnelse og tidspunkt angis direkte i tjenestekonfigurasjonen."
+  },
+  {
+    "objectID": "news/posts/2024-11-11-dapla-lab-source-data/index.html#feil-ved-manglende-begrunnelse",
+    "href": "news/posts/2024-11-11-dapla-lab-source-data/index.html#feil-ved-manglende-begrunnelse",
+    "title": "Kildedata tilgjengelig fra Dapla Lab",
+    "section": "Feil ved manglende begrunnelse",
+    "text": "Feil ved manglende begrunnelse\nHvis man prøver å starte en tjeneste som data-admins uten å oppgi en begrunnelse, så vil man få feilmeldingen vist i Figur 2. Denne feilmeldingen er lite forklarende og er noe vi ønsker å forbedre etter hvert.\n\n\n\n\n\n\nFigur 2: Feilmelding ved manglende begrunnelse i Dapla Lab."
+  },
+  {
+    "objectID": "news/posts/2025-01-29-dapla-lab-dagene/index.html",
+    "href": "news/posts/2025-01-29-dapla-lab-dagene/index.html",
+    "title": "Åpen dag om Dapla Lab i Oslo og Kongsvinger",
     "section": "",
-    "text": "DaplaNytt for mars 2025 ble avholdt som Teams-møte 1. april 2025.\nSe opptaket her (intern lenke).\nPresentasjonen finner du her.\n\n\n\nSkjembilde fra Teams-møtet DaplaNytt."
+    "text": "10. og 11. februar arrangerer vi åpen dag om Dapla Lab for å hjelpe brukere med overgangen til Dapla Lab. Utviklere, tech-coacher og støtteteam stiller fysisk for å hjelpe deg med å flytte kode, filer, sette opp Git- og GitHub-konfigurasjon, eller svare på spørsmål/innspill man måtte ha ifm. overgangen. Vi håper at så mange som mulig tar turen innom for å få hjelp eller bare slå av en prat.\nArrangement i Oslo 10. februar kl. 12 i Auditoriet\nArrangement i Kongsvinger 11. februar kl. 12 i A005"
+  },
+  {
+    "objectID": "news/posts/2025-04-24-update-shared-buckets/index.html",
+    "href": "news/posts/2025-04-24-update-shared-buckets/index.html",
+    "title": "Endring i opprettelse og administrasjon av delt-bøtter",
+    "section": "",
+    "text": "Vi ruller nå ut en endring i hvordan brukere kan opprette og gi tilganger til delt-bøtter. Den nye fremgangsmåten er dokumentert i Dapla-manualen. Endringen vil skje gradvis de neste dagene, og vil fullføres ila et par dager.\nÅrsaken til endringen er at Dapla nå skal støtte en ny type delt-bøtte kalt Delomat. Denne bøttetypen er spesielt konfigurert for en ny tjeneste for datadeling som utvikles med navnet Delomaten.\nEn direkte konsekvens av endringen er at brukere ikke lenger trenger å forholde seg iam.yaml for å gi tilganger slik som tidligere. Både opprettelse av bøtter og tilgangstyring skjer nå i samme fil shared-buckets.yaml. Figur 1 viser hvordan den nye strukturen ser ut.\nUtrullingen av den nye funksjonaliteten medfører ikke at brukere trenger å gjøre noe, siden alle tidligere shared-buckets.yaml og iam.yaml blir migrert inn til det nye formatet. Hvis noen skulle oppleve endringer i tilganger til delt-bøtter, så kan man kontakte Kundeservice for å få hjelp.\n\n\n\n\n\n\nFigur 1: Bilde av det nye oppsettet for delt-bøtter."
   },
   {
     "objectID": "news/posts/2025-04-01-validate-standards/index.html",
