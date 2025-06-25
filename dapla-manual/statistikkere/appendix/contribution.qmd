@@ -21,24 +21,6 @@ Gjør du nyhetsverdige endringer må du også lage et nyhetsinnlegg i [nyhetsdel
 - Man kan lære seg Markdown (enkel tekst formatering), en fin oversikt [finnes her](http://mdcheatsheet.com/).
 - Verktøyet Quarto burde installeres for å kunne se endringene slik som de ser ut på nettsiden. [Installasjon instruksjoner finnes her](https://quarto.org/docs/get-started/index.html).
 
-## Fremgangsmåte
-
-1. Klone repoet 
-```{.bash filename="terminal"}
-git clone https://github.com/statisticsnorway/dapla-manual.git
-```
-2. Lage en ny gren
-3. Gjøre endringen
-4. Kjør følgende og følge lenken for å sjekke at alt ser bra ut på nettsiden:
-```{.bash filename="terminal"}
-quarto preview dapla-manual
-```
-5. Åpne en PR
-6. Be noen å gjennomgå endringen og eventuelt godkjenne den
-7. Merge PRen 
-8. Etter et par minutter skal din endring være synlig!
-
-
 ### Tittelblock
 
 I dapla-manualen har vi noen konvensjoner vi følger.
@@ -47,6 +29,14 @@ En av de er å lage en title block som det kalles på [quarto sin nettside](http
 Vi ber våre bidragsytere om å lage en lik block med overskrift og datoen artikkelen ble endret. Åpner man filen til denne siden ser det på dette tidspunktet slik ut:
 
 ![Tittelblock for denne siden.](../../images/title-block.png){fig-alt="Skjermbilde av tittelblock." #fig-tittelblock}
+
+:::{.callout-tip}
+# Interne lenker
+Når man skal lenke til andre artikler i manualen bør gjør man det slik:
+`[artikkel om ssb-project](../ssb-project.qmd)`
+
+Legg merke til at vi lenker til .qmd-filen, ikke den genererte .html-filen, ei heller `manual.dapla.ssb.no`
+:::
 
 ### Nyhetsinnlegg
 
@@ -104,3 +94,20 @@ quarto render ./notebooks/<notebook-navn.ipynb> --execute
 Dette sikrer at vi kan se output etter at boken bygges i GitHub Actions. Husk at notebooks ikke blir strippet for output på vanlig måte, slik at kun åpne data skal benyttes. 
 
 Spør Team Statistikktjenester eller Alex (akc@ssb.no) om du lurer på noe.
+
+## Teknisk remgangsmåte
+
+1. Klone repoet 
+```{.bash filename="terminal"}
+git clone https://github.com/statisticsnorway/dapla-manual.git
+```
+2. Lage en ny gren
+3. Gjøre endringen
+4. Kjør følgende og følge lenken for å sjekke at alt ser bra ut på nettsiden:
+```{.bash filename="terminal"}
+quarto preview dapla-manual
+```
+5. Åpne en PR
+6. Be noen å gjennomgå endringen og eventuelt godkjenne den
+7. Merge PRen 
+8. Etter et par minutter skal din endring være synlig!
