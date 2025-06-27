@@ -1790,37 +1790,37 @@
   {
     "objectID": "statistikkere/appendix/contribution.html",
     "href": "statistikkere/appendix/contribution.html",
-    "title": "Bidra til Dapla-manualen",
+    "title": "Hvordan bidra til Dapla-manualen",
     "section": "",
-    "text": "Alle i SSB kan bidra til denne manualen. Endringer må godkjennes av noen i Team Statistikktjenester eller Alex Crozier (akc@ssb.no). Si gjerne i fra at det ligger en PR å se på. Vi trenger bidrag med alt fra språkvask, nye artikler og andre gode initiativer! Har du lyst til å bidra, men er ikke helt sikker på hva du kan bidra med? Ta en titt på issues i GitHub-repoet.",
+    "text": "Alle i SSB kan bidra til denne manualen. Endringer må godkjennes av noen i Team Statistikktjenester eller Alex Crozier (akc@ssb.no). Si gjerne i fra at det ligger en PR å se på. Vi trenger bidrag med alt fra språkvask, nye artikler og andre gode initiativer! Har du lyst til å bidra, men er ikke helt sikker på hva du kan bidra med? Ta en titt på issues i GitHub-repoet.\nGjør du nyhetsverdige endringer må du også lage et nyhetsinnlegg i nyhetsdelen av manualen. Mer om det lenger nede.",
     "crumbs": [
       "Manual",
       "Appendix",
-      "Bidra til Dapla-manualen"
+      "Hvordan bidra til Dapla-manualen"
     ]
   },
   {
     "objectID": "statistikkere/appendix/contribution.html#forutsetninger",
     "href": "statistikkere/appendix/contribution.html#forutsetninger",
-    "title": "Bidra til Dapla-manualen",
+    "title": "Hvordan bidra til Dapla-manualen",
     "section": "Forutsetninger",
-    "text": "Forutsetninger\n\nMan trenger basis git kompetanse, det ligger en fin beskrivelse av det på Beste Praksis siden fra KVAKK.\nMan trenger en konto på Github, det kan man opprette ved å følge instruksjonene her.\nMan kan lære seg Markdown (enkel tekst formatering), en fin oversikt finnes her.\nVerktøyet Quarto burde installeres for å kunne se endringene slik som de ser ut på nettsiden. Installasjon instruksjoner finnes her.",
+    "text": "Forutsetninger\n\nMan trenger basis git kompetanse, det ligger en fin beskrivelse av det på Beste Praksis siden fra KVAKK.\nMan trenger en konto på Github, det kan man opprette ved å følge instruksjonene her.\nMan kan lære seg Markdown (enkel tekst formatering), en fin oversikt finnes her.\nVerktøyet Quarto burde installeres for å kunne se endringene slik som de ser ut på nettsiden. Installasjon instruksjoner finnes her.\n\n\nTittelblock\nI dapla-manualen har vi noen konvensjoner vi følger. En av de er å lage en title block som det kalles på quarto sin nettside.\nVi ber våre bidragsytere om å lage en lik block med overskrift og datoen artikkelen ble endret. Åpner man filen til denne siden ser det på dette tidspunktet slik ut:\n\n\n\n\n\n\nFigur 1: Tittelblock for denne siden.\n\n\n\n\n\n\n\n\n\nInterne lenker\n\n\n\nNår man skal lenke til andre artikler i manualen bør gjør man det slik: [artikkel om ssb-project](../ssb-project.qmd)\nLegg merke til at vi lenker til .qmd-filen, ikke den genererte .html-filen, ei heller manual.dapla.ssb.no\n\n\n\n\nNyhetsinnlegg\nManualens egen nyhetssiden skal oppdaters med et innlegg en nyhetsverdig endring på Dapla skjer - for eksempel når manualen får en ny artikkel. Det er ikke nødvendig å lage en sak om at en side har blitt oppdatert, med mindre endringene er omfattende.\nNyhetssiden er i Quarto sitt blog-format. Fremgangsmåten er enkel og beskrives i quarto sin artikkel om blogger. Ellers anbefales det å ta en titt på hvordan det gjøres i dapla-manualen. Alex Crozier (akc@ssb.no) er ansvarlig for nyhetssiden og kan kontaktes dersom man trenger hjelp.\n\n\n\n\n\n\nHvordan skrive nyhetsinnlegg?\n\n\n\nUtover det tekniske er det særlig tre ting å tenke på:\nKategoriser innlegget. Om du skriver en ny artikkel bør du kategorisere innlegget med ‘dapla-manual’, slik det har blitt gjort i dette nyhetsinnlegget.\nBruk emojier for å kategorisere For å gjøre det enda lettere for lesere bruker vi emojier i starten av overskriften som sier noe om nyhetens natur. Trykk win + . for å få opp emojier. Her er emojiene vi tar i bruk og deres betydning:\n📄 Ny dokumentasjon (f.eks artikkel i manualen) 🚀 Endringer på Dapla lab 🐍 Python 🐍📚 Pythonpakke ❗ Driftsmelding 🥳 Ny lansering\nEr du usikker på hvilken emoji du skal bruke kan det fint droppes - eller så kan man ta i bruk nye emojier.\nSkriv kort og ha en forklarende overskrift\n\n\n\n\nEmbedded notebooks\nQuarto tilbyr å legge ved (embed) notebooks inn i nettsiden. Dette er en fin måte å dele kode og output på. Men det krever at vi tenker gjennom hvor outputen genereres. Siden Dapla-manualen renderes med GitHub-action, så ønsker vi ikke å introdusere kompleksiteten det innebærer å generere output fra kode her. I tillegg er det mange miljø-spesifikke konfigurasjoner som bestemmer hvordan output kan genereres. Derfor anbefaler vi følgende tilnærming når man skal legge ved en notebook til et kapittel:\n\nLogg deg inn i miljøet du ønsker å bruke.\nKlone ned repoet til Dapla-manualen.\nOpprett en notebook i mappen ./dapla-manual/notebooks/notebook-navn.ipynb\nSkriv kode og generer output som du ønsker. Husk å bare bruke data som alle har tilgang til eller de kan generere selv.\nEmbed output i kapitlet du ønsker iht til denne beskrivelsen\nPå toppen av notebooken lager du en raw-celle der du skriver:\n\n\n\nnotebook\n\n---\nfreeze: true\n---\n\n\nKjør denne notebooken fra terminalen med kommandoen:\n\n\n\nterminal\n\nquarto render ./notebooks/&lt;notebook-navn.ipynb&gt; --execute\n\nDette sikrer at vi kan se output etter at boken bygges i GitHub Actions. Husk at notebooks ikke blir strippet for output på vanlig måte, slik at kun åpne data skal benyttes.\nSpør Team Statistikktjenester eller Alex (akc@ssb.no) om du lurer på noe.",
     "crumbs": [
       "Manual",
       "Appendix",
-      "Bidra til Dapla-manualen"
+      "Hvordan bidra til Dapla-manualen"
     ]
   },
   {
-    "objectID": "statistikkere/appendix/contribution.html#fremgangsmåte",
-    "href": "statistikkere/appendix/contribution.html#fremgangsmåte",
-    "title": "Bidra til Dapla-manualen",
-    "section": "Fremgangsmåte",
-    "text": "Fremgangsmåte\n\nKlone repoet\n\n\n\nterminal\n\ngit clone https://github.com/statisticsnorway/dapla-manual.git\n\n\nLage en ny gren\nGjøre endringen\nKjør følgende og følge lenken for å sjekke at alt ser bra ut på nettsiden:\n\n\n\nterminal\n\nquarto preview dapla-manual\n\n\nÅpne en PR\nBe noen å gjennomgå endringen og eventuelt godkjenne den\nMerge PRen\nEtter et par minutter skal din endring være synlig!\n\n\nTittelblock og nyhetsinnlegg\nI dapla-manualen har vi noen konvensjoner vi følger. En av de er å lage en title block som det kalles på quarto sin nettside.\nVi ber våre bidragsytere om å lage en lik block med overskrift og datoen artikkelen ble endret. Åpner man filen til denne siden ser det på dette tidspunktet slik ut:\n\n\n\n\n\n\nFigur 1: Tittelblock for denne siden.\n\n\n\nManualens egen nyhetssiden skal oppdaters med et innlegg når det kommer nye artikler. Det er ikke nødvendig å lage en sak om at en side har blitt oppdatert, med mindre endringene er omfattende. Nyhetssiden er i Quarto sitt blog-format. Fremgangsmåten er enkel og beskrives i quarto sin artikkel om blogger. Ellers anbefales det å ta en titt på hvordan det gjøres i dapla-manualen. Alex Crozier (akc@ssb.no) er ansvarlig for nyhetssiden og kan kontaktes dersom man trenger hjelp.\n\n\nEmbedded notebooks\nQuarto tilbyr å legge ved (embed) notebooks inn i nettsiden. Dette er en fin måte å dele kode og output på. Men det krever at vi tenker gjennom hvor outputen genereres. Siden Dapla-manualen renderes med GitHub-action, så ønsker vi ikke å introdusere kompleksiteten det innebærer å generere output fra kode her. I tillegg er det mange miljø-spesifikke konfigurasjoner som bestemmer hvordan output kan genereres. Derfor anbefaler vi følgende tilnærming når man skal legge ved en notebook til et kapittel:\n\nLogg deg inn i miljøet du ønsker å bruke.\nKlone ned repoet til Dapla-manualen.\nOpprett en notebook i mappen ./dapla-manual/notebooks/notebook-navn.ipynb\nSkriv kode og generer output som du ønsker. Husk å bare bruke data som alle har tilgang til eller de kan generere selv.\nEmbed output i kapitlet du ønsker iht til denne beskrivelsen\nPå toppen av notebooken lager du en raw-celle der du skriver:\n\n\n\nnotebook\n\n---\nfreeze: true\n---\n\n\nKjør denne notebooken fra terminalen med kommandoen:\n\n\n\nterminal\n\nquarto render ./notebooks/&lt;notebook-navn.ipynb&gt; --execute\n\nDette sikrer at vi kan se output etter at boken bygges i GitHub Actions. Husk at notebooks ikke blir strippet for output på vanlig måte, slik at kun åpne data skal benyttes.\nSpør Team Statistikktjenester eller Alex (akc@ssb.no) om du lurer på noe.",
+    "objectID": "statistikkere/appendix/contribution.html#teknisk-remgangsmåte",
+    "href": "statistikkere/appendix/contribution.html#teknisk-remgangsmåte",
+    "title": "Hvordan bidra til Dapla-manualen",
+    "section": "Teknisk remgangsmåte",
+    "text": "Teknisk remgangsmåte\n\nKlone repoet\n\n\n\nterminal\n\ngit clone https://github.com/statisticsnorway/dapla-manual.git\n\n\nLage en ny gren\nGjøre endringen\nKjør følgende og følge lenken for å sjekke at alt ser bra ut på nettsiden:\n\n\n\nterminal\n\nquarto preview dapla-manual\n\n\nÅpne en PR\nBe noen å gjennomgå endringen og eventuelt godkjenne den\nMerge PRen\nEtter et par minutter skal din endring være synlig!",
     "crumbs": [
       "Manual",
       "Appendix",
-      "Bidra til Dapla-manualen"
+      "Hvordan bidra til Dapla-manualen"
     ]
   },
   {
