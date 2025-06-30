@@ -1,0 +1,51 @@
+---
+title: Jobbe med data
+date-modified: "2025-06-30"
+---
+
+I denne artikkelen viser vi hvordan man leser og skriver data på Dapla og forklarer hvordan dette fungerer. Vi har skrevet egne artikler for [deling av data](deling-av-data.qmd), flytting av data mellom bøtter ([transfer service](transfer-service.qmd)), [pseudonymisering](dapla-pseudo.qmd). Vi har også skrevet om [kartdata](appendix/kartdata.qmd) og [datavalidering med pandera](../blog/posts/2024-12-16-data-validering-pandera/index.qmd).
+
+## Lese og skrive data på Dapla
+
+Vi bruker Python og R når vi skal lese, skrive og bearbeide data. Dette må gjøres fra en av [Dapla lab](lab.dapla.ssb.no)-tjenestene - for eksempel [jupyter](jupyter.qmd). Dette er fordi Dapla lab er koblet opp mot Google Cloud Storage.
+
+Tidligere har vi vært avhengige av python-pakken dapla-toolbelt og R-pakken fellesR for å kunne lese og skrive data på Dapla fordi miljøene ikke har vært koblet opp mot Google Cloud. Nå trenger man ikke ta spesielle hensyn: man leser og skriver data som om man jobber lokalt. Man bruker altså [pandas](https://pandas.pydata.org/docs/user_guide/io.html#parquet) for Python og [arrow](https://arrow.apache.org/docs/r/reference/read_parquet.html) for R.
+
+### Fremgangsmåte
+
+Det første man bør gjøre, gitt at dataene ligger i Google Cloud Storage, er å starte en instans av VSCode, Jupyter eller RStudio fra Dapla lab.
+
+Når man starter tjenesten må man være obs på hvilket team man representerer i den tjenesten. På dapla er det slik at datatilgang styres etter [Dapla team](hva-er-dapla-team.qmd). Du må derfor velge riktig dapla team under tjenestekonfigurasjonen. Tjenestekonfigurasjonen kan du lese om i blant annet [jupyter-artikkelen vår](jupyter.qmd).
+
+![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
+
+Man må naturligvis også vite filstien når man skal lese inn data. Vi bruker en test-fil i fellesbøtten som eksempel. Den har følgende filsti: `gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet`
+
+For å lese (og skrive) filen med Python er koden følgende:
+
+```{.python filename="notebook"}
+import pandas as pd
+
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet"
+df = pd.read_parquet(file_path)
+
+df = df.drop(columns = ['test_kolonne'])
+
+file_path_new = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test_ny.parquet"
+
+df.to_parquet(file_path)
+```
+Så enkelt er det! Men...
+
+Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske standarder, for eksempel [navnestandarden](navnestandard.qmd).
+
+I denne artikkelen fokuserer vi på det tekniske.
+
+## Fra bøtte til skjermen din
+
+![Fra bøtte til Dapla og tilbake](../images/data-storage-image.drawio.png){width=350 height=372}
+
+Dataene våre ligger i Google Cloud Storage - altså på google sine servere. For å lese og skrive dataene bruker vi Python og R i Dapla lab.
+
+
+
