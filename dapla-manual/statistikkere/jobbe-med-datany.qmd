@@ -26,26 +26,44 @@ For å lese (og skrive) filen med Python er koden følgende:
 ```{.python filename="notebook"}
 import pandas as pd
 
-file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet"
-df = pd.read_parquet(file_path)
+file_path = "/buckets/produkt/dapla-metrics/test.parquet"
+dapla_testdata = pd.read_parquet(file_path)
 
-df = df.drop(columns = ['test_kolonne'])
+dapla_testdata = dapla_testdata.drop(columns = ['test_kolonne'])
 
-file_path_new = "gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test_ny.parquet"
-
-df.to_parquet(file_path)
+dapla_testdata.to_parquet(file_path)
 ```
+Slik gjøres det i R:
+
+```{.r filename="notebook"}
+library(arrow)
+
+file_path <- "/buckets/produkt/dapla-metrics/test.parquet"
+
+dapla_testdata <- arrow::read_parquet(file_path)
+
+dapla_testdata <- subset(dapla_testdata, select = -c(test_kolonne))
+
+arrow::write_parquet(dapla_testdata, file_path)
+```
+
+:::{.callout-note}
+# Full filsti ikke lenger nødvendig!
+
+Legg merke til at det ikke lenger er nødvendig med full filsti. I tilfellene vist over ville man tidligere skrevet filstien slik: `gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet`
+
+Nå skjønner maskinen at den skal lete under ssb-dapla-felles fordi dette er teamet vi valgte under tjenestekonfigurasjon
+:::
+
+
+
 Så enkelt er det! Men...
 
-Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske standarder, for eksempel [navnestandarden](navnestandard.qmd).
+Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske standarder, for eksempel [navnestandarden](navnestandard.qmd). Versjonering av datasett er viktig i denne sammenheng.
 
-I denne artikkelen fokuserer vi på det tekniske.
 
-## Fra bøtte til skjermen din
 
-![Fra bøtte til Dapla og tilbake](../images/data-storage-image.drawio.png){width=350 height=372}
 
-Dataene våre ligger i Google Cloud Storage - altså på google sine servere. For å lese og skrive dataene bruker vi Python og R i Dapla lab.
 
 
 
