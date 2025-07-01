@@ -11,9 +11,9 @@ Vi bruker Python og R når vi skal lese, skrive og bearbeide data. Dette må gj�
 
 Tidligere har vi vært avhengige av python-pakken dapla-toolbelt og R-pakken fellesR for å kunne lese og skrive data på Dapla fordi miljøene ikke har vært koblet opp mot Google Cloud. Nå trenger man ikke ta spesielle hensyn: man leser og skriver data som om man jobber lokalt. Man bruker altså [pandas](https://pandas.pydata.org/docs/user_guide/io.html#parquet) for Python og [arrow](https://arrow.apache.org/docs/r/reference/read_parquet.html) for R.
 
-### Fremgangsmåte
+### Forbredelse og kontekst
 
-Det første man bør gjøre, gitt at dataene ligger i Google Cloud Storage, er å starte en instans av VSCode, Jupyter eller RStudio fra Dapla lab.
+For å få tilgang til data på Google Cloud må man kjøre Python/R fra Dapla lab. Første steg er altså å starte en instans av VSCode, Jupyter eller RStudio fra Dapla lab.
 
 Når man starter tjenesten må man være obs på hvilket team man representerer i den tjenesten. På dapla er det slik at datatilgang styres etter [Dapla team](hva-er-dapla-team.qmd). Du må derfor velge riktig dapla team under tjenestekonfigurasjonen. Tjenestekonfigurasjonen kan du lese om i blant annet [jupyter-artikkelen vår](jupyter.qmd).
 
@@ -21,7 +21,198 @@ Når man starter tjenesten må man være obs på hvilket team man representerer 
 
 Man må naturligvis også vite filstien når man skal lese inn data. Vi bruker en test-fil i fellesbøtten som eksempel. Den har følgende filsti: `gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet`
 
-For å lese (og skrive) filen med Python er koden følgende:
+Vi trenger derimot ikke hele filstien! Dapla lab er *bøttemontert* - det vil si at vi kan forenkle filstier til `bucket/{bøttenavn}/{filnavn}`. 
+
+::: {.callout-tip}
+## Eksempeldata i Dapla Felles
+
+Dapla Felles er et team der alle i SSB er med i *developers*-gruppa. Dvs. at alle har lese- og skrivetilgang til følgende områder:  
+**gs://ssb-dapla-felles-data-produkt-prod/** i prod-miljøet på Dapla, og  
+**gs://ssb-dapla-felles-data-produkt-test/** i test-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv. 
+
+Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.
+:::
+
+### Lese inn filer
+
+Under finner du eksempler på hvordan du kan lese inn data til en Jupyter Notebooks på Dapla.
+
+#### Parquet
+
+::: {.panel-tabset}
+
+## Python {{< fa brands python >}}
+
+```{.python filename="notebook"}
+import dapla as dp
+
+# Set path to folder
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"
+
+# Read path into pandas dataframe 
+dp.read_pandas(gcs_path= file_path,
+               file_format = "parquet",
+               columns = None,)
+```
+
+Som vi så med `write_pandas` så er `file_format` default satt til `parquet`, og default for `columns = None`, så vi kunne også ha skrevet det slik:
+
+```python
+dp.read_pandas(gcs_path= file_path)
+```
+`columns`-argumentet er en liste med kolonnenavn som vi ønsker å lese inn. Hvis vi ikke spesifiserer noen kolonner så vil alle kolonnene leses inn.
+
+## {{< fa brands r-project >}}
+Funksjonen [read_parquet](https://arrow.apache.org/docs/r/reference/read_parquet.html) fra pakken [arrow](https://cran.r-project.org/web/packages/arrow/index.html) kan brukes til å lese inn parquet-filer i R.
+
+Her er et eksempel av å lese inn parquet-filen "person_testdata_p2021_v1.parquet":
+
+```{.r filename="notebook"}
+library(arrow)
+
+file_path = "/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"
+
+person_testdata <- arrow::read_parquet(file_path)
+```
+
+Vi kan også filtrere hvilke variabler vi ønsker å lese inn ved å spesifisere parameter `col_select`. For eksempel:
+
+```r
+person_testdata <- arrow::read_parquet(file_path,
+                                       col_select = c("fnr", "sivilstand"))
+```
+
+
+Kartdata lagret som .parquet kan leses inn ved å kombinere funksjonen [open_dataset](https://arrow.apache.org/docs/r/reference/open_dataset.html) fra pakken [arrow](https://cran.r-project.org/web/packages/arrow/index.html) og [read_sf_dataset](https://rdrr.io/cran/sfarrow/man/read_sf_dataset.html) fra pakken [sfarrow](https://wcjochem.github.io/sfarrow/articles/example_sfarrow.html).
+
+```r
+library(arrow)
+library(sfarrow)
+library(tidyverse)
+
+data <- arrow::open_dataset("/buckets/produkt/GIS/Kart/2023/ABAS_grunnkrets_flate_2023/ABAS_grunnkrets_flate_2023.parquet") %>%
+  dplyr::filter(KOMMUNENR == "0301") %>%
+  sfarrow::read_sf_dataset()
+```
+
+:::
+
+#### Tekstfiler
+
+Kommer mer snart. Python-koden under bygger på eksempelet over. 
+
+::: {.panel-tabset}
+
+## Python {{< fa brands python >}}
+
+
+```{.python filename="notebook"}
+import dapla as dp
+
+# Path to write to
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.json"
+
+# Read in json-file from dapla-storage
+df = dp.read_pandas(gcs_path = file_path,
+               file_format = "json")
+```
+
+
+## {{< fa brands r-project >}}
+
+
+
+
+```{.r filename="notebook"}
+# Filsti
+file_path = "/buckets/produkt/dapla-manual-examples/purchases.csv"
+
+# Lese inn CSV-fil
+dt_1987 <- read.csv2(file_path)
+
+```
+
+For å lese inn en json-fil kan skrive følgende:
+
+```{.r filename="notebook"}
+library(jsonlite)
+
+# Filsti
+file_path = "/buckets/produkt/dapla-manual-examples/test.json"
+
+# Lese inn JSON-fil
+data <- jsonlite::fromJSON(file_path)
+
+```
+
+:::
+
+#### xlsx
+
+::: {.panel-tabset}
+
+## Python {{< fa brands python >}}
+
+```{.python filename="notebook"}
+import pandas as pd
+from dapla import AuthClient
+
+# Hent token
+token = AuthClient.fetch_google_credentials()
+
+# Les inn fil
+df = pd.read_excel("gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.xlsx",
+    storage_options={"token": token})
+
+```
+
+## {{< fa brands r-project >}}
+
+XLSX-filer kan lese inn med funksjonen [read.xlsx](https://www.rdocumentation.org/packages/openxlsx/versions/4.2.8/topics/read.xlsx) fra pakken [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html).
+
+```{.r filename="notebook"}
+library(openxlsx)
+
+file_path = "/buckets/produkt/dapla-manual-examples/purchases.xlsx"
+
+data <- openxlsx::read.xlsx(file_path)
+
+```
+
+:::
+
+#### SAS
+
+Her er et eksempel på hvordan man leser inn en sas7bdat-fil på Dapla som har blitt generert i prodsonen. 
+
+::: {.panel-tabset}
+
+## Python {{< fa brands python >}}
+
+```{.python filename="notebook"}
+import dapla as dp
+
+file_path = "gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/statbank_ledstill.sas7bdat"
+
+dp.read_pandas(file_path, file_format="sas7bdat", encoding="latin1")
+```
+
+## {{< fa brands r-project >}}
+
+For å lese sas7bdat-filer i R kan man bruke funksjonen [read_sas](https://haven.tidyverse.org/reference/read_sas.html) fra pakken [haven](https://cran.r-project.org/web/packages/haven/index.html) (som ligger i ´tidyverse´).
+
+```{.r filename="notebook"}
+library(tidyverse)
+
+# Filsti
+file_path = "/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"
+
+data <- haven::read_sas(file_path)
+```
+
+:::
+
+### Parquet
 
 ```{.python filename="notebook"}
 import pandas as pd
@@ -55,11 +246,21 @@ Legg merke til at det ikke lenger er nødvendig med full filsti. I tilfellene vi
 Nå skjønner maskinen at den skal lete under ssb-dapla-felles fordi dette er teamet vi valgte under tjenestekonfigurasjon
 :::
 
-
-
 Så enkelt er det! Men...
 
-Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske standarder, for eksempel [navnestandarden](navnestandard.qmd). Versjonering av datasett er viktig i denne sammenheng.
+Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske standarder, for eksempel [navnestandarden](navnestandard.qmd). Versjonering av datasett er viktig i denne sammenheng. Å jobbe med data krever i praksis mer enn de tekniske ferdighetene til å lese, behandle og skrive data.
+
+:::{.callout-tip}
+# Hva nå? Hva gjør du med dataene?
+
+For å lære hvordan du bruker R og Python til databehandling må man foreløpig ut av manualen.
+Vi anbefaler at du bruker deler av dokumentet [Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla#Databehandling-med-pandas) skrevet av A200 støtteteam.
+
+For databehandling i R anbefaler vi
+:::
+
+
+
 
 
 
