@@ -99,7 +99,7 @@ file_path = "/buckets/produkt/dapla-manual-examples/purchases.csv"
 df = pd.read_csv(file_path, sep=';')
 
 # Skriv med df.to_csv()
-df.to_csv()
+df.to_csv(file_path)
 ```
 
 ```{.python filename="notebook"}
@@ -135,8 +135,8 @@ file_path = "/buckets/produkt/dapla-manual-examples/test.json"
 # Les med jsonlite::fromJSON()
 data <- jsonlite::fromJSON(file_path)
 
-# Skriv med jsonlite::toJSON()
-jsonlite::toJSON(data, file_path)
+# Skriv med jsonlite::write_json()
+jsonlite::write_json(data, file_path)
 ```
 
 :::
@@ -192,7 +192,7 @@ import dapla as dp
 file_path = "/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"
 
 # Les med pd.read_sas()
-pd.read_sas(file_path, file_format="sas7bdat", encoding="latin1")
+pd.read_sas(file_path, format="sas7bdat", encoding="latin1")
 ```
 
 ## {{< fa brands r-project >}}
@@ -228,8 +228,6 @@ Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske
 
 For å lære hvordan du bruker R og Python til databehandling må man foreløpig ut av manualen.
 Vi anbefaler at du bruker deler av dokumentet [Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla#Databehandling-med-pandas) skrevet av A200 støtteteam.
-
-For databehandling i R anbefaler vi ???
 :::
 
 ## Filbehandling
@@ -280,7 +278,7 @@ shutil.copy(f"{from_folder}/data.parquet",
       f"{to_folder}/data_copy.parquet")
 
 ```
-Dette fungerer også for å kopiere filer mellom bøtter. [gjør det det???]
+Dette fungerer også for å kopiere filer mellom bøtter.
 
 ## {{< fa brands r-project >}}
 
@@ -350,7 +348,7 @@ Merk at funksjonen file.rename() sletter den opprinnelige filen. Hvis du bare vi
 
 ### Opprette mapper
 
-Selv om bøtter ikke har mapper med en hierarkisk struktur slik man er kjent med fra klassike filsystemer, så kan man opprette det som ser ut som mapper i objektnavnet. I realiteten blir bare `/` oppfattet som en del av navnet på objektet. Skulle du likevel ønske å opprette dette så kan du gjøre det følgende måte:
+Selv om bøtter ikke har mapper med en hierarkisk struktur slik man er kjent med fra klassiske filsystemer, så kan man opprette det som ser ut som mapper i objektnavnet. I realiteten blir bare `/` oppfattet som en del av navnet på objektet. Skulle du likevel ønske å opprette dette så kan du gjøre det følgende måte:
 
 ::: {.panel-tabset}
 
