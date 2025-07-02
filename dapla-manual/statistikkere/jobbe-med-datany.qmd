@@ -3,7 +3,7 @@ title: Jobbe med data
 date-modified: "2025-06-30"
 ---
 
-I denne artikkelen viser vi hvordan man leser og skriver data på Dapla. Vi har skrevet egne artikler for [deling av data](deling-av-data.qmd), flytting av data mellom bøtter ([transfer service](transfer-service.qmd)), [pseudonymisering](dapla-pseudo.qmd). Vi har også skrevet om [kartdata](appendix/kartdata.qmd) og [datavalidering med pandera](../blog/posts/2024-12-16-data-validering-pandera/index.qmd).
+I denne artikkelen viser vi hvordan man leser og skriver forskjellige filtyper på Dapla med Python og R. Vi har skrevet egne artikler for [deling av data](deling-av-data.qmd), flytting av data mellom bøtter ([transfer service](transfer-service.qmd)), [pseudonymisering](dapla-pseudo.qmd). Vi har også skrevet om [kartdata](appendix/kartdata.qmd) og [datavalidering med pandera](../blog/posts/2024-12-16-data-validering-pandera/index.qmd).
 
 ## Lese og skrive data på Dapla
 
@@ -15,27 +15,21 @@ Tidligere har vi vært avhengige av python-pakken [dapla-toolbelt](dapla-toolbel
 
 For å få tilgang til data på Google Cloud må man kjøre Python/R fra Dapla lab. Første steg er altså å starte en instans av VSCode, Jupyter eller RStudio fra Dapla lab.
 
-Når man starter tjenesten må man være obs på hvilket team man representerer i den tjenesten. På dapla er det slik at datatilgang styres etter [Dapla team](hva-er-dapla-team.qmd). Du må derfor velge riktig dapla team under tjenestekonfigurasjonen. Tjenestekonfigurasjonen kan du lese om i blant annet [jupyter-artikkelen vår](jupyter.qmd).
+Når man starter tjenesten må man være obs på hvilket team man representerer i den tjenesten. På dapla styres datatilgang etter [Dapla team](hva-er-dapla-team.qmd). Du må derfor velge riktig dapla team under tjenestekonfigurasjonen. Tjenestekonfigurasjonen kan du lese om i blant annet [jupyter-artikkelen vår](jupyter.qmd).
 
 ![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
 
-Man må naturligvis også vite filstien når man skal lese inn data. Vi bruker en test-fil i fellesbøtten som eksempel. Den har følgende filsti: `gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet`
-
-Vi trenger derimot ikke hele filstien! Dapla lab er *bøttemontert* - det vil si at vi kan forenkle filstier til `buckets/{bøttenavn}/{filnavn}`. 
+Man må naturligvis også vite filstien når man skal lese inn data, men vi trenger ikke hele filstien! Dapla lab er *bøttemontert* - det vil si at vi kan forenkle filstier til `buckets/{bøttenavn}/{filnavn}` (`gs://ssb-dapla-felles-data-produkt-prod` er ikke lenger nødvendig å ha i filstien). 
 
 ::: {.callout-tip}
 ## Eksempeldata i Dapla Felles
 
-Dapla Felles er et team der alle i SSB er med i *developers*-gruppa. Dvs. at alle har lese- og skrivetilgang til følgende områder:  
-**gs://ssb-dapla-felles-data-produkt-prod/** i prod-miljøet på Dapla, og  
-**gs://ssb-dapla-felles-data-produkt-test/** i test-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv. 
-
-Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.
+Dapla Felles er et team der alle i SSB er med i *developers*-gruppa. Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.
 :::
 
-### Lese inn filer
+### Lese og skrive filer
 
-Under finner du eksempler på hvordan du kan lese inn data til en Jupyter Notebooks på Dapla.
+Under finner du eksempler på hvordan du kan lese og skrive data på Dapla. Kode-eksemplene finnes for både R og Python og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.
 
 #### Parquet
 
@@ -48,7 +42,11 @@ import pandas as pd
 
 file_path = "/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"
 
+# Les med pd.read_parquet()
 df = pd.read_parquet(file_path)
+
+# Skriv med to_parquet()
+df.to_parquet(file_path )
 ```
 
 ## {{< fa brands r-project >}}
@@ -61,8 +59,11 @@ library(arrow)
 
 file_path = "/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"
 
+# Les med arrow::read_parquet()
 person_testdata <- arrow::read_parquet(file_path)
 ```
+# Skriv med arrow::write_parquet()
+arrow::write_parquet(person_testdata, file_path)
 
 Vi kan også filtrere hvilke variabler vi ønsker å lese inn ved å spesifisere parameter `col_select`. For eksempel:
 
@@ -96,7 +97,11 @@ import pandas as pd
 
 file_path = "/buckets/produkt/dapla-manual-examples/purchases.csv"
 
-df = pd.read_csv_(file_path, sep=';')
+# Les med pd.read_csv()
+df = pd.read_csv(file_path, sep=';')
+
+# Skriv med df.to_csv()
+df.to_csv()
 ```
 
 ```{.python filename="notebook"}
@@ -104,7 +109,11 @@ import pandas as pd
 
 file_path = "/buckets/produkt/dapla-manual-examples/test.json"
 
+# Les med pd.read_json()
 df = pd.read_json(file_path)
+
+# Skriv med df.to_json()
+df.to_json(file_path)
 ```
 
 ## {{< fa brands r-project >}}
@@ -112,8 +121,12 @@ df = pd.read_json(file_path)
 ```{.r filename="notebook"}
 file_path = "/buckets/produkt/dapla-manual-examples/purchases.csv"
 
+# Les med read.csv2() 
 dt_1987 <- read.csv2(file_path) #bruk read.csv2 for semikolonseparerte filer
+# OBS: bruk read.csv() for kommaseparerte filer
 
+# Skriv med write.csv2()
+write.csv2(dt_1987, file_path)
 ```
 
 ```{.r filename="notebook"}
@@ -121,8 +134,11 @@ library(jsonlite)
 
 file_path = "/buckets/produkt/dapla-manual-examples/test.json"
 
+# Les med jsonlite::fromJSON()
 data <- jsonlite::fromJSON(file_path)
 
+# Skriv med jsonlite::toJSON()
+jsonlite::toJSON(data, file_path)
 ```
 
 :::
@@ -137,7 +153,12 @@ data <- jsonlite::fromJSON(file_path)
 import pandas as pd
 
 file_path = "/buckets/produkt/dapla-manual-examples/test.xlsx"
+
+# Les med pd.read_excel()
 df = pd.read_excel(file_path)
+
+# Skriv med df.to_excel()
+df.to_excel(file_path)
 
 ```
 
@@ -150,8 +171,11 @@ library(openxlsx)
 
 file_path = "/buckets/produkt/dapla-manual-examples/purchases.xlsx"
 
+# Les med openxlsx::read.xlsx()
 data <- openxlsx::read.xlsx(file_path)
 
+# Skriv med openxlsx::write.xlsx()
+openxlsx::write.xlsx(data, file_path)
 ```
 
 :::
@@ -169,6 +193,7 @@ import dapla as dp
 
 file_path = "/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"
 
+# Les med pd.read_sas()
 pd.read_sas(file_path, file_format="sas7bdat", encoding="latin1")
 ```
 
@@ -182,6 +207,7 @@ library(tidyverse)
 # Filsti
 file_path = "/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"
 
+# Les med read_sas()
 data <- haven::read_sas(file_path)
 ```
 
