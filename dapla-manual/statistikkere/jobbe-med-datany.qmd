@@ -21,7 +21,7 @@ Når man starter tjenesten må man være obs på hvilket team man representerer 
 
 Man må naturligvis også vite filstien når man skal lese inn data. Vi bruker en test-fil i fellesbøtten som eksempel. Den har følgende filsti: `gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet`
 
-Vi trenger derimot ikke hele filstien! Dapla lab er *bøttemontert* - det vil si at vi kan forenkle filstier til `bucket/{bøttenavn}/{filnavn}`. 
+Vi trenger derimot ikke hele filstien! Dapla lab er *bøttemontert* - det vil si at vi kan forenkle filstier til `buckets/{bøttenavn}/{filnavn}`. 
 
 ::: {.callout-tip}
 ## Eksempeldata i Dapla Felles
@@ -244,23 +244,19 @@ file.remove(file_path)
 
 ## Python {{< fa brands python >}}
 
-La oss begynne med et eksempel der vi kopierer en fil fra en mappe til en annen i samme bøtte.
-
 ```{.python filename="notebook"}	
-from dapla import FileClient
-fs = FileClient.get_gcs_file_system()
+import shutil
 
 # Path to folders
-bucket = "gs://ssb-dapla-felles-data-produkt-prod"
-from_folder = "felles/veiledning/python/eksempler/purchases"
-to_folder = "felles/veiledning/python/eksempler"
+from_folder = "/buckets/produkt/felles/veiledning/python/eksempler/purchases"
+to_folder = "/buckets/produkt/felles/veiledning/python/eksempler"
 
 # Copy file
-fs.cp(f"{bucket}/{from_folder}/data.parquet",
-      f"{bucket}/{to_folder}/data_copy.parquet")
+shutil.copy(f"{from_folder}/data.parquet",
+      f"{to_folder}/data_copy.parquet")
 
 ```
-Dette fungerer også for å kopiere filer mellom bøtter. 
+Dette fungerer også for å kopiere filer mellom bøtter. [gjør det det???]
 
 Et annet scenario vi ofte vil støte på er at vi ønsker å kopiere en fil fra vårt Jupyter-filsystem til en mappe på lagringsområdet. Her kan vi bruke `fs.put`-metoden. 
 
@@ -273,11 +269,10 @@ with open('/home/jovyan/test.txt', 'w') as f:
     f.write('Create a new text file!')
 
 #Path to folder
-bucket = "gs://ssb-dapla-felles-data-produkt-prod"
-folder = "felles/veiledning/python/eksempler"
+file_path = "/buckets/produkt/felles/veiledning/python/eksempler"
 
 # Copy file from local to remote file system
-fs.put(lpath=f"/home/jovyan/test.txt", rpath=f"{bucket}/{folder}/test.txt")
+fs.put(lpath=f"/home/jovyan/test.txt", rpath=f"{file_path}/test.txt")
 
 ```
 Ønsker vi å kopiere en hel mappe fra lagringsområdet til Jupyter-filsystemet, kan vi bruke `fs.get`-metoden, med opsjonen `recursive=True.` 
@@ -316,21 +311,22 @@ Merk at funksjonen file.copy() bevarer den opprinnelige filen. Hvis du heller ø
 
 :::
 
-### Flytte filer
+### Flytte (klippe/lime) filer
 
 ::: {.panel-tabset}
 
 ## Python {{< fa brands python >}}
 
 ```{.python filename="notebook"}	
-from dapla import FileClient
-fs = FileClient.get_gcs_file_system()
+import shutil
 
-bucket = "gs://ssb-dapla-felles-data-produkt-prod"
-from_folder = "felles/veiledning/python/eksempler/purchases"
-to_folder = "felles/veiledning/python/eksempler"
+# Path to folders
+from_folder = "/buckets/produkt/felles/veiledning/python/eksempler/purchases"
+to_folder = "/buckets/produkt/felles/veiledning/python/eksempler"
 
-fs.mv(f"{bucket}/{from_folder}/data.parquet", f"{bucket}/{to_folder}/data.parquet")
+# Copy file
+shutil.move(f"{from_folder}/data.parquet",
+      f"{to_folder}/data.parquet")
 
 ```
 
@@ -371,11 +367,10 @@ from dapla import FileClient
 fs = FileClient.get_gcs_file_system()
 
 #Path to folder
-bucket = "gs://ssb-dapla-felles-data-produkt-prod"
-folder = "felles/veiledning/python/eksempler"
+new_folder_path = '/buckets/produkt/felles/veiledning/python/eksempler/testmappe/'
 
 # Create folder
-fs.touch(f"{bucket}/{folder}/testmappe/")
+os.mkdir(new_folder_path)
 ```
 
 ## {{< fa brands r-project >}}
@@ -385,7 +380,6 @@ fs.touch(f"{bucket}/{folder}/testmappe/")
 ny_mappe = "/buckets/produkt/dapla_manual-examples/testmappe/"
 dir.create(ny_mappe)
 ```
-
 :::
 
 
