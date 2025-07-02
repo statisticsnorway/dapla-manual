@@ -9,9 +9,9 @@ I denne artikkelen viser vi hvordan man leser og skriver forskjellige filtyper p
 
 Vi bruker Python og R når vi skal lese, skrive og bearbeide data. Dette må gjøres fra en av [Dapla lab](lab.dapla.ssb.no)-tjenestene (for eksempel [jupyter](jupyter.qmd)). Dette er fordi Dapla lab er koblet opp mot Google Cloud Storage.
 
-Tidligere har vi vært avhengige av python-pakken [dapla-toolbelt](dapla-toolbelt-metadata.qmd) og R-pakken [fellesR](https://github.com/statisticsnorway/ssb-fellesr). Nå trenger man ikke ta spesielle hensyn: man leser og skriver data som om man jobber lokalt. Man bruker altså [pandas](https://pandas.pydata.org/docs/user_guide/io.html#parquet) for Python og [arrow](https://arrow.apache.org/docs/r/reference/read_parquet.html) for R.
+Tidligere har vi vært avhengige av Python-pakken [dapla-toolbelt](dapla-toolbelt-metadata.qmd) og R-pakken [fellesR](https://github.com/statisticsnorway/ssb-fellesr). Nå trenger man ikke ta spesielle hensyn: man leser og skriver data som om man jobber lokalt. Man bruker altså [pandas](https://pandas.pydata.org/docs/user_guide/io.html#parquet) for Python og [arrow](https://arrow.apache.org/docs/r/reference/read_parquet.html) for R.
 
-### Forberedelse og kontekst
+### Bøttemontering og teamtilhørighet
 
 For å få tilgang til data på Google Cloud må man kjøre Python/R fra Dapla lab. Første steg er altså å starte en instans av VSCode, Jupyter eller RStudio fra Dapla lab.
 
@@ -19,7 +19,7 @@ Når man starter tjenesten må man være obs på hvilket team man representerer 
 
 ![Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab](../images/dapla-lab-konf-buckets.png){fig-alt="Viser tjenestekonfigurasjonen i Dapla Lab." #fig-dapla-lab-konf-buckets}
 
-Man må naturligvis også vite filstien når man skal lese inn data, men vi trenger ikke hele filstien! Dapla lab er *bøttemontert* - det vil si at vi kan forenkle filstier til `buckets/{bøttenavn}/{filnavn}` (`gs://ssb-dapla-felles-data-produkt-prod` er ikke lenger nødvendig å ha i filstien). 
+Man må naturligvis vite hvor dataene ligger, men vi trenger ikke hele filstien! Dapla lab er *bøttemontert*: det vil si at vi kan forenkle filstier til `buckets/{bøttenavn}/{filnavn}` (`gs://ssb-dapla-felles-data-produkt-prod` er ikke lenger nødvendig å ha i filstien). 
 
 ::: {.callout-tip}
 ## Eksempeldata i Dapla Felles
@@ -50,9 +50,6 @@ df.to_parquet(file_path )
 ```
 
 ## {{< fa brands r-project >}}
-Funksjonen [read_parquet](https://arrow.apache.org/docs/r/reference/read_parquet.html) fra pakken [arrow](https://cran.r-project.org/web/packages/arrow/index.html) kan brukes til å lese inn parquet-filer i R.
-
-Her er et eksempel av å lese inn parquet-filen "person_testdata_p2021_v1.parquet":
 
 ```{.r filename="notebook"}
 library(arrow)
@@ -61,9 +58,10 @@ file_path = "/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/p
 
 # Les med arrow::read_parquet()
 person_testdata <- arrow::read_parquet(file_path)
-```
+
 # Skriv med arrow::write_parquet()
 arrow::write_parquet(person_testdata, file_path)
+```
 
 Vi kan også filtrere hvilke variabler vi ønsker å lese inn ved å spesifisere parameter `col_select`. For eksempel:
 
@@ -199,7 +197,7 @@ pd.read_sas(file_path, file_format="sas7bdat", encoding="latin1")
 
 ## {{< fa brands r-project >}}
 
-For å lese sas7bdat-filer i R kan man bruke funksjonen [read_sas](https://haven.tidyverse.org/reference/read_sas.html) fra pakken [haven](https://cran.r-project.org/web/packages/haven/index.html) (som ligger i ´tidyverse´).
+For å lese sas7bdat-filer i R kan man bruke funksjonen [read_sas](https://haven.tidyverse.org/reference/read_sas.html) fra pakken [haven](https://cran.r-project.org/web/packages/haven/index.html) (som ligger i `tidyverse`).
 
 ```{.r filename="notebook"}
 library(tidyverse)
@@ -216,7 +214,7 @@ data <- haven::read_sas(file_path)
 :::{.callout-note}
 # Full filsti ikke lenger nødvendig!
 
-Legg merke til at det ikke lenger er nødvendig med full filsti. I tilfellene vist over ville man tidligere skrevet filstien slik: `gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet`
+Legg merke til at det ikke lenger er nødvendig med full filsti. I tilfellene vist over ville man tidligere skrevet filstiene på denne måten: `gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet`
 
 Nå skjønner maskinen at den skal lete under ssb-dapla-felles fordi dette er teamet vi valgte under tjenestekonfigurasjon
 :::
@@ -283,36 +281,6 @@ shutil.copy(f"{from_folder}/data.parquet",
 
 ```
 Dette fungerer også for å kopiere filer mellom bøtter. [gjør det det???]
-
-Et annet scenario vi ofte vil støte på er at vi ønsker å kopiere en fil fra vårt Jupyter-filsystem til en mappe på lagringsområdet. Her kan vi bruke `fs.put`-metoden. 
-
-```{.python filename="notebook"}
-from dapla import FileClient
-fs = FileClient.get_gcs_file_system()
-
-# Create a new file in your home directory called test.txt
-with open('/home/jovyan/test.txt', 'w') as f:
-    f.write('Create a new text file!')
-
-#Path to folder
-file_path = "/buckets/produkt/felles/veiledning/python/eksempler"
-
-# Copy file from local to remote file system
-fs.put(lpath=f"/home/jovyan/test.txt", rpath=f"{file_path}/test.txt")
-
-```
-Ønsker vi å kopiere en hel mappe fra lagringsområdet til Jupyter-filsystemet, kan vi bruke `fs.get`-metoden, med opsjonen `recursive=True.` 
-
-```{.python filename="notebook"}
-from dapla import FileClient
-fs = FileClient.get_gcs_file_system()
-
-# Copy file
-fs.get(<from_bucket>,
-      "/home/jovyan/sesongjustering/",
-      recursive=True)
-
-```
 
 ## {{< fa brands r-project >}}
 
@@ -389,8 +357,7 @@ Selv om bøtter ikke har mapper med en hierarkisk struktur slik man er kjent med
 ## Python {{< fa brands python >}}
 
 ```{.python filename="notebook"}
-from dapla import FileClient
-fs = FileClient.get_gcs_file_system()
+import os
 
 #Path to folder
 new_folder_path = '/buckets/produkt/felles/veiledning/python/eksempler/testmappe/'
@@ -407,16 +374,3 @@ ny_mappe = "/buckets/produkt/dapla_manual-examples/testmappe/"
 dir.create(ny_mappe)
 ```
 :::
-
-
-
-
-
-
-
-
-
-
-
-
-
