@@ -111,17 +111,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Jobbe med data – Dapla-manualen">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/data-storage-image.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-lab-konf-buckets.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:alt" content="Bilde som viser forskjellen mellom kodemiljø og hvor data lagres.">
-<meta property="og:image:height" content="720">
-<meta property="og:image:width" content="1280">
+<meta property="og:image:alt" content="Viser tjenestekonfigurasjonen i Dapla Lab.">
+<meta property="og:image:height" content="431">
+<meta property="og:image:width" content="1363">
 <meta name="twitter:title" content="Jobbe med data – Dapla-manualen">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/data-storage-image.png">
-<meta name="twitter:image:alt" content="Bilde som viser forskjellen mellom kodemiljø og hvor data lagres.">
-<meta name="twitter:image-height" content="720">
-<meta name="twitter:image-width" content="1280">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-lab-konf-buckets.png">
+<meta name="twitter:image:alt" content="Viser tjenestekonfigurasjonen i Dapla Lab.">
+<meta name="twitter:image-height" content="431">
+<meta name="twitter:image-width" content="1363">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -761,19 +761,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#ssb-biblioteker" id="toc-ssb-biblioteker" class="nav-link active" data-scroll-target="#ssb-biblioteker">SSB-biblioteker</a>
+  <li><a href="#lese-og-skrive-data-på-dapla" id="toc-lese-og-skrive-data-på-dapla" class="nav-link active" data-scroll-target="#lese-og-skrive-data-på-dapla">Lese og skrive data på Dapla</a>
   <ul class="collapse">
-  <li><a href="#dapla-toolbelt" id="toc-dapla-toolbelt" class="nav-link" data-scroll-target="#dapla-toolbelt">dapla-toolbelt</a></li>
-  <li><a href="#fellesr" id="toc-fellesr" class="nav-link" data-scroll-target="#fellesr">fellesr</a></li>
+  <li><a href="#bøttemontering-og-teamtilhørighet" id="toc-bøttemontering-og-teamtilhørighet" class="nav-link" data-scroll-target="#bøttemontering-og-teamtilhørighet">Bøttemontering og teamtilhørighet</a></li>
+  <li><a href="#lese-og-skrive-filer" id="toc-lese-og-skrive-filer" class="nav-link" data-scroll-target="#lese-og-skrive-filer">Lese og skrive filer</a></li>
   </ul></li>
-  <li><a href="#vanlige-operasjoner" id="toc-vanlige-operasjoner" class="nav-link" data-scroll-target="#vanlige-operasjoner">Vanlige operasjoner</a>
+  <li><a href="#filbehandling" id="toc-filbehandling" class="nav-link" data-scroll-target="#filbehandling">Filbehandling</a>
   <ul class="collapse">
-  <li><a href="#liste-ut-innhold-i-mappe" id="toc-liste-ut-innhold-i-mappe" class="nav-link" data-scroll-target="#liste-ut-innhold-i-mappe">Liste ut innhold i mappe</a></li>
-  <li><a href="#skrive-ut-filer" id="toc-skrive-ut-filer" class="nav-link" data-scroll-target="#skrive-ut-filer">Skrive ut filer</a></li>
-  <li><a href="#lese-inn-filer" id="toc-lese-inn-filer" class="nav-link" data-scroll-target="#lese-inn-filer">Lese inn filer</a></li>
   <li><a href="#slette-filer" id="toc-slette-filer" class="nav-link" data-scroll-target="#slette-filer">Slette filer</a></li>
   <li><a href="#kopiere-filer" id="toc-kopiere-filer" class="nav-link" data-scroll-target="#kopiere-filer">Kopiere filer</a></li>
-  <li><a href="#flytte-filer" id="toc-flytte-filer" class="nav-link" data-scroll-target="#flytte-filer">Flytte filer</a></li>
+  <li><a href="#flytte-klippelime-filer" id="toc-flytte-klippelime-filer" class="nav-link" data-scroll-target="#flytte-klippelime-filer">Flytte (klippe/lime) filer</a></li>
   <li><a href="#opprette-mapper" id="toc-opprette-mapper" class="nav-link" data-scroll-target="#opprette-mapper">Opprette mapper</a></li>
   </ul></li>
   </ul>
@@ -793,6 +790,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
     
   
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">June 30, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -801,69 +804,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Når man oppretter et <strong>dapla-team</strong> så får vi tildelt et eget området for lagring av data. For å kunne lese og skrive data fra Jupyter til disse områdene må vi autentisere oss, siden Jupyter og lagringsområdet er to separate sikkerhetsoner.</p>
-<p><a href="#fig-storage" class="quarto-xref">Figur&nbsp;1</a> viser dette klarer skillet mellom hvor vi koder og hvor dataene ligger på Dapla<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I dette kapitlet beskriver vi nærmere hvordan du kan jobbe med dataene dine på Dapla.</p>
-<div id="fig-storage" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde som viser forskjellen mellom kodemiljø og hvor data lagres.">
+<p>I denne artikkelen viser vi hvordan man leser og skriver forskjellige filtyper på Dapla med Python og R. Vi har skrevet egne artikler for <a href="../statistikkere/deling-av-data.html">deling av data</a>, flytting av data mellom bøtter (<a href="../statistikkere/transfer-service.html">transfer service</a>), <a href="../statistikkere/dapla-pseudo.html">pseudonymisering</a>. Vi har også skrevet om <a href="../statistikkere/appendix/kartdata.html">kartdata</a> og <a href="../blog/posts/2024-12-16-data-validering-pandera/index.html">datavalidering med pandera</a>.</p>
+<section id="lese-og-skrive-data-på-dapla" class="level2">
+<h2 class="anchored" data-anchor-id="lese-og-skrive-data-på-dapla">Lese og skrive data på Dapla</h2>
+<p>Vi bruker Python og R når vi skal lese, skrive og bearbeide data. Dette må gjøres fra en av <a href="lab.dapla.ssb.no">Dapla lab</a>-tjenestene (for eksempel <a href="../statistikkere/jupyter.html">jupyter</a>). Dette er fordi Dapla lab er koblet opp mot Google Cloud Storage.</p>
+<p>Tidligere har vi vært avhengige av Python-pakken <a href="../statistikkere/dapla-toolbelt-metadata.html">dapla-toolbelt</a> og R-pakken <a href="https://github.com/statisticsnorway/ssb-fellesr">fellesR</a>. Nå trenger man ikke ta spesielle hensyn: man leser og skriver data som om man jobber lokalt. Man bruker altså <a href="https://pandas.pydata.org/docs/user_guide/io.html#parquet">pandas</a> for Python og <a href="https://arrow.apache.org/docs/r/reference/read_parquet.html">arrow</a> for R.</p>
+<section id="bøttemontering-og-teamtilhørighet" class="level3">
+<h3 class="anchored" data-anchor-id="bøttemontering-og-teamtilhørighet">Bøttemontering og teamtilhørighet</h3>
+<p>For å få tilgang til data på Google Cloud må man kjøre Python/R fra Dapla lab. Første steg er altså å starte en instans av VSCode, Jupyter eller RStudio fra Dapla lab.</p>
+<p>Når man starter tjenesten må man være obs på hvilket team man representerer i den tjenesten. På dapla styres datatilgang etter <a href="../statistikkere/hva-er-dapla-team.html">Dapla team</a>. Du må derfor velge riktig dapla team under tjenestekonfigurasjonen. Tjenestekonfigurasjonen kan du lese om i blant annet <a href="../statistikkere/jupyter.html">jupyter-artikkelen vår</a>.</p>
+<div id="fig-dapla-lab-konf-buckets" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser tjenestekonfigurasjonen i Dapla Lab.">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-storage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/data-storage-image.png" class="img-fluid figure-img" alt="Bilde som viser forskjellen mellom kodemiljø og hvor data lagres.">
+<div aria-describedby="fig-dapla-lab-konf-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../images/dapla-lab-konf-buckets.png" class="img-fluid figure-img" alt="Viser tjenestekonfigurasjonen i Dapla Lab.">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-storage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1: Tydelig skille mellom kodemiljø og datalagring på Dapla.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-konf-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Detaljert tjenestekonfigurasjon for bøttetilgang i Dapla Lab
 </figcaption>
 </figure>
 </div>
-<section id="ssb-biblioteker" class="level2">
-<h2 class="anchored" data-anchor-id="ssb-biblioteker">SSB-biblioteker</h2>
-<p>For å gjøre det enklere å jobbe data på tvers av Jupyter og lagringsområdet er det laget noen egne SSB-utviklede biblioteker for å gjøre vanlige operasjoner mot lagringsområdet. Siden både R og Python skal brukes på Dapla, så er det laget to biblioteker, en for hver av disse språkene. <a href="https://statisticsnorway.github.io/ssb-fellesr/articles/vignette__DAPLA_jukseark.html">fellesr</a> er biblioteket for R, og <a href="https://github.com/statisticsnorway/dapla-toolbelt">dapla-toolbelt</a> er biblioteket for Python.</p>
-<section id="dapla-toolbelt" class="level3">
-<h3 class="anchored" data-anchor-id="dapla-toolbelt">dapla-toolbelt</h3>
-<p><a href="https://github.com/statisticsnorway/dapla-toolbelt">dapla-toolbelt</a> er en en pakke som lar deg enkelt lese og skrive til lagringsområdet uten å måtte autentifisere deg manuelt. Den har en <strong>Pandas</strong>-aktig syntaks som forhåpentlig er gjenkjennbar for de fleste. Pakken er installert i alle Python-kernels på Dapla, så du trenger ikke å installere den selv hvis du åpner en notebook med Python3 for eksempel. For å importere hele biblioteket i en notebook skriver du bare</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb1" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>dapla-toolbelt</strong> bruker en pakke som heter <strong>gcsfs</strong> for å kommunisere med lagringsområdet. <strong>gcsfs</strong> er en pakke som lar deg bruke Google Cloud Storage (GCS) som om det var en filsystem. Det betyr at du kan bruke samme syntaks som du bruker for å lese og skrive til filer på din egen maskin. Du kan lese mulighetene i gcsfs <a href="https://gcsfs.readthedocs.io/en/latest/api.html">her</a>. Et eksempel på hvordan de to pakkene kan brukes sammen ser du her:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb2" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of how you can use gcsfs and dapla-toolbelt together</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fs.touch(<span class="st">"gs://my-bucket/my-folder/"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>I koden over brukte jeg kommandoen <code>touch</code> fra <a href="https://gcsfs.readthedocs.io/en/latest/api.html">gcsfs</a> og <code>FileClient</code> fra dapla-toolbelt for å opprette en mappe i lagringsområdet.</p>
-<p>I kapitlene under finner du konkrete eksempler på hvordan du kan bruke <strong>dapla-toolbelt</strong> til å jobbe med data i SSBs lagringsområdet.</p>
-</section>
-<section id="fellesr" class="level3">
-<h3 class="anchored" data-anchor-id="fellesr">fellesr</h3>
-<p>R-pakken <a href="https://statisticsnorway.github.io/ssb-fellesr/articles/vignette__DAPLA_jukseark.html">fellesr</a> er under utvikling og gir mye av den samme funksjonaliteten som <strong>dapla-toolbelt</strong> gir for Python. I tillegg til å kunne lese og skrive til lagringsområdet på Dapla, så har <strong>fellesr</strong> også funksjoner for å jobbe med metadata på Dapla.</p>
-<p>På Dapla Lab kan man bruke vanlige R-funksjoner for mappene du har tilgjengelig i filsystemet, dvs. bøtten du har tilgang til via Dapla-teamet ditt. Det betyr at funksjonene for å lese (<code>read_SSB</code>) og skrive (<code>write_SSB</code>) data i <code>fellesr</code> ikke lenger er nødvendige og vil ikke lenger vedlikeholdes.</p>
-<p><strong>fellesr</strong> er installert på Dapla og funksjoner kan benyttes ved:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb3" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fellesr)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Hvis du benytter et renv-miljø, må pakken installeres før bruk. Dette kan gjøres ved:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb4" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"statisticsnorway/ssb-fellesr"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-</section>
-<section id="vanlige-operasjoner" class="level2">
-<h2 class="anchored" data-anchor-id="vanlige-operasjoner">Vanlige operasjoner</h2>
-<p>I denne delen viser vi hvordan man gjør veldig vanlige operasjoner når man koder et produksonsløp for en statistikk. Flere eksempler på nyttige systemkommandoer <a href="../statistikkere/hva-er-botter.html#systemkommandoer-mot-bøttter">finner du her</a>.</p>
-<section id="liste-ut-innhold-i-mappe" class="level3">
-<h3 class="anchored" data-anchor-id="liste-ut-innhold-i-mappe">Liste ut innhold i mappe</h3>
+<p>Man må naturligvis vite hvor dataene ligger, men vi trenger ikke hele filstien! Dapla lab er <em>bøttemontert</em>: det vil si at vi kan forenkle filstier til <code>buckets/{bøttenavn}/{filnavn}</code> (<code>gs://ssb-dapla-felles-data-produkt-prod</code> er ikke lenger nødvendig å ha i filstien).</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -874,159 +834,126 @@ Eksempeldata i Dapla Felles
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dapla Felles er et team der alle i SSB er med i <em>developers</em>-gruppa. Dvs. at alle har lese- og skrivetilgang til følgende områder:<br>
-<strong>gs://ssb-dapla-felles-data-produkt-prod/</strong> i prod-miljøet på Dapla, og<br>
-<strong>gs://ssb-dapla-felles-data-produkt-test/</strong> i test-miljøet. Eksemplene under bruker førstnevnte i koden, slik at alle kan kjøre koden selv.</p>
-<p>Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.</p>
+<p>Dapla Felles er et team der alle i SSB er med i <em>developers</em>-gruppa. Kode-eksemplene finnes for både R og Python, og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.</p>
 </div>
 </div>
-<p>Å liste ut innhold i et gitt mappe på Dapla er ganske enkelt. Under ser du hvordan du kan liste ut innholdet i følgende mappe:</p>
-<p><code>gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte-data</code></p>
+</section>
+<section id="lese-og-skrive-filer" class="level3">
+<h3 class="anchored" data-anchor-id="lese-og-skrive-filer">Lese og skrive filer</h3>
+<p>Under finner du eksempler på hvordan du kan lese og skrive data på Dapla. Kode-eksemplene finnes for både R og Python og du kan velge hvilken du skal se ved å trykke på den arkfanen du er interessert i.</p>
+<section id="parquet" class="level4">
+<h4 class="anchored" data-anchor-id="parquet">Parquet</h4>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>Vi bruker modulen <code>FileClient</code> fra <strong>dapla-toolbelt</strong> for å liste ut innholdet i en mappe.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set path to folder</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte-data"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>FileClient.ls(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med pd.read_parquet()</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(file_path)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med to_parquet()</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df.to_parquet(file_path )</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Med kommandoen over får du listet ut alle filnavn i mappen. Hvis du vil ha mer informasjon om filene så kan du bruke <code>ls</code>-kommandoen med <code>detail = True</code>, som under:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FileClient.ls(file_path, detail <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Syntaksen med <code>ls</code> er veldig lik det man kjenner fra en Linux-terminal. Men når vi bruker <code>detail = True</code> blir metadata om filene returnert som en Python-liste med dictionaries. Det kan være svært nyttig når du f.eks. trenger å vite dato og tidspunkt for når en fil ble opprettet, eller når den sist ble oppdatert.</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb7" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to folder</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List files in folder </span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">list.files</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med arrow::read_parquet()</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>person_testdata <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(file_path)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med arrow::write_parquet()</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>arrow<span class="sc">::</span><span class="fu">write_parquet</span>(person_testdata, file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-</div>
-</section>
-<section id="skrive-ut-filer" class="level3">
-<h3 class="anchored" data-anchor-id="skrive-ut-filer">Skrive ut filer</h3>
-<p>Å skrive filer til et lagringsområde på Dapla er også ganske enkelt. Det ligner mye på den syntaksen vi er kjent med fra vanlige R- og Python-pakker, med noen små unntak.</p>
-<section id="parquet" class="level4">
-<h4 class="anchored" data-anchor-id="parquet">Parquet</h4>
-<p>Under lager vi en dataframe i en notebook og skriver den ut til en parquet-fil.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p>Når vi leser en Parquet-fil med <strong>dapla-toolbelt</strong> så bruker den <a href="https://arrow.apache.org/docs/python/index.html">pyarrow</a> i bakgrunnen. Dette er en av de raskeste måtene å lese og skrive Parquet-filer på.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb8" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set path to folder</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create pandas dataframe</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>purchases <span class="op">=</span> pd.DataFrame(np.random.randn(<span class="dv">10</span>, <span class="dv">5</span>),</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                        columns<span class="op">=</span>[<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>])</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Write pandas dataframe as parquet to GCS bucket</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>dp.write_pandas(df <span class="op">=</span> purchases,</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                gcs_path <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>file_path<span class="sc">}</span><span class="ss">/data.parquet"</span>,</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>                file_format <span class="op">=</span> <span class="st">"parquet"</span>,)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Når vi kalte <code>write_pandas</code> over så spesifiserte vi at filformatet skulle være <code>parquet</code>. Dette er default, så vi kunne også ha skrevet det slik:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb9" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dp.write_pandas(df <span class="op">=</span> purchases,</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                gcs_path <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>file_path<span class="sc">}</span><span class="ss">/data.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Men for de andre filformatene må vi altså spesifisere dette.</p>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<p>Når vi jobber med Parquet-fil i R, bruker vi pakken <a href="https://arrow.apache.org/docs/r/">arrow</a>.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb10" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set stien til hvor data skal lagres</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.parquet"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lag eksempeldata</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>purchases <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">A =</span> <span class="fu">runif</span>(<span class="dv">10</span>), <span class="at">B=</span> <span class="fu">runif</span>(<span class="dv">10</span>), <span class="at">C=</span><span class="fu">runif</span>(<span class="dv">10</span>))</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Skrive data til bøtte som parquet</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>arrow<span class="sc">::</span><span class="fu">write_parquet</span>(purchases, file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>Vi kan også filtrere hvilke variabler vi ønsker å lese inn ved å spesifisere parameter <code>col_select</code>. For eksempel:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>person_testdata <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(file_path,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">"fnr"</span>, <span class="st">"sivilstand"</span>))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Kartdata lagret som .parquet kan leses inn ved å kombinere funksjonen <a href="https://arrow.apache.org/docs/r/reference/open_dataset.html">open_dataset</a> fra pakken <a href="https://cran.r-project.org/web/packages/arrow/index.html">arrow</a> og <a href="https://rdrr.io/cran/sfarrow/man/read_sf_dataset.html">read_sf_dataset</a> fra pakken <a href="https://wcjochem.github.io/sfarrow/articles/example_sfarrow.html">sfarrow</a>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sfarrow)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">open_dataset</span>(<span class="st">"/buckets/produkt/GIS/Kart/2023/ABAS_grunnkrets_flate_2023/ABAS_grunnkrets_flate_2023.parquet"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(KOMMUNENR <span class="sc">==</span> <span class="st">"0301"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  sfarrow<span class="sc">::</span><span class="fu">read_sf_dataset</span>()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="tekstfiler" class="level4">
 <h4 class="anchored" data-anchor-id="tekstfiler">Tekstfiler</h4>
-<p>Noen ganger ønsker vi å lagre data i andre formatter slik som CSV, JSON og XML.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<p>dapla-toolbelt kan skrive ut json, csv og posisjonsfiler (fixed-width-files/fwf) til lagringsområdet. Måten den gjør det på er å bruke Pandas sine funksjoner <code>read_json</code>, <code>read_csv</code>, <code>read_fwf</code> under panseret. Dette kan være nyttig å vite for skjønne hvordan dapla-toolbelt håndterer ulike strukturer i (spesielt hierarkiske) tekstfiler. Under ser du hvordan du kan skrive ut en dataframe til en json-fil.</p>
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb11" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set path to folder</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a dataframe with Pandas</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(np.random.randn(<span class="dv">10</span>, <span class="dv">5</span>), columns<span class="op">=</span>[<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>])</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Save dataframe as json with dapla-toolbelt</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>dp.write_pandas(df <span class="op">=</span> df,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                gcs_path <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>file_path<span class="sc">}</span><span class="ss">/test.json"</span>,</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                file_format <span class="op">=</span> <span class="st">"json"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.csv"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med pd.read_csv()</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(file_path, sep<span class="op">=</span><span class="st">';'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med df.to_csv()</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>df.to_csv(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Som vi ser at syntaksen over så kunne vi skrevet ut til noe annet enn json ved å endre verdien i argumentet <code>file_format</code>.</p>
-</div>
-<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<p>Funksjonen <a href="https://www.rdocumentation.org/packages/AlphaPart/versions/0.9.8/topics/write.csv">write.csv2</a> kan brukes til å skrive csv-filer til bøtter.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb12" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sett stien til hvor data skal lagres</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.csv"</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lag eksempeldata</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>purchases <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">A =</span> <span class="fu">runif</span>(<span class="dv">10</span>), <span class="at">B=</span> <span class="fu">runif</span>(<span class="dv">10</span>), <span class="at">C=</span><span class="fu">runif</span>(<span class="dv">10</span>))</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv til csv</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(purchases, </span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>           file_path, </span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/test.json"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med pd.read_json()</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_json(file_path)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med df.to_json()</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>df.to_json(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb7" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.csv"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med read.csv2() </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>dt_1987 <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(file_path) <span class="co">#bruk read.csv2 for semikolonseparerte filer</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># OBS: bruk read.csv() for kommaseparerte filer</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med write.csv2()</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(dt_1987, file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="sourceCode" id="cb8" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/test.json"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med jsonlite::fromJSON()</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(file_path)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med jsonlite::write_json()</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>jsonlite<span class="sc">::</span><span class="fu">write_json</span>(data, file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1034,189 +961,40 @@ Eksempeldata i Dapla Felles
 </section>
 <section id="xlsx" class="level4">
 <h4 class="anchored" data-anchor-id="xlsx">xlsx</h4>
-<p>Det er ikke anbefalt å bruke xlsx-formatet, men her ser du hvordan det kan skrives ut. Mer kommer.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb13" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter token for å kunne lese fra Dapla</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> AuthClient.fetch_google_credentials()</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples"</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>df.to_excel(<span class="ss">f"</span><span class="sc">{</span>file_path<span class="sc">}</span><span class="ss">/test.xlsx"</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>           storage_options<span class="op">=</span>{<span class="st">"token"</span>: token})</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/test.xlsx"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med pd.read_excel()</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_excel(file_path)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med df.to_excel()</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>df.to_excel(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<p>Funksjonen <a href="https://www.rdocumentation.org/packages/openxlsx/versions/4.2.8/topics/write.xlsx">write.xlsx</a> fra pakken <a href="https://cran.r-project.org/web/packages/openxlsx/index.html">openxlsx</a> kan brukes til å skrive .xlsx-filer til bøtter i R.</p>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>XLSX-filer kan leses inn med funksjonen <a href="https://www.rdocumentation.org/packages/openxlsx/versions/4.2.8/topics/read.xlsx">read.xlsx</a> fra pakken <a href="https://cran.r-project.org/web/packages/openxlsx/index.html">openxlsx</a>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb14" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sett stien til hvor data skal lagres</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.xlsx"</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Lag eksempeldata</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>purchases <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">A =</span> <span class="fu">runif</span>(<span class="dv">10</span>), <span class="at">B=</span> <span class="fu">runif</span>(<span class="dv">10</span>), <span class="at">C=</span><span class="fu">runif</span>(<span class="dv">10</span>))</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv til xlsx</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>openxlsx<span class="sc">::</span><span class="fu">write.xlsx</span>(purchases, </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">file =</span> file_path,</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">rowNames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">showNA =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">overwrite=</span>T)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="lese-inn-filer" class="level3">
-<h3 class="anchored" data-anchor-id="lese-inn-filer">Lese inn filer</h3>
-<p>Under finner du eksempler på hvordan du kan lese inn data til en Jupyter Notebooks på Dapla.</p>
-<section id="parquet-1" class="level4">
-<h4 class="anchored" data-anchor-id="parquet-1">Parquet</h4>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
-<div class="tab-content">
-<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb15" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set path to folder</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Read path into pandas dataframe </span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>dp.read_pandas(gcs_path<span class="op">=</span> file_path,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>               file_format <span class="op">=</span> <span class="st">"parquet"</span>,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>               columns <span class="op">=</span> <span class="va">None</span>,)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Som vi så med <code>write_pandas</code> så er <code>file_format</code> default satt til <code>parquet</code>, og default for <code>columns = None</code>, så vi kunne også ha skrevet det slik:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dp.read_pandas(gcs_path<span class="op">=</span> file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>columns</code>-argumentet er en liste med kolonnenavn som vi ønsker å lese inn. Hvis vi ikke spesifiserer noen kolonner så vil alle kolonnene leses inn.</p>
-</div>
-<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<p>Funksjonen <a href="https://arrow.apache.org/docs/r/reference/read_parquet.html">read_parquet</a> fra pakken <a href="https://cran.r-project.org/web/packages/arrow/index.html">arrow</a> kan brukes til å lese inn parquet-filer i R.</p>
-<p>Her er et eksempel av å lese inn parquet-filen “person_testdata_p2021_v1.parquet”:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb17" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/datadoc/brukertest/10/sykefratot/klargjorte-data/person_testdata_p2021_v1.parquet"</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>person_testdata <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Vi kan også filtrere hvilke variabler vi ønsker å lese inn ved å spesifisere parameter <code>col_select</code>. For eksempel:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>person_testdata <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">read_parquet</span>(file_path,</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">"fnr"</span>, <span class="st">"sivilstand"</span>))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Kartdata lagret som .parquet kan leses inn ved å kombinere funksjonen <a href="https://arrow.apache.org/docs/r/reference/open_dataset.html">open_dataset</a> fra pakken <a href="https://cran.r-project.org/web/packages/arrow/index.html">arrow</a> og <a href="https://rdrr.io/cran/sfarrow/man/read_sf_dataset.html">read_sf_dataset</a> fra pakken <a href="https://wcjochem.github.io/sfarrow/articles/example_sfarrow.html">sfarrow</a>.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sfarrow)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> arrow<span class="sc">::</span><span class="fu">open_dataset</span>(<span class="st">"/buckets/produkt/GIS/Kart/2023/ABAS_grunnkrets_flate_2023/ABAS_grunnkrets_flate_2023.parquet"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(KOMMUNENR <span class="sc">==</span> <span class="st">"0301"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  sfarrow<span class="sc">::</span><span class="fu">read_sf_dataset</span>()</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="tekstfiler-1" class="level4">
-<h4 class="anchored" data-anchor-id="tekstfiler-1">Tekstfiler</h4>
-<p>Kommer mer snart. Python-koden under bygger på eksempelet over.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
-<div class="tab-content">
-<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb20" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to write to</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.json"</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in json-file from dapla-storage</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> dp.read_pandas(gcs_path <span class="op">=</span> file_path,</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>               file_format <span class="op">=</span> <span class="st">"json"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb21" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.csv"</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Lese inn CSV-fil</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>dt_1987 <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>For å lese inn en json-fil kan skrive følgende:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb22" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/test.json"</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Lese inn JSON-fil</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="xlsx-1" class="level4">
-<h4 class="anchored" data-anchor-id="xlsx-1">xlsx</h4>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
-<div class="tab-content">
-<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb23" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Hent token</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>token <span class="op">=</span> AuthClient.fetch_google_credentials()</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Les inn fil</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_excel(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/test.xlsx"</span>,</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    storage_options<span class="op">=</span>{<span class="st">"token"</span>: token})</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
-<p>XLSX-filer kan lese inn med funksjonen <a href="https://www.rdocumentation.org/packages/openxlsx/versions/4.2.8/topics/read.xlsx">read.xlsx</a> fra pakken <a href="https://cran.r-project.org/web/packages/openxlsx/index.html">openxlsx</a>.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb24" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.xlsx"</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> openxlsx<span class="sc">::</span><span class="fu">read.xlsx</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/purchases.xlsx"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med openxlsx::read.xlsx()</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> openxlsx<span class="sc">::</span><span class="fu">read.xlsx</span>(file_path)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv med openxlsx::write.xlsx()</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>openxlsx<span class="sc">::</span><span class="fu">write.xlsx</span>(data, file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1226,68 +1004,100 @@ Eksempeldata i Dapla Felles
 <h4 class="anchored" data-anchor-id="sas">SAS</h4>
 <p>Her er et eksempel på hvordan man leser inn en sas7bdat-fil på Dapla som har blitt generert i prodsonen.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb25" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/dapla-manual-examples/statbank_ledstill.sas7bdat"</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>dp.read_pandas(file_path, file_format<span class="op">=</span><span class="st">"sas7bdat"</span>, encoding<span class="op">=</span><span class="st">"latin1"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med pd.read_sas()</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>pd.read_sas(file_path, <span class="bu">format</span><span class="op">=</span><span class="st">"sas7bdat"</span>, encoding<span class="op">=</span><span class="st">"latin1"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
-<p>For å lese sas7bdat-filer i R kan man bruke funksjonen <a href="https://haven.tidyverse.org/reference/read_sas.html">read_sas</a> fra pakken <a href="https://cran.r-project.org/web/packages/haven/index.html">haven</a> (som ligger i ´tidyverse´).</p>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p>For å lese sas7bdat-filer i R kan man bruke funksjonen <a href="https://haven.tidyverse.org/reference/read_sas.html">read_sas</a> fra pakken <a href="https://cran.r-project.org/web/packages/haven/index.html">haven</a> (som ligger i <code>tidyverse</code>).</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb26" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sas</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla-manual-examples/statbank_ledstill.sas7bdat"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Les med read_sas()</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sas</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Full filsti ikke lenger nødvendig!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Legg merke til at det ikke lenger er nødvendig med full filsti. I tilfellene vist over ville man tidligere skrevet filstiene på denne måten: <code>gs://ssb-dapla-felles-data-produkt-prod/dapla-metrics/test.parquet</code></p>
+<p>Nå skjønner maskinen at den skal lete under ssb-dapla-felles fordi dette er teamet vi valgte under tjenestekonfigurasjon</p>
+</div>
+</div>
+<p>Så enkelt er det! Men…</p>
+<p>Når vi jobber med data på dapla må vi ta stilling til og følge obligatoriske standarder, for eksempel <a href="../statistikkere/navnestandard.html">navnestandarden</a>. Versjonering av datasett er viktig i denne sammenheng. Å jobbe med data krever i praksis mer enn de tekniske ferdighetene til å lese, behandle og skrive data.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Hva nå? Hva gjør du med dataene?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For å lære hvordan du bruker R og Python til databehandling må man foreløpig ut av manualen. Vi anbefaler at du bruker deler av dokumentet <a href="https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla#Databehandling-med-pandas">Kom i gang med Dapla</a> skrevet av A200 støtteteam og boken <a href="https://r4ds.hadley.nz">R for Data Science</a>.</p>
 </div>
 </div>
 </section>
 </section>
+</section>
+<section id="filbehandling" class="level2">
+<h2 class="anchored" data-anchor-id="filbehandling">Filbehandling</h2>
 <section id="slette-filer" class="level3">
 <h3 class="anchored" data-anchor-id="slette-filer">Slette filer</h3>
-<p>Å slette filer fra lagringsområdet kan gjøres på flere måter. I kapitlet om <a href="./slette-data.html">sletting av data</a> viste vi hvordan man gjør det med pek-og-klikk i <a href="https://console.cloud.google.com/">Google Cloud Console</a>. Under ser du hvordan du kan slette filer med <strong>dapla-toolbelt</strong> og <strong>gcsfs</strong> eller <a href="https://statisticsnorway.github.io/fellesr/index.html">fellesr</a>.</p>
+<p>Å slette filer fra lagringsområdet kan gjøres på flere måter. Man kan gjøre det med pek-og-klikk i <a href="https://console.cloud.google.com/">Google Cloud Console</a> eller med Python og R:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb27" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn full filsti til filen som skal slettes</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">""</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>fs.rm(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"fil/sti.parquet"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>os.remove(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
 <p>Funksjonen <code>file.remove</code> kan brukes til å slette data på lagringsområdet.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb28" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn full filsti til filen som skal slettes</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">""</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">file.remove</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14" data-filename="notebook"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn full filsti til filen som skal slettes</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span> <span class="st">"fil/sti.parquet"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">file.remove</span>(file_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1295,124 +1105,89 @@ Eksempeldata i Dapla Felles
 </section>
 <section id="kopiere-filer" class="level3">
 <h3 class="anchored" data-anchor-id="kopiere-filer">Kopiere filer</h3>
-<p>Å kopiere filer mellom mapper på et Linux-filsystem innebærer som regel bruke <code>cp</code>-kommandoen. På Dapla er det ikke så mye forskjell. Vi bruker en ligende tilnærming nå vi skal kopiere mellom bøtter eller mapper på lagringsområdet til SSB. Under ser du hvordan du kan kopiere en fil fra en mappe til en annen.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
-<p>La oss begynne med et eksempel der vi kopierer en fil fra en mappe til en annen i samme bøtte.</p>
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb29" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to folders</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod"</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>from_folder <span class="op">=</span> <span class="st">"felles/veiledning/python/eksempler/purchases"</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>to_folder <span class="op">=</span> <span class="st">"felles/veiledning/python/eksempler"</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy file</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>fs.cp(<span class="ss">f"</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>from_folder<span class="sc">}</span><span class="ss">/data.parquet"</span>,</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>to_folder<span class="sc">}</span><span class="ss">/data_copy.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to folders</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>from_folder <span class="op">=</span> <span class="st">"/buckets/produkt/felles/veiledning/python/eksempler/purchases"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>to_folder <span class="op">=</span> <span class="st">"/buckets/produkt/felles/veiledning/python/eksempler"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy file</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>shutil.copy(<span class="ss">f"</span><span class="sc">{</span>from_folder<span class="sc">}</span><span class="ss">/data.parquet"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>to_folder<span class="sc">}</span><span class="ss">/data_copy.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Dette fungerer også for å kopiere filer mellom bøtter.</p>
-<p>Et annet scenario vi ofte vil støte på er at vi ønsker å kopiere en fil fra vårt Jupyter-filsystem til en mappe på lagringsområdet. Her kan vi bruke <code>fs.put</code>-metoden.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb30" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new file in your home directory called test.txt</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'/home/jovyan/test.txt'</span>, <span class="st">'w'</span>) <span class="im">as</span> f:</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">'Create a new text file!'</span>)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Path to folder</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod"</span></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>folder <span class="op">=</span> <span class="st">"felles/veiledning/python/eksempler"</span></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy file from local to remote file system</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>fs.put(lpath<span class="op">=</span><span class="ss">f"/home/jovyan/test.txt"</span>, rpath<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>folder<span class="sc">}</span><span class="ss">/test.txt"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Ønsker vi å kopiere en hel mappe fra lagringsområdet til Jupyter-filsystemet, kan vi bruke <code>fs.get</code>-metoden, med opsjonen <code>recursive=True.</code></p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="sourceCode" id="cb31" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy file</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>fs.get(<span class="op">&lt;</span>from_bucket<span class="op">&gt;</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"/home/jovyan/sesongjustering/"</span>,</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>      recursive<span class="op">=</span><span class="va">True</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Console</strong></pre>
 </div>
-<div class="sourceCode" id="cb32" data-filename="Console"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn filnavn på filen som skal flytte og navn på bøtta hvor filen ligger. </span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>file_name <span class="ot">=</span> <span class="st">"purchases.csv"</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>bucket_path_gammel <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/"</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Skriv inn ny (hvis ikke bøtta finnes må den opprettes - se Opprette mapper under)</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>bucket_path_ny <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/ny_mappe/"</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du bare vil endre plassering skriver du:</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,file_name))</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du også vil endre navnet på filen kan du skrive:</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>new_name <span class="ot">=</span> <span class="st">"innkjoep.csv"</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,new_name))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16" data-filename="Console"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn filnavn på filen som skal flytte og navn på bøtta hvor filen ligger. </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>file_name <span class="ot">=</span> <span class="st">"purchases.csv"</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>bucket_path_gammel <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Skriv inn ny (hvis ikke bøtta finnes må den opprettes - se Opprette mapper under)</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>bucket_path_ny <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/ny_mappe/"</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du bare vil endre plassering skriver du:</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,file_name))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du også vil endre navnet på filen kan du skrive:</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>new_name <span class="ot">=</span> <span class="st">"innkjoep.csv"</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">file.copy</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,new_name))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Merk at funksjonen file.copy() bevarer den opprinnelige filen. Hvis du heller ønsker å flytte filen (dvs å kopiere og slette den opprinnelige filen) velg file.rename().</p>
 </div>
 </div>
 </div>
 </section>
-<section id="flytte-filer" class="level3">
-<h3 class="anchored" data-anchor-id="flytte-filer">Flytte filer</h3>
+<section id="flytte-klippelime-filer" class="level3">
+<h3 class="anchored" data-anchor-id="flytte-klippelime-filer">Flytte (klippe/lime) filer</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb33" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod"</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>from_folder <span class="op">=</span> <span class="st">"felles/veiledning/python/eksempler/purchases"</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>to_folder <span class="op">=</span> <span class="st">"felles/veiledning/python/eksempler"</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>fs.mv(<span class="ss">f"</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>from_folder<span class="sc">}</span><span class="ss">/data.parquet"</span>, <span class="ss">f"</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>to_folder<span class="sc">}</span><span class="ss">/data.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to folders</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>from_folder <span class="op">=</span> <span class="st">"/buckets/produkt/felles/veiledning/python/eksempler/purchases"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>to_folder <span class="op">=</span> <span class="st">"/buckets/produkt/felles/veiledning/python/eksempler"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy file</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>shutil.move(<span class="ss">f"</span><span class="sc">{</span>from_folder<span class="sc">}</span><span class="ss">/data.parquet"</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span>to_folder<span class="sc">}</span><span class="ss">/data.parquet"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Console</strong></pre>
 </div>
-<div class="sourceCode" id="cb34" data-filename="Console"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn filnavn på filen som skal flyttes og navn på bøtta hvor filen ligger nå. </span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>file_name <span class="ot">=</span> <span class="st">"purchases.csv"</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>bucket_path_gammel <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/"</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Skriv inn navn på den nye plasseringen (hvis ikke bøtta finnes må den opprettes - se Opprette mapper under)</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>bucket_path_ny <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/ny_mappe/"</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du bare vil endre plassering skriver du:</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="fu">file.rename</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,file_name))</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du også vil endre navnet på filen kan du skrive:</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>new_name <span class="ot">=</span> <span class="st">"innkjoep.csv"</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="fu">file.rename</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,new_name))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18" data-filename="Console"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn filnavn på filen som skal flyttes og navn på bøtta hvor filen ligger nå. </span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>file_name <span class="ot">=</span> <span class="st">"purchases.csv"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>bucket_path_gammel <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Skriv inn navn på den nye plasseringen (hvis ikke bøtta finnes må den opprettes - se Opprette mapper under)</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>bucket_path_ny <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/ny_mappe/"</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du bare vil endre plassering skriver du:</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">file.rename</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,file_name))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Hvis du også vil endre navnet på filen kan du skrive:</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>new_name <span class="ot">=</span> <span class="st">"innkjoep.csv"</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">file.rename</span>(<span class="at">from =</span> <span class="fu">paste0</span>(bucket_path_gammel,file_name), <span class="at">to =</span> <span class="fu">paste0</span>(bucket_path_ny,new_name))</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Merk at funksjonen file.rename() sletter den opprinnelige filen. Hvis du bare vil kopiere uten å slette den opprinnelige filen velg file.copy().</p>
 </div>
@@ -1421,34 +1196,32 @@ Eksempeldata i Dapla Felles
 </section>
 <section id="opprette-mapper" class="level3">
 <h3 class="anchored" data-anchor-id="opprette-mapper">Opprette mapper</h3>
-<p>Selv om bøtter ikke har mapper med en hierarkisk struktur slik man er kjent med fra klassike filsystemer, så kan man opprette det som ser ut som mapper i objektnavnet. I realiteten blir bare <code>/</code> oppfattet som en del av navnet på objektet. Skulle du likevel ønske å opprette dette så kan du gjøre det følgende måte:</p>
+<p>Selv om bøtter ikke har mapper med en hierarkisk struktur slik man er kjent med fra klassiske filsystemer, så kan man opprette det som ser ut som mapper i objektnavnet. I realiteten blir bare <code>/</code> oppfattet som en del av navnet på objektet. Skulle du likevel ønske å opprette dette så kan du gjøre det følgende måte:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Python <i class="fa-brands fa-python" aria-label="python"></i></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a></li></ul>
 <div class="tab-content">
-<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="sourceCode" id="cb35" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Path to folder</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod"</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>folder <span class="op">=</span> <span class="st">"felles/veiledning/python/eksempler"</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create folder</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>fs.touch(<span class="ss">f"</span><span class="sc">{</span>bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>folder<span class="sc">}</span><span class="ss">/testmappe/"</span>)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Path to folder</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>new_folder_path <span class="op">=</span> <span class="st">'/buckets/produkt/felles/veiledning/python/eksempler/testmappe/'</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create folder</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>os.mkdir(new_folder_path)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Console</strong></pre>
 </div>
-<div class="sourceCode" id="cb36" data-filename="Console"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn navnet på den nye mappen. </span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>ny_mappe <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/testmappe/"</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(ny_mappe)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20" data-filename="Console"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriv inn navnet på den nye mappen. </span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ny_mappe <span class="ot">=</span> <span class="st">"/buckets/produkt/dapla_manual-examples/testmappe/"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(ny_mappe)</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1458,13 +1231,7 @@ Eksempeldata i Dapla Felles
 </section>
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
-
-<ol>
-<li id="fn1"><p>I de tidligere systemene på bakken så var det ikke nødvendig med autentisering mellom kodemiljø og datalagringen<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
