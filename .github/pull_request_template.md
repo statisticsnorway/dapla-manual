@@ -1,1 +1,4 @@
-PR opprettet! Har du husket å lese gjennom artikkelen om [hvordan man bidrar til manualen](dapla-manual/statistikkere/appendix/contribution.qml)? Husk å skrive nyhetsinnlegg om endringene er store. 
+🤖 Automatisk beskjed 🤖
+
+Har du husket å lese gjennom [retningslinjene for å bidra til manualen](dapla-manual/statistikkere/appendix/contribution.qml)?
+👉 Husk å skrive et nyhetsinnlegg dersom endringene er omfattende!
