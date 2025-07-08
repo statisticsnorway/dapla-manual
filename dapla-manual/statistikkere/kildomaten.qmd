@@ -205,12 +205,12 @@ Under ser du et eksempel på hvordan en vanlig kodesnutt kan konverteres til å 
 
 ::: {.column width="47%"}
 ```{.python filename="Vanlig kode"}
-import dapla as dp
+import pandas as pd
 
 # Stien til filen
 source_file = "gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv"
 
-df = dp.read_pandas(source_file, file_type="csv")
+df = pd.read_csv(source_file)
 
 # Dataminimerer ved å velge kolonner
 df2 = df[['col1', 'col2', 'col3']]
@@ -230,10 +230,10 @@ dp.write_pandas(df2,
 ::: {.column width="47%"}
 
 ```{.python filename="Kode i Kildomaten"}
-import dapla as dp
+import pandas as pd
 
 def main(source_file):
-    df = dp.read_pandas(source_file, file_type="csv")
+    df = pd.read_csv(source_file)
 
 # Dataminimerer ved å velge kolonner
     df2 = df[['col1', 'col2', 'col3']]
