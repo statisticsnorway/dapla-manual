@@ -21,7 +21,7 @@ I motsetning til et vanlig filsystem er det ikke en hierarkisk mappestruktur i e
 
 ## Lokalt filsystem på Dapla lab?
 
-På Dapla skal data lagres i bøtter. Men når du åpner en tjeneste fra [Dapla lab](dapla-lab.qmd) får du også et lokalt filsystem @fig-jupyter-file-explorer. Det er også dette filsystemet du ser når du f.eks. bruker `ls`-kommandoen i en terminal i [JupyterLab](jupyter.qmd), [VSCode](vscode-python.qmd) og [RStudio](rstudio.qmd). 
+På Dapla skal data lagres i bøtter, men når du åpner en tjeneste fra [Dapla lab](dapla-lab.qmd) får du også et lokalt filsystem @fig-jupyter-file-explorer. Det er også dette filsystemet du ser når du f.eks. bruker `ls`-kommandoen i en terminal i [JupyterLab](jupyter.qmd), [VSCode](vscode-python.qmd) og [RStudio](rstudio.qmd). 
 
 ![Til venstre i bildet ser du filutforskeren i Jupyterlab](../images/jupyter-file-explorer.png){fig-alt="Bilde av filutforskeren i Jupyterlab" #fig-jupyter-file-explorer}
 
@@ -34,3 +34,9 @@ Alt arbeid bør skje i området `$HOME/work`. Alle filer utenfor dette området 
 ## Systemkommandoer mot bøtter
 
 Man kan i likeht med vanlige filsystemer gjøre operasjoner mot bøtter fra Python og R utover det å lese og skrive data. Man kan lage mapper, slette og flytte filer. I forrige artikkel - [jobbe med data](jobbe-med-data.qmd) finner du kodeeksempler for hvordan du kan både lese og skrive forskjellige filtyper fra bøtter og gjøre forskjellige systemkommandoer.
+
+### Bøttemontering med Cloud Storage FUSE
+
+Med unntak av noen begrensninger kan man behandle bøttene som et vanlig filsystem når man jobber fra Dapla. Dette er fordi Dapla lab er *bøttemontert* ved hjelp av Google Cloud sin tjeneste [FUSE](https://cloud.google.com/storage/docs/cloud-storage-fuse/overview).
+
+Bøttemonteringen er en abstraksjon over bøttene og har derfor noen begrensninger. For eksempel støttes ikke samtidighet, i tillegg til at noe metadata ikke blir bevart. Bøttemonteringen er forøvrig tregere enn et lokalt filsystem. Les mer om begrensningene i Google sin [dokumentasjon om FUSE/bøttemontering](https://cloud.google.com/storage/docs/cloud-storage-fuse/overview#expandable-1).
