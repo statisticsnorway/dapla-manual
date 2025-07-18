@@ -207,45 +207,15 @@ For å lage en PAT som er godkjent mot *statisticsnorway* gjør man følgende:
 
 Vi har nå opprettet en PAT som er godkjent for bruk mot SSB sin kode på GitHub. Det betyr at hvis vi vil jobbe med **Git** på SSB sine maskiner i sky eller på bakken, så må vi sendte med dette tokenet for å få lov til å jobbe med koden som ligger på **statisticsnorway** på GitHub.
 
-#### Lagre PAT {#lagre-pat}
+#### Lagre PAT i Dapla Lab {#lagre-pat}
 
-Anta at min personlige GitHub-bruker er **SSB-Chad** og at min Personal Access Token er **blablabla**. Da kan jeg gjøre følgende for å lagre det i **.netrc**:
-
-1.  Gå inn i Jupyterlab og åpne en Python-notebook.
-
-2.  I den første kodecellen skriver du:
-
-``` {.bash filename="terminal"}
-!echo "machine GitHub.com login SSB-Chad password blablabla" >> ~/.netrc
-```
-
-Alternativt kan du fjerne utropstegnet og kjøre kommandoen direkte i terminalen. Det vil gi samme resultat. Koden over legger til en linje med teksten
-
-**machine GitHub.com login SSB-Chad password blablabla**
-
-i en .netrc-fil på din hjemmeområdet, uavhengig av om du har en fra før eller ikke. Hvis du har en fil fra før som allerede har et token fra GitHub, ville jeg nok slettet det før jeg legger en et nytt token.
-
-Hver gang du jobber mot GitHub vil Git sjekke om informasjon om autentisering ligger i denne filen, og bruke den hvis den ligger der.
-
-##### **På DaplaLab**
-
-Å lagre PAT på DaplaLab er enkelt og gjøres kun en gang uansett hvor mange tjenester man bruker.
-
-Her er stegene:
+Anta at min personlige GitHub-bruker er **SSB-Chad** og at min Personal Access Token er **a13bc12**. Da kan jeg gjøre følgende for å lagre det i Dapla Lab:
 
 1.  Logg inn på <https://lab.dapla.ssb.no>
 2.  Trykk på 'My account'
 3.  Naviger til Git-fanen
-4.  Lim inn token der det står 'Git Forge Personal Access Token' vist i @fig-dapla-lab-my-account
+4.  Skriv inn brukernavn (f.eks **SSB-Chad**) under Username for Git
+5.  Skriv inn e-posten som er koblet opp mot Git
+6.  Lim inn token (f.eks **a13bc12**) der det står 'Git Forge Personal Access Token' vist i @fig-dapla-lab-my-account
 
 ![DaplaLab My account: lagre PAT](../images/dapla-lab-my-account.png){#fig-dapla-lab-my-account fig-alt="Skjermbilde av DaplaLab innstillinger for Git"}
-
-#### Oppdater PAT
-
-I eksempelet over lagde vi en PAT som var gyldig i 90 dager. Dermed vil du ikke kunne jobbe mot GitHub med dette tokenet etter 90 dager. For å oppdatere tokenet gjør du følgende:
-
-1.  Lag et nytt PAT ved å repetere @sec-pat.
-
-2.  I miljøet der du skal jobbe med Git og GitHub går du inn i din **.netrc** og bytter ut token med det nye.
-
-Og med det er du klar til å jobbe mot *statisticsnorway* på **GitHub**.
