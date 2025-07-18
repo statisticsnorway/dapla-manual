@@ -11,11 +11,11 @@ I SSB bruker vi [Git](https://git-scm.com/) til versjonskontroll av koden vår o
 
 Git og GitHub er viktige verktøy for å sikre at produksjonssystemene våre er trygge og reproduserbare. De gjør det enkelt å spore endringer og gjennomgå eller godkjenne hverandres bidrag.
 
-I dette kapittelet ser vi nærmere på Git og GitHub og hvordan de er implementert i SSB. Selv om [ssb-project](./ssb-project.qmd) gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
+I denne artikkelen ser vi nærmere på Git og GitHub og hvordan de er implementert i SSB. Selv om [ssb-project](ssb-project.qmd) gjør det lettere å forholde seg til Git og GitHub vil vi dette kapittelet forklare nærmere hvordan det funker uten dette hjelpemiddelet.
 
-::: callout-tip
+::: {.callout-tip collapse="true"}
 ## Les videre med interne ressurser
-Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til dette kapittelet. Gruppen Kvalitet i Kode og Koding (KVAKK) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt), [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt) og [hvordan man håndterer hemmeligheter og passord i git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3216703491/Hvordan+h+ndtere+hemmeligheter+og+passord+i+git). Se hele katalogen til KVAKK om Git og GitHub ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). 
+Det finnes mange gode ressurser på huset om versjonshåndtering i tillegg til denne artikkelen. Gruppen Kvalitet i Kode og Koding ([KVAKK](kvakk.qmd)) har skrevet flere veiledninger på confluence, blant annet om [Git anbefalt arbeidsflyt](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt), [hvordan man løser en merge conflict](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt) og [hvordan man håndterer hemmeligheter og passord i git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3216703491/Hvordan+h+ndtere+hemmeligheter+og+passord+i+git). Se hele katalogen til KVAKK om Git og GitHub ved å gå inn på deres confluence-område: [Versjonskontroll med Git](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3006889999/Versjonskontroll+med+Git). 
 
 I tillegg har A200 sitt støtteteam skrevet om hva man bør lære seg og hvordan man går frem for å lære i [confluence-dokumentet Kom i gang med Dapla](https://statistics-norway.atlassian.net/wiki/spaces/AS/pages/3708878851/Kom+i+gang+med+Dapla) (statistics-norway.atlassian.net).
 
@@ -31,58 +31,38 @@ Git er en programvare for distribuert versjonshåndtering av filer:
 - Git tar vare på historien til koden din
 - Alle som jobber med koden har en kopi av koden hos seg selv (distribuert)
 
-Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Git versjonshåndterer filene i repoet. Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjonshåndtere bilder og PDFer.
+Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjonshåndtere bilder og PDFer.
 
 Git er installert på maskinen du jobber på og brukes fra terminalen. Det finnes pek-og-klikk versjoner av Git, blant annet i Jupyterlab og RStudio, men noen situasjoner vil bare kunne løses i terminalen.
 
-I SSB anbefaler vi at du starter et nytt Git-prosjekt ved å benytte [ssb-project](./jobbe-med-kode.html#ssb-project). Da vil du ikke bare aktivere Git, men du kan også få implementert en del andre gode praksiser for å holde koden din ryddig, oversiktlig og sikker.
-
-Men før vi kan begynne å bruke Git må vi konfigurere vår egen bruker for Git, som er forklart i neste seksjon.
+I SSB anbefaler vi at du starter et nytt Git-prosjekt ved å benytte [ssb-project](ssb-project.qmd). Da vil du ikke bare aktivere Git, men du kan også få implementert en del andre gode praksiser for å holde koden din ryddig, oversiktlig og sikker.
 
 Les mer om Git på <https://git-scm.com/>.
 
-::: callout-note
+::: {.callout-note collapse="true"}
 ## Git i praksis: Kort fortalt
 
 Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
 :::
 
-### Oppsett av Git i gamle jupyter
-*Denne delen er kun gjeldende for gamle jupyter, altså [jupyter.dapla.ssb.no](https://jupyter.dapla.ssb.no/), og ikke DaplaLab.*
+### Oppsett av Git på Dapla Lab
 
-::: callout-warning
-## Bruk SSB sin konfigurasjon!
+Man kan lagre git-brukernavn og PAT i Dapla Lab sine instillinger. Da vil de hentes automatisk hver gang man Git/Dapla Lab trenger det. Vi har skrevet en egen del om det i [artikkelen vår om Dapla Lab](dapla-lab.qmd/#git).
 
-Alle som bruker GitHub i SSB bør bruke SSB sin Git-konfigurasjon. Hvis ikke kan man bl.a. risikere at output fra Notebooks blir pushet til GitHub. Du kan bruke SSBs konfigurasjon ved å kjøre `ssb-gitconfig.py` i terminalen og svare på spørsmålene som dukker opp.
-:::
+### Git, notebooks og filformat: Jupytext
 
-For å jobbe med Git så må man konfigurere brukeren sin slik at Git vet hvem som gjør endringer i koden. I praksis betyr det at du må ha filen `.gitconfig` på hjemmeområdet ditt (f.eks. `/home/jovyan/.gitconfig` på Dapla) med noe grunnleggende informasjon:
+Når man versjonshåndterer bør man ta hensyn til hvilket filformat man lagrer kode i. Versjonshåndtering av notebooks (`.ipynb`) er ikke anbefalt siden filene inneholder mer enn bare tekst. De inneholder metadata og kode er delt inn i celler. Det gjør de vanskelig for mennesker å lese og dermed kontrollere/versjonshåndtere. I tillegg risikerer man å dytte opp data hvis man versjonshåndterer notebooks da notebooks kan lagre output.
 
-``` {.bash filename=".gitconfig"}
-# /home/jovyan/.gitconfig på Dapla
-[user]
-        name = Ola Nordmann
-        email = <ini>@ssb.no
-```
+Tekstfiler (`.py`og `.R`) er derimot enklere og tryggere å versjonshåndtere.
 
-Med denne konfigurasjonen så kan man bruke Git lokalt. Men skal man også bruke **GitHub** i SSB, dvs. dele kode med andre, så må man også legge til mer informasjon i `.gitconfig`. Heldigvis er det skrevet et script som gjør dette for deg. For å få anbefalt konfigurasjon for Git så kan du kjøre følgende kommando i terminalen:
+Derfor bruker vi et verktøy som heter *Jupytext*. Jupytext synkroniserer notebooks med en tilsvarende tekstfil. Det lar oss skrive kode i notebooks mens programmene våre lagres og versjonshåndteres som tekstfiler. Det gir oss brukervennligheten til notebooks uten krøllet som oppstår når man skal versjonshåndtere de. Det er derfor vanlig å ha linjen `*.ipynb` i .gitignore-filen: da vil alle notebooks ignoreres av Git, og den vil bare foprholde seg til de speilede textfilene (altså tilsvarende .py eller .R-fil). Les om hvordan man implementerer og bruker Jupytext på [IT-avdelingen sin confluence-side](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3567812611/Hvordan+lagre+Jupyter+notebooks+i+rent+tekstformat#Hvordan%3F).
 
-``` {.bash filename="terminal"}
-ssb_gitconfig.py
-```
+Standardformatet for kobling med Jupytext er [prosent-formatet](https://jupytext.readthedocs.io/en/latest/formats-scripts.html#the-percent-format).
 
-Dette scriptet vil spørre deg om ditt brukernavn i SSB, og så vil det opprette en fil som heter `.gitconfig` i hjemmeområdet ditt. Denne filen vil inneholde informasjon om brukernavn, e-post og tilgang til GitHub. I tillegg vil den sørge for at ditt **ssb-project** ikke sender output fra notebooks til GitHub.
-
-### Git og Notebooks
-
-Selv om det er vanlig å jobbe i *notebooks* på Dapla, så skal all kode i SSB [lagres og versjonhåndteres som rene tekstfiler](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3698458826/ADR0020+-+Lagringsformat+for+Jypyter+Notebooks) i **.R**- eller **.py**-filer i [prosent-formatet](https://jupytext.readthedocs.io/en/latest/formats-scripts.html#the-percent-format). I praksis har ikke dette så stor betydning, siden disse filtypene kan åpnes som notebooks i verktøy som Jupyterlab og VS Code, og på den måten handler det bare om hvilket filformat koden lagres til. 
-
-Prosentformatet har med [jupytext](https://jupytext.readthedocs.io/en/latest/) å gjøre. Jupytext er et verktøy som synkroniserer .ipynb-filer med tilsvarende .py-filer. Man kan altså skrive og kjøre kode i notebooks og jupytext vil automatisk lagre endringene til den tilhørende .py-filen. Dette er så man skal slippe versjonshåndtere .ipynb-filene da dette skaper problemer, i tillegg til det er fare for å dytte opp data til GitHub når man bruker notebooks.
-
+::: {.callout-note collapse="true"}
+# Bruk av Jupytext et vedtak fra IT
 Bruk av jupytext er en Architecture Decision Record (ADR) - altså et vedtak fra IT. Les mer om ADR0020 på [Confluence](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3698458826/ADR0020+-+Lagringsformat+for+Jypyter+Notebooks).
-
-
-Les mer om hvordan man bruker Jupytext på [IT-avdelingen sin confluence-side](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3567812611/Hvordan+lagre+Jupyter+notebooks+i+rent+tekstformat).
+:::
 
 ### Vanlige Git-operasjoner
 
