@@ -9,7 +9,7 @@ I SSB bruker vi [Git](https://git-scm.com/) til versjonskontroll av koden vår o
 ## Git vs. GitHub: Kort fortalt
 
 **Git** er et verktøy installert på din lokale maskin som sporer endringer i koden din.\
-**GitHub** er en skybasert plattform som fungerer som et felles lagringssystem, der du kan dele og samarbeide med andre om kode.
+**GitHub** er en skybasert plattform som fungerer som et felles lagringssystem der du kan dele og samarbeide med andre om kode.
 :::
 
 Git og GitHub er viktige verktøy for å sikre at produksjonssystemene våre er trygge og reproduserbare. De gjør det enkelt å spore endringer og gjennomgå eller godkjenne hverandres bidrag.
@@ -37,7 +37,7 @@ Git er en programvare for distribuert versjonshåndtering av filer:
 -   Git tar vare på historien til koden din
 -   Alle som jobber med koden har en kopi av koden hos seg selv (distribuert)
 
-Når man ønsker å dele koden med andre laster man opp koden til et felles kodelager på GitHub kalt repository (repo). Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjonshåndtere bilder og PDFer.
+Når man ønsker å dele kode med andre laster man det opp til et felles kodelager på GitHub kalt repository (repo). Vanligvis versjonshåndteres rene tekstfiler, men git kan også versjonshåndtere bilder og PDFer.
 
 Git er installert på maskinen du jobber på og brukes fra terminalen. Det finnes pek-og-klikk versjoner av Git, blant annet i Jupyterlab og RStudio, men noen situasjoner vil bare kunne løses i terminalen.
 
@@ -51,17 +51,15 @@ Les mer om Git på <https://git-scm.com/>.
 Man aktiverer Git på en mappe i filsystemet sitt med kommandoen `git init` når man står i mappen som skal versjonshånderes. Da vil Git versjonshåndtere alle filer som er i den mappen og i eventuelle undermapper. Når du så gjør endringer på en fil i mappen, vil Git registrere endringer. Ønsker du at endringen skal bli et punkt i historikken til prosjektet, så må du først legge til filen i Git med kommandoen `git add filnavn`. Når du har gjort dette, så kan du lagre endringen med kommandoen `git commit -m "Din melding her"`. Når du har gjort dette, så vil endringen være lagret i Git. Når du har gjort mange endringer, så kan du sende endringene til GitHub med kommandoen `git push`. Når du har gjort dette, så vil endringene være synlige for alle som har tilgang til GitHub-prosjektet.
 :::
 
-### Oppsett av Git på Dapla Lab
+### Oppsett av Git/GitHub på Dapla Lab
 
-Man kan lagre git-brukernavn og PAT i Dapla Lab sine instillinger. Da vil de hentes automatisk hver gang man Git/Dapla Lab trenger det. Vi har skrevet en egen del om det i [artikkelen vår om Dapla Lab](dapla-lab.qmd/#git).
+Man kan lagre GitHub-brukernavn og PAT i Dapla Lab sine instillinger. Da vil de hentes automatisk hver gang man Git/Dapla Lab trenger det. Vi har skrevet en egen del om det i [artikkelen vår om Dapla Lab](dapla-lab.qmd/#git).
 
 ### Git, notebooks og filformat: Jupytext
 
-Når man versjonshåndterer bør man ta hensyn til hvilket filformat man lagrer kode i. Versjonshåndtering av notebooks (`.ipynb`) er ikke anbefalt siden filene inneholder mer enn bare tekst. De inneholder metadata og kode er delt inn i celler. Det gjør de vanskelig for mennesker å lese og dermed kontrollere/versjonshåndtere. I tillegg risikerer man å dytte opp data hvis man versjonshåndterer notebooks da notebooks kan lagre output.
+Når man versjonshåndterer bør man ta hensyn til hvilket filformat man lagrer kode i. Versjonshåndtering av notebooks (`.ipynb`) er ikke anbefalt siden filene inneholder mer enn bare tekst. De inneholder metadata og kode er delt inn i celler. Det gjør de vanskelig for mennesker å lese og dermed kontrollere/versjonshåndtere. I tillegg risikerer man å dytte opp data hvis man versjonshåndterer notebooks da notebooks kan lagre output. Tekstfiler (`.py`og `.R`) er derimot enklere og tryggere å versjonshåndtere.
 
-Tekstfiler (`.py`og `.R`) er derimot enklere og tryggere å versjonshåndtere.
-
-Derfor bruker vi et verktøy som heter *Jupytext*. Jupytext synkroniserer notebooks med en tilsvarende tekstfil. Det lar oss skrive kode i notebooks mens programmene våre lagres og versjonshåndteres som tekstfiler. Det gir oss brukervennligheten til notebooks uten krøllet som oppstår når man skal versjonshåndtere de. Det er derfor vanlig å ha linjen `*.ipynb` i .gitignore-filen: da vil alle notebooks ignoreres av Git, og den vil bare foprholde seg til de speilede textfilene (altså tilsvarende .py eller .R-fil). Les om hvordan man implementerer og bruker Jupytext på [IT-avdelingen sin confluence-side](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3567812611/Hvordan+lagre+Jupyter+notebooks+i+rent+tekstformat#Hvordan%3F).
+Derfor bruker vi et verktøy som heter *Jupytext*. Jupytext synkroniserer notebooks med en tilsvarende tekstfil. Det lar oss skrive kode i notebooks mens programmene våre lagres og versjonshåndteres som tekstfiler. Det gir oss brukervennligheten til notebooks uten krøllet som oppstår når man skal versjonshåndtere de. Det er derfor vanlig å ha linjen `*.ipynb` i .gitignore-filen: da vil alle notebooks ignoreres av Git, og den vil bare forholde seg til de synkroniserte tekstfilene (altså tilsvarende .py eller .R-fil). Les om hvordan man implementerer og bruker Jupytext på [IT-avdelingen sin confluence-side](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3567812611/Hvordan+lagre+Jupyter+notebooks+i+rent+tekstformat#Hvordan%3F).
 
 Standardformatet for kobling med Jupytext er [prosent-formatet](https://jupytext.readthedocs.io/en/latest/formats-scripts.html#the-percent-format).
 
@@ -77,10 +75,10 @@ I git er det noen operasjoner som er så vanlige at alle som jobber med kode i S
 
 -   `git status` for å se hvilke endringer Git har oppdaget
 -   `git add <filnavn>` for å fortelle Git at endringene skal lagres
--   `git commit -m "Din melding her"` for å gjøre endringene om til et punkt i historien til koden din \* Hver commit har sin egen unike ID \* Flere filer kan samles i en commit
+-   `git commit -m "Din melding her"` for å gjøre endringene om til et punkt i historien til koden din (*flere filer kan samles under en commit*)
 -   `git push` for å sende endringene opp til GitHub
 
-Når man utvikler kode gjør man det fra såkalte branches[^1]. Hvis vi tenker oss at din eksisterende kodebase er stammen på et tre (ofte kalt **master** eller **main**) legger Git opp til at man gjør endringer på denne koden via grener av treet. Med andre ord holder vi stammen (main) urørt helt til vi vet at endringen fungerer som den skal. Til slutt *merger* vi den inn i master. Vi kan opprette en ny branch og gå inn i den ved å skrive `git switch -c <branch navn>`. Da står du i en branch og kan bruke kommandoer som `git add` og `git commit` som vist tidligere.
+Når man utvikler kode gjør man det fra såkalte branches[^1]. Hvis vi tenker oss at din eksisterende kodebase er stammen på et tre (ofte kalt **master** eller **main**) legger Git opp til at man gjør endringer på denne koden via grener av treet. Med andre ord holder vi stammen (main) urørt helt til vi vet at endringen fungerer som den skal. Til slutt *merger* vi arbeidsgrenen inn i main. Vi kan opprette en ny branch og gå inn i den ved å skrive `git switch -c <branch navn>`. Da står du i en branch og kan bruke kommandoer som `git add` og `git commit` som vist tidligere.
 
 [^1]: *Branches* kan oversettes til grener på norsk. Men i denne boken velger vi å bruke det engelske ordet **branches**. Grunnen er at det erfaringsmessig er lettere forholde seg til det engelske ordet når man skal søke etter informasjon i annen dokumentasjon
 
