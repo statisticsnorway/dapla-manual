@@ -15,25 +15,6 @@ resources:
 ---
 
 ::: {.hero-container}
-
-::: {.side-block}
-
-::: {.child-box}
-:::{.box-header}
-Utvalgte artikler
-:::
-:::{.box-content}
-<ul id="latest-news-list">
-  <li><a href="statistikkere/dapla-lab.qmd"> Dapla lab</a></li>
-  <li><a href="statistikkere/git-og-github.qmd"> Git og GitHub</a></li>
-  <li><a href="statistikkere/ssb-project.qmd"> SSB-project</a></li>
-  <li><a href="statistikkere/datatilstander.qmd"> Datatilstander</a></li>
-  <li><a href="statistikkere/jobbe-med-data.qmd"> Jobbe med data</a></li>
-</ul>
-:::
-:::
-:::
-
 ::: {.hero-banner}
 
 ::: {.hero-text}
@@ -45,34 +26,94 @@ Utvalgte artikler
 [Til manualen](statistikkere/index.html){.btn-action-primary .btn .btn-success .btn-lg role="button"}
 :::
 
-::: {.hero-animation}
-<div class="cube">
-  <div class="face left"><img src="images/ssb_logo.svg" alt="ssb"/></div>
-  <div class="face front"><img src="images/dapla-long.svg" alt="dapla"/></div> 
-  <div class="face right"><img src="images/ssb_logo.svg" alt="ssb"/></div>
-  <div class="face back"><img src="images/dapla-long.svg" alt="dapla"/></div>
+:::
+
+:::
+
+::: {.bottom-row}
+::: {.left-block}
+<h1> Utvalgte artikler </h1>
+
+::: {.article-grid}
+
+::: {.article-box}
+[Hurtigstart: en intro til manualen](statistikkere/index.qmd)
+:::
+
+::: {.article-box}
+[Git og GitHub](statistikkere/git-og-github.qmd)
+:::
+
+::: {.article-box}
+[Datatilstander](statistikkere/datatilstander.qmd)
+:::
+
+::: {.article-box}
+[SSB-project](statistikkere/ssb-project.qmd)
+:::
+
+::: {.article-box}
+[Jobbe med data på Dapla](statistikkere/jobbe-med-data.qmd)
+:::
+
+::: {.article-box}
+[Dapla lab](statistikkere/dapla-lab.qmd)
+:::
+:::
+
+:::
+::: {.right-block}
+<div class="latest-news-box">
+  <h3>Siste nyheter:</h3>
+  <ul id="latest-news-list" class="latest-news-list">
+    <!-- Latest news items will be appended here -->
+  </ul>
 </div>
+
+<script>
+  async function loadLatestPosts() {
+    try {
+      const response = await fetch('news/index.xml');
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const xmlText = await response.text();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+
+      const latestItems = xmlDoc.querySelectorAll("item");
+      const latestNewsList = document.getElementById('latest-news-list');
+
+      latestItems.forEach((item, index) => {
+        if (index < 3) { 
+          const title = item.querySelector("title").textContent;
+          const pubDate = item.querySelector("pubDate").textContent;
+          const link = item.querySelector("link").textContent;
+
+          const listItem = document.createElement('li');
+          const titleLink = document.createElement('a');
+          titleLink.href = link;
+          titleLink.target = "_blank";
+          titleLink.innerText = title;
+
+          const dateText = document.createElement('p');
+          dateText.innerText = new Date(pubDate).toLocaleDateString();
+          dateText.style.margin = "0";
+
+          listItem.appendChild(titleLink);
+          listItem.appendChild(dateText);
+          latestNewsList.appendChild(listItem);
+        }
+      });
+    } catch (error) {
+      console.error("Error loading latest news:", error);
+      const errorMessage = document.createElement('li');
+      errorMessage.innerText = "Kunne ikke laste nyheter";
+      document.getElementById('latest-news-list').appendChild(errorMessage);
+    }
+  }
+
+  loadLatestPosts();
+</script>
+:::
 :::
 
-:::
-
-::: {.side-block}
-
-
-::: {.child-box}
-:::{.box-header}
-Siste nyheter
-:::
-:::{.box-content}
-<ul id="latest-news-list">
-  <li><a href="statistikkere/dapla-lab.qmd"> placeholder </a></li>
-  <li><a href="statistikkere/git-og-github.qmd"> placeholder</a></li>
-  <li><a href="statistikkere/ssb-project.qmd"> placeholder</a></li>
-  <li><a href="statistikkere/datatilstander.qmd"> placeholder</a></li>
-  <li><a href="statistikkere/jobbe-med-data.qmd"> placeholder</a></li>
-</ul>
-:::
-:::
-:::
-
-:::
