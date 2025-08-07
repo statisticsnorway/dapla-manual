@@ -1,19 +1,27 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html, body {
   margin-top: 0 !important;
   padding-top: 0 !important;
   margin-bottom: 0 !important;
+  height: 100vh;
   overflow-x: hidden;
 }
 
 .hero-banner {
   min-width: 100vw;
-  min-height: 66vh;
+  height: 66vh;
   margin-top: 0%;
+  overflow: hidden;
   background: radial-gradient(circle, rgba(240, 248, 249, 1) 0%, rgba(234, 227, 240) 18%, rgba(240, 248, 249, 0.97) 28%, rgba(240, 248, 249, 1) 76%, rgba(234, 227, 240) 99%);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px 30px;
+  padding: 20px 20px;
   box-sizing: border-box;
   align-items: center;
   text-align: center;
@@ -43,19 +51,19 @@ html, body {
   padding-top: 0 !important;
   display: flex;
   flex-direction: row;
-  height: 34vh;
+  height: 33vh;
 }
 
 .left-block {
-  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  flex: 1;
   background: rgba(220, 241, 252, 0.8);
   border-radius: 1%;
   box-sizing: border-box;
-  min-height: 100%;
-  overflow-y: auto;
 }
 
 .left-block h1 {
@@ -68,24 +76,23 @@ html, body {
 
 .article-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 20px;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
   flex: 1;
   align-content: start;
 }
-
 .article-box {
+  position: relative;
+  padding: 8px 10px;
   background-color: rgba(255,255,255,0.75);
-  padding: 16px 20px;
-  border-radius: 8px;
+  border-radius: 40px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   font-size: 1.2em;
   color: #274247;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,10 +100,17 @@ html, body {
 }
 
 .article-box a {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px;
   text-decoration: none;
   color: #4b7272;
   font-weight: bold;
-  font-size: 1em;
+  font-size: inherit;
+  z-index: 1;
 }
 
 .article-box a:hover {
