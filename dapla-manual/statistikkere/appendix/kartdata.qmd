@@ -15,7 +15,7 @@ med koordinat-kolonner (se eksempel under).
 
 Geopandas kan blant annet brukes til å kartlegge dataene, beregne avstander og labe variabler for nærmiljø ved å koble datasett sammen basert på geografisk overlapp.
 
-For lesing og skriving av geodata i Dapla, kan man bruke SSB-pakken **sgis**. Med denne kan man blant annet også beregne reisetider langs veg og lage publiseringsverdige kart. 
+Man kan også bruke SSB-pakken **sgis** til å beregne reisetider langs veg og lage publiseringsverdige kart. 
 
 Pakkene kan installeres i Dapla sånn her:
 
@@ -24,24 +24,13 @@ poetry add geopandas
 poetry add ssb-sgis
 ```
 
-Og så importeres det i Python på vanlig vis.
-
-```{.python filename="notebook"}
-import geopandas as gpd
-import sgis as sg
-```
-
 **Eksempel på lesing/skriving av kartdata**
 
-Man kan lese/skrive geodata i Dapla med sgis-funksjonene read_geopandas og write_geopandas. 
-Støttede formater er blant annet (geo)parquet, geojson og gml.
 En rekke kartdata for hele landet til analyse- og visualiseringsformål ligger i bøtta "kart". 
 For eksempel kommuneflater til analyse eller statistikk:
 
 ```{.python filename="notebook"}
-# enten:
-kommuner = sg.read_geopandas("ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/ABAS_kommune_flate_p2025_v1.parquet")
-# eller:
+import geopandas as gpd
 kommuner = gpd.read_parquet("gs://ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/ABAS_kommune_flate_p2025_v1.parquet")
 ```
 
@@ -49,13 +38,14 @@ Eksempel på lesing av kommuneflater for visualisering. Disse dataene er general
 å lage kart, men blir unøyaktige til statistikk:
 
 ```{.python filename="notebook"}
-kommuner = sg.read_geopandas("ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet")
+kommuner = gpd.read_parquet("gs://ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet")
 ```
 
-Tilsvarende for skriving til parquet eller annet geodataformat:
+Større filer er lagret som partisjonerte parquet-filer. Disse leses best med sgis siden geopandas ikke støtter partisjonerte filer ennå.
 
 ```{.python filename="notebook"}
-sg.write_geopandas(kommuner, filsti_ny)
+import sgis as sg
+arealbruk = sg.read_geopandas("ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/SSB_arealbruk_flate_p2025_v1.parquet")
 ```
 
 Man kan også gjøre vanlige tabell-filer geografiske hvis man har koordinat-kolonner. For eksempel situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF):
@@ -85,14 +75,16 @@ vof_gdf
 Man kan lage tematiske kart med sgis.ThematicMap. Her er et eksempel på et enkelt kart over arealet i kommuner. 
 
 ```{.python filename="notebook"}
+import sgis as sg
 kommuner = sg.read_geopandas("ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet")
-kommuner["Kvadratmeter"] = kommuner.area
+kommuner["km2"] = kommuner.area / 1_000_000
 
 m = sg.ThematicMap(
     kommuner, 
-    column="Kvadratmeter", 
+    column="km2", 
     size=15,
     title="Areal i kommunene",
+    legend_kwargs=dict(title="Kvadratkilometer"),
 )
 m.plot()
 ```
@@ -105,7 +97,7 @@ Avstand i **luftlinje** finner man enkelt med sjoin_nearest.
 Sånn her finner man avstand fra boligbygg (1000 tilfeldige) i Oslo til nærmeste butikkbygg.
 
 ```{.python filename="notebook"}
-testdatasti = "ssb-dapla-felles-data-produkt-prod/GIS/testdata"
+testdatasti = "gs://ssb-dapla-felles-data-produkt-prod/GIS/testdata"
 boligbygg = sg.read_geopandas(f"{testdatasti}/noen_boligbygg_oslo.parquet")
 butikkbygg = sg.read_geopandas(f"{testdatasti}/butikkbygg_oslo.parquet")
 
