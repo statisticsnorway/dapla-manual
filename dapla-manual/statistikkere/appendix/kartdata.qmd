@@ -1,6 +1,6 @@
 # Kartdata
 Det er tilrettelagt kartdata i Dapla til analyse, statistikkproduksjon og visualisering. 
-Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på **ssb-kart-data-delt-geo-prod**.
+Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på **ssb-areal-data-delt-kart-prod**.
 De er lagret som parquetfiler i standardprojeksjonen vi bruker i SSB (UTM sone 33N) hvis ikke annet er angitt. 
 Det er også SSBs standard-rutenett i ulike størrelser samt Eurostats rutenett over Norge.
 
@@ -39,22 +39,23 @@ En rekke kartdata for hele landet til analyse- og visualiseringsformål ligger i
 For eksempel kommuneflater til analyse eller statistikk:
 
 ```{.python filename="notebook"}
-filsti = "ssb-kart-data-delt-geo-prod/analyse_data/klargjorte-data/2024/ABAS_kommune_flate_p2024_v1.parquet"
-kommuner = sg.read_geopandas(filsti)
+# enten:
+kommuner = sg.read_geopandas("ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/ABAS_kommune_flate_p2025_v1.parquet")
+# eller:
+kommuner = gpd.read_parquet("gs://ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/ABAS_kommune_flate_p2025_v1.parquet")
 ```
 
 Eksempel på lesing av kommuneflater for visualisering. Disse dataene er generalisert slik at de egner seg for
 å lage kart, men blir unøyaktige til statistikk:
 
 ```{.python filename="notebook"}
-filsti = "ssb-kart-data-delt-geo-prod/visualisering_data/klargjorte-data/2024/parquet/N5000_kommune_flate_p2024_v1.parquet"
-kommuner = sg.read_geopandas(filsti)
+kommuner = sg.read_geopandas("ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet")
 ```
 
 Tilsvarende for skriving til parquet eller annet geodataformat:
 
 ```{.python filename="notebook"}
-sg.write_geopandas(kommuner, filsti_ny) 
+sg.write_geopandas(kommuner, filsti_ny)
 ```
 
 Man kan også gjøre vanlige tabell-filer geografiske hvis man har koordinat-kolonner. For eksempel situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF):
@@ -79,15 +80,24 @@ vof_gdf
 
 ### geopandas-eksempler i Dapla
 
-I tillegg til kartdataene, ligger det testdata i fellesbøtta som man kan leke seg med. 
-Testdataene finnes for Oslo og Kongsvinger, og kan leses sånn her:
+**Eksempel på å lage kart**
+
+Man kan lage tematiske kart med sgis.ThematicMap. Her er et eksempel på et enkelt kart over arealet i kommuner. 
 
 ```{.python filename="notebook"}
-testdatasti = "ssb-dapla-felles-data-produkt-prod/GIS/testdata"
-veger = sg.read_geopandas(f"{testdatasti}/veger_oslo.parquet")
+kommuner = sg.read_geopandas("ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet")
+kommuner["Kvadratmeter"] = kommuner.area
+
+m = sg.ThematicMap(
+    kommuner, 
+    column="Kvadratmeter", 
+    size=15,
+    title="Areal i kommunene",
+)
+m.plot()
 ```
 
-Under følger noen eksempler på GIS-prosessering med testdataene. 
+[Se flere kart-eksempler her.](https://statisticsnorway.github.io/ssb-sgis/examples/maps.html)
 
 **Eksempel på avstandsberegning**
 
@@ -95,6 +105,7 @@ Avstand i **luftlinje** finner man enkelt med sjoin_nearest.
 Sånn her finner man avstand fra boligbygg (1000 tilfeldige) i Oslo til nærmeste butikkbygg.
 
 ```{.python filename="notebook"}
+testdatasti = "ssb-dapla-felles-data-produkt-prod/GIS/testdata"
 boligbygg = sg.read_geopandas(f"{testdatasti}/noen_boligbygg_oslo.parquet")
 butikkbygg = sg.read_geopandas(f"{testdatasti}/butikkbygg_oslo.parquet")
 
@@ -105,6 +116,7 @@ For å finne avstand eller reisetid langs veier, kan man gjøre **nettverksanaly
 Man må først klargjøre vegnettet og bestemme regler for beregningen(e):
 
 ```{.python filename="notebook"}
+veger = sg.read_geopandas(f"{testdatasti}/veger_oslo.parquet")
 veger_klargjort = (
     sg.get_connected_components(veger)
     .loc[lambda x: x["connected"] == 1]
@@ -156,20 +168,6 @@ Med motsatt rekkefølge, får man ett boligbygg per kommune den overlapper med. 
 ```{.python filename="notebook"}
 boligbygg_med_kommuneinfo = boligbygg.sjoin(kommuner, how="left")
 ```
-
-**Eksempel på å lage kart**
-
-Man kan lage tematiske kart med sgis-klassen ThematicMap. Her er et enkelt eksempel på et kart over arealet i kommuner. 
-
-```{.python filename="notebook"}
-kommuner["Kvadratmeter"] = kommuner.area
-
-m = sg.ThematicMap(kommuner, column="Kvadratmeter", size=15)
-m.title = "Areal i kommunene"
-m.plot()
-```
-
-[Se flere kart-eksempler her.](https://statisticsnorway.github.io/ssb-sgis/examples/maps.html)
 
 **Konvertere DataFrame til GeoDataFrame**
 
