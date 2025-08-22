@@ -4,25 +4,21 @@ date-modified: "22/08/2025"
 lightbox: true
 ---
 
-Delomaten er en tjeneste for å automatisere deling av data mellom seksjoner og team som har forskjellige PKI.
-Dette gjøres ved at tjenesten pseudonymiserer eller depseudonymiserer felt i datasett før den lagres i en spesiell deltbøtte
-som det delende teamet ikke har lesetilgang til. Dataflyten her blir at tjenesten først leser filer fra teamets produktbøtte,
-prosesserer dem og tilslutt skriver dem til en 'delomat' deltbøtte.
+Delomaten er en tjeneste for å automatisere deling av data mellom seksjoner og team som har forskjellige datatilganger av hensyn til behov og personvern. Dette gjøres ved at tjenesten pseudonymiserer eller depseudonymiserer felt i datasett før den lagres i en spesiell deltbøtte som det delende teamet ikke har lesetilgang til. Tjenesten leser filer fra teamets produktbøtte, prosesserer dem og deretter skriver dem til en 'delomat' deltbøtte. 
 
 ## Forberedelser
 
 Før et Dapla-team kan ta i bruk delomaten må tjenesten være aktivert for teamet.
-Dette kan gjøres selvbetjent som en [feature](./features.html) hvor både `shared-buckets` og `delomaten` featursene må skrus på.
+Dette kan gjøres selvbetjent som en [feature](./features.html) hvor både `shared-buckets` og `delomaten` må skrus på.
 Alternativt kan man opprette en [Kundeservice](https://ssb.pureservice.com/#/categories/14/new)-sak og be om å hjelp til dette.
 
-Tilslutt trenger man å [opprette en 'delomat' deltbøtte](./deling-av-data.qmd).
+Til slutt [oppretter man en 'delomat' deltbøtte](./deling-av-data.qmd).
 
 ## Sette opp tjenesten
 
-Tjenesten lar statistikere konfigurere hvilke felt skal pseudonymiseres/depseudonymiseres før dataen blir lagret i deltbøtten gjennom en
-yaml fil. På samme måte som kildomaten oppretter man kilder under `automation` mappen i teamets IAC repo.
+Tjenesten lar statistikere konfigurere hvilke felt som skal pseudonymiseres/depseudonymiseres før dataen blir lagret i deltbøtten gjennom en .yaml fil. I likhet med kildomaten oppretter man kilder under `automation` mappen i teamets IAC repo.
 For delomaten ligger disse under `automation/shared-data`. Delomaten forventer en `config.yaml` fil per kilde.
-F.eks. hvis man skal opprette en delomaten jobb i prod-miljøet som heter 'forbruk' oppretter man filen
+F.eks. hvis man skal opprette en delomaten-jobb i prod-miljøet som heter 'forbruk' oppretter man filen
 `automation/shared-data/mitt-dapla-team-prod/forbruk/config.yaml`.
 
 ### Konfigurasjonsfil
@@ -44,8 +40,8 @@ pseudo:
       sid_snapshot_date: "2025-07-07"
 ```
 
-I dette eksempelet definerer vi en delomaten jobb som vil pseudonymisere `fnr` og `snr` feltene ved bruk at sid mapping og katalogdato `2025-07-07`.
-Det er også mulig å spesifisere forskjellige algoritmer for forksjellige felt.
+I dette eksempelet definerer vi en delomaten-jobb som vil pseudonymisere `fnr` og `snr` feltene ved bruk av sid mapping og katalogdato `2025-07-07`.
+Det er også mulig å spesifisere forskjellige algoritmer for forskjellige felt.
 
 ```{.yaml filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"}
 shared_bucket: "delomatentest"
@@ -66,9 +62,7 @@ pseudo:
       algorithm: "default"
 ```
 
-Her depseudonymiserer vi `fnr` kolonnen med sid mapping algoritmen, mens `fornavn` blir depseudonymisert med 'default' algoritmen som er DAEAD.
-
-Konfigurasjonsfilen blir validert når du oppretter en pull request på GitHub og der vil du få eventuelle feilmeldinger om du har feilkonfigurert delomaten.
+Her depseudonymiserer vi `fnr` kolonnen med sid mapping algoritmen, mens `fornavn` blir depseudonymisert med standardalgoritmen DAEAD. Konfigurasjonsfilen blir validert når du oppretter en pull request på GitHub. Der vil du få eventuelle feilmeldinger om du har feilkonfigurert delomaten.
 
 ![Delomaten test feil](../images/delomaten_error.png)
 
