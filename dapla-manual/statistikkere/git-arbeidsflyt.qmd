@@ -1,3 +1,62 @@
- ---
- title: Git - Anbefalt arbeidsflyt
 ---
+title: "Git: anbefalt arbeidsflyt"
+date-modified: 08/28/2025
+---
+
+
+Å lære seg å bruke git handler om å implementere nye rutiner i arbeidshverdagen. Vi kaller dette for *anbefalt arbeidsflyt*. Arbeidsflyten er noe man gjennomfører hyppig iløpet av en arbeidsdag om man jobber med kode. Vi beskriver derfor anbefalt git arbeidsflyt fra man begynner på en ny oppgave til den er avsluttet og merget til main.
+
+Denne siden er en inspirert av Beste Praksis sin confluence-artikkel [*Hvordan er Git anbefalt arbeidsflyt?*](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt).
+
+
+
+::: {.callout-tip}
+# Usikker på hva Git og GitHub er?
+Les vår artikkel om [Git og GitHub](git-og-github.qmd). Der kan du lære hva verktøyene er og hvorfor vi bruker de i SSB.
+:::
+
+### Arbeidsflyt
+
+#### 1. Oppdater ditt lokale repo
+
+```{.bash filename="terminal"}
+git switch main # bytt til main
+git pull # oppdaterer
+```
+#### 2. Lag ny gren (*branch*)
+
+I vårt eksempel skal vi lage ekstremkontroller i produksjons repoet. Vi kaller derfor grenen `lag-ekstremkontroll`
+
+```{.bash filename="terminal"}
+git switch -c lag-ekstremkontroll # -c står for create
+```
+
+#### 3. Gjør endringer i repoet/koden
+
+#### 4. Lagre kode og oppdatere repoet på GitHub
+
+Dette er hoveddelen av arbeidsflyten og en prosess man vil gjenta flere ganger før man er ferdig med en gren.
+
+```{.bash filename="terminal"}
+git status          # Viser hvilke filer som er endret, nye eller klare for commit
+git add <filnavn>   # For alle filer du vil ha med i committen
+git commit -m"<tekst som beksriver endringer>" 
+git push            # Sender endringene til GitHub
+```
+
+::: {.callout-tip}
+# Tips for git add
+`git add .` legger til alle filer! Da slipper man å skrive hvert filnavn
+
+Man kan også legge til alt nytt innhold i en mappe ved å skrive `git add <mappenavn>`
+
+Om du vil legge til alle filer av en filtype kan man skrive `git add *<filtype>`. For eksempel: `git add *.py` 
+:::
+
+#### 5. Gjenta [steg 3](git-arbeidsflyt.qmd#gjør-endringer-i-repoetkoden) og [4](git-arbeidsflyt.qmd#lagre-kode-og-oppdatere-repoet-på-github) til oppgaven er ferdig
+
+I eksempelet vårt gjelder det ekstremkontroller.
+
+#### 6. Opprett en pull request på GitHub
+
+##### 6.1
