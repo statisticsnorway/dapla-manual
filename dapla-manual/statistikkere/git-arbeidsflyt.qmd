@@ -19,10 +19,21 @@ Les vår artikkel om [Git og GitHub](git-og-github.qmd). Der kan du lære hva ve
 
 #### 1. Oppdater ditt lokale repo
 
+##### 1.1 Sørg for at repoet ikke har ulagrede endringer 
+```{.bash filename="terminal"}
+git status # Viser hvilke filer som er endret, nye eller klare for commit
+```
+Vil du lagre endringene gjør du som beskrevet i [punkt 4](git-arbeidsflyt.qmd#lagre-kode-og-oppdatere-repoet-på-github). Hvis ikke kjører du følgende:
+
+```{.bash filename="terminal"}
+git reset --hard HEAD # forkaster endringer
+```
+##### 1.2 Oppdater lokal versjon av main
 ```{.bash filename="terminal"}
 git switch main # bytt til main
 git pull # oppdaterer
 ```
+
 #### 2. Lag ny gren (*branch*)
 
 I vårt eksempel skal vi lage ekstremkontroller i produksjons repoet. Vi kaller derfor grenen `lag-ekstremkontroll`
@@ -46,11 +57,11 @@ git push            # Sender endringene til GitHub
 
 ::: {.callout-tip}
 # Tips for git add
-`git add .` legger til alle filer! Da slipper man å skrive hvert filnavn
+`git add .` legger til alle filer! Da slipper man å skrive hvert filnavn.
 
-Man kan også legge til alt nytt innhold i en mappe ved å skrive `git add <mappenavn>`
+Man kan også legge til alt nytt innhold i en mappe ved å skrive `git add <mappenavn>`.
 
-Om du vil legge til alle filer av en filtype kan man skrive `git add *<filtype>`. For eksempel: `git add *.py` 
+Om du vil legge til alle filer av en filtype kan man skrive `git add *<filtype>`. For eksempel: `git add *.py`.
 :::
 
 #### 5. Gjenta [steg 3](git-arbeidsflyt.qmd#gjør-endringer-i-repoetkoden) og [4](git-arbeidsflyt.qmd#lagre-kode-og-oppdatere-repoet-på-github) til oppgaven er ferdig
@@ -82,3 +93,4 @@ For eksempel ved å bruke GitHub sin *request review* funksjon. Eller sende meld
 Når en kollega har godkjent endringene vil *merge*-knappen bli grønn slik bildet nedenfor viser. Etter å ha merget vil man få muligheten til å seltte grenen enkelt ved å trykke på den grå knappen siste figur viser.
 
 **plaCEholder for figurene** Må få PR for denne grenen godkjent og ta skjermbilde*
+
