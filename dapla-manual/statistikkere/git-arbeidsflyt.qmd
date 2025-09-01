@@ -36,10 +36,10 @@ git pull # oppdaterer
 
 #### 2. Lag ny gren (*branch*)
 
-I vårt eksempel skal vi lage ekstremkontroller i produksjons repoet. Vi kaller derfor grenen `lag-ekstremkontroll`
+I vårt eksempel skal vi omstrukturere denne delen av manualen. Vi kaller derfor grenen `omstrukturere-git-github`
 
 ```{.bash filename="terminal"}
-git switch -c lag-ekstremkontroll # -c står for create
+git switch -c omstrukturere-git-github # -c står for create
 ```
 
 #### 3. Gjør endringer i repoet/koden
@@ -66,29 +66,39 @@ Om du vil legge til alle filer av en filtype kan man skrive `git add *<filtype>`
 
 #### 5. Gjenta [steg 3](git-arbeidsflyt.qmd#gjør-endringer-i-repoetkoden) og [4](git-arbeidsflyt.qmd#lagre-kode-og-oppdatere-repoet-på-github) til oppgaven er ferdig
 
-I eksempelet vårt gjelder det ekstremkontroller.
+#### 6. Sjekk for merge-konflikt: Merge inn endringer fra main til din gren
 
-#### 6. Opprett en pull request på GitHub
+Dette gjør vi fordi det er lettere å løse mergekonflikter lokalt enn på GitHub. Sjekk først at du har en 'ren' git status slik vist i [punkt 1.1](git-arbeidsflyt.qmd#sørg-for-at-repoet-ikke-har-ulagrede-endringer).
 
-##### 6.1 Finn repoet på GitHub
+```{.bash filename="terminal"}
+git fetch # Synkroniserer origin-biten av ditt lokale repo med github
+git merge origin/main # evt. origin/master om hovedgrena heter master
+git push
+```
 
-##### 6.2 Opprett ny pull request
+Om du får en merge-konflikt løser du dette slik det er beskrevet i siste del av denne artikkelen: [Hvordan løse en merge-konflikt](git-arbeidsflyt.qmd#hvordan-løse-en-merge-konflikt). 
+
+#### 7. Opprett en pull request på GitHub
+
+##### 7.1 Finn repoet på GitHub
+
+##### 7.2 Opprett ny pull request
 
 Har du nylig pushet kan du trykke på *Compare & pull request* der den lilla pilen  viser. Eventuelt kan man trykke på pull requets slik den grønne boblen viser.
 
 ![GitHub: opprett PR](../images/git-arbeidsflyt/github-pr1.png)
 
-##### 6.3 Beskriv endringene
+##### 7.3 Beskriv endringene
 ![GitHub: PR beskrivelse](../images/git-arbeidsflyt/github-pr2.png)
 
 
-##### 6.4 Be en kollega om se over 
+##### 7.4 Be en kollega om se over 
 
 For eksempel ved å bruke GitHub sin *request review* funksjon. Eller sende melding på teams 
 
 ![GitHub: Request Review](../images/git-arbeidsflyt/github-pr3.png)
 
-##### 6.5 Merge og slette gren
+##### 7.5 Merge og slette gren
 
 Når en kollega har godkjent endringene vil *merge*-knappen bli grønn slik bildet nedenfor viser. Etter å ha merget vil man få muligheten til å seltte grenen enkelt ved å trykke på den grå knappen siste figur viser.
 
@@ -99,3 +109,4 @@ Når en kollega har godkjent endringene vil *merge*-knappen bli grønn slik bild
 
 ![](../images/git-arbeidsflyt/git-arbeidsflyt-tegning.png)
 
+### Hvordan løse en merge-konflikt
