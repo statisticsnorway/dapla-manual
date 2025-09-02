@@ -1,6 +1,6 @@
 ---
 title: Editeringsrammeverket
-date-modified: 20/08/2025
+date-modified: 01/09/2025
 lightbox: true
 ---
 
@@ -21,13 +21,13 @@ Målet vårt med å standardisere oppsettet av editeringsapplikasjoner med en fe
 
 Det er *ikke* låst til en spesifikk lagringsteknologi eller datastruktur. Så lenge du kan få dataene dine inn i en pandas dataframe så kan du bruke rammeverket.
 
-- Men noen moduler forutsetter foreløpig en spesifikk datastruktur lagret i eimerdb.
+Men *noen* moduler forutsetter foreløpig en spesifikk datastruktur lagret i eimerdb.
 
 ## Hvordan kan jeg ta det i bruk?
 
-Det er noen forutsetninger før du kan sette igang med rammeverket. Det viktigste er at du må forberede dataene dine slik at de er klare for editering. Dette vil si at åpenbare feil skal rettes, maskinelle/automatiske rettinger skal være gjort og dataene må være strukturert på en måte som gjør at det er lett å bearbeide.
+Det er noen forutsetninger før du kan sette igang med rammeverket. Det viktigste er at du må forberede dataene dine slik at de er klare for editering. Dette vil si at åpenbare feil skal rettes, maskinelle/automatiske rettinger skal være gjort og dataene må være strukturert på en måte som gjør at det er lett å bearbeide. Hva som gjør data lett å bearbeide er vanskelig å gi en fasit på siden det kan være ulike hensyn for ulike data. For eksempel vil det for Altinn undersøkelser være nødvendig å strukturere data slik at du kan holde styr på hvilke enheter som har rapportert, hvilke innsendinger som tilhører hvilken enhet og hvilken innsending dataene dine kommer fra, for å håndtere dubletter.
 
-Det viktigste er at dine data struktureres på en måte som passer dine data. Du kan finne et forslag til datastruktur i dokumentasjonen i neste avsnitt og noen moduler forutsetter at dette oppsettet følges, men rammeverket er ikke låst til ett spesifikt oppsett.
+Du kan finne et forslag til datastruktur i dokumentasjonen i neste avsnitt og noen moduler forutsetter at dette oppsettet følges, men rammeverket er ikke låst til ett spesifikt oppsett.
 
 ## Hva trenger jeg å kunne?
 Du må ha litt python kompetanse, men hvor komfortabel du må være med python avhenger av hvor kompliserte behov du har.
@@ -41,7 +41,10 @@ Grovt sett kan kompetansekravet deles i tre nivåer.
 Kompleksiteten reduseres om du:
 
 - kan bruke eimerdb for å lagre dataene dine.
-- har enkle data (få variabler, flat struktur, ingen repeterende verdier).
+- har enkle data.
+    - få variabler
+    - flat struktur
+    - ingen repeterende verdier, at hver variabel kun forekommer 1 gang for hver observasjon.
 - Kan følge anbefalt datastruktur.
 - kan gjenbruke eksisterende moduler.
 
@@ -59,11 +62,11 @@ Nedenfor er en oversikt over dokumentasjonen for Editeringsrammeverket. Det er s
 For konkret bruk av biblioteket og koden er det best å se på dokumentasjonen i repoet og i koden, enten ved å se på [denne siden](https://statisticsnorway.github.io/ssb-dash-framework/) eller se direkte i repoet [github repoet](https://github.com/statisticsnorway/ssb-dash-framework/tree/main). Hvis du sjekker i repoet, ta gjerne en tur innom docs/ mappen.
 
 Vi har demoer som du kan se på, og som kan kjøres med dapla-felles tilgangen i Dapla lab som alle har. Du kan finne demoene [her](https://github.com/statisticsnorway/demo-ssb-dash-framework.git).
-- I tjenesten din kan du skrive dette inn under "Repo": https://github.com/statisticsnorway/demo-ssb-dash-framework.git
-- Hvis du vil teste hvordan det er å lage en editeringsapplikasjon så kan du bruke de samme dataene som demoene bruker.
-- Det anbefales også å 
+
+Hvis du vil teste hvordan det er å lage en editeringsapplikasjon så kan du bruke de samme dataene som demoene bruker.
 
 Vi har skrevet en veiledning for hvordan du kan tilpasse Altinn 3 data til å passe editeringsrammeverket [som du kan se på Confluence](https://statistics-norway.atlassian.net/wiki/pages/resumedraft.action?draftId=4679434501).
+
 - Noen moduler forutsetter at dataene dine er i eimerdb og følger foreslått datastruktur.
 - Om du ikke har en Altinn 3 undersøkelse kan veiledningen fortsatt være nyttig for å se en foreslått struktur på dataene.
 - Strukturen på dataene kan følges uavhengig av om du har dataene dine i parquet filer, eimerdb eller andre lagringsteknologier.
