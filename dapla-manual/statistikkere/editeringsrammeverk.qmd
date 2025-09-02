@@ -4,24 +4,27 @@ date-modified: 01/09/2025
 lightbox: true
 ---
 
-Editeringsrammeverket er et python bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier.
+Editeringsrammeverket er et Python-bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier.
 
-Målsettingen er at dette rammeverket skal være fleksibelt nok til at du kan tilpasse det til dine egne behov, spare deg mye tid ved å ha store deler av koden ferdig laget til gjenbruk, og at mest mulig av vedlikeholdet skal gjøres sentralt.
+Målsettingen er at rammeverket skal være fleksibelt nok til at du kan tilpasse det til egne behov, spare mye tid ved å ha store deler av koden ferdig laget til gjenbruk, og at mest mulig av vedlikeholdet gjøres sentralt.
 
 ## Hva er Editeringsrammeverket?
 
 Grunnen til at det heter Editeringsrammeverk og ikke Editeringsløsning er ganske enkelt at det ikke er en ferdig løsning, noe montering må påberegnes.
 
-Rammeverket tilrettelegger for gjenbruk på to måter.
+Rammeverket tilrettelegger for gjenbruk på to måter:
 
-- Den ene er at det inneholder flere moduler/komponenter som kan gjenbrukes. Disse krever litt ulike grader av tilpasning, alt fra null tilpasning til at dataene dine må settes opp på en spesifikk måte.
-- Den andre er at det er et standardisert oppsett på hvordan koden kan struktureres for å passe med kode andre har skrevet (se [contributing.md](https://github.com/statisticsnorway/ssb-dash-framework/blob/main/CONTRIBUTING.md) for detaljer).
+1) **Modulbasert**
+Rammeverket inneholder moduler/komponenter som kan gjenbrukes. Disse krever litt ulike grader av tilpasning, alt fra null tilpasning til at dataene dine må settes opp på en spesifikk måte.
 
-Målet vårt med å standardisere oppsettet av editeringsapplikasjoner med en felles ramme og lage gjenbrukbare komponenter er ment å redusere personavhengighet og samle mest mulig vedlikeholdsarbeidet på ett sted. I tillegg kan en felles struktur gjøre det enklere å lære av hverandre og utvide med mer felles funksjonalitet.
+2) **Standardisert oppsett for kode**
+Man må følge et standard oppsett for hvordan koden kan struktureres. Se [contributing.md](https://github.com/statisticsnorway/ssb-dash-framework/blob/main/CONTRIBUTING.md) for detaljer.
 
-Det er *ikke* låst til en spesifikk lagringsteknologi eller datastruktur. Så lenge du kan få dataene dine inn i en pandas dataframe så kan du bruke rammeverket.
+Disse prinsippene bidrar til å redusere personavhengighet og samle mest mulig vedlikeholdsarbeid på ett sted. I tillegg kan en felles struktur gjøre det enklere å lære av hverandre og utvide med mer felles funksjonalitet.
 
-Men *noen* moduler forutsetter foreløpig en spesifikk datastruktur lagret i eimerdb.
+Rammeverket er *ikke* låst til en spesifikk lagringsteknologi eller datastruktur: Så lenge du kan få dataene dine inn i en pandas dataframe kan du bruke rammeverket.
+
+Men *noen* moduler forutsetter foreløpig en spesifikk datastruktur lagret i [eimerdb](https://github.com/statisticsnorway/ssb-eimerdb).
 
 ## Hvordan kan jeg ta det i bruk?
 
@@ -34,26 +37,27 @@ Du må ha litt python kompetanse, men hvor komfortabel du må være med python a
 
 Grovt sett kan kompetansekravet deles i tre nivåer.
 
-- Enkle behov. Du kan gjenbruke ferdigbygde moduler og trenger ikke skreddersydde moduler.
-- Noen skreddersydde tabeller, figurer eller skjermbilder kreves.
-- Du har behov for skreddersydd funksjonalitet og egne moduler.
+*Nivå 1:* Gjenbruk av ferdigbygde moduler er tilstrekkelig.
+*Nivå 2:* Noen skreddersydde tabeller, figurer eller skjermbilder kreves.
+*Nivå 3:* Du har behov for skreddersydd funksjonalitet og egne moduler.
 
 Kompleksiteten reduseres om du:
 
 - kan bruke eimerdb for å lagre dataene dine.
-- har enkle data.
+- har enkle data:
     - få variabler
     - flat struktur
-    - ingen repeterende verdier, at hver variabel kun forekommer 1 gang for hver observasjon.
-- Kan følge anbefalt datastruktur.
+    - ingen repeterende verdier (hver variabel kun forekommer 1 gang for hver observasjon)
+- kan følge anbefalt datastruktur.
 - kan gjenbruke eksisterende moduler.
 
-Noen ting som øker kompleksitet:
+Kompleksitet økes om:
 
-- samme variabel kan ha mellom 0 og uendelig antall verdier for samme enhet, for eksempel at en bedrift kan ha gjort 0 eller mange investeringer og rapporterer opplysninger for hver enkelt investering, som skal behandles enkeltvis.
-- data med flere nivåer.
-- data med kompliserte/sammensatte sammenhenger mellom variabler.
-- behov for skreddersydde og sammensatte moduler
+- samme variabel kan ha mellom 0 og uendelig antall verdier for samme enhet
+    - Eks. en bedrift kan ha gjort 0 eller mange investeringer og rapporterer opplysninger for hver enkelt investering, som skal behandles enkeltvis.
+- datene har flere nivåer.
+- dataene har kompliserte/sammensatte sammenhenger mellom variabler.
+- du har behov for skreddersydde og sammensatte moduler
 
 ## Hvor er dokumentasjonen?
 
@@ -61,7 +65,7 @@ Nedenfor er en oversikt over dokumentasjonen for Editeringsrammeverket. Det er s
 
 For konkret bruk av biblioteket og koden er det best å se på dokumentasjonen i repoet og i koden, enten ved å se på [denne siden](https://statisticsnorway.github.io/ssb-dash-framework/) eller se direkte i repoet [github repoet](https://github.com/statisticsnorway/ssb-dash-framework/tree/main). Hvis du sjekker i repoet, ta gjerne en tur innom docs/ mappen.
 
-Vi har demoer som du kan se på, og som kan kjøres med dapla-felles tilgangen i Dapla lab som alle har. Du kan finne demoene [her](https://github.com/statisticsnorway/demo-ssb-dash-framework.git).
+Vi har demoer som du kan se på, og som kan kjøres med dapla-felles tilgangen i Dapla Lab. Du kan finne demoene [her](https://github.com/statisticsnorway/demo-ssb-dash-framework.git).
 
 Hvis du vil teste hvordan det er å lage en editeringsapplikasjon så kan du bruke de samme dataene som demoene bruker.
 
