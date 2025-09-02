@@ -1,0 +1,116 @@
+---
+title: "Anbefalt arbeidsflyt med Git"
+date-modified: 08/28/2025
+---
+
+
+Å lære seg å bruke git handler om å implementere nye rutiner i arbeidshverdagen. Vi kaller dette for *anbefalt arbeidsflyt*. Arbeidsflyten er noe man gjennomfører hyppig iløpet av en arbeidsdag om man jobber med kode. Vi beskriver derfor anbefalt git arbeidsflyt fra man begynner på en ny oppgave til den er avsluttet og merget til main.
+
+Denne siden er en inspirert av Beste Praksis sin confluence-artikkel [*Hvordan er Git anbefalt arbeidsflyt?*](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt).
+
+
+
+::: {.callout-tip}
+# Usikker på hva Git og GitHub er?
+Les vår artikkel om [Git og GitHub](git-og-github.qmd). Der kan du lære hva verktøyene er og hvorfor vi bruker de i SSB.
+:::
+
+### Arbeidsflyt
+
+#### 1. Oppdater ditt lokale repo
+
+##### 1.1 Sørg for at repoet ikke har ulagrede endringer 
+```{.bash filename="terminal"}
+git status # Viser hvilke filer som er endret, nye eller klare for commit
+```
+Vil du lagre endringene gjør du som beskrevet i [punkt 4](git-arbeidsflyt.qmd#lagre-kode-og-oppdatere-repoet-på-github). Hvis ikke kjører du følgende:
+
+```{.bash filename="terminal"}
+git reset --hard HEAD # forkaster endringer
+```
+##### 1.2 Oppdater lokal versjon av main
+```{.bash filename="terminal"}
+git switch main # bytt til main
+git pull # oppdaterer
+```
+
+#### 2. Lag ny gren (*branch*)
+
+I vårt eksempel skal vi omstrukturere denne delen av manualen. Vi kaller derfor grenen `omstrukturere-git-github`
+
+```{.bash filename="terminal"}
+git switch -c omstrukturere-git-github # -c står for create
+```
+
+#### 3. Gjør endringer i repoet/koden
+
+#### 4. Lagre kode og oppdatere repoet på GitHub
+
+Dette er hoveddelen av arbeidsflyten og en prosess man vil gjenta flere ganger før man er ferdig med en gren.
+
+```{.bash filename="terminal"}
+git status          # Viser hvilke filer som er endret, nye eller klare for commit
+git add <filnavn>   # For alle filer du vil ha med i committen
+git commit -m"<tekst som beksriver endringer>" 
+git push            # Sender endringene til GitHub
+```
+
+::: {.callout-tip}
+# Tips for git add
+`git add .` legger til alle filer! Da slipper man å skrive hvert filnavn.
+
+Man kan også legge til alt nytt innhold i en mappe ved å skrive `git add <mappenavn>`.
+
+Om du vil legge til alle filer av en filtype kan man skrive `git add *<filtype>`. For eksempel: `git add *.py`.
+:::
+
+#### 5. Gjenta [steg 3](git-arbeidsflyt.qmd#gjør-endringer-i-repoetkoden) og [4](git-arbeidsflyt.qmd#lagre-kode-og-oppdatere-repoet-på-github) til oppgaven er ferdig
+
+#### 6. Sjekk for merge-konflikt: Merge inn endringer fra main til din gren
+
+Dette gjør vi fordi det er lettere å løse mergekonflikter lokalt enn på GitHub. Sjekk først at du har en 'ren' git status slik vist i [punkt 1.1](git-arbeidsflyt.qmd#sørg-for-at-repoet-ikke-har-ulagrede-endringer).
+
+```{.bash filename="terminal"}
+git fetch # Synkroniserer origin-biten av ditt lokale repo med github
+git merge origin/main # evt. origin/master om hovedgrena heter master
+git push
+```
+
+Om du får en merge-konflikt løser du dette slik det er beskrevet i siste del av denne artikkelen: [Hvordan løse en merge-konflikt](git-arbeidsflyt.qmd#hvordan-løse-en-merge-konflikt). 
+
+#### 7. Opprett en pull request på GitHub
+
+##### 7.1 Finn repoet på GitHub
+
+##### 7.2 Opprett ny pull request
+
+Har du nylig pushet kan du trykke på *Compare & pull request* der den lilla pilen  viser. Eventuelt kan man trykke på pull requets slik den grønne boblen viser.
+
+![GitHub: opprett PR](../images/git-arbeidsflyt/github-pr1.png)
+
+##### 7.3 Beskriv endringene
+![GitHub: PR beskrivelse](../images/git-arbeidsflyt/github-pr2.png)
+
+
+##### 7.4 Be en kollega om se over 
+
+For eksempel ved å bruke GitHub sin *request review* funksjon. Eller sende melding på teams 
+
+![GitHub: Request Review](../images/git-arbeidsflyt/github-pr3.png)
+
+##### 7.5 Merge og slette gren
+
+Når en kollega har godkjent endringene vil *merge*-knappen bli grønn slik bildet nedenfor viser. Etter å ha merget vil man få muligheten til å seltte grenen enkelt ved å trykke på den grå knappen siste figur viser.
+
+**plaCEholder for figurene** Må få PR for denne grenen godkjent og ta skjermbilde*
+
+
+#### Arbeidsflyt og repo illustrert
+
+![](../images/git-arbeidsflyt/git-arbeidsflyt-tegning.png)
+
+### Hvordan løse en merge-konflikt
+
+Hvis to personer har endret samme linje i en fil vet ikke Git hvilken av endringene den skal velge. Dette kalles en merge-konflikt. I vårt tilfelle vil dette skje om endringene har skjedd i main etter at vi lagde grenen vår.
+
+Om en slik konflikt oppstår må man manuelt velge hvilken versjon man ønsker. Følg [denne veiledningen](https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/2951905285/Hvordan+l+se+en+merge-konflikt) (confluence) for å løse en merge-konflikt. 
