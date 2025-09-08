@@ -90,38 +90,45 @@ Utledes automatisk basert på datasettets [datatilstand](./datatilstander.qmd), 
 
 ---
 
-### Bruksrestriksjon
+### Bruksrestriksjoner
 
-🌐 *use_restriction*
+🌐 *use_restrictions*
 
 klargjorte data ⚠️ | statistikkdata ⚠️
 
-Angis om datasettet har bruksrestriksjoner. Datasett uten brukrestriksjoner trenger ikke å fylle ut feltet, og i json-utskriften vil verdien i dette feltet da vises som `null`. Følgende verdier er tillatt for datasett med bruksrestriksjoner:
+Angis om datasettet har bruksrestriksjoner. Et datasett kan fint ha null, én eller flere bruksrestriksjoner. Dersom datasettet har ingen brukrestriksjoner så kan feltet stå tomt, og i json-utskriften vil verdien i dette feltet da vises som `null`.
 
-#### Sletting/anonymisering
+Bruksrestriksjoner er oppgitt som en liste hvor var element har to felt som beskrevet under.
+
+#### Bruksrestriksjonstype
+
+Følgende verdier er tillatt for datasett med bruksrestriksjoner:
+
+##### Sletting/anonymisering
 
 🌐 *DELETION_ANONYMIZATION*
+
 *Datasettet er hentet inn til SSB med forutsetning om at opplysningene skal slettes eller anonymiseres innen et bestemt tidspunkt. F.eks. har samtykkebaserte surveydata alltid krav om anonymisering eller sletting innen et gitt tidspunkt.*
 
-#### Behandlingsbegrensninger
+##### Behandlingsbegrensninger
 
 🌐 *PROCESS_LIMITATIONS*
+
 *Datasettet er hentet inn til SSB med forutsetning om at opplysningene kun prosesseres på en forhåndsdefinert og begrenset måte. Et datasett kan f.eks. være hentet inn med begrensninger knyttet til hvilke andre data den kan kobles sammen med.*
 
-#### Sekundærbruksrestriksjoner
+##### Sekundærbruksrestriksjoner
 
 🌐 *SECONDARY_USE_RESTRICTIONS*
+
 *Datasettet er hentet inn under forutsetning av at opplysningene utelukkende benyttes av SSB til utvikling, utarbeiding eller formidling av offisiell statistikk. SSB kan ikke gi tilgang til opplysningene for utarbeiding av statistiske resultater og analyser, herunder forskning, jf. statikkloven § 14..*
 
 ---
 
-### Bruksrestriksjonsdato
+#### Bruksrestriksjonsdato
 
 🌐 *use_restriction_date*
 
-klargjorte data ⚠️ | statistikkdata ⚠️
-
-Angis kun dersom det er knyttet [bruksrestriksjoner](#bruksrestriksjon) til datasettet, og det finnes en “tiltaksdato”. En tiltaksdato kan f.eks. være at et datasett skal slettes eller anonymiseres på en gitt dato. Noen datasett med Bruksrestriksjon vil ikke ha en slik dato, f.eks. vil en behandlingsbegrensning normalt være permanent/tidsuavhengig, og da skal ikke dette feltet fylles ut. I json-utskriften vil verdien i dette feltet da vises som “null”.
+Angis kun dersom bruksrestriksjonen har en “tiltaksdato”. En tiltaksdato kan f.eks. være at et datasett skal slettes eller anonymiseres på en gitt dato. Noen datasett med Bruksrestriksjon vil ikke ha en slik dato, f.eks. vil en behandlingsbegrensning normalt være permanent/tidsuavhengig, og da skal ikke dette feltet fylles ut. I json-utskriften vil verdien i dette feltet da vises som `null`.
 
 Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](https://www.iso.org/iso-8601-date-and-time-format.html#:~:text=Therefore%2C%20the%20order%20of%20the,27%2018%3A00%3A00.000.).
 
