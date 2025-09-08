@@ -1,0 +1,77 @@
+---
+title: Breaking Changes i Datadoc-modellen 08.sept
+subtitle: Tilgjengelig i dapla-toolbelt-metadata v0.9.0
+categories:
+  - metadata
+  - datadoc
+  - dapla-toolbelt-metadata
+author:
+  - name: Miles Winther
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: mmw@ssb.no
+date: "09/08/2025"
+date-modified: "09/08/2025"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+## Introduksjon
+
+[dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) v0.9.0 slippes ut. Det inneholder noen Breaking Changes i strukturen av modellen. De alle fleste kommer ikke til å merke endringen dersom eksisterende Datadoc `...__DOC.json` filer blir oppgradert når de er åpnet og Datadoc-editor blir oppdatert i takt.
+
+## Hvorfor gjør vi endringene?
+
+Endringene er gjort for å:
+
+- Kunne i større grad knytte metadata til variablene slik at vi beskriver variablene mer nøyaktig.
+- Legge til rette for å ha flere bruksrestriksjoner knyttet til et datasett samtidig.
+
+## Hvem blir rammet?
+
+De som bruker `dapla-toolbelt-metadata` progammatisk og har kode som refererer til følgende metadata-felt eller enum kommer til å måtte oppdatere koden sin:
+
+```python
+meta.dataset.use_restriction         # Ny datastruktur
+meta.dataset.use_restriction_date    # Ny datastruktur
+
+model.UseRestriction.PROCESS_LIMITATIONS  # Nytt navn
+
+meta.dataset.contains_personal_data  # Kun tilgjengelig på variabel-nivå
+meta.dataset.unit_type               # Kun tilgjengelig på variabel-nivå
+meta.dataset.temporality_type        # Kun tilgjengelig på variabel-nivå
+meta.dataset.data_source             # Kun tilgjengelig på variabel-nivå
+
+```
+
+## Hvordan skal koden se ut nå?
+
+### Bruksrestriksjoner
+
+```python
+meta.dataset.use_restrictions = [
+    model.UseRestrictionItem(
+        model.UseRestrictionType.PROCESS_LIMITATIONS, date(2025, 12, 31)
+    ),
+    model.UseRestrictionItem(
+        model.UseRestrictionType.DELETION_ANONYMIZATION, None
+    ),
+]
+```
+
+### Felt flyttet til variabel-nivå
+
+```python
+my_variable = meta.variables_lookup[
+    "my_short_name"
+]
+my_variable.contains_personal_data = True
+my_variable.unit_type = "20"
+my_variable.temporality_type = model.TemporalityTypeType.ACCUMULATED
+my_variable.data_source = "23"
+```
+
+## Hva med Datadoc-editor
+
+Datadoc-editor oppdateres til å reflektere disse endringene. Det kommer informasjon om dette i et eget innlegg etterhvert.
