@@ -17,6 +17,122 @@
 <generator>quarto-1.7.34</generator>
 <lastBuildDate>Mon, 08 Sep 2025 00:00:00 GMT</lastBuildDate>
 <item>
+  <title>Breaking Changes i Datadoc-modellen</title>
+  <dc:creator>Miles Winther</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-09-08-datadoc-model-breaking-changes/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="introduksjon" class="level2">
+<h2 class="anchored" data-anchor-id="introduksjon">Introduksjon</h2>
+<p><a href="https://pypi.org/project/dapla-toolbelt-metadata/">dapla-toolbelt-metadata</a> v0.9.0 slippes ut. Det inneholder noen Breaking Changes i strukturen av modellen. De alle fleste kommer ikke til å merke endringen dersom eksisterende Datadoc <code>...__DOC.json</code> filer blir oppgradert når de er åpnet og Datadoc-editor blir oppdatert i takt.</p>
+</section>
+<section id="hvorfor-gjør-vi-endringene" class="level2">
+<h2 class="anchored" data-anchor-id="hvorfor-gjør-vi-endringene">Hvorfor gjør vi endringene?</h2>
+<p>Endringene er gjort for å:</p>
+<ul>
+<li>Kunne i større grad knytte metadata til variablene slik at vi beskriver variablene mer nøyaktig.</li>
+<li>Legge til rette for å ha flere bruksrestriksjoner knyttet til et datasett samtidig.</li>
+</ul>
+</section>
+<section id="hvem-blir-rammet" class="level2">
+<h2 class="anchored" data-anchor-id="hvem-blir-rammet">Hvem blir rammet?</h2>
+<p>De som bruker <code>dapla-toolbelt-metadata</code> progammatisk og har kode som refererer til følgende metadata-felt eller enum kommer til å måtte oppdatere koden sin:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">meta.dataset.use_restriction         <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Ny datastruktur</span></span>
+<span id="cb1-2">meta.dataset.use_restriction_date    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Ny datastruktur</span></span>
+<span id="cb1-3"></span>
+<span id="cb1-4">model.UseRestriction.PROCESS_LIMITATIONS  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Nytt navn</span></span>
+<span id="cb1-5"></span>
+<span id="cb1-6">meta.dataset.contains_personal_data  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span>
+<span id="cb1-7">meta.dataset.unit_type               <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span>
+<span id="cb1-8">meta.dataset.temporality_type        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span>
+<span id="cb1-9">meta.dataset.data_source             <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span></code></pre></div>
+</section>
+<section id="hvordan-skal-koden-se-ut-nå" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-skal-koden-se-ut-nå">Hvordan skal koden se ut nå?</h2>
+<section id="bruksrestriksjoner" class="level3">
+<h3 class="anchored" data-anchor-id="bruksrestriksjoner">Bruksrestriksjoner</h3>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">meta.dataset.use_restrictions <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb2-2">    model.UseRestrictionItem(</span>
+<span id="cb2-3">        model.UseRestrictionType.PROCESS_LIMITATIONS, date(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2025</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">31</span>)</span>
+<span id="cb2-4">    ),</span>
+<span id="cb2-5">    model.UseRestrictionItem(</span>
+<span id="cb2-6">        model.UseRestrictionType.DELETION_ANONYMIZATION, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span></span>
+<span id="cb2-7">    ),</span>
+<span id="cb2-8">]</span></code></pre></div>
+</section>
+<section id="felt-flyttet-til-variabel-nivå" class="level3">
+<h3 class="anchored" data-anchor-id="felt-flyttet-til-variabel-nivå">Felt flyttet til variabel-nivå</h3>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">my_variable <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> meta.variables_lookup[</span>
+<span id="cb3-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"my_short_name"</span></span>
+<span id="cb3-3">]</span>
+<span id="cb3-4">my_variable.contains_personal_data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb3-5">my_variable.unit_type <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"20"</span></span>
+<span id="cb3-6">my_variable.temporality_type <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> model.TemporalityTypeType.ACCUMULATED</span>
+<span id="cb3-7">my_variable.data_source <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"23"</span></span></code></pre></div>
+</section>
+</section>
+<section id="hva-med-datadoc-editor" class="level2">
+<h2 class="anchored" data-anchor-id="hva-med-datadoc-editor">Hva med Datadoc-editor</h2>
+<p>Datadoc-editor oppdateres til å reflektere disse endringene. Det kommer informasjon om dette i et eget innlegg etterhvert.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>metadata</category>
+  <category>datadoc</category>
+  <category>dapla-toolbelt-metadata</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-09-08-datadoc-model-breaking-changes/</guid>
+  <pubDate>Mon, 08 Sep 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
+<item>
   <title>Ny artikkel om Editeringsrammeverket</title>
   <dc:creator>Magnus Theodor Engh</dc:creator>
   <link>https://manual.dapla.ssb.no/news/posts/2025-09-08-editeringsrammeverk/</link>
@@ -1156,31 +1272,6 @@ font-style: inherit;">True</span>)</span></code></pre></div>
   <guid>https://manual.dapla.ssb.no/news/posts/2025-05-01-dapla-lab-groups/</guid>
   <pubDate>Thu, 01 May 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/news/posts/2025-05-01-dapla-lab-groups/viz.png" medium="image" type="image/png" height="86" width="144"/>
-</item>
-<item>
-  <title>Deling av data og /buckets</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-04-30-challenges-gcsfuse/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Etter noen måneder med erfaring med tilgjengeliggjøring av bøtter som filsystem i Dapla Lab, har vi erfart at funksjonaliteten i noen tilfeller har noen utfordringer.</p>
-<p>En utfordring oppstår når team skriver data til delt-bøtter direkte via Transfer Service, uten å logge seg inn på Dapla Lab etterpå. Hvis det delende teamet aldri åpner en tjeneste på Dapla Lab etter at dataene er delt, så vil ikke de dataene vises for konsumentene av dataene under /buckets/ i Dapla Lab.</p>
-<p>Årsaken er at opprettelsen av mapper krever skrivetilgang til bøtta, og det har ikke konsumenten av delte-data. Konsumentene vil kunne se dataene via <code>gs://</code>-stien, men ikke <code>/buckets/</code>-stien. Hvis data derimot deles ved at de produseres direkte fra en tjeneste på Dapla Lab, så vil ikke dette være en problemstilling.</p>
-<p>Vi jobber med å løse dette problemet, og finner forhåpentligvis en løsning innen kort tid.</p>
-
-
-
- ]]></description>
-  <category>dapla lab</category>
-  <category>datadeling</category>
-  <category>gcsfuse</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-04-30-challenges-gcsfuse/</guid>
-  <pubDate>Wed, 30 Apr 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/Dapla-Logo1.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>
 </rss>

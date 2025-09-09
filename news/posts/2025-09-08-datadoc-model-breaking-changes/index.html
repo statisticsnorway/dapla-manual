@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Miles Winther">
+<meta name="dcterms.date" content="2025-09-08">
 
-<title>Git arbeidsflyt i Jupyter – Dapla-manualen</title>
+<title>Breaking Changes i Datadoc-modellen – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +22,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../images/dapla-favicon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2ba89726b6a4d258419a048189a116fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-2ba89726b6a4d258419a048189a116fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,35 +105,50 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: white;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: white;
+background: #274247;
+      }
+</style>
 
 
-<meta property="og:title" content="Git arbeidsflyt i Jupyter – Dapla-manualen">
-<meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/git-grensesnitt/git-clone1.png">
+<meta property="og:title" content="Breaking Changes i Datadoc-modellen – Dapla-manualen">
+<meta property="og:description" content="Slippes i dapla-toolbelt-metadata v0.9.0">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:alt" content="Grensesnitt før kloning">
-<meta property="og:image:height" content="277">
-<meta property="og:image:width" content="275">
-<meta name="twitter:title" content="Git arbeidsflyt i Jupyter – Dapla-manualen">
-<meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/git-grensesnitt/git-clone1.png">
-<meta name="twitter:image:alt" content="Grensesnitt før kloning">
-<meta name="twitter:image-height" content="277">
-<meta name="twitter:image-width" content="275">
+<meta property="og:image:height" content="403">
+<meta property="og:image:width" content="863">
+<meta name="twitter:title" content="Breaking Changes i Datadoc-modellen – Dapla-manualen">
+<meta name="twitter:description" content="Slippes i dapla-toolbelt-metadata v0.9.0">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
+<meta name="twitter:image-height" content="403">
+<meta name="twitter:image-width" content="863">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Dapla-manualen</span>
     </a>
   </div>
@@ -107,31 +159,31 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../statistikkere/index.html"> 
+    <a class="nav-link" href="../../../statistikkere/index.html"> 
 <span class="menu-text">Manual</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../news/index.html"> 
+    <a class="nav-link" href="../../../news/index.html"> 
 <span class="menu-text">Nyheter</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog/index.html"> 
+    <a class="nav-link" href="../../../blog/index.html"> 
 <span class="menu-text">Blogg</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../faq.html"> 
+    <a class="nav-link" href="../../../faq.html"> 
 <span class="menu-text">FAQ</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../notebooks/index.html"> 
+    <a class="nav-link" href="../../../notebooks/index.html"> 
 <span class="menu-text">Eksempler</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../utviklere/lenker.html"> 
+    <a class="nav-link" href="../../../utviklere/lenker.html"> 
 <span class="menu-text">Utviklere</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../om-dapla.html"> 
+    <a class="nav-link" href="../../../om-dapla.html"> 
 <span class="menu-text">Om Dapla</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -203,171 +255,135 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Breaking Changes i Datadoc-modellen</h1>
+            <p class="subtitle lead">Slippes i dapla-toolbelt-metadata v0.9.0</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">metadata</div>
+                <div class="quarto-category">datadoc</div>
+                <div class="quarto-category">dapla-toolbelt-metadata</div>
+              </div>
+                  </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Forfatter</div>
+    <div class="quarto-title-meta-heading">Tilhører</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author">Miles Winther </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              Seksjon for dataplattform (724)
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Opprettet</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 8, 2025</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Sist endret</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">September 9, 2025</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#introduksjon" id="toc-introduksjon" class="nav-link active" data-scroll-target="#introduksjon">Introduksjon</a></li>
+  <li><a href="#hvorfor-gjør-vi-endringene" id="toc-hvorfor-gjør-vi-endringene" class="nav-link" data-scroll-target="#hvorfor-gjør-vi-endringene">Hvorfor gjør vi endringene?</a></li>
+  <li><a href="#hvem-blir-rammet" id="toc-hvem-blir-rammet" class="nav-link" data-scroll-target="#hvem-blir-rammet">Hvem blir rammet?</a></li>
+  <li><a href="#hvordan-skal-koden-se-ut-nå" id="toc-hvordan-skal-koden-se-ut-nå" class="nav-link" data-scroll-target="#hvordan-skal-koden-se-ut-nå">Hvordan skal koden se ut nå?</a>
+  <ul class="collapse">
+  <li><a href="#bruksrestriksjoner" id="toc-bruksrestriksjoner" class="nav-link" data-scroll-target="#bruksrestriksjoner">Bruksrestriksjoner</a></li>
+  <li><a href="#felt-flyttet-til-variabel-nivå" id="toc-felt-flyttet-til-variabel-nivå" class="nav-link" data-scroll-target="#felt-flyttet-til-variabel-nivå">Felt flyttet til variabel-nivå</a></li>
+  </ul></li>
+  <li><a href="#hva-med-datadoc-editor" id="toc-hva-med-datadoc-editor" class="nav-link" data-scroll-target="#hva-med-datadoc-editor">Hva med Datadoc-editor</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-09-08-datadoc-model-breaking-changes/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-09-08-datadoc-model-breaking-changes/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Git arbeidsflyt i Jupyter</h1>
-</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
 
 
-</header>
-
-
-<p>I denne artikkelen viser vi hvordan man gjennomfører anbefalt <a href="https://statistics-norway.atlassian.net/wiki/spaces/BEST/pages/3206283277/Hvordan+er+anbefalt+git+arbeidsflyt">git arbeidsflyt</a> i Jupyter med Git-grensesnittet.</p>
-<section id="git-clone" class="level5">
-<h5 class="anchored" data-anchor-id="git-clone">1. git clone</h5>
-<div id="fig-git-clone1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grensesnitt før kloning" width="40%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-git-clone1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-clone1.png" id="fig-git-clone1" class="img-fluid figure-img" style="width:40.0%" alt="Grensesnitt før kloning">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-git-clone1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;1
-</figcaption>
-</figure>
-</div>
-<div id="fig-git-clone2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grensesnitt ved kloning" width="50%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-git-clone2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-clone2.png" id="fig-git-clone2" class="img-fluid figure-img" style="width:50.0%" alt="Grensesnitt ved kloning">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-git-clone2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2
-</figcaption>
-</figure>
-</div>
+<section id="introduksjon" class="level2">
+<h2 class="anchored" data-anchor-id="introduksjon">Introduksjon</h2>
+<p><a href="https://pypi.org/project/dapla-toolbelt-metadata/">dapla-toolbelt-metadata</a> v0.9.0 slippes ut. Det inneholder noen Breaking Changes i strukturen av modellen. De alle fleste kommer ikke til å merke endringen dersom eksisterende Datadoc <code>...__DOC.json</code> filer blir oppgradert når de er åpnet og Datadoc-editor blir oppdatert i takt.</p>
 </section>
-<section id="git-switch-main-git-pull" class="level5">
-<h5 class="anchored" data-anchor-id="git-switch-main-git-pull">2. git switch main + git pull</h5>
-<div id="fig-git-clone2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git switch main + git pull" width="50%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-git-clone2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/switch-main-pull.png" id="fig-git-clone2" class="img-fluid figure-img" style="width:50.0%" alt="git switch main + git pull">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-git-clone2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;3
-</figcaption>
-</figure>
-</div>
+<section id="hvorfor-gjør-vi-endringene" class="level2">
+<h2 class="anchored" data-anchor-id="hvorfor-gjør-vi-endringene">Hvorfor gjør vi endringene?</h2>
+<p>Endringene er gjort for å:</p>
+<ul>
+<li>Kunne i større grad knytte metadata til variablene slik at vi beskriver variablene mer nøyaktig.</li>
+<li>Legge til rette for å ha flere bruksrestriksjoner knyttet til et datasett samtidig.</li>
+</ul>
 </section>
-<section id="git-status" class="level5">
-<h5 class="anchored" data-anchor-id="git-status">3. git status</h5>
-<div id="fig-untracked-changes" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git status" width="35%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-untracked-changes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-status.png" id="fig-untracked-changes" class="img-fluid figure-img" style="width:35.0%" alt="git status">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-untracked-changes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;4
-</figcaption>
-</figure>
-</div>
+<section id="hvem-blir-rammet" class="level2">
+<h2 class="anchored" data-anchor-id="hvem-blir-rammet">Hvem blir rammet?</h2>
+<p>De som bruker <code>dapla-toolbelt-metadata</code> progammatisk og har kode som refererer til følgende metadata-felt eller enum kommer til å måtte oppdatere koden sin:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>meta.dataset.use_restriction         <span class="co"># Ny datastruktur</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>meta.dataset.use_restriction_date    <span class="co"># Ny datastruktur</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>model.UseRestriction.PROCESS_LIMITATIONS  <span class="co"># Nytt navn</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>meta.dataset.contains_personal_data  <span class="co"># Kun tilgjengelig på variabel-nivå</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>meta.dataset.unit_type               <span class="co"># Kun tilgjengelig på variabel-nivå</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>meta.dataset.temporality_type        <span class="co"># Kun tilgjengelig på variabel-nivå</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>meta.dataset.data_source             <span class="co"># Kun tilgjengelig på variabel-nivå</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="git-add" class="level5">
-<h5 class="anchored" data-anchor-id="git-add">4. git add</h5>
-<div id="fig-untracked-changes" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grensesnittet ved ulagrede endringer" width="35%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-untracked-changes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-add1.png" id="fig-untracked-changes" class="img-fluid figure-img" style="width:35.0%" alt="Grensesnittet ved ulagrede endringer">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-untracked-changes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;5
-</figcaption>
-</figure>
-</div>
+<section id="hvordan-skal-koden-se-ut-nå" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-skal-koden-se-ut-nå">Hvordan skal koden se ut nå?</h2>
+<section id="bruksrestriksjoner" class="level3">
+<h3 class="anchored" data-anchor-id="bruksrestriksjoner">Bruksrestriksjoner</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>meta.dataset.use_restrictions <span class="op">=</span> [</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    model.UseRestrictionItem(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        model.UseRestrictionType.PROCESS_LIMITATIONS, date(<span class="dv">2025</span>, <span class="dv">12</span>, <span class="dv">31</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    model.UseRestrictionItem(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        model.UseRestrictionType.DELETION_ANONYMIZATION, <span class="va">None</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="git-commit" class="level5">
-<h5 class="anchored" data-anchor-id="git-commit">5. git commit</h5>
-<div id="fig-staged" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Commit message" width="40%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/commit.png" id="fig-staged" class="img-fluid figure-img" style="width:40.0%" alt="Commit message">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;6
-</figcaption>
-</figure>
-</div>
+<section id="felt-flyttet-til-variabel-nivå" class="level3">
+<h3 class="anchored" data-anchor-id="felt-flyttet-til-variabel-nivå">Felt flyttet til variabel-nivå</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_variable <span class="op">=</span> meta.variables_lookup[</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"my_short_name"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>my_variable.contains_personal_data <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>my_variable.unit_type <span class="op">=</span> <span class="st">"20"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>my_variable.temporality_type <span class="op">=</span> model.TemporalityTypeType.ACCUMULATED</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>my_variable.data_source <span class="op">=</span> <span class="st">"23"</span></span></code><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="git-push" class="level5">
-<h5 class="anchored" data-anchor-id="git-push">6. git push</h5>
-<div id="fig-staged" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git push" width="40%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-push.png" id="fig-staged" class="img-fluid figure-img" style="width:40.0%" alt="git push">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;7
-</figcaption>
-</figure>
-</div>
 </section>
-<section id="git-fetch" class="level5">
-<h5 class="anchored" data-anchor-id="git-fetch">7. git fetch</h5>
-<div id="fig-staged" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git fetch" width="40%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-pull.png" id="fig-staged" class="img-fluid figure-img" style="width:40.0%" alt="git fetch">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;8
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="git-merge-originmain" class="level5">
-<h5 class="anchored" data-anchor-id="git-merge-originmain">8. git merge origin/main</h5>
-<div id="fig-staged" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git merge" width="60%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-merge.png" id="fig-staged" class="img-fluid figure-img" style="width:60.0%" alt="git merge">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;9
-</figcaption>
-</figure>
-</div>
-<div id="fig-staged" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git merge2" width="60%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-merge2.png" id="fig-staged" class="img-fluid figure-img" style="width:60.0%" alt="git merge2">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;10
-</figcaption>
-</figure>
-</div>
-</section>
-<section id="git-push-1" class="level5">
-<h5 class="anchored" data-anchor-id="git-push-1">9. git push</h5>
-<div id="fig-staged" class="quarto-float quarto-figure quarto-figure-center anchored" alt="git push" width="40%">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/git-grensesnitt/git-push.png" id="fig-staged" class="img-fluid figure-img" style="width:40.0%" alt="git push">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-staged-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;11
-</figcaption>
-</figure>
-</div>
+<section id="hva-med-datadoc-editor" class="level2">
+<h2 class="anchored" data-anchor-id="hva-med-datadoc-editor">Hva med Datadoc-editor</h2>
+<p>Datadoc-editor oppdateres til å reflektere disse endringene. Det kommer informasjon om dette i et eget innlegg etterhvert.</p>
 
 
 </section>
@@ -780,7 +796,7 @@ Figur&nbsp;11
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/git-grensesnitt.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/git-grensesnitt.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-09-08-datadoc-model-breaking-changes/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-09-08-datadoc-model-breaking-changes/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
