@@ -1,0 +1,42 @@
+---
+title: Forbedret errormeldinger i dapla-toolbelt-metadata
+subtitle: Slippes i dapla-toolbelt-metadata v0.9.2
+categories:
+  - metadata
+  - datadoc
+  - dapla-toolbelt-metadata
+author:
+  - name: Miles Winther
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: mmw@ssb.no
+date: "09/15/2025"
+date-modified: "09/15/2025"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+## Introduksjon
+
+[dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) v0.9.2 er slippet ut. Det forbedrer errormeldinger som gis når man programmatisk produserer metadata for en ny periode slik at det er enklere å forstå hva det er som avviker.
+
+## Hvorfor gjør vi endringene?
+
+Når man [lager metadata for en ny periode av en statistikk](../../../statistikkere/datadoc-toolbelt.qmd#kopiere-fra-forrige-periode-uten-endringer) så ligger det en antagelse at det er ingen strukturelle endringer i datasettet. Hvis det er det så kan metadataene være feilaktig og det kan være en brudd i Daplas [system for versjonering av datasett](../../../statistikkere/navnestandard.qmd#versjonering-av-datasett).
+
+`dapla-toolbelt-metadata` gjør en rekke sjekker når man produserer metadataen for den nye perioden og utgir en error dersom det er oppdaget noe avvik. Sjekkene utført på variabler i et datasett var relativt enkle og selv om de plukket opp at det var noe avvik, så kommunisert de ikke hva avviket var på en god måte.
+
+`dapla-toolbelt-metadata` nå detekterer og tydelig kommuniserer alle disse ulike avvik mellom eksisterende metadata og nytt datasett:
+
+- Datasettet har **flere** variabler.
+- Datasettet har **færre** variabler.
+- Datasettet har et variabel med et annet navn.
+- Datasettet har ulik **rekkefølge** av variabler.
+- Datasettet har variabler med annen datatype.
+
+Dersom man er bevvist om risikoen for å produsere feilaktig metadata så kan man [slå av errorne slik](../../../statistikkere/datadoc-toolbelt.qmd#kopiere-fra-forrige-periode-med-endringer).
+
+## Eksempel på en av de nye feilmeldingene
+
+![Eksempel av error på avvik mellom nytt datasett og eksisterende metadata.](../../../images/dapla-toolbelt-metadata-inconsistent-datasets-error-example.png){fig-alt="Eksempel av error på avvik mellom nytt datasett og eksisterende metadata." #fig-dapla-toolbelt-metadata-inconsistent-datasets-error-example}
