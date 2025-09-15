@@ -4,13 +4,18 @@ date-modified: 01/09/2025
 lightbox: true
 ---
 
+## Hva er Editeringsrammeverket?
+
 Editeringsrammeverket er et Python-bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier.
 
 Målsettingen er at rammeverket skal være fleksibelt nok til at du kan tilpasse det til egne behov, spare mye tid ved å ha store deler av koden ferdig laget til gjenbruk, og at mest mulig av vedlikeholdet gjøres sentralt.
 
-## Hva er Editeringsrammeverket?
+Variabelvelgeren er en sentral del av rammeverket. Kort fortalt koordinerer den skjermbildene iapplikasjonen og sørger for at alt henger sammen.
 
-Grunnen til at det heter Editeringsrammeverk og ikke Editeringsløsning er ganske enkelt at det ikke er en ferdig løsning, noe montering må påberegnes.
+Rammeverket krever noe montering. Dette er grunnen til at det heter Editeringsrammeverk og ikke Editeringsløsning.
+
+
+## Gjenbruk som hovedprinsipp
 
 Rammeverket tilrettelegger for gjenbruk på to måter:
 
@@ -35,7 +40,7 @@ I denne delen gir vi en kort innføring i hvordan man tar i bruk rammeverket.
 poetry add ssb-dash-framework
 ```
 
-2) Opprett en app.py-fil med følgende kode:
+2) Opprett og kjør en `app.py`-fil med følgende kode:
 
 ```{.python filename="app.py"}
 import os
@@ -59,9 +64,34 @@ if __name__ == "__main__":
         jupyter_server_url=domain,
         jupyter_mode="tab"
     )
-
-
 ```
+
+3) Sett opp variabelvelgeren
+
+Som nevnt er variabelvelgeren en sentral del av rammeverket. Den sørger for at alt henger sammen. Slik setter du den opp:
+
+```{.python filename="hurtigstart.py"}
+from ssb_dash_framework import set_variables # importerer variabelvelgeren
+
+set_variables(["orgnr", "aar"]) # Dette gjør at orgnr og aar er tilgjengelig i applikasjonen din.
+start_verdier = { # Valgfritt å ha med, men kan være praktisk for brukervennlighet. Puttes inn i app.layout() funksjonen.
+    "orgnr": "971526920",
+    "aar": "2020"
+}
+```
+
+4) Legg til moduler
+
+Moduler er komponenter i applikasjonen din sopm gir spesifikke funksjoner eller funksjonalitet. Vi legger til modulene EditingTableTab og EditingTableWindow.
+
+Første steg er å importere modulene i `app.py`
+
+```.{python filename="app.py"}
+from ssb_dash_framework import EditingTableTab # Tab modulen
+from ssb_dash_framework import EditingTableWindow # Vindu modulen
+```
+
+
 
 Det er noen forutsetninger før du kan sette igang med rammeverket. Det viktigste er at du må forberede dataene dine slik at de er klare for editering. Dette vil si at åpenbare feil skal rettes, maskinelle/automatiske rettinger skal være gjort og dataene må være strukturert på en måte som gjør at det er lett å bearbeide. Hva som gjør data lett å bearbeide er vanskelig å gi en fasit på siden det kan være ulike hensyn for ulike data. For eksempel vil det for Altinn undersøkelser være nødvendig å strukturere data slik at du kan holde styr på hvilke enheter som har rapportert, hvilke innsendinger som tilhører hvilken enhet og hvilken innsending dataene dine kommer fra, for å håndtere dubletter.
 
