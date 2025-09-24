@@ -81,6 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-725912e2fd72a80ce1c9c5b91cbc5bd1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -617,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Maskinporten Guardian</span></a>
+ <span class="menu-text">Maskinporten</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -653,7 +656,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Google Cloud Console (GCC)</span></a>
+ <span class="menu-text">Anbefalt arbeidsflyt med Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -729,7 +732,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/appendix/innlogging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Innlogging</span></a>
+ <span class="menu-text">Dash og dashboard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -809,6 +812,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
     
   
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 7, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -929,7 +938,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fig-filename-breakdown" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-filename-breakdown-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/filename-breakdown.png" class="img-fluid figure-img" width="450">
+<a href="../images/filename-breakdown.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: De ulike delene av et standardisert filnavn"><img src="../images/filename-breakdown.png" class="img-fluid figure-img" width="450"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-filename-breakdown-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;1: De ulike delene av et standardisert filnavn
@@ -1681,6 +1690,38 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

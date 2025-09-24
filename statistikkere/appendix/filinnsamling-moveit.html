@@ -44,6 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-725912e2fd72a80ce1c9c5b91cbc5bd1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -580,7 +583,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Maskinporten Guardian</span></a>
+ <span class="menu-text">Maskinporten</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -616,7 +619,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Google Cloud Console (GCC)</span></a>
+ <span class="menu-text">Anbefalt arbeidsflyt med Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -692,7 +695,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../statistikkere/appendix/innlogging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Innlogging</span></a>
+ <span class="menu-text">Dash og dashboard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -774,10 +777,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Her finner du fremgangsmåten beskrevet for hvordan ditt team kan få på plass automatisert overføring av filer samlet inn via Moveit på bakken til teamets kildedatabøtte på Dapla.</p>
-<p><img src="../../images/filinnsamling-via-moveit-1.png" class="img-fluid" style="max-width: 70%;"></p>
+<p><a href="../../images/filinnsamling-via-moveit-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../../images/filinnsamling-via-moveit-1.png" class="img-fluid" style="max-width: 70%;"></a></p>
 <p>Fremgangsmåten beskrevet her innebærer en begrensning på at overflytting av filer til Dapla ikke kan utføres oftere enn en gang i timen. For de aller fleste er ikke dette en utfordring. Dersom dette er en utfordring for ditt team, ta kontakt på arkitektur@ssb.no.</p>
 <p><a href="../../statistikkere/transfer-service.html">Transfer Service</a> er en tjeneste som brukes til å flytte filer mellom bakke og sky. Når du skal ta i bruk tjenesten for å overføre data fra bakken til en kildedata-bøtte i Dapla-teamet ditt, så følger du <a href="../../statistikkere/transfer-service.html#overføring-av-data">denne beskrivelsen</a> på hvordan man setter opp overføringsjobber. Før du kan kan ta i bruk Transfer Service, må filene samlet inn via Moveit først flyttes til filområdet på “kilde” som Transfer Service benytter (/ssb/cloud_sync/”daplateamnavn”/tilsky).</p>
-<p><img src="../../images/filinnsamling-via-moveit-2.png" class="img-fluid" style="max-width: 70%;"></p>
+<p><a href="../../images/filinnsamling-via-moveit-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="../../images/filinnsamling-via-moveit-2.png" class="img-fluid" style="max-width: 70%;"></a></p>
 <p>Dette må settes opp av s782, og henvendelsen må gå via Kundeservice. Henvendelsen må inneholde:</p>
 <ul>
 <li>navn og epostadresse på den som leverer filene i MoveIT</li>
@@ -1242,6 +1245,38 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

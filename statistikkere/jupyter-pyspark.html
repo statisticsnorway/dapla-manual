@@ -79,6 +79,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-725912e2fd72a80ce1c9c5b91cbc5bd1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -617,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Maskinporten Guardian</span></a>
+ <span class="menu-text">Maskinporten</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -653,7 +656,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Google Cloud Console (GCC)</span></a>
+ <span class="menu-text">Anbefalt arbeidsflyt med Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -729,7 +732,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../statistikkere/appendix/innlogging.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Innlogging</span></a>
+ <span class="menu-text">Dash og dashboard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -817,7 +820,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><img src="../images/dapla-lab-jupyter-pyspark-service.png" class="img-fluid" style="max-width: 50%; float: right;" alt="Jupyter Service"></p>
+<p><a href="../images/dapla-lab-jupyter-pyspark-service.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/dapla-lab-jupyter-pyspark-service.png" class="img-fluid" style="max-width: 50%; float: right;" alt="Jupyter Service"></a></p>
 <p><strong>Jupyter-pyspark</strong> er en tjeneste på <a href="./dapla-lab.html">Dapla Lab</a> som lar brukerne kode i <a href="https://docs.jupyter.org/en/latest/">Jupyterlab</a>. Tjenesten kommer med Python, Pyspark og noen vanlige Jupyterlab-extensions ferdig installert. Målgruppen for tjenesten er brukere som skal skrive produksjonskode med Pyspark i Jupyterlab.</p>
 <p>Siden tjenesten er ment for produksjonskode så er det veldig få Python-pakker som er forhåndsinstallert. Antagelsen er at brukeren/teamet heller bør installere de pakkene de selv trenger, framfor at det ligger ferdiginstallerte pakker som skal dekke behovet til alle brukere/team i SSB. Det reduserer kompleksitet i tjenesten og dermed sannsynligheten for feilsituasjoner.</p>
 <section id="forberedelser" class="level2">
@@ -928,7 +931,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="fig-dapla-lab-monitoring" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Viser Persistence-fanen i Jupyter-pyspark-konfigurasjonen i Dapla Lab.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dapla-lab-monitoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../images/dapla-lab-monitoring.png" class="img-fluid figure-img" alt="Viser Persistence-fanen i Jupyter-pyspark-konfigurasjonen i Dapla Lab.">
+<a href="../images/dapla-lab-monitoring.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figur&nbsp;1: Monitorering av Jupyter-pyspark i Dapla Lab"><img src="../images/dapla-lab-monitoring.png" class="img-fluid figure-img" alt="Viser Persistence-fanen i Jupyter-pyspark-konfigurasjonen i Dapla Lab."></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-lab-monitoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figur&nbsp;1: Monitorering av Jupyter-pyspark i Dapla Lab
@@ -1368,6 +1371,38 @@ Figur&nbsp;1: Monitorering av Jupyter-pyspark i Dapla Lab
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
