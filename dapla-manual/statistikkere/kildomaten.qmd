@@ -1,23 +1,19 @@
 ---
 title: Kildomaten
-date-modified: 06/16/2025
+date-modified: 10/14/2025
 lightbox: true
 ---
 
-Kildomaten er en tjeneste for å automatisere overgangen fra [kildedata](./datatilstander.html#kildedata) til [inndata](./datatilstander.html#inndata).
+Kildomaten er en tjeneste for å automatisere deler av overgangen fra [kildedata](./datatilstander.html#kildedata) til [inndata](./datatilstander.html#inndata).
 
 Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjonn til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.
 
-Prosessering som skal skje i overgangen fra kildedata til inndata har SSB definert til å være:
+Anbefalt prosessering som bør skje i Kildomaten er:
 
 - **Dataminimering**:
 Fjerne alle felter som ikke er strengt nødvendig for å produsere statistikk.
 - **Pseudonymisering**:
 Pseudonymisering av personidentifiserende data.
-- **Kodeverk**:
-Legge på standard kodeverk fra for eksempel [Klass](https://www.ssb.no/klass/).
-- **Standardisering**:
-Tegnsett, datoformat, etc. endres til SSBs standardformat.
 
 En forutestning for å bruke kildomaten er å ha et [Dapla-team](hva-er-dapla-team.qmd).
 
@@ -27,13 +23,13 @@ Før et Dapla-team kan ta i bruk kildomaten må tjenesten være aktivert for tea
 
 ## Sette opp tjenesten
 
-I denne delen bryter vi ned prosessen med å sette opp kildomaten i de stegene vi mener er hensiktsmessige. Senere i artikkelen forklarer vi hvordan man setter den opp flere kilder og hvordan man vedlikeholder tjenesten.
+I denne delen bryter vi ned prosessen med å sette opp kildomaten i de stegene vi mener er hensiktsmessige. Senere i artikkelen forklarer vi hvordan man setter opp flere kilder og hvordan man vedlikeholder tjenesten.
 
 Husk at alle på teamet kan gjøre det meste av arbeidet her, men det er **data-admins** som må godkjenne at [tjenesten rulles ut](./kildomaten.html#rull-ut-tjenesten)^[I tillegg er det **data-admins** som må [teste tjenesten](./kildomaten.html#test-koden) manuelt hvis det gjøres på skarpe data, siden det kun er data-admins som kan få tilgang til de dataene.].
 
 ### Klone IaC-repoet
 
-Oppsett av kildomaten gjøres i teamets IaC-repo^[*Infrastructure-as-Code* (IaC) er repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub med navnet <teamnavn>-iac under [statisticsnorway](https://github.com/orgs/statisticsnorway/repositories)]. Når vi skal sette opp kildomaten må vi gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på [SSBs GitHub-organisasjon](https://github.com/statisticsnorway) og søke etter repoet som heter `<teamnavn>-iac`. Når du har funnet repoet så kan du gjøre følgende:
+Oppsett av kildomaten gjøres i teamets IaC-repo^[*Et Infrastructure-as-Code* (IaC)-repo er et GitHub-repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub med navnet <teamnavn>-iac under [statisticsnorway](https://github.com/orgs/statisticsnorway/repositories)]. Når vi skal sette opp kildomaten må vi gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på [SSBs GitHub-organisasjon](https://github.com/statisticsnorway) og søke etter repoet som heter `<teamnavn>-iac`. Når du har funnet repoet så kan du gjøre følgende:
 
 1. Klon teamets IaC-repo `git clone <repo-url>`
 2. Opprett en ny branch: `git switch -c add-kildomaten-source`
@@ -224,8 +220,7 @@ df = pd.read_csv(source_file)
 df2 = df[['col1', 'col2', 'col3']]
 
 # Skriver ut fil til produktbøtta
-dp.write_pandas(df2,
-            "gs://ssb-dapla-example-data-produkt-prod/test20231010.parquet")
+df2.to_parquet("gs://ssb-dapla-example-data-produkt-prod/test20231010.parquet")
 ```
 
 
@@ -253,15 +248,14 @@ def main(source_file):
     new_path2 = new_path.replace(".csv", ".parquet")
 
 # Skriver ut fil til produktbøtta
-    dp.write_pandas(df2, new_path2)
-
+    df2.to_parquet(new_path2)
 ```
 :::
 
 
 ::::
 
-De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta.
+De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta.
 
 Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.
 
