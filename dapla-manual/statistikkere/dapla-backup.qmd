@@ -1,0 +1,61 @@
+---
+title: Backup-løsning
+date-modified: 10/14/2025
+lightbox: true
+---
+
+Innhold i teamets bøtter tas automatisk backup av hver dag kl. 21. Ved behov kan filer eller mapper gjenopprettes fra backup.
+
+Backup-løsningen er felles for alle Dapla-team og settes opp automatisk via teamets infrastrukturkonfigurasjon (IaC).  
+Teamet trenger derfor ikke gjøre noe for å aktivere backup.
+
+## Hvilke bøtter tas med i backupen
+
+Som standard tas følgende bøtter med i backupen:
+
+1. **Kildebøtte**  
+   – `ssb-<team>-data-kilde-prod`
+
+2. **Produktbøtte**  
+   – `ssb-<team>-data-produkt-prod`
+
+3. **Delt-bøtter**  
+   – `ssb-<team>-data-delt-<navn>-prod`  
+   – Inkluderer alle delt-bøtter som teamet har opprettet
+
+::: {.callout-tip}
+## Tips
+Alle bøttene legges automatisk til i backup-løsningen.  
+Teamet trenger ikke å gjøre endringer i kode eller konfigurasjon for at dette skal fungere.
+:::
+
+## Krav og unntak
+
+Filer som ligger i mapper med navn **`tmp`** eller **`temp`** på øverste nivå i bøttene tas ikke med i backup-løsningen, og kan dermed ikke gjenopprettes.  
+Dette gjelder uansett bøttetype.
+
+Legg filer her dersom det **ikke er behov** for at de skal være en del av backup-ordningen.
+
+::: {.callout-tip}
+## Tips
+Bruk `tmp`- eller `temp`-mapper for midlertidige filer som ikke skal beholdes.  
+:::
+
+## Gjenoppretting (restore)
+
+Dersom en fil eller mappe ved en feiltakelse har blitt slettet fra en bøtte, kan den gjenopprettes fra backup.
+
+1. Identifiser filen eller mappen som skal gjenopprettes.  
+2. Opprett sak til kundeservice:  
+   [https://ssb.pureservice.com/](https://ssb.pureservice.com/)  
+3. Oppgi følgende informasjon:
+   - Fil- eller mappenavn som ønskes gjenopprettet  
+   - Ønsket plassering:
+     - Samme som opprinnelig  
+     - Alternativt i en midlertidig “restore”-mappe
+
+::: {.callout-warning}
+## Viktig
+Backup dekker kun bøtter som inngår i Dapla-buckets-featuren (`kilde`, `produkt` og `delt`).  
+Filer i `tmp` eller `temp` gjenopprettes **ikke**, selv om resten av bøtta tas med i backupen.
+:::
