@@ -1,0 +1,79 @@
+---
+title: Viktige endringer i Datadoc
+subtitle: Hva betyr dette for allerede dokumenterte filer i Datadoc? 
+categories:
+  - metadata
+  - datadoc
+  - dapla-toolbelt-metadata
+  - datadoc-editor
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "10/14/2025"
+date-modified: "10/14/2025"
+image: ../../../images/dapla-lab-datadoc-service.png
+draft: false
+lightbox: true
+---
+
+Tidligere annonserte vi at det er gjort [større endringer i Datadoc-modellen](../2025-09-08-datadoc-model-breaking-changes/index.qmd), dvs. endringer hvilken informasjon vi ønsker om våre datasett og variabler. Endringene ble implementert fom. v0.0.9 av [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/). Nå er det også gjort tilsvarende tilpasninger og endringer i [Datadoc-editor](../../../statistikkere/datadoc-editor.qmd). 
+
+## Hva er endret?
+
+Følgende endringer er gjort i Datadoc-modellen og Datadoc-editor:
+
+- feltene [Datakilde](../../../statistikkere/datadoc-model.qmd#datakilde) og [Temporalitetstype](../../../statistikkere/datadoc-model.qmd#temporalitetstype) kunne tidligere dokumenteres både på datasett- og variabelnivå. Etter endringen kan de bare dokumenteres på variabelnivå. 
+
+- feltene [Enhetstype](../../../statistikkere/datadoc-model.qmd#enhetstype) og [Inneholder personopplysninger](../../../statistikkere/datadoc-model.qmd#er-personopplysning) kunne tidligere dokumenteres på datasettnivå. Etter endringen kan de bare dokumenteres på variabelnivå. Feltet **Inneholder personopplysninger** har også endret navn til **Er personopplysning**.
+
+- implementert ny funksjonalitet i [Datadoc-editor](../../../statistikkere/datadoc-editor.qmd) for å lettere kunne gi samme verdi for alle variabler. Dette er et tiltak for å redusere arbeidsmengden ved dokumentasjon av data. Denne funksjonaliteten innføres for feltene [Enhetstype](../../../statistikkere/datadoc-model.qmd#enhetstype), [Datakilde](../../../statistikkere/datadoc-model.qmd#datakilde), [Temporalitetstype](../../../statistikkere/datadoc-model.qmd#temporalitetstype), [Variabelens rolle](../../../statistikkere/datadoc-model.qmd#variabelens-rolle), [Måleenhet](../../../statistikkere/datadoc-model.qmd#måleenhet) og [Multiplikasjonsfaktor](../../../statistikkere/datadoc-model.qmd#multiplikasjonsfaktor). 
+
+- implementert en forenklet måte å fylle inn informasjon om pseudonymisering i Datadoc-editor. 
+
+- implementert mulighet for å velge flere bruksrestriksjoner for et datasett.
+
+
+## Hvorfor er endringene gjort?
+
+Erfaringer fra bruk av Datadoc-editor, og behov knyttet til pseudonymisering, gjør at det nå er gjort noen endringer i modellen for Datadoc, og dermed også i Datadoc-editor. Dette er gjort for å forenkle innlegging av data, gi mer detaljert informasjon på variabelnivå og for å dokumentere hvilken pseudonymiseringsalgoritme som er brukt.
+
+## Hva betyr dette for meg?
+
+Endringene betyr ingenting for brukere som skal dokumentere et datasett for første gang etter oppdateringen. 
+
+Brukere som allerede har dokumentert datasett blir påvirket av endringene og må oppdatere eksisterende Datadoc-dokumentasjon til siste versjon av modellen. Et allerede dokumentert datasett vil automatisk oppdateres neste gang du åpner det i Datadoc-editor eller bruker dapla-toolbelt-metadata. Den automatiske oppdateringen innebærer at følgende endringer gjøres i dokumentasjonen din:
+
+- **Enhetstype**  
+Ved oppdateringen til den nye modellen, vil enhetstypen som er satt på datasettnivå (her var det bare mulig å velge én enhetstype), automatisk settes som enhetstype på hver variabel. 
+
+- **Inneholder personopplysninger**  
+Ved oppdatering til den nye modellen vil de som tidligere hadde fylt inn at datasettet inneholder personopplysninger få denne verdien på alle variabler i den nye modellen. Hvis noen av variablene ikke inneholder personopplysninger må brukeren endre dette for hver variabel. 
+
+- **Pseudonymisering**  
+Alle som har dokumenterer data som inkluderer pseudonymiserte variabler bør oppdatere til ny modell og dokumentere hvordan pseudonymiseringen er gjennomført. Dette er enklest å gjøre fra Datadoc-editor siden den kun lar deg velge mellom noen få alternativer, mens en programmatisk utfylling med dapla-toolbelt-metadata innebærer at man må kjenne til mange flere detaljer.
+
+### Programmatisk oppdatering
+
+I noen tilfeller kan det være enklere å oppdatere til den nye modellen programmatisk og ikke med Datadoc-editor. Under er et eksempel på hvordan man programmatisk oppdaterer en dokumentert enkeltfil: 
+
+```{.python filename="Notebook"}
+from pathlib import Path
+from dapla_metadata.datasets.core import Datadoc
+
+# Angi stien til metadatadokumentet
+meta_path = "/path/to/metadata.json"
+
+meta = Datadoc(metadata_document_path=meta_path)
+meta.write_metadata_document()
+print(f"Upgraded {Path(meta_path).stem} to v{meta.container.datadoc.document_version}")
+```
+
+### Ny funksjonalitet i Datadoc-editor
+
+Som nevnt tidligere, så er det nå mulig sette like verdier på visse felt for alle variabler. Dette er implementert under **Variabler** i Datadoc-editor med en egen fane for **Alle variabler**, slik som vist på @fig-datadoc-editor-multivar.
+
+![Ny funksjonalitet for sette verdier som skal gjelde for alle variabler](../../../images/datadoc-editor-multi-variables.png){#fig-datadoc-editor-multivar}
+
+Endringen er gjort for å gjøre det enklere å dokumentere data. Man kan da sette en verdi for alle variabler, og deretter endre på enkeltvariabler som skal ha en egen verdi. Dette kan være spesielt nyttig for de som har datasett med mange variabler.
