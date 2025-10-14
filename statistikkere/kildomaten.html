@@ -792,6 +792,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#endre-skript" id="toc-endre-skript" class="nav-link" data-scroll-target="#endre-skript">Endre skript</a></li>
   <li><a href="#endre-config.yaml" id="toc-endre-config.yaml" class="nav-link" data-scroll-target="#endre-config.yaml">Endre config.yaml</a></li>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/kildomaten.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/kildomaten.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -813,7 +814,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 16, 2025</p>
+      <p class="date-modified">October 14, 2025</p>
     </div>
   </div>
     
@@ -824,19 +825,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Kildomaten er en tjeneste for å automatisere overgangen fra <a href="./datatilstander.html#kildedata">kildedata</a> til <a href="./datatilstander.html#inndata">inndata</a>.</p>
+<p>Kildomaten er en tjeneste for å automatisere deler av overgangen fra <a href="./datatilstander.html#kildedata">kildedata</a> til <a href="./datatilstander.html#inndata">inndata</a>.</p>
 <p>Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjonn til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.</p>
-<p>Prosessering som skal skje i overgangen fra kildedata til inndata har SSB definert til å være:</p>
+<p>Anbefalt prosessering som bør skje i Kildomaten er:</p>
 <ul>
-<li><strong>Dataminimering</strong>:<br>
-Fjerne alle felter som ikke er strengt nødvendig for å produsere statistikk.</li>
-<li><strong>Pseudonymisering</strong>:<br>
-Pseudonymisering av personidentifiserende data.</li>
-<li><strong>Kodeverk</strong>:<br>
-Legge på standard kodeverk fra for eksempel <a href="https://www.ssb.no/klass/">Klass</a>.<br>
-</li>
-<li><strong>Standardisering</strong>:<br>
-Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
+<li><strong>Dataminimering</strong>: Fjerne alle felter som ikke er strengt nødvendig for å produsere statistikk.</li>
+<li><strong>Pseudonymisering</strong>: Pseudonymisering av personidentifiserende data.</li>
 </ul>
 <p>En forutestning for å bruke kildomaten er å ha et <a href="../statistikkere/hva-er-dapla-team.html">Dapla-team</a>.</p>
 <section id="forberedelser" class="level2">
@@ -845,13 +839,13 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 </section>
 <section id="sette-opp-tjenesten" class="level2">
 <h2 class="anchored" data-anchor-id="sette-opp-tjenesten">Sette opp tjenesten</h2>
-<p>I denne delen bryter vi ned prosessen med å sette opp kildomaten i de stegene vi mener er hensiktsmessige. Senere i artikkelen forklarer vi hvordan man setter den opp flere kilder og hvordan man vedlikeholder tjenesten.</p>
+<p>I denne delen bryter vi ned prosessen med å sette opp kildomaten i de stegene vi mener er hensiktsmessige. Senere i artikkelen forklarer vi hvordan man setter opp flere kilder og hvordan man vedlikeholder tjenesten.</p>
 <p>Husk at alle på teamet kan gjøre det meste av arbeidet her, men det er <strong>data-admins</strong> som må godkjenne at <a href="./kildomaten.html#rull-ut-tjenesten">tjenesten rulles ut</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <section id="klone-iac-repoet" class="level3">
 <h3 class="anchored" data-anchor-id="klone-iac-repoet">Klone IaC-repoet</h3>
 <p>Oppsett av kildomaten gjøres i teamets IaC-repo<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Når vi skal sette opp kildomaten må vi gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på <a href="https://github.com/statisticsnorway">SSBs GitHub-organisasjon</a> og søke etter repoet som heter <code>&lt;teamnavn&gt;-iac</code>. Når du har funnet repoet så kan du gjøre følgende:</p>
 <ol type="1">
-<li>Klon ned ditt teams Iac-repo <code>git clone &lt;repo-url&gt;</code></li>
+<li>Klon teamets IaC-repo <code>git clone &lt;repo-url&gt;</code></li>
 <li>Opprett en ny branch: <code>git switch -c add-kildomaten-source</code></li>
 </ol>
 </section>
@@ -867,8 +861,8 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── README.md</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│ </span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda.</p>
 <p>Skal du også bruke kildomaten i <strong>test</strong>-miljøet må du opprette en ny mappe og lage en PR i IaC-repoet til teamet. Da vil strukturen se slik ut:</p>
@@ -881,8 +875,8 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── README.md</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test/ </span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test/</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I mappestrukturen over har vi klargjort den grunnleggende mappestrukturen for å ta i bruk kildomaten i prod- og test-miljøet. Neste steg blir å legge de ulike kildene som egne mapper under <code>dapla-example-prod</code> og <code>dapla-example-test</code>. Det viser vi i neste avsnitt.</p>
 </section>
@@ -904,7 +898,7 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── altinn</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── ameld</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── nudb</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I eksempelet over ser vi at det er mapper i IaC-repoet for kildene <em>altinn</em> og <em>ameld</em> for både test- og prod-miljøet. I tillegg har test-miljøet en mappe for kilden <em>nudb</em>. Hver av disse kildene kan kjøre et eget Pyton-script på alle filer som skrives til en gitt filsti som man definerer selv.</p>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -940,13 +934,12 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── altinn/</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── config.yaml</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="konfigurasjonsfil" class="level4">
 <h4 class="anchored" data-anchor-id="konfigurasjonsfil">Konfigurasjonsfil</h4>
 <p>Kildomaten trigges ved at det oppstår nye filer i kildebøtta til teamet. Hvorvidt den skal trigges på alle filer, eller kun filer i en gitt undermappe, bestemmer brukeren ved å konfigurere tjenesten i <code>config.yaml</code>. Her kan du også angi hvor mye ressurser prosesseringen skal få.</p>
-<p>Hvis vi fortsetter eksempelet vårt fra tidligere med <code>dapla-example</code> kan vi tenke oss at teamet ønsker at kildomaten skal trigges på alle filer som oppstår i kildebøtta under filstien:<br>
-<code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code>.</p>
+<p>Hvis vi fortsetter eksempelet vårt fra tidligere med <code>dapla-example</code> kan vi tenke oss at teamet ønsker at kildomaten skal trigges på alle filer som oppstår i kildebøtta under filstien: <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code>.</p>
 <p>For å konfigurere tjenesten i kildomaten må vi legge til en fil som heter <code>config.yaml</code> under <code>automation/source-data/dapla-example-prod/altinn/</code> slik som vist tidligere. I dette tilfellet vil den ha innholdet som vist til venstre under:</p>
 <div class="columns">
 <div class="column" style="width:47.5%;">
@@ -970,8 +963,7 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">├── sykefra/</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── altinn/</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── freg/</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="at">       </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -988,7 +980,7 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>Som standard får hver prosessering med kildomaten 1 CPU-kjerne og 512MB minne/RAM. Hvis man skal gjøre mye prossesering, eller filene som prosesseres er veldig store, kan man sette <code>memory_size</code> opp til max 32GB minne. Antall CPU-kjerner blir satt implisitt ut i fra valg av <code>memory_size</code> iht til <a href="https://cloud.google.com/run/docs/configuring/services/memory-limits#cpu-minimum">begrensningene som Google setter for Cloud Run</a>. Se de <a href="https://github.com/statisticsnorway/terraform-dapla-source-data-processor/blob/b7655776258c79a91e97dd0da4c5c1e6f3631796/modules/processor-instance/locals.tf#L2">nøyaktige verdiene</a> som blir satt her.</p>
+<p>Som standard får hver prosessering med kildomaten 1 CPU-kjerne og 512MB minne/RAM. Hvis man skal gjøre mye prossesering, eller filene som prosesseres er veldig store, kan man sette <code>memory_size</code> opp til max 32GB minne. Antall CPU-kjerner blir satt implisitt ut i fra valg av <code>memory_size</code> iht til <a href="https://cloud.google.com/run/docs/configuring/workerpools/memory-limits#cpu-minimum">begrensningene som Google setter for Cloud Run</a>. Se de <a href="https://github.com/statisticsnorway/terraform-dapla-source-data-processor/blob/b7655776258c79a91e97dd0da4c5c1e6f3631796/modules/processor-instance/locals.tf#L2">nøyaktige verdiene</a> som blir satt her.</p>
 </div>
 </div>
 </div>
@@ -1008,8 +1000,8 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <ol type="1">
 <li>Skriptet ditt kommer til å bli kjørt på en-og-en fil.</li>
 <li>Skriptet ditt må skrive ut et unikt navn på filen som skal skrives til produktbøtta, ellers risikerer du at filer blir overskrevet.</li>
-<li>Python-pakkene som kan benyttes <a href="https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml">er definert her</a>. Ved behov for andre pakker, <a href="https://ssb.pureservice.com/#/categories/14/new">ta kontakt med Kundeservice</a>.</li>
-<li><a href="../statistikkere/hva-er-botter.html#bøttemontering-med-cloud-storage-fuse">Bøttemontering</a> gjelder ikke for kildomaten så man må bruke pakken <code>gcfs</code> når man gjør filoperasjoner i kildomaten.</li>
+<li>Python-pakkene som kan benyttes <a href="https://github.com/statisticsnorway/dapla-automation-processor/blob/main/pyproject.toml">er definert her</a>. Ved behov for andre pakker, <a href="https://ssb.pureservice.com/#/categories/14/new">ta kontakt med Kundeservice</a>.</li>
+<li><a href="../statistikkere/hva-er-botter.html#bøttemontering-med-cloud-storage-fuse">Bøttemontering</a> gjelder ikke for kildomaten, så man må bruke pakken <code>gcfs</code> når man gjør filoperasjoner i kildomaten.</li>
 </ol>
 </div>
 </div>
@@ -1018,9 +1010,22 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <li>Koden må ligge i en fil som heter <code>process_source_data.py</code>.</li>
 <li>Koden må pakkes inn i en funksjon som heter <code>main()</code>.</li>
 </ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Ikke bruk <code>sys.exit</code> eller lignende
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Skriptet ditt kjøres som en del av et større program, og bruk av <code>exit</code>-funksjoner vil hindre resten av Kildomaten i å virke som den skal og kan forårsake uprosesserte filer og uendelige omstarter. Hvis du har brukt <code>sys.exit</code> i skriptet ditt, vil dette oppdages i <em>pull request</em>-en og du vil bli hindret fra å rulle ut koden.</p>
+<p>Hvis du vil stoppe prosesseringen pga. en feil bør du bruke <em>exceptions</em>. Kildomaten forstår da at noe har gått galt i prosesseringen og vil i tillegg varsle teamet på e-post dersom dette har blitt <a href="./kildomaten.html#varsling-på-e-post">konfigurert</a>.</p>
+</div>
+</div>
 <p><code>main()</code> er en funksjon med ett parameter som heter <code>source_file</code> som du alltid får av kildomaten når en fil blir prosessert. Når man skriver koden kan man derfor anta at dette parameteret blir gitt til funksjonen, og du kan benytte det inne i <code>main</code>-funksjonen.</p>
-<p><code>source_file</code>-parameteret gir <code>main()</code> en ferdig definert filsti til filen som skal prosesseres. For eksempel kan <code>source_file</code> ha verdien<br>
-<code>gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv</code> hvis filen <code>test20231010.csv</code> dukker opp i <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code>.</p>
+<p><code>source_file</code>-parameteret gir <code>main()</code> en ferdig definert filsti til filen som skal prosesseres. For eksempel kan <code>source_file</code> ha verdien <code>gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv</code> hvis filen <code>test20231010.csv</code> dukker opp i <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code>.</p>
 <p>Hvis vi fortsetter eksempelet fra tidligere ser mappen i IaC-repoet vårt slik ut nå:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -1033,10 +1038,9 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── config.yaml</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="at">│...         </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Vi ser nå at filene <code>config.yaml</code> og <code>process_source_data.py</code> ligger i mappen<br>
-<code>automation/source-data/dapla-example-prod/ledstill/altinn/</code>. Senere, når vi har rullet ut tjenesten, vil en ny fil i <code>gs://ssb-dapla-exmaple-data-kilde-prod/ledstill/altinn/</code> trigge kildomaten og kjøre koden i <code>process_source_data.py</code> på filen.</p>
+<p>Vi ser nå at filene <code>config.yaml</code> og <code>process_source_data.py</code> ligger i mappen <code>automation/source-data/dapla-example-prod/ledstill/altinn/</code>. Senere, når vi har rullet ut tjenesten, vil en ny fil i <code>gs://ssb-dapla-exmaple-data-kilde-prod/ledstill/altinn/</code> trigge kildomaten og kjøre koden i <code>process_source_data.py</code> på filen.</p>
 <p>Under ser du et eksempel på hvordan en vanlig kodesnutt kan konverteres til å kjøre i kildomaten:</p>
 <div class="columns">
 <div class="column" style="width:47%;">
@@ -1055,8 +1059,7 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> df[[<span class="st">'col1'</span>, <span class="st">'col2'</span>, <span class="st">'col3'</span>]]</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriver ut fil til produktbøtta</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>dp.write_pandas(df2, </span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"gs://ssb-dapla-example-data-produkt-prod/test20231010.parquet"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>df2.to_parquet(<span class="st">"gs://ssb-dapla-example-data-produkt-prod/test20231010.parquet"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div><div class="column" style="width:6%;">
 
@@ -1080,36 +1083,24 @@ Tegnsett, datoformat, etc. endres til SSBs standardformat.</li>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    new_path2 <span class="op">=</span> new_path.replace(<span class="st">".csv"</span>, <span class="st">".parquet"</span>)</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Skriver ut fil til produktbøtta</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    dp.write_pandas(df2, new_path2)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    df2.to_parquet(new_path2)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<p>De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta.</p>
+<p>De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta.</p>
 <p>Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.</p>
 </section>
 </section>
 <section id="test-koden" class="level3">
 <h3 class="anchored" data-anchor-id="test-koden">Test koden</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Tilgang til kildedata
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Tilgang til kildedata i prod-miljøet er det kun gruppen <strong>data-admins</strong> som kan aktivere ved å bruke tilgangsstyringsløsningen <a href="https://jitaccess.dapla.ssb.no/">Just-in-Time Access (JIT)</a>. Les mer om hvordan <a href="./jit.html">JIT-løsningen fungerer her</a>. Ønsker man å kunne liste ut innhold fra bøtta må man aktivere rollen <code>ssb.buckets.list</code>. Ønsker man i tillegg å lese/skrive til bøtta må man også aktivere <code>ssb.bucket.write</code>. Tilgang til kildebøtta i test-miljøet krever ikke JIT-tilgang.</p>
-</div>
-</div>
-<p>Før man ruller ut koden i tjenesten er det greit å teste at alt fungerer som det skal i Jupyterlab. Hvis vi tar utgangspunkt i eksempelet over kan vi teste koden ved å kjøre følgende nederst i skriptet:</p>
+<p>Før man ruller ut koden i tjenesten er det greit å teste at alt fungerer som det skal i Dapla Lab. Hvis vi tar utgangspunkt i eksempelet over kan vi teste koden ved å kjøre følgende nederst i skriptet i en data-admins-tjeneste:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>process_source_data.py</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="process_source_data.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>main(<span class="st">"gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Merk at siden man i en data-admins-tjeneste kun har tilgang til kildebøtta, og ikke produktbøtta, så vil kjøringen feile når den prøver å skrive resultatet til en fil i produktbøtta.</p>
 <p>Når tjenesten er rullet ut vil det være dette som kjøres når en fil dukker opp i <code>gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code>. Ved å kjøre det manuelt på denne måten får vi sett at ting fungerer som det skal.</p>
 <p>Husk å fjerne kjøringen av koden før du ruller ut tjenesten.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -1169,16 +1160,16 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <li>Heter python-skriptet <code>process_source_data.py</code>?</li>
 <li>Finnes en <code>config.yaml</code> med gyldig <code>folder_prefix:</code>?</li>
 <li>Bruker <code>process_source_data.py</code> biblioteker som ikke <a href="https://github.com/statisticsnorway/dapla-source-data-processor/blob/main/pyproject.toml">er installert i kildomaten</a>?</li>
-<li>Har koden i <code>process_source_data.py</code> feil iht <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>?</li>
+<li>Har koden i <code>process_source_data.py</code> feil iht. <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>?</li>
+<li>Bruker du <code>sys.exit</code> i koden?</li>
 </ul>
-<p>Det kan også forekomme at <strong>Atlantis</strong>, verktøyet for å rulle ut endringer fra IaC-repoet til GCP, feiler. Da kan du prøve å skrive <code>atlantis plan</code> i kommentarfeltet til <em>pull request</em>’en, og testene vil kjøre på nytt. Hvis det fortsatt ikke fungerer kontakter man Dapla kundeservice.</p>
+<p>Det kan også forekomme at <strong>Atlantis</strong>, verktøyet for å rulle ut endringer fra IaC-repoet til GCP, feiler. Da kan du prøve å skrive <code>atlantis plan</code> i kommentarfeltet til <em>pull request</em>-en, og testene vil kjøre på nytt. Hvis det fortsatt ikke fungerer kontakter man Dapla kundeservice.</p>
 </div>
 </div>
 </section>
 <section id="test-tjenesten" class="level3">
 <h3 class="anchored" data-anchor-id="test-tjenesten">Test tjenesten</h3>
-<p>Når du har rullet ut tjenesten kan du <em>teste</em> tjenesten ved at <strong>data-admins</strong> flytter en fil til en den filstien kildomaten er satt opp for. I eksempelet vi har brukt tidligere, gjør du følgende: 1. Aktiverer JIT-tilgangen til kildedata (som beskrevet over). 2. Kopier en fil over til filstien:<br>
-<code>gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code> 3. Sjekk om filen ble skrevet til ønsket mappe i produktbøtta.</p>
+<p>Når du har rullet ut tjenesten kan du <em>teste</em> tjenesten ved at <strong>data-admins</strong> flytter en fil til den filstien kildomaten er satt opp for. I eksempelet vi har brukt tidligere, gjør du følgende: 1. Åpne en tjeneste i Dapla Lab med teamets data-admins-gruppe valgt i Data-menyen. 2. Kopier en fil over til filstien: <code>gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/</code> 3. Sjekk om filen ble skrevet til ønsket mappe i produktbøtta.</p>
 <p>Du kan også sjekke logger og monitorere kildomaten.</p>
 </section>
 <section id="monitorering-og-logging" class="level3">
@@ -1188,37 +1179,10 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <li><a href="https://console.cloud.google.com/">Logg deg inn</a> med SSB-bruker på GCC.</li>
 <li>Velg standardprosjektet i prosjektvelgeren<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</li>
 <li>Søk opp <strong>Cloud Run</strong> i søkefeltet på toppen av siden og gå inn på siden.</li>
+<li>Velg <strong>Worker Pools</strong> i menyen til venstre.</li>
 </ol>
-<p>På siden til <strong>Cloud Run</strong> vil du se en oversikt over alle kilder teamet har kjørende i kildomaten. De har formen <code>source-&lt;kildenavn&gt;-processor</code>. I eksempelet med team <strong>dapla-example</strong> tidligere, vil man da se en kilde som heter <code>source-altinn-processor</code>, siden mappen de opprettet under<br>
-<code>automation/source-data-dapla-example-prod/</code> i IaC-repoet heter <code>altinn</code>.</p>
+<p>På siden til <strong>Cloud Run Worker Pools</strong> vil du se en oversikt over alle kilder teamet har kjørende i kildomaten. De har formen <code>source-&lt;kildenavn&gt;-processor</code>. I eksempelet med team <strong>dapla-example</strong> tidligere, vil man da se en kilde som heter <code>source-altinn-processor</code>, siden mappen de opprettet under <code>automation/source-data/dapla-example-prod/</code> i IaC-repoet heter <code>altinn</code>.</p>
 <p>Trykker man seg inn på hver enkelt kilde vil man kunne monitorere aktiviteten i kilden, og man kan trykke seg videre for å se loggene.</p>
-<section id="sjekk-prosesseringsstatus" class="level4">
-<h4 class="anchored" data-anchor-id="sjekk-prosesseringsstatus">Sjekk prosesseringsstatus</h4>
-<p>Kildomaten lar deg sjekke om filprosessering har feilet, blitt vellykket eller forstatt pågår. Kodeeksempelet fordrer at man har installert python-pakken <a href="https://pypi.org/project/google-cloud-storage/">google-cloud-storage</a>.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>sjekk-status-kildomaten.py</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="sjekk-status-kildomaten.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>team <span class="op">=</span> <span class="st">"prisstat"</span> <span class="co"># skriv inn teamnavn</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>env <span class="op">=</span> <span class="st">"prod"</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"failed"</span> <span class="co"># let etter filer som har failed status. evt. done/processing for andre resultater</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"ra2900"</span> <span class="co"># refererer til denne mappen: https://github.com/statisticsnorway/prisstat-iac/tree/main/automation/source-data/prisstat-prod/ra2900 </span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> source_name.lower().replace(<span class="st">"_"</span>, <span class="st">"-"</span>)</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>prefix <span class="op">=</span> <span class="st">"ra2900"</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> client.bucket(<span class="ss">f"ssb-</span><span class="sc">{</span>team<span class="sc">}</span><span class="ss">-data-kilde-</span><span class="sc">{</span>env<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> blob <span class="kw">in</span> bucket.list_blobs(prefix<span class="op">=</span>prefix):</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> blob.metadata.get(<span class="ss">f"source-</span><span class="sc">{</span>source_name<span class="sc">}</span><span class="ss">-status"</span>, <span class="st">""</span>) <span class="op">==</span> status:</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    results.append(blob.name)</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results) <span class="co"># skriver ut filnavn for filer hvor prosessering feilet</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1238,15 +1202,60 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 </div>
 </div>
 </div>
+<section id="sjekk-prosesseringsstatus" class="level4">
+<h4 class="anchored" data-anchor-id="sjekk-prosesseringsstatus">Sjekk prosesseringsstatus</h4>
+<p>Kildomaten lar deg sjekke om filprosessering har feilet, blitt vellykket eller forstatt pågår. Kodeeksempelet fordrer at man har installert python-pakken <a href="https://pypi.org/project/google-cloud-storage/">google-cloud-storage</a>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sjekk-status-kildomaten.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="sjekk-status-kildomaten.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>team <span class="op">=</span> <span class="st">"prisstat"</span> <span class="co"># skriv inn teamnavn</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>env <span class="op">=</span> <span class="st">"prod"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="st">"failed"</span> <span class="co"># let etter filer som har failed status. evt. done/processing for andre resultater</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"ra2900"</span> <span class="co"># refererer til denne mappen: https://github.com/statisticsnorway/prisstat-iac/tree/main/automation/source-data/prisstat-prod/ra2900</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> source_name.lower().replace(<span class="st">"_"</span>, <span class="st">"-"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>prefix <span class="op">=</span> <span class="st">"ra2900"</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> client.bucket(<span class="ss">f"ssb-</span><span class="sc">{</span>team<span class="sc">}</span><span class="ss">-data-kilde-</span><span class="sc">{</span>env<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> blob <span class="kw">in</span> bucket.list_blobs(prefix<span class="op">=</span>prefix):</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> blob.metadata.get(<span class="ss">f"source-</span><span class="sc">{</span>source_name<span class="sc">}</span><span class="ss">-status"</span>, <span class="st">""</span>) <span class="op">==</span> status:</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    results.append(blob.name)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results) <span class="co"># skriver ut filnavn for filer hvor prosessering feilet</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 </section>
 <section id="skalering" class="level3">
 <h3 class="anchored" data-anchor-id="skalering">Skalering</h3>
-<p>Kildomaten er satt opp for å kunne prosessere hver kilde i 100 parallelle instanser samtidig. F.eks. hvis det oppstår 110 nye filer i en mappe som trigger en kildomaten-kilde, kan det prosesseres 100 filer samtidig. <a href="https://ssb.pureservice.com/#/categories/14/new">Ta kontakt med Kundeservice</a> hvis man har behov for ytterlige skalering.</p>
+<p>Kildomaten er satt opp for å kunne prosessere hver kilde i opptil 100 parallelle instanser samtidig. <a href="https://ssb.pureservice.com/#/categories/14/new">Ta kontakt med Kundeservice</a> hvis man opplever problemer med kapasiteten til Kildomaten.</p>
 </section>
 <section id="varsling-på-e-post" class="level3">
 <h3 class="anchored" data-anchor-id="varsling-på-e-post">Varsling på e-post</h3>
 <p>Kildomaten tilbyr e-postvarsling til teamet når tjenesten feiler. Opprett en Kundeservice-sak for å få satt opp e-postvarsling for teamet ditt.</p>
+<p>Varslene sendes dersom det oppstår en feilmelding under prosesseringen. Det betyr at dersom du vil trigge et varsel fra koden din, så har du to muligheter:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>varsling.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="varsling.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Bruk en exception.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   I dette tilfellet vil prosesseringen stanse og filen markeres som feilet.</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(source_file):</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"Kunne ikke prosessere fil pga.."</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Log en feilmelding manuelt</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  I dette tilfellet vil ikke prosesseringen stanse. Hvis ingen flere feil (exceptions) skjer,</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  så markeres filen som prosessert.</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(source_file):</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  logging.error(<span class="st">"Ikke-kritisk feil"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Som det er hintet til i koden så anbefales alternativ 1 for uhåndterbare feil hvor prosesseringen ikke kan fortsette, mens alternativ 2 passer bra for feil som ikke hindrer prosessering, men som man vil bli varlset om allikevel.</p>
 </section>
 <section id="flere-kilder-1" class="level3">
 <h3 class="anchored" data-anchor-id="flere-kilder-1">Flere kilder</h3>
@@ -1255,50 +1264,49 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <div class="code-with-filename-file">
 <pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── altinn/</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── config.yaml</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── ledstill/</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── config.yaml</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── altinn/</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── config.yaml</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── ledstill/</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── config.yaml</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I eksempelet over ser vi det er to kilder: <code>altinn</code> og <code>ledstill</code>. Hver kilde trigges på ulike filstier i kildebøtta, og python-koden som kjøres kan være ulik mellom kilder.</p>
 </section>
 <section id="test-miljø" class="level3">
 <h3 class="anchored" data-anchor-id="test-miljø">Test-miljø</h3>
 <p>I eksempelet som er brukt i denne artiklen er kildomaten satt opp i prodmiljøet til teamet. Man bør egentlig teste ut nye kilder i teamets test-miljø. Kildomaten er ikke satt opp i test-miljøet som standard, og derfor må det skrus på før man kan anvende det. Teamet kan gjøre det selv <a href="../statistikkere/features.html">ved å følge denne beskrivelsen</a> eller ta kontakt med kundeservice og få hjelp til dette.</p>
-<p>En av de store fordelene med å sette opp kildomaten-kilder i test-miljøet før man gjør det i prod-miljøet er at tilgangsstyringen til data er mye mindre streng. Det gjør det lettere for alle i teamet å utvikle koden som skal benyttes.</p>
+<p>En av de store fordelene med å sette opp kildomaten-kilder i test-miljøet før man gjør det i prod-miljøet er at tilgang til funksjonalitet i tjenester som pseudo-tjenesten er bredere. Det gjør det lettere for alle i teamet å utvikle koden som skal benyttes.</p>
 <p>Når man skal sette opp kildomaten i test-miljøet følger det samme oppskrift som vi har vist for prod-miljøet over. Den store forskjellen er at test-kilder skal legges under en egen mappe under <code>automation/source-data/</code> i teamets IaC-repo. Eksempelet under med team <strong>dapla-example</strong> viser hvordan man kan sette opp kildene <code>altinn</code> og <code>ledstill</code> for både prod- og test-testmiljøet:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       ├── altinn/</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       │       ├── config.yaml</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       │       └── process_source_data.py</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       └── ledstill/</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="at">│       │               ├── config.yaml</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">│       │               └── process_source_data.py</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test/</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── altinn/</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="at">│               │       ├── config.yaml</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="at">│               │       └── process_source_data.py</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── ledstill/</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="at">│                       ├── config.yaml</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="at">│                       └── process_source_data.py</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="at">│...           </span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       ├── altinn/</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       │       ├── config.yaml</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       │       └── process_source_data.py</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="at">│       │       └── ledstill/</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="at">│       │               ├── config.yaml</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="at">│       │               └── process_source_data.py</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test/</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="at">│               ├── altinn/</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="at">│               │       ├── config.yaml</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="at">│               │       └── process_source_data.py</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── ledstill/</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="at">│                       ├── config.yaml</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="at">│                       └── process_source_data.py</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Som vi ser av mappestrukturen over er det to mapper under<br>
-<code>automation/source-data</code>:</p>
+<p>Som vi ser av mappestrukturen over er det to mapper under <code>automation/source-data</code>:</p>
 <ul>
 <li>dapla-example-prod</li>
 <li>dapla-example-test</li>
@@ -1325,25 +1333,10 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <ol type="1">
 <li><strong>project-id</strong> for <em>standardprosjektet</em>. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>. Merk at dette ikke er kilde-prosjektet!</li>
 <li><strong>folder_prefix</strong> er mappen i kilde-bøtten som du ønsker at koden skal trigges på. Dette fungerer likt som tidligere forklart for <code>config.yaml</code>, men her har du også mulighet til å kunne trigge prosesseringen på en undermappe av stien som var satt i kildens config.yaml.</li>
-<li><strong>source_name</strong> er navnet på mappen i iac-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team <strong>dapla-example</strong> var <code>altinn</code>.</li>
+<li><strong>source_name</strong> er navnet på mappen i IaC-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team <strong>dapla-example</strong> var <code>altinn</code>.</li>
 </ol>
 <p>Hvis man under <strong>folder_prefix</strong> legger inn en hel filsti med filnavn og filending, så trigges Kildomaten kun på denne ene fila.</p>
 <p>Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle filer for kilde</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> trigger_source_data_processing</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>folder_prefix <span class="op">=</span> <span class="st">"ledstill/altinn/ra0678"</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>trigger_source_data_processing(project_id, source_name, folder_prefix, kuben<span class="op">=</span><span class="va">True</span>)          </span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på alle undermapper av<br>
-<code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/</code>.</p>
-<p>Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -1352,13 +1345,27 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>file_paths <span class="op">=</span> [</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data1.parquet'</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data2.parquet'</span>,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data3.parquet'</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> file_paths:</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    trigger_source_data_processing(project_id, source_name, <span class="bu">file</span>, kuben<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>folder_prefix <span class="op">=</span> <span class="st">"ledstill/altinn/ra0678"</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>trigger_source_data_processing(project_id, source_name, folder_prefix, kuben<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på alle undermapper av <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/</code>.</p>
+<p>Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> trigger_source_data_processing</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>file_paths <span class="op">=</span> [</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data1.parquet'</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data2.parquet'</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data3.parquet'</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> file_paths:</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    trigger_source_data_processing(project_id, source_name, <span class="bu">file</span>, kuben<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på de tre spesifike filene <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data1.parquet</code>, <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data2.parquet</code> og <code>ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data3.parquet</code>.</p>
 </section>
@@ -1389,6 +1396,39 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <li>Når endringene er godkjent så kan du <em>merge</em> inn i <code>main</code>-branchen.</li>
 </ol>
 <p>En endring i config.yaml krever at tjenesten rulles ut på nytt og tar derfor litt mer tid enn en endring i Python-skriptet.</p>
+</section>
+<section id="metadata" class="level3">
+<h3 class="anchored" data-anchor-id="metadata">Metadata</h3>
+<p>For å hindre dobbeltprosessering og forbedre ytelse bruker Kildomaten Cloud Storage sin innebygde metadatafunksjonalitet for å sette noen markører på kildedatafilene. Disse metadatane kan du hente ut f.eks. via dette scriptet:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sjekk-metadata.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="sjekk-metadata.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>team <span class="op">=</span> <span class="st">"dapla-example"</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>env <span class="op">=</span> <span class="st">"prod"</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"my-folder/my-file.parquet"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> client.bucket(<span class="ss">f"ssb-</span><span class="sc">{</span>team<span class="sc">}</span><span class="ss">-data-kilde-</span><span class="sc">{</span>env<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>blob <span class="op">=</span> bucket.get_blob(filename)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(blob.metadata)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Et eksempel på hvordan denne metadataen er som følger:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source-my-source-processor-generation</span><span class="kw">:</span><span class="at"> </span><span class="dv">2309419879432</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source-my-source-processor-status</span><span class="kw">:</span><span class="at"> done</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Status</strong>-feltet forteller deg om filen er ferdigprosessert, under arbeid eller om prosesseringen feilet. Verdien for dette feltet vil da være, henholdsvis, <code>done</code>, <code>processing</code> eller <code>failed</code>. Merk at filer som er markert som <code>failed</code> fremdeles kan bli plukket opp igjen, siden Kildomaten vil forsøke å prosessere filen 10 ganger før den gir opp.</p>
+<p><strong>Generation</strong>-feltet sier akkurat hvilken utgave av filen <strong>status</strong>-feltet gjelder. Dette feltet er nødvendig ettersom filens metadata ikke blir slettet når en ny utgave blir lastet opp, og Kildomaten må holde styr på hva den faktisk har prosessert. Du kan sjekke at dette er den nåværende utgaven av filen ved å sammenligne metadatafeltets verdi med filens <strong>generation</strong>-felt. Hvis vi utvider eksempelet ovenfor:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sjekk-metadata.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="sjekk-metadata.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>metadata_generation <span class="op">=</span> <span class="bu">int</span>(blob.metadata[<span class="st">"source-my-source-processor-generation"</span>])</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(metadata_generation <span class="op">==</span> blob.generation)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>
@@ -1399,7 +1439,7 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 
 <ol>
 <li id="fn1"><p>I tillegg er det <strong>data-admins</strong> som må <a href="./kildomaten.html#test-koden">teste tjenesten</a> manuelt hvis det gjøres på skarpe data, siden det kun er data-admins som kan få tilgang til de dataene.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><em>Infrastructure-as-Code</em> (IaC) er repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub med navnet <teamnavn>-iac under <a href="https://github.com/orgs/statisticsnorway/repositories">statisticsnorway</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></teamnavn></p></li>
+<li id="fn2"><p><em>Et Infrastructure-as-Code</em> (IaC)-repo er et GitHub-repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub med navnet <teamnavn>-iac under <a href="https://github.com/orgs/statisticsnorway/repositories">statisticsnorway</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></teamnavn></p></li>
 <li id="fn3"><p>Standardprosjektet har navnestrukturen <code>&lt;teamnavn&gt;-p</code><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
