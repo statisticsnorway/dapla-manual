@@ -15,7 +15,133 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.8.25</generator>
-<lastBuildDate>Mon, 13 Oct 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 14 Oct 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Viktige endringer i Datadoc</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-10-14-datadoc-update/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Tidligere annonserte vi at det er gjort <a href="../../../news/posts/2025-09-08-datadoc-model-breaking-changes/index.html">større endringer i Datadoc-modellen</a>, dvs. endringer hvilken informasjon vi ønsker om våre datasett og variabler. Endringene ble implementert fom. v0.0.9 av <a href="https://pypi.org/project/dapla-toolbelt-metadata/">dapla-toolbelt-metadata</a>. Nå er det også gjort tilsvarende tilpasninger og endringer i <a href="../../../statistikkere/datadoc-editor.html">Datadoc-editor</a>.</p>
+<section id="hva-er-endret" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-endret">Hva er endret?</h2>
+<p>Følgende endringer er gjort i Datadoc-modellen og Datadoc-editor:</p>
+<ul>
+<li><p>feltene <a href="../../../statistikkere/datadoc-model.html#datakilde">Datakilde</a> og <a href="../../../statistikkere/datadoc-model.html#temporalitetstype">Temporalitetstype</a> kunne tidligere dokumenteres både på datasett- og variabelnivå. Etter endringen kan de bare dokumenteres på variabelnivå.</p></li>
+<li><p>feltene <a href="../../../statistikkere/datadoc-model.html#enhetstype">Enhetstype</a> og <a href="../../../statistikkere/datadoc-model.html#er-personopplysning">Inneholder personopplysninger</a> kunne tidligere dokumenteres på datasettnivå. Etter endringen kan de bare dokumenteres på variabelnivå. Feltet <strong>Inneholder personopplysninger</strong> har også endret navn til <strong>Er personopplysning</strong>.</p></li>
+<li><p>implementert ny funksjonalitet i <a href="../../../statistikkere/datadoc-editor.html">Datadoc-editor</a> for å lettere kunne gi samme verdi for alle variabler. Dette er et tiltak for å redusere arbeidsmengden ved dokumentasjon av data. Denne funksjonaliteten innføres for feltene <a href="../../../statistikkere/datadoc-model.html#enhetstype">Enhetstype</a>, <a href="../../../statistikkere/datadoc-model.html#datakilde">Datakilde</a>, <a href="../../../statistikkere/datadoc-model.html#temporalitetstype">Temporalitetstype</a>, <a href="../../../statistikkere/datadoc-model.html#variabelens-rolle">Variabelens rolle</a>, <a href="../../../statistikkere/datadoc-model.html#måleenhet">Måleenhet</a> og <a href="../../../statistikkere/datadoc-model.html#multiplikasjonsfaktor">Multiplikasjonsfaktor</a>.</p></li>
+<li><p>implementert en forenklet måte å fylle inn informasjon om pseudonymisering i Datadoc-editor.</p></li>
+<li><p>implementert mulighet for å velge flere bruksrestriksjoner for et datasett.</p></li>
+</ul>
+</section>
+<section id="hvorfor-er-endringene-gjort" class="level2">
+<h2 class="anchored" data-anchor-id="hvorfor-er-endringene-gjort">Hvorfor er endringene gjort?</h2>
+<p>Erfaringer fra bruk av Datadoc-editor, og behov knyttet til pseudonymisering, gjør at det nå er gjort noen endringer i modellen for Datadoc, og dermed også i Datadoc-editor. Dette er gjort for å forenkle innlegging av data, gi mer detaljert informasjon på variabelnivå og for å dokumentere hvilken pseudonymiseringsalgoritme som er brukt.</p>
+</section>
+<section id="hva-betyr-dette-for-meg" class="level2">
+<h2 class="anchored" data-anchor-id="hva-betyr-dette-for-meg">Hva betyr dette for meg?</h2>
+<p>Endringene betyr ingenting for brukere som skal dokumentere et datasett for første gang etter oppdateringen.</p>
+<p>Brukere som allerede har dokumentert datasett blir påvirket av endringene og må oppdatere eksisterende Datadoc-dokumentasjon til siste versjon av modellen. Et allerede dokumentert datasett vil automatisk oppdateres neste gang du åpner det i Datadoc-editor eller bruker dapla-toolbelt-metadata. Den automatiske oppdateringen innebærer at følgende endringer gjøres i dokumentasjonen din:</p>
+<ul>
+<li><p><strong>Enhetstype</strong><br>
+Ved oppdateringen til den nye modellen, vil enhetstypen som er satt på datasettnivå (her var det bare mulig å velge én enhetstype), automatisk settes som enhetstype på hver variabel. Hvis datasettet inneholder ulike enhetstyper så må dette endres for hver varabel</p></li>
+<li><p><strong>Inneholder personopplysninger</strong><br>
+Ved oppdatering til den nye modellen vil de som tidligere hadde fylt inn at datasettet inneholder personopplysninger få denne verdien på alle variabler i den nye modellen. Hvis noen av variablene ikke inneholder personopplysninger må brukeren endre dette for hver variabel.</p></li>
+<li><p><strong>Pseudonymisering</strong><br>
+Alle som har dokumenterer data som inkluderer pseudonymiserte variabler bør oppdatere til ny modell og dokumentere hvordan pseudonymiseringen er gjennomført. Dette er enklest å gjøre fra Datadoc-editor siden den kun lar deg velge mellom noen få alternativer, mens en programmatisk utfylling med dapla-toolbelt-metadata innebærer at man må kjenne til mange flere detaljer.</p></li>
+</ul>
+<section id="programmatisk-oppdatering" class="level3">
+<h3 class="anchored" data-anchor-id="programmatisk-oppdatering">Programmatisk oppdatering</h3>
+<p>I noen tilfeller kan det være enklere å oppdatere til den nye modellen programmatisk og ikke med Datadoc-editor. Under er et eksempel på hvordan man programmatisk oppdaterer en dokumentert enkeltfil:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Notebook" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pathlib <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Path</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dapla_metadata.datasets.core <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Datadoc</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Angi stien til metadatadokumentet</span></span>
+<span id="cb1-5">meta_path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/path/to/metadata.json"</span></span>
+<span id="cb1-6"></span>
+<span id="cb1-7">meta <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Datadoc(metadata_document_path<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>meta_path)</span>
+<span id="cb1-8">meta.write_metadata_document()</span>
+<span id="cb1-9"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"Upgraded </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>Path(meta_path)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>stem<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> to v</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>meta<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>container<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>datadoc<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>document_version<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span></code></pre></div></div>
+</div>
+</section>
+<section id="ny-funksjonalitet-i-datadoc-editor" class="level3">
+<h3 class="anchored" data-anchor-id="ny-funksjonalitet-i-datadoc-editor">Ny funksjonalitet i Datadoc-editor</h3>
+<p>Som nevnt tidligere, så er det nå mulig sette like verdier på visse felt for alle variabler. Dette er implementert under <strong>Variabler</strong> i Datadoc-editor med en egen fane for <strong>Alle variabler</strong>, slik som vist på Figur&nbsp;1.</p>
+<div id="fig-datadoc-editor-multivar" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-datadoc-editor-multivar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../../../images/datadoc-editor-multi-variables.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Ny funksjonalitet for sette verdier som skal gjelde for alle variabler"><img src="https://manual.dapla.ssb.no/images/datadoc-editor-multi-variables.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-datadoc-editor-multivar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Ny funksjonalitet for sette verdier som skal gjelde for alle variabler
+</figcaption>
+</figure>
+</div>
+<p>Endringen er gjort for å gjøre det enklere å dokumentere data. Man kan da sette en verdi for alle variabler, og deretter endre på enkeltvariabler som skal ha en egen verdi. Dette kan være spesielt nyttig for de som har datasett med mange variabler.</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>metadata</category>
+  <category>datadoc</category>
+  <category>dapla-toolbelt-metadata</category>
+  <category>datadoc-editor</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-10-14-datadoc-update/</guid>
+  <pubDate>Tue, 14 Oct 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-lab-datadoc-service.png" medium="image" type="image/png" height="74" width="144"/>
+</item>
 <item>
   <title>Utfasing av dapla-toolbelt</title>
   <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
@@ -815,28 +941,6 @@ Figur&nbsp;1: Visning av en beskrivelse fra det nye kapitlet.
   <guid>https://manual.dapla.ssb.no/news/posts/2025-06-02-datadoc-model/</guid>
   <pubDate>Mon, 02 Jun 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/news/posts/2025-06-02-datadoc-model/datadoc-model-name.png" medium="image" type="image/png" height="67" width="144"/>
-</item>
-<item>
-  <title>Økt ytelse i Kildomaten</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-05-21-kildomaten-instances/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Kildomaten vil nå som standard prosessere 100 filer parallelt, mot 5 tidligere. Endringen vil spesielt forbedre ytelsen for team som mottar svært mange filer kildebøtta som skal prosesseres med en Kildomaten-jobb. Antall parallelle prosesser kan også økes over 100 som er standard, men vi ønsker da at teamet tar kontakt med Kundeservice slik at vi kan få erfaringer med hvordan andre systemer, som pseudonymisering, håndterer dette.</p>
-<p>Forbedringen i ytelse påvirker i hovedsak Kildoamten sin evne til å prosessere mange små/mellomstore filer, og ikke hvordan den håndterer store filer. Team Statistikktjenester jobber kommer fremover til iverksette tiltak å øke kapasiteten på prosessering av store filer også.</p>
-<p><a href="../../../statistikkere/kildomaten.html#skalering">Les oppdatert dokumentasjon for Kildomaten her</a>.</p>
-
-
-
- ]]></description>
-  <category>kildomaten</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-05-21-kildomaten-instances/</guid>
-  <pubDate>Wed, 21 May 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 </channel>
 </rss>
