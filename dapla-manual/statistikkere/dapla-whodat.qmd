@@ -1,0 +1,476 @@
+---
+title: dapla-toolbelt-whodat
+date-modified: 14/10/2025
+lightbox: true
+crossref:
+  thm-prefix: ""
+  thm-labels: Eksempel
+  thm-title: ""
+---
+
+[dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er en Python-pakke som gir statistikere
+mulighet for å søke etter fødselsnummer basert på hjelpeopplysninger - for eksempel navn, adresse eller kommunenummer.
+Funksjonaliteten kan hjelpe statistikere å beholde rader som ellers hadde blitt forkastet, fordi man har manglende
+eller feil identifikator i datasettet. *dapla-toolbelt-whodat* er, bak kulissene, et tynt lag rundt
+Skatteetatens folkeregister-søk.
+
+Siden tilgang til direkte identifiserende opplysninger er underlagt strenge regler, så krever bruken av *dapla-toolbelt-whodat* at man forholder seg til vedtatte standarder som [datatilstander](./datatilstander.html) og systemer som [Kildomaten](./kildomaten.html). I tillegg er det en streng tilgangsstyring til hvor man kan kalle funksjonaliteten fra.
+
+## Forberedelser
+
+Før man tar i bruk funksjonaliteten er det viktig at man kjenner godt til [tilgangstyring i Dapla-team](./tilgangsstyring.html) og [Kildomaten](./kildomaten.html), og har diskutert med seksjonen hvordan man skal behandle direkte identifiserende opplysninger i de aktuelle dataene. 
+
+For at et Dapla-team skal kunne bruke dapla-toolbelt-whodat må [Kildomaten](./kildomaten.html) være skrudd på for miljøet^[Et Dapla-team har både et test- og et prod-miljø. Kildomaten må være skrudd på i det miljøet du ønkser å benytte dapla-toolbelt-whodat fra.] man ønsker å jobbe fra. Som standard får alle statistikkteam skrudd på Kildomaten i prod-miljøet og ikke i test-miljøet. Ønsker du å aktivere Kildomaten i test-miljøet kan dette gjøres selvbetjent som en [feature](./features.html).
+
+## Tilgangsstyring
+
+Tilgang til å funksjonalitet i dapla-toolbelt-whodat kan regnes som sensitivt i seg selv, og derfor er det en streng tilgangsstyring for bruk av tjenesten. I prod-miljøet kan man kun ta i bruk funksjonaliteten ved å prosessere dataene i Kildomaten, og det er bare tilgangsgruppen [data-admins](./hva-er-dapla-team.html#data-admins) som har tilgang til å godkjenne slike automatiske prosesseringer. I test-miljøet, derimot, kan alle på teamet benytte seg av all funksjonalitet, siden det aldri skal forekomme ekte data.
+
+
+::: {#tbl-whodat-panel layout-nrwos=2}
+| Aktør                     | FNR-leting |
+| ------------------------- | :-------:  |
+| Kildomaten                | &#x2705;   |
+| data-admins (interaktivt) | &#x2705;   |
+| developers (interaktivt)  | &#x2705;   |
+
+: Test-miljø {#tbl-whodat-first}
+
+| Aktør                      | FNR-leting |
+| -------------------------- | :-------:  |
+| Kildomaten                 | &#x2705;   |
+| data-admins (interaktivt)  | &#128683;  |
+| developers (interaktivt)   | &#128683;  |
+
+: Prod-miljø {#tbl-whodat-second}
+
+Tilgangsstyring til dapla-toolbelt-whodat
+:::
+
+I @tbl-whodat-panel ser vi fra @tbl-whodat-first at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-whodat, både fra Kildomaten og når man jobber interaktivt^[Med interaktiv jobbing menes at man skriver og kode og får tilbake output i samme verktøy. F.eks. er Jupyterlab et eksempel på et verktøy som lar deg jobbe interaktivt med data.] i Jupyterlab. @tbl-whodat-second viser at det kun er tilgang til *FNR-leting* fra Kildomaten i prod-miljøet, og man kan ikke kan bruke biblioteket interaktivt, da det potensielt kan avsløre samtlige FNR. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.
+
+
+## Installering
+
+[dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er ferdig installert i Kildomaten. Men ønsker du å bruke den i test-miljøet til teamet så kan du installere det i et [ssb-project](./jobbe-med-kode.html) fra [PyPI](https://pypi.org/) med denne kommandoen: 
+
+```{.bash filename="Terminal"}
+poetry add dapla-toolbelt-whodat
+```
+
+## Spesifikasjon
+
+### Dataformater
+
+*dapla-toolbelt-pseudo* støtter innlesing av følgende dataformater: 
+
+- [Pandas dataframes](https://pandas.pydata.org/docs/index.html)
+- [Polars dataframes](https://docs.pola.rs/py-polars/html/reference/index.html)
+
+Eksemplene under viser hovedskelig innlesing av dataframes fra minnet.
+
+### Variabler og modifikatorer
+
+**Variabler** er radvis data som blir brukt i søket for et enkelt fødselsnummer og vil være forskjellig for hver rad.
+
+**NB:** Alle variabler må være strengverdier i den faktiske DataFramen. Tall-typer støttes ikke.
+
+::: {#tbl-whodat-variables }
+| Variabel                 | Format                                               | Kommentar                                               |
+|:------------------------  |:------------------------------------------------------|:---------------------------------------------------------|
+| **navn**                 | Et eller flere hele ord fra personnavnet, skilt med mellomrom. | Tegnsetting: "Åse" og "Günther" er gyldig, men ikke "مُحَمَّد" |
+| **kjoenn**               | 'mann' eller 'kvinne'                               |                                                          |
+| **foedselsdato**         | "YYYYMMDD"                                          |                                                          |
+| **foedselsaarFraOgMed**  | "YYYY"                                              | Laveste fødselsår                                        |
+| **foedselsaarTilOgMed**  | "YYYY"                                              | Høyeste fødselsår                                        |
+| **adressenavn**          | Minst 3 tegn fra begynnelsen av gatenavn            |                                                          |
+| **husnummer**            | Husnummer, med eller uten bokstav                   |                                                          |
+| **postnummer**           | Fire siffer                                         |                                                          |
+| **kommunenummer**        | Fire siffer                                         |                                                          |
+| **fylkesnummer**         | To siffer                                           |                                                          |
+
+Variabler
+
+:::
+
+<br>
+
+**Modifikatorer** er verdier som endrer søket, men er uavhengige av radverdiene - de utføres for hver rad.
+
+::: {#tbl-whodat-modifiers}
+| Modifikator             | Format                             | Default-verdi |  Kommentar                                                                                                   |
+|:--------------------------|:-------------------------------  |:--------------|:-------------------------------------------------------------------------------------------------------------|
+| **inkluder_oppholdsadresse** | true eller false              | false         | Treffer oppholdsasdresse i tillegg til bostedsadresse                                               |
+| **soek_fonetisk**            | true eller false              | false         | Søk på fonetisk lignende navn                                                                               |
+| **inkluder_doede**           | true eller false              | false         | Søket treffer også døde personer                                                                            |
+| **opplysningsgrunnlag**      | "gjeldende" eller "historisk" | "gjeldende".  | Styrer håndtering av historikk. Påvirker kun navn og adresse – for andre opplysninger søkes det alltid kun på gjeldende |
+
+Modifikatorer
+
+::: 
+
+## Arbeidsflyt
+
+En vanlig arbeidsflyt i Kildomaten for å bruke dette biblioteket vil være følgende:
+
+1. Bruke Validator()-funksjonalitet for å finne ugyldige FNR ([Dokumentasjon](dapla-pseudo.qmd#validere-fødselsnummer))
+2. Hent ut alle rader fra den originale DataFramen med ugyldig FNR funnet i steg 1.
+3. Transformer alle hjelpevariablene til formatet beskrevet i @tbl-whodat-variables, og endre navn på kolonnene.
+4. Utfør et FNR-søk basert på hjelpevariablene.
+5. Erstatt de ugyldige FNRene med gyldig FNR
+6. Pseudonymiser FNRene
+
+::: {.callout-warning}
+Fra steg 2-5 er det veldig viktig at man tar vare på indeksen fra den originale DataFramen! Fordi man gjør et utdrag av DataFramen
+i steg 2, må man også kunne finne tilbake til de originale radene når man skal erstatte ugyldige FNR i steg 5. Ikke bruk Pandas'
+`df.reset_index()` eller lignende i mellomtiden.
+
+Polars har ikke en innebygd indeks, og man burde opprette en indeks-kolonne **før** man gjør utdrag av DataFramen i steg 2
+med `df.with_row_index()`
+:::
+
+I repoet [whodat-examples](https://github.com/statisticsnorway/whodat-examples) finner man eksempler.
+Repoet inneholder en [notebook](https://github.com/statisticsnorway/whodat-examples/blob/main/src/notebooks/whodat_examples.py)
+man kan kjøre i [Dapla Lab Test](https://lab.dapla-test.ssb.no/), med rollen `dapla-felles-developers`. Repoet inneholder også en
+notebook med et [Kildomaten-eksempel](https://github.com/statisticsnorway/whodat-examples/blob/main/src/notebooks/whodat_examples_kildomaten.py)
+
+
+## Eksempler
+
+### Enkle eksempler
+
+FNR-leting følger et såkalt *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes en Pandas dataframe i minnet som heter `df` hvor man skal gjøre et enkelt søk på "navn"-variabelen. Da vil koden se slik ut:
+
+```{.python filename="Enkelt søk"}
+from dapla_whodat import Whodat
+import pandas as pd
+
+df = pd.DataFrame(
+  {
+    "navn": ["Donald Duck", "Dolly Duck", "Onkel Skrue"]
+    "adressenavn": ["Lundlia", "Smøyatunvegen", "Simmenesvegen"]
+  }
+)
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn"])
+    .run()
+)
+```
+
+I koden over så angir `from_pandas(df)` at hjelpevariablene vi ønsker å bruke for søket ligger i en [Pandas](https://pandas.pydata.org/docs/index.html) DataFrame i minnet og heter `df`. DataFramen har to kolonner, `navn` og `adressenavn`, med tre rader. Deretter spesifiserer vi hva vi ønsker å gjøre, med `search_fnr()`. Videre angir `with_search_strategy()` *hvordan* vi skal søke. Det første argumentet (`["navn"]`), er en liste over hjelpevariabler vi bruker i søket - i vårt tilfelle kun `navn`. Vi antar dermed at kolonnen `navn` eksisterer i DataFramen, hvor hver rad i kolonnen representerer et fødselsnummer vi ønsker å søke på. Til slutt kjører vi ´run()´, som faktisk utfører søket.
+
+Man kan også legge til modifikatorer på søket - som er uavhengige av verdiene i DataFramen.
+
+```{.python filename="Enkelt søk + fonetisk"}
+from dapla_whodat import Whodat
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn"], soek_fonetisk = True)
+    .run()
+)
+```
+
+Kodesnutten over legger til `soek_fonetisk = True` i søket - man vil dermed også, for hver rad, gjøre et fonetisk søk på navnet.
+
+
+### Avanserte eksempler
+
+```{.python filename="Hente ut FNR"}
+from dapla_whodat import Whodat
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn"])
+    .run()
+)
+
+found_personal_ids = result.to_list()
+```
+
+`to_list()` returnerer en liste av FNRer som er funnet.
+
+::: {.callout-warning}
+**Det blir kun returnert et FNR når søket gir et unikt treff**.
+Søk som returnerer flere FNR, eller ingen FNR, vil bli erstattet med `None`. 
+:::
+
+La oss se på et eksempel:
+
+::: {#thm-eksempel}
+Vi har en DataFrame med 3 rader, og vi kjører koden over. Anta at:
+
+* Søk på den første raden med `navn` gir ett enkelt FNR.
+* Søk på den andre raden gir flere treff.
+* Søk på den tredje raden gir ingen treff. 
+:::
+
+Resultatet hadde da sett slik ut:
+
+```{.python filename="Eksempel ouput"}
+found_personal_ids = result.to_list()
+
+print(found_personal_ids)
+> ["11111123456", None, None]
+```
+
+Her vil da radnummer være tilsvarende til plasseringen i listen, slik at første rad gir et gyldig FNR på det første elementet
+i listen, mens andre og tredje rad returnerer `None` på det andre og tredje elementet i listen.
+
+### Flere søk
+Vi kan også legge til *flere* søk for hver enkelt rad i en DataFrame. Dette ser slik ut:
+
+```{.python}
+from dapla_whodat import Whodat
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn"])
+    .with_search_strategy(["navn", "adressenavn"])
+    .run()
+)
+```
+
+I koden over har vi lagt til et ekstra søk, som også søker på adressenavn. **Dette endrer søkemetoden, som følgende**: For hver rad, hvis vi får et
+unikt treff på det øverste søket (kun `navn`), returner det FNRet. Hvis ikke, gå videre til neste søk (`navn` og `adressenavn`). Repeter denne prosessen
+for hvert kall med `with_search_strategy()` til man enten har funnet et unikt FNR, eller alle søk har blitt forsøkt. Hvis man da ikke har funnet
+et unikt FNR, returner `None`.
+
+Vi fortsetter med utgangspunkt i scenariet fra @thm-eksempel over, men nå med koden over. Vi har nå fått returnert dataene:
+
+```{.python}
+found_personal_ids = result.to_list()
+
+print(found_personal_ids)
+> ["11111123456", "22222209876", None]
+```
+
+Husk at når vi kjørte koden tidligere, så fikk vi `None` på det andre elementet i listen, fordi vi fikk mer enn ett FNR.
+Siden vi nå har *snevret* inn søket ved å legge til en adressevariabel, finner vi nå et unikt treff.
+
+<br>
+
+Likedan fikk vi, med den tidligere koden, returnert `None` for det tredje elementet, fordi vi ikke fikk treff på noen FNR.
+La oss se om vi kan finne det:
+
+```{.python}
+from dapla_whodat import Whodat
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn"])
+    .with_search_strategy(["navn", "adressenavn"])
+    .with_search_strategy(["navn", "adressenavn"], inkluder_doede=True)
+    .run()
+)
+
+found_personal_ids = result.to_list()
+
+print(found_personal_ids)
+> ["11111123456", "22222209876", "33333376543"]
+```
+
+Ved å legge til et tredje søk, som inkluderer døde, har vi funnet personnummeret i det tredje elementet.
+Merk at ved å legge til døde, har vi *utvidet* søket. 
+
+## Søkestrategi
+
+Statistikkseksjonene blir gitt mye frihet i dette biblioteket - med intensjon. Det finnes ingen "beste" universal 
+søkestrategi, da søkemetodikken vil variere basert på datagrunnlaget og behov.
+
+Her er noen aspekter man kan ta stilling til:
+
+* FNR-søk kan gi falskt positivt funn 
+  * **Eksempel**: Man søker kun på etternavn, adresse, og fødselsdato - kan gi FNRet til en tvilling
+* FNR-søk kan gi falskt negativt funn 
+  * **Eksempel**: Man søker på navn og adresse, men vedkommende har flyttet - man får man ingen treff
+* Flere variabler (@tbl-whodat-variables) gir et snevrere søk. Modifikatorer (@tbl-whodat-modifiers) utvider søket.
+
+### Case 1: Snevert søk
+
+Noen seksjoner vil kanskje vurdere at man ønsker så langt som mulig å unngå falskt positive funn. Med andre ord, så tar man
+heller kostnaden av å ekskludere potensielt gyldige FNR til fordel for å være helt sikre på at de FNR-ene man finner er gyldige. En strategi
+kunne da ha vært å kjøre et enkelt søk med alle variablene man har tilgjengelig - et snevert søk. 
+Dette kunne ha sett slik ut:
+
+```{.python}
+from dapla_whodat import Whodat
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn", "adressenavn", "husnummer", "postnummer", "foedselsdato"])
+    .run()
+)
+```
+
+### Case 2: Bredt søk
+
+Andre seksjoner rydder muligens opp i dataene sine senere i produksjonsløpet ved å koble mot annen data,
+og ønsker et veldig bredt søk for å få med alle potensielle FNRer. Vi kan da se for oss et iterativt søk, hvor vi starter
+veldig snevert med mange variabler og utvider søket etter hvert.
+Dette kunne ha sett slik ut:
+
+```{.python}
+from dapla_whodat import Whodat
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn", "adressenavn", "husnummer", "postnummer", "foedselsdato"])
+    .with_search_strategy(["navn", "adressenavn", "husnummer", "postnummer", "foedselsaarFraOgMed", "foedselsaarTilOgMed"])
+    .with_search_strategy(["navn", "adressenavn", "husnummer", "postnummer", "foedselsaarFraOgMed", "foedselsaarTilOgMed"],
+      inkluder_doede=True)
+    .with_search_strategy(["navn", "adressenavn", "husnummer", "postnummer", "foedselsaarFraOgMed", "foedselsaarTilOgMed"],
+      inkluder_doede=True, opplysningsgrunnlag=True, inkluder_oppholdsadresse=True)
+    .with_search_strategy(["navn", "adressenavn", "husnummer", "postnummer", "foedselsaarFraOgMed", "foedselsaarTilOgMed"],
+      inkluder_doede=True, opplysningsgrunnlag=True, inkluder_oppholdsadresse=True, soek_fonetisk=True)
+    .run()
+)
+```
+
+Vi anbefaler
+statistikere å teste ut hvilke variabler som gir best resultater med datagrunnlaget man har tilgjengelig.
+
+## Detaljer om FNR-søket
+
+Man kan få metadata fra søket man har utført. Dette gir detaljert informasjon om på hvilken søkestrategi som ga treff, for
+hver rad.
+
+```{.python filename="Detaljer"}
+from dapla_whodat import Whodat
+import pandas as pd
+
+df = pd.DataFrame(
+  {
+    "navn": ["Donald Duck", "Dolly Duck", "Onkel Skrue"]
+    "adressenavn": ["Lundlia", "Smøyatunvegen", "Simmenesvegen"]
+  }
+)
+
+result = (
+    Whodat.from_pandas(df)
+    .search_fnr()
+    .with_search_strategy(["navn"])
+    .with_search_strategy(["navn", "adressenavn"])
+    .run()
+)
+
+found_personal_ids = result.to_list()
+
+print(found_personal_ids)
+> ["11111123456", "22222209876", None]
+
+print(result.details)
+> [
+    {
+        "index_fnr_search_df": 0,
+        "index_original_df": 0,
+        "number_of_found_ids": 1,
+        "unique_response_step_number": 1,
+    },
+    {
+        "index_fnr_search_df": 1,
+        "index_original_df": 1,
+        "number_of_found_ids": 1,
+        "unique_response_step_number": 2,
+    },
+    {
+        "index_fnr_search_df": 2,
+        "index_original_df": 2,
+        "number_of_found_ids": 0,
+        "unique_response_step_number": None,
+    },
+  ]
+```
+
+Hver rad i `df` tilsvarer ett element i listen i `result.details`. Hvert element har følgende data:
+
+::: {#tbl-whodat-details }
+| Felt                     | Beskrivelse |
+| :-                        | :---         |
+| index_fnr_search_df                | Radnummeret i DataFramen - uavhengig av indeks   |
+| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index)    |
+| number_of_found_ids  | Hvor mange FNRer som ble funnet på siste søk   |
+| unique_response_step_number  | Hvis et unikt FNR ble funnet - hvilket steg (søk) som fant FNRet. Hvis man ikke finner et unikt FNR, blir dette None.  |
+
+Beskrivelse av metadata-felter
+
+:::
+
+I eksempelet over fant vi to FNRer, i første og andre rad. For den første raden i DataFramen, ser vi at `unique_response_step_number = 1`. Dette betyr at
+vi fant et unikt FNR i det første søket vårt, altså søket med kun `navn`. For den andre raden, er `unique_response_step_number = 2`,
+som betyr at vi fant et unikt FNR på søket med `navn` og `adresse`. 
+
+`index_fnr_search_df` beskriver radnummeret metadataen gjelder, uavhengig av DataFramens indeks. `index_original_df` beskriver
+radnummeret i henhold til indeksen i DataFramen. Dette blir viktig når vi skal erstatte ugyldige FNR med gyldige FNR.
+
+Metadataen er ikke sensitiv, og kan skrives til produktbøtta for videre utforskning fra Kildomaten slik:
+
+```{.python}
+from gcsfs import GCSFileSystem
+import json
+
+details = result.details
+
+with GCSFileSystem().open("gs://ssb-someteam-data-produkt-prod/somefolder/details_fnrsearch.json", "w") as f:
+  json.dump(details, f)
+```
+
+## Erstatte ugyldige med gyldige FNR
+
+Vi antar at vi har fulgt fremgangsmåten i [Arbeidsflyt](dapla-whodat.qmd#arbeidsflyt). Vi har da to DataFrames når vi utfører
+FNR-søket:
+
+* `df_original`: Den originale DataFramen vi ønsker å utføre FNR-søk på. DataFramen sin FNR-kolonne heter `fnr`
+* `df_helper_variables`: Et utsnitt av `df_original`, som kun inneholder radene med ugyldig FNR, og hjelpevariablene nødvendig for søket.
+  Indeksen er lik som i `df_original`
+
+Vi har to måter å få ut data fra FNR-søket:
+
+### 1) Bruk av `to_list()`
+
+```{.python}
+found_personal_ids = result.to_list()
+
+print(found_personal_ids)
+> ["11111123456", "22222209876", None]
+```
+
+Vi kan da erstatte rader i `df_original` med følgende kode:
+
+```{.python}
+df_valid_personal_ids = pd.DataFrame({"fnr": found_personal_ids}, index=df_helper_variables.index, copy=False)
+df_valid_personal_ids = df_valid_personal_ids.reindex(df.index) # Pad dataset with NaN if value doesn't exist (for rows with valid FNR)
+  
+df_original["fnr"] = df_valid_personal_ids["fnr"].where(df_valid_personal_ids["fnr"].notna(), df_original["fnr"]) # Merge valid FNRs into 'df_original'
+```
+
+### 2) Bruk av `to_dict_from_original_indices()`
+
+Vi kan også få ut data som et Python *dictionary*, hvor den originale indeksen er nøkkelen og FNR-et er verdien. Hvis det ikke ble
+funnet et unikt FNR, er ikke dataen i dictionaryen.
+
+```{.python}
+found_personal_ids = result.to_dict_from_original_indices()
+
+print(found_personal_ids)
+> {0: "11111123456", 1: "22222209876"}
+```
+
+FNR-erstatning:
+
+```{.python}
+found_personal_ids = result.to_dict_from_original_indices()
+df_original["new_fnr"] = df_original.index.map(found_personal_ids)
+
+df_original["fnr"] = df_original["new_fnr"].fillna(df['fnr'])
+df_original = df_original.drop(columns="new_fnr")
+```
