@@ -468,9 +468,5 @@ print(found_personal_ids)
 FNR-erstatning:
 
 ```{.python}
-found_personal_ids = result.to_dict_from_original_indices()
-df_original["new_fnr"] = df_original.index.map(found_personal_ids)
-
-df_original["fnr"] = df_original["new_fnr"].fillna(df['fnr'])
-df_original = df_original.drop(columns="new_fnr")
+df_original["fnr"] = pd.Series(found_personal_ids).combine_first(df_original["fnr"])
 ```
