@@ -1,0 +1,145 @@
+---
+title: Backup
+date-modified: "2025-10-17"
+lightbox: true
+---
+
+::: {.callout-warning}
+## Under arbeid
+
+Utrulling av løsning for sikkerhetskopi av data på Dapla rulles ut til alle Dapla-team ila oktober 2025. Funksjonaliteten beskrevet i artikkelen vil gjelde fra løsningen er rullet ut for et team. Bevaringspolicy i bøttene kan benyttes nå. 
+:::
+
+SSBs evne til å gjenopprette data ved katastrofer, samt ved tilsiktet eller utilsiktet tap eller korrupsjon av data, ivaretas gjennom 2 ulike løsninger på Dapla:
+
+1. **Ekstern sikkerhetskopi (Backup)**  
+Data i **kilde**-, **produkt**- og **delt**-bøtter sikkerhetskopieres til en ekstern lokasjon hver dag. Brukere som ønsker å gjenopprette filer herfra må [kontakte Kundeservice i et eget skjema](https://ssb.pureservice.com/#/new/23). Dette er anbefalt for brukere som ikke kan gjenopprette filer selv gjennom bevaringspolicy i bøttene (se under). 
+
+2. **Bevaringspolicy i GCS (Retention policy)**  
+Alle GCS-bøtter i kilde- og standardprosjektet til Dapla-team har aktivert en bevaringspolicy som innebærer at tidligere versjoner av filer som blir overskrevet eller slettet bevares. Hver nye versjon lagres som en egen kopi, og eldre (*noncurrent*) versjoner bevares i 180 dager, inntil det finnes 2 eller 3 nyere versjoner av samme fil i bøtta. Brukere kan gjenopprette disse selv ([se kodeseksempel her](./backup-data.qmd#bevaringspolicy-i-gcs)).    
+
+Disse løsningene gjelder for de standardiserte bøttene som tilbys av plattformen gjennom [*features*](./features.qmd) som *dapla-buckets* og *shared-buckets*. Det er disse ressursene som typisk benyttes av statistikkproduserende [managed](./hva-er-dapla-team.qmd#autonomitetsnivå) Dapla-team. 
+
+Dapla-team som oppretter sine egne ressurser, eller har spesielle behov knyttet til sikkerhetskopier, må selv sørge for at disse bli ivaretatt.
+
+## Ekstern sikkerhetskopi
+
+Et Dapla-team som har [*featuren*](./features.qmd#features) *dapla-buckets* og *shared-buckets* aktivert vil automatisk ha sikkerhetskopi på følgende bøtter:  
+
+- **Kildebøtte**  
+`ssb-<team>-data-kilde-prod`
+
+- **Produktbøtte**  
+`ssb-<team>-data-produkt-prod`
+
+- **Delt-bøtter**  
+`ssb-<teamnavn>-data-delt-<kortnavn>-prod`  
+`ssb-<teamnavn>-data-delt-delomat-<kortnavn>-prod`
+
+::: {.callout-caution}
+## Unntak for en mappe
+
+Mapper som heter `temp/` eller `tmp/`, og som ligger på toppnivå i mappestrukturen, vil ikke inkluderes i sikkerhetskopien. F.eks. hvis du lagrer data i `ssb-<team>-data-produkt-prod/temp/` så vil dataene i denne mappen **IKKE** sikkerhetskopieres, mens data lagres i `ssb-<team>-data-produkt-prod/inndata/temp/` vil sikkerhetskopieres. Bakgrunnen for unntaket er å gi brukere muligheten å jobbe med midlertidige filer som ikke krever sikkerhetskopi.  
+:::
+
+Sikkerhetskopier tas automatisk **hver dag kl. 21**, og gjenopprettingspunkter lagres i **inntil 500 dager**.  
+Dette betyr at du kan gjenopprette filer fra en hvilken som helst dag de siste **500 dagene**.
+
+
+### Gjenoppretting av filer
+
+Gjenoppretting av filer fra en sikkerhetskopi gjøres på følgende måte:
+
+1. Gå til [https://ssb.pureservice.com/](https://ssb.pureservice.com/)  
+2. Velg **“Skjema for gjenoppretting av data”**  
+3. Fyll ut følgende felter i skjemaet:  
+   - **Plattform:** velg *Dapla*  
+   - **Filsti:** angi full sti til filen eller mappen som skal gjenopprettes  
+   - **Gjenopprettingsdato:** datoen du ønsker å hente filen fra  
+   - **Skal filen overskrives?:** velg *Ja* eller *Nei* avhengig av behov  
+4. Send inn skjemaet
+
+Kundeservice vil behandle forespørselen og gjenopprette filene i henhold til informasjonen du har gitt.
+
+Det er mulig å gjenopprette filer, mapper og bøtter. 
+
+
+## Bevaringspolicy i GCS
+
+Alle bøttene som opprettes i [*featuren*](./features.qmd) *dapla-buckets* eller *shared-buckets* har en bevaringspolicy som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode. 
+
+Filer som overskrives eller slettes blir satt til *noncurrent*. En *non-current* versjon blir slettet hvis den er mer enn 180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta, avhengig av type bøtte:
+
+**Kildebøtta**  
+I kildebøtta blir *non-current* versjoner slettet hvis det er mer enn **3** nyere versjoner.
+
+**Produktbøtta**  
+I produktbøtta blir *non-current* versjoner slettet hvis det er mer enn **2** nyere versjoner.
+
+For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](https://pypi.org/project/dapla-toolbelt/). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
+
+```{.python filename="Notebook"}
+from dapla import FileClient
+
+# Set bucket name and folder name(if any)
+bucket = "ssb-dapla-felles-data-produkt-prod" 
+folder = "restore"
+
+FileClient.get_versions(bucket, folder)
+```
+
+**Output**
+```
+[<Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818>,
+ <Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930>]
+```
+
+Fra output over ser vi filen data1.parquet finnes i 2 versjoner. Vi kan undersøke den nærmere med følgende kode:
+
+```{.python filename="notebook"}
+files = FileClient.get_versions("ssb-dapla-felles-data-produkt-prod", "restore/data1.parquet")
+
+for file in files:
+    print("Name          : ",file.name)
+    print("Generation Id : ", file.generation)
+    print("Updated on    : ", file.updated)
+    print("Deleted on    : ", file.time_deleted)
+    print("------------------------------------------")
+```
+
+**Output**  
+```
+Name          :  restore/data1.parquet
+Generation Id :  1718436304922143
+Updated on    :  2024-06-15 07:25:04.928000+00:00
+Deleted on    :  2024-06-24 11:10:10.807000+00:00
+------------------------------------------
+Name          :  restore/data1.parquet
+Generation Id :  1719227410801992
+Updated on    :  2024-06-24 11:10:10.807000+00:00
+Deleted on    :  None
+------------------------------------------
+```
+
+Av output over ser vi at det er en fil som som har en verdi i `Deleted on` feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke `restore_version()`og referere til Generation ID:
+
+```{.python filename="notebook"}
+FileClient.restore_version( source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
+                            source_file_name="restore/data3.parquet",
+                            source_generation_id=1718436304922143,
+                            new_name="" (optional)
+                           )
+```
+Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt *non-current*. Ved gjenoppretting av *non-current*-versjoner så kan man også spesifisere nytt navn på filen med parameteret `new_name=` i `restore_version()`-funksjonen. 
+
+
+::: {.callout-note}
+## Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
+
+Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i @fig-gcc-versions. Men man har ikke tilgang til *Object details* og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.   
+
+![Hvordan liste ut versjoner fra GCC.](../images/gcc-versions.png){fig-alt="Bilde av hvordan man velger versjoner i GCC." #fig-gcc-versions}
+
+:::
