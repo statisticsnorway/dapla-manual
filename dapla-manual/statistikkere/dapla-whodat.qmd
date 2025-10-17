@@ -3,9 +3,20 @@ title: dapla-toolbelt-whodat
 date-modified: 14/10/2025
 lightbox: true
 crossref:
-  thm-prefix: ""
+  thm-prefix: ''
   thm-labels: Eksempel
-  thm-title: ""
+  thm-title: ''
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.17.3
+  kernelspec:
+    display_name: a200-stoetteteam-examples
+    language: python
+    name: a200-stoetteteam-examples
 ---
 
 [dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er en Python-pakke som gir statistikere
@@ -145,6 +156,7 @@ FNR-leting følger et såkalt *builder-pattern* der man spesifiserer hva og i hv
 from dapla_whodat import Whodat
 import pandas as pd
 
+# Vi 
 df = pd.DataFrame(
   {
     "navn": ["Donald Duck", "Dolly Duck", "Onkel Skrue"]
@@ -159,24 +171,18 @@ result = (
     .run()
 )
 ```
+Etter importering av pakker begynner vi med å lage en Pandas [DataFrame](https://pandas.pydata.org/docs/index.html) med variablene `navn` og adresse.
 
-I koden over så angir `from_pandas(df)` at hjelpevariablene vi ønsker å bruke for søket ligger i en [Pandas](https://pandas.pydata.org/docs/index.html) DataFrame i minnet og heter `df`. DataFramen har to kolonner, `navn` og `adressenavn`, med tre rader. Deretter spesifiserer vi hva vi ønsker å gjøre, med `search_fnr()`. Videre angir `with_search_strategy()` *hvordan* vi skal søke. Det første argumentet (`["navn"]`), er en liste over hjelpevariabler vi bruker i søket - i vårt tilfelle kun `navn`. Vi antar dermed at kolonnen `navn` eksisterer i DataFramen, hvor hver rad i kolonnen representerer et fødselsnummer vi ønsker å søke på. Til slutt kjører vi ´run()´, som faktisk utfører søket.
+Vi bruker `Whodat` fra pakken vår og følgende metoder:
 
-Man kan også legge til modifikatorer på søket - som er uavhengige av verdiene i DataFramen.
+* `from_pandas(df)`: angir at hjelpevariablene vi ønsker å bruke for søket ligger i en [Pandas](https://pandas.pydata.org/docs/index.html) DataFrame (`df`).
 
-```{.python filename="Enkelt søk + fonetisk"}
-from dapla_whodat import Whodat
+* `search_fnr()`
 
-result = (
-    Whodat.from_pandas(df)
-    .search_fnr()
-    .with_search_strategy(["navn"], soek_fonetisk = True)
-    .run()
-)
-```
+* `with_search_strategy()`: forteller *hvordan* vi skal søke. I eksempelet søker vi på `["navn"]`.
+    * man kan gjøre fonetisk navnesøk på hver rad ved å angi `soek_fonetisk = True` slik: `.with_search_strategy(["navn"], soek_fonetisk = True)`
 
-Kodesnutten over legger til `soek_fonetisk = True` i søket - man vil dermed også, for hver rad, gjøre et fonetisk søk på navnet.
-
+* `run()`: metoden som faktisk utfører søket.
 
 ### Avanserte eksempler
 
