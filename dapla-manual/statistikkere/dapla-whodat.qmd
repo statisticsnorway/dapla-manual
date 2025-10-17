@@ -165,7 +165,7 @@ Vi bruker følgende metoder fra pakken vår `Whodat`:
 
 * `from_pandas(df)`: angir at hjelpevariablene vi ønsker å bruke for søket ligger i en [Pandas](https://pandas.pydata.org/docs/index.html) DataFrame (`df`).
 
-* `search_fnr()`
+* `search_fnr()`: angir *hva* vi skal gjøre
 
 * `with_search_strategy()`: forteller *hvordan* vi skal søke. I eksempelet søker vi på `["navn"]`.
     * man kan gjøre fonetisk navnesøk på hver rad ved å angi `soek_fonetisk = True` slik: `.with_search_strategy(["navn"], soek_fonetisk = True)`
@@ -389,8 +389,9 @@ Hver rad i `df` tilsvarer ett element i listen i `result.details`. Hvert element
 | :-                        | :---         |
 | index_fnr_search_df                | Radnummeret i DataFramen - uavhengig av indeks   |
 | index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index). Brukes for å erstatte ugylidge fødselsnummer    |
+| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index). Brukes for erstatning av ugyldige FNR.    |
 | number_of_found_ids  | Hvor mange FNRer som ble funnet på siste søk   |
-| unique_response_step_number  | Hvis et unikt FNR ble funnet - hvilket steg (søk) som fant FNRet. Hvis man ikke finner et unikt FNR, blir dette None.  |
+| unique_response_step_number  | Hvis et unikt FNR ble funnet - hvilket stegnummer (søk) som fant FNRet. Tallet tilsvarer bruk av `with_search_strategy()`, fra første til siste, hvor første kall er `1`. Hvis man ikke finner et unikt FNR, blir dette None.  |
 
 Beskrivelse av metadata-felter
 
@@ -437,10 +438,22 @@ print(found_personal_ids)
 Vi kan da erstatte rader i `df_original` med følgende kode:
 
 ```{.python}
-df_valid_personal_ids = pd.DataFrame({"fnr": found_personal_ids}, index=df_helper_variables.index, copy=False)
-df_valid_personal_ids = df_valid_personal_ids.reindex(df.index) # Pad dataset with NaN if value doesn't exist (for rows with valid FNR)
+df_valid_personal_ids = (
+                        pd.DataFrame({"fnr": found_personal_ids},
+                        index=df_helper_variables.index, copy=False)
+                        )
+
+df_valid_personal_ids = (
+                        df_valid_personal_ids
+                        .reindex(df.index) 
+                        # Pad dataset with NaN for rows with valid FNR
+                        )
   
-df_original["fnr"] = df_valid_personal_ids["fnr"].where(df_valid_personal_ids["fnr"].notna(), df_original["fnr"]) # Merge valid FNRs into 'df_original'
+df_original["fnr"] = (
+                    df_valid_personal_ids["fnr"]
+                    .where(df_valid_personal_ids["fnr"].notna(),
+                    df_original["fnr"]) # Merge valid FNRs into 'df_original'
+                    )
 ```
 
 ### 2) Bruk av `to_dict_from_original_indices()`
@@ -455,8 +468,11 @@ print(found_personal_ids)
 > {0: "11111123456", 1: "22222209876"}
 ```
 
-FNR-erstatning:
+**FNR-erstatning**:
 
 ```{.python}
-df_original["fnr"] = pd.Series(found_personal_ids).combine_first(df_original["fnr"])
+df_original["fnr"] = (
+                      pd.Series(found_personal_ids)
+                      .combine_first(df_original["fnr"])
+                    )
 ```
