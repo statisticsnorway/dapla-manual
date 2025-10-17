@@ -1,41 +1,29 @@
 ---
 title: dapla-toolbelt-whodat
-date-modified: 14/10/2025
+date-modified: 10/17/2025
 lightbox: true
 crossref:
   thm-prefix: ''
   thm-labels: Eksempel
   thm-title: ''
-jupyter:
-  jupytext:
-    text_representation:
-      extension: .qmd
-      format_name: quarto
-      format_version: '1.0'
-      jupytext_version: 1.17.3
-  kernelspec:
-    display_name: a200-stoetteteam-examples
-    language: python
-    name: a200-stoetteteam-examples
 ---
 
 [dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er en Python-pakke som gir statistikere
 mulighet for å søke etter fødselsnummer (FNR) basert på hjelpeopplysninger - for eksempel navn, adresse eller kommunenummer.
 Funksjonaliteten kan hjelpe statistikere å beholde rader som ellers hadde blitt forkastet, fordi man har manglende
-eller feil identifikator i datasettet. *dapla-toolbelt-whodat* er, bak kulissene, et tynt lag rundt
-Skatteetatens folkeregister-søk.
+eller feil identifikator i datasettet. *dapla-toolbelt-whodat*  bygger på Skatteetatens folkeregister-søk og er utviklet av team statistikktjenester.
 
-Siden tilgang til direkte identifiserende opplysninger er underlagt strenge regler, så krever bruken av *dapla-toolbelt-whodat* at man forholder seg til vedtatte standarder som [datatilstander](./datatilstander.html) og systemer som [Kildomaten](./kildomaten.html). I tillegg er det en streng tilgangsstyring til hvor man kan kalle funksjonaliteten fra.
+Siden tilgang til direkte identifiserende opplysninger er underlagt strenge regler krever bruken av *dapla-toolbelt-whodat* at man forholder seg til vedtatte standarder som [datatilstander](./datatilstander.qmd) og systemer som [Kildomaten](./kildomaten.qmd). I tillegg er det en streng tilgangsstyring til hvor man kan kalle funksjonaliteten fra.
 
 ## Forberedelser
 
-Før man tar i bruk funksjonaliteten er det viktig at man kjenner godt til [tilgangstyring i Dapla-team](./tilgangsstyring.html) og [Kildomaten](./kildomaten.html), og har diskutert med seksjonen hvordan man skal behandle direkte identifiserende opplysninger i de aktuelle dataene. 
+Før man tar i bruk funksjonaliteten er det viktig at man kjenner godt til [tilgangstyring i Dapla-team](./tilgangsstyring.qmd) og [Kildomaten](./kildomaten.qmd), og har diskutert med seksjonen hvordan man skal behandle direkte identifiserende opplysninger i de aktuelle dataene. 
 
-For at et Dapla-team skal kunne bruke dapla-toolbelt-whodat må [Kildomaten](./kildomaten.html) være skrudd på for miljøet^[Et Dapla-team har både et test- og et prod-miljø. Kildomaten må være skrudd på i det miljøet du ønkser å benytte dapla-toolbelt-whodat fra.] man ønsker å jobbe fra. Som standard får alle statistikkteam skrudd på Kildomaten i prod-miljøet og ikke i test-miljøet. Ønsker du å aktivere Kildomaten i test-miljøet kan dette gjøres selvbetjent som en [feature](./features.html).
+For at et Dapla-team skal kunne bruke dapla-toolbelt-whodat må [Kildomaten](./kildomaten.qmd) være skrudd på for miljøet^[Et Dapla-team har både et test- og et prod-miljø. Kildomaten må være skrudd på i det miljøet du ønkser å benytte dapla-toolbelt-whodat fra.] man ønsker å jobbe fra. Som standard får alle statistikkteam skrudd på Kildomaten i prod-miljøet og ikke i test-miljøet. Ønsker du å aktivere Kildomaten i test-miljøet kan dette gjøres selvbetjent som en [feature](./features.qmd).
 
 ## Tilgangsstyring
 
-Tilgang til å funksjonalitet i dapla-toolbelt-whodat kan regnes som sensitivt i seg selv, og derfor er det en streng tilgangsstyring for bruk av tjenesten. I prod-miljøet kan man kun ta i bruk funksjonaliteten ved å prosessere dataene i Kildomaten, og det er bare tilgangsgruppen [data-admins](./hva-er-dapla-team.html#data-admins) som har tilgang til å godkjenne slike automatiske prosesseringer. I test-miljøet, derimot, kan alle på teamet benytte seg av all funksjonalitet, siden det aldri skal forekomme ekte data.
+Tilgang til funksjonalitet i dapla-toolbelt-whodat er i seg selv sensitivt. Tjenesten tilgangsstyres derfor strengt. I prod-miljøet kan man kun ta i bruk funksjonaliteten ved å prosessere dataene i Kildomaten. Det er bare tilgangsgruppen [data-admins](./hva-er-dapla-team.qmd#data-admins) som har tilgang til å godkjenne slike automatiske prosesseringer. I test-miljøet, derimot, kan alle på teamet benytte seg av all funksjonalitet siden det aldri skal forekomme ekte data.
 
 
 ::: {#tbl-whodat-panel layout-nrwos=2}
@@ -58,12 +46,12 @@ Tilgang til å funksjonalitet i dapla-toolbelt-whodat kan regnes som sensitivt i
 Tilgangsstyring til dapla-toolbelt-whodat
 :::
 
-I @tbl-whodat-panel ser vi fra @tbl-whodat-first at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-whodat, både fra Kildomaten og når man jobber interaktivt^[Med interaktiv jobbing menes at man skriver og kode og får tilbake output i samme verktøy. F.eks. er Jupyterlab et eksempel på et verktøy som lar deg jobbe interaktivt med data.] i Jupyterlab. @tbl-whodat-second viser at det kun er tilgang til *FNR-leting* fra Kildomaten i prod-miljøet, og man kan ikke kan bruke biblioteket interaktivt, da det potensielt kan avsløre samtlige FNR. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i i prod-miljøet med Kildomaten.
+Vi ser fra @tbl-whodat-first at man i test-miljøet har full tilgang til funksjonaliteten i dapla-toolbelt-whodat, både fra Kildomaten og når man jobber interaktivt^[Med interaktiv jobbing menes at man skriver og kode og får tilbake output i samme verktøy. F.eks. er Jupyterlab et eksempel på et verktøy som lar deg jobbe interaktivt med data.] i Jupyterlab. @tbl-whodat-second viser at det kun er tilgang til *FNR-leting* fra Kildomaten i prod-miljøet, og man kan ikke kan bruke biblioteket interaktivt, da det potensielt kan avsløre samtlige FNR. Av den grunn er det alltid anbefalt å teste ut koden sin i test-miljøet før den produksjonssettes i prod-miljøet med Kildomaten.
 
 
 ## Installering
 
-[dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er ferdig installert i Kildomaten. Men ønsker du å bruke den i test-miljøet til teamet så kan du installere det i et [ssb-project](./jobbe-med-kode.html) fra [PyPI](https://pypi.org/) med denne kommandoen: 
+[dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er ferdig installert i Kildomaten. Ønsker du å bruke den i test-miljøet til teamet kan du installere det i et [ssb-project](./jobbe-med-kode.qmd) fra [PyPI](https://pypi.org/) med denne kommandoen: 
 
 ```{.bash filename="Terminal"}
 poetry add dapla-toolbelt-whodat
@@ -78,7 +66,7 @@ poetry add dapla-toolbelt-whodat
 - [Pandas dataframes](https://pandas.pydata.org/docs/index.html)
 - [Polars dataframes](https://docs.pola.rs/py-polars/html/reference/index.html)
 
-Eksemplene under viser hovedskelig innlesing av dataframes fra minnet.
+Eksemplene under viser hovedsaklig innlesing av dataframes fra minnet.
 
 ### Variabler og modifikatorer
 
