@@ -274,7 +274,7 @@ Merk at ved å legge til døde, har vi *utvidet* søket.
 
 ## Søkestrategi
 
-Det finnes ingen universelt beste søkestrategi da søkemetodikken vil variere basert på datagrunnlaget og behov. Derfor har vi lagt inn mye funksjonalitet i dette biblioteket.
+Det finnes ingen universell beste søkestrategi da søkemetodikken vil variere basert på datagrunnlaget og behov. Derfor har vi lagt inn mye funksjonalitet i dette biblioteket.
 
 
 Her er noen aspekter man bør ta stilling til:
@@ -289,7 +289,7 @@ Her er noen aspekter man bør ta stilling til:
 
 Noen seksjoner vil kanskje vurdere at man ønsker så langt som mulig å unngå falskt positive funn. Med andre ord tar man
 heller kostnaden av å ekskludere potensielt gyldige FNR til fordel for å være helt sikre på at de FNR-ene man finner er gyldige. En strategi
-kunne da ha vært å kjøre et enkelt søk med alle variablene man har tilgjengelig.
+kunne da ha vært å kjøre ett søk med alle variablene man har tilgjengelig - et snevert søk.
 Dette kunne ha sett slik ut:
 
 ```{.python}
@@ -388,10 +388,9 @@ Hver rad i `df` tilsvarer ett element i listen i `result.details`. Hvert element
 | Felt                     | Beskrivelse |
 | :-                        | :---         |
 | index_fnr_search_df                | Radnummeret i DataFramen - uavhengig av indeks   |
-| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index). Brukes for å erstatte ugylidge fødselsnummer    |
-| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index). Brukes for erstatning av ugyldige FNR.    |
+| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index). Brukes når man erstatter ugyldige fødselsnummer    |
 | number_of_found_ids  | Hvor mange FNRer som ble funnet på siste søk   |
-| unique_response_step_number  | Hvis et unikt FNR ble funnet - hvilket stegnummer (søk) som fant FNRet. Tallet tilsvarer bruk av `with_search_strategy()`, fra første til siste, hvor første kall er `1`. Hvis man ikke finner et unikt FNR, blir dette None.  |
+| unique_response_step_number  | Hvilken `with_search_strategy()` som fant et unikt FNR. Hvis man ikke finner et unikt FNR, er feltet `None`  |
 
 Beskrivelse av metadata-felter
 
