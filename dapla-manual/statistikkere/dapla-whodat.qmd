@@ -20,7 +20,7 @@ jupyter:
 ---
 
 [dapla-toolbelt-whodat](https://pypi.org/project/dapla-toolbelt-whodat/) er en Python-pakke som gir statistikere
-mulighet for å søke etter fødselsnummer basert på hjelpeopplysninger - for eksempel navn, adresse eller kommunenummer.
+mulighet for å søke etter fødselsnummer (FNR) basert på hjelpeopplysninger - for eksempel navn, adresse eller kommunenummer.
 Funksjonaliteten kan hjelpe statistikere å beholde rader som ellers hadde blitt forkastet, fordi man har manglende
 eller feil identifikator i datasettet. *dapla-toolbelt-whodat* er, bak kulissene, et tynt lag rundt
 Skatteetatens folkeregister-søk.
@@ -173,7 +173,7 @@ result = (
 ```
 Etter importering av pakker begynner vi med å lage en Pandas [DataFrame](https://pandas.pydata.org/docs/index.html) med variablene `navn` og adresse.
 
-Vi bruker f;lgende metoder fra pakken vår `Whodat`:
+Vi bruker følgende metoder fra pakken vår `Whodat`:
 
 * `from_pandas(df)`: angir at hjelpevariablene vi ønsker å bruke for søket ligger i en [Pandas](https://pandas.pydata.org/docs/index.html) DataFrame (`df`).
 
@@ -209,6 +209,7 @@ Søk som returnerer flere FNR, eller ingen FNR, vil bli erstattet med `None`.
 La oss se på et eksempel:
 
 ::: {#thm-eksempel}
+
 Vi har en DataFrame med 3 rader, og vi kjører koden over. Anta at:
 
 * Søk på den første raden med `navn` gir ett enkelt FNR.
@@ -226,7 +227,7 @@ print(found_personal_ids)
 ```
 
 Her vil da radnummer være tilsvarende til plasseringen i listen, slik at første rad gir et gyldig FNR på det første elementet
-i listen, mens andre og tredje rad returnerer `None` på det andre og tredje elementet i listen.
+i listen mens andre og tredje rad returnerer `None`.
 
 ### Flere søk
 Vi kan også legge til *flere* søk for hver enkelt rad i en DataFrame. Dette ser slik ut:
@@ -243,10 +244,9 @@ result = (
 )
 ```
 
-I koden over har vi lagt til et ekstra søk, som også søker på adressenavn. **Dette endrer søkemetoden, som følgende**: For hver rad, hvis vi får et
-unikt treff på det øverste søket (kun `navn`), returner det FNRet. Hvis ikke, gå videre til neste søk (`navn` og `adressenavn`). Repeter denne prosessen
-for hvert kall med `with_search_strategy()` til man enten har funnet et unikt FNR, eller alle søk har blitt forsøkt. Hvis man da ikke har funnet
-et unikt FNR, returner `None`.
+I koden over har vi lagt til et søk som også søker på adressenavn. **Dette endrer søkemetoden slik**:
+
+For hver rad, hvis vi får et unikt treff på det øverste søket (kun `navn`), returner det FNRet. Hvis ikke, gå videre til neste søk (`navn` og `adressenavn`). Repeter denne prosessen for hvert kall med `with_search_strategy()` til man enten har funnet et unikt FNR, eller alle søk har blitt forsøkt. Hvis man da ikke har funnet et unikt FNR, returner `None`.
 
 Vi fortsetter med utgangspunkt i scenariet fra @thm-eksempel over, men nå med koden over. Vi har nå fått returnert dataene:
 
@@ -257,10 +257,8 @@ print(found_personal_ids)
 > ["11111123456", "22222209876", None]
 ```
 
-Husk at når vi kjørte koden tidligere, så fikk vi `None` på det andre elementet i listen, fordi vi fikk mer enn ett FNR.
-Siden vi nå har *snevret* inn søket ved å legge til en adressevariabel, finner vi nå et unikt treff.
-
-<br>
+Når vi kjørte koden tidligere fikk vi `None` på det andre elementet i listen fordi vi fikk mer enn ett FNR.
+Siden vi nå har *snevret* inn søket ved å legge til en adressevariabel inner vi nå et unikt treff.
 
 Likedan fikk vi, med den tidligere koden, returnert `None` for det tredje elementet, fordi vi ikke fikk treff på noen FNR.
 La oss se om vi kan finne det:
@@ -288,22 +286,22 @@ Merk at ved å legge til døde, har vi *utvidet* søket.
 
 ## Søkestrategi
 
-Statistikkseksjonene blir gitt mye frihet i dette biblioteket - med intensjon. Det finnes ingen "beste" universal 
-søkestrategi, da søkemetodikken vil variere basert på datagrunnlaget og behov.
+Det finnes ingen universelt beste søkestrategi da søkemetodikken vil variere basert på datagrunnlaget og behov. Derfor har vi lagt inn mye funksjonalitet i dette biblioteket.
 
-Her er noen aspekter man kan ta stilling til:
 
-* FNR-søk kan gi falskt positivt funn 
-  * **Eksempel**: Man søker kun på etternavn, adresse, og fødselsdato - kan gi FNRet til en tvilling
+Her er noen aspekter man bør ta stilling til:
+
+* FNR-søk kan gi falskt positivt funn
+  * **Eksempel**: Mån søker kun på etternavn, adresse, og fødselsdato - kan gi FNRet til en tvilling
 * FNR-søk kan gi falskt negativt funn 
-  * **Eksempel**: Man søker på navn og adresse, men vedkommende har flyttet - man får man ingen treff
+  * **Eksempel**: Man søker på navn og adresse, men vedkommende har flyttet - da får man ingen treff
 * Flere variabler (@tbl-whodat-variables) gir et snevrere søk. Modifikatorer (@tbl-whodat-modifiers) utvider søket.
 
 ### Case 1: Snevert søk
 
-Noen seksjoner vil kanskje vurdere at man ønsker så langt som mulig å unngå falskt positive funn. Med andre ord, så tar man
+Noen seksjoner vil kanskje vurdere at man ønsker så langt som mulig å unngå falskt positive funn. Med andre ord tar man
 heller kostnaden av å ekskludere potensielt gyldige FNR til fordel for å være helt sikre på at de FNR-ene man finner er gyldige. En strategi
-kunne da ha vært å kjøre et enkelt søk med alle variablene man har tilgjengelig - et snevert søk. 
+kunne da ha vært å kjøre et enkelt søk med alle variablene man har tilgjengelig.
 Dette kunne ha sett slik ut:
 
 ```{.python}
@@ -320,8 +318,8 @@ result = (
 ### Case 2: Bredt søk
 
 Andre seksjoner rydder muligens opp i dataene sine senere i produksjonsløpet ved å koble mot annen data,
-og ønsker et veldig bredt søk for å få med alle potensielle FNRer. Vi kan da se for oss et iterativt søk, hvor vi starter
-veldig snevert med mange variabler og utvider søket etter hvert.
+og ønsker et veldig bredt søk for å få med alle potensielle FNRer. Vi kan da se for oss et iterativt søk: vi starter
+snevert og utvider søket etter hvert.
 Dette kunne ha sett slik ut:
 
 ```{.python}
@@ -342,8 +340,7 @@ result = (
 )
 ```
 
-Vi anbefaler
-statistikere å teste ut hvilke variabler som gir best resultater med datagrunnlaget man har tilgjengelig.
+Vi anbefaler statistikere å teste ut hvilke variabler som gir best resultater med datagrunnlaget man har tilgjengelig.
 
 ## Detaljer om FNR-søket
 
@@ -403,7 +400,7 @@ Hver rad i `df` tilsvarer ett element i listen i `result.details`. Hvert element
 | Felt                     | Beskrivelse |
 | :-                        | :---         |
 | index_fnr_search_df                | Radnummeret i DataFramen - uavhengig av indeks   |
-| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index)    |
+| index_original_df | Radnummeret i forhold til indeksen i DataFramen (følger df.index). Brukes for å erstatte ugylidge fødselsnummer    |
 | number_of_found_ids  | Hvor mange FNRer som ble funnet på siste søk   |
 | unique_response_step_number  | Hvis et unikt FNR ble funnet - hvilket steg (søk) som fant FNRet. Hvis man ikke finner et unikt FNR, blir dette None.  |
 
@@ -411,16 +408,13 @@ Beskrivelse av metadata-felter
 
 :::
 
-I eksempelet over fant vi to FNRer, i første og andre rad. For den første raden i DataFramen, ser vi at `unique_response_step_number = 1`. Dette betyr at
-vi fant et unikt FNR i det første søket vårt, altså søket med kun `navn`. For den andre raden, er `unique_response_step_number = 2`,
-som betyr at vi fant et unikt FNR på søket med `navn` og `adresse`. 
+I eksempelet over fant vi to FNRer. De ligger i listen `found_personal_ids`.
 
-`index_fnr_search_df` beskriver radnummeret metadataen gjelder, uavhengig av DataFramens indeks. `index_original_df` beskriver
-radnummeret i henhold til indeksen i DataFramen. Dette blir viktig når vi skal erstatte ugyldige FNR med gyldige FNR.
+*Første fødselsnummer:* `unique_response_step_number = 1` forteller oss at vi fant et unikt FNR med kun `navn`.
 
-Metadataen er ikke sensitiv, og kan skrives til produktbøtta for videre utforskning fra Kildomaten slik:
+*Andre fødselsnummer:* `unique_response_step_number = 2` forteller oss at `navn` *og* `adresse` var nødvendig for å få et unikt FNR.
 
-```{.python}
+```{.python filename="Lagre metadata"}
 from gcsfs import GCSFileSystem
 import json
 
@@ -429,6 +423,8 @@ details = result.details
 with GCSFileSystem().open("gs://ssb-someteam-data-produkt-prod/somefolder/details_fnrsearch.json", "w") as f:
   json.dump(details, f)
 ```
+
+Metadatane er ikke sensitive og kan derfor skrives til produktbøtta for videre utforskning fra Kildomaten.
 
 ## Erstatte ugyldige med gyldige FNR
 
