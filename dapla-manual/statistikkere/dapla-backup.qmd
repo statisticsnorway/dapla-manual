@@ -1,0 +1,69 @@
+---
+title: Backup-løsning
+date-modified: "2025-10-15"
+lightbox: true
+---
+
+Innhold i teamets bøtter tas automatisk backup av hver dag kl. 21. Ved behov kan filer eller mapper gjenopprettes fra backup.
+
+Backup-løsningen er felles for alle Dapla-team og settes opp automatisk via teamets infrastrukturkonfigurasjon (IaC).  
+Teamet trenger derfor ikke gjøre noe for å aktivere backup.
+
+## Hvilke bøtter tas med i backupen
+
+Som standard tas følgende bøtter med i backupen:
+
+1. **Kildebøtte**  
+   – `ssb-<team>-data-kilde-prod`
+
+2. **Produktbøtte**  
+   – `ssb-<team>-data-produkt-prod`
+
+3. **Delt-bøtter**  
+   – `ssb-<team>-data-delt-<navn>-prod`  
+   – Inkluderer alle delt-bøtter som teamet har opprettet
+
+::: {.callout-tip}
+## Tips
+Alle bøttene legges automatisk til i backup-løsningen.  
+Teamet trenger ikke å gjøre endringer i kode eller konfigurasjon for at dette skal fungere.
+:::
+
+## Hvor ofte og hvor lenge
+
+Backup tas automatisk **hver dag kl. 21**, og gjenopprettingspunkter lagres i **inntil 500 dager**.  
+Dette betyr at du kan gjenopprette filer fra en hvilken som helst dag de siste **500 dagene**.
+
+## Krav og unntak
+
+Filer som ligger i mapper med navn **`tmp`** eller **`temp`** på øverste nivå i bøttene tas ikke med i backup-løsningen, og kan dermed ikke gjenopprettes.  
+Dette gjelder uansett bøttetype.
+
+Legg filer her dersom det **ikke er behov** for at de skal være en del av backup-ordningen.
+
+::: {.callout-tip}
+## Tips
+Bruk `tmp`- eller `temp`-mapper for midlertidige filer som ikke skal beholdes.  
+Dette gjør backupen både raskere og mer oversiktlig.
+:::
+
+## Gjenoppretting (restore)
+
+Dersom en fil eller mappe ved en feiltakelse har blitt slettet fra en bøtte, kan den gjenopprettes fra backup.
+
+1. Gå til [https://ssb.pureservice.com/](https://ssb.pureservice.com/)  
+2. Velg **“Skjema for gjenoppretting av data”**  
+3. Fyll ut følgende felter i skjemaet:  
+   - **Plattform:** velg *Dapla*  
+   - **Filsti:** angi full sti til filen eller mappen som skal gjenopprettes  
+   - **Gjenopprettingsdato:** datoen du ønsker å hente filen fra  
+   - **Skal filen overskrives?:** velg *Ja* eller *Nei* avhengig av behov  
+4. Send inn skjemaet
+
+Kundeservice vil behandle forespørselen og gjenopprette filene i henhold til informasjonen du har gitt.
+
+::: {.callout-warning}
+## Viktig
+Backup dekker kun bøtter som inngår i Dapla-buckets-featuren (`kilde`, `produkt` og `delt`).  
+Filer i `tmp` eller `temp` gjenopprettes **ikke**, selv om resten av bøtta tas med i backupen.
+:::

@@ -1,0 +1,57 @@
+---
+title: Utfasing av dapla-toolbelt
+subtitle: Støtte for dapla-toolbelt fjernes 1. februar 2026
+categories:
+  - dapla-toolbelt
+  - kildomaten
+  - data collector
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "10/13/2025"
+date-modified: "10/13/2025"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+Team Statistikktjenester kommer til å fjerne støtte for Python-pakken dapla-toolbelt **1. februar 2026**.
+
+## Hva endres? 
+
+Etter 1. februar vil vi ikke lenger støtte bruk av dapla-toolbelt på Dapla Lab. Noe av funksjonaliteten i dapla-toolbelt fjernes, mens noe videreføres inn i nye Python-pakker.
+
+## Hva betyr dette for meg? 
+Hvis du bruker dapla-toolbelt i koden din i dag så må du erstatte dette før 1. februar 2026. Noe kan erstattes allerede nå, mens annen funksjonalitet vil erstattes gradvis de neste månedene. @tbl-dapla-toolbelt-phase-out gir en oversikt over hvilken funksjonalitet som erstattes med hva:
+
+| dapla-toolbelt                    | Etter endring                                                   |
+|:----------------------------------|:----------------------------------------------------------------|
+| `read_pandas()`, `write_pandas()` | Bytt til standard-pakker som [Pandas](https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html), [Polars](https://docs.pola.rs/api/python/stable/reference/api/polars.read_parquet.html), [PyArrow](https://arrow.apache.org/docs/python/parquet.html), etc.      |
+| `CollectorClient`                 | *Ny Python-pakke kommer snart*  | 
+| `GuardianClient`                  | *Ny Python-pakke kommer snart*  |
+| `AuthClient`                      | [dapla-auth-client](https://manual.dapla.ssb.no/statistikkere/dapla-auth-client.html) |
+| `get_secret_version()`            | *Skal flyttes til Python-pakken [ssb-fagfunksjoner](https://github.com/statisticsnorway/ssb-fagfunksjoner)*                                                  |
+| `FileClient`                      |  [gcsfs](https://gcsfs.readthedocs.io/en/latest/)                       |
+| `trigger_source_data_processing`  | *Ny Python-pakke kommer snart* |
+
+: Funksjonalitet i dapla-toolbelt og hvor det flyttes. {#tbl-dapla-toolbelt-phase-out .striped}
+
+Av @tbl-dapla-toolbelt-phase-out ser vi at funksjonaliteten i `read_pandas()`, `write_pandas()`, `AuthClient` og `FileClient` kan erstattes med nye alternativene nå. Resten av funksjonaliteten er under utvikling og det vil annonseres når disse er klare for erstatning.  
+
+
+### dapla-toolbelt i Kildomaten
+
+Brukere som benytter dapla-toolbelt fra Kildomaten kan erstatte dette med en gang. I Kildomaten er det `read_pandas()`, `write_pandas()` og `FileClient` som benyttes og disse kan erstattes nå. 
+
+## Kan jeg få hjelp? 
+Ja. Ta kontakt med avdelingens **støtteteam** eller **tech-coacher** ved behov for støtte.
+
+## Hvorfor gjøres endringen?
+Endringen gjøres fordi mye av funksjonaliteten i pakken ikke lenger er relevant, og vi ønsker å flytte gjenværende funksjonalitet inn i mindre Python-pakker. Fordelen med dette er følgende:
+
+- mindre forvaltning
+- færre avhengigheter i ssb-project
+- enklere migrering fra prodsonen til Dapla
+- mindre SSB-spesifikk dokumentasjon
