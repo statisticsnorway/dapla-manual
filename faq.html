@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-701cf985b04c13a44ea29e1938249dbe.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-adf23eb75d509aaa68dfd9b23c07f30b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -345,106 +345,7 @@ ServerApp.rate_limit_window=3.0 (secs)</code></pre>
 </section>
 <section id="hvordan-kan-jeg-gjenopprette-filer-fra-bøtter" class="level3">
 <h3 class="anchored" data-anchor-id="hvordan-kan-jeg-gjenopprette-filer-fra-bøtter">Hvordan kan jeg gjenopprette filer fra bøtter?</h3>
-<p>Bøttene som opprettes i <a href="./statistikkere/features.html">featuren <em>dapla-buckets</em></a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> har en <em>Retention policy</em> som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode.</p>
-<p>I dapla-buckets blir overskrevne og slettede filer noncurrent. En noncurrent versjon blir slettet hvis den er mer enn <strong>180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta</strong>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>Alle dapla-teamene har objektversjon aktivert som standard på alle bøtter.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Ekspertteam eller Self-managed team
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Hvis bøttene ikke er opprettet gjennom featuren <em>dapla-buckets</em>, men kanskje av et ekspertteam eller ekspertteam, så må man først forhøre seg med teamet om versjonering er skrudd på for bøtta. Hvis den ikke er det så blir kun soft-deleted filer tatt vare på i 7 dager.</p>
-</div>
-</div>
-</div>
-<p>For å gjennopprette en <em>non-current</em> eller <em>soft-deleted</em> versjon så benytte funksjonalitet fra <a href="./statistikkere/dapla-toolbelt-metadata.html">dapla-toolbelt</a>. For å gjenskape en versjon så må man først bruke funksjonen <code>get_versions()</code> liste ut ID-en til versjonen:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set bucket name and folder name(if any)</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-prod"</span> </span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>folder <span class="op">=</span> <span class="st">"restore"</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>FileClient.get_versions(bucket, folder)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><strong>Output</strong></p>
-<pre><code>[&lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835&gt;,
- &lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499&gt;,
- &lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818&gt;,
- &lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930&gt;]</code></pre>
-<p>Fra output over ser vi filen <code>data1.parquet</code> finnes i 2 versjoner. Vi kan undersøke den nærmere med følgende kode:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> FileClient.get_versions(<span class="st">"ssb-dapla-felles-data-produkt-prod"</span>, <span class="st">"restore/data1.parquet"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files:</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Name          : "</span>,<span class="bu">file</span>.name)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Generation Id : "</span>, <span class="bu">file</span>.generation)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Updated on    : "</span>, <span class="bu">file</span>.updated)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Deleted on    : "</span>, <span class="bu">file</span>.time_deleted)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"------------------------------------------"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p><strong>Output</strong></p>
-<pre><code>Name          :  restore/data1.parquet
-Generation Id :  1718436304922143
-Updated on    :  2024-06-15 07:25:04.928000+00:00
-Deleted on    :  2024-06-24 11:10:10.807000+00:00
-------------------------------------------
-Name          :  restore/data1.parquet
-Generation Id :  1719227410801992
-Updated on    :  2024-06-24 11:10:10.807000+00:00
-Deleted on    :  None
-------------------------------------------</code></pre>
-<p>Av output over ser vi at det er en fil som som har en verdi i <code>Deleted on</code> feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke <code>restore_version()</code>og referere til Generation ID:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FileClient.restore_version( source_bucket_name<span class="op">=</span><span class="st">"ssb-dapla-kildomaten-data-delt-test"</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                            source_file_name<span class="op">=</span><span class="st">"restore/data3.parquet"</span>,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                            source_generation_id<span class="op">=</span><span class="dv">1718436304922143</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                            new_name<span class="op">=</span><span class="st">""</span> (optional)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                           )</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt <em>non-current</em>. Ved gjenoppretting av <em>non-current</em>-versjoner så kan man også spesifisere nytt navn på filen med parameteret <code>new_name=</code> i <code>restore_version()</code>-funksjonen.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i <a href="#fig-gcc-versions" class="quarto-xref">Figur&nbsp;2</a>. Men man har ikke tilgang til <em>Object details</em> og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.</p>
-<div id="fig-gcc-versions" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av hvordan man velger versjoner i GCC.">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-gcc-versions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./images/gcc-versions.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figur&nbsp;2: Hvordan liste ut versjoner fra GCC."><img src="./images/gcc-versions.png" class="img-fluid figure-img" alt="Bilde av hvordan man velger versjoner i GCC."></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gcc-versions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;2: Hvordan liste ut versjoner fra GCC.
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
+<p>Fremgangsmåten for gjenoppretting av filer er <a href="./statistikkere/backup-data.html">beskrevet i Backup-kapitlet</a>.</p>
 </section>
 <section id="hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team" class="level3">
 <h3 class="anchored" data-anchor-id="hvordan-sjekker-jeg-om-kildomaten-er-tilgjengelig-for-mitt-team">Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team?</h3>
@@ -459,20 +360,20 @@ Figur&nbsp;2: Hvordan liste ut versjoner fra GCC.
 <div class="code-with-filename-file">
 <pre><strong>dapla-example-iac/infra/projects.yaml</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="dapla-example-iac/infra/projects.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_uniform_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">projects</span><span class="kw">:</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> test</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> prod</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> transfer-service</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> kildomaten</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="dapla-example-iac/infra/projects.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_uniform_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">projects</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> dapla-example</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> transfer-service</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> kildomaten</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -492,10 +393,10 @@ Figur&nbsp;2: Hvordan liste ut versjoner fra GCC.
 <div class="column" style="width:47.5%;">
 <p>Det hender at man får melding om at <em>Account already exists</em> når man logger seg inn på en Dapla-tjeneste. For å løse dette gjør man følgende:</p>
 <ol type="1">
-<li>Velg <em>Add to existing account</em> som vist i <a href="#fig-add-existing-account" class="quarto-xref">Figur&nbsp;3</a>.</li>
-<li>Velg <em>Google</em> slik som vist i <a href="#fig-authenticate" class="quarto-xref">Figur&nbsp;4</a>.</li>
+<li>Velg <em>Add to existing account</em> som vist i <a href="#fig-add-existing-account" class="quarto-xref">Figur&nbsp;2</a>.</li>
+<li>Velg <em>Google</em> slik som vist i <a href="#fig-authenticate" class="quarto-xref">Figur&nbsp;3</a>.</li>
 </ol>
-<p>I <a href="#fig-authenticate" class="quarto-xref">Figur&nbsp;4</a> skal du IKKE fylle inn <em>Username or email</em> og <em>Password</em>. Du skal kun trykke på <em>Google</em>-knappen.</p>
+<p>I <a href="#fig-authenticate" class="quarto-xref">Figur&nbsp;3</a> skal du IKKE fylle inn <em>Username or email</em> og <em>Password</em>. Du skal kun trykke på <em>Google</em>-knappen.</p>
 <p>Meldingen om at <em>Account already exists</em> forekommer svært sjelden, og typisk skjer det første gang man logger seg inn på en tjeneste.</p>
 </div><div class="column" style="width:5%;">
 <!-- empty column to create gap -->
@@ -503,20 +404,20 @@ Figur&nbsp;2: Hvordan liste ut versjoner fra GCC.
 <div id="fig-add-existing-account" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-add-existing-account-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./images/account-already-exist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figur&nbsp;3: "><img src="./images/account-already-exist.png" id="fig-add-existing-account" class="img-fluid figure-img"></a>
+<a href="./images/account-already-exist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figur&nbsp;2: "><img src="./images/account-already-exist.png" id="fig-add-existing-account" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-add-existing-account-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;3
+Figur&nbsp;2
 </figcaption>
 </figure>
 </div>
 <div id="fig-authenticate" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-authenticate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./images/account-authenticate-link.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figur&nbsp;4: "><img src="./images/account-authenticate-link.png" id="fig-authenticate" class="img-fluid figure-img"></a>
+<a href="./images/account-authenticate-link.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figur&nbsp;3: "><img src="./images/account-authenticate-link.png" id="fig-authenticate" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-authenticate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;4
+Figur&nbsp;3
 </figcaption>
 </figure>
 </div>
@@ -562,7 +463,7 @@ Figur&nbsp;4
 </section>
 <section id="hva-betyr-det-at-tjenesten-min-er-suspendert" class="level3">
 <h3 class="anchored" data-anchor-id="hva-betyr-det-at-tjenesten-min-er-suspendert">Hva betyr det at tjenesten min er <em>suspendert</em>?</h3>
-<p><a href="./images/dapla-lab-pause.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="./images/dapla-lab-pause.png" class="img-fluid" style="max-width: 50%; float: right;" alt="Tjenesteikon for Jupyter"></a></p>
+<p><a href="./images/dapla-lab-pause.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="./images/dapla-lab-pause.png" class="img-fluid" style="max-width: 50%; float: right;" alt="Tjenesteikon for Jupyter"></a></p>
 <p>At en tjeneste er suspendert betyr at tjenesten er satt på pause. I praksis vil det si at ressursene, f.eks. CPU og RAM, som tjenesten har reservert har blitt frigjort. Man kan starte tjenesten på nytt ved å trykke på <em>Play</em>-knappen i bildet til høyre, og man starter opp tjenesten på nytt med de samme ressursene. Alt som ble lagret i tjenestens lokale filsystem under <code>/home/onyxia/work/</code>blir også gjennopprettet, mens resten blir borte. Derfor bør alltid kode lagres under <code>work</code>-mappen.</p>
 </section>
 <section id="kan-jeg-jobbe-med-kildedata-fra-dapla-lab" class="level3">
@@ -610,46 +511,46 @@ Figur&nbsp;4
 <div class="code-with-filename-file">
 <pre><strong>app.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="app.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dash <span class="im">import</span> Dash, html, dcc, callback, Output, Input</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a sample dataset similar to the Gapminder dataset</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'country'</span>: [<span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>],</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'continent'</span>: [<span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>],</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>: [<span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>],</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lifeExp'</span>: [<span class="fl">28.801</span>, <span class="fl">39.877</span>, <span class="fl">43.828</span>, <span class="fl">50.917</span>, <span class="fl">59.504</span>, <span class="fl">72.390</span>, <span class="fl">44.000</span>, <span class="fl">63.739</span>, <span class="fl">72.961</span>],</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'pop'</span>: [<span class="dv">8425333</span>, <span class="dv">12412311</span>, <span class="dv">31889923</span>, <span class="dv">56602560</span>, <span class="dv">80461570</span>, <span class="dv">190010647</span>, <span class="dv">556263527</span>, <span class="dv">862030000</span>, <span class="dv">1318683096</span>],</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gdpPercap'</span>: [<span class="fl">779.4453145</span>, <span class="fl">786.11336</span>, <span class="fl">974.5803384</span>, <span class="fl">2108.944355</span>, <span class="fl">5718.766744</span>, <span class="fl">9065.800825</span>, <span class="fl">400.448611</span>, <span class="fl">1488.041713</span>, <span class="fl">4959.114854</span>]</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating DataFrame</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the app</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Dash(</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="va">__name__</span>,</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    requests_pathname_prefix<span class="op">=</span><span class="st">'/proxy/8050/'</span>, </span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    serve_locally<span class="op">=</span><span class="va">True</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>app.layout <span class="op">=</span> [</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    html.H1(children<span class="op">=</span><span class="st">'Title of Dash App'</span>, style<span class="op">=</span>{<span class="st">'textAlign'</span>:<span class="st">'center'</span>}),</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    dcc.Dropdown(df.country.unique(), <span class="st">'Canada'</span>, <span class="bu">id</span><span class="op">=</span><span class="st">'dropdown-selection'</span>),</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    dcc.Graph(<span class="bu">id</span><span class="op">=</span><span class="st">'graph-content'</span>)</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="at">@callback</span>(</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    Output(<span class="st">'graph-content'</span>, <span class="st">'figure'</span>),</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    Input(<span class="st">'dropdown-selection'</span>, <span class="st">'value'</span>)</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_graph(value):</span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    dff <span class="op">=</span> df[df.country<span class="op">==</span>value]</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.line(dff, x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'pop'</span>)</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    app.run(debug<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="app.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dash <span class="im">import</span> Dash, html, dcc, callback, Output, Input</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a sample dataset similar to the Gapminder dataset</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'country'</span>: [<span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>],</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'continent'</span>: [<span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>],</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>: [<span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>],</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lifeExp'</span>: [<span class="fl">28.801</span>, <span class="fl">39.877</span>, <span class="fl">43.828</span>, <span class="fl">50.917</span>, <span class="fl">59.504</span>, <span class="fl">72.390</span>, <span class="fl">44.000</span>, <span class="fl">63.739</span>, <span class="fl">72.961</span>],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'pop'</span>: [<span class="dv">8425333</span>, <span class="dv">12412311</span>, <span class="dv">31889923</span>, <span class="dv">56602560</span>, <span class="dv">80461570</span>, <span class="dv">190010647</span>, <span class="dv">556263527</span>, <span class="dv">862030000</span>, <span class="dv">1318683096</span>],</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gdpPercap'</span>: [<span class="fl">779.4453145</span>, <span class="fl">786.11336</span>, <span class="fl">974.5803384</span>, <span class="fl">2108.944355</span>, <span class="fl">5718.766744</span>, <span class="fl">9065.800825</span>, <span class="fl">400.448611</span>, <span class="fl">1488.041713</span>, <span class="fl">4959.114854</span>]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating DataFrame</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the app</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Dash(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="va">__name__</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    requests_pathname_prefix<span class="op">=</span><span class="st">'/proxy/8050/'</span>, </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    serve_locally<span class="op">=</span><span class="va">True</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>app.layout <span class="op">=</span> [</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    html.H1(children<span class="op">=</span><span class="st">'Title of Dash App'</span>, style<span class="op">=</span>{<span class="st">'textAlign'</span>:<span class="st">'center'</span>}),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    dcc.Dropdown(df.country.unique(), <span class="st">'Canada'</span>, <span class="bu">id</span><span class="op">=</span><span class="st">'dropdown-selection'</span>),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    dcc.Graph(<span class="bu">id</span><span class="op">=</span><span class="st">'graph-content'</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="at">@callback</span>(</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    Output(<span class="st">'graph-content'</span>, <span class="st">'figure'</span>),</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    Input(<span class="st">'dropdown-selection'</span>, <span class="st">'value'</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_graph(value):</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    dff <span class="op">=</span> df[df.country<span class="op">==</span>value]</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.line(dff, x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'pop'</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    app.run(debug<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="fra-jupyter-tjenesten" class="level4">
@@ -665,56 +566,56 @@ Figur&nbsp;4
 <div class="code-with-filename-file">
 <pre><strong>app.ipynb</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="app.ipynb"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Notebook cell 1</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dash <span class="im">import</span> Dash, html, dcc, callback, Output, Input</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Notebook cell 2</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a sample dataset similar to the Gapminder dataset</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'country'</span>: [<span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>],</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'continent'</span>: [<span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>],</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>: [<span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>],</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lifeExp'</span>: [<span class="fl">28.801</span>, <span class="fl">39.877</span>, <span class="fl">43.828</span>, <span class="fl">50.917</span>, <span class="fl">59.504</span>, <span class="fl">72.390</span>, <span class="fl">44.000</span>, <span class="fl">63.739</span>, <span class="fl">72.961</span>],</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'pop'</span>: [<span class="dv">8425333</span>, <span class="dv">12412311</span>, <span class="dv">31889923</span>, <span class="dv">56602560</span>, <span class="dv">80461570</span>, <span class="dv">190010647</span>, <span class="dv">556263527</span>, <span class="dv">862030000</span>, <span class="dv">1318683096</span>],</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gdpPercap'</span>: [<span class="fl">779.4453145</span>, <span class="fl">786.11336</span>, <span class="fl">974.5803384</span>, <span class="fl">2108.944355</span>, <span class="fl">5718.766744</span>, <span class="fl">9065.800825</span>, <span class="fl">400.448611</span>, <span class="fl">1488.041713</span>, <span class="fl">4959.114854</span>]</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating DataFrame</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the app</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>port <span class="op">=</span> <span class="dv">8050</span> <span class="co"># must be between 1024 and 9999</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>service_prefix <span class="op">=</span> os.getenv(<span class="st">'JUPYTERHUB_SERVICE_PREFIX'</span>, <span class="st">'/'</span>)</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>domain <span class="op">=</span> os.getenv(<span class="st">'JUPYTERHUB_HTTP_REFERER'</span>, <span class="va">None</span>)</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Dash(</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="va">__name__</span>,</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    requests_pathname_prefix<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>service_prefix<span class="sc">}</span><span class="ss">proxy/</span><span class="sc">{</span>port<span class="sc">}</span><span class="ss">/"</span>, </span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    serve_locally<span class="op">=</span><span class="va">True</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>app.layout <span class="op">=</span> [</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    html.H1(children<span class="op">=</span><span class="st">'Title of Dash App'</span>, style<span class="op">=</span>{<span class="st">'textAlign'</span>:<span class="st">'center'</span>}),</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    dcc.Dropdown(df.country.unique(), <span class="st">'Canada'</span>, <span class="bu">id</span><span class="op">=</span><span class="st">'dropdown-selection'</span>),</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    dcc.Graph(<span class="bu">id</span><span class="op">=</span><span class="st">'graph-content'</span>)</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="at">@callback</span>(</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    Output(<span class="st">'graph-content'</span>, <span class="st">'figure'</span>),</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>    Input(<span class="st">'dropdown-selection'</span>, <span class="st">'value'</span>)</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_graph(value):</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    dff <span class="op">=</span> df[df.country<span class="op">==</span>value]</span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.line(dff, x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'pop'</span>)</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For jupyter_mode, choose between 'external' or 'inline'.</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 'jupyterlab' should also be poosible, but doesn't seem to work...</span></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>    app.run(jupyter_mode<span class="op">=</span><span class="st">"external"</span>, jupyter_server_url<span class="op">=</span>domain, port<span class="op">=</span>port)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="app.ipynb"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Notebook cell 1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dash <span class="im">import</span> Dash, html, dcc, callback, Output, Input</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Notebook cell 2</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a sample dataset similar to the Gapminder dataset</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'country'</span>: [<span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Afghanistan'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'Brazil'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>, <span class="st">'China'</span>],</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'continent'</span>: [<span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'South America'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>, <span class="st">'Asia'</span>],</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>: [<span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>, <span class="dv">1952</span>, <span class="dv">1977</span>, <span class="dv">2007</span>],</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'lifeExp'</span>: [<span class="fl">28.801</span>, <span class="fl">39.877</span>, <span class="fl">43.828</span>, <span class="fl">50.917</span>, <span class="fl">59.504</span>, <span class="fl">72.390</span>, <span class="fl">44.000</span>, <span class="fl">63.739</span>, <span class="fl">72.961</span>],</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'pop'</span>: [<span class="dv">8425333</span>, <span class="dv">12412311</span>, <span class="dv">31889923</span>, <span class="dv">56602560</span>, <span class="dv">80461570</span>, <span class="dv">190010647</span>, <span class="dv">556263527</span>, <span class="dv">862030000</span>, <span class="dv">1318683096</span>],</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gdpPercap'</span>: [<span class="fl">779.4453145</span>, <span class="fl">786.11336</span>, <span class="fl">974.5803384</span>, <span class="fl">2108.944355</span>, <span class="fl">5718.766744</span>, <span class="fl">9065.800825</span>, <span class="fl">400.448611</span>, <span class="fl">1488.041713</span>, <span class="fl">4959.114854</span>]</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating DataFrame</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the app</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>port <span class="op">=</span> <span class="dv">8050</span> <span class="co"># must be between 1024 and 9999</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>service_prefix <span class="op">=</span> os.getenv(<span class="st">'JUPYTERHUB_SERVICE_PREFIX'</span>, <span class="st">'/'</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>domain <span class="op">=</span> os.getenv(<span class="st">'JUPYTERHUB_HTTP_REFERER'</span>, <span class="va">None</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Dash(</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="va">__name__</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    requests_pathname_prefix<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>service_prefix<span class="sc">}</span><span class="ss">proxy/</span><span class="sc">{</span>port<span class="sc">}</span><span class="ss">/"</span>, </span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    serve_locally<span class="op">=</span><span class="va">True</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>app.layout <span class="op">=</span> [</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    html.H1(children<span class="op">=</span><span class="st">'Title of Dash App'</span>, style<span class="op">=</span>{<span class="st">'textAlign'</span>:<span class="st">'center'</span>}),</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    dcc.Dropdown(df.country.unique(), <span class="st">'Canada'</span>, <span class="bu">id</span><span class="op">=</span><span class="st">'dropdown-selection'</span>),</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    dcc.Graph(<span class="bu">id</span><span class="op">=</span><span class="st">'graph-content'</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="at">@callback</span>(</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    Output(<span class="st">'graph-content'</span>, <span class="st">'figure'</span>),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    Input(<span class="st">'dropdown-selection'</span>, <span class="st">'value'</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_graph(value):</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    dff <span class="op">=</span> df[df.country<span class="op">==</span>value]</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.line(dff, x<span class="op">=</span><span class="st">'year'</span>, y<span class="op">=</span><span class="st">'pop'</span>)</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># For jupyter_mode, choose between 'external' or 'inline'.</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 'jupyterlab' should also be poosible, but doesn't seem to work...</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    app.run(jupyter_mode<span class="op">=</span><span class="st">"external"</span>, jupyter_server_url<span class="op">=</span>domain, port<span class="op">=</span>port)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -792,12 +693,12 @@ Figur&nbsp;4
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> google.cloud.storage <span class="im">as</span> storage</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> blob <span class="kw">in</span> client.list_blobs(<span class="st">"FULLT NAVN PÅ DELT-BØTTE"</span>, versions<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    blob.delete()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> google.cloud.storage <span class="im">as</span> storage</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> blob <span class="kw">in</span> client.list_blobs(<span class="st">"FULLT NAVN PÅ DELT-BØTTE"</span>, versions<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    blob.delete()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ol start="3" type="1">
 <li>Fjern delt-bøtta fra buckets-shared.yaml igjen og kjør <code>atlantis apply</code> etter godkjenning.</li>
@@ -809,30 +710,30 @@ Figur&nbsp;4
 <p>Man kan pause en regelmessig jobb med Transfer Service fra <a href="https://console.cloud.google.com/">Google Cloud Console</a> i nettleseren.</p>
 <ol type="1">
 <li>Åpne <a href="https://console.cloud.google.com/">Consolet</a></li>
-<li>Velge riktig Google prosjekt, slik som vist <a href="#fig-project" class="quarto-xref">Figur&nbsp;5</a></li>
+<li>Velge riktig Google prosjekt, slik som vist <a href="#fig-project" class="quarto-xref">Figur&nbsp;4</a></li>
 </ol>
 <div id="fig-project" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-project-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./images/gcc-project-selector.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figur&nbsp;5: Prosjektvelger i Consolet"><img src="./images/gcc-project-selector.png" class="img-fluid figure-img"></a>
+<a href="./images/gcc-project-selector.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figur&nbsp;4: Prosjektvelger i Consolet"><img src="./images/gcc-project-selector.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-project-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;5: Prosjektvelger i Consolet
+Figur&nbsp;4: Prosjektvelger i Consolet
 </figcaption>
 </figure>
 </div>
 <ol start="3" type="1">
 <li>Søk opp <strong>Transfer Jobs</strong> i søkefeltet øverst på siden.</li>
 <li>Velg hvilken Transfer Service jobb som skal endres.</li>
-<li>Velg <strong>Disable job</strong> som vist i <a href="#fig-disable" class="quarto-xref">Figur&nbsp;6</a></li>
+<li>Velg <strong>Disable job</strong> som vist i <a href="#fig-disable" class="quarto-xref">Figur&nbsp;5</a></li>
 </ol>
 <div id="fig-disable" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-disable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./images/transfer-service-disable.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figur&nbsp;6: Valg for Transfer Service jobber."><img src="./images/transfer-service-disable.png" class="img-fluid figure-img"></a>
+<a href="./images/transfer-service-disable.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figur&nbsp;5: Valg for Transfer Service jobber."><img src="./images/transfer-service-disable.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-disable-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;6: Valg for Transfer Service jobber.
+Figur&nbsp;5: Valg for Transfer Service jobber.
 </figcaption>
 </figure>
 </div>
@@ -841,14 +742,14 @@ Figur&nbsp;6: Valg for Transfer Service jobber.
 <section id="hvordan-søker-jeg-om-åpning-for-utgående-trafikk-i-dapla-lab-åpning-av-apier-for-å-hente-data" class="level3">
 <h3 class="anchored" data-anchor-id="hvordan-søker-jeg-om-åpning-for-utgående-trafikk-i-dapla-lab-åpning-av-apier-for-å-hente-data">Hvordan søker jeg om åpning for utgående trafikk i Dapla Lab (åpning av APIer for å hente data)?</h3>
 <p>Hvis du trenger å hente data fra eksterne kilder til bruk i statistikkproduksjonen (f.eks. APIer), må du søke om tilgang til dette hos Team M2M. Dette gjøres ved å melde sak til Kundeservice. Se veiledning nedenfor.</p>
-<p>Fra Byrånettet velg <strong>Arbeidsverktøy</strong> og <strong>Meld sak til kundeservice</strong>. Logg deg inn ved å velge <strong>Logg inn med federert autentisering</strong>. Inne løsningen velger du deretter <strong>Dapla helpdesk</strong>. <a href="#fig-dapla-helpdesk" class="quarto-xref">Figur&nbsp;7</a> viser menyen som vises.</p>
+<p>Fra Byrånettet velg <strong>Arbeidsverktøy</strong> og <strong>Meld sak til kundeservice</strong>. Logg deg inn ved å velge <strong>Logg inn med federert autentisering</strong>. Inne løsningen velger du deretter <strong>Dapla helpdesk</strong>. <a href="#fig-dapla-helpdesk" class="quarto-xref">Figur&nbsp;6</a> viser menyen som vises.</p>
 <div id="fig-dapla-helpdesk" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Visning av Dapla Helpdesk">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dapla-helpdesk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<a href="./images/dapla-helpdesk.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figur&nbsp;7: Visning av en Kundeservice-sak"><img src="./images/dapla-helpdesk.png" class="img-fluid figure-img" alt="Visning av Dapla Helpdesk"></a>
+<a href="./images/dapla-helpdesk.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figur&nbsp;6: Visning av en Kundeservice-sak"><img src="./images/dapla-helpdesk.png" class="img-fluid figure-img" alt="Visning av Dapla Helpdesk"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dapla-helpdesk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figur&nbsp;7: Visning av en Kundeservice-sak
+Figur&nbsp;6: Visning av en Kundeservice-sak
 </figcaption>
 </figure>
 </div>
@@ -862,14 +763,7 @@ Figur&nbsp;7: Visning av en Kundeservice-sak
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
-
-<ol>
-<li id="fn1"><p>Featuren <em>dapla-buckets</em> inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>I produktbøtta blir noncurrent versjoner slettet hvis det er mer enn 2 nyere versjoner, mens for kildebøtta er grensen på 3 nyere versjoner<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
