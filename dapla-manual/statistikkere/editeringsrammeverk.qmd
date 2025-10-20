@@ -1,16 +1,18 @@
 ---
 title: Editeringsrammeverket
-date-modified: 01/09/2025
+date-modified: 17/10/2025
 lightbox: true
 ---
 
-Editeringsrammeverket er et Python-bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier.
-
-Målsettingen er at rammeverket skal være fleksibelt nok til at du kan tilpasse det til egne behov, spare mye tid ved å ha store deler av koden ferdig laget til gjenbruk, og at mest mulig av vedlikeholdet gjøres sentralt.
-
 ## Hva er Editeringsrammeverket?
 
-Grunnen til at det heter Editeringsrammeverk og ikke Editeringsløsning er ganske enkelt at det ikke er en ferdig løsning, noe montering må påberegnes.
+Editeringsrammeverket er et Python-bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier. Rammeverket er utviklet i SSB.
+
+Målet er at rammeverket skal være fleksibelt *og* gjenbrukbart. Det vi kaller *variabelvelgeren* er en sentral del av rammeverket. Kort fortalt koordinerer den skjermbildene i applikasjonen og sørger for at alt henger sammen.
+
+Rammeverket krever noe montering. Dette er grunnen til at det heter Editeringsrammeverk og ikke Editeringsløsning.
+
+## Gjenbruk som hovedprinsipp
 
 Rammeverket tilrettelegger for gjenbruk på to måter:
 
@@ -25,12 +27,6 @@ Disse prinsippene bidrar til å redusere personavhengighet og samle mest mulig v
 Rammeverket er *ikke* låst til en spesifikk lagringsteknologi eller datastruktur: Så lenge du kan få dataene dine inn i en pandas dataframe kan du bruke rammeverket.
 
 Men *noen* moduler forutsetter foreløpig en spesifikk datastruktur lagret i [eimerdb](https://github.com/statisticsnorway/ssb-eimerdb).
-
-## Hvordan kan jeg ta det i bruk?
-
-Det er noen forutsetninger før du kan sette igang med rammeverket. Det viktigste er at du må forberede dataene dine slik at de er klare for editering. Dette vil si at åpenbare feil skal rettes, maskinelle/automatiske rettinger skal være gjort og dataene må være strukturert på en måte som gjør at det er lett å bearbeide. Hva som gjør data lett å bearbeide er vanskelig å gi en fasit på siden det kan være ulike hensyn for ulike data. For eksempel vil det for Altinn undersøkelser være nødvendig å strukturere data slik at du kan holde styr på hvilke enheter som har rapportert, hvilke innsendinger som tilhører hvilken enhet og hvilken innsending dataene dine kommer fra, for å håndtere dubletter.
-
-Du kan finne et forslag til datastruktur i dokumentasjonen i neste avsnitt og noen moduler forutsetter at dette oppsettet følges, men rammeverket er ikke låst til ett spesifikt oppsett.
 
 ## Hva trenger jeg å kunne?
 Du må ha litt python kompetanse, men hvor komfortabel du må være med python avhenger av hvor kompliserte behov du har.
@@ -58,6 +54,134 @@ Kompleksitet økes om:
 - datene har flere nivåer.
 - dataene har kompliserte/sammensatte sammenhenger mellom variabler.
 - du har behov for skreddersydde og sammensatte moduler
+
+## Hvordan kan jeg ta det i bruk?
+
+Det er noen forutsetninger før du kan sette igang med rammeverket. Det viktigste er at du må forberede dataene dine slik at de er klare for editering: altså at maskinelle/automatiske rettinger skal være gjort og dataene er strukturert på en måte som gjør at det er lett å bearbeide.
+
+Eksempelkoden viser hvordan man tar i bruk rammeverket for å editere en dataframe. Begynn med å installere pakken `ssb-dash-framework` og eventuelle andre pakker som mangler. [Trykk her](../notebooks/editering_demo.ipynb) for å åpne koden som en egen fil i ny fane. Koden er lik kodeeksempelet nedenfor.
+
+### Importer pakker
+```{.python } 
+from ssb_dash_framework import main_layout
+from ssb_dash_framework import app_setup
+from ssb_dash_framework import set_variables
+from ssb_dash_framework import EditingTableTab # Tab modulen
+from ssb_dash_framework import EditingTableWindow # Vindu modulen
+from ssb_dash_framework import apply_edits
+
+import pandas as pd
+import numpy as np
+
+import os
+import uuid
+from datetime import datetime, timezone
+
+from fagfunksjoner import next_version_path
+```
+### Les inn data
+
+```{.python}
+filsti_data = '/buckets/produkt/editering/editering_test_v1.parquet'
+
+df = pd.read_parquet(
+    filsti_data
+)
+
+filsti_logg = '/buckets/produkt/editering/logg/prosessdata/prosess-editering_test_v1.jsonl'
+try: os.makedirs('/buckets/produkt/editering/logg/prosessdata') # lag mappe for logg 
+except: pass
+```
+
+### Klargjøre data
+Løsningen avhenger av at man har en *uuid*-kolonne i dataframen. Dette er for å forsikre at riktig rad blir endret.
+
+```{.python}
+if 'uuid' not in df.columns: df['uuid'] = [uuid.uuid4() for _ in range(len(df))]
+```
+
+### Kjør app
+
+#### App setup
+
+```{.python}
+port = 8070
+service_prefix = os.getenv("JUPYTERHUB_SERVICE_PREFIX", "/")
+domain = os.getenv("JUPYTERHUB_HTTP_REFERER", None)
+theme = "cosmo" # sjekk ut flere temaer: https://www.dash-bootstrap-components.com/docs/themes/explorer/ 
+app = app_setup(port, service_prefix, theme)
+app_timestamp = datetime.now()
+```
+
+#### Velg variabler
+
+```{.python}
+set_variables(["orgnr","aar"]) # Dette gjør at orgnr og aar er tilgjengelig i applikasjonen din.
+start_verdier = { # Valgfritt å ha med, men kan være praktisk for brukervennlighet. Puttes inn i main_layout() funksjonen.
+    "orgnr": "971526920", 
+    "aar": "2020"
+}
+
+# Definer get_data funkjson
+def get_data(orgnr,aar):
+    return df[(df['orgnr'] == orgnr) & (df['aar']==aar)]
+    
+enhetstabell = EditingTableTab(
+    label="Eksempel 1: Fiktiv data",
+    inputs=["orgnr", "aar"], # evt. start_verdier.keys()
+    states=[],
+    get_data_func=get_data,
+    update_table_func=lambda x, *_: x ,
+    output="aar",
+    log_filepath = filsti_logg,
+    
+)
+
+tab_list = [
+    enhetstabell,
+]
+window_list = []
+
+app.layout = main_layout(window_list, tab_list, default_values = start_verdier, )
+
+if __name__ == "__main__":
+    app.run(
+        port=port,
+        jupyter_server_url=domain,
+        jupyter_mode="tab",
+    )
+```
+
+`EditingTableTab()` tar imot parameteret `justify_edit`. Standardverdien er True. Dersom man ikke vil gi begrunnelse når man editerer setter man den til False. Vær vi må spore endringer i dataene. Dette innebærer at vi må loggføre endringene - blant annet med begrunnelse for editering.
+
+#### Gjør endringer i datasettet
+
+
+### Påfør endringer fra logg
+
+```{.python}
+logg = pd.read_json(filsti_logg, lines = True)
+
+print(logg)
+
+df_editert = apply_edits(df, filsti_logg, app_timestamp)
+```
+
+### Sjekk hva som har blitt endret
+
+```{.python}
+
+pd.concat([df,df_editert]).drop_duplicates(keep=False)
+
+```
+
+### Lagre det editerte datasettet
+
+```{.python}
+filsti_data_neste_versjon = next_version_path(filsti_data)
+print(filsti_data_neste_versjon)
+df.to_parquet(filsti_data_neste_versjon)
+```
 
 ## Hvor er dokumentasjonen?
 
