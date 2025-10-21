@@ -68,16 +68,19 @@ poetry add dapla-toolbelt-whodat
 
 Eksemplene under viser hovedsaklig innlesing av dataframes fra minnet.
 
-### Variabler og modifikatorer
+### Kolonner og opsjoner
 
-**Variabler** er radvis data som blir brukt i søket for et enkelt fødselsnummer og vil være forskjellig for hver rad.
+I `dapla-toolbelt-whodat` konstruerer man en DataFrame med hjelpevariabler man skal bruke for søket (eksempler under).
+**Da er det veldig viktig** at kolonnenenavnene er riktige, og at formatet er helt likt som i tabellen under.
 
+::: {.callout-warning}
 **NB:** Alle variabler må være strengverdier i den faktiske DataFramen. Tall-typer støttes ikke.
+:::
 
 ::: {#tbl-whodat-variables }
-| Variabel                 | Format                                               | Kommentar                                               |
-|:------------------------  |:------------------------------------------------------|:---------------------------------------------------------|
-| **navn**                 | Et eller flere hele ord fra personnavnet, skilt med mellomrom. | Tegnsetting: "Åse" og "Günther" er gyldig, men ikke "مُحَمَّد" |
+| Kolonnenavn              | Format                                               | Kommentar                                               |
+|:------------------------ |:------------------------------------------------------|:---------------------------------------------------------|
+| **navn**                 | Et eller flere hele ord fra personnavnet, skilt med mellomrom. | Tegnsetting: "Åse J. Ås" og "Günther" er gyldig, men ikke "مُحَمَّد" |
 | **kjoenn**               | 'mann' eller 'kvinne'                               |                                                          |
 | **foedselsdato**         | "YYYYMMDD"                                          |                                                          |
 | **foedselsaarFraOgMed**  | "YYYY"                                              | Laveste fødselsår                                        |
@@ -94,17 +97,17 @@ Variabler
 
 <br>
 
-**Modifikatorer** er verdier som endrer søket, men er uavhengige av radverdiene - de utføres for hver rad.
+**Opsjoner** er verdier som endrer søket, og utføres for hver rad.
 
 ::: {#tbl-whodat-modifiers}
-| Modifikator             | Format                             | Default-verdi |  Kommentar                                                                                                   |
+| Opsjon             | Format                             | Default-verdi |  Kommentar                                                                                                   |
 |:--------------------------|:-------------------------------  |:--------------|:-------------------------------------------------------------------------------------------------------------|
 | **inkluder_oppholdsadresse** | true eller false              | false         | Treffer oppholdsasdresse i tillegg til bostedsadresse                                               |
 | **soek_fonetisk**            | true eller false              | false         | Søk på fonetisk lignende navn                                                                               |
 | **inkluder_doede**           | true eller false              | false         | Søket treffer også døde personer                                                                            |
 | **opplysningsgrunnlag**      | "gjeldende" eller "historisk" | "gjeldende".  | Styrer håndtering av historikk. Påvirker kun navn og adresse – for andre opplysninger søkes det alltid kun på gjeldende |
 
-Modifikatorer
+Opsjoner
 
 ::: 
 
@@ -283,7 +286,7 @@ Her er noen aspekter man bør ta stilling til:
   * **Eksempel**: Mån søker kun på etternavn, adresse, og fødselsdato - kan gi FNRet til en tvilling
 * FNR-søk kan gi falskt negativt funn 
   * **Eksempel**: Man søker på navn og adresse, men vedkommende har flyttet - da får man ingen treff
-* Flere variabler (@tbl-whodat-variables) gir et snevrere søk. Modifikatorer (@tbl-whodat-modifiers) utvider søket.
+* Flere variabler (@tbl-whodat-variables) gir et snevrere søk. Opsjoner (@tbl-whodat-modifiers) utvider søket.
 
 ### Case 1: Snevert søk
 
@@ -474,4 +477,3 @@ df_original["fnr"] = (
                       pd.Series(found_personal_ids)
                       .combine_first(df_original["fnr"])
                     )
-```
