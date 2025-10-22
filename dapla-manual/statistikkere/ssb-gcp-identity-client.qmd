@@ -1,0 +1,74 @@
+---
+title: "ssb-gcp-identity-client"
+date-modified: "21/10/2025"
+lightbox: true
+---
+
+[ssb-gcp-identity-client](https://pypi.org/project/ssb-gcp-identity-client/) er en Python-pakke med funksjonalitet for
+å koble seg til eksterne Google Cloud skyressurser med Maskinporten-tokens gjennom [Skyporten](https://docs.digdir.no/docs/Maskinporten/maskinporten_skyporten.html/).
+
+## Installasjon
+
+For å benytte [ssb-gcp-identity-client](https://pypi.org/project/ssb-gcp-identity-client/) må man først installere pakken i et [ssb-project](./ssb-project.qmd):
+
+```{.bash filename="Terminal"}
+poetry add ssb-gcp-identity-client
+```
+
+## Maskinporten-tokens
+
+Når du skal autentisere deg mot Skyporten må du først hente ut et gyldig Maskinporten-token.
+Se [Maskinporten-dokumentasjonen](./maskinporten-guardian.qmd) for mer informasjon.
+
+## Funksjonalitet
+
+### get_federated_storage_client()
+
+Funksjonen `get_federated_storage_client()` returnerer en Google Cloud Storage-klient autentisert gjennom Skyporten,
+som kan brukes mot bøtter i eksterne Google Cloud prosjekter.
+
+Funksjonen tar inn parametre som identifiserer den eksterne aktørens Workload Identity-pool samt Maskinporten-tokenet som en streng.
+
+```{.python}
+from ssb_gcp_identity_client import get_federated_storage_client
+
+storage_client = get_federated_storage_client(
+    project_number="1234567890",
+    workload_identity_pool_id="my-pool",
+    provider_id="maskinporten-provider",
+    maskinporten_token=token_as_string
+)
+
+# Eksempel på bruk av klienten
+for bucket in storage_client.list_buckets():
+    print(bucket.name)
+```
+
+### get_federated_credentials()
+
+Funksjonen `get_federated_credentials()` returnerer Google Cloud-credentials autentisert gjennom Skyporten,
+som kan brukes til å opprette Google Cloud-klienter. Funksjonen er nyttig dersom man ønsker å opprette klienter av
+andre typer enn Storage.
+
+Funksjonen tar inn parametre som identifiserer den eksterne aktørens Workload Identity-pool samt Maskinporten-tokenet som en streng.
+
+```{.python}
+from ssb_gcp_identity_client import get_federated_credentials
+
+creds = get_federated_credentials(
+    project_number="1234567890",
+    workload_identity_pool_id="my-pool",
+    provider_id="maskinporten-provider",
+    maskinporten_token=token_as_string
+)
+
+# Eksempel på bruk av credentials
+storage_client = storage.Client(credentials=creds)
+for bucket in storage_client.list_buckets():
+    print(bucket.name)
+```
+
+## Andre ressurser
+
+Se [koden](https://github.com/statisticsnorway/ssb-gcp-identity-client) og [dokumentasjonen](https://congenial-carnival-ezl841m.pages.github.io/reference.html)
+for ssb-gcp-identity-client på Github.
