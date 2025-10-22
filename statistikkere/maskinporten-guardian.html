@@ -680,6 +680,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">ssb-altinn-python</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-gcp-identity-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-gcp-identity-client</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -798,6 +804,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#opprette-en-maskinporten-guardian-m2m-bruker" id="toc-opprette-en-maskinporten-guardian-m2m-bruker" class="nav-link" data-scroll-target="#opprette-en-maskinporten-guardian-m2m-bruker">Opprette en Maskinporten Guardian M2M-bruker</a>
   <ul class="collapse">
   <li><a href="#eksempelkonfigurasjon" id="toc-eksempelkonfigurasjon" class="nav-link" data-scroll-target="#eksempelkonfigurasjon">Eksempelkonfigurasjon</a></li>
+  <li><a href="#skyporten-eksempelkonfigurasjon" id="toc-skyporten-eksempelkonfigurasjon" class="nav-link" data-scroll-target="#skyporten-eksempelkonfigurasjon">Skyporten eksempelkonfigurasjon</a></li>
   </ul></li>
   <li><a href="#kodeeksempler" id="toc-kodeeksempler" class="nav-link" data-scroll-target="#kodeeksempler">Kodeeksempler</a>
   <ul class="collapse">
@@ -1023,6 +1030,29 @@ Note
 <p>I test skal <code>maskinporten_audience</code> ha verdien <code>https://test.maskinporten.no/</code>. I prod skal det være <code>https://maskinporten.no/</code> (merk: skråstrek på slutten er viktig)</p>
 </div>
 </div>
+</section>
+<section id="skyporten-eksempelkonfigurasjon" class="level3">
+<h3 class="anchored" data-anchor-id="skyporten-eksempelkonfigurasjon">Skyporten eksempelkonfigurasjon</h3>
+<pre class="text"><code>amends ".../pkl/MaskinportenGuardianClient.pkl"
+
+api_shortname = "Kort API-beskrivelse (maks 32 tegn)"
+ maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
+ maskinporten_audience = "https://maskinporten.no/"
+ maskinporten_default_scopes {
+   "foo:data1"
+   "foo:data2"
+ }
+ credentials_access {
+   "group:play-foeniks-data-admins@groups.ssb.no"
+   "serviceaccount:foo-sa@play-foeniks-p-ab.iam.gserviceaccount.com"
+ }
+
+mappers {
+  new HardcodedClaimMapper {
+    claim_name = "skyporten_audience"
+    claim_value = "https://sky.maskinporten.no"
+  }
+}</code></pre>
 <p>Pull Requesten må godkjennes og behandles av en Dapla platformutvikler. Når dette er gjort blir det opprettet en Keycloak-klient, og hemmeligheten som kan brukes for å hente ut sikkerhetstokens for denne klienten er tilgjengelig i Secret Manager.</p>
 <p>Se følgende dokumentasjon for mer informasjon:</p>
 <ul>
@@ -1038,139 +1068,154 @@ Note
 <p>Følgende viser Python kodeeksempler for hvordan man kan hente ut et Maskinporten sikkerhetstoken.</p>
 <section id="flyt-m2m" class="level3">
 <h3 class="anchored" data-anchor-id="flyt-m2m">Flyt: M2M</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">Retrieve maskinporten M2M access token for querying an external API.</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">The following code example expects a toml config file to exist named</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;team_uniform_name&gt;-&lt;env&gt;-maskinporten-m2m.toml (e.g. play-foeniks-prod-maskinporten-m2m.toml)</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">with contents such as:</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">keycloak_url = "https://auth.test.ssb.no"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">keycloak_clients_gcp_project_id = "keycloak-clients-&lt;p|t&gt;-??"</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "https://guardian.intern.test.ssb.no"</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">[my-api]</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> toml</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>team_uniform_name <span class="op">=</span> <span class="st">"play-foeniks"</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>api_name <span class="op">=</span> <span class="st">"my-api"</span> <span class="co"># identifies the API in the config.toml file</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which environment we're running and load corresponding config</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>dapla_env <span class="op">=</span> os.getenv(<span class="st">"DAPLA_ENVIRONMENT"</span>).lower()</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> toml.load(<span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>dapla_env<span class="sc">}</span><span class="ss">-maskinporten-m2m.toml"</span>)</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten Guardian M2M Keycloak client credentials from Google Secret Manager</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># The secret's name is deduced from the team name and maskinporten client id</span></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-ssb-maskinporten-</span><span class="sc">{</span>config[api_name][<span class="st">'maskinporten_client_id'</span>]<span class="sc">}</span><span class="ss">-credentials"</span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>secret <span class="op">=</span> get_secret_version(project_id<span class="op">=</span>config[<span class="st">'keycloak_clients_gcp_project_id'</span>],</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                            shortname<span class="op">=</span>name)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># The credentials are stored as yaml. Here we simply use a regex to parse. </span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>keycloak_client_id <span class="op">=</span> re.search(<span class="vs">r'"client_id": "</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">"'</span>, secret).group(<span class="dv">1</span>)</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>keycloak_client_secret <span class="op">=</span> re.search(<span class="vs">r'"client_secret": "</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">"'</span>, secret).group(<span class="dv">1</span>)</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Keycloak access token</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co"># This token includes custom claims with values such as maskinporten_default_scopes</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'keycloak_url'</span>]<span class="sc">}</span><span class="ss">/realms/ssb/protocol/openid-connect/token"</span>,</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    headers<span class="op">=</span>{</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Content-type"</span>: <span class="st">"application/x-www-form-urlencoded"</span>,</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    auth<span class="op">=</span>(keycloak_client_id, keycloak_client_secret),</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"grant_type"</span>: <span class="st">"client_credentials"</span>}</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>keycloak_access_token <span class="op">=</span> response.json()[<span class="st">'access_token'</span>]</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten access token from Maskinporten Guardian (using the Keycloak token from above)</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that you can specify custom scopes in the request body if you need to. Using defaults defined in the client config if not specified.</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>request_body<span class="op">=</span>{}</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'guardian_url'</span>]<span class="sc">}</span><span class="ss">/maskinporten/access-token"</span>,</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            headers<span class="op">=</span>{</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>keycloak_access_token<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Content-type"</span>: <span class="st">"application/json"</span>,</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            },</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>request_body,</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>maskinporten_access_token <span class="op">=</span> response.json()[<span class="st">'accessToken'</span>]</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Then use the maskinporten access token to query the external API...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Støttefunksjon for å hente ut secrets fra Secret Manager</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> secretmanager</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">Retrieve maskinporten M2M access token for querying an external API.</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_secret_version(project_id, shortname, version_id<span class="op">=</span><span class="st">'latest'</span>):</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Access the payload for a given secret version.</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">    The user's google credentials are used to authorize that the user have permission</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">    to access the secret_id.</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    - project_id (str): ID of the Google Cloud project where the secret is stored.</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">    - shortname (str): Name (not full path) of the secret in Secret Manager.</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">    - version_id (str, optional): The version of the secret to access. Defaults to 'latest'.</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">    - str: The payload of the secret version as a UTF-8 decoded string.</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    client <span class="op">=</span> secretmanager.SecretManagerServiceClient(credentials<span class="op">=</span>AuthClient.fetch_google_credentials())</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    secret_name <span class="op">=</span> <span class="ss">f"projects/</span><span class="sc">{</span>project_id<span class="sc">}</span><span class="ss">/secrets/</span><span class="sc">{</span>shortname<span class="sc">}</span><span class="ss">/versions/</span><span class="sc">{</span>version_id<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> client.access_secret_version(name<span class="op">=</span>secret_name)</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.payload.data.decode(<span class="st">"UTF-8"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">The following code example expects a toml config file to exist named</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;team_uniform_name&gt;-&lt;env&gt;-maskinporten-m2m.toml (e.g. play-foeniks-prod-maskinporten-m2m.toml)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">with contents such as:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">keycloak_url = "https://auth.test.ssb.no"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">keycloak_clients_gcp_project_id = "keycloak-clients-&lt;p|t&gt;-??"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "https://guardian.intern.test.ssb.no"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">[my-api]</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> toml</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>team_uniform_name <span class="op">=</span> <span class="st">"play-foeniks"</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>api_name <span class="op">=</span> <span class="st">"my-api"</span> <span class="co"># identifies the API in the config.toml file</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which environment we're running and load corresponding config</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>dapla_env <span class="op">=</span> os.getenv(<span class="st">"DAPLA_ENVIRONMENT"</span>).lower()</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> toml.load(<span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>dapla_env<span class="sc">}</span><span class="ss">-maskinporten-m2m.toml"</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten Guardian M2M Keycloak client credentials from Google Secret Manager</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># The secret's name is deduced from the team name and maskinporten client id</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-ssb-maskinporten-</span><span class="sc">{</span>config[api_name][<span class="st">'maskinporten_client_id'</span>]<span class="sc">}</span><span class="ss">-credentials"</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>secret <span class="op">=</span> get_secret_version(project_id<span class="op">=</span>config[<span class="st">'keycloak_clients_gcp_project_id'</span>],</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>                            shortname<span class="op">=</span>name)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co"># The credentials are stored as yaml. Here we simply use a regex to parse. </span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>keycloak_client_id <span class="op">=</span> re.search(<span class="vs">r'"client_id": "</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">"'</span>, secret).group(<span class="dv">1</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>keycloak_client_secret <span class="op">=</span> re.search(<span class="vs">r'"client_secret": "</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">"'</span>, secret).group(<span class="dv">1</span>)</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Keycloak access token</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co"># This token includes custom claims with values such as maskinporten_default_scopes</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'keycloak_url'</span>]<span class="sc">}</span><span class="ss">/realms/ssb/protocol/openid-connect/token"</span>,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    headers<span class="op">=</span>{</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Content-type"</span>: <span class="st">"application/x-www-form-urlencoded"</span>,</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    auth<span class="op">=</span>(keycloak_client_id, keycloak_client_secret),</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{<span class="st">"grant_type"</span>: <span class="st">"client_credentials"</span>}</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>keycloak_access_token <span class="op">=</span> response.json()[<span class="st">'access_token'</span>]</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten access token from Maskinporten Guardian (using the Keycloak token from above)</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co"># If user want access to data from external resources via skyporten they need extra parameter in the request:</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Audience (aud) is a claim in a token that tells which service the token is intended for.</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co"># In this case, the token is meant to be used with Skyporten, a service hosted by Kartverket (Norwegian Mapping Authority).</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co"># So, "https://skyporten.kartverk.no" is the identifier of the target service that will receive and validate the token.</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>request_body<span class="op">=</span>{</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">"accessTokenAudience"</span> : <span class="st">"https://skyporten.kartverk.no"</span>,</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that you can specify custom scopes in the request body if you need to. Using defaults defined in the client config if not specified.</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>request_body<span class="op">=</span>{}</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'guardian_url'</span>]<span class="sc">}</span><span class="ss">/maskinporten/access-token"</span>,</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>            headers<span class="op">=</span>{</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>keycloak_access_token<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Content-type"</span>: <span class="st">"application/json"</span>,</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>request_body,</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>maskinporten_access_token <span class="op">=</span> response.json()[<span class="st">'accessToken'</span>]</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Then use the maskinporten access token to query the external API...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Støttefunksjon for å hente ut secrets fra Secret Manager</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> secretmanager</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_secret_version(project_id, shortname, version_id<span class="op">=</span><span class="st">'latest'</span>):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Access the payload for a given secret version.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">    The user's google credentials are used to authorize that the user have permission</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    to access the secret_id.</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">    - project_id (str): ID of the Google Cloud project where the secret is stored.</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">    - shortname (str): Name (not full path) of the secret in Secret Manager.</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">    - version_id (str, optional): The version of the secret to access. Defaults to 'latest'.</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">    - str: The payload of the secret version as a UTF-8 decoded string.</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    client <span class="op">=</span> secretmanager.SecretManagerServiceClient(credentials<span class="op">=</span>AuthClient.fetch_google_credentials())</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    secret_name <span class="op">=</span> <span class="ss">f"projects/</span><span class="sc">{</span>project_id<span class="sc">}</span><span class="ss">/secrets/</span><span class="sc">{</span>shortname<span class="sc">}</span><span class="ss">/versions/</span><span class="sc">{</span>version_id<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    response <span class="op">=</span> client.access_secret_version(name<span class="op">=</span>secret_name)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response.payload.data.decode(<span class="st">"UTF-8"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="flyt-personlig-bruker" class="level3">
 <h3 class="anchored" data-anchor-id="flyt-personlig-bruker">Flyt: Personlig bruker</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">Retrieve maskinporten personal access token for querying an external API.</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">The following code example expects a toml config file to exist named</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;team_uniform_name&gt;-&lt;env&gt;-maskinporten-pers.toml (e.g. play-foeniks-prod-maskinporten-pers.toml)</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">with contents such as:</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "https://guardian.intern.test.ssb.no"</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">[my-api]</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">    scopes = ["some:scope1", "some:scope2"]</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> toml</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>team_uniform_name <span class="op">=</span> <span class="st">"play-foeniks"</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>api_name <span class="op">=</span> <span class="st">"my-api"</span> <span class="co"># identifies the API in the config.toml file</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which environment we're running and load corresponding config</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>dapla_env <span class="op">=</span> os.getenv(<span class="st">"DAPLA_ENVIRONMENT"</span>).lower()</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> toml.load(<span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>dapla_env<span class="sc">}</span><span class="ss">-maskinporten-pers.toml"</span>)</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Keycloak access token</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>keycloak_access_token <span class="op">=</span> AuthClient.fetch_personal_token()</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten access token from Maskinporten Guardian (using the personal Keycloak token from above)</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>request_body <span class="op">=</span> {</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"maskinportenClientId"</span>: config[api_name][<span class="st">'maskinporten_client_id'</span>],</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scopes"</span>: config[api_name][<span class="st">'scopes'</span>]</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'guardian_url'</span>]<span class="sc">}</span><span class="ss">/maskinporten/access-token"</span>,</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>            headers<span class="op">=</span>{</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>keycloak_access_token<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Content-type"</span>: <span class="st">"application/json"</span>,</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>            },</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>request_body</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>maskinporten_access_token <span class="op">=</span> response.json()[<span class="st">'accessToken'</span>]</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, use the maskinporten access token to query the external API</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(maskinporten_access_token)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">Retrieve maskinporten personal access token for querying an external API.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">The following code example expects a toml config file to exist named</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;team_uniform_name&gt;-&lt;env&gt;-maskinporten-pers.toml (e.g. play-foeniks-prod-maskinporten-pers.toml)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">with contents such as:</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">guardian_url = "https://guardian.intern.test.ssb.no"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">[my-api]</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">    maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">    scopes = ["some:scope1", "some:scope2"]</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> toml</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> AuthClient</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>team_uniform_name <span class="op">=</span> <span class="st">"play-foeniks"</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>api_name <span class="op">=</span> <span class="st">"my-api"</span> <span class="co"># identifies the API in the config.toml file</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Check which environment we're running and load corresponding config</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>dapla_env <span class="op">=</span> os.getenv(<span class="st">"DAPLA_ENVIRONMENT"</span>).lower()</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> toml.load(<span class="ss">f"</span><span class="sc">{</span>team_uniform_name<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>dapla_env<span class="sc">}</span><span class="ss">-maskinporten-pers.toml"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Keycloak access token</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>keycloak_access_token <span class="op">=</span> AuthClient.fetch_personal_token()</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Maskinporten access token from Maskinporten Guardian (using the personal Keycloak token from above)</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>request_body <span class="op">=</span> {</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"maskinportenClientId"</span>: config[api_name][<span class="st">'maskinporten_client_id'</span>],</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scopes"</span>: config[api_name][<span class="st">'scopes'</span>]</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.post(<span class="ss">f"</span><span class="sc">{</span>config[<span class="st">'guardian_url'</span>]<span class="sc">}</span><span class="ss">/maskinporten/access-token"</span>,</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>            headers<span class="op">=</span>{</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Authorization"</span>: <span class="ss">f"Bearer </span><span class="sc">{</span>keycloak_access_token<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Content-type"</span>: <span class="st">"application/json"</span>,</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>            },</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>            json<span class="op">=</span>request_body</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>maskinporten_access_token <span class="op">=</span> response.json()[<span class="st">'accessToken'</span>]</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, use the maskinporten access token to query the external API</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(maskinporten_access_token)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
