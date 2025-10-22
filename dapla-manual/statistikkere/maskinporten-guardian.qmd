@@ -174,6 +174,31 @@ I test skal `maskinporten_audience` ha verdien `https://test.maskinporten.no/`.
 I prod skal det være `https://maskinporten.no/` (merk: skråstrek på slutten er viktig)
 :::
 
+### Skyporten eksempelkonfigurasjon
+
+```text
+amends ".../pkl/MaskinportenGuardianClient.pkl"
+
+api_shortname = "Kort API-beskrivelse (maks 32 tegn)"
+ maskinporten_client_id = "12345678-9abc-def0-1234-567890abcdef"
+ maskinporten_audience = "https://maskinporten.no/"
+ maskinporten_default_scopes {
+   "foo:data1"
+   "foo:data2"
+ }
+ credentials_access {
+   "group:play-foeniks-data-admins@groups.ssb.no"
+   "serviceaccount:foo-sa@play-foeniks-p-ab.iam.gserviceaccount.com"
+ }
+
+mappers {
+  new HardcodedClaimMapper {
+    claim_name = "skyporten_audience"
+    claim_value = "https://sky.maskinporten.no"
+  }
+}
+```
+
 Pull Requesten må godkjennes og behandles av en Dapla platformutvikler. Når dette er gjort blir det opprettet en Keycloak-klient, og hemmeligheten
 som kan brukes for å hente ut sikkerhetstokens for denne klienten er tilgjengelig i Secret Manager.
 
@@ -244,6 +269,21 @@ response = requests.post(f"{config['keycloak_url']}/realms/ssb/protocol/openid-c
 keycloak_access_token = response.json()['access_token']
 
 # Get Maskinporten access token from Maskinporten Guardian (using the Keycloak token from above)
+
+# If user want access to data from external resources via skyporten they need extra parameter in the request:
+
+# Audience (aud) is a claim in a token that tells which service the token is intended for.
+
+# In this case, the token is meant to be used with Skyporten, a service hosted by Kartverket (Norwegian Mapping Authority).
+
+# So, "https://skyporten.kartverk.no" is the identifier of the target service that will receive and validate the token.
+
+
+request_body={
+    "accessTokenAudience" : "https://skyporten.kartverk.no",
+ }
+
+
 # Note that you can specify custom scopes in the request body if you need to. Using defaults defined in the client config if not specified.
 request_body={}
 response = requests.post(f"{config['guardian_url']}/maskinporten/access-token",
