@@ -1,0 +1,71 @@
+---
+title: Hvordan refererer til eksterne systemer fra Datadoc
+subtitle: Endringer til feltene definition_uri og classification_uri
+categories:
+  - metadata
+  - datadoc
+  - dapla-toolbelt-metadata
+  - datadoc-editor
+author:
+  - name: Miles Winther
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: mmw@ssb.no
+date: "10/21/2025"
+date-modified: "10/21/2025"
+image: ../../../images/dapla-lab-datadoc-service.png
+draft: false
+lightbox: true
+---
+
+## Hva er endret?
+
+Før i Datadoc-editor så oppga man URLer i feltene "Definisjon URI" og "Kodeverkets URI". Nå oppgir man kun en ID i disse feltene, som refererer til en Variabeldefinisjon i Vardef eller et Kodeverk i Klass. UIet i Datadoc-editor har oppdatert instruksjoner og verdiene valideres.
+
+![Det nye feltet for Variabeldefinisjon ID.](../../../images/datadoc-editor-variable-definition-id.png){fig-alt="Det nye feltet for Variabeldefinisjon ID."}
+
+Disse endringene tilgjengeliggjøres i dapla-toolbelt-metadata v0.9.8 og Datadoc-editor v1.3.0.
+
+## Hvorfor er endringene gjort?
+
+Å kunne oppgi en vilkårlig URL hadde en liten fordel i og med at det er en veldig fleksibel løsning. Men det har flere ulemper, særlig med tanke på forvaltning av metadata over tid. Fordi:
+
+- Man kunne legge inn en URL som har ingenting med Metadata å gjøre. Dette kunne etterhvert blitt forvirrende eller i verste fall farlig hvis man blir lurt til å åpne visse lenker. Nå skal vi kunne garantere at slike lenker sender en kun til kjente systemer.
+- Det kan være flere ulike URLer som refererer til en ressurs, f.eks for Klass er det ulike URLer for Nettsiden og APIet. Det er viktig at vi kan kontrollere hvilken som er brukt i en viss kontekst.
+- Det gir mulighet for datavalidering slik at kvaliteten i metadata er ivaretatt.
+- Det åpner for bedre funksjonalitet etterhvert, som f.eks automatisk søk og kobling til variabeldefinisjoner.
+
+## Hva betyr dette for meg?
+
+Hvis man har metadata dokumenter liggene med URLer i disse feltene så har vi lagt inn funksjonalitet til å oppgradere informasjon. Her er det to tilfeller:
+
+1. Vi kjenner igjen formen av URLen til å være en referanse til Vardef eller Klass også omformer vi den til den nyere format.
+1. Vi kjenner ikke igjen formen.
+    - I dette tilfellet endrer vi ikke på URLen
+    - Vi skriver en loggmelding med instruksjoner til å ta kontakt med Team Metadata
+    - Vi har særlig lyst til å høre fra dere dersom dere mener man skulle kunne refererer til et annet metadata system (f.eks en Eurostat kodeverk). Da må vi legge til støtte for det også.
+    - URLen må gjøres noe med før eventuell publisering til datakatalogen
+
+Hvis man ikke har URLer i metadata dokumentene sine, er det bare å dokumentere utifra instruksjonene i Datadoc-editor som vanlig.
+
+### Programmatisk oppdatering
+
+I noen tilfeller kan det være enklere å oppdatere til den nye modellen programmatisk og ikke med Datadoc-editor. Under er et eksempel på hvordan man programmatisk oppdaterer en dokumentert enkeltfil:
+
+```{.python filename="Notebook"}
+from pathlib import Path
+from dapla_metadata.datasets.core import Datadoc
+
+# Angi stien til metadatadokumentet
+meta_path = "/path/to/metadata.json"
+
+meta = Datadoc(metadata_document_path=meta_path)
+meta.write_metadata_document()
+print(f"Upgraded {Path(meta_path).stem} to v{meta.container.datadoc.document_version}")
+```
+
+Hvis vi kjenner ikke igjen URLen så blir det sendt en varsel slik som dette:
+
+```text
+The URL is not in a supported format for field 'definition_uri' of variable 'fnr'. URL: 'https://www.vg.no'. Please contact Team Metadata if this URL should be supported.
+```

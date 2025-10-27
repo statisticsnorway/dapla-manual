@@ -49,84 +49,7 @@ betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-fronten
 
 ### Hvordan kan jeg gjenopprette filer fra bøtter? 
 
-Bøttene som opprettes i [featuren *dapla-buckets*](./statistikkere/features.html)^[Featuren *dapla-buckets* inkluderer produkt- og kildebøtta i henholdsvis standard- og kildeprosjektet som de fleste statistikkproduserende team får ved opprettelse.] har en *Retention policy* som gjør at slettede eller overskrevne objekter kan gjenskapes i en viss periode.
-
-I dapla-buckets blir overskrevne og slettede filer noncurrent. En noncurrent versjon blir slettet hvis den er mer enn **180 dager gammel og det er minst 2+ eller 3+ nyere versjoner i bøtta**.^[I produktbøtta blir noncurrent versjoner slettet hvis det er mer enn 2 nyere versjoner, mens for kildebøtta er grensen på 3 nyere versjoner]
-
-Alle dapla-teamene har objektversjon aktivert som standard på alle bøtter. 
-
-::: {.callout-note collapse="true"}
-# Ekspertteam eller Self-managed team
-Hvis bøttene ikke er opprettet gjennom featuren *dapla-buckets*, men kanskje av et ekspertteam eller ekspertteam, så må man først forhøre seg med teamet om versjonering er skrudd på for bøtta. Hvis den ikke er det så blir kun soft-deleted filer tatt vare på i 7 dager.   
-:::
-
-For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](./statistikkere/dapla-toolbelt-metadata.qmd). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
-
-```{.python filename="notebook"}
-from dapla import FileClient
-
-# Set bucket name and folder name(if any)
-bucket = "ssb-dapla-felles-data-produkt-prod" 
-folder = "restore"
-
-FileClient.get_versions(bucket, folder)
-```
-
-**Output**
-```
-[<Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835>,
- <Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499>,
- <Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818>,
- <Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930>]
-```
-
-Fra output over ser vi filen `data1.parquet` finnes i 2 versjoner. Vi kan undersøke den nærmere med følgende kode:
-
-```{.python filename="notebook"}
-files = FileClient.get_versions("ssb-dapla-felles-data-produkt-prod", "restore/data1.parquet")
-
-for file in files:
-    print("Name          : ",file.name)
-    print("Generation Id : ", file.generation)
-    print("Updated on    : ", file.updated)
-    print("Deleted on    : ", file.time_deleted)
-    print("------------------------------------------")
-```
-
-**Output**  
-```
-Name          :  restore/data1.parquet
-Generation Id :  1718436304922143
-Updated on    :  2024-06-15 07:25:04.928000+00:00
-Deleted on    :  2024-06-24 11:10:10.807000+00:00
-------------------------------------------
-Name          :  restore/data1.parquet
-Generation Id :  1719227410801992
-Updated on    :  2024-06-24 11:10:10.807000+00:00
-Deleted on    :  None
-------------------------------------------
-```
-
-Av output over ser vi at det er en fil som som har en verdi i `Deleted on` feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke `restore_version()`og referere til Generation ID:
-
-```{.python filename="notebook"}
-FileClient.restore_version( source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
-                            source_file_name="restore/data3.parquet",
-                            source_generation_id=1718436304922143,
-                            new_name="" (optional)
-                           )
-```
-Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt *non-current*. Ved gjenoppretting av *non-current*-versjoner så kan man også spesifisere nytt navn på filen med parameteret `new_name=` i `restore_version()`-funksjonen. 
-
-
-::: {.callout-note collapse="true"}
-## Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
-
-Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i @fig-gcc-versions. Men man har ikke tilgang til *Object details* og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.   
-
-![Hvordan liste ut versjoner fra GCC.](./images/gcc-versions.png){fig-alt="Bilde av hvordan man velger versjoner i GCC." #fig-gcc-versions}
-
-:::
+Fremgangsmåten for gjenoppretting av filer er [beskrevet i Backup-kapitlet](./statistikkere/backup-data.qmd). 
 
 
 ### Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team? 
@@ -474,3 +397,7 @@ Fra Byrånettet velg **Arbeidsverktøy** og **Meld sak til kundeservice**. Logg 
 Fra menyen velger du **Søknad for utgående trafikk i DaplaLab**, fyller ut skjemaet som vises og trykker på «Send».
 
 Team M2M vil så godkjenne eller avslå søknaden. Hvis søknaden godkjennes sendes saken videre til Kundeservice for effektuering. Hvis avslag så får du en begrunnelse for dette fra Team M2M.
+
+### Hvorfor fungerer det ikke med å melde seg ut av automatiske pausingen av tjenester på Dapla Lab? 
+
+Hvis man opplever at en tjeneste fortsatt pauses selv om man har endret visningsnavnet til tjenesten til å inkludere ` [nosuspend]`, så kan det skyldes at man faktisk ikke har lagret det nye navnet. For å lagre det nye navnet så må man trykke **Enter** etter at man skrevet inn ` [nosuspend]`. Gjør man ikke dette kan det tilsynelatende virke som om du har endret navnet selv om det ikke lagret. Du kan verifisere at navnet er riktig ved *refreshe* siden og se at navnet nå er riktig.   
