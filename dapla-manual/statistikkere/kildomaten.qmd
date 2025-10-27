@@ -461,7 +461,7 @@ Disse to mappene angir om det er henholdsvis prod- eller test-miljøet vi setter
 
 ### Trigge kilde manuelt
 
-Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. Men noen ganger er det nødvendig å trigge kjøring av filer for en gitt kilde på nytt. Dette kan gjøres med en funksjon i Python-pakken [dapla-toolbelt](https://github.com/statisticsnorway/dapla-toolbelt).
+Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. Men noen ganger er det nødvendig å trigge kjøring av filer for en gitt kilde på nytt. Dette kan gjøres med en funksjon i Python-pakken [dapla-toolbelt-automation](https://pypi.org/project/dapla-toolbelt-automation/).
 
 ::: {.callout-caution}
 ## Logg inn som data-admins i Dapla Lab
@@ -478,24 +478,23 @@ Før du kan gjøre dette trenger du følgende informasjon:
 
 Hvis man under **folder_prefix** legger inn en hel filsti med filnavn og filending, så trigges Kildomaten kun på denne ene fila.
 
-Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle filer for kilde
+Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle filer for kilden `altinn`:
 
 ```{.python filename="notebook"}
-from dapla import trigger_source_data_processing
+from dapla_toolbelt_automation import trigger_source_data_processing
 
 project_id = "dapla-example-p"
 source_name = "altinn"
 folder_prefix = "ledstill/altinn/ra0678"
 
-trigger_source_data_processing(project_id, source_name, folder_prefix, kuben=True)
-```
+trigger_source_data_processing(project_id, source_name, folder_prefix)          
 
 I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på alle undermapper av
 `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/`.
 
 Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde
 ```{.python filename="notebook"}
-from dapla import trigger_source_data_processing
+from dapla_toolbelt_automation import trigger_source_data_processing
 
 project_id = "dapla-example-p"
 source_name = "altinn"
@@ -505,7 +504,7 @@ file_paths = [
     'ledstill/altin/ra0678/data3.parquet'
 ]
 for file in file_paths:
-    trigger_source_data_processing(project_id, source_name, file, kuben=True)
+    trigger_source_data_processing(project_id, source_name, file)
 ```
 I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på de tre spesifike filene
 `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data1.parquet`, `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data2.parquet` og `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data3.parquet`.
