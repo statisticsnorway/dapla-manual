@@ -430,7 +430,7 @@ En av de store fordelene med å sette opp kildomaten-kilder i test-miljøet før
 
 Når man skal sette opp kildomaten i test-miljøet følger det samme oppskrift som vi har vist for prod-miljøet over. Den store forskjellen er at test-kilder skal legges under en egen mappe under  `automation/source-data/` i teamets IaC-repo. Eksempelet under med team **dapla-example** viser hvordan man kan sette opp kildene `altinn` og `ledstill` for både prod- og test-testmiljøet:
 
-```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
+```{#lst-dapla-example .yaml lst-cap="Eksempel filstruktur"}
 dapla-example-iac
 ├── automation/
 │   └── source-data/
@@ -473,8 +473,8 @@ Trigging av kilder manuelt kan kun gjøres av *data-admins* på Dapla Lab. På D
 Før du kan gjøre dette trenger du følgende informasjon:
 
 1. **project-id** for *standardprosjektet*. [Slik finner du prosjekt-id](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id). Merk at dette ikke er kilde-prosjektet!
-2. **folder_prefix** er mappen i kilde-bøtten som du ønsker at koden skal trigges på. Dette fungerer likt som tidligere forklart for `config.yaml`, men her har du også mulighet til å kunne trigge prosesseringen på en undermappe av stien som var satt i kildens config.yaml.
-3. **source_name** er navnet på mappen i IaC-repoet hvor kilden du skal trigge er definert. Navnet på kilden i eksempelet med team **dapla-example** var  `altinn`.
+2. **folder_prefix** er mappen i kilde-bøtten. Man vil da kjøre Kildomaten-scriptet for hver fil i denne mappen.
+3. **source_name** er navnet på *kilden*, og vil bestemme hvilket Kildomat-script man bruker for å prosessere filene fra *punkt 2*. Det vil tilsvare mappenavnene under mappen `automation/source-data/<team-navn>-prod/` i IaC-repoet for teamet. I eksempelet over ( [@lst-dapla-example]) har vi to kilder -  `altinn` og `ledstill`.
 
 Hvis man under **folder_prefix** legger inn en hel filsti med filnavn og filending, så trigges Kildomaten kun på denne ene fila.
 
@@ -487,7 +487,8 @@ project_id = "dapla-example-p"
 source_name = "altinn"
 folder_prefix = "ledstill/altinn/ra0678"
 
-trigger_source_data_processing(project_id, source_name, folder_prefix)          
+trigger_source_data_processing(project_id, source_name, folder_prefix)
+```
 
 I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på alle undermapper av
 `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/`.
