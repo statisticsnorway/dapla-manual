@@ -84,7 +84,7 @@ dapla-example-iac
   - Vanligvis setter du samme navn som `source_folder_prefix`, men du kan velge fritt.  
 
 - **`memory_size`**  
-  Ressurser jobben bruker (for avanserte brukere).  
+  Ressurser jobben maksimalt får tilgang til spesifisert i Gigabyte (for avanserte brukere).  
 
 - **`pseudo`**  
   En liste over kolonner som skal pseudonymiseres/depseudonymiseres, og hvilken algoritme som skal brukes.  
@@ -94,23 +94,23 @@ dapla-example-iac
 shared_bucket: "delomatentest"
 source_folder_prefix: "forbruk/"
 destination_folder: "forbruk"
-memory_size: 3
+memory_size: 6
 pseudo:
   - name: task_one
-    columns: [ "fnr", "snr" ]
+    columns: [ "fnr" ]
     pseudo_operation: "PSEUDO"
     encryption:
       algorithm: "sid_mapping"
       sid_snapshot_date: "2025-07-07"
 ```
-Her pseudonymiseres kolonnene fnr og snr med sid mapping og katalogdato `2025-07-07`.
+Her pseudonymiseres kolonnen fnr med sid mapping og katalogdato `2025-07-07`.
 
 ### Eksempel 2 – depseudonymisering
 ```{.yaml filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"}
 shared_bucket: "delomatentest"
 source_folder_prefix: "ledstill/"
 destination_folder: "ledstill"
-memory_size: 2
+memory_size: 6
 pseudo:
   - name: task_one
     columns: [ "fnr"]
@@ -119,12 +119,12 @@ pseudo:
       algorithm: "sid_mapping"
       sid_snapshot_date: "2025-07-07"
   - name: task_two
-    columns: [ "fornavn"]
+    columns: [ "fornavn", "etternavn" ]
     pseudo_operation: "DEPSEUDO"
     encryption:
       algorithm: "default"
 ```
-Her depseudonymiseres fnr kolonnen med sid mapping og fornavn med standardalgoritmen (DAEAD).
+Her depseudonymiseres fnr kolonnen med sid mapping og kolonnene fornavn og etternavn med standardalgoritmen (DAEAD).
 
 ## Feilmeldinger
 
