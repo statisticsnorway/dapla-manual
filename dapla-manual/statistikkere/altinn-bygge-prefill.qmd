@@ -1,6 +1,6 @@
 ---
 title: Bygge skjemaprefill
-date-modified: 03/28/2025
+date-modified: 11/14/2025
 lightbox: true
 ---
 
@@ -25,7 +25,7 @@ Ta kontakt med planleggeren for skjemaet på seksjon 821 dersom skjemaet ditt sk
 @tbl-prefill-meta beskriver feltene i skjemaprefill meta-tabellen. 
 
 | Meta | Forklaring |
-| ----------------- |-------------------------------------------------------------------------------------- |
+| :----------------- |:-------------------------------------------------------------------------------------- |
 | Komplett sti | Refererer til hele stien som brukes for å navigere fra SkjemaData til en spesifikk verdi. Den beskriver nøyaktig plasseringen av dataene i hierarkiet og kan bestå av flere nivåer. 
 | Type | Beskriver hvilken datatype feltet kan inneholde. 
 | Min | Begrensing (minimum) på datatypen.
@@ -33,8 +33,8 @@ Ta kontakt med planleggeren for skjemaet på seksjon 821 dersom skjemaet ditt sk
 | Obligatorisk | Indikerer om feltet er påkrevd for prefill. 
 | Dublett-sjekk | Angir om feltet skal inneholde unike verdier.  
 | Statistikk navn | Kan brukes for mapping til statistikkteamenes interne systemer.
-| Beskrivelse | Eventuell beskrivelse av feltet.
-| Kommentar | Eventuelle kommentarer om feltet
+| Beskrivelse | Eventuell beskrivelse av datafeltet.
+| Kommentar | Eventuell kommentar om datafeltet.
 : Prefill Meta {#tbl-prefill-meta .striped}
 
 ### Hente prefill meta med kode
@@ -133,16 +133,27 @@ output = client.save_prefill_for_enhet(
 print(output)    
 ```
 
+::: {.callout-note}
+
+Prefill skal alltid lagres på **skjemaenheten**.
+
+Mapping til felter i SFU:
+
+- `enhetsident` → `skj_enh_ident_nr`
+- `enhetstype` → `skj_enh_enhets_type`
+
+:::
+
 @tbl-lagre-prefill-param viser en beskrivelse av de ulike parameterne i `save_prefill_for_enhet` 
 
 | Parameter | Forklaring |
-| ----------------- |-------------------------------------------------------------------------------------- |
+| :----------------- | :-------------------------------------------------------------------------------------- |
 | RA-nummer | RA-nummer for skjemaet.  
 | versjon | Skjemaversjon.
 | periode_aar | Årstall for perioden.
 | periode_type | Periode type. Gyldige verdier er `AAR`, `MND`, `KVRT`, `UKE` 
 | periode_nr | Periode nummer
-| enhetsident | Identifikator for enheten
+| enhetsident | Identifikator for enheten.
 | enhetstype | Type enhet. Gyldige verdier er `FRTK`, `BEDR`, `PERS`
 | prefill | Prefill-data i gyldig JSON-format.
 : Beskrivelse av parametere {#tbl-lagre-prefill-param .striped}
@@ -192,123 +203,105 @@ Skjemaet inneholder to felter som skal forhåndsutfylles. Det er `antallAnsatteP
 @tbl-prefill-ra0678 beskriver feltene som kan forhåndsutfylles. 
 
 | Felt | Sti |
-| ----------------- |-------------------------------------------------------------------------------------- |
+| :----------------- |:-------------------------------------------------------------------------------------- |
 | antallAnsattePrefill | -
 | datoPrefill | -
 : Prefill felter {#tbl-prefill-ra0678 .striped}
 
 Eksempelet leser prefill-data fra en tekstfil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
 
-### RA-0692 (Utenrikshandel med tjenester)
-Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0692 (Utenrikshandel med tjenester). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
+### RA-0255 (Omsetning, kostnader og investeringer i næringslivet)
+Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0255 (Omsetning, kostnader og investeringer i næringslivet). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
 
 ```json
 {
-   "SkjemaData": {
-        "type": "object",
-        "properties": {
-            "leveransetype": {
-                "type": "string",
-                "enum": [
-                    "0",
-                    "1",
-                    "2"
-                  ]
-            },
-            "Eksport": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/$defs/Eksport"                
-              }
-            },
-            "Import": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/$defs/Import"
-            }
+    "SkjemaData": {
+      "type": "object",
+      "properties": {
+        "Prefill": {
+          "$ref": "#/$defs/Prefill"
+        },
+        "VirkTabell": {
+          "type": "array",
+          "maxItems": 1000,
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/VirkTabell"
+          }
+     },
+    "Prefill": {
+      "type": "object",
+      "title": "Preutfylte verdier",
+      "description": "Verdier som skal komme preutfylt fra SSB",
+      "properties": {
+        "filter": {
+          "type": "string"
+        },
+        "totalOmsPrefill": {
+          "type": "number"
+        },
+        "pf9010Driftskostnader": {
+          "type": "number"
+        },
+        "pf4005Varekostnader": {
+          "type": "number"
+        },
+        "totalSalgsinntektPrefill": {
+          "type": "number"
+        },
+        "vedleggsinfo": {
+          "type": "string"
         }
-    },   
-    "Eksport": {
-        "type": "object",
-        "properties": {
-            "cpaLevel1Eksport": {
-                "type": "string"        
-            },
-            "cpaEksport": {
-                "type": "string"
-            },
-            "PostEksport": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/$defs/PostEksport"
-            }
-        }
+      }
     },
-    "Import": {
-        "type": "object",
-        "properties": {
-            "cpaLevel1Import": {
-                "type": "string",          
-            },
-            "cpaImport": {
-                "type": "string"
-            },
-            "PostImport": {
-                "type": "array",
-                "items": {
-                    "$ref": "#/$defs/PostImport"
-            }
-        } 
-    },
-    "PostEksport": {
-        "type": "object",
-        "properties": {
-            "landkodeEksport": {
-                "type": "string"
-            },
-            "forrigeKvartalKrEksport": {
-                "type": "integer"
-            },
-            "forrigeKonsernIntKrEksport": {
-                "type": "integer"
-            },
+    "VirkTabell": {
+      "type": "object",
+      "properties": {
+        "virkOrgNr": {
+          "type": "string"
+        },
+        "virkNavn": {
+          "type": "string"
+        },
+        "virkNaeringskode": {
+          "type": "string",
+          "maxLength": 7
+        },
+        "virkNaeringsbeskrivelse": {
+          "type": "string"
+        },
+        "omsetningPerVirk": {
+          "type": "number"
+        },
+        "driftskostnadPerVirk": {
+          "type": "number"
+        },
+        "virkKarakteristikk": {
+          "type": "string"
         }
-    },
-    "PostImport": {
-        "type": "object",
-        "properties": {
-            "landkodeImport": {
-                "type": "string",
-            },
-            "forrigeKvartalKrImport": {
-                "type": "integer"
-            },
-            "forrigeKonsernIntKrImport": {
-                "type": "integer"
-            },
-        }
+      }
     }
-}
 ```
 
-Merk at både Eksport/Import og PostEksport/PostImport er repeterende. Den ytterste gruppa er CPA-verdien, mens den innerste gruppa inneholder landskodene og kronebeløpene.
+Prefill for dette skjemaet inneholder både datafelter fra en flat struktur men også fra en tabell (VirkTabell)
 
-@tbl-prefill-ra0692 beskriver feltene som kan forhåndsutfylles. 
+@tbl-prefill-ra0255 beskriver feltene som kan forhåndsutfylles. 
 
 | Felt | Sti |
-| ----------------- |-------------------------------------------------------------------------------------- |
-| leveransetype | -
-| cpaLevel1Eksport | Eksport 
-| cpaEksport | Eksport
-| landkodeEksport | Eksport.PostEksport
-| forrigeKvartalKrEksport | Eksport.PostEksport
-| forrigeKonsernIntKrEksport | Eksport.PostEksport
-| cpaLevel1Import | Import 
-| cpaImport | Import
-| landkodeImport | Import.PostImport
-| forrigeKvartalKrImport | Import.PostImport
-| forrigeKonsernIntKrImport | Import.PostImport
-: Prefill felter {#tbl-prefill-ra0692 .striped}
+| :----------------- |:-------------------------------------------------------------------------------------- |
+| filter | Prefill
+| pf4005Varekostnader | Prefill
+| pf9010Driftskostnader | Prefill
+| totalOmsPrefill | Prefill
+| totalSalgsinntektPrefill | Prefill
+| vedleggsinfo | Prefill 
+| virkKarakteristikk | VirkTabell
+| virkNaeringsbeskrivelse | VirkTabell
+| virkNaeringskode | VirkTabell
+| virkNavn | VirkTabell
+| virkOrgNr | VirkTabell
+: Prefill felter {#tbl-prefill-ra0255 .striped}
 
-Eksempelet leser prefill-data fra flere tekstfiler og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
+Eksempelet leser prefill-data fra SFU og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
 

@@ -1,10 +1,10 @@
 ---
-title: System for utvalgsadministrasjon (SFU)
-date-modified: 01/21/2025
+title: Hente data fra bakke
+date-modified: 11/14/2025
 lightbox: true
 ---
 
-Denne kapitlet beskriver hvordan man kan bruke [dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) for å hente utvalg og enhetsinformasjon fra SFU i Dapla-miljøet.
+Denne kapitlet beskriver hvordan man kan bruke [dapla-suv-tools pakken](./altinn-dapla-suv-tools.html) for å hente utvalg, enhetsinformasjon, delregister og vareliste fra SFU i Dapla-miljøet. I tillegg finnes det funksjonalitet for å hente prefill fra ISEE.
 
 Det finnes fortsatt avhengigheter til bakkesystemene for å kunne kjøre et fullstendig produksjonsløp på Dapla. SU-V har laget integrasjoner mellom bakke- og skyløsninger der det er behov for dette. Administrasjon av utvalg og enheter skjer fortsatt fra SFU på bakke.
 
@@ -37,6 +37,10 @@ response = client.get_utvalg_from_sfu(
 
 print(json.dumps(response, indent=4))
 ```
+
+::: {.callout-important}
+Utvalget som hentes ut baserer seg på skjemaenhetene. Det vil si at du skal forholde deg til `skj_enh_ident_nr` og `skj_enh_enhets_type`.
+:::
 
 ### Hente enhetsinformasjon fra SFU
 
@@ -72,6 +76,14 @@ print(json.dumps(response, indent=4))
     "f_adresse3": null,
     "f_postnr": "0019",
     "f_poststed": "OSLO",
+    "skj_enh_ident_nr": "ATB1247288",
+    "skj_enh_orgnr": "987654321",
+    "skj_enh_enhets_type": "BEDR",
+    "skj_enh_navn": "MITT REGNSKAP",
+    "skj_enh_adresse": "Regnskpvegen 250",
+    "skj_enh_postnr": "1111",
+    "skj_enh_poststed": "ARENDAL",
+    "skj_enh_avdeling": "AVD ARENDAL",
     "maalform": null,
     "kontaktperson": "OLA NORDMANN",
     "kont_telefon": "12121212",
@@ -95,10 +107,188 @@ print(json.dumps(response, indent=4))
     "kommentar_int": null,
     "kommentar_ekst": null,
     "test_pulje": null,
-    "prosedyre": null,
-    "felles_oppgave": null
+    "skjema_type": "RA-0666A3",
+    "dato_innkvittering": null,
+    "kvitt_type": null,
+    "kvitt_format": null,
+    "kvitt_undertype": null,
+    "kvitt_nivaa": null
 }
 ```
 
+:::
+
+### Hente delregister fra SFU
+
+For å hente delregister fra SFU, bruk metoden `get_delreg_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer. Metoden vil returnere alle enheter i angitt delregister.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+response = client.get_delreg_from_sfu(
+    delreg_nr=49430224    
+)
+
+print(json.dumps(response, indent=4))
+```
+
+::: {.callout-tip collapse="true"}
+## Frivillige parametere
+
+Disse parameterne kan brukes for å filtrere resultatet ytterligere:
+
+| Parameter | Type | Beskrivelse |
+|------------|------|-------------|
+| `enhets_type` | str | Hent spesifikk enhetstype |
+| `max_results` | int | Maks antall resultater som returneres |
+| `pagination_info` | object | Pagineringsinformasjon |
+
+Eksempel:
+```python
+response = client.get_delreg_from_sfu(
+    delreg_nr=49430224,
+    enhets_type='FRTK',
+    max_results=200,
+    pagination_info=p_info
+)
+
+print(json.dumps(response, indent=4))
+```
+:::
+
+### Hente vareliste fra SFU
+
+For å hente vareliste fra SFU, bruk metoden `get_vareliste` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+response = client.get_vareliste(
+    delreg_nr=769523,
+    ra_nummer="RA-0830A3" 
+)
+
+print(json.dumps(response, indent=4))
+```
+
+::: {.callout-caution collapse="true"}
+## Vis output
+
+```json
+{
+    "delreg_nr": 769523,
+    "ident_nr": "A3TF0001",
+    "enhets_type": "FRTK",
+    "skjema_type": "RA-0830A3",
+    "katalog_id": 81,
+    "felt": "ORGNR",
+    "rad_nr": 1,
+    "felt_verdi": "900000001",
+    "aktiv": "Y",
+    "endret_av": "ABC",
+    "endret_dato": null
+}
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Frivillige parametere
+
+Disse parameterne kan brukes for å filtrere resultatet ytterligere:
+
+| Parameter | Type | Beskrivelse |
+|------------|------|-------------|
+| `ident_nr` | str | Hent spesifikk enhet |
+| `enhets_type` | str | Hent spesifikk enhetstype |
+| `katalog_id` | str | Hent bare spesifikk katalog |
+| `aktiv` | str | Hent spesifikk aktiv status |
+| `felt_ids` | list[str] | Hent bare spesifikke felt |
+| `max_results` | int | Maks antall resultater som returneres |
+| `pagination_info` | object | Pagineringsinformasjon |
+
+Eksempel:
+```python
+response = client.get_vareliste(
+    delreg_nr=769523,
+    ra_nummer="RA-0830A3",
+    ident_nr="A3TF0001",
+    enhets_type="FRTK",
+    katalog_id=81,
+    aktiv='Y',
+    felt_ids=["ORGNR", "NAVN"],
+    max_results=100,
+    pagination_info=p_info
+)
+
+print(json.dumps(response, indent=4))
+```
+:::
+
+### Hente prefill fra ISEE
+
+For å hente prefill fra ISEE, bruk metoden `get_prefill_isee` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+response = client.get_prefill_isee(
+    delreg_nr=190125,
+    ra_nummer="RA-0484A3" 
+)
+
+print(json.dumps(response, indent=4))
+```
+
+::: {.callout-caution collapse="true"}
+## Vis output
+
+```json
+{
+    "delreg_nr": 190125,
+    "enhets_id": "ATB1149185",
+    "skjema": "RA-0484A3",
+    "lopenr": 3,
+    "felt_id": "BESKRIVELSE",
+    "felt_verdi": "Corona",
+    "kilde": "DYNAREV",
+    "endret_dato": "2025-11-07T09:35:42.000",
+    "endret_av": "SUV_ORDS",
+    "enhets_type": "BEDR",
+    "rad_nr": 1,
+    "for_kilde": "DEFAULT",
+    "nokkel_verdier": null
+}
+```
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Frivillige parametere
+
+Disse parameterne kan brukes for å filtrere resultatet ytterligere:
+
+| Parameter | Type | Beskrivelse |
+|------------|------|-------------|
+| `ident_nr` | str | Hent spesifikk enhet |
+| `enhets_type` | str | Hent spesifikk enhetstype |
+| `felt_ids` | list[str] | Hent bare spesifikke felt |
+| `max_results` | int | Maks antall resultater som returneres |
+| `pagination_info` | object | Pagineringsinformasjon |
+
+Eksempel:
+```python
+response = client.get_prefill_isee(
+    delreg_nr=190125,
+    ra_nummer="RA-0484A3",
+    ident_nr="ATB1149212",
+    enhets_type="BEDR",
+    felt_ids=["VARENAVN", "VARENR"],
+    max_results=200,
+    pagination_info=p_info
+)
+
+print(json.dumps(response, indent=4))
+```
 :::
 
