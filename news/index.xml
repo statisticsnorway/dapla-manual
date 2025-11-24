@@ -15,7 +15,66 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Fri, 21 Nov 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 24 Nov 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Erstatt FileClient fra dapla-toolbelt med gcsfs</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-11-24-fileclient-replacement/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Som <a href="../../../news/posts/2025-10-13-dapla-toolbelt-utfasing/index.html">nevnt i en tidligere nyhetsartikkel</a> så skal dapla-toolbelt fases ut innen 1. februar 2026. Noe av funksjonaliteten skal flyttes inn i mindre Python-pakker, og annen funksjonalitet erstattes med standard Python-pakker som allerede eksisterer. Vi har nå oppdatert dokumentasjonen i Dapla-manualen slik at alle eksempler som tidligere viste til <code>FileClient</code> i dapla-toolbelt nå viser til Python-pakken <a href="https://gcsfs.readthedocs.io/en/latest/api.html">gcsfs</a>.</p>
+<section id="hva-betyr-dette-for-meg" class="level2">
+<h2 class="anchored" data-anchor-id="hva-betyr-dette-for-meg">Hva betyr dette for meg?</h2>
+<p>Brukere som benytter seg av <code>FileClient</code>-metoden fra dapla-toolbelt i sin kode må bytte dette ut før 1. februar. For å ta i bruk gcsfs må man installere det:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">poetry</span> add gcsfs</span></code></pre></div></div>
+<p>Deretter endrer du koden slik som vist under:</p>
+</section>
+<div class="columns">
+<div class="column" style="width:47.5%;">
+<section id="før" class="level2">
+<h2 class="anchored" data-anchor-id="før">FØR</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dapla <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> FileClient</span>
+<span id="cb2-2"></span>
+<span id="cb2-3">fs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> FileClient.get_gcs_file_system()</span></code></pre></div></div>
+</section>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:47.5%;">
+<section id="etter" class="level2">
+<h2 class="anchored" data-anchor-id="etter">Etter</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> gcsfs</span>
+<span id="cb3-2"></span>
+<span id="cb3-3">fs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> gcsfs.GCSFileSystem()</span></code></pre></div></div>
+</section>
+</div>
+</div>
+<p>Deretter kan du bruke <code>fs</code>-objektet som før.</p>
+
+
+
+ ]]></description>
+  <category>dapla-toolbelt</category>
+  <category>gcsfs</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-11-24-fileclient-replacement/</guid>
+  <pubDate>Mon, 24 Nov 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
 <item>
   <title>Endringer i dapla-suv-tools</title>
   <dc:creator>Øyvind Steinbekken</dc:creator>
@@ -610,7 +669,7 @@ Tabell&nbsp;1: Funksjonalitet i dapla-toolbelt og hvor det flyttes.
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>FileClient</code></td>
-<td style="text-align: left;"><a href="https://gcsfs.readthedocs.io/en/latest/">gcsfs</a></td>
+<td style="text-align: left;"><a href="https://gcsfs.readthedocs.io/en/latest/">gcsfs</a>. <a href="../../../news/posts/2025-11-24-fileclient-replacement/index.html">Se eksempler.</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>trigger_source_data_processing</code></td>
@@ -937,48 +996,6 @@ font-style: inherit;">"23"</span></span></code></pre></div></div>
   <category>delomaten</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2025-09-04-daplanytt-aug25/</guid>
   <pubDate>Thu, 04 Sep 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
-</item>
-<item>
-  <title>Oppgradering av Kildomaten 26.august</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-08-19-kildomaten-update/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Tirsdag 26. august oppgraderer vi Kildomaten for alle Dapla-team. Formålet er å øke stabiliteten og gi en bedre brukeropplevelse.</p>
-<section id="dette-blir-nytt" class="level2">
-<h2 class="anchored" data-anchor-id="dette-blir-nytt">Dette blir nytt</h2>
-<ul>
-<li>Ingen timeout-grense ved prosessering</li>
-<li>Mulighet til å prosessere betydelig flere filer samtidig sammenlignet med tidligere</li>
-<li>Team som mottar svært mange filer i kildebøtta samtidig vil ikke lenger oppleve problemer/ustabilitet</li>
-<li>Mer detaljert logging</li>
-<li>Enklere oversikt over om en kildefil er prosessert eller ikke</li>
-</ul>
-</section>
-<section id="nedetid" class="level2">
-<h2 class="anchored" data-anchor-id="nedetid">Nedetid</h2>
-<p>Oppgraderingen medfører ca. 15 minutters nedetid per team i tidsrommet <strong>kl. 09–15</strong>. I denne perioden vil ikke Kildomaten prosessere nye filer fra kildebøtta, og team kan ikke gjøre endringer i sitt IaC-repo. Etter oppgraderingen vil Kildomaten fortsette å prosessere filer som ikke allerede er prosessert. Brukere og team trenger ikke å gjøre noe i forbindelse med oppgraderingen.</p>
-</section>
-<section id="viktig-for-team-med-isee-synkronisering-til-bakken" class="level2">
-<h2 class="anchored" data-anchor-id="viktig-for-team-med-isee-synkronisering-til-bakken">Viktig for team med ISEE-synkronisering til bakken</h2>
-<p>Team som synkroniserer data fra produktbøtta ned til bakken og videre til <strong>ISEE</strong> bør være oppmerksomme på at enkelte filer kan bli prosessert på nytt. Dette kan føre til dubletter i ISEE. Hvis dette er en utfordring, anbefaler vi å pause synkroniseringen i oppgraderingsperioden.</p>
-</section>
-<section id="tidskritiske-publiseringer" class="level2">
-<h2 class="anchored" data-anchor-id="tidskritiske-publiseringer">Tidskritiske publiseringer</h2>
-<p>Dersom teamet ditt har publiseringer som er tidskritiske ift oppgraderingsvinduet, ta kontakt med Kundeservice for å avtale et annet tidspunkt.</p>
-
-
-</section>
-
- ]]></description>
-  <category>kildomaten</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-08-19-kildomaten-update/</guid>
-  <pubDate>Tue, 19 Aug 2025 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 </channel>

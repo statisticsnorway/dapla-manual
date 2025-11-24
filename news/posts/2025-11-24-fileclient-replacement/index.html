@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Øyvind Bruer-Skarsbø">
-<meta name="dcterms.date" content="2025-10-13">
+<meta name="dcterms.date" content="2025-11-24">
 
-<title>Utfasing av dapla-toolbelt – Dapla-manualen</title>
+<title>Erstatt FileClient fra dapla-toolbelt med gcsfs – Dapla-manualen</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -90,14 +125,14 @@ background: #274247;
 </style>
 
 
-<meta property="og:title" content="Utfasing av dapla-toolbelt – Dapla-manualen">
-<meta property="og:description" content="Støtte for dapla-toolbelt fjernes 1. februar 2026">
+<meta property="og:title" content="Erstatt FileClient fra dapla-toolbelt med gcsfs – Dapla-manualen">
+<meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
 <meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
 <meta property="og:image:height" content="403">
 <meta property="og:image:width" content="863">
-<meta name="twitter:title" content="Utfasing av dapla-toolbelt – Dapla-manualen">
-<meta name="twitter:description" content="Støtte for dapla-toolbelt fjernes 1. februar 2026">
+<meta name="twitter:title" content="Erstatt FileClient fra dapla-toolbelt med gcsfs – Dapla-manualen">
+<meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
 <meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
 <meta name="twitter:image-height" content="403">
 <meta name="twitter:image-width" content="863">
@@ -225,12 +260,10 @@ background: #274247;
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Utfasing av dapla-toolbelt</h1>
-            <p class="subtitle lead">Støtte for dapla-toolbelt fjernes 1. februar 2026</p>
+      <h1 class="title">Erstatt FileClient fra dapla-toolbelt med gcsfs</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">dapla-toolbelt</div>
-                <div class="quarto-category">kildomaten</div>
-                <div class="quarto-category">data collector</div>
+                <div class="quarto-category">gcsfs</div>
               </div>
                   </div>
   </div>
@@ -255,7 +288,7 @@ background: #274247;
       <div>
       <div class="quarto-title-meta-heading">Opprettet</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 13, 2025</p>
+        <p class="date">November 24, 2025</p>
       </div>
     </div>
     
@@ -276,15 +309,9 @@ background: #274247;
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#hva-endres" id="toc-hva-endres" class="nav-link active" data-scroll-target="#hva-endres">Hva endres?</a></li>
-  <li><a href="#hva-betyr-dette-for-meg" id="toc-hva-betyr-dette-for-meg" class="nav-link" data-scroll-target="#hva-betyr-dette-for-meg">Hva betyr dette for meg?</a>
-  <ul class="collapse">
-  <li><a href="#dapla-toolbelt-i-kildomaten" id="toc-dapla-toolbelt-i-kildomaten" class="nav-link" data-scroll-target="#dapla-toolbelt-i-kildomaten">dapla-toolbelt i Kildomaten</a></li>
-  </ul></li>
-  <li><a href="#kan-jeg-få-hjelp" id="toc-kan-jeg-få-hjelp" class="nav-link" data-scroll-target="#kan-jeg-få-hjelp">Kan jeg få hjelp?</a></li>
-  <li><a href="#hvorfor-gjøres-endringen" id="toc-hvorfor-gjøres-endringen" class="nav-link" data-scroll-target="#hvorfor-gjøres-endringen">Hvorfor gjøres endringen?</a></li>
+  <li><a href="#hva-betyr-dette-for-meg" id="toc-hva-betyr-dette-for-meg" class="nav-link active" data-scroll-target="#hva-betyr-dette-for-meg">Hva betyr dette for meg?</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-10-13-dapla-toolbelt-utfasing/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-10-13-dapla-toolbelt-utfasing/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-11-24-fileclient-replacement/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-11-24-fileclient-replacement/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -297,83 +324,35 @@ background: #274247;
 
 
 
-<p>Team Statistikktjenester kommer til å fjerne støtte for Python-pakken dapla-toolbelt <strong>1. februar 2026</strong>.</p>
-<section id="hva-endres" class="level2">
-<h2 class="anchored" data-anchor-id="hva-endres">Hva endres?</h2>
-<p>Etter 1. februar vil vi ikke lenger støtte bruk av dapla-toolbelt på Dapla Lab. Noe av funksjonaliteten i dapla-toolbelt fjernes, mens noe videreføres inn i nye Python-pakker.</p>
-</section>
+<p>Som <a href="../../../news/posts/2025-10-13-dapla-toolbelt-utfasing/index.html">nevnt i en tidligere nyhetsartikkel</a> så skal dapla-toolbelt fases ut innen 1. februar 2026. Noe av funksjonaliteten skal flyttes inn i mindre Python-pakker, og annen funksjonalitet erstattes med standard Python-pakker som allerede eksisterer. Vi har nå oppdatert dokumentasjonen i Dapla-manualen slik at alle eksempler som tidligere viste til <code>FileClient</code> i dapla-toolbelt nå viser til Python-pakken <a href="https://gcsfs.readthedocs.io/en/latest/api.html">gcsfs</a>.</p>
 <section id="hva-betyr-dette-for-meg" class="level2">
 <h2 class="anchored" data-anchor-id="hva-betyr-dette-for-meg">Hva betyr dette for meg?</h2>
-<p>Hvis du bruker dapla-toolbelt i koden din i dag så må du erstatte dette før 1. februar 2026. Noe kan erstattes allerede nå, mens annen funksjonalitet vil erstattes gradvis de neste månedene. <a href="#tbl-dapla-toolbelt-phase-out" class="quarto-xref">Tabell&nbsp;1</a> gir en oversikt over hvilken funksjonalitet som erstattes med hva:</p>
-<div id="tbl-dapla-toolbelt-phase-out" class="striped quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-dapla-toolbelt-phase-out-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabell&nbsp;1: Funksjonalitet i dapla-toolbelt og hvor det flyttes.
-</figcaption>
-<div aria-describedby="tbl-dapla-toolbelt-phase-out-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="table-striped caption-top table">
-<thead>
-<tr class="header">
-<th style="text-align: left;">dapla-toolbelt</th>
-<th style="text-align: left;">Etter endring</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><code>read_pandas()</code>, <code>write_pandas()</code></td>
-<td style="text-align: left;">Bytt til standard-pakker som <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_parquet.html">Pandas</a>, <a href="https://docs.pola.rs/api/python/stable/reference/api/polars.read_parquet.html">Polars</a>, <a href="https://arrow.apache.org/docs/python/parquet.html">PyArrow</a>, etc.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>CollectorClient</code></td>
-<td style="text-align: left;"><em>Ny Python-pakke kommer snart</em></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>GuardianClient</code></td>
-<td style="text-align: left;"><em>Ny Python-pakke kommer snart</em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>AuthClient</code></td>
-<td style="text-align: left;"><a href="https://manual.dapla.ssb.no/statistikkere/dapla-auth-client.html">dapla-auth-client</a></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>get_secret_version()</code></td>
-<td style="text-align: left;"><em>Skal flyttes til Python-pakken <a href="https://github.com/statisticsnorway/ssb-fagfunksjoner">ssb-fagfunksjoner</a></em></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><code>FileClient</code></td>
-<td style="text-align: left;"><a href="https://gcsfs.readthedocs.io/en/latest/">gcsfs</a>. <a href="../../../news/posts/2025-11-24-fileclient-replacement/index.html">Se eksempler.</a></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><code>trigger_source_data_processing</code></td>
-<td style="text-align: left;"><a href="https://pypi.org/project/dapla-toolbelt-automation/">dapla-toolbelt-automation</a></td>
-</tr>
-</tbody>
-</table>
+<p>Brukere som benytter seg av <code>FileClient</code>-metoden fra dapla-toolbelt i sin kode må bytte dette ut før 1. februar. For å ta i bruk gcsfs må man installere det:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">poetry</span> add gcsfs</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Deretter endrer du koden slik som vist under:</p>
+</section>
+<div class="columns">
+<div class="column" style="width:47.5%;">
+<section id="før" class="level2">
+<h2 class="anchored" data-anchor-id="før">FØR</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> FileClient.get_gcs_file_system()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:47.5%;">
+<section id="etter" class="level2">
+<h2 class="anchored" data-anchor-id="etter">Etter</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gcsfs</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> gcsfs.GCSFileSystem()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
 </div>
-</figure>
 </div>
-<p>Av <a href="#tbl-dapla-toolbelt-phase-out" class="quarto-xref">Tabell&nbsp;1</a> ser vi at funksjonaliteten i <code>read_pandas()</code>, <code>write_pandas()</code>, <code>AuthClient</code> og <code>FileClient</code> kan erstattes med nye alternativene nå. Resten av funksjonaliteten er under utvikling og det vil annonseres når disse er klare for erstatning.</p>
-<section id="dapla-toolbelt-i-kildomaten" class="level3">
-<h3 class="anchored" data-anchor-id="dapla-toolbelt-i-kildomaten">dapla-toolbelt i Kildomaten</h3>
-<p>Brukere som benytter dapla-toolbelt fra Kildomaten kan erstatte dette med en gang. I Kildomaten er det <code>read_pandas()</code>, <code>write_pandas()</code> og <code>FileClient</code> som benyttes og disse kan erstattes nå.</p>
-</section>
-</section>
-<section id="kan-jeg-få-hjelp" class="level2">
-<h2 class="anchored" data-anchor-id="kan-jeg-få-hjelp">Kan jeg få hjelp?</h2>
-<p>Ja. Ta kontakt med avdelingens <strong>støtteteam</strong> eller <strong>tech-coacher</strong> ved behov for støtte.</p>
-</section>
-<section id="hvorfor-gjøres-endringen" class="level2">
-<h2 class="anchored" data-anchor-id="hvorfor-gjøres-endringen">Hvorfor gjøres endringen?</h2>
-<p>Endringen gjøres fordi mye av funksjonaliteten i pakken ikke lenger er relevant, og vi ønsker å flytte gjenværende funksjonalitet inn i mindre Python-pakker. Fordelen med dette er følgende:</p>
-<ul>
-<li>mindre forvaltning</li>
-<li>færre avhengigheter i ssb-project</li>
-<li>enklere migrering fra prodsonen til Dapla</li>
-<li>mindre SSB-spesifikk dokumentasjon</li>
-</ul>
+<p>Deretter kan du bruke <code>fs</code>-objektet som før.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -784,7 +763,7 @@ Tabell&nbsp;1: Funksjonalitet i dapla-toolbelt og hvor det flyttes.
 </div>   
     <div class="nav-footer-center">
 <p>Kom i gang med Dapla</p>
-<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-10-13-dapla-toolbelt-utfasing/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-10-13-dapla-toolbelt-utfasing/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/news/posts/2025-11-24-fileclient-replacement/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/news/posts/2025-11-24-fileclient-replacement/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
