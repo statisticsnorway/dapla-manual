@@ -1,0 +1,61 @@
+---
+title: Erstatt FileClient fra dapla-toolbelt med gcsfs 
+categories:
+  - dapla-toolbelt
+  - gcsfs
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: "11/24/2025"
+date-modified: "11/24/2025"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+Som [nevnt i en tidligere nyhetsartikkel](../2025-10-13-dapla-toolbelt-utfasing/index.qmd) så skal dapla-toolbelt fases ut innen 1. februar 2026. Noe av funksjonaliteten skal flyttes inn i mindre Python-pakker, og annen funksjonalitet erstattes med standard Python-pakker som allerede eksisterer. Vi har nå oppdatert dokumentasjonen i Dapla-manualen slik at alle eksempler som tidligere viste til `FileClient` i dapla-toolbelt nå viser til Python-pakken [gcsfs](https://gcsfs.readthedocs.io/en/latest/api.html). 
+
+## Hva betyr dette for meg? 
+
+Brukere som benytter seg av `FileClient`-metoden fra dapla-toolbelt i sin kode må bytte dette ut før 1. februar. For å ta i bruk gcsfs må man installere det:
+
+```{.bash}
+poetry add gcsfs
+```
+
+Deretter endrer du koden slik som vist under:
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+
+## FØR 
+
+```{.python}
+from dapla import FileClient
+
+fs = FileClient.get_gcs_file_system()
+
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+
+## Etter
+
+```{.python}
+import gcsfs
+
+fs = gcsfs.GCSFileSystem()
+```
+:::
+
+::::
+
+Deretter kan du bruke `fs`-objektet som før. 
