@@ -3603,7 +3603,7 @@
     "href": "statistikkere/delomaten.html",
     "title": "Delomaten",
     "section": "",
-    "text": "WarningTjenesten er under utvikling\n\n\n\nDelomaten under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025.\nDelomaten er en tjeneste for å automatisere deling av data mellom seksjoner og team som har forskjellige datatilganger av hensyn til behov og personvern. Dette gjøres ved at tjenesten pseudonymiserer eller depseudonymiserer felt i datasett før den lagres i en spesiell deltbøtte som det delende teamet ikke har lesetilgang til. Tjenesten leser paruqet datafiler og datadoc metadata fra teamets produktbøtte, prosesserer dem og deretter skriver dem til en mappe i ‘delomat’ deltbøtte. Datadoc metadatafiler for dataen er påbudt. Hvis data filer blir flyttet til kildemappen uten tilhørende metadatafil innen 5 minutter vil delomaten jobben feile.",
+    "text": "WarningTjenesten er under utvikling\n\n\n\nDelomaten er under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025.\nDelomaten er en Dapla-tjeneste som automatiserer sikker deling av data mellom team med forskjellige datatilganger av hensyn til behov og personvern.\nDen fungerer slik:",
     "crumbs": [
       "Manual",
       "Datatjenester",
@@ -3611,11 +3611,11 @@
     ]
   },
   {
-    "objectID": "statistikkere/delomaten.html#forberedelser",
-    "href": "statistikkere/delomaten.html#forberedelser",
+    "objectID": "statistikkere/delomaten.html#personvern-og-forutsetninger",
+    "href": "statistikkere/delomaten.html#personvern-og-forutsetninger",
     "title": "Delomaten",
-    "section": "Forberedelser",
-    "text": "Forberedelser\nFør et Dapla-team kan ta i bruk delomaten må tjenesten være aktivert for teamet. Dette kan gjøres selvbetjent som en feature hvor både shared-buckets og delomaten må skrus på. Alternativt kan man opprette en Kundeservice-sak og be om å hjelp til dette.\nTil slutt oppretter man en ‘delomat’ deltbøtte.",
+    "section": "Personvern og forutsetninger",
+    "text": "Personvern og forutsetninger\nFør du tar i bruk Delomaten, er det viktig at du setter deg inn i hvordan personvern håndteres i SSB. Delomaten er laget for å støtte trygg deling av data mellom team med ulike tilgangsnivåer og må brukes i tråd med SSBs personvernregler.\nLes mer på siden Personvern i Dapla.",
     "crumbs": [
       "Manual",
       "Datatjenester",
@@ -3623,11 +3623,35 @@
     ]
   },
   {
-    "objectID": "statistikkere/delomaten.html#sette-opp-tjenesten",
-    "href": "statistikkere/delomaten.html#sette-opp-tjenesten",
+    "objectID": "statistikkere/delomaten.html#sett-opp-delomaten",
+    "href": "statistikkere/delomaten.html#sett-opp-delomaten",
     "title": "Delomaten",
-    "section": "Sette opp tjenesten",
-    "text": "Sette opp tjenesten\nTjenesten lar statistikere konfigurere hvilke felt som skal pseudonymiseres/depseudonymiseres før dataen blir lagret i deltbøtten gjennom en .yaml fil. I likhet med kildomaten oppretter man kilder under automation mappen i teamets IAC repo. For delomaten ligger disse under automation/shared-data. Delomaten forventer en config.yaml fil per kilde. F.eks. hvis man skal opprette en delomaten-jobb i prod-miljøet som heter ‘forbruk’ oppretter man filen automation/shared-data/mitt-dapla-team-prod/forbruk/config.yaml.\n\nKonfigurasjonsfil\nKonfigurasjonsfilen inneholder oppskriften på hvilke felt som skal pseudonymiseres/depseudonymiseres og med hvilken algoritme som skal brukes.\n\n\nautomation/shared-data/mitt-dapla-team-prod/forbruk/config.yaml\n\nshared_bucket: \"delomatentest\"\nsource_folder_prefix: \"forbruk/\"\ndestination_folder: \"forbruk\"\nmemory_size: 3\npseudo:\n  - name: task_one\n    columns: [ \"fnr\", \"snr\" ]\n    pseudo_operation: \"PSEUDO\"\n    encryption:\n      algorithm: \"sid_mapping\"\n      sid_snapshot_date: \"2025-07-07\"\n\nI dette eksempelet definerer vi en delomaten-jobb som vil pseudonymisere fnr og snr feltene ved bruk av sid mapping og katalogdato 2025-07-07. Det er også mulig å spesifisere forskjellige algoritmer for forskjellige felt.\n\n\nautomation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml\n\nshared_bucket: \"delomatentest\"\nsource_folder_prefix: \"ledstill/\"\ndestination_folder: \"ledstill\"\nmemory_size: 2\npseudo:\n  - name: task_one\n    columns: [ \"fnr\"]\n    pseudo_operation: \"DEPSEUDO\"\n    encryption:\n      algorithm: \"sid_mapping\"\n      sid_snapshot_date: \"2025-07-07\"\n  - name: task_two\n    columns: [ \"fornavn\"]\n    pseudo_operation: \"DEPSEUDO\"\n    encryption:\n      algorithm: \"default\"\n\nHer depseudonymiserer vi fnr kolonnen med sid mapping algoritmen, mens fornavn blir depseudonymisert med standardalgoritmen DAEAD. Konfigurasjonsfilen blir validert når du oppretter en pull request på GitHub. Der vil du få eventuelle feilmeldinger om du har feilkonfigurert delomaten.\n\n\n\nDelomaten test feil\n\n\nHvis du så trykker deg inn på workflowen som feilet vil du få en beskrivende feilmelding markert i rødt som f.eks:\n\n\n\nDelomaten feilmelding",
+    "section": "Sett opp Delomaten",
+    "text": "Sett opp Delomaten\nFor å sette opp Delomaten gjør følgende endringer i teamets IAC-repo:\n\nSjekk at dataene er dokumentert\n\nAlle data som deles gjennom Delomaten må være dokumentert i Datadoc.\nHver datafil må ha en tilhørende metadatafil (.json) som lastes opp samtidig.\nHvis metadatafilen mangler, vil jobben feile automatisk.\n\nAktiver tjenesten\n\nSkru på shared-buckets og Delomaten under Features,\neller opprett en kundeservice-sak.\n\nOpprett Delomaten-bøtte\n\nFølg veiledningen i deling av data.\n\nLag konfigurasjonsfil i GitHub\n\nOpprett automation/shared-data/&lt;Ditt team&gt;-prod/&lt;&gt;/config.yaml.\nBeskriv hvilke kolonner som skal pseudonymiseres/depseudonymiseres.",
+    "crumbs": [
+      "Manual",
+      "Datatjenester",
+      "Delomaten"
+    ]
+  },
+  {
+    "objectID": "statistikkere/delomaten.html#konfigurasjonsfilen",
+    "href": "statistikkere/delomaten.html#konfigurasjonsfilen",
+    "title": "Delomaten",
+    "section": "Konfigurasjonsfilen",
+    "text": "Konfigurasjonsfilen\nKonfigurasjonsfilen (config.yaml) styrer hvordan Delomaten skal behandle dataen. Filen må ligge i teamets IAC-repo, under automation/shared-data/....\n\n\ngithub.com/statisticsnorway/dapla-example-iac\n\ndapla-example-iac\n├── automation/\n│   ├── shared-data/\n│   │   ├── dapla-example-prod/\n│   │   │    └── altinn\n│   │   │    └── ameld\n│   │   └── dapla-example-test/\n│   │        └── altinn\n│   │        └── ameld\n│   │        └── skatt\n│   └── source-data/\n│       ...\n│...\n\n\nViktige parametre\n\nshared_bucket Navnet på Delomaten-bøtta der resultatet lagres.\nsource_folder_prefix Stien til kildedata i produktbøtta.\n\nHvis du setter source_folder_prefix: \"forbruk/\", betyr det at alle filer under mappen forbruk/ i produktbøtta deles.\nTips: Hvis du bare vil dele deler av mappen, kan du bruke underkataloger eller et mer spesifikt prefix.\n\ndestination_folder Navnet på mappen i Delomaten-bøtta som mottakerne får tilgang til.\n\nVanligvis setter du samme navn som source_folder_prefix, men du kan velge fritt.\n\nmemory_size Ressurser jobben maksimalt får tilgang til spesifisert i Gigabyte (for avanserte brukere).\npseudo En liste over kolonner som skal pseudonymiseres, og hvilken algoritme som skal brukes.\ndepseudo En liste over kolonner som skal depseudonymiseres. Hvilken algoritme som brukes bestemmes utfra metadataen til variabelen.\n\n\n\nEksempeler på pseudonymisering\n\n\nautomation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml\n\nshared_bucket: \"delomatentest\"\nsource_folder_prefix: \"forbruk/\"\ndestination_folder: \"forbruk\"\nmemory_size: 6\npseudo:\n  - name: task_one\n    columns: [ \"fnr\" ]\n    encryption:\n      algorithm: \"sid_mapping\"\n      sid_snapshot_date: \"2025-07-07\"\n\nHer pseudonymiseres kolonnen fnr med sid mapping og katalogdato 2025-07-07.\n\n\nautomation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml\n\nshared_bucket: \"delomatentest\"\nsource_folder_prefix: \"forbruk/\"\ndestination_folder: \"forbruk\"\nmemory_size: 6\npseudo:\n  - name: task_one\n    columns: [ \"fnr\" ]\n    encryption:\n      algorithm: \"sid_mapping\"\n\nHer pseudonymiseres kolonnen fnr med sid mapping og siden katalogdato ikke er spesifisert brukes den nyeste.\n\n\nautomation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml\n\nshared_bucket: \"delomatentest\"\nsource_folder_prefix: \"forbruk/\"\ndestination_folder: \"forbruk\"\nmemory_size: 6\npseudo:\n  - name: task_one\n    columns: [ \"fnr\" ]\n    encryption:\n      algorithm: \"sid_mapping\"\n  - name: task_two\n    columns: [ \"snr\" ]\n    encryption:\n      algorithm: \"papis_compatible\"\n  - name: task_three\n    columns: [ \"fornavn\", \"etternavn\" ]\n    encryption:\n      algorithm: \"default\"\n\nHer pseudonymiseres flere kolonner med forskjellige algoritmer:\n\nfnr kolonnen pseudonymiseres med sid mapping og nyeste sid-katalog\nsnr kolonnen pseudonymiseres med papis algoritmen, men uten noe sid mapping\nfornavn og etternavn kolonnene pseudonymiseres med default algoritmen som altså er DAEAD\n\n\n\nEksempel 2 – depseudonymisering\n\n\nautomation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml\n\nshared_bucket: \"delomatentest\"\nsource_folder_prefix: \"ledstill/\"\ndestination_folder: \"ledstill\"\nmemory_size: 6\ndepseudo:\n    columns: [\"fnr\", \"fnr_naa\"]\n\nHer depseudonymiseres fnr og fnr_naa kolonnene med de samme algoritmene og parameterene som de ble pseudonymisert med. Denne informasjonen blir hentet fra datadoc metadataen til variablene.",
+    "crumbs": [
+      "Manual",
+      "Datatjenester",
+      "Delomaten"
+    ]
+  },
+  {
+    "objectID": "statistikkere/delomaten.html#feilmeldinger",
+    "href": "statistikkere/delomaten.html#feilmeldinger",
+    "title": "Delomaten",
+    "section": "Feilmeldinger",
+    "text": "Feilmeldinger\nKonfigurasjonsfilen valideres automatisk når du oppretter en pull request i GitHub. Hvis noe er feil får du en tydelig feilmelding: \nEksempel på feilmelding i workflow",
     "crumbs": [
       "Manual",
       "Datatjenester",
