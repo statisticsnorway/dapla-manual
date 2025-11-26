@@ -7,7 +7,7 @@ lightbox: true
 ::: {.callout-warning}
 ## Tjenesten er under utvikling
 
-Delomaten er under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025. 
+Delomaten er under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025.
 :::
 
 
@@ -17,16 +17,16 @@ Den fungerer slik:
 
 1. Delomaten leser data og metadata fra **produktbøtta** til det delende teamet.
 2. Dataene blir **pseudonymistert eller depseudonymisert** basert på oppsettet det delende teamet har laget.
-3. Resultatet lagres i en egen **Delomaten-bøtte** som kun mottaker teamet har tilgang til. 
+3. Resultatet lagres i en egen **Delomaten-bøtte** som kun mottaker teamet har tilgang til.
 
 ![Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang.](../images/delomaten.png)
 
 ## Personvern og forutsetninger
 
-Før du tar i bruk Delomaten, er det viktig at du setter deg inn i hvordan personvern håndteres i SSB.  
+Før du tar i bruk Delomaten, er det viktig at du setter deg inn i hvordan personvern håndteres i SSB.
 Delomaten er laget for å støtte trygg deling av data mellom team med ulike tilgangsnivåer og må brukes i tråd med SSBs personvernregler.
 
-Les mer på siden [**Personvern i Dapla**](./personvern.qmd).  
+Les mer på siden [**Personvern i Dapla**](./personvern.qmd).
 
 ## Sett opp Delomaten
 For å sette opp Delomaten gjør følgende endringer i teamets IAC-repo:
@@ -37,20 +37,20 @@ For å sette opp Delomaten gjør følgende endringer i teamets IAC-repo:
    - Hvis metadatafilen mangler, vil jobben feile automatisk.
 
 1. **Aktiver tjenesten**
-   - Skru på `shared-buckets` og `Delomaten` under [Features](./features.html),  
-   - eller opprett en [kundeservice-sak](https://ssb.pureservice.com/#/categories/14/new).  
+   - Skru på `shared-buckets` og `Delomaten` under [Features](./features.html),
+   - eller opprett en [kundeservice-sak](https://ssb.pureservice.com/#/categories/14/new).
 
 2. **Opprett Delomaten-bøtte**
-   - Følg veiledningen i [deling av data](./deling-av-data.qmd).  
+   - Følg veiledningen i [deling av data](./deling-av-data.qmd).
 
 3. **Lag konfigurasjonsfil i GitHub**
-   - Opprett `automation/shared-data/<Ditt team>-prod/<>/config.yaml`.  
-   - Beskriv hvilke kolonner som skal pseudonymiseres/depseudonymiseres.  
+   - Opprett `automation/shared-data/<Ditt team>-prod/<>/config.yaml`.
+   - Beskriv hvilke kolonner som skal pseudonymiseres/depseudonymiseres.
 
 ---
 ## Konfigurasjonsfilen
 
-Konfigurasjonsfilen (`config.yaml`) styrer hvordan Delomaten skal behandle dataen.  
+Konfigurasjonsfilen (`config.yaml`) styrer hvordan Delomaten skal behandle dataen.
 Filen må ligge i teamets IAC-repo, under `automation/shared-data/...`.
 
 ```{.yaml filename="github.com/statisticsnorway/dapla-example-iac"}
@@ -66,30 +66,33 @@ dapla-example-iac
 │   │        └── skatt
 │   └── source-data/
 │       ...
-│...           
+│...
 ```
 
 ### Viktige parametre
 
-- **`shared_bucket`**  
-  Navnet på Delomaten-bøtta der resultatet lagres.  
+- **`shared_bucket`**
+  Navnet på Delomaten-bøtta der resultatet lagres.
 
-- **`source_folder_prefix`**  
-  Stien til kildedata i produktbøtta.  
-  - Hvis du setter `source_folder_prefix: "forbruk/"`, betyr det at alle filer under mappen `forbruk/` i produktbøtta deles.  
-  - Tips: Hvis du bare vil dele deler av mappen, kan du bruke underkataloger eller et mer spesifikt prefix.  
+- **`source_folder_prefix`**
+  Stien til kildedata i produktbøtta.
+  - Hvis du setter `source_folder_prefix: "forbruk/"`, betyr det at alle filer under mappen `forbruk/` i produktbøtta deles.
+  - Tips: Hvis du bare vil dele deler av mappen, kan du bruke underkataloger eller et mer spesifikt prefix.
 
-- **`destination_folder`**  
-  Navnet på mappen i Delomaten-bøtta som mottakerne får tilgang til.  
-  - Vanligvis setter du samme navn som `source_folder_prefix`, men du kan velge fritt.  
+- **`destination_folder`**
+  Navnet på mappen i Delomaten-bøtta som mottakerne får tilgang til.
+  - Vanligvis setter du samme navn som `source_folder_prefix`, men du kan velge fritt.
 
-- **`memory_size`**  
-  Ressurser jobben maksimalt får tilgang til spesifisert i Gigabyte (for avanserte brukere).  
+- **`memory_size`**
+  Ressurser jobben maksimalt får tilgang til spesifisert i Gigabyte (for avanserte brukere).
 
-- **`pseudo`**  
-  En liste over kolonner som skal pseudonymiseres/depseudonymiseres, og hvilken algoritme som skal brukes.  
+- **`pseudo`**
+  En liste over kolonner som skal pseudonymiseres, og hvilken algoritme som skal brukes.
 
-### Eksempel 1 – pseudonymisering
+- **`depseudo`**
+  En liste over kolonner som skal depseudonymiseres. Hvilken algoritme som brukes bestemmes utfra metadataen til variabelen.
+
+### Eksempeler på pseudonymisering
 ```{.yaml filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"}
 shared_bucket: "delomatentest"
 source_folder_prefix: "forbruk/"
@@ -98,12 +101,49 @@ memory_size: 6
 pseudo:
   - name: task_one
     columns: [ "fnr" ]
-    pseudo_operation: "PSEUDO"
     encryption:
       algorithm: "sid_mapping"
       sid_snapshot_date: "2025-07-07"
 ```
 Her pseudonymiseres kolonnen fnr med sid mapping og katalogdato `2025-07-07`.
+
+```{.yaml filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"}
+shared_bucket: "delomatentest"
+source_folder_prefix: "forbruk/"
+destination_folder: "forbruk"
+memory_size: 6
+pseudo:
+  - name: task_one
+    columns: [ "fnr" ]
+    encryption:
+      algorithm: "sid_mapping"
+```
+Her pseudonymiseres kolonnen fnr med sid mapping og siden katalogdato ikke er spesifisert brukes den nyeste.
+
+```{.yaml filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"}
+shared_bucket: "delomatentest"
+source_folder_prefix: "forbruk/"
+destination_folder: "forbruk"
+memory_size: 6
+pseudo:
+  - name: task_one
+    columns: [ "fnr" ]
+    encryption:
+      algorithm: "sid_mapping"
+  - name: task_two
+    columns: [ "snr" ]
+    encryption:
+      algorithm: "papis_compatible"
+  - name: task_three
+    columns: [ "fornavn", "etternavn" ]
+    encryption:
+      algorithm: "default"
+```
+Her pseudonymiseres flere kolonner med forskjellige algoritmer:
+
+- `fnr` kolonnen pseudonymiseres med sid mapping og nyeste sid-katalog
+- `snr` kolonnen pseudonymiseres med papis algoritmen, men uten noe sid mapping
+- `fornavn` og `etternavn` kolonnene pseudonymiseres med `default` algoritmen som altså er DAEAD
 
 ### Eksempel 2 – depseudonymisering
 ```{.yaml filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"}
@@ -111,20 +151,11 @@ shared_bucket: "delomatentest"
 source_folder_prefix: "ledstill/"
 destination_folder: "ledstill"
 memory_size: 6
-pseudo:
-  - name: task_one
-    columns: [ "fnr"]
-    pseudo_operation: "DEPSEUDO"
-    encryption:
-      algorithm: "sid_mapping"
-      sid_snapshot_date: "2025-07-07"
-  - name: task_two
-    columns: [ "fornavn", "etternavn" ]
-    pseudo_operation: "DEPSEUDO"
-    encryption:
-      algorithm: "default"
+depseudo:
+    columns: ["fnr", "fnr_naa"]
 ```
-Her depseudonymiseres fnr kolonnen med sid mapping og kolonnene fornavn og etternavn med standardalgoritmen (DAEAD).
+Her depseudonymiseres `fnr` og `fnr_naa` kolonnene med de samme algoritmene og parameterene som de ble pseudonymisert med.
+ Denne informasjonen blir hentet fra datadoc metadataen til variablene.
 
 ## Feilmeldinger
 
