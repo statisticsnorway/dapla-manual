@@ -823,7 +823,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 7, 2025</p>
+      <p class="date-modified">February 12, 2025</p>
     </div>
   </div>
     
@@ -1147,19 +1147,32 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 </section>
 <section id="versjonering-av-datasett" class="level2">
 <h2 class="anchored" data-anchor-id="versjonering-av-datasett">Versjonering av datasett</h2>
-<p>Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Derfor skal et datasett som er brukt i statistikkproduksjon aldri slettes - det skal opprettes en ny versjon av datasettet. Les mer om prinsippet om uforanderlighet av data på <a href="https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data">confluence-siden til IT-Arkitektur</a>.</p>
+<p><strong>Versjonering er obligatorisk</strong> når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Derfor skal et datasett som er brukt i statistikkproduksjon aldri slettes - det skal opprettes en ny versjon av datasettet. Les mer om prinsippet om uforanderlighet av data på <a href="https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data">confluence-siden til IT-Arkitektur</a>.</p>
 <p>Kort fortalt innebærer versjonering av data at datasettene har versjonsnummer før filendelsen. For eksempel: <em>framskrevne-befolkningsendringer_p2019_p2050<strong>_v1</strong>.parquet</em></p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Mulighet til å lagre uversjonert fil
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Når man lagrer den obligatoriske versjonerte filen, har man mulighet til å samtidig lagre en uversjonert versjon. Feks. “filnavn_v1.parquet” + “filnavn.parquet”. Dette gjør at konsumenten til en hver tid bruker “nyeste” versjon av fila, og kan derfor forenkle konsumeringen av den uversjonerte filen. Men, det er noen ting man bør være OBS på: 1. Hvordan sikrer man reproduserbarhet, når det ikke logges hos konsumenten hvilken versjon av filen som ble konsumert? 2. Kan du garantere at du alltid skriver over den uversjonerte filen, eller er det en mulighet for at den kan bli “hengende bak” de versjonerte filene? Det anbefales derfor kun å benytte filnavn med versjonsnummer (unngå uversjonerte filer)! Dette vil også forenkle dokumentasjon av datasett i DataDoc, tilgjengeliggjøring i datakatalogen, og er nødvendig for en ryddig deling av data.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Unntak til versjonering: nyeste versjon og temporære data
+<span class="screen-reader-only">Note</span>Unntak til versjonering: temporære data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Nyeste versjon kan lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tilegg trenger man ikke versjonere temporære data.</p>
+<p>Man trenger ikke versjonere temporære data.</p>
 </div>
 </div>
 <section id="når-skal-man-lagre-ny-versjon" class="level3">
