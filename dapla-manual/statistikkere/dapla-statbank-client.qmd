@@ -39,7 +39,7 @@ Man kan hente ut filbeskrivelsen til en statistikkbanktabell fra Statistikkbanke
 
 ```{.python filename="Notebook"}
 from statbank import StatbankClient
-stat_client = StatbankClient()  # Ber om lastebruker og lastepassord
+stat_client = StatbankClient()  # Ber om lastebruker og lastepassord om du ikke har skrevet inn dette tidligere.
 
 tabell = "06339"
 filbeskrivelse = stat_client.get_description(tableid=tabell)
@@ -176,3 +176,16 @@ query = {'query': [{'code': 'Region', 'selection': {'filter': 'vs:Landet', 'valu
 
 df_folkemengde = apidata(uri, query, include_id = True)
 ```
+
+
+
+### Resette passord om noe har gått galt med passord / bruker
+Dette tømmer passord fra lokal lagring, og ber deg om å skrive inn dette på nytt.
+Kanskje dette kan forenkles i fremtiden, men dette er nødvendig i v1.4.0.
+
+```{.python filename="Notebook"}
+reset_client = StatbankClient(check_username_password=False)
+reset_client.reset_auth()
+```
+Om du fikk en error under innskriving av passord og brukernavn som du mener dapla-statbank-client-pakken bør ta høyde for, [rapporter error-teksten som ett issue på pakkens github repo](https://github.com/statisticsnorway/dapla-statbank-client/issues).
+
