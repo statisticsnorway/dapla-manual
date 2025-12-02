@@ -785,6 +785,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#validering" id="toc-validering" class="nav-link" data-scroll-target="#validering">Validering</a></li>
   <li><a href="#publiserte-tabeller" id="toc-publiserte-tabeller" class="nav-link" data-scroll-target="#publiserte-tabeller">Publiserte tabeller</a></li>
   <li><a href="#intern-statistikkbank" id="toc-intern-statistikkbank" class="nav-link" data-scroll-target="#intern-statistikkbank">Intern statistikkbank</a></li>
+  <li><a href="#resette-passord-om-noe-har-gått-galt-med-passord-bruker" id="toc-resette-passord-om-noe-har-gått-galt-med-passord-bruker" class="nav-link" data-scroll-target="#resette-passord-om-noe-har-gått-galt-med-passord-bruker">Resette passord om noe har gått galt med passord / bruker</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/dapla-statbank-client.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/dapla-statbank-client.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -806,7 +807,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">April 4, 2025</p>
+      <p class="date-modified">February 12, 2025</p>
     </div>
   </div>
     
@@ -851,7 +852,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><strong>Notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statbank <span class="im">import</span> StatbankClient</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>stat_client <span class="op">=</span> StatbankClient()  <span class="co"># Ber om lastebruker og lastepassord</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>stat_client <span class="op">=</span> StatbankClient()  <span class="co"># Ber om lastebruker og lastepassord om du ikke har skrevet inn dette tidligere.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tabell <span class="op">=</span> <span class="st">"06339"</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>filbeskrivelse <span class="op">=</span> stat_client.get_description(tableid<span class="op">=</span>tabell)</span>
@@ -999,6 +1000,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>df_folkemengde <span class="op">=</span> apidata(uri, query, include_id <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="resette-passord-om-noe-har-gått-galt-med-passord-bruker" class="level3">
+<h3 class="anchored" data-anchor-id="resette-passord-om-noe-har-gått-galt-med-passord-bruker">Resette passord om noe har gått galt med passord / bruker</h3>
+<p>Dette tømmer passord fra lokal lagring, og ber deg om å skrive inn dette på nytt. Kanskje dette kan forenkles i fremtiden, men dette er nødvendig i v1.4.0.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>reset_client <span class="op">=</span> StatbankClient(check_username_password<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>reset_client.reset_auth()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Om du fikk en error under innskriving av passord og brukernavn som du mener dapla-statbank-client-pakken bør ta høyde for, <a href="https://github.com/statisticsnorway/dapla-statbank-client/issues">rapporter error-teksten som ett issue på pakkens github repo</a>.</p>
 
 
 </section>
