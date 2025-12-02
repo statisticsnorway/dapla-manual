@@ -1,6 +1,6 @@
 ---
 title: Navnestandard
-date-modified: 09/07/2025
+date-modified: 02/12/2025
 lightbox: true
 ---
 
@@ -211,14 +211,22 @@ ssb-dapla-example-data-produkt-prod/
 
 ## Versjonering av datasett
 
-Versjonering er obligatorisk når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Derfor skal et datasett som er brukt i statistikkproduksjon aldri slettes - det skal opprettes en ny versjon av datasettet. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
+**Versjonering er obligatorisk** når man jobber med data på dapla. Hovedgrunnen til at vi versjonerer er for å dekke kravet om uforanderlighet og etterprøvbarehet: at data-konsumenter (menneske eller maskin) skal ha kontroll på endringer. Derfor skal et datasett som er brukt i statistikkproduksjon aldri slettes - det skal opprettes en ny versjon av datasettet. Les mer om prinsippet om uforanderlighet av data på [confluence-siden til IT-Arkitektur](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/2839707937/Prinsipp+1+Uforanderlighet+av+data).
 
 Kort fortalt innebærer versjonering av data at datasettene har versjonsnummer før filendelsen.
 For eksempel: *framskrevne-befolkningsendringer_p2019_p2050**\_v1**.parquet*
 
+::: {.callout-warning}
+## Mulighet til å lagre uversjonert fil
+Når man lagrer den obligatoriske versjonerte filen, har man mulighet til å samtidig lagre en uversjonert versjon. Feks. "filnavn_v1.parquet" + "filnavn.parquet". Dette gjør at konsumenten til en hver tid bruker "nyeste" versjon av fila, og kan derfor forenkle konsumeringen av den uversjonerte filen. Men, det er noen ting man bør være OBS på:
+1. Hvordan sikrer man reproduserbarhet, når det ikke logges hos konsumenten hvilken versjon av filen som ble konsumert?
+2. Kan du garantere at du alltid skriver over den uversjonerte filen, eller er det en mulighet for at den kan bli "hengende bak" de versjonerte filene?
+Det anbefales derfor kun å benytte filnavn med versjonsnummer (unngå uversjonerte filer)! Dette vil også forenkle dokumentasjon av datasett i DataDoc, tilgjengeliggjøring i datakatalogen, og er nødvendig for en ryddig deling av data.
+:::
+
 ::: {.callout-note}
-## Unntak til versjonering: nyeste versjon og temporære data
-Nyeste versjon kan lagres uten versjonsnummer. Dette er for at man enkelt skal kunne lese inn siste versjon av et datasett (ved å utelate versjonssuffiks). I tilegg trenger man ikke versjonere temporære data. 
+## Unntak til versjonering: temporære data
+Man trenger ikke versjonere temporære data. 
 :::
 
 ### Når skal man lagre ny versjon?
