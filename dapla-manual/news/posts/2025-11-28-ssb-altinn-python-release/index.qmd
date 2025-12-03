@@ -1,0 +1,38 @@
+---
+title: Ny release av ssb-altinn-python (0.4.15)
+categories:
+  - ssb-altinn-python
+  - altinn
+  - delomaten
+  - isee
+author:
+  - name: Team Fellesfunksjoner
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: vst@ssb.no
+date: "12/03/2025"
+date-modified: "12/03/2025"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+I tillegg til RA-skjemaer er det nå mulig å innrapportere RS-skjemaer i Altinn3. RS-skjemaene mangler feltet `enhetsIdent` som er grunnlaget for `IDENT_NR`-kolonnen i DataFramet som kommer ut fra `isee_transform()`. Dette har medført at utflating av XML med `isee_transform()` stopper/feiler for RS-skjema.
+
+Dette er endret i `v0.4.15`
+
+- feltet `raNummer` under `InternInfo` i XML avgjør om et skjema blir utflatet som RA eller RS
+
+- feltet `enhetsOrgNr` under `InternInfo` i XML benyttes for å fylle `IDENT_NR` i DataFramet som kommer ut fra `isee_transform()` på RS-skjema. 
+
+- feltet `SKJEMA_ID` i DataFramet som kommer ut fra `isee_transform()` omkodes fra `RS-xxxx` til `RA-xxxx` på RS-skjema  
+
+- funksjonen `create_isee_filename()` vil gi output med `RA` som prefix (`RA-0182A3_adaefe78sfd.csv`) på RS-skjema
+
+
+## Hva betyr dette for meg? 
+Ny versjon er tilgjengelig i Kildomaten.
+Brukere som har RS-skjema kan nå benytte seg av isee_transform() for å flate ut altinn3 XML til isee-format i Kildomaten og DaplaLab.
+Brukere som flater ut RA-skjema trenger ikke gjøre noe, pakken vil fungere som før.
+
+[Les mer her om bruk av pakken](../../../statistikkere/ssb-altinn-python.html). 
