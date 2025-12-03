@@ -10,25 +10,66 @@ lightbox: true
 Delomaten er under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025.
 :::
 
+Delomaten er en tjeneste som lar Dapla-team dele data med hverandre selv om de behandler personopplysninger ulikt. Tjenesten håndterer spesialtilfellene der team ikke kan bruke [standard delt-bøtter](./deling-av-data.qmd#typer-av-delt-bøtter) fordi teamet de skal dele med håndterer personopplysninger på en annen måte.
 
-Delomaten er en Dapla-tjeneste som *automatiserer sikker deling av data* mellom team med forskjellige datatilganger av hensyn til behov og personvern.
+@fig-delomaten viser et eksempel på hvordan tjenesten fungerer når et team som jobber med pseudonymiserte personopplysninger skal dele data et med et team som skal se personopplysninger i klartekst. 
 
-Den fungerer slik:
 
-1. Delomaten leser data og metadata fra **produktbøtta** til det delende teamet.
-2. Dataene blir **pseudonymistert eller depseudonymisert** basert på oppsettet det delende teamet har laget.
-3. Resultatet lagres i en egen **Delomaten-bøtte** som kun mottaker teamet har tilgang til.
+![Figuren viser hvordan hvordan team A deler de-pseudonymisert data med team B ved hjelp av Delomaten.](../images/delomaten.svg){#fig-delomaten}
 
-![Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang.](../images/delomaten.png)
+Av @fig-delomaten ser vi at team A jobber med pseudonymiserte personopplysninger i sin produktbøtte. Disse dataene kan de dele med andre team via standard delt-bøtter som team A kan skrive til. Hvis de i tillegg ønsker å dele data i klartekst (de-pseudonymisert) så må de dele via en såkalt Delomaten delt-bøtte. Team A kan da bruke Delomaten til å de-pseudonymisere dataene og skrive til Delomaten delt-bøtta uten at de selv har tilgang til den bøtta, mens team B har tilgang. Da håndterer Delomaten de-pseudonymisering og skriving til bøtta basert på konfigurasjon som team A setter opp. 
 
-## Personvern og forutsetninger
+Delomaten støtter også den motsatte flyten av det som er vist i @fig-delomaten. Dvs. hvis et team som håndterer personopplysninger i klartekst i produktbøtta ønsker å dele med et team som kun skal se opplysningene pseudonymisert. Re-pseudonymisering, dvs. bytte av krypteringsalgoritme eller nøkkel, støttes ikke av Delomaten enda. 
 
-Før du tar i bruk Delomaten, er det viktig at du setter deg inn i hvordan personvern håndteres i SSB.
-Delomaten er laget for å støtte trygg deling av data mellom team med ulike tilgangsnivåer og må brukes i tråd med SSBs personvernregler.
+## Forberedelser
 
-Les mer på siden [**Personvern i Dapla**](./personvern.qmd).
+Før et team tar i bruk Delomaten, eller konsumerer data fra en Delomaten delt-bøtte, er det viktig at man setter seg godt inn i hvordan personvern i data håndteres i SSB. Ta kontakt med nærmeste leder eller Personvernombud dersom det er behov for rådgiving eller informasjon.
 
-## Sett opp Delomaten
+Under beskriver vi hvilke tekniske krav som gjelder for Delomaten.
+
+### Dokumentasjon
+
+Data som skal deles gjennom Delomaten-bøtter må være [dokumentert i Datadoc](./datadoc.qmd). Alle [obligatoriske felt](datadoc-model.qmd) i Datadoc må være utfylt og metadata-filen (.json) må ligge lagret med riktig navn ved siden av data-filen. Delomaten-jobbene vil feile dersom metadatafilen ikke finnes.
+
+::: {.callout-important}
+## Metadata om pseudonymisering
+
+For at Delomaten skal kunne de-pseudonymisere data så krever den at de tekniske detaljene om hvordan dataene er pseudonymisert er dokumentert i Datadoc for hver variabel som skal prosesseres. Dvs. at feltene [krypteringsalgoritme](./datadoc-model.qmd#krypteringsalgoritme)  
+:::
+
+
+### Aktiver Delomaten
+
+Delomaten er en [*feature*](./features.qmd) som må aktiveres for hvert som skal bruke den. Du aktiverer den i teamets IaC-repo slik som vist på linje 14 i eksempelet under:
+
+```{.yaml filename="./infra/projects.yaml" caption="Eksempel på en feature" code-line-numbers="true"}
+team_uniform_name: play-obr
+
+projects:
+  - project_name: play-obr
+    env: test
+    features:
+      - dapla-buckets
+
+  - project_name: play-obr
+    env: prod
+    features:
+      - dapla-buckets
+      - shared-buckets
+      - delomaten
+```
+
+### Aktiver *shared-buckets*
+
+Delomaten forutsetter at teamet har opprettet en Delomaten delt-bøtte før Delomaten-jobber settes opp. For å opprette delt-bøtter må man aktivere [feature]([*feature*](./features.qmd) )'n *shared-buckets*, slik som vist i linje 13 i eksempelet over.
+
+### Opprett Delomaten-bøtte
+
+Les mer om hvordan man oppretter bøttene etter at *feature*'n er skrudd på [i denne artikkelen](./deling-av-data.qmd).
+
+
+
+## Sett opp tjenesten
 For å sette opp Delomaten gjør følgende endringer i teamets IAC-repo:
 
 1. **Sjekk at dataene er dokumentert**
