@@ -1,0 +1,197 @@
+---
+title: "SSB Collector Client: Administrer datainnsamlingsoppgaver"
+author: "Dapla Team"
+date: "12/04/2025"
+format: html
+categories: [Dapla, Python, Data Collection]
+---
+
+## Innledning
+
+I dette blogginnlegget presenterer vi `ssb-collector-client`, en Python-pakke som forenkler administrasjon av datainnsamlingsoppgaver (data collector tasks) i Dapla-plattformen. Pakken gir et objektorientert grensesnitt for å starte, overvåke og stoppe innsamlingsoppgaver.
+
+## Hva er SSB Collector Client?
+
+`ssb-collector-client` er en klientbibliotek som gir enkel tilgang til Data Collector-tjenesten i Dapla. Den håndterer autentisering automatisk via `dapla-auth-client` og tilbyr en intuitiv API for å jobbe med innsamlingsoppgaver.
+
+### Hovedfunksjoner
+
+- **Start nye innsamlingsoppgaver** med tilpassede spesifikasjoner
+- **List alle kjørende oppgaver** for å overvåke fremdrift
+- **Stopp kjørende oppgaver** ved behov
+- **Innebygd autentisering** via Dapla Auth Client
+- **Objektorientert API** med `CollectorClient`-klassen
+
+## Installasjon
+
+Du kan installere `ssb-collector-client` via pip fra PyPI:
+
+```bash
+pip install ssb-collector-client
+```
+
+Eller med Poetry:
+
+```bash
+poetry add ssb-collector-client
+```
+
+## Krav
+
+For å bruke `ssb-collector-client` trenger du:
+
+- Python 3.10 eller høyere
+- Tilgang til en Data Collector-tjeneste
+- Dapla-autentisering (håndteres automatisk)
+
+## Grunnleggende bruk
+
+### Hurtigstart
+
+Her er et enkelt eksempel på hvordan du kommer i gang:
+
+```python
+from ssb_collector_client import CollectorClient
+
+# Initialiser klienten med URL-en til collector-tjenesten
+client = CollectorClient("https://your-collector-service.no/tasks")
+
+# Definer spesifikasjonen for innsamlingsoppgaven
+specification = {
+    "type": "your-collector-type",
+    "name": "my-collection-task",
+    # ... andre spesifikasjonsparametere
+}
+
+# Start en ny oppgave
+response = client.start(specification)
+print(f"Task started: {response.status_code}")
+
+# Hent alle kjørende oppgaver
+tasks = client.running_tasks()
+print(f"Running tasks: {tasks.json()}")
+
+# Stopp en spesifikk oppgave ved ID
+client.stop(task_id=1234)
+```
+
+### Komplett eksempel
+
+Her er et mer detaljert eksempel som viser hele arbeidsflyten:
+
+```python
+from ssb_collector_client import CollectorClient
+
+# Initialiser klienten
+collector_url = "https://your-collector-service.no/tasks"
+client = CollectorClient(collector_url)
+
+# Definer spesifikasjonen for innsamlingen
+specification = {
+    "type": "example-type",
+    "name": "my-collection-task",
+    "schedule": {
+        "cron": "0 0 * * *"  # Kjør daglig ved midnatt
+    },
+    # Legg til flere parametere etter behov
+}
+
+# Start en ny innsamlingsoppgave
+print("Starter innsamlingsoppgave...")
+start_response = client.start(specification)
+
+if start_response.status_code == 200:
+    print("✓ Oppgaven ble startet vellykket")
+else:
+    print(f"✗ Feil ved start: {start_response.status_code}")
+
+# Sjekk kjørende oppgaver
+print("\nHenter kjørende oppgaver...")
+tasks_response = client.running_tasks()
+tasks = tasks_response.json()
+
+for task in tasks:
+    print(f"- Task ID: {task['id']}, Status: {task['status']}")
+
+# Stopp en oppgave om nødvendig
+if tasks:
+    task_id = tasks[0]['id']  # Bruk faktisk task ID
+    print(f"\nStopper oppgave {task_id}...")
+    stop_response = client.stop(task_id)
+    
+    if stop_response.status_code == 200:
+        print("✓ Oppgaven ble stoppet")
+    else:
+        print(f"✗ Kunne ikke stoppe oppgaven: {stop_response.status_code}")
+```
+
+## API-oversikt
+
+### CollectorClient
+
+Hovedklassen for å interagere med Data Collector-tjenesten.
+
+**Initialisering:**
+```python
+client = CollectorClient(base_url)
+```
+
+**Metoder:**
+
+- `start(specification)` - Starter en ny innsamlingsoppgave med gitt spesifikasjon
+- `running_tasks()` - Henter alle kjørende oppgaver
+- `stop(task_id)` - Stopper en oppgave basert på ID
+
+## Autentisering
+
+`ssb-collector-client` bruker `dapla-auth-client` for automatisk autentisering. Du trenger ikke å håndtere tokens manuelt - klienten tar seg av alt dette i bakgrunnen.
+
+## Nyttige bruksområder
+
+### Automatisert datainnsamling
+
+Bruk `ssb-collector-client` til å automatisere periodisk datainnsamling fra eksterne kilder:
+
+```python
+# Sett opp daglig innsamling
+specification = {
+    "type": "web-scraper",
+    "name": "daily-data-collection",
+    "schedule": {"cron": "0 6 * * *"},  # Kjør kl. 06:00 hver dag
+    "source_url": "https://data-source.com/api"
+}
+
+client.start(specification)
+```
+
+### Overvåking av innsamlingsoppgaver
+
+Hold oversikt over alle kjørende innsamlingsoppgaver:
+
+```python
+# Sjekk status på alle oppgaver
+tasks = client.running_tasks().json()
+
+for task in tasks:
+    if task['status'] == 'failed':
+        print(f"Oppgave {task['id']} har feilet!")
+        # Send varsling eller restart oppgaven
+```
+
+## Ressurser
+
+- **Dokumentasjon**: [https://statisticsnorway.github.io/ssb-collector-client](https://statisticsnorway.github.io/ssb-collector-client)
+- **Kildekode**: [https://github.com/statisticsnorway/ssb-collector-client](https://github.com/statisticsnorway/ssb-collector-client)
+- **PyPI**: [https://pypi.org/project/ssb-collector-client/](https://pypi.org/project/ssb-collector-client/)
+- **Rapporter problemer**: [GitHub Issues](https://github.com/statisticsnorway/ssb-collector-client/issues)
+
+## Oppsummering
+
+`ssb-collector-client` gjør det enkelt å:
+
+- Administrere datainnsamlingsoppgaver programmatisk
+- Automatisere periodisk datainnsamling
+- Overvåke og kontrollere kjørende oppgaver
+- Integrere med Dapla-plattformen uten manuell autentisering
+
+Prøv `ssb-collector-client` i ditt neste datainnsamlingsprosjekt!
