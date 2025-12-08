@@ -24,22 +24,43 @@ Under finner du eksempler på funksjonalitet som tilbys i `dapla-suv-tools` for 
 
 ### Hente utvalg fra SFU
 
-For å hente utvalg fra SFU, bruk metoden `get_utvalg_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer for utvalget. Dersom utvalget er delt inn i puljer kan du oppgi pulje som parameter.
+For å hente utvalg fra SFU, bruk metoden `get_utvalg_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer for utvalget.
 
 ```{.python filename="notebook"}
 client = SuvClient()
 
 response = client.get_utvalg_from_sfu(
     delreg_nr=49430224,
-    ra_nummer='RA-0666A3',
-    pulje='2'
+    ra_nummer='RA-0666A3'
 )
 
 print(json.dumps(response, indent=4))
 ```
+::: {.callout-tip collapse="true"}
+## Frivillige parametere
 
-::: {.callout-important}
-Utvalget som hentes ut baserer seg på skjemaenhetene. Det vil si at du skal forholde deg til `skj_enh_ident_nr` og `skj_enh_enhets_type`.
+Disse parameterne kan brukes for å filtrere resultatet ytterligere:
+
+| Parameter | Type | Beskrivelse |
+|------------|------|-------------|
+| `pulje` | int | Hent spesifikk pulje |
+| `status` | string | Hent spesifikk status. Mulige verdier er "besvart", "ikke-besvart", "alle" |
+| `max_results` | int | Maks antall resultater som returneres |
+| `pagination_info` | object | Pagineringsinformasjon |
+
+Eksempel:
+```python
+response = client.get_utvalg_from_sfu(
+    delreg_nr=49430224,
+    ra_nummer='RA-0666A3',
+    pulje='2',
+    status='ikke-besvart',
+    max_results=200,
+    pagination_info=p_info
+)
+
+print(json.dumps(response, indent=4))
+```
 :::
 
 ### Hente enhetsinformasjon fra SFU
