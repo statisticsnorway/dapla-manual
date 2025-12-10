@@ -78,9 +78,9 @@ def build_structure(data, include_metadata=False):
 
         if include_metadata:
             current_level["metadata"]["type"] = item.get("type")
-            current_level["metadata"]["kontroll"] = item.get("kontroll")
-            current_level["metadata"]["stat_navn"] = item.get("stat_navn")
+            current_level["metadata"]["tittel"] = item.get("tittel")            
             current_level["metadata"]["kommentar"] = item.get("kommentar")
+            current_level["metadata"]["stat_navn"] = item.get("stat_navn")
 
     return structure          
 
@@ -178,6 +178,27 @@ Valideringen er basert på [JSON Schema](https://pypi.org/project/jsonschema/).
 ::: {.callout-warning}
 Dersom skjemaet blir instansiert med ugyldige prefill data vil skjemaet feile ved instansiering hos Altinn. Skjemaet vil i dette tilfellet bli slettet fra innboksen til oppdragsgiver.
 :::
+
+## Hente prefilldata
+For å hente ut prefill-data for en gitt periode bruker du metoden `get_prefill_info_for_skjema` i klienten. Pass på at du angir korrekt **RA-nummer**, **versjon** og **periode**.
+
+Parameteren `include_prefill` er valgfri. Standardverdien er `False`, noe som betyr at metoden kun returnerer en oversikt over hvilke enheter det finnes lagret prefill for.
+
+Setter du `include_prefill=True`, vil metoden i tillegg returnere selve innholdet i den lagrede prefillen.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+prefill = client.get_prefill_info_for_skjema(
+    ra_nummer="RA-0255A3",
+    versjon=2,
+    periode_aar=2025,
+    periode_type="AAR",
+    periode_nr=1,
+    include_prefill=True    
+)
+print(json.dumps(prefill, indent=4))
+```
 
 ## Eksempelkode
 [Noe demokode ligger i repoet](https://github.com/statisticsnorway/s821-datafangst-python/tree/main/src/notebooks/Prefill%20eksempler), og kan være ett godt utgangspunkt å kopiere og endre fra.
