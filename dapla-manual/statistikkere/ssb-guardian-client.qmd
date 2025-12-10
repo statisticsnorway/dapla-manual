@@ -1,0 +1,170 @@
+---
+title: ssb-guardian-client
+date-modified: 12/10/2025
+lightbox: true
+---
+
+[ssb-guardian-client](https://pypi.org/project/ssb-guardian-client/) er et Python-bibliotek for sikker API-autentisering via Maskinporten i Dapla-plattformen. Biblioteket forenkler kommunikasjon med eksterne API-er som krever Maskinporten-autentisering ved å automatisk håndtere token-henting og -administrasjon via Guardian-tjenesten.
+
+## Forberedelser
+
+Biblioteket kan benyttes i tjenester på Dapla Lab der Python er installert. Den kan installeres med følgende kommando i et [ssb-project](./ssb-project.qmd):
+
+```{.bash filename="Terminal"}
+poetry add ssb-guardian-client
+```
+
+For å bruke biblioteket trenger du også:
+
+- Gyldige Maskinporten-klientopplysninger
+- Miljøvariabelen `DAPLA_ENVIRONMENT` satt til: `DEV`, `TEST`, eller `PROD`
+
+## Funksjonalitet
+
+Biblioteket er ment for å forenkle integrasjon med eksterne API-er som krever Maskinporten-autentisering. Det håndterer automatisk henting av personlige Keycloak-tokens og Maskinporten access tokens via Guardian-tjenesten.
+
+### Kalle eksterne API-er
+
+Den enkleste måten å kalle et eksternt API med Maskinporten-autentisering er:
+
+```{.python filename="Notebook"}
+from ssb_guardian_client import GuardianClient
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+# Kall et eksternt API med Maskinporten-autentisering
+response = client.call_api(
+    api_endpoint_url="https://api.example.com/data",
+    maskinporten_client_id="your-maskinporten-client-id",
+    scopes="scope1 scope2",  # Mellomromseparert streng
+)
+
+# Responsen inneholder JSON-data fra API-et
+print(response)
+```
+
+Metoden `call_api` gjør automatisk følgende:
+
+- Henter ditt personlige Keycloak-token via `dapla-auth-client`
+- Ber om et Maskinporten access token fra Guardian
+- Kaller mål-API-et med Maskinporten-tokenet
+- Returnerer JSON-responsen
+
+### Hente Maskinporten-tokens direkte
+
+Hvis du trenger mer kontroll eller bare vil hente Maskinporten-tokenet for egendefinert bruk:
+
+```{.python filename="Notebook"}
+from ssb_guardian_client import GuardianClient
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+# Hent et Maskinporten-token
+maskinporten_token = client.get_maskinporten_token(
+    maskinporten_client_id="your-client-id",
+    scopes=["scope1", "scope2"]  # Liste av scopes
+)
+
+# Bruk tokenet for egendefinerte API-kall
+import requests
+response = requests.get(
+    "https://api.example.com/data",
+    headers={"Authorization": f"Bearer {maskinporten_token}"}
+)
+```
+
+::: {.callout-note}
+## Scopes-format
+
+`scopes`-parameteren aksepterer begge formater:
+
+- ✅ Liste: `["scope1", "scope2"]` eller `["elhub:publicstakeholder"]`
+- ✅ Streng: `"scope1 scope2"` eller `"elhub:publicstakeholder"`
+:::
+
+### Miljøkonfigurasjon
+
+Klienten oppdager automatisk Dapla-miljøet fra `DAPLA_ENVIRONMENT`-miljøvariabelen og bruker riktig Guardian-URL:
+
+- **DEV/TEST**: `https://guardian.intern.test.ssb.no/maskinporten/access-token`
+- **PROD**: `https://guardian.intern.ssb.no/maskinporten/access-token`
+
+## Eksempler på bruk
+
+### Hente data fra Elhub
+
+```{.python filename="Notebook"}
+from ssb_guardian_client import GuardianClient
+
+client = GuardianClient()
+
+# Hent data fra Elhub
+response = client.call_api(
+    api_endpoint_url="https://api.elhub.no/data",
+    maskinporten_client_id="elhub-client-id",
+    scopes="elhub:publicstakeholder"
+)
+
+# Behandle dataene
+data = response.get("results", [])
+print(f"Hentet {len(data)} records")
+```
+
+### Integrering med NAV-tjenester
+
+```{.python filename="Notebook"}
+from ssb_guardian_client import GuardianClient
+
+client = GuardianClient()
+
+try:
+    # Kall NAV API
+    nav_response = client.call_api(
+        api_endpoint_url="https://api.nav.no/v1/statistics",
+        maskinporten_client_id="nav-maskinporten-client",
+        scopes="nav:statistics/read nav:data/access"
+    )
+    
+    # Prosesser NAV-data
+    statistics = nav_response.get("statistics", {})
+    print(f"Mottok statistikk: {statistics}")
+    
+except RuntimeError as e:
+    print(f"API-kall feilet: {e}")
+```
+
+## Feilsøking
+
+### ValueError: Unknown environment
+
+Sørg for at `DAPLA_ENVIRONMENT`-miljøvariabelen er satt til en av: `DEV`, `TEST`, eller `PROD`.
+
+```{.python filename="Notebook"}
+import os
+os.environ["DAPLA_ENVIRONMENT"] = "TEST"
+```
+
+### RuntimeError: Error getting maskinporten access-token from guardian
+
+Dette kan skyldes:
+
+- Feil Maskinporten client ID eller scopes
+- Manglende tillatelser til å bruke den spesifiserte Maskinporten-klienten
+- Ugyldig Keycloak-token
+
+### RuntimeError: Error calling target API
+
+Verifiser at:
+
+- API endpoint-URL er korrekt
+- Maskinporten-scopes matcher det API-et krever
+- API-et er tilgjengelig fra ditt miljø
+
+## Ressurser
+
+- **Dokumentasjon**: [https://statisticsnorway.github.io/ssb-guardian-client](https://statisticsnorway.github.io/ssb-guardian-client)
+- **Kildekode**: [https://github.com/statisticsnorway/ssb-guardian-client](https://github.com/statisticsnorway/ssb-guardian-client)
+- **PyPI**: [https://pypi.org/project/ssb-guardian-client/](https://pypi.org/project/ssb-guardian-client/)
+- **Rapporter problemer**: [GitHub Issues](https://github.com/statisticsnorway/ssb-guardian-client/issues)
