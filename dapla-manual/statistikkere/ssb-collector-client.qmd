@@ -112,13 +112,12 @@ collector_url = "https://data-collector-<team_navn>.intern.ssb.no/tasks"
 client = CollectorClient(collector_url)
 
 # Definer spesifikasjonen for innsamlingen
-specification = {
-    "type": "example-type",
-    "name": "my-collection-task",
-    "schedule": {
-        "cron": "0 0 * * *"
-    }
-}
+specification = None
+
+# Load specification from file
+with open("<specification_file>.json") as specification_file:
+    specification = json.load(specification_file)
+
 
 # Start en ny innsamlingsoppgave
 print("Starter innsamlingsoppgave...")
