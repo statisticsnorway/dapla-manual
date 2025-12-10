@@ -31,17 +31,15 @@ For å starte en ny innsamlingsoppgave kan brukeren skrive følgende:
 ```{.python filename="Notebook"}
 from ssb_collector_client import CollectorClient
 
-# Initialiser klienten med URL-en til collector-tjenesten
-client = CollectorClient("https://your-collector-service.no/tasks")
+collector_url = "https://data-collector-<team_navn>.intern.ssb.no/tasks"
 
-# Definer spesifikasjonen for innsamlingsoppgaven
-specification = {
-    "type": "your-collector-type",
-    "name": "my-collection-task",
-    "schedule": {
-        "cron": "0 0 * * *"  # Kjør daglig ved midnatt
-    }
-}
+# Initialiser klienten med URL-en til collector-tjenesten
+client = CollectorClient(collector_url)
+specification = None
+
+# Load specification from file
+with open("<specification_file>.json") as specification_file:
+    specification = json.load(specification_file)
 
 # Start en ny oppgave
 response = client.start(specification)
@@ -55,7 +53,7 @@ For å overvåke alle kjørende innsamlingsoppgaver:
 ```{.python filename="Notebook"}
 from ssb_collector_client import CollectorClient
 
-client = CollectorClient("https://your-collector-service.no/tasks")
+client = CollectorClient(collector_url)
 
 # Hent alle kjørende oppgaver
 tasks_response = client.running_tasks()
@@ -72,7 +70,7 @@ For å stoppe en kjørende innsamlingsoppgave:
 ```{.python filename="Notebook"}
 from ssb_collector_client import CollectorClient
 
-client = CollectorClient("https://your-collector-service.no/tasks")
+client = CollectorClient(collector_url)
 
 # Stopp en spesifikk oppgave ved ID
 response = client.stop(task_id=1234)
@@ -85,31 +83,13 @@ else:
 
 ## Eksempler på bruk
 
-### Automatisert periodisk datainnsamling
-
-```{.python filename="Notebook"}
-from ssb_collector_client import CollectorClient
-
-client = CollectorClient("https://your-collector-service.no/tasks")
-
-# Sett opp daglig innsamling
-specification = {
-    "type": "web-scraper",
-    "name": "daily-data-collection",
-    "schedule": {"cron": "0 6 * * *"},  # Kjør kl. 06:00 hver dag
-    "source_url": "https://data-source.com/api"
-}
-
-response = client.start(specification)
-print(f"Daglig innsamling startet: {response.status_code}")
-```
 
 ### Overvåke og håndtere feilede oppgaver
 
 ```{.python filename="Notebook"}
 from ssb_collector_client import CollectorClient
 
-client = CollectorClient("https://your-collector-service.no/tasks")
+client = CollectorClient(collector_url)
 
 # Sjekk status på alle oppgaver
 tasks = client.running_tasks().json()
@@ -128,7 +108,7 @@ for task in tasks:
 from ssb_collector_client import CollectorClient
 
 # Initialiser klienten
-collector_url = "https://your-collector-service.no/tasks"
+collector_url = "https://data-collector-<team_navn>.intern.ssb.no/tasks"
 client = CollectorClient(collector_url)
 
 # Definer spesifikasjonen for innsamlingen
