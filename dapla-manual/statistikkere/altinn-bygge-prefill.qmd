@@ -199,6 +199,63 @@ prefill = client.get_prefill_info_for_skjema(
 )
 print(json.dumps(prefill, indent=4))
 ```
+## Sjekk prefill for utvalget
+Før utsending kan det være nyttig å kontrollere at alle enheter i utvalget har prefill tilgjengelig. Eksemplet under viser hvordan du kan gjøre denne sjekken ved å hente prefill‐informasjon for skjemaet og sammenligne dette med enhetslisten i utvalget.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+#set variables
+_delreg_nr = 300125
+_ra_nummer = 'RA-3001A3'
+_versjon = 2
+_periode_aar = 2025
+_periode_type = 'AAR'
+_periode_nr = 1
+
+output = client.get_prefill_info_for_skjema(
+    ra_nummer=_ra_nummer,
+    versjon=_versjon,
+    periode_aar=_periode_aar,
+    periode_type=_periode_type,
+    periode_nr=_periode_nr
+)
+
+prefill_keys = {
+    (item["enhetsident"], item["enhetstype"])
+    for item in output["prefill_data"]
+}
+
+response_utvalg = client.get_utvalg_from_sfu(
+    delreg_nr=_delreg_nr,
+    ra_nummer=_ra_nummer,
+    status='ikke-besvart'
+)
+
+print(f"Totalt antall enheter: {len(response_utvalg)}")
+
+missing = [
+    item for item in response_utvalg
+    if (item["ident_nr"], item["enhets_type"]) not in prefill_keys
+]
+
+missing_prefill = [(item["ident_nr"], item["enhets_type"]) for item in missing]
+print(missing_prefill)
+```
+
+**Hva koden gjør**
+
+- **Henter prefill-metadata for skjemaet**  
+Funksjonen `get_prefill_info_for_skjema` returnerer en liste med prefill-objekter. Vi trekker ut (enhetsident, enhetstype) for alle enheter som har prefill.
+
+- **Henter utvalget**  
+`get_utvalg_from_sfu` henter alle enheter som tilhører utvalget for den aktuelle undersøkelsen.
+
+- **Sammenligner utvalg og prefill**  
+Vi sjekker hvilke enheter i utvalget som ikke finnes blant prefill‐nøklene.
+
+- **Lister enheter som mangler prefill**  
+Resultatet kan brukes til kvalitetssikring før utsending.
 
 ## Eksempelkode
 [Noe demokode ligger i repoet](https://github.com/statisticsnorway/s821-datafangst-python/tree/main/src/notebooks/Prefill%20eksempler), og kan være ett godt utgangspunkt å kopiere og endre fra.
