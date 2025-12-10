@@ -57,11 +57,11 @@ from ssb_collector_client import CollectorClient
 client = CollectorClient("https://your-collector-service.no/tasks")
 
 # Definer spesifikasjonen for innsamlingsoppgaven
-specification = {
-    "type": "your-collector-type",
-    "name": "my-collection-task",
-    # ... andre spesifikasjonsparametere
-}
+specification = None
+
+# Load specification from file
+with open("<specification_file>.json") as specification_file:
+    specification = json.load(specification_file)
 
 # Start en ny oppgave
 response = client.start(specification)
@@ -87,14 +87,11 @@ collector_url = "https://your-collector-service.no/tasks"
 client = CollectorClient(collector_url)
 
 # Definer spesifikasjonen for innsamlingen
-specification = {
-    "type": "example-type",
-    "name": "my-collection-task",
-    "schedule": {
-        "cron": "0 0 * * *"  # Kjør daglig ved midnatt
-    },
-    # Legg til flere parametere etter behov
-}
+specification = None
+
+# Load specification from file
+with open("<specification_file>.json") as specification_file:
+    specification = json.load(specification_file)
 
 # Start en ny innsamlingsoppgave
 print("Starter innsamlingsoppgave...")
@@ -154,12 +151,11 @@ Bruk `ssb-collector-client` til å automatisere periodisk datainnsamling fra eks
 
 ```python
 # Sett opp daglig innsamling
-specification = {
-    "type": "web-scraper",
-    "name": "daily-data-collection",
-    "schedule": {"cron": "0 6 * * *"},  # Kjør kl. 06:00 hver dag
-    "source_url": "https://data-source.com/api"
-}
+specification = None
+
+# Load specification from file
+with open("<specification_file>.json") as specification_file:
+    specification = json.load(specification_file)
 
 client.start(specification)
 ```
