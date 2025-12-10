@@ -47,33 +47,6 @@ For å bruke `ssb-guardian-client` trenger du:
 
 ## Grunnleggende bruk
 
-### Hurtigstart
-
-Her er et enkelt eksempel på hvordan du kaller et eksternt API med Maskinporten-autentisering:
-
-```python
-from ssb_guardian_client import GuardianClient
-
-# Opprett en GuardianClient-instans
-client = GuardianClient()
-
-# Kall et eksternt API med Maskinporten-autentisering
-response = client.call_api(
-    api_endpoint_url="https://api.example.com/data",
-    maskinporten_client_id="your-maskinporten-client-id",
-    scopes="scope1 scope2",  # Mellomromseparert streng
-)
-
-# Responsen inneholder JSON-data fra API-et
-print(response)
-```
-
-Metoden `call_api` gjør automatisk følgende:
-
-- Henter ditt personlige Keycloak-token via `dapla-auth-client`
-- Ber om et Maskinporten access token fra Guardian
-- Kaller mål-API-et med Maskinporten-tokenet
-- Returnerer JSON-responsen
 
 ### Hente Maskinporten-tokens direkte
 
@@ -114,6 +87,35 @@ response = requests.get(
 - ✅ Liste: `["scope1", "scope2"]` eller `["elhub:publicstakeholder"]`
 - ✅ Streng: `"scope1 scope2"` eller `"elhub:publicstakeholder"`
 :::
+
+
+### Hurtigstart
+
+Her er et enkelt eksempel på hvordan du kaller et eksternt API med Maskinporten-autentisering:
+
+```python
+from ssb_guardian_client import GuardianClient
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+# Kall et eksternt API med Maskinporten-autentisering
+response = client.call_api(
+    api_endpoint_url="https://api.example.com/data",
+    maskinporten_client_id="your-maskinporten-client-id",
+    scopes="scope1 scope2",  # Mellomromseparert streng
+)
+
+# Responsen inneholder JSON-data fra API-et
+print(response)
+```
+
+Metoden `call_api` gjør automatisk følgende:
+
+- Henter ditt personlige Keycloak-token via `dapla-auth-client`
+- Ber om et Maskinporten access token fra Guardian
+- Kaller mål-API-et med Maskinporten-tokenet
+- Returnerer JSON-responsen
 
 ### Miljøkonfigurasjon
 

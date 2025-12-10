@@ -1,0 +1,176 @@
+---
+title: Nye Python-pakker som erstatter client fra dapla-toolbelt - ssb-guardian-client og ssb-collector-client
+categories:
+  - dapla-toolbelt
+  - ssb-guardian-client
+  - ssb-collector-client
+author:
+  - name: Rupinder kaur
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+date: "12/10/2025"
+date-modified: "12/10/2025"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+Som [nevnt i en tidligere nyhetsartikkel](../2025-10-13-dapla-toolbelt-utfasing/index.qmd) så skal dapla-toolbelt fases ut innen 1. februar 2026. Funksjonalitet som tidligere var en del av dapla-toolbelt flyttes nå inn i mindre, dedikerte Python-pakker. Vi presenterer her to nye pakker: `ssb-guardian-client` for Maskinporten-autentisering og `ssb-collector-client` for administrasjon av datainnsamlingsoppgaver.
+
+## Hva er nytt?
+
+### ssb-guardian-client - Maskinporten-autentisering
+
+`ssb-guardian-client` forenkler sikker API-autentisering via Maskinporten i Dapla-plattformen. Pakken håndterer automatisk henting av Maskinporten-tokens og gjør det enkelt å kommunisere med eksterne API-er som krever Maskinporten-autentisering.
+
+**Installasjon:**
+```{.bash}
+poetry add ssb-guardian-client
+```
+
+**Bruk:**
+```{.python}
+from ssb_guardian_client import GuardianClient
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+# Kall et eksternt API med Maskinporten-autentisering
+response = client.call_api(
+    api_endpoint_url="https://api.example.com/data",
+    maskinporten_client_id="your-maskinporten-client-id",
+    scopes="scope1 scope2"
+)
+
+# Responsen inneholder JSON-data fra API-et
+print(response)
+```
+
+Les mer i [dokumentasjonen for ssb-guardian-client](../../../statistikkere/ssb-guardian-client.qmd) eller se [blogginnlegget](../../../blog/posts/2025-12-10-ssb-guardian-client/index.qmd).
+
+### ssb-collector-client - Administrer datainnsamlingsoppgaver
+
+`ssb-collector-client` gir et objektorientert grensesnitt for å starte, overvåke og stoppe datainnsamlingsoppgaver i Dapla-plattformen.
+
+**Installasjon:**
+```{.bash}
+poetry add ssb-collector-client
+```
+
+**Bruk:**
+```{.python}
+from ssb_collector_client import CollectorClient
+
+# Initialiser klienten
+client = CollectorClient("https://your-collector-service.no/tasks")
+
+# Definer spesifikasjonen for innsamlingsoppgaven
+specification = {
+    "type": "your-collector-type",
+    "name": "my-collection-task",
+    "schedule": {"cron": "0 0 * * *"}  # Kjør daglig ved midnatt
+}
+
+# Start en ny oppgave
+response = client.start(specification)
+
+# Hent alle kjørende oppgaver
+tasks = client.running_tasks()
+
+# Stopp en spesifikk oppgave ved ID
+client.stop(task_id=1234)
+```
+
+Les mer i [dokumentasjonen for ssb-collector-client](../../../statistikkere/ssb-collector-client.qmd) eller se [blogginnlegget](../../../blog/posts/2025-12-04-ssb-collector-client/index.qmd).
+
+## Hva betyr dette for meg?
+
+Hvis du bruker Guardian- eller Collector-funksjonalitet fra dapla-toolbelt i dag, må du bytte til de nye dedikerte pakkene før 1. februar 2026.
+
+### Migrering fra dapla-toolbelt
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+
+## FØR (dapla-toolbelt)
+
+```{.python}
+# Guardian-funksjonalitet
+from dapla import GuardianClient
+
+
+client = GuardianClient()
+response = client.call_api(...)
+
+maskinporten_token = client.get_maskinporten_token(
+    maskinporten_client_id="your-client-id",
+    scopes=["scope1", "scope2"]  # Liste av scopes
+)
+```
+
+```{.python}
+# Collector-funksjonalitet  
+from dapla import CollectorClient
+
+client = CollectorClient(url)
+client.start(specification)
+```
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+
+## ETTER (dedikerte pakker)
+
+```{.python}
+# ssb-guardian-client
+from ssb_guardian_client import GuardianClient
+
+client = GuardianClient()
+response = client.call_api(...)
+
+maskinporten_token = client.get_maskinporten_token(
+    maskinporten_client_id="your-client-id",
+    scopes=["scope1", "scope2"]  # Liste av scopes
+)
+```
+
+```{.python}
+# ssb-collector-client
+from ssb_collector_client import CollectorClient
+
+client = CollectorClient(url)
+client.start(specification)
+```
+:::
+
+::::
+
+## Fordeler med de nye pakkene
+
+- **Lettere vedlikehold**: Mindre, fokuserte pakker er enklere å vedlikeholde
+- **Raskere installasjon**: Installer bare det du trenger
+- **Bedre dokumentasjon**: Hver pakke har sin egen dedikerte dokumentasjon
+- **Enklere avhengigheter**: Færre unødvendige avhengigheter i prosjektene dine
+
+## Ressurser
+
+### ssb-guardian-client
+- [Dokumentasjon](../../../statistikkere/ssb-guardian-client.qmd)
+- [Blogginnlegg](../../../blog/posts/2025-12-10-ssb-guardian-client/index.qmd)
+- [PyPI](https://pypi.org/project/ssb-guardian-client/)
+- [GitHub](https://github.com/statisticsnorway/ssb-guardian-client)
+
+### ssb-collector-client
+- [Dokumentasjon](../../../statistikkere/ssb-collector-client.qmd)
+- [Blogginnlegg](../../../blog/posts/2025-12-04-ssb-collector-client/index.qmd)
+- [PyPI](https://pypi.org/project/ssb-collector-client/)
+- [GitHub](https://github.com/statisticsnorway/ssb-collector-client)
+
+## Spørsmål?
+
+Har du spørsmål om migreringen eller trenger hjelp? Ta kontakt med Dapla-teamet eller opprett et issue på GitHub.
