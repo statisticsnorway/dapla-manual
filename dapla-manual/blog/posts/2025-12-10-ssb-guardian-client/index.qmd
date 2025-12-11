@@ -1,0 +1,250 @@
+---
+title: "SSB Guardian Client: Sikker API-autentisering med Maskinporten"
+author: "Dapla Team"
+date: "12/10/2025"
+format: html
+categories: [Dapla, Python, API, Security, Maskinporten]
+---
+
+## Innledning
+
+I dette blogginnlegget presenterer vi `ssb-guardian-client`, en Python-pakke som forenkler sikker API-autentisering via Maskinporten i Dapla-plattformen. I dette blogginnlegget presenterer vi endringen der Guardian-klientfunksjonaliteten er flyttet ut fra dapla-toolbelt og inn i en egen Python-pakke kalt ssb-guardian-client. Hensikten er å gjøre det mulig å installere og bruke Maskinporten-autentisering isolert, uten å måtte laste inn hele verktøykassen i dapla-toolbelt. Pakken gir et enkelt grensesnitt for å kalle eksterne API-er med Maskinporten-autentisering uten å måtte håndtere kompleks token-administrasjon manuelt.
+
+## Hva er SSB Guardian Client?
+
+`ssb-guardian-client` er et klientbibliotek som integrerer sømløst med Maskinporten via Guardian-tjenesten i Dapla. Den håndterer automatisk henting av Maskinporten-tokens og forenkler kommunikasjon med eksterne API-er som krever Maskinporten-autentisering.
+
+### Hovedfunksjoner
+
+- **Maskinporten-integrasjon**: Sømløs integrasjon med Maskinporten for sikker API-autentisering
+- **Automatisk token-håndtering**: Henter og administrerer Maskinporten access tokens via Guardian
+- **Multi-miljøstøtte**: Fungerer på tvers av DEV, TEST og PROD i Dapla-plattformen
+- **Enkelt API**: Lettbrukt klientgrensesnitt for å kalle eksterne API-er
+- **Innebygd autentisering**: Henter personlige tokens automatisk via `dapla-auth-client`
+
+## Installasjon
+
+Du kan installere `ssb-guardian-client` via pip fra PyPI:
+
+```bash
+pip install ssb-guardian-client
+```
+
+Eller med Poetry:
+
+```bash
+poetry add ssb-guardian-client
+```
+
+## Krav
+
+For å bruke `ssb-guardian-client` trenger du:
+
+- Python 3.10 eller høyere
+- Tilgang til Dapla-plattformen
+- Gyldige Maskinporten-klientopplysninger
+- Miljøvariabelen `DAPLA_ENVIRONMENT` satt til: `DEV`, `TEST`, eller `PROD`
+
+## Grunnleggende bruk
+
+
+### Hente Maskinporten-tokens direkte
+
+Hvis du trenger mer kontroll eller bare vil hente Maskinporten-tokenet:
+
+```python
+from ssb_guardian_client import GuardianClient
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+# Hent et Maskinporten-token for egendefinert bruk
+# Scopes kan sendes som enten en liste eller mellomromseparert streng
+maskinporten_token = client.get_maskinporten_token(
+    maskinporten_client_id="your-client-id",
+    scopes=["scope1", "scope2"]  # Liste av scopes
+)
+
+# Eller med mellomromseparert streng:
+maskinporten_token = client.get_maskinporten_token(
+    maskinporten_client_id="your-client-id",
+    scopes="scope1 scope2"  # Mellomromseparert streng
+)
+
+# Bruk tokenet for egendefinerte API-kall
+import requests
+response = requests.get(
+    "https://api.example.com/data",
+    headers={"Authorization": f"Bearer {maskinporten_token}"}
+)
+```
+
+::: {.callout-note}
+## Scopes-format
+
+`scopes`-parameteren aksepterer begge formater:
+
+- ✅ Liste: `["scope1", "scope2"]` eller `["elhub:publicstakeholder"]`
+- ✅ Streng: `"scope1 scope2"` eller `"elhub:publicstakeholder"`
+:::
+
+
+### Hurtigstart
+
+Her er et enkelt eksempel på hvordan du kaller et eksternt API med Maskinporten-autentisering:
+
+```python
+from ssb_guardian_client import GuardianClient
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+# Kall et eksternt API med Maskinporten-autentisering
+response = client.call_api(
+    api_endpoint_url="https://api.example.com/data",
+    maskinporten_client_id="your-maskinporten-client-id",
+    scopes="scope1 scope2",  # Mellomromseparert streng
+)
+
+# Responsen inneholder JSON-data fra API-et
+print(response)
+```
+
+Metoden `call_api` gjør automatisk følgende:
+
+- Henter ditt personlige Keycloak-token via `dapla-auth-client`
+- Ber om et Maskinporten access token fra Guardian
+- Kaller mål-API-et med Maskinporten-tokenet
+- Returnerer JSON-responsen
+
+### Miljøkonfigurasjon
+
+Klienten oppdager automatisk Dapla-miljøet fra `DAPLA_ENVIRONMENT`-miljøvariabelen og bruker riktig Guardian-URL:
+
+- **DEV/TEST**: `https://guardian.intern.test.ssb.no/maskinporten/access-token`
+- **PROD**: `https://guardian.intern.ssb.no/maskinporten/access-token`
+
+Pass på at `DAPLA_ENVIRONMENT`-variabelen er satt til en av: `DEV`, `TEST`, eller `PROD`.
+
+## Komplett eksempel
+
+Her er et komplett eksempel som viser typisk bruk:
+
+```python
+import os
+from ssb_guardian_client import GuardianClient
+
+# Sørg for at miljøet er satt (vanligvis allerede satt i Dapla notebooks)
+# os.environ["DAPLA_ENVIRONMENT"] = "TEST"
+
+# Opprett en GuardianClient-instans
+client = GuardianClient()
+
+try:
+    # Kall et eksternt API
+    response = client.call_api(
+        api_endpoint_url="https://api.external-service.no/v1/data",
+        maskinporten_client_id="my-maskinporten-client",
+        scopes="nav:some/scope nav:another/scope",
+    )
+
+    # Behandle responsen
+    for item in response.get("data", []):
+        print(f"- {item['name']}: {item['value']}")
+
+except RuntimeError as e:
+    print(f"API-kall feilet: {e}")
+```
+
+## API-oversikt
+
+### GuardianClient
+
+Hovedklassen for å interagere med eksterne API-er via Maskinporten.
+
+**Initialisering:**
+```python
+client = GuardianClient()
+```
+
+**Metoder:**
+
+- `call_api(api_endpoint_url, maskinporten_client_id, scopes)` - Kaller et eksternt API med Maskinporten-autentisering
+- `get_maskinporten_token(maskinporten_client_id, scopes)` - Henter et Maskinporten access token for egendefinert bruk
+
+## Nyttige bruksområder
+
+### Hente data fra eksterne kilder
+
+Bruk `ssb-guardian-client` til å hente data fra eksterne API-er som krever Maskinporten-autentisering:
+
+```python
+from ssb_guardian_client import GuardianClient
+
+client = GuardianClient()
+
+# Hent data fra Elhub
+response = client.call_api(
+    api_endpoint_url="https://api.elhub.no/data",
+    maskinporten_client_id="elhub-client-id",
+    scopes="elhub:publicstakeholder"
+)
+
+# Behandle dataene
+data = response.get("results", [])
+print(f"Hentet {len(data)} records")
+```
+
+### Integrering med NAV-tjenester
+
+Koble til NAV-API-er sikker og enkelt:
+
+```python
+# Kall NAV API
+nav_response = client.call_api(
+    api_endpoint_url="https://api.nav.no/v1/statistics",
+    maskinporten_client_id="nav-maskinporten-client",
+    scopes="nav:statistics/read nav:data/access"
+)
+
+# Prosesser NAV-data
+statistics = nav_response.get("statistics", {})
+```
+
+## Feilsøking
+
+### Vanlige problemer
+
+**ValueError: Unknown environment**
+
+- Sørg for at `DAPLA_ENVIRONMENT`-miljøvariabelen er satt til en av: `DEV`, `TEST`, eller `PROD`
+
+**RuntimeError: Error getting maskinporten access-token from guardian**
+
+- Verifiser at Maskinporten client ID og scopes er korrekte
+- Sørg for at du har nødvendige tillatelser til å bruke den spesifiserte Maskinporten-klienten
+- Sjekk at Keycloak-tokenet ditt er gyldig
+
+**RuntimeError: Error calling target API**
+
+- Verifiser at API endpoint-URL er korrekt
+- Sørg for at Maskinporten-scopes matcher det API-et krever
+- Sjekk at API-et er tilgjengelig fra ditt miljø
+
+## Ressurser
+
+- **Dokumentasjon**: [https://statisticsnorway.github.io/ssb-guardian-client](https://statisticsnorway.github.io/ssb-guardian-client)
+- **Kildekode**: [https://github.com/statisticsnorway/ssb-guardian-client](https://github.com/statisticsnorway/ssb-guardian-client)
+- **PyPI**: [https://pypi.org/project/ssb-guardian-client/](https://pypi.org/project/ssb-guardian-client/)
+- **Rapporter problemer**: [GitHub Issues](https://github.com/statisticsnorway/ssb-guardian-client/issues)
+
+## Oppsummering
+
+`ssb-guardian-client` gjør det enkelt å:
+
+- Kommunisere sikkert med eksterne API-er via Maskinporten
+- Håndtere Maskinporten-autentisering uten kompleks token-administrasjon
+- Arbeide på tvers av ulike miljøer (DEV, TEST, PROD)
+- Integrere med Dapla-plattformen uten manuell autentisering
+
+Prøv `ssb-guardian-client` neste gang du trenger å kalle eksterne API-er med Maskinporten-autentisering!

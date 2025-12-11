@@ -301,7 +301,7 @@ maskinporten_access_token = response.json()['accessToken']
 Støttefunksjon for å hente ut secrets fra Secret Manager
 
 ```python
-from dapla import AuthClient
+from dapla_auth_client import AuthClient
 from google.cloud import secretmanager
 
 def get_secret_version(project_id, shortname, version_id='latest'):
@@ -344,7 +344,8 @@ guardian_url = "https://guardian.intern.test.ssb.no"
 import os
 import requests
 import toml
-from dapla import AuthClient
+from ssb_guardian_client import GuardianClient
+
 
 team_uniform_name = "play-foeniks"
 api_name = "my-api" # identifies the API in the config.toml file
@@ -353,24 +354,25 @@ api_name = "my-api" # identifies the API in the config.toml file
 dapla_env = os.getenv("DAPLA_ENVIRONMENT").lower()
 config = toml.load(f"{team_uniform_name}-{dapla_env}-maskinporten-pers.toml")
 
-# Get Keycloak access token
-keycloak_access_token = AuthClient.fetch_personal_token()
+# Opprett en GuardianClient-instans
+client = GuardianClient()
 
-# Get Maskinporten access token from Maskinporten Guardian (using the personal Keycloak token from above)
-request_body = {
-  "maskinportenClientId": config[api_name]['maskinporten_client_id'],
-  "scopes": config[api_name]['scopes']
-}
-response = requests.post(f"{config['guardian_url']}/maskinporten/access-token",
-            headers={
-                "Authorization": f"Bearer {keycloak_access_token}",
-                "Content-type": "application/json",
-            },
-            json=request_body
-        )
-
-maskinporten_access_token = response.json()['accessToken']
+# Hent et Maskinporten-token
+maskinporten_access_token = client.get_maskinporten_token(
+    maskinporten_client_id= config[api_name]['maskinporten_client_id'],
+    scopes= config[api_name]['scopes']  # Liste av scopes
+)
 
 # Finally, use the maskinporten access token to query the external API
 print(maskinporten_access_token)
+
+# Bruk tokenet for egendefinerte API-kall
+import requests
+
+response = requests.get(
+    "https://api.example.com/data",
+    headers={"Authorization": f"Bearer {maskinporten_access_token}"}
+)
+
+
 ```
