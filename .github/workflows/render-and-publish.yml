@@ -15,13 +15,16 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           tinytex: true
-
-      # add software dependencies here
-
-      - name: Publish to GitHub Pages (and render)
-        uses: quarto-dev/quarto-actions/publish@v2
+      - name: Render Quarto
+        uses: quarto-dev/quarto-actions/render@v2
         with:
-          target: gh-pages
+          to: html
           path: dapla-manual
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # this secret is always available for github actions
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ./dapla-manual/_site/
+          clean-exclude: pr-preview/
+          force: false
+          token: ${{ secrets.GITHUB_TOKEN }}
