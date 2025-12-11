@@ -813,6 +813,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#endre-skript" id="toc-endre-skript" class="nav-link" data-scroll-target="#endre-skript">Endre skript</a></li>
   <li><a href="#endre-config.yaml" id="toc-endre-config.yaml" class="nav-link" data-scroll-target="#endre-config.yaml">Endre config.yaml</a></li>
   <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
+  <li><a href="#pakker-og-oppdateringer" id="toc-pakker-og-oppdateringer" class="nav-link" data-scroll-target="#pakker-og-oppdateringer">Pakker og oppdateringer</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/kildomaten.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/kildomaten.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -834,7 +835,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 14, 2025</p>
+      <p class="date-modified">November 6, 2025</p>
     </div>
   </div>
     
@@ -1453,8 +1454,49 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>metadata_generation <span class="op">=</span> <span class="bu">int</span>(blob.metadata[<span class="st">"source-my-source-processor-generation"</span>])</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(metadata_generation <span class="op">==</span> blob.generation)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="pakker-og-oppdateringer" class="level3">
+<h3 class="anchored" data-anchor-id="pakker-og-oppdateringer">Pakker og oppdateringer</h3>
+<p>Det finnes et fast sett med pakker som er tilgjengelig i Kildomaten. Disse pakkene kan sees under <code>[tool.poetry.dependencies]</code>-blokken <a href="https://github.com/statisticsnorway/dapla-automation-processor/blob/main/pyproject.toml">her</a>.</p>
+<p>Dette repoet oppfører seg som et vanlig Poetry-prosjekt, og blir brukt som grunnlaget for alle Kildomaten-jobber.</p>
+<p><strong>Eksisterende Kildomaten-jobber blir oppdatert til den nyeste versjonen av dette prosjektet hvis</strong>:</p>
+<ul>
+<li>Man gjør endringer i en kilde i et IAC-repo (f.eks. filen (<code>process_source_data.py</code>))</li>
+<li>Plattformutviklere ruller ut endringer som treffer alle Kildomater. Dette skjer typisk ved:
+<ul>
+<li>Mindre pakkeoppdateringer som ikke har innvirkninger på scriptet.</li>
+<li>Viktige pakkeoppdateringer som fikser produksjonskritiske feil</li>
+</ul></li>
+<li>Man kjører en manuell oppdatering av Kildomaten (se bilde under)</li>
+</ul>
+<section id="manuell-oppdatering-av-kildomaten" class="level5">
+<h5 class="anchored" data-anchor-id="manuell-oppdatering-av-kildomaten">Manuell oppdatering av Kildomaten</h5>
+<div class="grid">
+<div class="g-col-4">
+<ol type="1">
+<li><p>Trykk på <strong>Actions</strong>-fanen i et IAC-repo for teamet med en Kildomat</p></li>
+<li><p>Velg <strong>Kildomaten</strong> på venstre side</p></li>
+<li><p>Utvid <strong>Run workflow</strong>-menyen</p></li>
+<li><p>Trykk på den grønne <strong>Run workflow</strong>-knappen.</p></li>
+</ol>
+<p>Etter noen minutter vil da Kildomaten være oppdatert.</p>
+</div>
+<div class="g-col-8">
+<div id="fig-GitHub-manuell-kildomat" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-GitHub-manuell-kildomat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../images/kildomaten-manuell-oppdatering.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figur&nbsp;2: Trykk på bilde for å forstørre"><img src="../images/kildomaten-manuell-oppdatering.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-GitHub-manuell-kildomat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;2: <em>Trykk på bilde for å forstørre</em>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 
