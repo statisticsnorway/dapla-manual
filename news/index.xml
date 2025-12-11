@@ -15,7 +15,307 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Wed, 03 Dec 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 10 Dec 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Nye Python-pakker for Data Collector og Maskinporten Guardian</title>
+  <dc:creator>Rupinder kaur</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2025-12-10-guardian-collector-clients/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Som <a href="../../../news/posts/2025-10-13-dapla-toolbelt-utfasing/index.html">nevnt i en tidligere nyhetsartikkel</a> så skal dapla-toolbelt fases ut innen 1. februar 2026. Funksjonalitet som tidligere var en del av dapla-toolbelt flyttes nå inn i mindre, dedikerte Python-pakker. Vi presenterer her to nye pakker: <code>ssb-guardian-client</code> for Maskinporten-autentisering og <code>ssb-collector-client</code> for administrasjon av datainnsamlingsoppgaver.</p>
+<section id="hva-er-nytt" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-nytt">Hva er nytt?</h2>
+<section id="ssb-guardian-client---maskinporten-autentisering" class="level3">
+<h3 class="anchored" data-anchor-id="ssb-guardian-client---maskinporten-autentisering">ssb-guardian-client - Maskinporten-autentisering</h3>
+<p><code>ssb-guardian-client</code> forenkler sikker API-autentisering via Maskinporten i Dapla-plattformen. Pakken håndterer automatisk henting av Maskinporten-tokens og gjør det enkelt å kommunisere med eksterne API-er som krever Maskinporten-autentisering.</p>
+<p><strong>Installasjon:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">poetry</span> add ssb-guardian-client</span></code></pre></div></div>
+<p><strong>Bruk:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> ssb_guardian_client <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> GuardianClient</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Opprett en GuardianClient-instans</span></span>
+<span id="cb2-4">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GuardianClient()</span>
+<span id="cb2-5"></span>
+<span id="cb2-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Kall et eksternt API med Maskinporten-autentisering</span></span>
+<span id="cb2-7">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.call_api(</span>
+<span id="cb2-8">    api_endpoint_url<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://api.example.com/data"</span>,</span>
+<span id="cb2-9">    maskinporten_client_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"your-maskinporten-client-id"</span>,</span>
+<span id="cb2-10">    scopes<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scope1 scope2"</span></span>
+<span id="cb2-11">)</span>
+<span id="cb2-12"></span>
+<span id="cb2-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Responsen inneholder JSON-data fra API-et</span></span>
+<span id="cb2-14"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response)</span></code></pre></div></div>
+<p>Les mer i <a href="../../../statistikkere/ssb-guardian-client.html">dokumentasjonen for ssb-guardian-client</a> eller se <a href="../../../blog/posts/2025-12-10-ssb-guardian-client/index.html">blogginnlegget</a>.</p>
+</section>
+<section id="ssb-collector-client---administrer-datainnsamlingsoppgaver" class="level3">
+<h3 class="anchored" data-anchor-id="ssb-collector-client---administrer-datainnsamlingsoppgaver">ssb-collector-client - Administrer datainnsamlingsoppgaver</h3>
+<p><code>ssb-collector-client</code> gir et objektorientert grensesnitt for å starte, overvåke og stoppe datainnsamlingsoppgaver i Dapla-plattformen.</p>
+<p><strong>Installasjon:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">poetry</span> add ssb-collector-client</span></code></pre></div></div>
+<p><strong>Bruk:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> ssb_collector_client <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> CollectorClient</span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Initialiser klienten</span></span>
+<span id="cb4-4">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> CollectorClient(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://your-collector-service.no/tasks"</span>)</span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Definer spesifikasjonen for innsamlingsoppgaven</span></span>
+<span id="cb4-7">specification <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb4-8">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"your-collector-type"</span>,</span>
+<span id="cb4-9">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"my-collection-task"</span>,</span>
+<span id="cb4-10">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"schedule"</span>: {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cron"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"0 0 * * *"</span>}  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Kjør daglig ved midnatt</span></span>
+<span id="cb4-11">}</span>
+<span id="cb4-12"></span>
+<span id="cb4-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Start en ny oppgave</span></span>
+<span id="cb4-14">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.start(specification)</span>
+<span id="cb4-15"></span>
+<span id="cb4-16"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Hent alle kjørende oppgaver</span></span>
+<span id="cb4-17">tasks <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.running_tasks()</span>
+<span id="cb4-18"></span>
+<span id="cb4-19"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Stopp en spesifikk oppgave ved ID</span></span>
+<span id="cb4-20">client.stop(task_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1234</span>)</span></code></pre></div></div>
+<p>Les mer i <a href="../../../statistikkere/ssb-collector-client.html">dokumentasjonen for ssb-collector-client</a> eller se <a href="../../../blog/posts/2025-12-04-ssb-collector-client/index.html">blogginnlegget</a>.</p>
+</section>
+</section>
+<section id="hva-betyr-dette-for-meg" class="level2">
+<h2 class="anchored" data-anchor-id="hva-betyr-dette-for-meg">Hva betyr dette for meg?</h2>
+<p>Hvis du bruker Guardian- eller Collector-funksjonalitet fra dapla-toolbelt i dag, må du bytte til de nye dedikerte pakkene før 1. februar 2026.</p>
+<section id="migrering-fra-dapla-toolbelt" class="level3">
+<h3 class="anchored" data-anchor-id="migrering-fra-dapla-toolbelt">Migrering fra dapla-toolbelt</h3>
+</section>
+</section>
+<div class="columns">
+<div class="column" style="width:47.5%;">
+<section id="før-dapla-toolbelt" class="level2">
+<h2 class="anchored" data-anchor-id="før-dapla-toolbelt">FØR (dapla-toolbelt)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Guardian-funksjonalitet</span></span>
+<span id="cb5-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dapla <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> GuardianClient</span>
+<span id="cb5-3"></span>
+<span id="cb5-4"></span>
+<span id="cb5-5">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GuardianClient()</span>
+<span id="cb5-6">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.call_api(...)</span>
+<span id="cb5-7"></span>
+<span id="cb5-8">maskinporten_token <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.get_maskinporten_token(</span>
+<span id="cb5-9">    maskinporten_client_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"your-client-id"</span>,</span>
+<span id="cb5-10">    scopes<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scope1"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scope2"</span>]  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Liste av scopes</span></span>
+<span id="cb5-11">)</span></code></pre></div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Collector-funksjonalitet  </span></span>
+<span id="cb6-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dapla <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> CollectorClient</span>
+<span id="cb6-3"></span>
+<span id="cb6-4">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> CollectorClient(url)</span>
+<span id="cb6-5">client.start(specification)</span></code></pre></div></div>
+</section>
+</div><div class="column" style="width:5%;">
+<!-- empty column to create gap -->
+</div><div class="column" style="width:47.5%;">
+<section id="etter-dedikerte-pakker" class="level2">
+<h2 class="anchored" data-anchor-id="etter-dedikerte-pakker">ETTER (dedikerte pakker)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ssb-guardian-client</span></span>
+<span id="cb7-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> ssb_guardian_client <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> GuardianClient</span>
+<span id="cb7-3"></span>
+<span id="cb7-4">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> GuardianClient()</span>
+<span id="cb7-5">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.call_api(...)</span>
+<span id="cb7-6"></span>
+<span id="cb7-7">maskinporten_token <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> client.get_maskinporten_token(</span>
+<span id="cb7-8">    maskinporten_client_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"your-client-id"</span>,</span>
+<span id="cb7-9">    scopes<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scope1"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scope2"</span>]  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Liste av scopes</span></span>
+<span id="cb7-10">)</span></code></pre></div></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ssb-collector-client</span></span>
+<span id="cb8-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> ssb_collector_client <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> CollectorClient</span>
+<span id="cb8-3"></span>
+<span id="cb8-4">client <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> CollectorClient(url)</span>
+<span id="cb8-5">client.start(specification)</span></code></pre></div></div>
+</section>
+</div>
+</div>
+<section id="fordeler-med-de-nye-pakkene" class="level2">
+<h2 class="anchored" data-anchor-id="fordeler-med-de-nye-pakkene">Fordeler med de nye pakkene</h2>
+<ul>
+<li><strong>Lettere vedlikehold</strong>: Mindre, fokuserte pakker er enklere å vedlikeholde</li>
+<li><strong>Raskere installasjon</strong>: Installer bare det du trenger</li>
+<li><strong>Bedre dokumentasjon</strong>: Hver pakke har sin egen dedikerte dokumentasjon</li>
+<li><strong>Enklere avhengigheter</strong>: Færre unødvendige avhengigheter i prosjektene dine</li>
+</ul>
+</section>
+<section id="ressurser" class="level2">
+<h2 class="anchored" data-anchor-id="ressurser">Ressurser</h2>
+<section id="ssb-guardian-client" class="level3">
+<h3 class="anchored" data-anchor-id="ssb-guardian-client">ssb-guardian-client</h3>
+<ul>
+<li><a href="../../../statistikkere/ssb-guardian-client.html">Dokumentasjon</a></li>
+<li><a href="../../../blog/posts/2025-12-10-ssb-guardian-client/index.html">Blogginnlegg</a></li>
+<li><a href="https://pypi.org/project/ssb-guardian-client/">PyPI</a></li>
+<li><a href="https://github.com/statisticsnorway/ssb-guardian-client">GitHub</a></li>
+</ul>
+</section>
+<section id="ssb-collector-client" class="level3">
+<h3 class="anchored" data-anchor-id="ssb-collector-client">ssb-collector-client</h3>
+<ul>
+<li><a href="../../../statistikkere/ssb-collector-client.html">Dokumentasjon</a></li>
+<li><a href="../../../blog/posts/2025-12-04-ssb-collector-client/index.html">Blogginnlegg</a></li>
+<li><a href="https://pypi.org/project/ssb-collector-client/">PyPI</a></li>
+<li><a href="https://github.com/statisticsnorway/ssb-collector-client">GitHub</a></li>
+</ul>
+</section>
+</section>
+<section id="spørsmål" class="level2">
+<h2 class="anchored" data-anchor-id="spørsmål">Spørsmål?</h2>
+<p>Har du spørsmål om migreringen eller trenger hjelp? Ta kontakt med Dapla-teamet eller opprett et issue på GitHub.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>dapla-toolbelt</category>
+  <category>ssb-guardian-client</category>
+  <category>ssb-collector-client</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2025-12-10-guardian-collector-clients/</guid>
+  <pubDate>Wed, 10 Dec 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
 <item>
   <title>Ny release av ssb-altinn-python (0.4.15)</title>
   <dc:creator>Team Fellesfunksjoner</dc:creator>
@@ -722,11 +1022,11 @@ Tabell&nbsp;1: Funksjonalitet i dapla-toolbelt og hvor det flyttes.
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>CollectorClient</code></td>
-<td style="text-align: left;"><em>Ny Python-pakke kommer snart</em></td>
+<td style="text-align: left;"><a href="https://manual.dapla.ssb.no/statistikkere/ssb-guardian-client.html"></a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>GuardianClient</code></td>
-<td style="text-align: left;"><em>Ny Python-pakke kommer snart</em></td>
+<td style="text-align: left;"><a href="https://manual.dapla.ssb.no/statistikkere/ssb-collector-client.html"></a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>AuthClient</code></td>
@@ -903,122 +1203,6 @@ Figur&nbsp;1: Eksempel av error på avvik mellom nytt datasett og eksisterende m
   <category>dapla lab</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2025-09-11-r-in-vscode/</guid>
   <pubDate>Thu, 11 Sep 2025 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Breaking Changes i Datadoc-modellen</title>
-  <dc:creator>Miles Winther</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2025-09-08-datadoc-model-breaking-changes/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<section id="introduksjon" class="level2">
-<h2 class="anchored" data-anchor-id="introduksjon">Introduksjon</h2>
-<p><a href="https://pypi.org/project/dapla-toolbelt-metadata/">dapla-toolbelt-metadata</a> v0.9.0 slippes ut. Det inneholder noen Breaking Changes i strukturen av modellen. De alle fleste kommer ikke til å merke endringen dersom eksisterende Datadoc <code>...__DOC.json</code> filer blir oppgradert når de er åpnet og Datadoc-editor blir oppdatert i takt.</p>
-</section>
-<section id="hvorfor-gjør-vi-endringene" class="level2">
-<h2 class="anchored" data-anchor-id="hvorfor-gjør-vi-endringene">Hvorfor gjør vi endringene?</h2>
-<p>Endringene er gjort for å:</p>
-<ul>
-<li>Kunne i større grad knytte metadata til variablene slik at vi beskriver variablene mer nøyaktig.</li>
-<li>Legge til rette for å ha flere bruksrestriksjoner knyttet til et datasett samtidig.</li>
-</ul>
-</section>
-<section id="hvem-blir-rammet" class="level2">
-<h2 class="anchored" data-anchor-id="hvem-blir-rammet">Hvem blir rammet?</h2>
-<p>De som bruker <code>dapla-toolbelt-metadata</code> progammatisk og har kode som refererer til følgende metadata-felt eller enum kommer til å måtte oppdatere koden sin:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">meta.dataset.use_restriction         <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Ny datastruktur</span></span>
-<span id="cb1-2">meta.dataset.use_restriction_date    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Ny datastruktur</span></span>
-<span id="cb1-3"></span>
-<span id="cb1-4">model.UseRestriction.PROCESS_LIMITATIONS  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Nytt navn</span></span>
-<span id="cb1-5"></span>
-<span id="cb1-6">meta.dataset.contains_personal_data  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span>
-<span id="cb1-7">meta.dataset.unit_type               <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span>
-<span id="cb1-8">meta.dataset.temporality_type        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span>
-<span id="cb1-9">meta.dataset.data_source             <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Kun tilgjengelig på variabel-nivå</span></span></code></pre></div></div>
-</section>
-<section id="hvordan-skal-koden-se-ut-nå" class="level2">
-<h2 class="anchored" data-anchor-id="hvordan-skal-koden-se-ut-nå">Hvordan skal koden se ut nå?</h2>
-<section id="bruksrestriksjoner" class="level3">
-<h3 class="anchored" data-anchor-id="bruksrestriksjoner">Bruksrestriksjoner</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">meta.dataset.use_restrictions <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [</span>
-<span id="cb2-2">    model.UseRestrictionItem(</span>
-<span id="cb2-3">        model.UseRestrictionType.PROCESS_LIMITATIONS, date(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2025</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">12</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">31</span>)</span>
-<span id="cb2-4">    ),</span>
-<span id="cb2-5">    model.UseRestrictionItem(</span>
-<span id="cb2-6">        model.UseRestrictionType.DELETION_ANONYMIZATION, <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">None</span></span>
-<span id="cb2-7">    ),</span>
-<span id="cb2-8">]</span></code></pre></div></div>
-</section>
-<section id="felt-flyttet-til-variabel-nivå" class="level3">
-<h3 class="anchored" data-anchor-id="felt-flyttet-til-variabel-nivå">Felt flyttet til variabel-nivå</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">my_variable <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> meta.variables_lookup[</span>
-<span id="cb3-2">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"my_short_name"</span></span>
-<span id="cb3-3">]</span>
-<span id="cb3-4">my_variable.contains_personal_data <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">True</span></span>
-<span id="cb3-5">my_variable.unit_type <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"20"</span></span>
-<span id="cb3-6">my_variable.temporality_type <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> model.TemporalityTypeType.ACCUMULATED</span>
-<span id="cb3-7">my_variable.data_source <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"23"</span></span></code></pre></div></div>
-</section>
-</section>
-<section id="hva-med-datadoc-editor" class="level2">
-<h2 class="anchored" data-anchor-id="hva-med-datadoc-editor">Hva med Datadoc-editor</h2>
-<p>Datadoc-editor oppdateres til å reflektere disse endringene. Det kommer informasjon om dette i et eget innlegg etterhvert.</p>
-
-
-</section>
-
- ]]></description>
-  <category>metadata</category>
-  <category>datadoc</category>
-  <category>dapla-toolbelt-metadata</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2025-09-08-datadoc-model-breaking-changes/</guid>
-  <pubDate>Mon, 08 Sep 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 </channel>
 </rss>
