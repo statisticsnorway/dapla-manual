@@ -5,13 +5,7 @@ lightbox: true
 toc-depth: 5
 ---
 
-::: {.callout-warning}
-## Tjenesten er under utvikling
-
-Delomaten er under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025.
-:::
-
-Delomaten er en tjeneste som lar Dapla-team dele data med hverandre selv om de behandler personopplysninger ulikt. Tjenesten håndterer spesialtilfellene der team ikke kan bruke [standard delt-bøtter](./deling-av-data.qmd#typer-av-delt-bøtter) fordi teamet de skal dele med håndterer personopplysninger på en annen måte.
+Delomaten er en tjeneste som lar Dapla-team dele data med hverandre selv om de behandler personopplysninger ulikt. Tjenesten håndterer spesialtilfeller der team ikke kan bruke [standard delt-bøtter](./deling-av-data.qmd#typer-av-delt-bøtter) fordi teamet de skal dele med håndterer personopplysninger på en annen måte.
 
 Delomaten lar team automatisere pseudonymisering eller de-pseudonymisering av informasjon før de deles. Selve prosesseringen skjer av en systembruker i Delomaten og brukerne får ikke direkte tilgang til å pseudonymisere eller de-pseudonymisere. Det delende teamet har ikke selv tilgang til dataene delt gjennom Delomaten, men andre team kan få tilgang.   
 
@@ -22,11 +16,13 @@ Delomaten lar team automatisere pseudonymisering eller de-pseudonymisering av in
 
 Av @fig-delomaten ser vi at team A jobber med pseudonymiserte personopplysninger i sin produktbøtte. Disse dataene kan de dele med andre team via standard delt-bøtter som team A kan skrive til. Hvis de i tillegg ønsker å dele data i klartekst (de-pseudonymisert) så må de dele via en Delomaten delt-bøtte. Team A kan da bruke Delomaten til å de-pseudonymisere dataene og skrive til Delomaten delt-bøtta uten at de selv har tilgang til den bøtta, mens team B har tilgang. Da håndterer Delomaten de-pseudonymisering og skriving til bøtta basert på konfigurasjon som team A setter opp. 
 
-Delomaten støtter også den motsatte flyten av det som er vist i @fig-delomaten. Dvs. hvis et team som håndterer personopplysninger i klartekst i produktbøtta ønsker å dele med et team som kun skal se opplysningene pseudonymisert. Re-pseudonymisering, dvs. bytte av krypteringsalgoritme eller nøkkel, støttes ikke av Delomaten enda. 
+Delomaten støtter også den motsatte flyten av det som er vist i @fig-delomaten. Dvs. hvis et team som håndterer personopplysninger i klartekst i produktbøtta ønsker å dele med et team som kun skal se opplysningene pseudonymisert. Re-pseudonymisering, dvs. bytte av krypteringsalgoritme eller nøkkel, støttes ikke av Delomaten enda.
+
+## Hvem kan bruke Delomaten?
+
+Før man tar i bruk Delomaten skal teamet diskutere formålet med delingen og tilgangsstyring med nærmeste leder. Delomaten er en tjeneste som skal benyttes unntaksvis og alle andre løsninger bør vurderes før man tar den i bruk. Det er også anbefalt at teamet rådfører seg meg Personvernombudet før man tar i bruk Delomaten.  
 
 ## Forberedelser
-
-Før et team tar i bruk Delomaten, eller konsumerer data fra en Delomaten delt-bøtte, er det viktig at man setter seg godt inn i hvordan personvern i data håndteres i SSB. Ta kontakt med nærmeste leder eller Personvernombud dersom det er behov for rådgiving eller informasjon.
 
 Under beskrives hvilke tekniske krav som gjelder for Delomaten.
 
@@ -71,6 +67,8 @@ Delomaten forutsetter at teamet har opprettet en Delomaten delt-bøtte før Delo
 Før man kan ta i bruk Delomaten må man opprette en Delomaten delt-bøtte. Les mer om hvordan man oppretter en slik bøtte [i denne artikkelen](./deling-av-data.qmd).
 
 ## Sett opp tjenesten
+
+Under beskrives det hvordan man setter opp Delomaten.
 
 ### Klone IaC-repoet
 
@@ -509,6 +507,10 @@ file_paths = [
 for file in file_paths:
     trigger_shared_data_processing(project_id, source_name, file)
 ```
+
+### Tilgangsstyring
+
+Teamet som deler data kan gi tilgang til andre team på lik måte som med standard delt-bøtter. Les mer om tilgangsstyring [her](./deling-av-data.qmd#tilgangsstyring). 
 
 ## Vedlikehold
 
