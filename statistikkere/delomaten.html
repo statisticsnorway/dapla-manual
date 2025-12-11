@@ -113,17 +113,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Delomaten – Dapla-manualen">
 <meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
-<meta property="og:image" content="https://manual.dapla.ssb.no/images/delomaten.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/delomaten.svg">
 <meta property="og:site_name" content="Dapla-manualen">
-<meta property="og:image:alt" content="Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang.">
-<meta property="og:image:height" content="758">
-<meta property="og:image:width" content="1243">
 <meta name="twitter:title" content="Delomaten – Dapla-manualen">
 <meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/delomaten.png">
-<meta name="twitter:image:alt" content="Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang.">
-<meta name="twitter:image-height" content="758">
-<meta name="twitter:image-width" content="1243">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/delomaten.svg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -791,15 +785,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#personvern-og-forutsetninger" id="toc-personvern-og-forutsetninger" class="nav-link active" data-scroll-target="#personvern-og-forutsetninger">Personvern og forutsetninger</a></li>
-  <li><a href="#sett-opp-delomaten" id="toc-sett-opp-delomaten" class="nav-link" data-scroll-target="#sett-opp-delomaten">Sett opp Delomaten</a></li>
-  <li><a href="#konfigurasjonsfilen" id="toc-konfigurasjonsfilen" class="nav-link" data-scroll-target="#konfigurasjonsfilen">Konfigurasjonsfilen</a>
-  <ul class="collapse">
-  <li><a href="#viktige-parametre" id="toc-viktige-parametre" class="nav-link" data-scroll-target="#viktige-parametre">Viktige parametre</a></li>
-  <li><a href="#eksempeler-på-pseudonymisering" id="toc-eksempeler-på-pseudonymisering" class="nav-link" data-scroll-target="#eksempeler-på-pseudonymisering">Eksempeler på pseudonymisering</a></li>
-  <li><a href="#eksempel-på-depseudonymisering" id="toc-eksempel-på-depseudonymisering" class="nav-link" data-scroll-target="#eksempel-på-depseudonymisering">Eksempel på depseudonymisering</a></li>
+  <li><a href="#hvem-kan-bruke-delomaten" id="toc-hvem-kan-bruke-delomaten" class="nav-link active" data-scroll-target="#hvem-kan-bruke-delomaten">Hvem kan bruke Delomaten?</a></li>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a>
+  <ul>
+  <li><a href="#dokumentasjon" id="toc-dokumentasjon" class="nav-link" data-scroll-target="#dokumentasjon">Dokumentasjon</a></li>
+  <li><a href="#aktiver-delomaten" id="toc-aktiver-delomaten" class="nav-link" data-scroll-target="#aktiver-delomaten">Aktiver Delomaten</a></li>
+  <li><a href="#aktiver-shared-buckets" id="toc-aktiver-shared-buckets" class="nav-link" data-scroll-target="#aktiver-shared-buckets">Aktiver <em>shared-buckets</em></a></li>
+  <li><a href="#opprett-delomaten-bøtte" id="toc-opprett-delomaten-bøtte" class="nav-link" data-scroll-target="#opprett-delomaten-bøtte">Opprett Delomaten-bøtte</a></li>
   </ul></li>
-  <li><a href="#feilmeldinger" id="toc-feilmeldinger" class="nav-link" data-scroll-target="#feilmeldinger">Feilmeldinger</a></li>
+  <li><a href="#sett-opp-tjenesten" id="toc-sett-opp-tjenesten" class="nav-link" data-scroll-target="#sett-opp-tjenesten">Sett opp tjenesten</a>
+  <ul>
+  <li><a href="#klone-iac-repoet" id="toc-klone-iac-repoet" class="nav-link" data-scroll-target="#klone-iac-repoet">Klone IaC-repoet</a></li>
+  <li><a href="#mappestruktur-i-iac-repo" id="toc-mappestruktur-i-iac-repo" class="nav-link" data-scroll-target="#mappestruktur-i-iac-repo">Mappestruktur i IaC-repo</a></li>
+  <li><a href="#flere-kilder" id="toc-flere-kilder" class="nav-link" data-scroll-target="#flere-kilder">Flere kilder</a></li>
+  <li><a href="#konfigurasjonsfilen" id="toc-konfigurasjonsfilen" class="nav-link" data-scroll-target="#konfigurasjonsfilen">Konfigurasjonsfilen</a>
+  <ul>
+  <li><a href="#shared_bucket" id="toc-shared_bucket" class="nav-link" data-scroll-target="#shared_bucket">shared_bucket</a></li>
+  <li><a href="#source_folder_prefix" id="toc-source_folder_prefix" class="nav-link" data-scroll-target="#source_folder_prefix">source_folder_prefix</a></li>
+  <li><a href="#destination_folder" id="toc-destination_folder" class="nav-link" data-scroll-target="#destination_folder">destination_folder</a></li>
+  <li><a href="#memory_size" id="toc-memory_size" class="nav-link" data-scroll-target="#memory_size">memory_size</a></li>
+  <li><a href="#pseudo" id="toc-pseudo" class="nav-link" data-scroll-target="#pseudo">pseudo</a>
+  <ul class="collapse">
+  <li><a href="#name" id="toc-name" class="nav-link" data-scroll-target="#name">name</a></li>
+  <li><a href="#columns" id="toc-columns" class="nav-link" data-scroll-target="#columns">columns</a></li>
+  <li><a href="#encryption" id="toc-encryption" class="nav-link" data-scroll-target="#encryption">encryption</a></li>
+  <li><a href="#sid_snapshot_date" id="toc-sid_snapshot_date" class="nav-link" data-scroll-target="#sid_snapshot_date">sid_snapshot_date</a></li>
+  <li><a href="#key" id="toc-key" class="nav-link" data-scroll-target="#key">key</a></li>
+  <li><a href="#sid_on_map_failure" id="toc-sid_on_map_failure" class="nav-link" data-scroll-target="#sid_on_map_failure">sid_on_map_failure</a></li>
+  </ul></li>
+  <li><a href="#depseudo" id="toc-depseudo" class="nav-link" data-scroll-target="#depseudo">depseudo</a>
+  <ul class="collapse">
+  <li><a href="#columns-1" id="toc-columns-1" class="nav-link" data-scroll-target="#columns-1">columns</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#rulle-ut-tjenesten" id="toc-rulle-ut-tjenesten" class="nav-link" data-scroll-target="#rulle-ut-tjenesten">Rulle ut tjenesten</a></li>
+  <li><a href="#test-tjenesten" id="toc-test-tjenesten" class="nav-link" data-scroll-target="#test-tjenesten">Test tjenesten</a></li>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
+  <li><a href="#monitorering-og-logging" id="toc-monitorering-og-logging" class="nav-link" data-scroll-target="#monitorering-og-logging">Monitorering og logging</a></li>
+  <li><a href="#skalering" id="toc-skalering" class="nav-link" data-scroll-target="#skalering">Skalering</a></li>
+  <li><a href="#varsling-på-e-post" id="toc-varsling-på-e-post" class="nav-link" data-scroll-target="#varsling-på-e-post">Varsling på e-post</a></li>
+  <li><a href="#trigge-kilde-manuelt" id="toc-trigge-kilde-manuelt" class="nav-link" data-scroll-target="#trigge-kilde-manuelt">Trigge kilde manuelt</a></li>
+  <li><a href="#tilgangsstyring" id="toc-tilgangsstyring" class="nav-link" data-scroll-target="#tilgangsstyring">Tilgangsstyring</a></li>
+  </ul></li>
+  <li><a href="#vedlikehold" id="toc-vedlikehold" class="nav-link" data-scroll-target="#vedlikehold">Vedlikehold</a>
+  <ul>
+  <li><a href="#endre-config.yaml" id="toc-endre-config.yaml" class="nav-link" data-scroll-target="#endre-config.yaml">Endre config.yaml</a></li>
+  <li><a href="#metadata-1" id="toc-metadata-1" class="nav-link" data-scroll-target="#metadata-1">Metadata</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/delomaten.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/delomaten.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
@@ -820,7 +852,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 5, 2025</p>
+      <p class="date-modified">December 9, 2025</p>
     </div>
   </div>
     
@@ -831,190 +863,688 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="callout callout-style-default callout-warning callout-titled">
+<p>Delomaten er en tjeneste som lar Dapla-team dele data med hverandre selv om de behandler personopplysninger ulikt. Tjenesten håndterer spesialtilfeller der team ikke kan bruke <a href="../statistikkere/deling-av-data.html#typer-av-delt-bøtter">standard delt-bøtter</a> fordi teamet de skal dele med håndterer personopplysninger på en annen måte.</p>
+<p>Delomaten lar team automatisere pseudonymisering eller de-pseudonymisering av informasjon før de deles. Selve prosesseringen skjer av en systembruker i Delomaten og brukerne får ikke direkte tilgang til å pseudonymisere eller de-pseudonymisere. Det delende teamet har ikke selv tilgang til dataene delt gjennom Delomaten, men andre team kan få tilgang.</p>
+<p><a href="#fig-delomaten" class="quarto-xref">Figur&nbsp;1</a> viser et eksempel på hvordan tjenesten fungerer når et team som jobber med pseudonymiserte personopplysninger skal dele data et med et team som skal se personopplysninger i klartekst.</p>
+<div id="fig-delomaten" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-delomaten-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../images/delomaten.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Figuren viser hvordan hvordan team A deler de-pseudonymisert data med team B ved hjelp av Delomaten."><img src="../images/delomaten.svg" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-delomaten-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Figuren viser hvordan hvordan team A deler de-pseudonymisert data med team B ved hjelp av Delomaten.
+</figcaption>
+</figure>
+</div>
+<p>Av <a href="#fig-delomaten" class="quarto-xref">Figur&nbsp;1</a> ser vi at team A jobber med pseudonymiserte personopplysninger i sin produktbøtte. Disse dataene kan de dele med andre team via standard delt-bøtter som team A kan skrive til. Hvis de i tillegg ønsker å dele data i klartekst (de-pseudonymisert) så må de dele via en Delomaten delt-bøtte. Team A kan da bruke Delomaten til å de-pseudonymisere dataene og skrive til Delomaten delt-bøtta uten at de selv har tilgang til den bøtta, mens team B har tilgang. Da håndterer Delomaten de-pseudonymisering og skriving til bøtta basert på konfigurasjon som team A setter opp.</p>
+<p>Delomaten støtter også den motsatte flyten av det som er vist i <a href="#fig-delomaten" class="quarto-xref">Figur&nbsp;1</a>. Dvs. hvis et team som håndterer personopplysninger i klartekst i produktbøtta ønsker å dele med et team som kun skal se opplysningene pseudonymisert. Re-pseudonymisering, dvs. bytte av krypteringsalgoritme eller nøkkel, støttes ikke av Delomaten enda.</p>
+<section id="hvem-kan-bruke-delomaten" class="level2">
+<h2 class="anchored" data-anchor-id="hvem-kan-bruke-delomaten">Hvem kan bruke Delomaten?</h2>
+<p>Før man tar i bruk Delomaten skal teamet diskutere formålet med delingen og tilgangsstyring med nærmeste leder. Delomaten er en tjeneste som skal benyttes unntaksvis og alle andre løsninger bør vurderes før man tar den i bruk. Det er også anbefalt at teamet rådfører seg meg Personvernombudet før man tar i bruk Delomaten.</p>
+</section>
+<section id="forberedelser" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
+<p>Under beskrives hvilke tekniske krav som gjelder for Delomaten.</p>
+<section id="dokumentasjon" class="level3">
+<h3 class="anchored" data-anchor-id="dokumentasjon">Dokumentasjon</h3>
+<p>Data som skal deles gjennom Delomaten-bøtter må være <a href="../statistikkere/datadoc.html">dokumentert i Datadoc</a>. Alle <a href="../statistikkere/datadoc-model.html">obligatoriske felt</a> i Datadoc må være utfylt og metadata-filen (.json) må ligge lagret med riktig navn ved siden av data-filen. Delomaten-jobbene vil feile dersom den ikke finner metadatafilen.</p>
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Tjenesten er under utvikling
+<span class="screen-reader-only">Important</span>Metadata om pseudonymisering
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Delomaten er under utvikling og er ikke tilgjengelig for Dapla-team enda. Tjenesten vil lanseres ila høsten 2025.</p>
+<p>For at Delomaten skal kunne de-pseudonymisere data så krever den at de tekniske detaljene om hvordan dataene er pseudonymisert er dokumentert i Datadoc for hver variabel som skal prosesseres. Den enkleste måten å legge inn metadata er gjøre det når dataene pseudonymiseres. Hvis man ikke har gjort dette, så kan man legge det inn ved hjelp av <a href="../statistikkere/datadoc-editor.html">Datadoc-editor</a>.</p>
 </div>
 </div>
-<p>Delomaten er en Dapla-tjeneste som <em>automatiserer sikker deling av data</em> mellom team med forskjellige datatilganger av hensyn til behov og personvern.</p>
-<p>Den fungerer slik:</p>
-<ol type="1">
-<li>Delomaten leser data og metadata fra <strong>produktbøtta</strong> til det delende teamet.</li>
-<li>Dataene blir <strong>pseudonymistert eller depseudonymisert</strong> basert på oppsettet det delende teamet har laget.</li>
-<li>Resultatet lagres i en egen <strong>Delomaten-bøtte</strong> som kun mottaker teamet har tilgang til.</li>
-</ol>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="../images/delomaten.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang."><img src="../images/delomaten.png" class="img-fluid figure-img" alt="Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang."></a></p>
-<figcaption>Team A deler data med Team B. Gjennom Delomaten vil data automatisk bli pseudonymisert/depseudonymisert og flyttet til en Delomaten-bøtte hvor kun Team B har tilgang.</figcaption>
-</figure>
-</div>
-<section id="personvern-og-forutsetninger" class="level2">
-<h2 class="anchored" data-anchor-id="personvern-og-forutsetninger">Personvern og forutsetninger</h2>
-<p>Før du tar i bruk Delomaten, er det viktig at du setter deg inn i hvordan personvern håndteres i SSB. Delomaten er laget for å støtte trygg deling av data mellom team med ulike tilgangsnivåer og må brukes i tråd med SSBs personvernregler.</p>
-<p>Les mer på siden <a href="./personvern.qmd"><strong>Personvern i Dapla</strong></a>.</p>
 </section>
-<section id="sett-opp-delomaten" class="level2">
-<h2 class="anchored" data-anchor-id="sett-opp-delomaten">Sett opp Delomaten</h2>
-<p>For å sette opp Delomaten gjør følgende endringer i teamets IAC-repo:</p>
-<ol type="1">
-<li><strong>Sjekk at dataene er dokumentert</strong>
-<ul>
-<li>Alle data som deles gjennom Delomaten må være dokumentert i <a href="./datadoc.html">Datadoc</a>.</li>
-<li>Hver datafil må ha en tilhørende metadatafil (.json) som lastes opp samtidig.</li>
-<li>Hvis metadatafilen mangler, vil jobben feile automatisk.</li>
-</ul></li>
-<li><strong>Aktiver tjenesten</strong>
-<ul>
-<li>Skru på <code>shared-buckets</code> og <code>Delomaten</code> under <a href="./features.html">Features</a>,</li>
-<li>eller opprett en <a href="https://ssb.pureservice.com/#/categories/14/new">kundeservice-sak</a>.</li>
-</ul></li>
-<li><strong>Opprett Delomaten-bøtte</strong>
-<ul>
-<li>Følg veiledningen i <a href="../statistikkere/deling-av-data.html">deling av data</a>.</li>
-</ul></li>
-<li><strong>Lag konfigurasjonsfil i GitHub</strong>
-<ul>
-<li>Opprett <code>automation/shared-data/&lt;Ditt team&gt;-prod/&lt;&gt;/config.yaml</code>.</li>
-<li>Beskriv hvilke kolonner som skal pseudonymiseres/depseudonymiseres.</li>
-</ul></li>
-</ol>
-<hr>
+<section id="aktiver-delomaten" class="level3">
+<h3 class="anchored" data-anchor-id="aktiver-delomaten">Aktiver Delomaten</h3>
+<p>Delomaten er en <a href="../statistikkere/features.html"><em>feature</em></a> som må aktiveres for hvert team som skal bruke den. Du aktiverer den i teamets IaC-repo slik som vist på linje 14 i eksempelet under:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>./infra/projects.yaml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="./infra/projects.yaml" data-caption="Eksempel på en feature"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">team_uniform_name</span><span class="kw">:</span><span class="at"> play-obr</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">projects</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> play-obr</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">project_name</span><span class="kw">:</span><span class="at"> play-obr</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="at">    </span><span class="fu">env</span><span class="kw">:</span><span class="at"> prod</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="at">    </span><span class="fu">features</span><span class="kw">:</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="at">      </span><span class="kw">-</span><span class="at"> dapla-buckets</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="at">      </span><span class="kw">-</span><span class="at"> shared-buckets</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="at">      </span><span class="kw">-</span><span class="at"> delomaten</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="konfigurasjonsfilen" class="level2">
-<h2 class="anchored" data-anchor-id="konfigurasjonsfilen">Konfigurasjonsfilen</h2>
-<p>Konfigurasjonsfilen (<code>config.yaml</code>) styrer hvordan Delomaten skal behandle dataen. Filen må ligge i teamets IAC-repo, under <code>automation/shared-data/...</code>.</p>
+<section id="aktiver-shared-buckets" class="level3">
+<h3 class="anchored" data-anchor-id="aktiver-shared-buckets">Aktiver <em>shared-buckets</em></h3>
+<p>Delomaten forutsetter at teamet har opprettet en Delomaten delt-bøtte før Delomaten-jobber settes opp. For å opprette delt-bøtter må man aktivere <a href="[*feature*](./features.qmd)">feature</a>’n <em>shared-buckets</em>, slik som vist i linje 13 i eksempelet over.</p>
+</section>
+<section id="opprett-delomaten-bøtte" class="level3">
+<h3 class="anchored" data-anchor-id="opprett-delomaten-bøtte">Opprett Delomaten-bøtte</h3>
+<p>Før man kan ta i bruk Delomaten må man opprette en Delomaten delt-bøtte. Les mer om hvordan man oppretter en slik bøtte <a href="../statistikkere/deling-av-data.html">i denne artikkelen</a>.</p>
+</section>
+</section>
+<section id="sett-opp-tjenesten" class="level2">
+<h2 class="anchored" data-anchor-id="sett-opp-tjenesten">Sett opp tjenesten</h2>
+<p>Under beskrives det hvordan man setter opp Delomaten.</p>
+<section id="klone-iac-repoet" class="level3">
+<h3 class="anchored" data-anchor-id="klone-iac-repoet">Klone IaC-repoet</h3>
+<p>Oppsett av Delomaten gjøres i teamets IaC-repo<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Når vi skal sette opp Delomaten må vi gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på <a href="https://github.com/statisticsnorway">SSBs GitHub-organisasjon</a> og søke etter repoet som heter <code>&lt;teamnavn&gt;-iac</code>. Når du har funnet repoet så kan du gjøre følgende:</p>
+<ol type="1">
+<li>Klon teamets IaC-repo <code>git clone &lt;repo-url&gt;</code></li>
+<li>Opprett en ny branch: <code>git switch -c add-delomaten-source</code></li>
+</ol>
+</section>
+<section id="mappestruktur-i-iac-repo" class="level3">
+<h3 class="anchored" data-anchor-id="mappestruktur-i-iac-repo">Mappestruktur i IaC-repo</h3>
+<p>For at Delomaten skal fungere må det opprettes en bestemt mappestruktur i IaC-repoet til teamet. F.eks. vil mappestrukturen for <strong>prod</strong>-miljøet se slik ut for team <strong>dapla-example</strong>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   ├── shared-data/</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   ├── dapla-example-prod/</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   │    └── altinn</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   │    └── ameld</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   └── dapla-example-test/</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">│   │        └── altinn</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">│   │        └── ameld</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">│   │        └── skatt</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">│       ...</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── shared-data/</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">│           └── README.md</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="viktige-parametre" class="level3">
-<h3 class="anchored" data-anchor-id="viktige-parametre">Viktige parametre</h3>
-<ul>
-<li><p><strong><code>shared_bucket</code></strong> Navnet på Delomaten-bøtta der resultatet lagres.</p></li>
-<li><p><strong><code>source_folder_prefix</code></strong> Stien til kildedata i produktbøtta.</p>
-<ul>
-<li>Hvis du setter <code>source_folder_prefix: "forbruk/"</code>, betyr det at alle filer under mappen <code>forbruk/</code> i produktbøtta deles.</li>
-<li>Tips: Hvis du bare vil dele deler av mappen, kan du bruke underkataloger eller et mer spesifikt prefix.</li>
-</ul></li>
-<li><p><strong><code>destination_folder</code></strong> Navnet på mappen i Delomaten-bøtta som mottakerne får tilgang til.</p>
-<ul>
-<li>Vanligvis setter du samme navn som <code>source_folder_prefix</code>, men du kan velge fritt.</li>
-</ul></li>
-<li><p><strong><code>memory_size</code></strong> Ressurser jobben maksimalt får tilgang til spesifisert i Gigabyte (for avanserte brukere).</p></li>
-<li><p><strong><code>pseudo</code></strong> En liste over kolonner som skal pseudonymiseres, og hvilken algoritme som skal brukes.</p></li>
-<li><p><strong><code>depseudo</code></strong> En liste over kolonner som skal depseudonymiseres. Hvilken algoritme som brukes bestemmes utfra metadataen til variabelen.</p></li>
-</ul>
+<p>Skal du sette opp Delomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda.</p>
+<p>Skal du også bruke Delomaten i <strong>test</strong>-miljøet må du opprette en ny mappe og lage en PR i IaC-repoet til teamet. Da vil strukturen se slik ut:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── shared-data/</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── README.md</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test/</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I mappestrukturen over har vi klargjort den grunnleggende mappestrukturen for å ta i bruk kildomaten i prod- og test-miljøet. Neste steg blir å legge de ulike kildene som egne mapper under <code>dapla-example-prod</code> og <code>dapla-example-test</code>. Det viser vi i neste avsnitt.</p>
 </section>
-<section id="eksempeler-på-pseudonymisering" class="level3">
-<h3 class="anchored" data-anchor-id="eksempeler-på-pseudonymisering">Eksempeler på pseudonymisering</h3>
+<section id="flere-kilder" class="level3">
+<h3 class="anchored" data-anchor-id="flere-kilder">Flere kilder</h3>
+<p>Delomaten lar deg prosessere ulike filstier ulikt. Dette refereres til som at Delomaten har flere <em>jobber</em>. For å sette opp en jobb må man følge en definert mappestruktur i IaC-repoet der alle jobbene ligger rett under <code>&lt;teamnavn&gt;-prod</code>- eller <code>&lt;teamnavn&gt;-test</code>-mappen. Du kan ikke ha undermapper under en jobb. Du velger selv navnet på jobbene/mappene i IaC-repoet, og det vil være navnet på jobbene i Delomaten. Senere i kapitlet ser vi at vi må bruke navnet for trigge re-kjøring av kilder.</p>
+<p>Under er et eksempel på hvordan det kan se ut for eksempel-teamet dapla-example:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── shared-data/</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-prod/</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── altinn</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── ameld</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">│       ├── dapla-example-test/</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── altinn</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── ameld</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── nudb</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I eksempelet over ser vi at det er mapper i IaC-repoet for jobbene <em>altinn</em> og <em>ameld</em> for både test- og prod-miljøet. I tillegg har test-miljøet en mappe for jobben <em>nudb</em>. Hver av disse kildene kan kjøre ulike jobber på alle filer som skrives til en gitt filsti som man definerer selv.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Alle jobber på samme nivå
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Et team kan sette opp forskjellige jobber for forskjellig data, men Delomaten tillater bare ett nivå under <code>automation/source-data-&lt;teamnavn&gt;-&lt;miljø&gt;/</code>. Det vil si at du ikke kan ha undermapper under en jobb. Det er også slik at man alltid må opprette en mappe for en jobb, selv om du kun har en jobb. F.eks. kan man ikke droppe mappen <code>altinn</code> i eksempelet over.</p>
+</div>
+</div>
+</section>
+<section id="konfigurasjonsfilen" class="level3">
+<h3 class="anchored" data-anchor-id="konfigurasjonsfilen">Konfigurasjonsfilen</h3>
+<p>Konfigurasjonsfilen (<code>config.yaml</code>) styrer hvordan Delomaten skal behandle dataene. Filen må ligge i under mappen for en jobb i teamets IaC-repo. I eksempelet under ser vi at det er configurert en jobb som heter <em>altinn</em> med en konfigurasjonsfil.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>github.com/statisticsnorway/dapla-example-iac</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="github.com/statisticsnorway/dapla-example-iac"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">dapla-example-iac</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">├── automation/</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">│   ├── shared-data/</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   ├── dapla-example-prod/</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   │    └── altinn</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   │         └── config.yaml</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   │    └── ameld</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">│   │   └── dapla-example-test/</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">│   │        └── altinn</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="at">│   │        └── ameld</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="at">│   │        └── skatt</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="at">│   └── source-data/</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="at">│       ...</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I konfigurasjonsfilen kan teamet bestemme prosesseringen i Delomaten-jobben ved hjelp av parametre. Følgende parametre kan settes i konfigurasjonsfilen:</p>
+<section id="shared_bucket" class="level4">
+<h4 class="anchored" data-anchor-id="shared_bucket">shared_bucket</h4>
+<p>Oppgi kortnavnet til Delomaten-bøtta der resultatet av Delomatenjobben skal lagres. Kortnavnet til bøtta er det korte navnet man oppga når bøtta ble opprettet. F.eks. er kortnavnet til Delomaten-bøtta <code>ssb-play-obr-data-delt-delomatentest-prod</code> bare <code>delomatentest</code>.</p>
+</section>
+<section id="source_folder_prefix" class="level4">
+<h4 class="anchored" data-anchor-id="source_folder_prefix">source_folder_prefix</h4>
+<p>Oppgi prefix til dataene i produktbøtta som skal prosesseres. Stien oppgis uten bøttenavn. Hvis du setter <code>source_folder_prefix: "forbruk/"</code>, betyr det at alle filer under mappen <code>forbruk/</code> i produktbøtta deles.</p>
+<p>Hvis du bare vil dele deler av mappen, kan du bruke underkataloger eller et mer spesifikt prefix. F.eks. vil <code>source_folder_prefix: "forbruk/klargjorte-data/pensjon_p2018"</code> kun prosessere filer i mappen <code>klargjorte-data</code> som starter med <code>pensjon_p2018</code>.</p>
+</section>
+<section id="destination_folder" class="level4">
+<h4 class="anchored" data-anchor-id="destination_folder">destination_folder</h4>
+<p>Oppgi mappen i Delomaten-bøtta som Delomaten-jobben skal skrive til. Hvis mappen ikke allerede eksisterer så blir den opprettet i Delomaten-jobben. Mappen skal, i motsetning til <code>source_folder_prefix</code>, oppgis uten <code>/</code>.</p>
+<p>En ryddig praksis kan være å bruke samme mappenavn som er oppgitt i <code>source_folder_prefix: "forbruk"</code>.</p>
+</section>
+<section id="memory_size" class="level4">
+<h4 class="anchored" data-anchor-id="memory_size">memory_size</h4>
+<p>Oppgi hvor mye minne prosesseringen av en enkeltfil skal få tilgang til. Spesifisert i Gigabyte. Det er anbefalt å starte med 6 og deretter øke hvis det viser seg at mer er nødvendig.</p>
+</section>
+<section id="pseudo" class="level4">
+<h4 class="anchored" data-anchor-id="pseudo">pseudo</h4>
+<p>Velges dersom formålet er at Delomaten-jobben skal pseudonymisere data før deling. <code>pseudo</code>-operasjonen støtter ulike metodene som i <a href="../statistikkere/dapla-pseudo.html#algoritmer">dapla-toolbelt-pseudo</a>. I eksemplet under vises hvordan man konfigurerer en jobb som skal pseudonymisere kolonnen <code>fnr</code> i alle filer under mappen <code>forbruk</code> i produktbøtta til teamet, og at resultatet skal skrives til delt-bøtta <code>delomatentest</code> i undermappen <code>forbruk</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_stable_id"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Under pseudo har man følgende argumenter:</p>
+<section id="name" class="level5">
+<h5 class="anchored" data-anchor-id="name">name</h5>
+<p>Gi et navn til oppgaven som skal gjøres slik som vist med <code>task_one</code> i eksempelet over. Man kan velge et hvilket som helst man ønsker.</p>
+<p>Hvis man skal pseudonymisere alle kolonnene med samme metode og nøkkel så trenger man kun en oppgave. Hvis man f.eks. skal pseudonymisere noen kolonner med <code>with_stable_id</code>, og andre med <code>with_default_encryption</code>, så lager man en oppgave for hver.</p>
+</section>
+<section id="columns" class="level5">
+<h5 class="anchored" data-anchor-id="columns">columns</h5>
+<p>Oppgi en kommaseparert liste av kolonner som skal få samme pseudonym.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Eksempel: samme pseudonym på flere kolonner
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="kw">,</span><span class="at"> </span><span class="st">"fornavn"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_stable_id"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Her pseudonymiseres kolonnen <code>fnr</code>og <code>fornavn</code> med metoden <code>with_stable_id</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Eksempel: ulike pseudonymer for ulike kolonner
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="at"> </span><span class="kw">]</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">algorithm</span><span class="kw">:</span><span class="at"> </span><span class="st">"sid_mapping"</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">sid_snapshot_date</span><span class="kw">:</span><span class="at"> </span><span class="st">"2025-07-07"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Her pseudonymiseres kolonnen fnr med sid mapping og katalogdato <code>2025-07-07</code>.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="at"> </span><span class="kw">]</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">algorithm</span><span class="kw">:</span><span class="at"> </span><span class="st">"sid_mapping"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Her pseudonymiseres kolonnen fnr med sid mapping og siden katalogdato ikke er spesifisert brukes den nyeste.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="at"> </span><span class="kw">]</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">algorithm</span><span class="kw">:</span><span class="at"> </span><span class="st">"sid_mapping"</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_two</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"snr"</span><span class="at"> </span><span class="kw">]</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">algorithm</span><span class="kw">:</span><span class="at"> </span><span class="st">"papis_compatible"</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_three</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fornavn"</span><span class="kw">,</span><span class="at"> </span><span class="st">"etternavn"</span><span class="at"> </span><span class="kw">]</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">algorithm</span><span class="kw">:</span><span class="at"> </span><span class="st">"default"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_stable_id"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_two</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"snr"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_papis_compatible_encryption"</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_three</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fornavn"</span><span class="kw">,</span><span class="at"> </span><span class="st">"etternavn"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_default_encryption"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Her pseudonymiseres flere kolonner med forskjellige algoritmer:</p>
 <ul>
-<li><code>fnr</code> kolonnen pseudonymiseres med sid mapping og nyeste sid-katalog</li>
-<li><code>snr</code> kolonnen pseudonymiseres med papis algoritmen, men uten noe sid mapping</li>
-<li><code>fornavn</code> og <code>etternavn</code> kolonnene pseudonymiseres med <code>default</code> algoritmen som altså er DAEAD</li>
+<li><code>fnr</code>-kolonnen pseudonymiseres med <code>with_stable_id</code>-metoden.</li>
+<li><code>snr</code>-kolonnen pseudonymiseres med <code>with_papis_compatible_encryption</code>-metoden.</li>
+<li><code>fornavn</code>- og <code>etternavn</code>-kolonnene pseudonymiseres med <code>with_default_encryption</code>-metoden og standard nøkkel.</li>
 </ul>
+</div>
+</div>
+</div>
 </section>
-<section id="eksempel-på-depseudonymisering" class="level3">
-<h3 class="anchored" data-anchor-id="eksempel-på-depseudonymisering">Eksempel på depseudonymisering</h3>
+<section id="encryption" class="level5">
+<h5 class="anchored" data-anchor-id="encryption">encryption</h5>
+<p>Oppgi navnet på krypteringsmetoden som skal benyttes. Metoden angis på samme måte som i <a href="../statistikkere/dapla-pseudo.html#algoritmer">dapla-toolbelt-pseudo</a>. <a href="#tbl-delomaten-algorithms" class="quarto-xref">Tabell&nbsp;1</a> viser hvilke navn som kan velges og hva de betyr.</p>
+<div id="tbl-delomaten-algorithms" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-delomaten-algorithms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: Oversikt over hvilke navn som støttes i Delomaten for pseudonymisering.
+</figcaption>
+<div aria-describedby="tbl-delomaten-algorithms-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 82%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Navn</th>
+<th>Beskrivelse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>with_stable_id</code></td>
+<td>Koder om til <strong>stabil ID</strong> og deretter krypterer med <strong>THINK-FPE</strong> algoritmen (<strong>Papis</strong>-algoritmen).</td>
+</tr>
+<tr class="even">
+<td><code>with_papis_compatible_encryption</code></td>
+<td>Krypterer direkte med THINK-FPE algoritme (<strong>Papis</strong>-algoritmen).</td>
+</tr>
+<tr class="odd">
+<td><code>with_default_encryption</code></td>
+<td>Krypterer med <strong>TINK-DAED</strong> algoritmen, ofte omtalt som default-algoritmen på Dapla. Standard nøkkel er <code>ssb-common-key-1</code>, men støtter også en annen nøkkel.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="sid_snapshot_date" class="level5">
+<h5 class="anchored" data-anchor-id="sid_snapshot_date">sid_snapshot_date</h5>
+<p>Angi hvilken versjon av katalog for stabil ID som skal benyttes dersom siste tilgjengelige katalog ikke skal benyttes. Verdien oppgis som en dato på formatet <code>YYYY-MM-DD</code> og pseudonymiseringen bruker da nærmeste tilgjengelige katalog tilbake i tid.</p>
+<p><code>sid_snapshot_date</code> benyttes kun om siste versjon av katalogen ikke skal benyttes, og kan kun benyttes med metoden <code>with_stable_id</code>. Se eksempelkode lenger opp i artikkelen.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Eksempel: spesifikk versjon av SID-katalog
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="kw">,</span><span class="at"> </span><span class="st">"fornavn"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_stable_id"</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">sid_snapshot_date</span><span class="kw">:</span><span class="at"> </span><span class="st">"2024-01-15"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Her pseudonymiseres kolonnen <code>fnr</code>og <code>fornavn</code> med metoden <code>with_stable_id</code> og nærmeste SID-katalog (bakover i tid) fra 15. januar 2024 benyttess.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="key" class="level5">
+<h5 class="anchored" data-anchor-id="key">key</h5>
+<p>Kan angis som et valg man har valgt<br>
+<code>method: "with_default_encryption"</code> og ikke ønsker standard-nøkkelen <code>ssb-common-key-1</code>. Siden denne metoden støtter en alternativ nøkkel kan man oppgi <code>key: "ssb-common-key-2"</code> dersom man ønsker det.</p>
+<p>De andre metodene støtter kun en nøkkel og man trenger aldri å oppgi <code>key</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Eksempel: benytte en annen nøkkel
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="kw">,</span><span class="at"> </span><span class="st">"fornavn"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_default_encryption"</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">key</span><span class="kw">:</span><span class="at"> </span><span class="st">"ssb-common-key-2"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Her pseudonymiseres kolonnen <code>fnr</code>og <code>fornavn</code> med metoden <code>with_default_encryption</code> og nøkkelen <code>ssb-common-key-2</code> benyttes.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="sid_on_map_failure" class="level5">
+<h5 class="anchored" data-anchor-id="sid_on_map_failure">sid_on_map_failure</h5>
+<p>Kan angis som et valg hvis<br>
+<code>method: "sid_mapping"</code> og man IKKE ønsker at den originale verdien pseudonymiseres direkte dersom den ikke får treff i stabil ID katalogen. Hvis man heller ønsker at pseudonymiseringen returnerer <code>NULL</code> der man ikke får treff. Hvis man ønsker at <code>NULL</code> returneres oppgir man i konfigurasjonsfilen til Delomaten:<br>
+<code>sid_on_map_failure: "RETURN_NULL"</code></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Eksempel: Returner NULL ved manglende treff i SID-katalog
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="automation/shared-data/mitt-dapla-team-prod/altinn/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk/"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"forbruk"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pseudo</span><span class="kw">:</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> task_one</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at"> </span><span class="st">"fnr"</span><span class="kw">,</span><span class="at"> </span><span class="st">"fornavn"</span><span class="at"> </span><span class="kw">]</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">encryption</span><span class="kw">:</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">method</span><span class="kw">:</span><span class="at"> </span><span class="st">"with_stable_id"</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">key</span><span class="kw">:</span><span class="at"> </span><span class="st">"ssb-common-key-2"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Her pseudonymiseres kolonnen <code>fnr</code>og <code>fornavn</code> med metoden <code>with_stable_id</code> og vi pseudonymiseringen returnerer <code>NULL</code> hvis den ikke fikk treff i SID-katalog.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="depseudo" class="level4">
+<h4 class="anchored" data-anchor-id="depseudo">depseudo</h4>
+<p>Velges dersom formålet er at Delomaten-jobben skal de-pseudonymisere data før deling. De-pseudonymisering krever at man den opprinnelige pseudonymiseringen er dokumentert i Datadoc og derfor trenger man kun å oppgi hvilke kolonner som skal de-pseudonymiseres.</p>
+<section id="columns-1" class="level5">
+<h5 class="anchored" data-anchor-id="columns-1">columns</h5>
+<p>Oppgi en kommaseparert liste med kolonner som skal de-pseudonymiseres. Se eksempler under.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Eksempel (depseudo)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"ledstill/"</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"ledstill"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">depseudo</span><span class="kw">:</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"fnr"</span><span class="kw">,</span><span class="at"> </span><span class="st">"fnr_naa"</span><span class="kw">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="automation/shared-data/mitt-dapla-team-prod/ledstill/config.yaml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shared_bucket</span><span class="kw">:</span><span class="at"> </span><span class="st">"delomatentest"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source_folder_prefix</span><span class="kw">:</span><span class="at"> </span><span class="st">"ledstill/"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">destination_folder</span><span class="kw">:</span><span class="at"> </span><span class="st">"ledstill"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">memory_size</span><span class="kw">:</span><span class="at"> </span><span class="dv">6</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">depseudo</span><span class="kw">:</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">columns</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"fnr"</span><span class="kw">,</span><span class="at"> </span><span class="st">"fnr_naa"</span><span class="kw">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Her depseudonymiseres <code>fnr</code> og <code>fnr_naa</code> kolonnene med de samme algoritmene og parameterene som de ble pseudonymisert med. Denne informasjonen blir hentet fra datadoc metadataen til variablene.</p>
+<p>Her depseudonymiseres <code>fnr</code> og <code>fnr_naa</code> kolonnene med de samme algoritmene og parameterene som de ble pseudonymisert med.</p>
+<p>Denne informasjonen blir hentet fra datadoc metadataen til variablene.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
-<section id="feilmeldinger" class="level2">
-<h2 class="anchored" data-anchor-id="feilmeldinger">Feilmeldinger</h2>
-<p>Konfigurasjonsfilen valideres automatisk når du oppretter en pull request i GitHub. Hvis noe er feil får du en tydelig feilmelding: <img src="../images/delomaten_error.png" class="img-fluid" alt="Delomaten test feil"></p>
-<p>Eksempel på feilmelding i workflow <img src="../images/delomaten_error_msg.png" class="img-fluid" alt="Delomaten feilmelding"></p>
+</section>
+<section id="rulle-ut-tjenesten" class="level3">
+<h3 class="anchored" data-anchor-id="rulle-ut-tjenesten">Rulle ut tjenesten</h3>
+<p>For å rulle ut tjenesten gjør du følgende;</p>
+<ol type="1">
+<li><em>Push branchen</em> til GitHub og opprette en <em>pull request</em>.</li>
+<li><em>Pull request</em> må godkjennes av en <strong>data-admins</strong> på teamet.</li>
+</ol>
+<div class="grid">
+<div class="g-col-4">
+<ol start="3" type="1">
+<li>Når <em>pull request</em> er godkjent så sjekker du om alle tester, planer og utrullinger var vellykket, slik som vist i <a href="#fig-passing-checks" class="quarto-xref">Figur&nbsp;2</a>.</li>
+<li>Hvis alt er vellykket så kan du <em>merge</em> branchen inn i <code>main</code>-branchen.</li>
+</ol>
+</div>
+<div class="g-col-8">
+<div id="fig-passing-checks" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Suksessfulle tester på GitHub">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-passing-checks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="../images/checks_passed.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figur&nbsp;2: Suksessfulle tester på GitHub"><img src="../images/checks_passed.png" class="img-fluid figure-img" alt="Suksessfulle tester på GitHub"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-passing-checks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;2: Suksessfulle tester på GitHub
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Etter at du har <em>merget</em> inn i <em>main</em> kan du følge med på utrullingen under <em>Actions</em>-fanen i repoet. Når den siste jobben lyser grønt er kildomaten rullet ut og klar til bruk.</p>
+</section>
+<section id="test-tjenesten" class="level3">
+<h3 class="anchored" data-anchor-id="test-tjenesten">Test tjenesten</h3>
+<p>Siden Delomaten er utformet på den måten at det delende teamet ikke har tilgang til dataene som deles, så må testing koordineres med et av teamene som skal konsumere dataene. Dette kan gjøres på følgende måte:</p>
+<ol type="1">
+<li>Ta kontakt med ett av teamet som skal konsumere dataene som deles med Delomaten.</li>
+<li>Trigg Delomaten manuelt, eller legg en fil på filstien som Delomaten er konfigurert til å prosessere.</li>
+<li>Det delende teamet kan inspisere metadataene som genereres av Delomaten og monitorere logger.<br>
+</li>
+<li>Diskuter datakvaliteten med det konsumerende teamet.</li>
+</ol>
+<p>Når kvaliteten er tilfrestillende kan man dele alle filer som skal deles ved at de flyttes over til den aktuelle mappen. HVis det allerede ligger data der kan man trigge disse manuelt først.</p>
+</section>
+<section id="metadata" class="level3">
+<h3 class="anchored" data-anchor-id="metadata">Metadata</h3>
+<p>Delomaten krever at datasett som deles er dokumentert i <a href="../statistikkere/datadoc-model.html">Datadoc</a>. Når en fil prosesseres av Delomaten og innholdet i datasettet endres, så oppdaterer Delomaten dokumentasjonen og skriver den sammen med filen til delt-bøtta. Det konsumerende teamet kan derfor være sikre på at dataene fortsatt er riktig dokumentert.</p>
+<p>I tillegg til metdata så produseres det metrikker fra prosesseringen som både det delende og det konsumerende teamet får tilgang til. Det konsumerende får tilgang til en fil i delt-bøtta med samme navn som filen som deles, men den har suffix’et <code>__METRICS.json</code>. Denne filen kan f.eks. se slik ut:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'fnr'</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">'logs'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="dv">999999</span><span class="er">*****'</span><span class="ot">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">XX'</span><span class="ot">,</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">X8b7k2*'</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="er">'metrics'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MAPPED_SID'</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MISSING_SID'</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Det delende teamet kan få tilgang til denne informasjonen fra loggene til Delomaten-jobben (se neste kapittel).</p>
+</section>
+<section id="monitorering-og-logging" class="level3">
+<h3 class="anchored" data-anchor-id="monitorering-og-logging">Monitorering og logging</h3>
+<p>Når en jobb i Delomaten er satt opp og rullet ut kan tjenesten monitoreres i Google Cloud Console (GCC) ved å gjøre følgende:</p>
+<ol type="1">
+<li><a href="https://console.cloud.google.com/">Logg deg inn</a> med SSB-bruker på GCC.</li>
+<li>Velg standardprosjektet i prosjektvelgeren<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
+<li>Søk opp <strong>Cloud Run</strong> i søkefeltet på toppen av siden og gå inn på siden.</li>
+<li>Velg <strong>Worker Pools</strong> i menyen til venstre.</li>
+</ol>
+<p>På siden til <strong>Cloud Run Worker Pools</strong> vil du se en oversikt over alle kilder teamet har kjørende i kildomaten. De har formen <code>shared-&lt;kildenavn&gt;-processor</code>. I eksempelet med team <strong>dapla-example</strong> tidligere, vil man da se en kilde som heter <code>shared-altinn-processor</code>, siden mappen de opprettet under <code>automation/shared-data/dapla-example-prod/</code> i IaC-repoet heter <code>altinn</code>.</p>
+<p>Trykker man seg inn på hver enkelt jobb vil man kunne monitorere aktiviteten i Delomaten, og man kan trykke seg videre for å se loggene.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Sjekke logger
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det er anbefalt å se på Delomaten-loggene i Logs Explorer. Det kan man enkelt gjøre ved å trykke på “View in Logs Explorer” som vist på bildet under:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/kildomaten-logger.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Åpne Delomaten-loggene i Logs Explorer"><img src="../images/kildomaten-logger.png" class="img-fluid figure-img" style="width:100.0%" alt="Bilde som viser hvordan man åpner Logs Explorer"></a></p>
+<figcaption>Åpne Delomaten-loggene i Logs Explorer</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="skalering" class="level3">
+<h3 class="anchored" data-anchor-id="skalering">Skalering</h3>
+<p>Delomaten er satt opp for å kunne prosessere hver kilde i opptil 100 parallelle instanser samtidig. <a href="https://ssb.pureservice.com/#/categories/14/new">Ta kontakt med Kundeservice</a> hvis man opplever problemer med kapasiteten til Delomaten.</p>
+</section>
+<section id="varsling-på-e-post" class="level3">
+<h3 class="anchored" data-anchor-id="varsling-på-e-post">Varsling på e-post</h3>
+<p>Delomaten tilbyr e-postvarsling til teamet når tjenesten feiler. Opprett en Kundeservice-sak for å få satt opp e-postvarsling for teamet ditt.</p>
+<p>Varslene sendes kun dersom det oppstår en feilmelding under prosesseringen.</p>
+</section>
+<section id="trigge-kilde-manuelt" class="level3">
+<h3 class="anchored" data-anchor-id="trigge-kilde-manuelt">Trigge kilde manuelt</h3>
+<p>Delomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. Men noen ganger er det nødvendig å trigge kjøring av filer for en gitt kilde på nytt. Dette kan gjøres med en funksjon i Python-pakken <a href="https://pypi.org/project/dapla-toolbelt-automation/">dapla-toolbelt-automation</a>.</p>
+<p>Før du kan gjøre dette trenger du følgende informasjon:</p>
+<ol type="1">
+<li><strong>project-id</strong> for <em>standardprosjektet</em>. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>.</li>
+<li><strong>folder_prefix</strong> er mappen i produktbøtta. Man vil da kjøre Delomaten-scriptet for hver fil i denne mappen.</li>
+<li><strong>source_name</strong> er navnet på <em>jobben</em>, og vil bestemme hvilket Delomaten-script man bruker for å prosessere filene fra <em>punkt 2</em>. Det vil tilsvare mappenavnene under mappen <code>automation/shared-data/&lt;team-navn&gt;-prod/</code> i IaC-repoet for teamet.</li>
+</ol>
+<p>Hvis man under <strong>folder_prefix</strong> legger inn en hel filsti med filnavn og filending, så trigges Delomaten kun på denne ene fila.</p>
+<p>Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle filer for jobben <code>altinn</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_toolbelt_automation <span class="im">import</span> trigger_shared_data_processing</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>folder_prefix <span class="op">=</span> <span class="st">"ledstill/altinn/ra0678"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>trigger_shared_data_processing(project_id, source_name, folder_prefix)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en jobb:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_toolbelt_automation <span class="im">import</span> trigger_shared_data_processing</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>project_id <span class="op">=</span> <span class="st">"dapla-example-p"</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>source_name <span class="op">=</span> <span class="st">"altinn"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>file_paths <span class="op">=</span> [</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data1.parquet'</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data2.parquet'</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'ledstill/altin/ra0678/data3.parquet'</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> file_paths:</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    trigger_shared_data_processing(project_id, source_name, <span class="bu">file</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="tilgangsstyring" class="level3">
+<h3 class="anchored" data-anchor-id="tilgangsstyring">Tilgangsstyring</h3>
+<p>Teamet som deler data kan gi tilgang til andre team på lik måte som med standard delt-bøtter. Les mer om tilgangsstyring <a href="../statistikkere/deling-av-data.html#tilgangsstyring">her</a>.</p>
+</section>
+</section>
+<section id="vedlikehold" class="level2">
+<h2 class="anchored" data-anchor-id="vedlikehold">Vedlikehold</h2>
+<p>Når tjenesten er rullet ut så vil den kjøre automatisk på alle filer som dukker opp i den oppgitte filstien. Etter hvert vil det være behov for å endre filstier som skal trigge tjenesten, eller prosessere alle filer på nytt. I denne delen forklarer vi hvordan du går frem for å gjøre dette.</p>
+<section id="endre-config.yaml" class="level3">
+<h3 class="anchored" data-anchor-id="endre-config.yaml">Endre config.yaml</h3>
+<p>Alle på teamet kan gjøre endringer i <code>config.yaml</code>, men det er <strong>data-admins</strong> som må godkjenne endringene før de blir rullet ut. For å endre <code>config.yaml</code> gjør du følgende:</p>
+<ol type="1">
+<li>Klon repoet.</li>
+<li>Gjør endringene du ønsker i en <em>branch</em>.</li>
+<li>Push opp endringene til GitHub og opprett en <em>pull request</em>.</li>
+<li>Få en data-admins på teamet til å godkjenne endringene.</li>
+<li>Når endringene er godkjent så kan du <em>merge</em> inn i <code>main</code>-branchen.</li>
+</ol>
+<p>En endring i config.yaml krever at tjenesten rulles ut på nytt og tar derfor litt mer tid enn en endring i Python-skriptet.</p>
+</section>
+<section id="metadata-1" class="level3">
+<h3 class="anchored" data-anchor-id="metadata-1">Metadata</h3>
+<p>For å hindre dobbeltprosessering og forbedre ytelse bruker Delomaten Cloud Storage sin innebygde metadatafunksjonalitet for å sette noen markører på kildedatafilene. Disse metadatane kan du hente ut f.eks. via dette scriptet:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sjekk-metadata.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="sjekk-metadata.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>team <span class="op">=</span> <span class="st">"dapla-example"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>env <span class="op">=</span> <span class="st">"prod"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>filename <span class="op">=</span> <span class="st">"my-folder/my-file.parquet"</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> client.bucket(<span class="ss">f"ssb-</span><span class="sc">{</span>team<span class="sc">}</span><span class="ss">-data-kilde-</span><span class="sc">{</span>env<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>blob <span class="op">=</span> bucket.get_blob(filename)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(blob.metadata)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Et eksempel på hvordan denne metadataen er som følger:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source-my-source-processor-generation</span><span class="kw">:</span><span class="at"> </span><span class="dv">2309419879432</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source-my-source-processor-status</span><span class="kw">:</span><span class="at"> done</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Status</strong>-feltet forteller deg om filen er ferdigprosessert, under arbeid eller om prosesseringen feilet. Verdien for dette feltet vil da være, henholdsvis, <code>done</code>, <code>processing</code> eller <code>failed</code>. Merk at filer som er markert som <code>failed</code> fremdeles kan bli plukket opp igjen, siden Kildomaten vil forsøke å prosessere filen 10 ganger før den gir opp.</p>
+<p><strong>Generation</strong>-feltet sier akkurat hvilken utgave av filen <strong>status</strong>-feltet gjelder. Dette feltet er nødvendig ettersom filens metadata ikke blir slettet når en ny utgave blir lastet opp, og Delomaten må holde styr på hva den faktisk har prosessert. Du kan sjekke at dette er den nåværende utgaven av filen ved å sammenligne metadatafeltets verdi med filens <strong>generation</strong>-felt. Hvis vi utvider eksempelet ovenfor:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sjekk-metadata.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="sjekk-metadata.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>metadata_generation <span class="op">=</span> <span class="bu">int</span>(blob.metadata[<span class="st">"source-my-source-processor-generation"</span>])</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(metadata_generation <span class="op">==</span> blob.generation)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p><em>Et Infrastructure-as-Code</em> (IaC)-repo er et GitHub-repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub med navnet <teamnavn>-iac under <a href="https://github.com/orgs/statisticsnorway/repositories">statisticsnorway</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></teamnavn></p></li>
+<li id="fn2"><p>Standardprosjektet har navnestrukturen <code>&lt;teamnavn&gt;-p</code><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
