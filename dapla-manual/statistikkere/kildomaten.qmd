@@ -1,6 +1,6 @@
 ---
 title: Kildomaten
-date-modified: 10/14/2025
+date-modified: 11/06/2025
 lightbox: true
 ---
 
@@ -579,3 +579,39 @@ metadata_generation = int(blob.metadata["source-my-source-processor-generation"]
 print(metadata_generation == blob.generation)
 
 ```
+
+### Pakker og oppdateringer
+
+Det finnes et fast sett med pakker som er tilgjengelig i Kildomaten. Disse pakkene kan sees
+under `[tool.poetry.dependencies]`-blokken [her](https://github.com/statisticsnorway/dapla-automation-processor/blob/main/pyproject.toml).
+
+Dette repoet oppfører seg som et vanlig Poetry-prosjekt, og blir brukt som grunnlaget for alle Kildomaten-jobber.
+
+**Eksisterende Kildomaten-jobber blir oppdatert til den nyeste versjonen av dette prosjektet hvis**:
+
+* Man gjør endringer i en kilde i et IAC-repo (f.eks. filen (`process_source_data.py`))
+* Plattformutviklere ruller ut endringer som treffer alle Kildomater. Dette skjer typisk ved:
+    * Mindre pakkeoppdateringer som ikke har innvirkninger på scriptet.
+    * Viktige pakkeoppdateringer som fikser produksjonskritiske feil
+* Man kjører en manuell oppdatering av Kildomaten (se bilde under)
+
+##### Manuell oppdatering av Kildomaten
+
+::::: grid
+::: g-col-4
+1.  Trykk på **Actions**-fanen i et IAC-repo for teamet med en Kildomat
+
+2.  Velg **Kildomaten** på venstre side
+
+3.  Utvid **Run workflow**-menyen
+
+4. Trykk på den grønne **Run workflow**-knappen.
+
+Etter noen minutter vil da Kildomaten være oppdatert.
+:::
+
+::: g-col-8
+![*Trykk på bilde for å forstørre*](../images/kildomaten-manuell-oppdatering.png){#fig-GitHub-manuell-kildomat}
+:::
+:::::
+
