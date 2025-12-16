@@ -4,16 +4,9 @@ date-modified: 12/11/2025
 lightbox: true
 ---
 
-:::{.callout-warning}
-# Rammeverket under utvikling - koden endres!
-
-Editeringsrammeverket er for øyeblikket under utvikliing. Koden og opplegget for editering av dataframes vil endre seg i løpet av november/desember 2025. Vi anbefaler derfor at brukere *ikke* tar i bruk rammeverket for editering av dataframes enda. Et nyhetsinnlegg vil publiseres når opplegget for editering av dataframes ferdigstilles. 
-:::
-
-
 ## Hva er Editeringsrammeverket?
 
-Editeringsrammeverket er et Python-bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier. Rammeverket er utviklet i SSB.
+Editeringsrammeverket er et Python-bibliotek som hjelper deg med å lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier. Rammeverket er utviklet i SSB.
 
 Målet er at rammeverket skal være fleksibelt *og* gjenbrukbart. Det vi kaller *variabelvelgeren* er en sentral del av rammeverket. Kort fortalt koordinerer den skjermbildene i applikasjonen og sørger for at alt henger sammen.
 
@@ -69,42 +62,26 @@ Det er noen forutsetninger før du kan sette igang med rammeverket. Det viktigst
 Eksempelkoden viser hvordan man tar i bruk rammeverket for å editere en dataframe. Begynn med å installere pakken `ssb-dash-framework` og eventuelle andre pakker som mangler. Kodeeksemplene nedenfor er også tilgjengelig som en egen notebook: [editering_demo.ipynb](../notebooks/editeringsrammeverk/editering_demo.ipynb).
 
 ### Importer pakker
-```{.python } 
-from ssb_dash_framework import main_layout
-from ssb_dash_framework import app_setup
-from ssb_dash_framework import set_variables
-from ssb_dash_framework import EditingTableTab # Tab modulen
-from ssb_dash_framework import EditingTableWindow # Vindu modulen
-from ssb_dash_framework import apply_edits
-
-import pandas as pd
-import numpy as np
+```{.python }
 
 import os
-import uuid
-from datetime import datetime, timezone
-
-from fagfunksjoner import next_version_path
-```
-### Les inn data
-
-```{.python}
-filsti_data = '/buckets/produkt/editering/editering_test_v1.parquet'
-
-df = pd.read_parquet(
-    filsti_data
-)
-
-filsti_logg = '/buckets/produkt/editering/logg/prosessdata/prosess-editering_test_v1.jsonl'
-try: os.makedirs('/buckets/produkt/editering/logg/prosessdata') # lag mappe for logg 
-except: pass
+import pandas as pd
+from ssb_dash_framework import ParquetEditor
+from ssb_dash_framework import ParquetEditorChangelog
+from ssb_dash_framework import FigureDisplayWindow
+from ssb_dash_framework import apply_edits
+from ssb_dash_framework import app_setup
+from ssb_dash_framework import main_layout
+from ssb_dash_framework import set_variables
+import plotly.express as px
 ```
 
-### Klargjøre data
-Løsningen avhenger av at man har en *uuid*-kolonne i dataframen. Dette er for å forsikre at riktig rad blir endret.
+### Definer filstier og id_variabler
 
 ```{.python}
-if 'uuid' not in df.columns: df['uuid'] = [uuid.uuid4() for _ in range(len(df))]
+file_path_test = '/buckets/produkt/editering-eksempel/inndata/test_p2024_v1.parquet'
+file_path_test_edited = '/buckets/produkt/editering-eksempel/inndata/test_editert_p2024_v1.parquet'
+id_variabler = ['orgnr','aar']
 ```
 
 ### Kjør app
@@ -115,78 +92,41 @@ if 'uuid' not in df.columns: df['uuid'] = [uuid.uuid4() for _ in range(len(df))]
 port = 8070
 service_prefix = os.getenv("JUPYTERHUB_SERVICE_PREFIX", "/")
 domain = os.getenv("JUPYTERHUB_HTTP_REFERER", None)
-theme = "cosmo" # sjekk ut flere temaer: https://www.dash-bootstrap-components.com/docs/themes/explorer/ 
-app = app_setup(port, service_prefix, theme)
-app_timestamp = datetime.now()
+app = app_setup(port, service_prefix, "darkly", logging_level="debug")
 ```
 
 #### Velg variabler
 
 ```{.python}
-set_variables(["orgnr","aar"]) # Dette gjør at orgnr og aar er tilgjengelig i applikasjonen din.
-start_verdier = { # Valgfritt å ha med, men kan være praktisk for brukervennlighet. Puttes inn i main_layout() funksjonen.
-    "orgnr": "971526920", 
-    "aar": "2020"
-}
+set_variables(id_variabler)
 
-# Definer get_data funkjson
-def get_data(orgnr,aar):
-    return df[(df['orgnr'] == orgnr) & (df['aar']==aar)]
-    
-enhetstabell = EditingTableTab(
-    label="Eksempel 1: Fiktiv data",
-    inputs=["orgnr", "aar"], # evt. start_verdier.keys()
-    states=[],
-    get_data_func=get_data,
-    output="aar",
-    log_filepath = filsti_logg,
-    
+parquet_editor = ParquetEditor(
+    id_vars=id_variabler,
+    data_source=file_path_test,
+    output=id_variabler,
+    output_varselector_name=id_variabler,
+    statistics_name="editering_test"
 )
 
-tab_list = [
-    enhetstabell,
-]
+parquet_changelog = ParquetEditorChangelog(
+    id_vars=id_variabler,
+    file_path=file_path_test,
+)
+
+tab_list = [parquet_editor, parquet_changelog]
+
 window_list = []
 
-app.layout = main_layout(window_list, tab_list, default_values = start_verdier, )
+app.layout = main_layout(window_list, tab_list)
 
 if __name__ == "__main__":
-    app.run(
-        port=port,
-        jupyter_server_url=domain,
-        jupyter_mode="tab",
-    )
+    app.run(debug=False, port=port, jupyter_server_url=domain, jupyter_mode="tab")
 ```
 
-`EditingTableTab()` tar imot parameteret `justify_edit`. Standardverdien er True. Dersom man ikke vil gi begrunnelse når man editerer setter man den til False. Vær vi må spore endringer i dataene. Dette innebærer at vi må loggføre endringene - blant annet med begrunnelse for editering.
-
-#### Gjør endringer i datasettet
-
-
-### Påfør endringer fra logg
-
+#### Lagre endringene
 ```{.python}
-logg = pd.read_json(filsti_logg, lines = True)
-
-print(logg)
-
-df_editert = apply_edits(df, filsti_logg, app_timestamp)
-```
-
-### Sjekk hva som har blitt endret
-
-```{.python}
-
-pd.concat([df,df_editert]).drop_duplicates(keep=False)
-
-```
-
-### Lagre det editerte datasettet
-
-```{.python}
-filsti_data_neste_versjon = next_version_path(filsti_data)
-print(filsti_data_neste_versjon)
-df.to_parquet(filsti_data_neste_versjon)
+from ssb_dash_framework import export_from_parqueteditor
+export_from_parqueteditor(file_path_test, file_path_test_edited)
 ```
 
 ## Hvor er dokumentasjonen?
