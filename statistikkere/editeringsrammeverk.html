@@ -788,12 +788,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#hvordan-kan-jeg-ta-det-i-bruk" id="toc-hvordan-kan-jeg-ta-det-i-bruk" class="nav-link" data-scroll-target="#hvordan-kan-jeg-ta-det-i-bruk">Hvordan kan jeg ta det i bruk?</a>
   <ul class="collapse">
   <li><a href="#importer-pakker" id="toc-importer-pakker" class="nav-link" data-scroll-target="#importer-pakker">Importer pakker</a></li>
-  <li><a href="#les-inn-data" id="toc-les-inn-data" class="nav-link" data-scroll-target="#les-inn-data">Les inn data</a></li>
-  <li><a href="#klargjøre-data" id="toc-klargjøre-data" class="nav-link" data-scroll-target="#klargjøre-data">Klargjøre data</a></li>
+  <li><a href="#definer-filstier-og-id_variabler" id="toc-definer-filstier-og-id_variabler" class="nav-link" data-scroll-target="#definer-filstier-og-id_variabler">Definer filstier og id_variabler</a></li>
   <li><a href="#kjør-app" id="toc-kjør-app" class="nav-link" data-scroll-target="#kjør-app">Kjør app</a></li>
-  <li><a href="#påfør-endringer-fra-logg" id="toc-påfør-endringer-fra-logg" class="nav-link" data-scroll-target="#påfør-endringer-fra-logg">Påfør endringer fra logg</a></li>
-  <li><a href="#sjekk-hva-som-har-blitt-endret" id="toc-sjekk-hva-som-har-blitt-endret" class="nav-link" data-scroll-target="#sjekk-hva-som-har-blitt-endret">Sjekk hva som har blitt endret</a></li>
-  <li><a href="#lagre-det-editerte-datasettet" id="toc-lagre-det-editerte-datasettet" class="nav-link" data-scroll-target="#lagre-det-editerte-datasettet">Lagre det editerte datasettet</a></li>
+  <li><a href="#lagre-endringene" id="toc-lagre-endringene" class="nav-link" data-scroll-target="#lagre-endringene">Lagre endringene</a></li>
   </ul></li>
   <li><a href="#hvor-er-dokumentasjonen" id="toc-hvor-er-dokumentasjonen" class="nav-link" data-scroll-target="#hvor-er-dokumentasjonen">Hvor er dokumentasjonen?</a></li>
   <li><a href="#er-editeringsrammeverket-ferdig" id="toc-er-editeringsrammeverket-ferdig" class="nav-link" data-scroll-target="#er-editeringsrammeverket-ferdig">Er Editeringsrammeverket ferdig?</a></li>
@@ -829,22 +826,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Rammeverket under utvikling - koden endres!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Editeringsrammeverket er for øyeblikket under utvikliing. Koden og opplegget for editering av dataframes vil endre seg i løpet av november/desember 2025. Vi anbefaler derfor at brukere <em>ikke</em> tar i bruk rammeverket for editering av dataframes enda. Et nyhetsinnlegg vil publiseres når opplegget for editering av dataframes ferdigstilles.</p>
-</div>
-</div>
 <section id="hva-er-editeringsrammeverket" class="level2">
 <h2 class="anchored" data-anchor-id="hva-er-editeringsrammeverket">Hva er Editeringsrammeverket?</h2>
-<p>Editeringsrammeverket er et Python-bibliotek som hjelper deg lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier. Rammeverket er utviklet i SSB.</p>
+<p>Editeringsrammeverket er et Python-bibliotek som hjelper deg med å lage en editeringsapplikasjon for å se gjennom dataene dine og hvis nødvendig korrigere feilaktige verdier. Rammeverket er utviklet i SSB.</p>
 <p>Målet er at rammeverket skal være fleksibelt <em>og</em> gjenbrukbart. Det vi kaller <em>variabelvelgeren</em> er en sentral del av rammeverket. Kort fortalt koordinerer den skjermbildene i applikasjonen og sørger for at alt henger sammen.</p>
 <p>Rammeverket krever noe montering. Dette er grunnen til at det heter Editeringsrammeverk og ikke Editeringsløsning.</p>
 </section>
@@ -893,109 +877,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Eksempelkoden viser hvordan man tar i bruk rammeverket for å editere en dataframe. Begynn med å installere pakken <code>ssb-dash-framework</code> og eventuelle andre pakker som mangler. Kodeeksemplene nedenfor er også tilgjengelig som en egen notebook: <a href="../notebooks/editeringsrammeverk/editering_demo.html">editering_demo.ipynb</a>.</p>
 <section id="importer-pakker" class="level3">
 <h3 class="anchored" data-anchor-id="importer-pakker">Importer pakker</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> main_layout</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> app_setup</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> set_variables</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> EditingTableTab <span class="co"># Tab modulen</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> EditingTableWindow <span class="co"># Vindu modulen</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> ParquetEditor</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> ParquetEditorChangelog</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> FigureDisplayWindow</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> apply_edits</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> uuid</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timezone</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fagfunksjoner <span class="im">import</span> next_version_path</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> app_setup</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> main_layout</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> set_variables</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="les-inn-data" class="level3">
-<h3 class="anchored" data-anchor-id="les-inn-data">Les inn data</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>filsti_data <span class="op">=</span> <span class="st">'/buckets/produkt/editering/editering_test_v1.parquet'</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_parquet(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    filsti_data</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>filsti_logg <span class="op">=</span> <span class="st">'/buckets/produkt/editering/logg/prosessdata/prosess-editering_test_v1.jsonl'</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>: os.makedirs(<span class="st">'/buckets/produkt/editering/logg/prosessdata'</span>) <span class="co"># lag mappe for logg </span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span>: <span class="cf">pass</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="klargjøre-data" class="level3">
-<h3 class="anchored" data-anchor-id="klargjøre-data">Klargjøre data</h3>
-<p>Løsningen avhenger av at man har en <em>uuid</em>-kolonne i dataframen. Dette er for å forsikre at riktig rad blir endret.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'uuid'</span> <span class="kw">not</span> <span class="kw">in</span> df.columns: df[<span class="st">'uuid'</span>] <span class="op">=</span> [uuid.uuid4() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(df))]</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="definer-filstier-og-id_variabler" class="level3">
+<h3 class="anchored" data-anchor-id="definer-filstier-og-id_variabler">Definer filstier og id_variabler</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_path_test <span class="op">=</span> <span class="st">'/buckets/produkt/editering-eksempel/inndata/test_p2024_v1.parquet'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file_path_test_edited <span class="op">=</span> <span class="st">'/buckets/produkt/editering-eksempel/klargjorte-data/test_editert_p2024_v1.parquet'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>id_variabler <span class="op">=</span> [<span class="st">'orgnr'</span>,<span class="st">'aar'</span>]</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="kjør-app" class="level3">
 <h3 class="anchored" data-anchor-id="kjør-app">Kjør app</h3>
 <section id="app-setup" class="level4">
 <h4 class="anchored" data-anchor-id="app-setup">App setup</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>port <span class="op">=</span> <span class="dv">8070</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>service_prefix <span class="op">=</span> os.getenv(<span class="st">"JUPYTERHUB_SERVICE_PREFIX"</span>, <span class="st">"/"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>domain <span class="op">=</span> os.getenv(<span class="st">"JUPYTERHUB_HTTP_REFERER"</span>, <span class="va">None</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>theme <span class="op">=</span> <span class="st">"cosmo"</span> <span class="co"># sjekk ut flere temaer: https://www.dash-bootstrap-components.com/docs/themes/explorer/ </span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> app_setup(port, service_prefix, theme)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>app_timestamp <span class="op">=</span> datetime.now()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>port <span class="op">=</span> <span class="dv">8070</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>service_prefix <span class="op">=</span> os.getenv(<span class="st">"JUPYTERHUB_SERVICE_PREFIX"</span>, <span class="st">"/"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>domain <span class="op">=</span> os.getenv(<span class="st">"JUPYTERHUB_HTTP_REFERER"</span>, <span class="va">None</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> app_setup(port, service_prefix, <span class="st">"darkly"</span>, logging_level<span class="op">=</span><span class="st">"debug"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="velg-variabler" class="level4">
-<h4 class="anchored" data-anchor-id="velg-variabler">Velg variabler</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>set_variables([<span class="st">"orgnr"</span>,<span class="st">"aar"</span>]) <span class="co"># Dette gjør at orgnr og aar er tilgjengelig i applikasjonen din.</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>start_verdier <span class="op">=</span> { <span class="co"># Valgfritt å ha med, men kan være praktisk for brukervennlighet. Puttes inn i main_layout() funksjonen.</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"orgnr"</span>: <span class="st">"971526920"</span>, </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"aar"</span>: <span class="st">"2020"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Definer get_data funkjson</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_data(orgnr,aar):</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df[(df[<span class="st">'orgnr'</span>] <span class="op">==</span> orgnr) <span class="op">&amp;</span> (df[<span class="st">'aar'</span>]<span class="op">==</span>aar)]</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>enhetstabell <span class="op">=</span> EditingTableTab(</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    label<span class="op">=</span><span class="st">"Eksempel 1: Fiktiv data"</span>,</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>[<span class="st">"orgnr"</span>, <span class="st">"aar"</span>], <span class="co"># evt. start_verdier.keys()</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    states<span class="op">=</span>[],</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    get_data_func<span class="op">=</span>get_data,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span><span class="st">"aar"</span>,</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    log_filepath <span class="op">=</span> filsti_logg,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>tab_list <span class="op">=</span> [</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    enhetstabell,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>window_list <span class="op">=</span> []</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>app.layout <span class="op">=</span> main_layout(window_list, tab_list, default_values <span class="op">=</span> start_verdier, )</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    app.run(</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>        port<span class="op">=</span>port,</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        jupyter_server_url<span class="op">=</span>domain,</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>        jupyter_mode<span class="op">=</span><span class="st">"tab"</span>,</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>EditingTableTab()</code> tar imot parameteret <code>justify_edit</code>. Standardverdien er True. Dersom man ikke vil gi begrunnelse når man editerer setter man den til False. Vær vi må spore endringer i dataene. Dette innebærer at vi må loggføre endringene - blant annet med begrunnelse for editering.</p>
-</section>
-<section id="gjør-endringer-i-datasettet" class="level4">
-<h4 class="anchored" data-anchor-id="gjør-endringer-i-datasettet">Gjør endringer i datasettet</h4>
+<section id="definer-tabeller" class="level4">
+<h4 class="anchored" data-anchor-id="definer-tabeller">Definer tabeller</h4>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>set_variables(id_variabler)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>parquet_editor <span class="op">=</span> ParquetEditor(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>id_variabler,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    data_source<span class="op">=</span>file_path_test,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    output<span class="op">=</span>id_variabler,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    output_varselector_name<span class="op">=</span>id_variabler,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    statistics_name<span class="op">=</span><span class="st">"editering_test"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>parquet_changelog <span class="op">=</span> ParquetEditorChangelog(</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>id_variabler,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    file_path<span class="op">=</span>file_path_test,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>tab_list <span class="op">=</span> [parquet_editor, parquet_changelog]</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>window_list <span class="op">=</span> []</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>app.layout <span class="op">=</span> main_layout(window_list, tab_list)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    app.run(debug<span class="op">=</span><span class="va">False</span>, port<span class="op">=</span>port, jupyter_server_url<span class="op">=</span>domain, jupyter_mode<span class="op">=</span><span class="st">"tab"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
-<section id="påfør-endringer-fra-logg" class="level3">
-<h3 class="anchored" data-anchor-id="påfør-endringer-fra-logg">Påfør endringer fra logg</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>logg <span class="op">=</span> pd.read_json(filsti_logg, lines <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(logg)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>df_editert <span class="op">=</span> apply_edits(df, filsti_logg, app_timestamp)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="sjekk-hva-som-har-blitt-endret" class="level3">
-<h3 class="anchored" data-anchor-id="sjekk-hva-som-har-blitt-endret">Sjekk hva som har blitt endret</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pd.concat([df,df_editert]).drop_duplicates(keep<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="lagre-det-editerte-datasettet" class="level3">
-<h3 class="anchored" data-anchor-id="lagre-det-editerte-datasettet">Lagre det editerte datasettet</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>filsti_data_neste_versjon <span class="op">=</span> next_version_path(filsti_data)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filsti_data_neste_versjon)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>df.to_parquet(filsti_data_neste_versjon)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="lagre-endringene" class="level3">
+<h3 class="anchored" data-anchor-id="lagre-endringene">Lagre endringene</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_dash_framework <span class="im">import</span> export_from_parqueteditor</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>export_from_parqueteditor(file_path_test, file_path_test_edited)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="hvor-er-dokumentasjonen" class="level2">
