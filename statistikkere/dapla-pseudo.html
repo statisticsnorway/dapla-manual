@@ -1239,7 +1239,8 @@ Tabell&nbsp;2: Oversikt over algoritmer, nøkler og mapping som støttes på Dap
 <h4 class="anchored" data-anchor-id="datadoc">Datadoc</h4>
 <div class="columns">
 <div class="column" style="width:35%;">
-<p>Datadoc-metadata er på et format som er planlagt integrert i Datadoc<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> på et senere tidspunkt. I koden til høyre så printes metadataene fra et kall til <code>Pseudonomize</code> ved å skrive <code>print(result.datadoc)</code>. Da printer man objektet interaktivt i f.eks. Jupyterlab, noe som kun er mulig i test-miljøet. Skal man kjøre dette i Kildomaten så er det lettere å skrive filen direkte til riktig json-format med <code>to_file</code>-funksjonen. Da får får filen endelsen <code>__DOC</code> på slutten av filnavnet, og man slipper å tenke på om filen skrives med riktig formattering, osv..</p>
+<p>Datadoc-metadata er på et format som er integrert i Datadoc<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>. I koden til høyre så printes metadataene fra et kall til <code>Pseudonymize</code> ved å skrive <code>print(result.datadoc)</code>. Da printer man objektet interaktivt i f.eks. Jupyter. Merk at dette kun er mulig i test-miljøet</p>
+<p>Det er anbefalt å ta vare på Datadoc-metadataen i Kildomaten. Da er det lettere å skrive filen direkte i bøtta med <code>to_file()</code>-funksjonen, også i kodesnutten til høyre. <code>to_file("&lt;filsti&gt;.parquet")</code> skriver to filer til filstien - en fil med de pseudonymiserte dataene, og en Datadoc-fil med samme filnavn, men da med endelsen <code>__DOC</code> på slutten av filnavnet. Med denne funksjonen slipper man å tenke på om filen skrives med riktig formattering.</p>
 </div><div class="column" style="width:5%;">
 <!-- empty column to create gap -->
 </div><div class="column" style="width:60%;">
@@ -1247,24 +1248,24 @@ Tabell&nbsp;2: Oversikt over algoritmer, nøkler og mapping som støttes på Dap
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-17" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-17-1"><a href="#annotated-cell-17-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
-<span id="annotated-cell-17-2"><a href="#annotated-cell-17-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
-<span id="annotated-cell-17-3"><a href="#annotated-cell-17-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
-<span id="annotated-cell-17-4"><a href="#annotated-cell-17-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
-<span id="annotated-cell-17-5"><a href="#annotated-cell-17-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
-<span id="annotated-cell-17-6"><a href="#annotated-cell-17-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="annotated-cell-17-7"><a href="#annotated-cell-17-7" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-17-8" class="code-annotation-target"><a href="#annotated-cell-17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-17-9" class="code-annotation-target"><a href="#annotated-cell-17-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-18" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-18-1"><a href="#annotated-cell-18-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="annotated-cell-18-2"><a href="#annotated-cell-18-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
+<span id="annotated-cell-18-3"><a href="#annotated-cell-18-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
+<span id="annotated-cell-18-4"><a href="#annotated-cell-18-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
+<span id="annotated-cell-18-5"><a href="#annotated-cell-18-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
+<span id="annotated-cell-18-6"><a href="#annotated-cell-18-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-18-7"><a href="#annotated-cell-18-7" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-18-8" class="code-annotation-target"><a href="#annotated-cell-18-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-18-9" class="code-annotation-target"><a href="#annotated-cell-18-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-17" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
+<span data-code-cell="annotated-cell-18" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
 </dd>
-<dt data-target-cell="annotated-cell-17" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-18" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="9" data-code-annotation="2">Skriver metadata direkte til bøtte.</span>
+<span data-code-cell="annotated-cell-18" data-code-lines="9" data-code-annotation="2">Skriver data og metadata direkte til bøtte.</span>
 </dd>
 </dl>
 </div>
@@ -1275,38 +1276,50 @@ Tabell&nbsp;2: Oversikt over algoritmer, nøkler og mapping som støttes på Dap
 <div class="code-with-filename-file">
 <pre><strong>Datadoc</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Datadoc"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.0.1"</span><span class="fu">,</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"datadoc"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"pseudonymization"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>    <span class="dt">"document_version"</span><span class="fu">:</span> <span class="st">"0.1.0"</span><span class="fu">,</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a>    <span class="dt">"pseudo_dataset"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>    <span class="dt">"pseudo_variables"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a>      <span class="fu">{</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a>        <span class="dt">"short_name"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span>   </span>
-<span id="cb8-10"><a href="#cb8-10"></a>        <span class="dt">"data_element_path"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a>        <span class="dt">"data_element_pattern"</span><span class="fu">:</span> <span class="st">"**"</span><span class="fu">,</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a>        <span class="dt">"stable_identifier_type"</span><span class="fu">:</span> <span class="st">"FREG_SNR"</span><span class="fu">,</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a>        <span class="dt">"stable_identifier_version"</span><span class="fu">:</span> <span class="st">"2023-08-31"</span><span class="fu">,</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a>        <span class="dt">"encryption_algorithm"</span><span class="fu">:</span> <span class="st">"TINK-FPE"</span><span class="fu">,</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a>        <span class="dt">"encryption_key_reference"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span><span class="fu">,</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a>        <span class="dt">"encryption_algorithm_parameters"</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a>          <span class="fu">{</span></span>
-<span id="cb8-18"><a href="#cb8-18"></a>            <span class="dt">"keyId"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span></span>
-<span id="cb8-19"><a href="#cb8-19"></a>          <span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb8-20"><a href="#cb8-20"></a>          <span class="fu">{</span></span>
-<span id="cb8-21"><a href="#cb8-21"></a>            <span class="dt">"strategy"</span><span class="fu">:</span> <span class="st">"SKIP"</span></span>
-<span id="cb8-22"><a href="#cb8-22"></a>          <span class="fu">}</span></span>
-<span id="cb8-23"><a href="#cb8-23"></a>        <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb8-24"><a href="#cb8-24"></a>        <span class="dt">"source_variable"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
-<span id="cb8-25"><a href="#cb8-25"></a>        <span class="dt">"source_variable_datatype"</span><span class="fu">:</span> <span class="kw">null</span></span>
-<span id="cb8-26"><a href="#cb8-26"></a>      <span class="fu">}</span></span>
-<span id="cb8-27"><a href="#cb8-27"></a>    <span class="ot">]</span></span>
-<span id="cb8-28"><a href="#cb8-28"></a>  <span class="fu">}</span></span>
-<span id="cb8-29"><a href="#cb8-29"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Datadoc"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="ot">[</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">{</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="dt">"short_name"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="dt">"data_element_path"</span><span class="fu">:</span> <span class="st">"fnr"</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="dt">"pseudonymization"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>      <span class="dt">"stable_identifier_type"</span><span class="fu">:</span> <span class="st">"FREG_SNR"</span><span class="fu">,</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>      <span class="dt">"stable_identifier_version"</span><span class="fu">:</span> <span class="st">"2023-08-31"</span><span class="fu">,</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>      <span class="dt">"encryption_algorithm"</span><span class="fu">:</span> <span class="st">"TINK-FPE"</span><span class="fu">,</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>      <span class="dt">"encryption_key_reference"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span><span class="fu">,</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>      <span class="dt">"encryption_algorithm_parameters"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>        <span class="fu">{</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>          <span class="dt">"keyId"</span><span class="fu">:</span> <span class="st">"papis-common-key-1"</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>        <span class="fu">{</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a>          <span class="dt">"snapshotDate"</span><span class="fu">:</span> <span class="st">"2023-08-31"</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>        <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>        <span class="fu">{</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>          <span class="dt">"strategy"</span><span class="fu">:</span> <span class="st">"skip"</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>        <span class="fu">}</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>      <span class="ot">]</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a>    <span class="fu">}</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a>  <span class="fu">}</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="ot">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Av metadatene kan vi se fra <code>pseudo_variables</code> at det bare var feltet <code>fnr</code> som ble pseudonymisert. Vi ser også av <code>stable_identifier_type</code> ser vi at <code>fnr</code> ble oversatt til <code>snr</code>, og at versjonen av SNR-katalogen var fra <code>2023-08-31</code>. <code>encryption_algorithm</code> angir at det var det var den formatpreserverende algoritmen <code>TINK-FPE</code> som ble benyttet. <code>keyID: "papis-common-key-1"</code> angir hvilken nøkkel-id som ble benyttet. <code>strategy: "SKIP"</code> refererer til at den format-preserverende algoritmen skal “hoppe over” ugyldige karakterer og la de være som de er.</p>
+<p>Datadoc-metadataen er en liste av pseudonymiserte variabler. Av metadatene kan vi i dette tilfellet se at det kun er ett element i listen - med andre ord at det bare var feltet <code>fnr</code> som ble pseudonymisert. Vi ser også av <code>stable_identifier_type</code> at <code>fnr</code> ble oversatt til <code>snr</code>, og at versjonen av SNR-katalogen var fra <code>2023-08-31</code>. <code>encryption_algorithm</code> angir at det var det var den formatpreserverende algoritmen <code>TINK-FPE</code> som ble benyttet. <code>keyID: "papis-common-key-1"</code> angir hvilken nøkkel-id som ble benyttet. <code>strategy: "SKIP"</code> refererer til at den format-preserverende algoritmen skal “hoppe over” ugyldige karakterer og la de være som de er.</p>
 <p>Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data.</p>
+<section id="legge-til-pseudonymiseringsmetadata-for-allerede-eksisterende-datadoc-metadata" class="level5">
+<h5 class="anchored" data-anchor-id="legge-til-pseudonymiseringsmetadata-for-allerede-eksisterende-datadoc-metadata">Legge til pseudonymiseringsmetadata for allerede eksisterende Datadoc-metadata</h5>
+<p>Hvis man allerede har Datadoc-metadata for et datasett, og man ønsker å legge til pseudonymiseringsmetadata, kan man gjøre dette ved å bruke <code>with_metadata()</code>-metoden.</p>
+<p><code>with_metadata(datadoc_metadata)</code> tar et <code>Datadoc</code>-objekt som et argument. Datadoc-objektet for et datasett fås ved hjelp av <code>dapla-toolbelt-metadata</code>. Les mer om pakken <a href="../statistikkere/datadoc-toolbelt.html">her</a>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Datadoc-metadata</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="Datadoc-metadata"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_pandas(df)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    .with_metadata(datadoc_obj)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)                      </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()         </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    .run()                              </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://somebucket/somefile.parquet"</span>) <span class="co"># NB: Husk å skrive tilbake data og metadata!</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 <section id="metadata-1" class="level4">
 <h4 class="anchored" data-anchor-id="metadata-1">Metadata</h4>
@@ -1315,19 +1328,19 @@ Tabell&nbsp;2: Oversikt over algoritmer, nøkler og mapping som støttes på Dap
 <div class="code-with-filename-file">
 <pre><strong>Metadata</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="Metadata"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'fnr'</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">'logs'</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="dv">999999</span><span class="er">*****'</span><span class="ot">,</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">XX'</span><span class="ot">,</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">X8b7k2*'</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="er">'metrics'</span><span class="fu">:</span> <span class="ot">[</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MAPPED_SID'</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">}</span><span class="ot">,</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MISSING_SID'</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="Metadata"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">'fnr'</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="er">'logs'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="dv">999999</span><span class="er">*****'</span><span class="ot">,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">XX'</span><span class="ot">,</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="er">'No</span> <span class="er">SID-mapping</span> <span class="er">found</span> <span class="er">for</span> <span class="er">fnr</span> <span class="er">X8b7k2*'</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="er">'metrics'</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MAPPED_SID'</span><span class="fu">:</span> <span class="dv">10</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span><span class="er">'MISSING_SID'</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">}</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>I Kildomaten kan det vært nyttig å printe denne informasjonen til loggene. Av eksempelet over ser vi at verdier som er over 6 karakterer lange blir maskert.</p>
 </section>
@@ -1364,7 +1377,7 @@ Tabell&nbsp;2: Oversikt over algoritmer, nøkler og mapping som støttes på Dap
 <li id="fn6"><p>SNR-katalogen eies og tilbys av Team Register på Dapla.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn7"><p>Papis var et prosjekt med fokus på bakkesystemene i SSB som skulle bringe SSBs behandling av personopplysninger, som brukes i statistikkproduksjon, i samsvar med GDPR gjennom en enhetlig pseudonymiseringsløsning.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>Generelt sett er det ikke å anbefale å benytte denne nøkkelen på annen informasjon enn fødselsnummer. Grunnen er at den er svakere enn andre algoritmer, der blant annet tekst som er kortere enn 4 karakter lang ikke blir pseudonymisert.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>Datadoc er det nye systemet for dokumentasjon av datasett i SSB. Systemet er fortsatt under utvikling.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Datadoc er det nye systemet for dokumentasjon av datasett i SSB.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
