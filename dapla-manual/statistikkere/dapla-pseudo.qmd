@@ -1,6 +1,6 @@
 ---
 title: dapla-toolbelt-pseudo
-date-modified: 01/06/2026
+date-modified: 01/28/2025
 lightbox: true
 ---
 
@@ -305,6 +305,25 @@ Under ser man hvilken informasjon som genereres fra pseudonymiseringen.
 Datadoc-metadataen er en liste av pseudonymiserte variabler. Av metadatene kan vi i dette tilfellet se at det kun er ett element i listen - med andre ord at det bare var feltet `fnr` som ble pseudonymisert. Vi ser også av `stable_identifier_type` at `fnr` ble oversatt til `snr`, og at versjonen av SNR-katalogen var fra `2023-08-31`. `encryption_algorithm` angir at det var det var den formatpreserverende algoritmen `TINK-FPE` som ble benyttet. `keyID: "papis-common-key-1"` angir hvilken nøkkel-id som ble benyttet. `strategy: "SKIP"` refererer til at den format-preserverende algoritmen skal "hoppe over" ugyldige karakterer og la de være som de er. 
 
 Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data.
+
+##### Legge til pseudonymiseringsmetadata for allerede eksisterende Datadoc-metadata
+
+Hvis man allerede har Datadoc-metadata for et datasett, og man ønsker å legge til
+pseudonymiseringsmetadata, kan man gjøre dette ved å bruke `with_metadata()`-metoden.
+
+`with_metadata(datadoc_metadata)` tar et `Datadoc`-objekt som et argument. Datadoc-objektet
+for et datasett fås ved hjelp av `dapla-toolbelt-metadata`. Les mer om pakken [her](datadoc-toolbelt.qmd). 
+
+```{.python filename="Datadoc-metadata"}
+result = (
+    Pseudonymize.from_pandas(df)
+    .with_metadata(datadoc_obj)
+    .on_fields("fnr")                      
+    .with_stable_id()         
+    .run()                              
+)
+result.to_file("gs://somebucket/somefile.parquet") # NB: Husk å skrive tilbake data og metadata!
+```
 
 #### Metadata
 
