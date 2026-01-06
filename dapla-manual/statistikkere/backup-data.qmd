@@ -1,6 +1,6 @@
 ---
 title: Backup
-date-modified: "2025-10-17"
+date-modified: "2026-01-06"
 lightbox: true
 ---
 
@@ -79,69 +79,63 @@ I produktbøtta blir *non-current* versjoner slettet hvis det er mer enn **2** n
 **Delt-bøtter**  
 I delt-bøtter blir *non-current* versjoner slettet hvis det er mer enn **2** nyere versjoner.
 
-For å gjennopprette en *non-current* eller *soft-deleted* versjon så benytte funksjonalitet fra [dapla-toolbelt](https://pypi.org/project/dapla-toolbelt/). For å gjenskape en versjon så må man først bruke funksjonen `get_versions()` liste ut ID-en til versjonen:
+### Gjenoppretting av filer manuelt
 
-```{.python filename="Notebook"}
-from dapla import FileClient
+Det er mulig å gjenopprette tidligere versjoner og nylig slettede filer manuelt uten å kontakte kundeservice. Fremgangsmåten er:
 
-# Set bucket name and folder name(if any)
-bucket = "ssb-dapla-felles-data-produkt-prod" 
-folder = "restore"
-
-FileClient.get_versions(bucket, folder)
-```
-
-**Output**
-```
-[<Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835>,
- <Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499>,
- <Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818>,
- <Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930>]
-```
-
-Fra output over ser vi filen data1.parquet finnes i 2 versjoner. Vi kan undersøke den nærmere med følgende kode:
+1. Finn riktig generasjons-ID (versjon) for filen som skal gjenopprettes.
 
 ```{.python filename="notebook"}
-files = FileClient.get_versions("ssb-dapla-felles-data-produkt-prod", "restore/data1.parquet")
+from google.cloud import storage
+
+# Navn på databøtten og stien til filen som skal gjennopprettes
+bucket_name = "ssb-dapla-felles-data-produkt-prod"
+file_path = "restore/data2.parquet"
+
+client = storage.Client()
+bucket = client.get_bucket(bucket_name)
+source_file = bucket.blob(file_path)
+
+files = []
+if bucket.versioning_enabled:
+    files.extend(bucket.list_blobs(prefix=file_path, versions=True))
+files.extend(bucket.list_blobs(prefix=file_path, soft_deleted=True))
+
 
 for file in files:
-    print("Name          : ",file.name)
+    print("Name          : ", file.name)
     print("Generation Id : ", file.generation)
     print("Updated on    : ", file.updated)
     print("Deleted on    : ", file.time_deleted)
     print("------------------------------------------")
 ```
 
-**Output**  
-```
-Name          :  restore/data1.parquet
-Generation Id :  1718436304922143
-Updated on    :  2024-06-15 07:25:04.928000+00:00
-Deleted on    :  2024-06-24 11:10:10.807000+00:00
-------------------------------------------
-Name          :  restore/data1.parquet
-Generation Id :  1719227410801992
-Updated on    :  2024-06-24 11:10:10.807000+00:00
-Deleted on    :  None
-------------------------------------------
-```
 
-Av output over ser vi at det er en fil som som har en verdi i `Deleted on` feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke `restore_version()`og referere til Generation ID:
+2. Referer til generasjons-ID og gjenopprett filen. 
 
+Hvis filen er slettet bruker vi `restore_blob` funksjonen:
 ```{.python filename="notebook"}
-FileClient.restore_version( source_bucket_name="ssb-dapla-kildomaten-data-delt-test",
-                            source_file_name="restore/data3.parquet",
-                            source_generation_id=1718436304922143,
-                            new_name="" (optional)
-                           )
-```
-Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt *non-current*. Ved gjenoppretting av *non-current*-versjoner så kan man også spesifisere nytt navn på filen med parameteret `new_name=` i `restore_version()`-funksjonen. 
+# Generasjons-ID på filen/versjonen som skal gjenopprettes
+generation_id = 1717762673242818
 
+bucket.restore_blob(object_name=file_path, generation=generation_id)
+```
+
+Hvis vi ønsker å gjenopprette en tidligere versjon av en fil som ikke er slettet, bruker vi `copy_blob` funksjonen. Her kan vi også spesifisere nytt navn på filen med parameteret `new_name`:
+```{.python filename="notebook"}
+# Nytt navn på filen
+new_name = "restore/data2_restored.parquet"
+
+# Generasjons-ID på filen/versjonen som skal gjenopprettes
+generation_id = 1717762673242818
+
+bucket.copy_blob(blob=source_file, destination_bucket=bucket, source_generation=generation_id, new_name=new_name)
+```
 
 ::: {.callout-note}
 ## Hvorfor kan jeg ikke bruke Google Cloud Console (GCC)?
 
-Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i @fig-gcc-versions. Men man har ikke tilgang til *Object details* og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.   
+Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i @fig-gcc-versions. Men man har ikke tilgang til *Object details* i GCC og kan derfor ikke hente ut ID-en til versjonen. Til dette må man bruke kode kjørt fra Dapla Lab.   
 
 ![Hvordan liste ut versjoner fra GCC.](../images/gcc-versions.png){fig-alt="Bilde av hvordan man velger versjoner i GCC." #fig-gcc-versions}
 
