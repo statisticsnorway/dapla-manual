@@ -243,9 +243,11 @@ De to typene av metadata returneres til brukeren i to forskjellige objekter.
 :::: {.columns}
 
 ::: {.column width="35%"}
-Datadoc-metadata er på et format som er planlagt integrert i Datadoc^[Datadoc er det nye systemet for dokumentasjon av datasett i SSB. Systemet er fortsatt under utvikling.] på et senere tidspunkt.
-I koden til høyre så printes metadataene fra et kall til `Pseudonomize` ved å skrive `print(result.datadoc)`. Da printer man objektet interaktivt i f.eks. Jupyterlab, noe som kun er mulig i test-miljøet. Skal man kjøre dette i Kildomaten så er det lettere å skrive filen direkte til riktig json-format med `to_file`-funksjonen. Da får får filen endelsen `__DOC` på slutten av filnavnet, og man slipper å tenke på om filen skrives med riktig formattering, osv..
- 
+Datadoc-metadata er på et format som er integrert i Datadoc^[Datadoc er det nye systemet for dokumentasjon av datasett i SSB.].
+I koden til høyre så printes metadataene fra et kall til `Pseudonymize` ved å skrive `print(result.datadoc)`. Da printer man objektet interaktivt i f.eks. Jupyter. Merk at dette kun er mulig i test-miljøet 
+
+Det er anbefalt å ta vare på Datadoc-metadataen i Kildomaten. Da er det lettere å skrive filen direkte i bøtta med `to_file()`-funksjonen, også i kodesnutten til høyre. `to_file("<filsti>.parquet")` skriver to filer til filstien - en fil med de pseudonymiserte dataene, og en Datadoc-fil med samme filnavn, men da med endelsen `__DOC` på slutten av filnavnet. Med denne funksjonen slipper man å tenke på om filen skrives med riktig formattering.
+
 :::
 
 ::: {.column width="5%"}
@@ -265,7 +267,7 @@ print(result.datadoc)           # <1>
 result.to_file("gs://bucket/test.parquet")  # <2>
 ```
 1. Printer metadata i en Notebook.
-2. Skriver metadata direkte til bøtte.
+2. Skriver data og metadata direkte til bøtte.
 :::
 
 ::::
@@ -275,38 +277,32 @@ Når man kjører pseudonymisering fra Kildomaten er det viktig å tenke på at f
 Under ser man hvilken informasjon som genereres fra pseudonymiseringen. 
 
 ```{.json filename=Datadoc code-line-numbers="true"}
-{
-  "document_version": "0.0.1",
-  "datadoc": null,
-  "pseudonymization": {
-    "document_version": "0.1.0",
-    "pseudo_dataset": null,
-    "pseudo_variables": [
-      {
-        "short_name": "fnr",   
-        "data_element_path": "fnr",
-        "data_element_pattern": "**",
-        "stable_identifier_type": "FREG_SNR",
-        "stable_identifier_version": "2023-08-31",
-        "encryption_algorithm": "TINK-FPE",
-        "encryption_key_reference": "papis-common-key-1",
-        "encryption_algorithm_parameters": [
-          {
-            "keyId": "papis-common-key-1"
-          },
-          {
-            "strategy": "SKIP"
-          }
-        ],
-        "source_variable": null,
-        "source_variable_datatype": null
-      }
-    ]
+[
+  {
+    "short_name": "fnr",
+    "data_element_path": "fnr",
+    "pseudonymization": {
+      "stable_identifier_type": "FREG_SNR",
+      "stable_identifier_version": "2023-08-31",
+      "encryption_algorithm": "TINK-FPE",
+      "encryption_key_reference": "papis-common-key-1",
+      "encryption_algorithm_parameters": [
+        {
+          "keyId": "papis-common-key-1"
+        },
+        {
+          "snapshotDate": "2023-08-31"
+        },
+        {
+          "strategy": "skip"
+        }
+      ]
+    }
   }
-}
+]
 ```
 
-Av metadatene kan vi se fra `pseudo_variables` at det bare var feltet `fnr` som ble pseudonymisert. Vi ser også av `stable_identifier_type` ser vi at `fnr` ble oversatt til `snr`, og at versjonen av SNR-katalogen var fra `2023-08-31`. `encryption_algorithm` angir at det var det var den formatpreserverende algoritmen `TINK-FPE` som ble benyttet. `keyID: "papis-common-key-1"` angir hvilken nøkkel-id som ble benyttet. `strategy: "SKIP"` refererer til at den format-preserverende algoritmen skal "hoppe over" ugyldige karakterer og la de være som de er. 
+Datadoc-metadataen er en liste av pseudonymiserte variabler. Av metadatene kan vi i dette tilfellet se at det kun er ett element i listen - med andre ord at det bare var feltet `fnr` som ble pseudonymisert. Vi ser også av `stable_identifier_type` at `fnr` ble oversatt til `snr`, og at versjonen av SNR-katalogen var fra `2023-08-31`. `encryption_algorithm` angir at det var det var den formatpreserverende algoritmen `TINK-FPE` som ble benyttet. `keyID: "papis-common-key-1"` angir hvilken nøkkel-id som ble benyttet. `strategy: "SKIP"` refererer til at den format-preserverende algoritmen skal "hoppe over" ugyldige karakterer og la de være som de er. 
 
 Denne informasjonen vil være svært nyttig i SSB hvis man senere skal kunne de-pseudonymisere eller re-pseudonymisere data.
 
