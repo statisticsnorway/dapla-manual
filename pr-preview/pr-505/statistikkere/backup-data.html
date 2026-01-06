@@ -795,7 +795,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#gjenoppretting-av-filer" id="toc-gjenoppretting-av-filer" class="nav-link" data-scroll-target="#gjenoppretting-av-filer">Gjenoppretting av filer</a></li>
   </ul></li>
-  <li><a href="#bevaringspolicy-i-gcs" id="toc-bevaringspolicy-i-gcs" class="nav-link" data-scroll-target="#bevaringspolicy-i-gcs">Bevaringspolicy i GCS</a></li>
+  <li><a href="#bevaringspolicy-i-gcs" id="toc-bevaringspolicy-i-gcs" class="nav-link" data-scroll-target="#bevaringspolicy-i-gcs">Bevaringspolicy i GCS</a>
+  <ul class="collapse">
+  <li><a href="#gjenoppretting-av-filer-manuelt" id="toc-gjenoppretting-av-filer-manuelt" class="nav-link" data-scroll-target="#gjenoppretting-av-filer-manuelt">Gjenoppretting av filer manuelt</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/backup-data.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/backup-data.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
@@ -816,7 +819,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 17, 2025</p>
+      <p class="date-modified">January 6, 2026</p>
     </div>
   </div>
     
@@ -911,61 +914,65 @@ I kildebøtta blir <em>non-current</em> versjoner slettet hvis det er mer enn <s
 I produktbøtta blir <em>non-current</em> versjoner slettet hvis det er mer enn <strong>2</strong> nyere versjoner.</p>
 <p><strong>Delt-bøtter</strong><br>
 I delt-bøtter blir <em>non-current</em> versjoner slettet hvis det er mer enn <strong>2</strong> nyere versjoner.</p>
-<p>For å gjennopprette en <em>non-current</em> eller <em>soft-deleted</em> versjon så benytte funksjonalitet fra <a href="https://pypi.org/project/dapla-toolbelt/">dapla-toolbelt</a>. For å gjenskape en versjon så må man først bruke funksjonen <code>get_versions()</code> liste ut ID-en til versjonen:</p>
+<section id="gjenoppretting-av-filer-manuelt" class="level3">
+<h3 class="anchored" data-anchor-id="gjenoppretting-av-filer-manuelt">Gjenoppretting av filer manuelt</h3>
+<p>Det er mulig å gjenopprette tidligere versjoner og nylig slettede filer manuelt uten å kontakte kundeservice. Fremgangsmåten er:</p>
+<ol type="1">
+<li>Finn riktig generasjons-ID (versjon) for filen som skal gjenopprettes.</li>
+</ol>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>Notebook</strong></pre>
+<pre><strong>notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla <span class="im">import</span> FileClient</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set bucket name and folder name(if any)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-prod"</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>folder <span class="op">=</span> <span class="st">"restore"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Navn på databøtten og stien til filen som skal gjennopprettes</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>bucket_name <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-prod"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">"restore/data2.parquet"</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>FileClient.get_versions(bucket, folder)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> storage.Client()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>bucket <span class="op">=</span> client.get_bucket(bucket_name)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>source_file <span class="op">=</span> bucket.blob(file_path)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> []</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> bucket.versioning_enabled:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    files.extend(bucket.list_blobs(prefix<span class="op">=</span>file_path, versions<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>files.extend(bucket.list_blobs(prefix<span class="op">=</span>file_path, soft_deleted<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files:</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Name          : "</span>, <span class="bu">file</span>.name)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Generation Id : "</span>, <span class="bu">file</span>.generation)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Updated on    : "</span>, <span class="bu">file</span>.updated)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Deleted on    : "</span>, <span class="bu">file</span>.time_deleted)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"------------------------------------------"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong>Output</strong></p>
-<pre><code>[&lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1717762669778835&gt;,
- &lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data1.parquet, 1718015249969499&gt;,
- &lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data2.parquet, 1717762673242818&gt;,
- &lt;Blob: ssb-dapla-felles-data-produkt-prod, restore/data3.parquet, 1717762677832930&gt;]</code></pre>
-<p>Fra output over ser vi filen data1.parquet finnes i 2 versjoner. Vi kan undersøke den nærmere med følgende kode:</p>
+<ol start="2" type="1">
+<li>Referer til generasjons-ID og gjenopprett filen.</li>
+</ol>
+<p>Hvis filen er slettet bruker vi <code>restore_blob</code> funksjonen:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> FileClient.get_versions(<span class="st">"ssb-dapla-felles-data-produkt-prod"</span>, <span class="st">"restore/data1.parquet"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files:</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Name          : "</span>,<span class="bu">file</span>.name)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Generation Id : "</span>, <span class="bu">file</span>.generation)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Updated on    : "</span>, <span class="bu">file</span>.updated)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Deleted on    : "</span>, <span class="bu">file</span>.time_deleted)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"------------------------------------------"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generasjons-ID på filen/versjonen som skal gjenopprettes</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>generation_id <span class="op">=</span> <span class="dv">1717762673242818</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bucket.restore_blob(object_name<span class="op">=</span>file_path, generation<span class="op">=</span>generation_id)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p><strong>Output</strong></p>
-<pre><code>Name          :  restore/data1.parquet
-Generation Id :  1718436304922143
-Updated on    :  2024-06-15 07:25:04.928000+00:00
-Deleted on    :  2024-06-24 11:10:10.807000+00:00
-------------------------------------------
-Name          :  restore/data1.parquet
-Generation Id :  1719227410801992
-Updated on    :  2024-06-24 11:10:10.807000+00:00
-Deleted on    :  None
-------------------------------------------</code></pre>
-<p>Av output over ser vi at det er en fil som som har en verdi i <code>Deleted on</code> feltet og som kan gjenskapes. Ønsker vi å gjenskape versjonen ved å bruke <code>restore_version()</code>og referere til Generation ID:</p>
+<p>Hvis vi ønsker å gjenopprette en tidligere versjon av en fil som ikke er slettet, bruker vi <code>copy_blob</code> funksjonen. Her kan vi også spesifisere nytt navn på filen med parameteret <code>new_name</code>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>FileClient.restore_version( source_bucket_name<span class="op">=</span><span class="st">"ssb-dapla-kildomaten-data-delt-test"</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                            source_file_name<span class="op">=</span><span class="st">"restore/data3.parquet"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                            source_generation_id<span class="op">=</span><span class="dv">1718436304922143</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                            new_name<span class="op">=</span><span class="st">""</span> (optional)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                           )</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nytt navn på filen</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>new_name <span class="op">=</span> <span class="st">"restore/data2_restored.parquet"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generasjons-ID på filen/versjonen som skal gjenopprettes</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>generation_id <span class="op">=</span> <span class="dv">1717762673242818</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>bucket.copy_blob(blob<span class="op">=</span>source_file, destination_bucket<span class="op">=</span>bucket, source_generation<span class="op">=</span>generation_id, new_name<span class="op">=</span>new_name)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Over har vi gjenopprettet en tidligere versjon av fil. Dette betyr at det nå er en ny Live-versjon av filen, og at den som tidligere var Live har blitt <em>non-current</em>. Ved gjenoppretting av <em>non-current</em>-versjoner så kan man også spesifisere nytt navn på filen med parameteret <code>new_name=</code> i <code>restore_version()</code>-funksjonen.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -976,7 +983,7 @@ Deleted on    :  None
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i <a href="#fig-gcc-versions" class="quarto-xref">Figur&nbsp;1</a>. Men man har ikke tilgang til <em>Object details</em> og kan derfor ikke hente ut ID-en til versjonen. Til dette må man benytte dapla-toolbelt fra Dapla Lab.</p>
+<p>Man kan liste ut Live, non-current og soft-deleted versjoner fra GCC, som vist i <a href="#fig-gcc-versions" class="quarto-xref">Figur&nbsp;1</a>. Men man har ikke tilgang til <em>Object details</em> i GCC og kan derfor ikke hente ut ID-en til versjonen. Til dette må man bruke kode kjørt fra Dapla Lab.</p>
 <div id="fig-gcc-versions" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bilde av hvordan man velger versjoner i GCC.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gcc-versions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -991,6 +998,7 @@ Figur&nbsp;1: Hvordan liste ut versjoner fra GCC.
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
