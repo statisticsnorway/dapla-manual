@@ -147,8 +147,13 @@ Bildet nedenfor viser eksempel på et skjema med en tilknyttet periode:
 : Periode metadata {#tbl-periode-meta .striped}
 :::
 
-### Kodeeksempel
-For å lage en ny periode, kan du bruke metoden `create_periode` i `SuvClient`.
+### Kodeeksempler
+
+Nedenfor finner du eksempler på hvordan du kan opprette og hente perioder ved hjelp av `SuvClient` i Python.
+
+#### Opprette en ny periode
+
+For å opprette **en ny periode**, bruk metoden `create_periode` i `SuvClient`.
 
 ```{.python filename="notebook"}
 client = SuvClient()
@@ -165,7 +170,11 @@ output = client.create_periode(
 print(output)
 ```
 
-For å hente ut perioder med tilhørende metadata i Python, kan du bruke metoden `get_perioder_by_skjema_id` i `SuvClient`. Sørg for at du oppgir riktig skjema_id.
+---
+
+#### Hente eksisterende perioder
+
+For å **hente ut eksisterende perioder** med tilhørende metadata i Python, bruke metoden `get_perioder_by_skjema_id`. Pass på at du oppgir riktig skjema_id.
 
 ```{.python filename="notebook"}
 client = SuvClient()
@@ -176,6 +185,26 @@ output = client.get_perioder_by_skjema_id(
 
 print(json.dumps(output, indent=4))
 ```
+
+---
+
+#### Opprette flere nye perioder (med puljer og utsendinger)
+
+Bruk metoden `create_new_periodes` for å **opprette en eller flere nye perioder** , inkludert eventuelle puljer og utsendinger.
+
+Perioden som brukes som utgangspunkt må være siste registrerte periode, og du må angi hvor mange nye perioder som skal opprettes.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_perioder_by_skjema_id(
+            periode_id=137,
+            num_new_periodes=2
+        )
+
+print(json.dumps(output, indent=4))
+```
+Systemet oppretter nye perioder automatisk og setter datoer for puljer og utsendinger basert på periodetype. Kontroller datoene nøye og juster dem ved behov. Delregister-nr må oppdateres manuelt for alle nye perioder.
 
 ## Pulje 
 En periode kan ha en eller flere puljer knyttet til seg. Hvilke puljer som er lagt inn på skjemaet kan du se i detaljvisningen når du har valgt en periode. 
