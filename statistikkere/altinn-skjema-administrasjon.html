@@ -802,16 +802,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#periode" id="toc-periode" class="nav-link" data-scroll-target="#periode">Periode</a>
   <ul class="collapse">
-  <li><a href="#kodeeksempel-1" id="toc-kodeeksempel-1" class="nav-link" data-scroll-target="#kodeeksempel-1">Kodeeksempel</a></li>
+  <li><a href="#kodeeksempler" id="toc-kodeeksempler" class="nav-link" data-scroll-target="#kodeeksempler">Kodeeksempler</a></li>
   </ul></li>
   <li><a href="#pulje" id="toc-pulje" class="nav-link" data-scroll-target="#pulje">Pulje</a>
   <ul class="collapse">
-  <li><a href="#kodeeksempel-2" id="toc-kodeeksempel-2" class="nav-link" data-scroll-target="#kodeeksempel-2">Kodeeksempel</a></li>
+  <li><a href="#kodeeksempel-1" id="toc-kodeeksempel-1" class="nav-link" data-scroll-target="#kodeeksempel-1">Kodeeksempel</a></li>
   </ul></li>
   <li><a href="#utsending" id="toc-utsending" class="nav-link" data-scroll-target="#utsending">Utsending</a>
   <ul class="collapse">
   <li><a href="#send-nå" id="toc-send-nå" class="nav-link" data-scroll-target="#send-nå">Send nå</a></li>
-  <li><a href="#kodeeksempel-3" id="toc-kodeeksempel-3" class="nav-link" data-scroll-target="#kodeeksempel-3">Kodeeksempel</a></li>
+  <li><a href="#kodeeksempel-2" id="toc-kodeeksempel-2" class="nav-link" data-scroll-target="#kodeeksempel-2">Kodeeksempel</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/altinn-skjema-administrasjon.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/altinn-skjema-administrasjon.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -1178,9 +1178,12 @@ Tabell&nbsp;3: Periode metadata
 </div>
 </div>
 </div>
-<section id="kodeeksempel-1" class="level3">
-<h3 class="anchored" data-anchor-id="kodeeksempel-1">Kodeeksempel</h3>
-<p>For å lage en ny periode, kan du bruke metoden <code>create_periode</code> i <code>SuvClient</code>.</p>
+<section id="kodeeksempler" class="level3">
+<h3 class="anchored" data-anchor-id="kodeeksempler">Kodeeksempler</h3>
+<p>Nedenfor finner du eksempler på hvordan du kan opprette og hente perioder ved hjelp av <code>SuvClient</code> i Python.</p>
+<section id="opprette-en-ny-periode" class="level4">
+<h4 class="anchored" data-anchor-id="opprette-en-ny-periode">Opprette en ny periode</h4>
+<p>For å opprette <strong>en ny periode</strong>, bruk metoden <code>create_periode</code> i <code>SuvClient</code>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -1198,7 +1201,11 @@ Tabell&nbsp;3: Periode metadata
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>For å hente ut perioder med tilhørende metadata i Python, kan du bruke metoden <code>get_perioder_by_skjema_id</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig skjema_id.</p>
+<hr>
+</section>
+<section id="hente-eksisterende-perioder" class="level4">
+<h4 class="anchored" data-anchor-id="hente-eksisterende-perioder">Hente eksisterende perioder</h4>
+<p>For å <strong>hente ut eksisterende perioder</strong> med tilhørende metadata i Python, bruke metoden <code>get_perioder_by_skjema_id</code>. Pass på at du oppgir riktig skjema_id.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -1211,6 +1218,27 @@ Tabell&nbsp;3: Periode metadata
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(output, indent<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<hr>
+</section>
+<section id="opprette-flere-nye-perioder-med-puljer-og-utsendinger" class="level4">
+<h4 class="anchored" data-anchor-id="opprette-flere-nye-perioder-med-puljer-og-utsendinger">Opprette flere nye perioder (med puljer og utsendinger)</h4>
+<p>Bruk metoden <code>create_new_periodes</code> for å <strong>opprette en eller flere nye perioder</strong> , inkludert eventuelle puljer og utsendinger.</p>
+<p>Perioden som brukes som utgangspunkt må være siste registrerte periode, og du må angi hvor mange nye perioder som skal opprettes.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.get_perioder_by_skjema_id(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            periode_id<span class="op">=</span><span class="dv">137</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            num_new_periodes<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(output, indent<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Systemet oppretter nye perioder automatisk og setter datoer for puljer og utsendinger basert på periodetype. Kontroller datoene nøye og juster dem ved behov. Delregister-nr må oppdateres manuelt for alle nye perioder.</p>
+</section>
 </section>
 </section>
 <section id="pulje" class="level2">
@@ -1286,43 +1314,43 @@ Tabell&nbsp;4: Pulje metadata
 </div>
 </div>
 </div>
-<section id="kodeeksempel-2" class="level3">
-<h3 class="anchored" data-anchor-id="kodeeksempel-2">Kodeeksempel</h3>
+<section id="kodeeksempel-1" class="level3">
+<h3 class="anchored" data-anchor-id="kodeeksempel-1">Kodeeksempel</h3>
 <p>For å lage en ny pulje, kan du bruke metoden <code>create_pulje</code> i <code>SuvClient</code>.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>_altinn_tilgjengelig <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">20</span>, <span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">0</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>_altinn_svarfrist <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">21</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>_tvangsmulkt_svarfrist_ <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">22</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>_send_si <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">23</span>)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>client.create_pulje(</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    periode_id <span class="op">=</span> <span class="dv">24</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    pulje_nr <span class="op">=</span> <span class="dv">1</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    altinn_tilgjengelig<span class="op">=</span>_altinn_tilgjengelig,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    altinn_svarfrist <span class="op">=</span> _altinn_svarfrist,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    tvangsmulkt_svarfris t<span class="op">=</span> _tvangsmulkt_svarfrist_,</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    send_si <span class="op">=</span> _send_si</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>For å hente ut pulje med tilhørende metadata i Python, kan du bruke metoden <code>get_pulje_by_periode_id</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig periode_id.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.get_pulje_by_periode_id(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            periode_id <span class="op">=</span> <span class="dv">99</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>_altinn_tilgjengelig <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">20</span>, <span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>_altinn_svarfrist <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">21</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>_tvangsmulkt_svarfrist_ <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">22</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>_send_si <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">23</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>client.create_pulje(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    periode_id <span class="op">=</span> <span class="dv">24</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    pulje_nr <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    altinn_tilgjengelig<span class="op">=</span>_altinn_tilgjengelig,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    altinn_svarfrist <span class="op">=</span> _altinn_svarfrist,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    tvangsmulkt_svarfris t<span class="op">=</span> _tvangsmulkt_svarfrist_,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    send_si <span class="op">=</span> _send_si</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For å hente ut pulje med tilhørende metadata i Python, kan du bruke metoden <code>get_pulje_by_periode_id</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig periode_id.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.get_pulje_by_periode_id(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            periode_id <span class="op">=</span> <span class="dv">99</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -1431,37 +1459,37 @@ Figur&nbsp;7: Send nå
 </div>
 </div>
 </section>
-<section id="kodeeksempel-3" class="level3">
-<h3 class="anchored" data-anchor-id="kodeeksempel-3">Kodeeksempel</h3>
+<section id="kodeeksempel-2" class="level3">
+<h3 class="anchored" data-anchor-id="kodeeksempel-2">Kodeeksempel</h3>
 <p>For å lage en ny utsending, kan du bruke metoden <code>create_utsending</code> i <code>SuvClient</code>.</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>notebook</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>_altinn_uts_tidspunkt <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">20</span>, <span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">0</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.create_utsending(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            pulje_id <span class="op">=</span> <span class="dv">75</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            utsendingstype_navn <span class="op">=</span> <span class="st">'instansiering'</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            altinn_uts_tidspunkt <span class="op">=</span> _altinn_uts_tidspunkt</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>For å hente ut utsending med tilhørende metadata i Python, kan du bruke metoden <code>get_utsending_by_id</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig utsending_id.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.client.get_utsending_by_id(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            utsending_id <span class="op">=</span> <span class="dv">133</span>   </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>_altinn_uts_tidspunkt <span class="op">=</span> datetime(<span class="dv">2024</span>, <span class="dv">11</span>, <span class="dv">20</span>, <span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">0</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.create_utsending(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            pulje_id <span class="op">=</span> <span class="dv">75</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            utsendingstype_navn <span class="op">=</span> <span class="st">'instansiering'</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            altinn_uts_tidspunkt <span class="op">=</span> _altinn_uts_tidspunkt</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For å hente ut utsending med tilhørende metadata i Python, kan du bruke metoden <code>get_utsending_by_id</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig utsending_id.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.client.get_utsending_by_id(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            utsending_id <span class="op">=</span> <span class="dv">133</span>   </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
