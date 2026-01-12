@@ -1,0 +1,74 @@
+---
+title: Utsending
+date-modified: 01/12/2026
+lightbox: true
+---
+
+En utsending er knyttet til en pulje som igjen er knyttet til en periode og et skjema. Hvilke utsendinger som er lagt inn på puljen kan du se i detaljvisningen når du har valgt en pulje. 
+
+**Eksempel på pulje med utsending**<br>
+Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
+
+![Pulje utsending](../images/altinn-utsending-pulje.png){fig-alt="Illustrasjon av pulje og utsending." #fig-altinn-pulje-utsending} 
+
+## Utsendingstyper
+@tbl-utsendingstyper beskriver de ulike utsendingstypene.
+
+| Utsendingstype | Beskrivelse |
+| :--------------------------- | :---------------------------------------------------------------------------- |
+| instansiering | Utsending av skjema (Hovedutsending skjema).|
+| Påminnelse | Sendes når fristen for å svare på undersøkelsen er utløpt.|
+| Vedtak opplysningsplikt | Sendes til enheter som er pålagt rapportering av opplysninger til SSB.|
+| Vedtak tvangsmulkt | Sendes når opplysningene ikke blir rapportert innen fastsatt frist.|
+| Hovedutsending brev | Sendes til enheter som ikke får opplysningsplikt fra SSB.|
+: Utsendingstyper {#tbl-utsendingstyper .striped}
+
+## Opprette ny utsending
+For å opprette en ny utsending må du først søke fram riktig skjemaperiode og pulje. Trykk deretter på **Pluss** symbolet under Utsendinger for å legge til en ny utsending.
+
+Bildet nedenfor viser eksempel på opprettelse av en utsending:
+
+![Opprette utsending](../images/altinn-utsending-opprette.png){fig-alt="Illustrasjon opprette utsending." #fig-altinn-opprette-utsending} 
+
+::: {.callout-tip collapse="true"}
+### Beskrivelse av utsending metadata
+
+@tbl-utsending-meta beskriver metadatafeltene for en utsending
+
+| Meta | Forklaring |
+| :----------------- | :-------------------------------------------------------------------------------------- |
+| Utsendingstype | Angir type utsending.
+| Test | Angir testutsending (sendes ikke til Altinn)
+| Send ut | Angir tidspunkt for utsendelse.
+: Pulje metadata {#tbl-utsending-meta .striped}
+:::
+
+### Kodeeksempel
+For å lage en ny utsending, kan du bruke metoden `create_utsending` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+_altinn_uts_tidspunkt = datetime(2026, 2, 1, 14, 30, 0)
+
+output = client.create_utsending(
+            pulje_id = 4,
+            utsendingstype_navn = 'instansiering',
+            altinn_uts_tidspunkt = _altinn_uts_tidspunkt
+        )
+        
+print(output)
+```
+
+For å hente ut alle utsendinger knyttet til en pulje, kan du bruke metoden `get_utsending_by_pulje_id` i `SuvClient`. Sørg for at du oppgir riktig pulje_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_utsending_by_pulje_id(
+            pulje_id = 4   
+        )
+
+print(json.dumps(output, indent=4))
+```
+## Opprette ny utsending basert på tidligere periode
