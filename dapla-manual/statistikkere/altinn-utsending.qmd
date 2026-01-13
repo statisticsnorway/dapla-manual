@@ -1,10 +1,10 @@
 ---
 title: Utsending
-date-modified: 01/12/2026
+date-modified: 01/13/2026
 lightbox: true
 ---
 
-En utsending er knyttet til en pulje som igjen er knyttet til en periode og et skjema. Hvilke utsendinger som er lagt inn på puljen kan du se i detaljvisningen når du har valgt en pulje. 
+En **utsending** er knyttet til en **pulje**, som igjen er knyttet til en **periode** og et **skjema**. Du kan se hvilke utsendinger som er registrert på en pulje i detaljvisningen etter at du har valgt ønsket pulje.
 
 **Eksempel på pulje med utsending**<br>
 Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
@@ -24,9 +24,9 @@ Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
 : Utsendingstyper {#tbl-utsendingstyper .striped}
 
 ## Opprette ny utsending
-For å opprette en ny utsending må du først søke fram riktig skjemaperiode og pulje. Trykk deretter på **Pluss** symbolet under Utsendinger for å legge til en ny utsending.
+For å opprette en ny utsending må du først søke fram riktig **skjemaperiode** og **pulje**. Trykk deretter på **pluss-symbolet** under Utsendinger for å legge til en ny utsending.
 
-Bildet nedenfor viser eksempel på opprettelse av en utsending:
+Bildet nedenfor viser et eksempel på hvordan en utsending opprettes:
 
 ![Opprette utsending](../images/altinn-utsending-opprette.png){fig-alt="Illustrasjon opprette utsending." #fig-altinn-opprette-utsending} 
 
@@ -60,7 +60,7 @@ output = client.create_utsending(
 print(output)
 ```
 
-For å hente ut alle utsendinger knyttet til en pulje, kan du bruke metoden `get_utsending_by_pulje_id` i `SuvClient`. Sørg for at du oppgir riktig pulje_id.
+For å hente ut alle utsendinger som er knyttet til en bestemt pulje, kan du bruke metoden `get_utsending_by_pulje_id` i `SuvClient`. Sørg for at du oppgir riktig pulje_id.
 
 ```{.python filename="notebook"}
 client = SuvClient()
@@ -71,4 +71,26 @@ output = client.get_utsending_by_pulje_id(
 
 print(json.dumps(output, indent=4))
 ```
-## Opprette ny utsending basert på tidligere periode
+## Opprette nye utsendinger basert på tidligere periode
+Det er også mulig å opprette nye utsendinger basert på en tidligere periode. Velg perioden som skal brukes som utgangspunkt. Denne må være den siste registrerte perioden. Deretter angir du hvor mange nye perioder som skal opprettes.
+
+Bildet nedenfor viser en periode med tilhørende pulje og utsending. Nederst i skjermbildet kan du angi antall nye perioder og starte opprettelsen:
+
+![Opprette nye perioder](../images/altinn-utsending-nye-perioder.png){fig-alt="Legg til nye perioder." #fig-altinn-utsending-nye-perioder} 
+
+Systemet oppretter nye perioder automatisk, inkludert eventuelle puljer og utsendinger. Datoer for puljer og utsendinger fastsettes basert på periodetypen. Kontroller datoene nøye, og juster dem ved behov. **Delregisternummer må oppdateres manuelt** for alle nye perioder.
+
+### Kodeeksempel
+
+Bruk metoden `create_new_periodes` for å **opprette en eller flere nye perioder** , inkludert eventuelle puljer og utsendinger.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.create_new_periodes(
+            periode_id=137,
+            num_new_periodes=2
+        )
+
+print(json.dumps(output, indent=4))
+```
