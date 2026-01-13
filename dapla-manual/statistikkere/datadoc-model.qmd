@@ -1,7 +1,8 @@
 ---
 title: Datamodell
-date-modified: 09/08/2025
+date-modified: 01/13/2026
 lightbox: true
+toc-depth: 5
 code-links:
     - text: Datasett
       icon: box-arrow-up-right
@@ -24,9 +25,8 @@ Det angis også hva det internasjonale🌐 navnet er, det er dette navnet som be
 Noen informasjonselementer er kun relevant for noen typer av data, og de er derfor kun obligatorisk hvis man har denne typen data, f.eks. er bruksrestriksjoner kun obligatorisk å fylle ut dersom datasettet har slike, og “måleenhet” kun obligatorisk for kvantitative^[Kvantitative variabler har verdier som er tall, i motsetning til kvalitative variabler som henter sine verdier fra en klassifikasjon eller kodeliste. *Inntekt* og *alder* er eksempler på kvantitative variabler.]  variabler. Dette angis med ⚠️. Felter som er valgfrie, angis ved (valgfritt).
 
 
-✅ = obligatorisk, ⚠️ = hvis relevant, 🌐 = internasjonalt
+✅ = obligatorisk, ⚠️ = obligatorisk hvis relevant, 🌐 = internasjonalt
 
-<br>
 
 ## Datasett
 
@@ -96,13 +96,12 @@ Utledes automatisk basert på datasettets [datatilstand](./datatilstander.qmd), 
 
 klargjorte data ⚠️ | statistikkdata ⚠️
 
-Angis om datasettet har bruksrestriksjoner. Et datasett kan fint ha null, én eller flere bruksrestriksjoner. Dersom datasettet har ingen brukrestriksjoner så kan feltet stå tomt, og i json-utskriften vil verdien i dette feltet da vises som `null`.
+Angis om datasettet har bruksrestriksjoner. Et datasett kan ha ingen, én eller flere bruksrestriksjoner. Dersom datasettet ikke har brukrestriksjoner så kan feltet stå tomt, og i json-utskriften vil verdien i dette feltet da vises som `null`.
 
-Bruksrestriksjoner er oppgitt som en liste hvor hvert element har to felt som beskrevet under.
+En kan velge mellom tre typer bruksrestriksjoner. Dersom bruksrestriksjonen har en dato, f.eks. for når en sletting skal utføres, skal denne fylles inn i [Dato for restriksjon](#dato-for-restriksjon).
+
 
 #### Bruksrestriksjonstype
-
-Følgende verdier er tillatt for datasett med bruksrestriksjoner:
 
 ##### Sletting/anonymisering
 
@@ -124,7 +123,7 @@ Følgende verdier er tillatt for datasett med bruksrestriksjoner:
 
 ---
 
-#### Bruksrestriksjonsdato
+#### Dato for restriksjon
 
 🌐 *use_restriction_date*
 
@@ -192,17 +191,13 @@ eksternt.
 
 🌐 *INTERNAL*
 
-Metadata er godkjent for intern bruk, men data med
-verdivurdering “skjermet” kan kun brukes/deles med ansatte med
-tjenstlig behov for tilgang
+Metadata er godkjent for intern deling og bruk. Data er klare for intern bruk, men skjermede og sensitive data kan kun brukes av/deles med interne med tjenstlig behov.
 
 #### Ekstern
 
 🌐 *EXTERNAL*
 
-Metadata er godkjent for både intern og eksternt bruk, men
-data kan kun deles med alle eksterne hvis datatilstanden er
-“utdata” (verdivurdering=åpen). Andre datatilstander kan deles f.eks. med forskere etter søknad og godkjenning.
+Metadata er godkjent for deling og bruk både intern og eksternt. Data er klare for intern og ekstern bruk, men skjermede og sensitive data kan kun brukes av/deles med interne med tjenstlig behov. Kun data med datatilstanden “utdata” (verdivurdering=åpen), kan deles med alle eksterne. Noen eksterne, f.eks. forskere, kan imidlertid få tilgang til (utlån av) skjermede/sensitive data etter søknad og godkjenning.
 
 #### Utgått
 
@@ -305,7 +300,7 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angir det primære statistikkområdet som datasettet tilhører.
 
-Gyldige verdier er definert i en [Klass kodeliste](https://www.ssb.no/klass/klassifikasjoner/618).
+Gyldige verdier er basert på følgende [Klass-kodeliste](https://www.ssb.no/klass/klassifikasjoner/618).
 
 ---
 
@@ -338,9 +333,11 @@ Oppgi datasettets geografiske dekningsområde. *Norge* er satt som standard.
 
 ---
 
-<br>
+
 
 ## Variabler
+
+
 
 ### Navn
 
@@ -352,14 +349,14 @@ Angir navnet til variabelen. Navnet skal være forståelig for mennesker (ikke
 kortnavn/teknisk navn) slik at det er søkbart. Navnet skal fylles ut på
 bokmål eller nynorsk.
 
-Et eksempel på navn er **Personidentifikator**. Det tilhørende kortnavnet
-(navnet i datasettet) vil være **pers_id**.
+Et eksempel på navn er **Fødselsnummer**. Det tilhørende kortnavnet
+(navnet i datasettet) vil være **fnr**.
 
 De fleste variabler skal dokumenters i [Vardef](./vardef.qmd), og dermed kunne pekes til
 fra Datadoc-editor. Men hvis datasettet inneholder noen variabler som
 kun brukes i dette datasettet, og dermed ikke skal gjenbrukes, trenger
 de ikke å dokumenteres i Vardef . Det kan f.eks. dreie seg om variabler
-som brukes i en spesiell beregning eller kontroll. Disse  dokumenteres da
+som brukes i en spesiell beregning eller kontroll. Disse dokumenteres da
 i Datadoc-editor. Navnet skal dokumenteres i dette feltet, mens
 definisjonen og eventuelt tilhørende kodeverk skal dokumenteres hhv. i
 feltet [Kommentar](#kommentar) og [Kodeverkets URI](#kodeverkets-uri).
@@ -372,7 +369,7 @@ Når [Vardef](./vardef.qmd) kommer i produksjon må **Navn**-feltet bare fylles 
 
 ---
 
-### Definisjons-URI
+### Variabeldefinisjon ID
 
 🌐 *definition_uri*
 
@@ -380,11 +377,6 @@ klargjorte data ⚠️  | statistikkdata ⚠️  | utdata ⚠️
 
 Angir lenken til relevant variabel(definisjon) i [Vardef](vardef.qmd). For variabler som ikke er definert i Vardef skal [definisjonen](./vardef-model.qmd#definisjon) til variabelen dokumenteres under feltet [Kommentar](#kommentar) i Datadoc.
 
-::: {.callout-important}
-#### Ikke obligatorisk enda
-
-Selv om Vardef er i produksjon på Dapla, så vil det i 2025 foregå arbeid med å migrere variabeldefinisjoner fra Vardok til Vardef. I denne perioden er det ikke et krav å fylle inn dette feltet.
-:::
 
 ---
 
@@ -394,7 +386,7 @@ Selv om Vardef er i produksjon på Dapla, så vil det i 2025 foregå arbeid med 
 
 klargjorte data ✅
 
-Angir om variabelen er en personopplysning eller ikke. Personopplysninger er alle opplysninger som entydig kan knyttes til en fysisk person (f.eks. fødselsnummer, ulike adresser og bankkontonummer). Se flere eksempler på personopplysninger i liste laget av PAPIS-prosjektet:
+Angir om variabelen er en personopplysning eller ikke. Personopplysninger er alle opplysninger som entydig kan identifisere en fysisk person (f.eks. fødselsnummer, ulike adresser og bankkontonummer). Se flere eksempler på personopplysninger i liste laget av PAPIS-prosjektet:
 
 [PAPIS - Variabelliste.docx](https://ssbno.sharepoint.com/:w:/r/sites/A19-GDPRiSSB/_layouts/15/Doc.aspx?sourcedoc=%7B6A778B7D-6ABE-4ECE-AF2D-8CBA0F5F5765%7D&file=PAPIS%20-%20Variabelliste.docx&wdLOR=c3C119C1B-F019-4D1A-B6E0-F21712898841&action=default&mobileredirect=true)
 
@@ -412,7 +404,7 @@ Angir enhetstypen («objektet») som variabelen inneholder informasjon om. Eksem
 
 I noen tilfeller vil dataene være aggregerte allerede når de kommer til SSB. Da vil det ikke være logisk å snakke om enhetstyper, og en kan velge kategorien «aggregert» som verdi i Enhetstype-feltet. Denne kategorien vil også ofte være det aktuelle valget for datatilstandene statistikk og utdata da disse ofte vil bestå av aggregerte data. Et unntak her vil være Kostra, som også har aggregerte data, men der disse er aggregert på kommune- eller fylkes nivå, og det vil da være naturlig å bruke enhetstypen «kommune(forvaltning)» eller «fylke(forvaltning)».
 
-[Kodeliste i Klass](https://www.ssb.no/klass/klassifikasjoner/702) for tillatte verdier.
+Gyldige verdier er basert på følgende [kodeliste i Klass](https://www.ssb.no/klass/klassifikasjoner/702).
 
 ---
 
@@ -422,9 +414,9 @@ I noen tilfeller vil dataene være aggregerte allerede når de kommer til SSB. D
 
 klargjorte data ⚠️  | statistikkdata ⚠️  | utdata ⚠️
 
-Angir måleenhet dersom variabelen er kvantitativ^[Kvantitative variabler har verdier som er tall. *Inntekt* og *Alder* er eksempler på kvantitative variabler.], f.eks. *kroner* eller *tonn*.
+Angir måleenhet dersom variabelen er kvantitativ^[Kvantitative variabler har verdier som er tall. *Inntekt* og *Alder* er eksempler på kvantitative variabler.], f.eks. *kroner* eller *tonn*. Det er kun kvantitative variabler med variabelrolle «målevariabel» som skal ha måleenhet. 
 
-[Klass-kodeliste](https://www.ssb.no/klass/klassifikasjoner/303/koder) for tillatte måleeneheter.
+Gyldige verdier er basert på følgende [kodeliste i Klass](https://www.ssb.no/klass/klassifikasjoner/303/koder).
 
 ---
 
@@ -432,7 +424,7 @@ Angir måleenhet dersom variabelen er kvantitativ^[Kvantitative variabler har ve
 
 🌐 *multiplication_factor*
 
-klargjorte data (valgfritt)  | statistikkdata (valgfritt)  | utdata (valgfritt)
+klargjorte data ⚠️  | statistikkdata ⚠️  | utdata ⚠️
 
 Angir multiplikasjonsfaktor der denne brukes sammen med måleenheten, f.eks. hvis det er store tall i datasettet. En kan f.eks. velge multiplikasjonsfaktor 1000, og måleenhet «kroner», slik at verdiene vises i 1000 kroner.
 
@@ -478,13 +470,13 @@ Benyttes dersom en ønsker å utvide datasettet med informasjon knyttet til gitt
 
 ---
 
-### Kodeverkets URI
+### Kodeverk ID
 
 🌐 *classification_uri*
 
 klargjorte data ⚠️ | statistikkdata ⚠️ | utdata ⚠️
 
-Angir lenke (URI) til gyldig kodeverk (klassifikasjon eller kodeliste) i Klass.
+Angir lenke (URL) til gyldig kodeverk (klassifikasjon eller kodeliste) i Klass.
 Dette feltet vil sjelden benyttes siden variabelen i all hovedsak vil knyttes
 til tilhørende kodeverk via relevant variabeldefinisjon i Vardef. Unntaksvis
 kan den imidlertid knyttes direkte til Klass via dette feltet i tilfeller der
@@ -520,7 +512,7 @@ klargjorte data ✅ | statistikkdata ✅ | utdata ✅
 
 Angir kilden til dataene (på etats-/organisasjonsnivå). Denne velges fra menyen.
 
-Tillate verdier er definert i en [Klass kodeliste](https://www.ssb.no/klass/klassifikasjoner/712).
+Gyldige verdier er basert på følgende [Klass kodeliste](https://www.ssb.no/klass/klassifikasjoner/712).
 
 ---
 
@@ -564,7 +556,7 @@ hendelser/tilstander, f.eks. (skifte av) bosted.
 
 🌐 *population_description*
 
-klargjorte data ✅ | statistikkdata ✅ | utdata ✅
+klargjorte data ⚠️ | statistikkdata ⚠️ | utdata ⚠️
 
 Angis vanligvis på datasettnivå, men dersom datasettet består av variabler med ulike populasjoner, kan populasjonen dokumenteres på variabelnivå i dette feltet.
 
@@ -597,7 +589,7 @@ Angir en ytterligere presisering av datatype i tilfellene der det er relevant. K
 
 🌐 *contains_data_from*
 
-klargjorte data ✅ | statistikkdata ✅ | utdata ✅
+klargjorte data ⚠️ | statistikkdata ⚠️ | utdata ⚠️
 
 Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholder data med ulike startdatoer, kan startdato dokumenteres på variabelnivå i dette feltet.
 
@@ -609,7 +601,7 @@ Dato må være på formatet **YYYY-MM-DD** iht [ISO 8601 Date and time format](h
 
 🌐 *contains_data_until*
 
-klargjorte data ✅ | statistikkdata ✅ | utdata ✅
+klargjorte data ⚠️ | statistikkdata ⚠️ | utdata ⚠️
 
 Angis vanligvis på datasettenivå, men dersom variablene i datasettet inneholder data med ulike sluttdatoer, kan sluttdato dokumenteres på variabelnivå i dette feltet.
 
