@@ -1,12 +1,12 @@
 ---
 title: Datamodell
-date-modified: 09/24/2025
+date-modified: 01/13/2026
 lightbox: true
 ---
 
 For hvert informasjonselement angis det om informasjonen er obligatorisk✅ Det angis også hva det internasjonale🌐 navnet er, det er dette navnet som benyttes i Vardef. Noen informasjonselementer er kun relevante for noen variabler, og de er derfor kun obligatoriske hvis man har denne typen variabler, f.eks. er «Kodeverkets URI» kun obligatorisk å fylle ut dersom det er en kvalitativ variabel . Dette angis med ⚠️. Felter som er valgfrie, angis ved (valgfritt).
 
-Det angis også om informasjonsfeltet kan endres (patches) etter publisering. Publisering gjelder her både intern og ekstern publisering.
+Det angis også om informasjonsfeltet kan endres (patches) etter publisering. Publisering gjelder her både intern og ekstern publisering. Før en variabel kan publiseres eksternt, må følgende felt være fylt ut både på bokmål, nynorsk og engelsk: navn, definisjon, ev. kommentar og kontakt/tittel.
 
 
 ### Navn
@@ -42,7 +42,7 @@ Eksempel 3:
 🌐 *short_name*  
 ✅
 
-Angir variabelens kortnavn. Kortnavn er som regel et teknisk forkortet navn som er egnet som variabel(kolonne)navn i et datasett. Følgende retningslinjer foreslås for kortnavn i Vardef:
+Angir variabelens kortnavn. Kortnavn er som regel et teknisk forkortet navn som er egnet som variabel(kolonne)navn i et datasett. Følgende retningslinjer gjelder for kortnavn i Vardef:
 
 - må være unikt.
 - minimumslengde på 2 tegn.
@@ -53,8 +53,6 @@ Angir variabelens kortnavn. Kortnavn er som regel et teknisk forkortet navn som 
 - dersom det brukes generiske navn som «kilde» eller «kode» skal variabelen spesifisere vha. suffiks, f.eks. kilde_innt
 - prefiks og suffiks kan brukes for å gjøre et kortnavn unikt, f.eks. pers_innt og hush_innt.
 - kan ikke være en av de reserverte kortnavnene i SSB (se boks under)
-
-Retningslinjene for kortnavn skal opp i Standardutvalget i september.
 
 Kortnavnet kan ikke endres etter publisering.
 
@@ -141,13 +139,31 @@ Eksempel på definisjon for variabeldefinisjon med [Navn](#navn) *Ordretilgangen
 
 :::
 
+::: {.callout-tip collapse="true"}
+## Hvordan skrive en definisjon? 
+
+Følg disse anbefalingene for å skrive en god variabeldefinisjon:
+
+- Start teksten med å variabelens navn. F.eks.:
+    - **Landbakgrunn** beskriver en persons tilknytning til utlandet... 
+    - **Arbeidsledig** beskriver personer uten inntektsgivende arbeid som forsøkte å skaffe seg slikt arbeid...
+- Bruk klart språk og vær presis.
+- Ingen sirkeldefinisjoner.
+- Ta med eksempler hvis det er relevant og øker forståelsen.
+- Vis ev. til andre variabler som brukes i definisjonen.
+- Hvis mulig, la definisjonen være kort.
+- Vanligvis bør populasjon og tidsangivelser utelates fra definisjonen.
+- Ved presisering i variabelnavn anbefales komma, f.eks. «Forbruksutgifter, reise». 
+
+:::
+
 ---
 
 ### Kodeverkets URI 
 🌐 *classification_reference*  
 ⚠️  
 
-Angir referansen til kodeverk (klassifikasjon eller kodeliste) i [Klass](https://www.ssb.no/klass/) som beskriver verdiene variabelen kan ha. En skal ikke legge inn hele URI-en, kun id-en for kodeverket.
+Angir referansen til kodeverk (klassifikasjon eller kodeliste) i [Klass](https://www.ssb.no/klass/) som beskriver verdiene variabelen kan anta. En skal ikke legge inn hele URI-en, kun id-en for kodeverket. Dette feltet er kun relevant for kvalitative variabler, dvs. variabler som henter sine verdier fra et kodeverk, f.eks. «næring» som henter sine verdier fra Standard for næringsgruppering. En skal ikke legge inn hele URI-en, kun id-en for kodeverket^[Id-en er tallet i kodeverkets URI i Klass, f.eks. har Standard for næringsgruppering id=6  https://www.ssb.no/klass/klassifikasjoner/6].
 
 Kodeverkets URI kan endres etter publisering.
 
@@ -171,7 +187,7 @@ Eksempel på Klass-referanse for variabeldefinisjonen med [Navn](#navn) *Landbak
 
 Angir hvilke(n) enhetstype (r) variabelen sier noe om. De fleste variabler vil kun være knyttet til en enhetstype, men noen, kan være knyttet til flere (f.eks. foretak og bedrift). Enhetstyper velges fra meny.
 
-Gyldige verdier er definert i [denne Klass-kodelisten](https://www.ssb.no/klass/klassifikasjoner/702). Verdiene er også [beskrevet her](https://www.ssb.no/metadata/definisjoner-av-statistiske-enheter).
+Gyldige verdier er definert i [denne Klass-kodelisten](https://www.ssb.no/klass/klassifikasjoner/702). Verdiene er også [beskrevet her](https://www.ssb.no/metadata/definisjoner-av-statistiske-enheter). Det er enhetstypens kode som skal inn i Vardef, f.eks. **20** hvis enhetstypen er **person**.
 
 Enhetstyper kan endres etter publisering.
 
@@ -187,7 +203,7 @@ Variabelen «produsentpris for tjenester» har enhetstypene «foretak» og «bed
 🌐 *subject_fields*    
 ✅
 
-Angir hvilke(t) statistikkområde(r) variabelen tilhører. Statistikkområde(r) kan enten være spesifisert på det overordnede nivå 1, eller det mer detaljerte statistikkområdet på nivå 2. F.eks. kan en variabeldefinisjon ha statistikkområdet «Befolkning»  på nivå 1, eller «Barn, familier og husholdninger» på nivå 2.
+Angir hvilke(t) statistikkområde(r) variabelen tilhører. En kan velge å oppgi Statistikkområde(r) enten på det overordnede nivå 1, eller på det mer detaljerte nivå 2. F.eks. kan en velge å bruke enten statistikkområdet **Befolkning** på nivå 1, eller spesifisere det ytterligere til **Barn, familier og husholdninger** på nivå 2. Det er statistikkområdets kode som skal inn i Vardef, f.eks. **be** dersom statistikkområdet er **Befolkning** eller **be01** dersom det er **Barn, familier og husholdninger**.
 
 Gyldige verdier er definert i [Kodeliste for statistikkområder i Statistikkbanken](https://www.ssb.no/klass/klassifikasjoner/618) i Klass. 
 
@@ -213,7 +229,7 @@ Eksempel på Klass-referanse for statistikkområde for variabeldefinisjonen med 
 
 Angir om variabelen inneholder spesielt sensitive personopplysninger. En oversikt over hvilke opplysninger dette er, [finnes hos Datatilsynet](https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/om-behandlingsgrunnlag/spesielt-om-sarlige-kategorier-av-personopplysninger/#:~:text=I%20tillegg%20sier%20personopplysningsloven%20%C2%A7%C2%A7%206%2C%207%20og,eller%20historisk%20forskning%20eller%20for%20statistiske%20form%C3%A5l.%20).
 
-Gyldige verdier er `true` og `false`.
+Gyldige verdier er `true` og `false`. `false` er standardverdi.
 
 
 *Inneholder særlige kategorier av personopplysninger* kan endres etter publisering.
@@ -268,6 +284,31 @@ Eksempel 1:
 Eksempel 2:
 
 > 1993-01-01
+
+:::
+
+::: {.callout-tip collapse="true"}
+## Eksempler2
+:::: {.columns}
+
+::: {.column width="70%"}
+I would like to have text here
+
+Sentence becomes longer, it should automatically stay in their column
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="20%"}
+and here
+
+More text
+:::
+
+::::
+
 
 :::
 
@@ -458,7 +499,7 @@ Statusen «Publisert internt» kan kun endres til «Publisert eksternt». Slik u
 
 Statusen «Publisert eksternt» kan ikke endres. Slik unngår en at eksterne brukere mister tilgang til variabler som har vært publisert eksternt.
 
-Det er mulig å kun publisere en variabel internt på bokmål eller nynorsk, og uten engelsk, men for å publisere eksternt, må alle relevante felt være oversatt til bokmål, nynorsk og engelsk (dvs. navn, definisjon og ev. merknad).
+Det er mulig å kun publisere en variabel internt på bokmål eller nynorsk, og uten engelsk, men for å publisere eksternt, må alle relevante felt være oversatt til bokmål, nynorsk og engelsk (dvs. navn, definisjon, ev. merknad og kontakt/tittel).
 
 ### Opprettet av
 🌐 *created_by*  
