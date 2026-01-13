@@ -57,6 +57,41 @@ I koden over angir vi det nye datasettet som skal dokumenteres i `dataset_path=`
 
 Med dette utgangspunktet kan man deretter gjøre endringer på evt. nye eller eksisterende kolonner ved å enten bruke [Datadoc-editor], eller en programmatisk tilnærming som forklart senere i kapitlet. 
 
+### Kopiere en variable fra en annen metadata fil
+
+Hvis du jobber med data som er delt av andre team, kan det være hensiktsmessig å hente inn metadata direkte fra kildefilene deres i stedet for å bare kopiere fra forrige periode. Dette sikrer at du får med deg eventuelle endringer som er gjort i dokumentasjonen av dataene du bruker. Merk at her vil det som er tidligere er dokumentert i den nye filen bli overskrevet av det som kommer fra metadata filen man kopierer fra.
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet",             # <1>
+    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2021_v1__DOC.json", # <2>
+)
+
+meta.copy_variable("gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json", "fnr") # <2>
+
+```
+1.  Vi angir det nye datasettet som skal dokumenteres i dataset_path=.
+2.  Vi kopierer metadata for variabelen `fnr` fra metadatadokumentet ved å angi filstien til kildens metadatadokument og navnet på variabelen som skal kopieres.
+
+
+Om man ønsker å kopiere metadata fra en variabel til en annen kan det også gjøres ved å legge til det kortnavent man ønsker å kopiere fra som siste argument i `copy_metadata` funksjonen. 
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+meta = Datadoc(
+    dataset_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet",             # <1>
+    metadata_document_path="gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2021_v1__DOC.json", # <2>
+)
+
+meta.copy_variable("gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json", "fnr", "pers_id") # <2>
+
+```
+1.  Vi angir det nye datasettet som skal dokumenteres i dataset_path=.
+2.  Vi kopierer metadata for variabelen `pers_id` fra metadatadokumentet ved å angi den som siste argument. Dette blir kopiert til variabelen `fnr` i den nye metadatafilen. 
+
 ### Opprette metadata for ny fil
 
 Det er i de fleste tilfeller anbefalt å opprette metadata for en ny fil med [Datadoc-editor](./datadoc-editor.qmd) fordi den har et er mer brukervennlig grensesnitt. Men i noen tilfeller kan det være nyttig å opprette et metadatadokument for Datadoc programmatisk. 
