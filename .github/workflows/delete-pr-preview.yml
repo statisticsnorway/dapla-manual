@@ -1,0 +1,52 @@
+name: Cleanup PR preview in gh-pages
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-preview-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+
+      - name: Delete PR preview folder for closed PR
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PREVIEW_DIR="pr-preview/pr-${PR_NUMBER}"
+
+          if [[ -d "$PREVIEW_DIR" ]]; then
+            echo "Removing $PREVIEW_DIR"
+            rm -rf "$PREVIEW_DIR"
+          else
+            echo "Nothing to remove: $PREVIEW_DIR does not exist"
+            exit 0
+          fi
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Remove PR preview for #${PR_NUMBER}"
+          git push origin gh-pages
