@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduksjon til Delta Lake – Dapla-manualen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-701cf985b04c13a44ea29e1938249dbe.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Introduksjon til Delta Lake – Dapla-manualen">
+<meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
+<meta property="og:image" content="https://manual.dapla.ssb.no/notebooks/spark/images/dapla-long.png">
+<meta property="og:site_name" content="Dapla-manualen">
+<meta name="twitter:title" content="Introduksjon til Delta Lake – Dapla-manualen">
+<meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/notebooks/spark/images/dapla-long.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo light-content">
+    <img src="../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../statistikkere/index.html"> 
+<span class="menu-text">Manual</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../news/index.html"> 
+<span class="menu-text">Nyheter</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog/index.html"> 
+<span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../faq.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../notebooks/index.html"> 
+<span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../utviklere/lenker.html"> 
+<span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../om-dapla.html"> 
+<span class="menu-text">Om Dapla</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7"><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://lab.dapla.ssb.no/"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Dapla Lab</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual"> <i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-andre-lenker" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Andre lenker</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-andre-lenker">    
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-test.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (test)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-dev.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (dev)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/"><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-controller" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#oppsett" id="toc-oppsett" class="nav-link active" data-scroll-target="#oppsett">Oppsett</a></li>
+  <li><a href="#genererer-noe-data" id="toc-genererer-noe-data" class="nav-link" data-scroll-target="#genererer-noe-data">Genererer noe data</a></li>
+  <li><a href="#skriver-ut-en-delta-lake-table" id="toc-skriver-ut-en-delta-lake-table" class="nav-link" data-scroll-target="#skriver-ut-en-delta-lake-table">Skriver ut en Delta Lake Table</a>
+  <ul class="collapse">
+  <li><a href="#delta-lake-tabellstruktur" id="toc-delta-lake-tabellstruktur" class="nav-link" data-scroll-target="#delta-lake-tabellstruktur">Delta Lake Tabellstruktur</a></li>
+  </ul></li>
+  <li><a href="#lese-inn-tabell" id="toc-lese-inn-tabell" class="nav-link" data-scroll-target="#lese-inn-tabell">Lese inn tabell</a></li>
+  <li><a href="#modifisere-datasettet" id="toc-modifisere-datasettet" class="nav-link" data-scroll-target="#modifisere-datasettet">Modifisere datasettet</a></li>
+  <li><a href="#append-data" id="toc-append-data" class="nav-link" data-scroll-target="#append-data">Append data</a></li>
+  <li><a href="#historien-og-metadata-til-filen" id="toc-historien-og-metadata-til-filen" class="nav-link" data-scroll-target="#historien-og-metadata-til-filen">Historien og metadata til filen</a></li>
+  <li><a href="#egendefinert-metadata" id="toc-egendefinert-metadata" class="nav-link" data-scroll-target="#egendefinert-metadata">Egendefinert metadata</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.dev/statisticsnorway/dapla-manual/blob/main/dapla-manual/notebooks/spark/deltalake-intro.ipynb" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/notebooks/spark/deltalake-intro.ipynb" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduksjon til Delta Lake</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Delta Lake er et databaselag som kan <em>legges over</em> parquet-filer i bøtter. Det kan gi oss mye av den funksjonaliteten vi har vært vant til i relasjonelle databaser og datavarehus. I denne notebooken vises hvordan man kan ta det i bruk på Dapla.</p>
+<section id="oppsett" class="level2">
+<h2 class="anchored" data-anchor-id="oppsett">Oppsett</h2>
+<p>Hvis du logger deg inn på <a href="https://jupyter.dapla.ssb.no/" class="uri">https://jupyter.dapla.ssb.no/</a> kan du ta i bruk Delta Lake via Spark. Men for å gjøre det må du installere <a href="https://pypi.org/project/delta-spark/">delta-spark</a>. For å installere pakken må du jobbe i et <a href="https://manual.dapla.ssb.no/jobbe-med-kode.html#ssb-project">ssb-project</a>. I tillegg må du installere <code>delta-spark</code>-versjon som er kompatibel med Spark-versjonen som er installert på Dapla. Gjør derfor følgende:</p>
+<ol type="1">
+<li><a href="https://manual.dapla.ssb.no/jobbe-med-kode.html#ssb-project">Opprett et ssb-project</a> med kommandoen:<br>
+<code>ssb-project create test-delta-lake</code></li>
+<li>I terminalen skriver du følgende for å sjekke Spark-versjonen som er installert:<br>
+<code>spark-shell --version</code></li>
+<li><a href="https://docs.delta.io/latest/releases.html">Sjekk hvilken <strong>delta-spark</strong>-versjon</a> som er kompatibel med din Spark-versjon og installer den med kommandoen<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:<br>
+<code>poetry add delta-spark@2.3</code></li>
+<li>Åpne en ny notebook og velg kernel <code>test-delta-lake</code>.</li>
+</ol>
+<p>Nå har du satt opp et virtuelt miljø med en PySpark-kernel som kjører en maskin (såkalt Pyspark local kernel), der du har installert delta-spark. Vi kan nå importere de bibliotekene vi trenger og sette igang en Spark-session.</p>
+<div id="7398549f-f7cf-4298-8254-ece4a08fa5d9" class="cell" data-tags="[]" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importerer biblioteker</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> delta <span class="im">import</span> <span class="op">*</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Deretter initialiserer jeg en Spark-session. <code>%%capture_output</code> er med for å forhindre at det ikke blir printet ut sensitiv informasjon i en notebook som skal inn i Dapla-manualen.</p>
+<div id="e037f70d-e6f8-4fd3-8a18-8b358ca9613f" class="cell" data-tags="[]" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>capture captured_output</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>run <span class="op">/</span>usr<span class="op">/</span>local<span class="op">/</span>share<span class="op">/</span>jupyter<span class="op">/</span>kernels<span class="op">/</span>pyspark_local<span class="op">/</span>init.py</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="genererer-noe-data" class="level2">
+<h2 class="anchored" data-anchor-id="genererer-noe-data">Genererer noe data</h2>
+<div id="5c5dd7d8-b1de-477b-8521-637698cc0f48" class="cell" data-tags="[]" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Genererer noe data med Spark</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> spark.<span class="bu">range</span>(<span class="dv">10</span>, <span class="dv">15</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>data.show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+---+
+| id|
++---+
+| 10|
+| 11|
+| 12|
+| 13|
+| 14|
++---+
+</code></pre>
+</div>
+</div>
+</section>
+<section id="skriver-ut-en-delta-lake-table" class="level2">
+<h2 class="anchored" data-anchor-id="skriver-ut-en-delta-lake-table">Skriver ut en Delta Lake Table</h2>
+<p>La oss skrive ut Spark DataFrame som en Delta Lake Table og bli kjent med strukturen i objektet:</p>
+<div id="b5e9dc42-599f-414b-ab95-c7a6e94780c3" class="cell" data-tags="[]" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data.write.<span class="bu">format</span>(<span class="st">"delta"</span>).mode(<span class="st">"overwrite"</span>).save(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 3.38 ms, sys: 1.7 ms, total: 5.08 ms
+Wall time: 5.59 s</code></pre>
+</div>
+</div>
+<p>Vi kan deretter printe ut hva som ble opprettet når vi skrev ut en Delta Lake Table:</p>
+<div id="cb0a2616-f5cb-4648-ae6a-f11b6d0e6093" class="cell" data-tags="[]">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gcsfs</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>files <span class="op">=</span> fs.glob(<span class="st">"ssb-dapla-felles-data-produkt-prod/temp4/**"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(files)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>['ssb-dapla-felles-data-delt-prod/temp4/_delta_log',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000000.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-9b3b81a9-2771-4fb4-9f0f-659fd160d643-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00001-0f2f8ba5-3161-41e8-b5d1-2084128a5bed-c000.snappy.parquet']</code></pre>
+</div>
+</div>
+<section id="delta-lake-tabellstruktur" class="level3">
+<h3 class="anchored" data-anchor-id="delta-lake-tabellstruktur">Delta Lake Tabellstruktur</h3>
+<p>Mappenstrukturen du ser over er typisk for en Delta Lake-tabell. La oss bryte ned komponentene:</p>
+<ol type="1">
+<li><strong><code>_delta_log/</code></strong>:
+<ul>
+<li>Dette er transaksjonsloggmappen for Delta Lake-tabellen. Den inneholder en serie med JSON-filer som registrerer alle transaksjoner gjort på tabellen.</li>
+<li>Transaksjonsloggen er avgjørende for Delta Lakes ACID-transaksjonsegenskaper, som muliggjør funksjoner som atomiske forpliktelser, tilbakerullinger og tid-reise-forespørsler.</li>
+</ul></li>
+<li><strong><code>_delta_log/00000000000000000000.json</code></strong>:
+<ul>
+<li>Dette er en JSON-fil innenfor transaksjonsloggkatalogen. Hver JSON-fil i denne mappen tilsvarer en transaksjon (eller en batch av transaksjoner) gjort på tabellen.</li>
+<li>Filnavnet er null-fylt og representerer transaksjonsversjonen. I dette tilfellet representerer <code>00000000000000000000.json</code> den aller første versjonen (versjon 0) av tabellen. Etter hvert som flere transaksjoner blir gjort, vil nye filer bli lagt til med økende versjonsnumre.</li>
+</ul></li>
+<li><strong><code>part-00000-450715bd-6b0c-4827-bb8a-b0265505ca72-c000.snappy.parquet</code></strong> og <strong><code>part-00001-977ed55f-5ce5-469f-8a1d-9eafb143c215-c000.snappy.parquet</code></strong>:
+<ul>
+<li>Dette er de faktiske datafilene til Delta Lake-tabellen, lagret i Parquet-format.</li>
+<li><code>.snappy.parquet</code>-utvidelsen indikerer at dataene er komprimert ved hjelp av Snappy-komprimeringsalgoritmen.</li>
+<li>Filnavnene er typiske for Sparks navngivningskonvensjon for datadeler. Prefiksene <code>part-00000</code> og <code>part-00001</code> indikerer partisjonsnumre. De lange UUID-lignende strengene er unike identifikatorer for datafilene. Suffikset <code>c000</code> indikerer Spark-oppgaven som skrev filen.</li>
+</ul></li>
+</ol>
+<p>Mappen representerer en Delta Lake-tabell med data lagret i Parquet-format og en transaksjonslogg som sporer endringer i tabellen. Tilstedeværelsen av <code>_delta_log</code>-mappen og innholdet er det som skiller en Delta Lake-tabell fra et vanlig Parquet-datasett.</p>
+</section>
+</section>
+<section id="lese-inn-tabell" class="level2">
+<h2 class="anchored" data-anchor-id="lese-inn-tabell">Lese inn tabell</h2>
+<div id="bc78bc00-1ef9-49d9-b8a0-87b3a7ec74ab" class="cell" data-tags="[]" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>deltaTable <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>deltaTable.toDF().show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+---+
+| id|
++---+
+| 12|
+| 13|
+| 14|
+| 10|
+| 11|
++---+
+</code></pre>
+</div>
+</div>
+</section>
+<section id="modifisere-datasettet" class="level2">
+<h2 class="anchored" data-anchor-id="modifisere-datasettet">Modifisere datasettet</h2>
+<p>La oss modifisere datasettet ved å bytte ut verdien <code>13</code> med <code>15</code> i <code>id</code>-kolonnen:</p>
+<div id="42699f66-ed3a-4fbb-ab54-a5f6874b0a54" class="cell" data-tags="[]" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> col, lit</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the cell with value 13 to 15</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>deltaTable.update(condition<span class="op">=</span>(col(<span class="st">"id"</span>) <span class="op">==</span> <span class="dv">13</span>), <span class="bu">set</span><span class="op">=</span>{<span class="st">"id"</span>: lit(<span class="dv">15</span>)})</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Et viktig poeng å få med seg her er at vi nå oppdaterte Delta Lake Table objektet både i minnet og på disk. La oss bevise det ved å lese inn fra disk:</p>
+<div id="2b10a295-843b-41e8-b407-f8fe1daf275b" class="cell" data-tags="[]" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>deltaTable2 <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>deltaTable2.toDF().show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+---+
+| id|
++---+
+| 12|
+| 15|
+| 14|
+| 10|
+| 11|
++---+
+</code></pre>
+</div>
+</div>
+<p>Og deretter ved å printe ut det opprinnelige objektet vi leste inn:</p>
+<div id="4258ccf3-6701-496c-baea-1bbff4274e5e" class="cell" data-tags="[]" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>deltaTable.toDF().show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+---+
+| id|
++---+
+| 12|
+| 15|
+| 14|
+| 10|
+| 11|
++---+
+</code></pre>
+</div>
+</div>
+</section>
+<section id="append-data" class="level2">
+<h2 class="anchored" data-anchor-id="append-data">Append data</h2>
+<p>La oss legge til verdiene <code>20</code> og <code>21</code> til datasettet. Først lager vi en Spark dataframe:</p>
+<div id="4c64e127-54ed-4a2b-8d35-a052faf985d0" class="cell" data-tags="[]" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>new_data <span class="op">=</span> [(<span class="dv">20</span>,), (<span class="dv">21</span>,)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>new_df <span class="op">=</span> spark.createDataFrame(new_data, [<span class="st">"id"</span>])</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>new_df.show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+---+
+| id|
++---+
+| 20|
+| 21|
++---+
+</code></pre>
+</div>
+</div>
+<p>Deretter kan vi appendere det til vår opprinnelige dataframe:</p>
+<div id="d3e6b418-3cb7-4360-bbd0-e09d7f82faf0" class="cell" data-tags="[]" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>new_df.write.<span class="bu">format</span>(<span class="st">"delta"</span>).mode(<span class="st">"append"</span>).save(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="a1182c79-36a5-4d4d-beb0-a72b3d377caf" class="cell" data-tags="[]" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>deltaTable.toDF().show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+---+
+| id|
++---+
+| 12|
+| 15|
+| 14|
+| 10|
+| 11|
+| 21|
+| 20|
++---+
+</code></pre>
+</div>
+</div>
+</section>
+<section id="historien-og-metadata-til-filen" class="level2">
+<h2 class="anchored" data-anchor-id="historien-og-metadata-til-filen">Historien og metadata til filen</h2>
+<p>Nå som vi har gjort noen endringer kan vi se på historien til filen:</p>
+<div id="f805cfdb-9081-4d6a-8840-48898aaa3956" class="cell" data-tags="[]">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lister ut filene i bøtta</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fs.glob(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4/**"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>['ssb-dapla-felles-data-delt-prod/temp4/_delta_log',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000000.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000001.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/_delta_log/00000000000000000002.json',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-73e5052f-1b82-48da-ab37-2cbc01bb46c1-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-9b3b81a9-2771-4fb4-9f0f-659fd160d643-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00000-d04d0ca2-8e8b-42e9-a8a3-0fed9a0e4e41-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00001-0f2f8ba5-3161-41e8-b5d1-2084128a5bed-c000.snappy.parquet',
+ 'ssb-dapla-felles-data-delt-prod/temp4/part-00001-30d707e4-dd9a-4bfd-a4c7-7fbb1933e9ae-c000.snappy.parquet']</code></pre>
+</div>
+</div>
+<p>Vi ser av transaksjonsloggen i <code>_delta_log</code>-mappen at det nå har vært 3 transaksjoner på datasettet. vi ser også av navnene på parquet-filene, <code>part-00000</code> og <code>part-00001</code>, at det finnes to versjoner av filen. Hvis vi ønsker å bli bedre kjent med hva slags informasjon som blir lagret fra transaksjonene, så kan vi printe ut den siste transaksjonen som heter <code>00000000000000000002.json</code>:</p>
+<div id="df9e687c-b0f3-4c5b-9327-6619196e5348" class="cell" data-tags="[]">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gcsfs</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler oss på bøttene</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-prod/temp4/_delta_log/00000000000000000002.json"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> fs.<span class="bu">open</span>(path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> json.loads(line)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        pretty_content <span class="op">=</span> json.dumps(data, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(pretty_content)</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">50</span>)  <span class="co"># Print separator for clarity</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "commitInfo": {
+        "timestamp": 1696942544879,
+        "operation": "WRITE",
+        "operationParameters": {
+            "mode": "Append",
+            "partitionBy": "[]"
+        },
+        "readVersion": 1,
+        "isolationLevel": "Serializable",
+        "isBlindAppend": true,
+        "operationMetrics": {
+            "numFiles": "2",
+            "numOutputRows": "2",
+            "numOutputBytes": "956"
+        },
+        "engineInfo": "Apache-Spark/3.3.1 Delta-Lake/2.3.0",
+        "txnId": "a3dcd582-8362-4fc2-a8ce-57613d2eb2b8"
+    }
+}
+--------------------------------------------------
+{
+    "add": {
+        "path": "part-00000-73e5052f-1b82-48da-ab37-2cbc01bb46c1-c000.snappy.parquet",
+        "partitionValues": {},
+        "size": 478,
+        "modificationTime": 1696942544755,
+        "dataChange": true,
+        "stats": "{\"numRecords\":1,\"minValues\":{\"id\":20},\"maxValues\":{\"id\":20},\"nullCount\":{\"id\":0}}"
+    }
+}
+--------------------------------------------------
+{
+    "add": {
+        "path": "part-00001-30d707e4-dd9a-4bfd-a4c7-7fbb1933e9ae-c000.snappy.parquet",
+        "partitionValues": {},
+        "size": 478,
+        "modificationTime": 1696942544833,
+        "dataChange": true,
+        "stats": "{\"numRecords\":1,\"minValues\":{\"id\":21},\"maxValues\":{\"id\":21},\"nullCount\":{\"id\":0}}"
+    }
+}
+--------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Her ser vi at vi får masse informasjon om endringen, både metadata om transaksjonen i <code>commitInfo</code>, og informasjon om nye data-filer i <code>add</code>-delen. Vi ser at det er en veldig rik beskrivelse av endringer, men det kan være vanskeig å lese innholdet direkte. La oss heller bruke <code>history()</code>-funksjonen som kommer med <code>delta</code>:</p>
+<div id="71ff024b-ebee-409e-943f-7625b7d78a8a" class="cell" data-tags="[]" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>history <span class="op">=</span> deltaTable.history()</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>history.show()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+-------+--------------------+------+--------+---------+--------------------+----+--------+---------+-----------+--------------+-------------+--------------------+------------+--------------------+
+|version|           timestamp|userId|userName|operation| operationParameters| job|notebook|clusterId|readVersion|isolationLevel|isBlindAppend|    operationMetrics|userMetadata|          engineInfo|
++-------+--------------------+------+--------+---------+--------------------+----+--------+---------+-----------+--------------+-------------+--------------------+------------+--------------------+
+|      2|2023-10-10 12:55:...|  null|    null|    WRITE|{mode -&gt; Append, ...|null|    null|     null|          1|  Serializable|         true|{numFiles -&gt; 2, n...|        null|Apache-Spark/3.3....|
+|      1|2023-10-10 12:55:...|  null|    null|   UPDATE|{predicate -&gt; (id...|null|    null|     null|          0|  Serializable|        false|{numRemovedFiles ...|        null|Apache-Spark/3.3....|
+|      0|2023-10-10 12:55:...|  null|    null|    WRITE|{mode -&gt; Overwrit...|null|    null|     null|       null|  Serializable|        false|{numFiles -&gt; 2, n...|        null|Apache-Spark/3.3....|
++-------+--------------------+------+--------+---------+--------------------+----+--------+---------+-----------+--------------+-------------+--------------------+------------+--------------------+
+</code></pre>
+</div>
+</div>
+<p>Siden det blit trangt i tabellen over så kan vi velge hvilke variabler vi ønsker å se på:</p>
+<div id="a596ee4f-5773-4f24-a1fb-621574f4e1ba" class="cell" data-tags="[]" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Oversikt over alle kolonner som finnes i historien</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>history.columns</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>['version',
+ 'timestamp',
+ 'userId',
+ 'userName',
+ 'operation',
+ 'operationParameters',
+ 'job',
+ 'notebook',
+ 'clusterId',
+ 'readVersion',
+ 'isolationLevel',
+ 'isBlindAppend',
+ 'operationMetrics',
+ 'userMetadata',
+ 'engineInfo']</code></pre>
+</div>
+</div>
+<div id="1baa4548-8ab3-406b-a76e-ea9b4191bf71" class="cell" data-tags="[]" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Velger de kolonnene jeg er interessert i</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>selected_history <span class="op">=</span> deltaTable.history().select(</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"version"</span>, <span class="st">"timestamp"</span>, <span class="st">"operation"</span>, <span class="st">"operationParameters"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="5178957e-f735-4434-8b1b-d94a9d77ee93" class="cell" data-tags="[]" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the selected columns</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>selected_history.show(truncate<span class="op">=</span><span class="dv">50</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+-------+-----------------------+---------+--------------------------------------+
+|version|              timestamp|operation|                   operationParameters|
++-------+-----------------------+---------+--------------------------------------+
+|      2|2023-10-10 12:55:45.014|    WRITE|   {mode -&gt; Append, partitionBy -&gt; []}|
+|      1|2023-10-10 12:55:37.054|   UPDATE|        {predicate -&gt; (id#4452L = 13)}|
+|      0|2023-10-10 12:55:29.048|    WRITE|{mode -&gt; Overwrite, partitionBy -&gt; []}|
++-------+-----------------------+---------+--------------------------------------+
+</code></pre>
+</div>
+</div>
+</section>
+<section id="egendefinert-metadata" class="level2">
+<h2 class="anchored" data-anchor-id="egendefinert-metadata">Egendefinert metadata</h2>
+<p>Delta Lake støtter også egendefinert metadata. Det kan for eksempel være nyttig hvis man ønsker å bruke Delta Lake som en backend for et GUI som lar brukeren oppdatere en tabell fra GUI-et. Da ønsker man typisk å lagre hvem som gjorde endringer og når det ble gjort. La oss legge på noe slik metadata:</p>
+<div id="80128e45-f7a3-4050-b34e-539b814e4f45" class="cell" data-tags="[]" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Leser inn filen</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.<span class="bu">format</span>(<span class="st">"delta"</span>).load(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cell-show-meta" class="cell" data-tags="[]" data-execution_count="20">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagrer egendefinert metadata i en json-fil</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="op">=</span> {</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"comment"</span>: <span class="st">"Kontaktet oppgavegiver og kranglet!"</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"manueltEditert"</span>: <span class="st">"True"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"maskineltEditert"</span>: <span class="st">"False"</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>metadata</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="show-meta" class="cell-output cell-output-display" data-execution_count="45">
+<pre><code>{'comment': 'Kontaktet oppgavegiver og kranglet!',
+ 'manueltEditert': 'True',
+ 'maskineltEditert': 'False'}</code></pre>
+</div>
+</div>
+<p>Vi kan deretter appende dette til den siste versjonen av fila.</p>
+<div id="2f5ae1c3-64b8-4864-b174-443481aa5364" class="cell" data-tags="[]" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    df.write.<span class="bu">format</span>(<span class="st">"delta"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    .mode(<span class="st">"append"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    .option(<span class="st">"userMetadata"</span>, json.dumps(metadata))  <span class="co"># Serialize metadata to a string</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    .save(<span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="66e15b79-7bd1-44ec-a278-e5f758122ea6" class="cell" data-tags="[]" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Laster inn tabellen</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>deltaTable <span class="op">=</span> DeltaTable.forPath(spark, <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/temp4"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Henter ut historien</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>history_df <span class="op">=</span> deltaTable.history()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="da236532-cacb-4e23-8669-f323944a2326" class="cell" data-tags="[]" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the operation details, including metadata</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>history_df.select(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"version"</span>, <span class="st">"timestamp"</span>, <span class="st">"operation"</span>, <span class="st">"operationParameters"</span>, <span class="st">"userMetadata"</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>).show(truncate<span class="op">=</span><span class="dv">10</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+-------+----------+---------+-------------------+------------+
+|version| timestamp|operation|operationParameters|userMetadata|
++-------+----------+---------+-------------------+------------+
+|      3|2023-10...|    WRITE|         {mode -...|  {"comme...|
+|      2|2023-10...|    WRITE|         {mode -...|        null|
+|      1|2023-10...|   UPDATE|         {predic...|        null|
+|      0|2023-10...|    WRITE|         {mode -...|        null|
++-------+----------+---------+-------------------+------------+
+</code></pre>
+</div>
+</div>
+<div id="8004531b-c729-4f63-9495-1bd45adce7ea" class="cell" data-tags="[]" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>history_df.select(<span class="st">"version"</span>, <span class="st">"userMetadata"</span>).show(truncate<span class="op">=</span><span class="dv">50</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+-------+--------------------------------------------------+
+|version|                                      userMetadata|
++-------+--------------------------------------------------+
+|      3|{"comment": "Kontaktet oppgavegiver og kranglet...|
+|      2|                                              null|
+|      1|                                              null|
+|      0|                                              null|
++-------+--------------------------------------------------+
+</code></pre>
+</div>
+</div>
+<p>Vi ser at vi la til vår egen metadata i versjon 3 av fila. Vi kan printe ut den rå transaksjonsloggen som tidligere, men nå er vi på transaksjon 3 <code>00000000000000000003.json</code>:</p>
+<div id="f5099b8b-408b-420d-828d-6689c746160f" class="cell" data-tags="[]">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gcsfs</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kobler oss på bøttene</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Filsti</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-prod/temp4/_delta_log/00000000000000000003.json"</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> fs.<span class="bu">open</span>(path, <span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> f:</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> json.loads(line)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>        pretty_content <span class="op">=</span> json.dumps(data, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(pretty_content)</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="dv">50</span>)  <span class="co"># Print separator for clarity</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "commitInfo": {
+        "timestamp": 1696942553907,
+        "operation": "WRITE",
+        "operationParameters": {
+            "mode": "Append",
+            "partitionBy": "[]"
+        },
+        "readVersion": 2,
+        "isolationLevel": "Serializable",
+        "isBlindAppend": false,
+        "operationMetrics": {
+            "numFiles": "2",
+            "numOutputRows": "7",
+            "numOutputBytes": "989"
+        },
+        "userMetadata": "{\"comment\": \"Kontaktet oppgavegiver og kranglet!\", \"manueltEditert\": \"True\", \"maskineltEditert\": \"False\"}",
+        "engineInfo": "Apache-Spark/3.3.1 Delta-Lake/2.3.0",
+        "txnId": "e7de92bf-b0f9-4341-8bbb-9b382f2f3eb6"
+    }
+}
+--------------------------------------------------
+{
+    "add": {
+        "path": "part-00000-96369f3d-fe4a-4365-a0df-00c813027399-c000.snappy.parquet",
+        "partitionValues": {},
+        "size": 503,
+        "modificationTime": 1696942553856,
+        "dataChange": true,
+        "stats": "{\"numRecords\":5,\"minValues\":{\"id\":10},\"maxValues\":{\"id\":15},\"nullCount\":{\"id\":0}}"
+    }
+}
+--------------------------------------------------
+{
+    "add": {
+        "path": "part-00001-0f1bc8e6-093b-49a9-ad0b-78d5a148cfb6-c000.snappy.parquet",
+        "partitionValues": {},
+        "size": 486,
+        "modificationTime": 1696942553853,
+        "dataChange": true,
+        "stats": "{\"numRecords\":2,\"minValues\":{\"id\":20},\"maxValues\":{\"id\":21},\"nullCount\":{\"id\":0}}"
+    }
+}
+--------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Vi er da at metadataene ligger som forventet i metadata-delen.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
+
+<ol>
+<li id="fn1"><p>I eksempelet er det Spark V3.3.1 som er installert og jeg installerer derfor delta-spark v2.3<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopiert!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopiert!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Kom i gang med Dapla</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.dev/statisticsnorway/dapla-manual/blob/main/dapla-manual/notebooks/spark/deltalake-intro.ipynb" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/notebooks/spark/deltalake-intro.ipynb" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
