@@ -902,28 +902,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="kopiere-en-variable-fra-en-annen-metadata-fil" class="level3">
 <h3 class="anchored" data-anchor-id="kopiere-en-variable-fra-en-annen-metadata-fil">Kopiere en variable fra en annen metadata fil</h3>
-<p>Hvis du jobber med data som er delt av andre team, kan det være hensiktsmessig å hente inn metadata direkte fra kildefilene deres i stedet for å bare kopiere fra forrige periode. Dette sikrer at du får med deg eventuelle endringer som er gjort i dokumentasjonen av dataene du bruker. Merk at her vil det som er tidligere er dokumentert i den nye filen bli overskrevet av det som kommer fra metadata filen man kopierer fra.</p>
+<p>I noen tilfeller kan det være nyttig å kopiere over metadata for en spesifikk variabel i et datasett til et annet. F.eks. hvis man kobler på data fra andre team sine delte-data, så er fint å gjenbruke metadata fra de delte dataene. Dette kan gjøres programmatisk på følgende måte:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-4" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.datasets <span class="im">import</span> Datadoc</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>meta <span class="op">=</span> Datadoc(</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>    dataset_path<span class="op">=</span><span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-4-5" class="code-annotation-target"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a>    metadata_document_path<span class="op">=</span><span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2021_v1__DOC.json"</span>,</span>
-<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="annotated-cell-4-7"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-4-8"><a href="#annotated-cell-4-8" aria-hidden="true" tabindex="-1"></a>meta.copy_variable(<span class="st">"gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json"</span>, <span class="st">"fnr"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>new_dataset <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet"</span></span>
+<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-4-5" class="code-annotation-target"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a>meta <span class="op">=</span> Datadoc(dataset_path<span class="op">=</span>new_dataset)</span>
+<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-4-7" class="code-annotation-target"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a>copy_from <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json"</span></span>
+<span id="annotated-cell-4-8"><a href="#annotated-cell-4-8" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-4-9" class="code-annotation-target"><a href="#annotated-cell-4-9" aria-hidden="true" tabindex="-1"></a>meta.copy_variable(copy_from, <span class="st">"fnr"</span>)</span>
+<span id="annotated-cell-4-10"><a href="#annotated-cell-4-10" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-4-11" class="code-annotation-target"><a href="#annotated-cell-4-11" aria-hidden="true" tabindex="-1"></a>meta.write_metadata_document()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="1">Vi angir det nye datasettet som skal dokumenteres i dataset_path=.</span>
+<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="1">Filsti til datasettet som det skal kopieres til</span>
 </dd>
 <dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-4" data-code-lines="5,8" data-code-annotation="2">Vi kopierer metadata for variabelen <code>fnr</code> fra metadatadokumentet ved å angi filstien til kildens metadatadokument og navnet på variabelen som skal kopieres.</span>
+<span data-code-cell="annotated-cell-4" data-code-lines="5" data-code-annotation="2">Oppretter et Datadoc-dokument i minnet</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="7" data-code-annotation="3">Filsti til datasett det skal kopieres fra</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="9" data-code-annotation="4">Kopierer over metadata for variabelen <code>fnr</code> til <code>new_dataset</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="11" data-code-annotation="5">Skrive metadata til fil</span>
 </dd>
 </dl>
 <p>Om variabelen man ønsker å kopiere har et annet navn enn den lokale variabelen, så kan man legge det til som siste argument i <code>copy_variable</code> funksjonen.</p>
@@ -933,21 +948,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-5" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_metadata.datasets <span class="im">import</span> Datadoc</span>
 <span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>meta <span class="op">=</span> Datadoc(</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-4" class="code-annotation-target"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a>    dataset_path<span class="op">=</span><span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-5" class="code-annotation-target"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>    metadata_document_path<span class="op">=</span><span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2021_v1__DOC.json"</span>,</span>
-<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="annotated-cell-5-7"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>meta.copy_variable(<span class="st">"gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json"</span>, <span class="st">"fnr"</span>, <span class="st">"pers_id"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-5-3" class="code-annotation-target"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a>new_dataset <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet"</span></span>
+<span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-5-5" class="code-annotation-target"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>meta <span class="op">=</span> Datadoc(dataset_path<span class="op">=</span>new_dataset)</span>
+<span id="annotated-cell-5-6"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>copy_from <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json"</span></span>
+<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>meta.copy_variable(</span>
+<span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>    copy_from,</span>
+<span id="annotated-cell-5-11"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a>    source_short_name<span class="op">=</span><span class="st">"snr"</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-5-12" class="code-annotation-target"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a>    target_short_name<span class="op">=</span><span class="st">"snr_mor"</span></span>
+<span id="annotated-cell-5-13"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a>    )     </span>
+<span id="annotated-cell-5-14"><a href="#annotated-cell-5-14" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-5-15" class="code-annotation-target"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>meta.write_metadata_document()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="4" data-code-annotation="1">Vi angir det nye datasettet som skal dokumenteres i dataset_path=.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="3" data-code-annotation="1">Filsti til datasettet som det skal kopieres til</span>
 </dd>
 <dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-5" data-code-lines="5,8" data-code-annotation="2">Vi kopierer metadata for variabelen <code>pers_id</code> fra metadatadokumentet ved å angi den som siste argument. Dette blir kopiert til variabelen <code>fnr</code> i den nye metadatafilen.</span>
+<span data-code-cell="annotated-cell-5" data-code-lines="5" data-code-annotation="2">Oppretter et Datadoc-dokument i minnet</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="7" data-code-annotation="3">Filsti til datasett det skal kopieres fra</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="12" data-code-annotation="4">Kopierer over metadata for variabelen <code>snr</code> til <code>new_dataset</code> og omdøper til variabelen til <code>fnr_mor</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="15" data-code-annotation="5">Skrive metadata til fil</span>
 </dd>
 </dl>
 </section>
