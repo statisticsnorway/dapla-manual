@@ -1,10 +1,14 @@
 ---
 title: Utsending
-date-modified: 01/13/2026
+date-modified: 01/15/2026
 lightbox: true
 ---
 
-En **utsending** er knyttet til en **pulje**, som igjen er knyttet til en **periode** og et **skjema**. Du kan se hvilke utsendinger som er registrert på en pulje i detaljvisningen etter at du har valgt ønsket pulje.
+En utsending er selve forsendelsen (brev/skjema/informasjon/påminnelse) som sendes til mottakere. For å kunne sende noe, må utsendingen ligge i en pulje, som igjen tilhører en periode for et bestemt skjema. 
+
+**Skjema → Periode → Pulje → Utsending**
+
+Sammenhengen mellom de ulike nivåene er forklart i [Administrasjon av skjema](./altinn-skjema-administrasjon.html)
 
 **Eksempel på pulje med utsending**<br>
 Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
@@ -16,17 +20,25 @@ Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
 
 | Utsendingstype | Beskrivelse |
 | :--------------------------- | :---------------------------------------------------------------------------- |
-| instansiering | Utsending av skjema (Hovedutsending skjema).|
+| Instansiering | Utsending av skjema (Hovedutsending skjema).|
+| Informasjon om skjema | Informasjon om at nytt skjema tilgjengelig for utfylling i Altinn.|
 | Påminnelse | Sendes når fristen for å svare på undersøkelsen er utløpt.|
 | Vedtak opplysningsplikt | Sendes til enheter som er pålagt rapportering av opplysninger til SSB.|
 | Vedtak tvangsmulkt | Sendes når opplysningene ikke blir rapportert innen fastsatt frist.|
 | Hovedutsending brev | Sendes til enheter som ikke får opplysningsplikt fra SSB.|
 : Utsendingstyper {#tbl-utsendingstyper .striped}
 
-## Opprette ny utsending
-For å opprette en ny utsending må du først søke fram riktig **skjemaperiode** og **pulje**. Trykk deretter på **pluss-symbolet** under Utsendinger for å legge til en ny utsending.
+## Forutsetninger
+Før du kan opprette en utsending må følgende være opprettet::
 
-Bildet nedenfor viser et eksempel på hvordan en utsending opprettes:
+- Skjema være opprettet
+- Periode være opprettet
+- Pulje være opprettet
+
+## Opprette ny utsending
+For å opprette en ny utsending må du først søke fram riktig **skjemaperiode** og **pulje**. Trykk deretter på **pluss-symbolet (+)** i seksjonen **Utsendinger** i puljevisningen.
+
+Bildet nedenfor viser et eksempel på metadata for en utsending:
 
 ![Opprette utsending](../images/altinn-utsending-opprette.png){fig-alt="Illustrasjon opprette utsending." #fig-altinn-opprette-utsending} 
 
@@ -38,9 +50,9 @@ Bildet nedenfor viser et eksempel på hvordan en utsending opprettes:
 | Meta | Forklaring |
 | :----------------- | :-------------------------------------------------------------------------------------- |
 | Utsendingstype | Angir type utsending.
-| Test | Angir testutsending (sendes ikke til Altinn)
+| Test | Angir om utsendingen er en test (sendes ikke til Altinn)
 | Send ut | Angir tidspunkt for utsendelse.
-: Pulje metadata {#tbl-utsending-meta .striped}
+: Utsending metadata {#tbl-utsending-meta .striped}
 :::
 
 ### Kodeeksempel
@@ -72,7 +84,9 @@ output = client.get_utsending_by_pulje_id(
 print(json.dumps(output, indent=4))
 ```
 ## Opprette nye utsendinger basert på tidligere periode
-Det er også mulig å opprette nye utsendinger basert på en tidligere periode. Velg perioden som skal brukes som utgangspunkt. Denne må være den siste registrerte perioden. Deretter angir du hvor mange nye perioder som skal opprettes.
+Dette er en funksjon for gjenbruk av tidligere perioder, og er ment for opprettelse av nye perioder basert på tidligere oppsett.
+
+Velg perioden som skal brukes som utgangspunkt. Denne må være den siste registrerte perioden. Deretter angir du hvor mange nye perioder som skal opprettes.
 
 Bildet nedenfor viser en periode med tilhørende pulje og utsending. Nederst i skjermbildet kan du angi antall nye perioder og starte opprettelsen:
 
