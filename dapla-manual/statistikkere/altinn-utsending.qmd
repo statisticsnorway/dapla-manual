@@ -1,0 +1,116 @@
+---
+title: Utsending
+date-modified: 01/16/2026
+lightbox: true
+---
+
+En utsending er selve forsendelsen (vedtaksbrev/skjema/informasjon/påminnelse) som sendes til mottakere. For å kunne sende noe, må utsendingen ligge i en pulje, som igjen tilhører en periode for et bestemt skjema. 
+
+**Skjema → Periode → Pulje → Utsending**
+
+Sammenhengen mellom de ulike nivåene er forklart i [Administrasjon av skjema](./altinn-skjema-administrasjon.html)
+
+**Eksempel på pulje med utsending**<br>
+Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
+
+![Pulje utsending](../images/altinn-utsending-pulje.png){fig-alt="Illustrasjon av pulje og utsending." #fig-altinn-pulje-utsending} 
+
+## Utsendingstyper
+@tbl-utsendingstyper beskriver de ulike utsendingstypene.
+
+| Utsendingstype | Beskrivelse | Type (se fotnote)[^utsending-type]
+| :-------------------------- | :-------------------------------------------------------------------- | :--------------------------------------- |
+| Instansiering | Skjema legges tilgjengelig i Altinn for oppgavegiver | Skjema
+| Informasjon om skjema | Informasjon om at et skjema er tilgjengelig for utfylling | Melding og påfølgende varsling
+| Vedtak opplysningsplikt | Informasjon om rapporteringen og vedtak opplysningsplikt | Melding, vedlegg, varsling og revarsling
+| Hovedutsending brev | Informasjon om rapporteringen | Melding, vedlegg, varsling og revarsling
+| Påminnelse | Informasjon om at svarfristen er utløpt | Melding og påfølgende varsling
+| Vedtak tvangsmulkt | Informasjon om vedtak om tvangsmulkt, og ny svarfrist | Melding, vedlegg, varsling og revarsling
+: Utsendingstyper {#tbl-utsendingstyper .striped}
+
+[^utsending-type]:  
+**Melding**: En melding som legges i mottakers innboks i Altinn.  
+**Vedlegg**: Dokument (PDF) som er knyttet til meldingen. Meldingen kan for eksempel informere om et vedtak, mens selve vedtaksbrevet ligger som vedlegg.  
+**Varsling**: Utsending av varsel (e-post eller SMS) for å informere mottaker om at det er kommet en ny melding i Altinn.  
+**Revarsling**: Ny varsling som sendes dersom mottaker ikke har åpnet meldingen innen gitt tidsrom.  
+
+## Forutsetninger
+Før du kan opprette en utsending må følgende være opprettet:
+
+- Skjema
+- Periode
+- Pulje
+
+## Opprette ny utsending
+For å opprette en ny utsending må du først søke fram riktig **skjemaperiode** og **pulje**. Trykk deretter på **pluss-symbolet (+)** i seksjonen **Utsendinger** i puljevisningen.
+
+Bildet nedenfor viser et eksempel på metadata for en utsending:
+
+![Opprette utsending](../images/altinn-utsending-opprette.png){fig-alt="Illustrasjon opprette utsending." #fig-altinn-opprette-utsending} 
+
+::: {.callout-tip collapse="true"}
+### Beskrivelse av utsending metadata
+
+@tbl-utsending-meta beskriver metadatafeltene for en utsending
+
+| Meta | Forklaring |
+| :----------------- | :-------------------------------------------------------------------------------------- |
+| Utsendingstype | Angir type utsending.
+| Test | Angir om utsendingen er en test (sendes ikke til Altinn)
+| Send ut | Angir tidspunkt for utsendelse.
+: Utsending metadata {#tbl-utsending-meta .striped}
+:::
+
+### Kodeeksempel
+For å lage en ny utsending, kan du bruke metoden `create_utsending` i `SuvClient`.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+_altinn_uts_tidspunkt = datetime(2026, 2, 1, 14, 30, 0)
+
+output = client.create_utsending(
+            pulje_id = 4,
+            utsendingstype_navn = 'instansiering',
+            altinn_uts_tidspunkt = _altinn_uts_tidspunkt
+        )
+        
+print(output)
+```
+
+For å hente ut alle utsendinger som er knyttet til en bestemt pulje, kan du bruke metoden `get_utsending_by_pulje_id` i `SuvClient`. Sørg for at du oppgir riktig pulje_id.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.get_utsending_by_pulje_id(
+            pulje_id = 4   
+        )
+
+print(json.dumps(output, indent=4))
+```
+## Opprette nye utsendinger basert på tidligere periode
+Dette er en funksjon for gjenbruk av tidligere perioder, og er ment for opprettelse av nye perioder basert på tidligere oppsett.
+
+Velg perioden som skal brukes som utgangspunkt. Denne må være den siste registrerte perioden. Deretter angir du hvor mange nye perioder som skal opprettes.
+
+Bildet nedenfor viser en periode med tilhørende pulje og utsending. Nederst i skjermbildet kan du angi antall nye perioder og starte opprettelsen:
+
+![Opprette nye perioder](../images/altinn-utsending-nye-perioder.png){fig-alt="Legg til nye perioder." #fig-altinn-utsending-nye-perioder} 
+
+Systemet oppretter nye perioder automatisk, inkludert eventuelle puljer og utsendinger. Datoer for puljer og utsendinger fastsettes basert på periodetypen. Kontroller datoene nøye, og juster dem ved behov. **Delregisternummer må oppdateres manuelt** for alle nye perioder.
+
+### Kodeeksempel
+
+Bruk metoden `create_new_periodes` for å **opprette en eller flere nye perioder** , inkludert eventuelle puljer og utsendinger.
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+output = client.create_new_periodes(
+            periode_id=137,
+            num_new_periodes=2
+        )
+
+print(json.dumps(output, indent=4))
+```

@@ -1,6 +1,6 @@
 ---
 title: Administrasjon av skjema
-date-modified: 11/14/2025
+date-modified: 01/16/2026
 lightbox: true
 ---
 
@@ -259,76 +259,6 @@ client = SuvClient()
 
 output = client.get_pulje_by_periode_id(
             periode_id = 99
-        )
-
-print(output)
-```
-
-## Utsending
-En pulje kan ha en eller flere utsendinger knyttet til seg. Hvilke utsendinger som er lagt inn på puljen kan du se i detaljvisningen når du har valgt en pulje. 
-
-**Eksempel på pulje med utsending**<br>
-Bildet nedenfor viser eksempel på en pulje med en tilknyttet utsending:
-
-![Pulje utsending](../images/altinn-skjemaadm-utsending.png){fig-alt="Illustrasjon av pulje og utsending." #fig-altinn-pulje-utsending} 
-
-::: {.callout-tip collapse="true"}
-## Beskrivelse av utsending metadata
-
-@tbl-utsending-meta beskriver metadatafeltene for en utsending
-
-| Meta | Forklaring |
-| :----------------- |:-------------------------------------------------------------------------------------- |
-| Utsendingstype | Angir type utsending (f.eks instansiering).
-| Trigger | Angir trigger for utsending (Manuell, Auto, Ekstern). 
-| Test | Angir testutsending (sendes ikke til utvalg)
-| Send ut | Angir tidspunkt for utsendelse.
-: Pulje metadata {#tbl-utsending-meta .striped}
-:::
-
-### Send nå
-Ønsker du å gjøre en utsending umiddelbart må dette gjøres fra GUI.
-
-**Slik gjør du en utsending umiddelbart:**
-
-1. Velg **Skjemadata** i venstremenyen.
-2. Bruk søkefeltet i det nye skjermbildet for å finne skjemaet ditt.
-3. Klikk på **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om skjemaet.
-4. Finn ønsket **periode** og velg **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om perioden.
-5. Finn ønsket **utsending** og velg **Vis detaljer**-ikonet i søkeresultatet for å se mer informasjon om utsendingen (eventuelt så kan du opprette en helt ny utsending).
-6. Trykk **"Send nå"**.
-
-![Send nå](../images/altinn-skjemaadm-utsending-jobb.png){fig-alt="Illustrasjon av utsending." #fig-altinn-utsending} 
-
-::: {.callout-tip}
-## Utsending til utvalgt(e) enhet(er)
-For å sende til én eller flere spesifikke enheter, kan du oppgi organisasjonsnumrene som en kommaseparert liste. Eksempel: 123456789, 987654321. Dersom ingen enheter oppgis, vil utsendingen automatisk gjelde for hele puljen.
-:::
-
-### Kodeeksempel
-For å lage en ny utsending, kan du bruke metoden `create_utsending` i `SuvClient`.
-
-```{.python filename="notebook"}
-client = SuvClient()
-
-_altinn_uts_tidspunkt = datetime(2024, 11, 20, 14, 30, 0)
-
-output = client.create_utsending(
-            pulje_id = 75,
-            utsendingstype_navn = 'instansiering',
-            altinn_uts_tidspunkt = _altinn_uts_tidspunkt
-        )
-        
-print(output)
-```
-
-For å hente ut utsending med tilhørende metadata i Python, kan du bruke metoden `get_utsending_by_id` i `SuvClient`. Sørg for at du oppgir riktig utsending_id.
-
-```{.python filename="notebook"}
-client = SuvClient()
-
-output = client.client.get_utsending_by_id(
-            utsending_id = 133   
         )
 
 print(output)
