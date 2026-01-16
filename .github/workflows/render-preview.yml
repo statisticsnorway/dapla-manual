@@ -19,7 +19,15 @@ jobs:
         with:
           to: html
           path: dapla-manual
+      - name: Check if PR is still open
+        id: check_pr
+        run: |
+          STATE=$(gh pr view ${{ github.event.pull_request.number }} --json state --jq .state)
+          echo "state=$STATE" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy PR Preview
+        if: steps.check_pr.outputs.state == 'OPEN'
         uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: ./dapla-manual/_site # The folder where Quarto renders the site
