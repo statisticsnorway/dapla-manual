@@ -6,9 +6,10 @@ on:
 
 permissions:
   contents: write
+  pull-requests: read
 
 concurrency:
-  group: gh-pages-preview-cleanup
+  group: gh-pages-updates
   cancel-in-progress: false
 
 jobs:
@@ -24,19 +25,34 @@ jobs:
 
       - name: Delete PR preview folder for closed PR
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
 
-          PR_NUMBER="${{ github.event.pull_request.number }}"
-          PREVIEW_DIR="pr-preview/pr-${PR_NUMBER}"
-
-          if [[ -d "$PREVIEW_DIR" ]]; then
-            echo "Removing $PREVIEW_DIR"
-            rm -rf "$PREVIEW_DIR"
-          else
-            echo "Nothing to remove: $PREVIEW_DIR does not exist"
+          if [[ ! -d "pr-preview" ]]; then
+            echo "No pr-preview directory found. Nothing to clean up."
             exit 0
           fi
+
+          # Iterate through all directories in pr-preview that match the pattern pr-*
+          for dir in pr-preview/pr-*; do
+            if [[ -d "$dir" ]]; then
+              PR_NUMBER=$(basename "$dir" | sed 's/pr-//')
+              
+              echo "Checking state of PR #$PR_NUMBER..."
+              
+              # Get PR state, handle cases where PR might not exist
+              STATE=$(gh pr view "$PR_NUMBER" --json state --jq .state 2>/dev/null || echo "UNKNOWN")
+              
+              if [[ "$STATE" != "OPEN" ]]; then
+                echo "Removing $dir (State: $STATE)"
+                rm -rf "$dir"
+              else
+                echo "Keeping $dir (State: $STATE)"
+              fi
+            fi
+          done
 
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -48,5 +64,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Remove PR preview for #${PR_NUMBER}"
+          git commit -m "Cleanup PR previews (triggered by #${{ github.event.pull_request.number }})"
           git push origin gh-pages
