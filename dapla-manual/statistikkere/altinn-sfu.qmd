@@ -1,6 +1,6 @@
 ---
 title: Hente data fra bakke
-date-modified: 12/15/2025
+date-modified: 01/21/2026
 lightbox: true
 ---
 
@@ -63,9 +63,66 @@ print(json.dumps(response, indent=4))
 ```
 :::
 
+::: {.callout-caution collapse="true"}
+## Vis output
+
+```json
+{
+    "delreg_nr": 49430224,
+    "ident_nr": "A3TF0001",
+    "orgnr": "123456789",
+    "enhets_type": "FRTK",
+    "reportee_ident_nr": "A3TF0001",
+    "reportee_orgnr": "123456789",
+    "reportee_enhets_type": "FRTK",
+    "foretak": "A3TF0001",
+    "orgnr_foretak": "123456789",
+    "flv": "0",
+    "navn1": "Foretaket",
+    "navn2": null,
+    "avdeling": null,
+    "f_adresse1": "Testvegen 1",
+    "f_adresse2": null,
+    "f_adresse3": null,
+    "f_postnr": "0001",
+    "f_poststed": "OSLO",
+    "maalform": null,
+    "kontaktperson": "Ola Nordmann",
+    "kont_telefon": "12121212",
+    "kont_mobiltlf": null,
+    "kont_epost": "test@test.ssb",
+    "h_var1_n": null,
+    "h_var2_n": null,
+    "h_var3_n": null,
+    "h_var1_a": null,
+    "h_var2_a": "1",
+    "h_var3_a": null,
+    "utvalgsstatus": null,
+    "pulje_nr": 1,
+    "vedtak_tvmulkt": "N",
+    "sendt_si": "N",
+    "status": null,
+    "org_form": null,
+    "sn07_1": "46.422",
+    "str_kode": null,
+    "viktig_enhet": null,
+    "kommentar_int": null,
+    "kommentar_ekst": null,
+    "test_pulje": null,
+    "skjema_type": "RA-0666A3",
+    "dato_innkvittering": "2025-12-29T11:51:18.000",
+    "kvitt_type": "K",
+    "kvitt_format": "A",
+    "kvitt_undertype": null,
+    "kvitt_nivaa": "F"
+}
+```
+
+:::
+
 ### Hente enhetsinformasjon fra SFU
 
-For å hente enhetsinformajon fra SFU, bruk metoden `get_enhet_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og organisajonsnummer.
+For å hente enhetsinformajon fra SFU, bruk metoden `get_enhet_from_sfu` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og organisasjonsnummer.
 
 ```{.python filename="notebook"}
 client = SuvClient()
@@ -77,67 +134,6 @@ response = client.get_enhet_from_sfu(
 
 print(json.dumps(response, indent=4))
 ```
-::: {.callout-caution collapse="true"}
-## Vis output
-
-```json
-{
-    "delreg_nr": 49430224,
-    "ident_nr": "A3TF0019",
-    "orgnr": "123456789",
-    "enhets_type": "FRTK",
-    "foretak": "A3TF0019",
-    "orgnr_foretak": "123456789",
-    "flv": "0",
-    "navn1": "MITT REGNSKAP",
-    "navn2": null,
-    "navn3": null,
-    "f_adresse1": "Testvegen 19",
-    "f_adresse2": null,
-    "f_adresse3": null,
-    "f_postnr": "0019",
-    "f_poststed": "OSLO",
-    "skj_enh_ident_nr": "ATB1247288",
-    "skj_enh_orgnr": "987654321",
-    "skj_enh_enhets_type": "BEDR",
-    "skj_enh_navn": "MITT REGNSKAP",
-    "skj_enh_adresse": "Regnskpvegen 250",
-    "skj_enh_postnr": "1111",
-    "skj_enh_poststed": "ARENDAL",
-    "skj_enh_avdeling": "AVD ARENDAL",
-    "maalform": null,
-    "kontaktperson": "OLA NORDMANN",
-    "kont_telefon": "12121212",
-    "kont_mobiltlf": null,
-    "kont_epost": null,
-    "h_var1_n": null,
-    "h_var2_n": null,
-    "h_var3_n": null,
-    "h_var1_a": null,
-    "h_var2_a": null,
-    "h_var3_a": null,
-    "utvalgsstatus": null,
-    "pulje_nr": 2,
-    "vedtak_tvmulkt": "N",
-    "sendt_si": "N",
-    "status": null,
-    "org_form": null,
-    "sn07_1": "17.120",
-    "str_kode": null,
-    "viktig_enhet": null,
-    "kommentar_int": null,
-    "kommentar_ekst": null,
-    "test_pulje": null,
-    "skjema_type": "RA-0666A3",
-    "dato_innkvittering": null,
-    "kvitt_type": null,
-    "kvitt_format": null,
-    "kvitt_undertype": null,
-    "kvitt_nivaa": null
-}
-```
-
-:::
 
 ### Hente delregister fra SFU
 

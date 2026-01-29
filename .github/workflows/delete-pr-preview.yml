@@ -1,0 +1,68 @@
+name: Cleanup PR preview in gh-pages
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: gh-pages-updates
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+
+      - name: Delete PR preview folder for closed PR
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! -d "pr-preview" ]]; then
+            echo "No pr-preview directory found. Nothing to clean up."
+            exit 0
+          fi
+
+          # Iterate through all directories in pr-preview that match the pattern pr-*
+          for dir in pr-preview/pr-*; do
+            if [[ -d "$dir" ]]; then
+              PR_NUMBER=$(basename "$dir" | sed 's/pr-//')
+              
+              echo "Checking state of PR #$PR_NUMBER..."
+              
+              # Get PR state, handle cases where PR might not exist
+              STATE=$(gh pr view "$PR_NUMBER" --json state --jq .state 2>/dev/null || echo "UNKNOWN")
+              
+              if [[ "$STATE" != "OPEN" ]]; then
+                echo "Removing $dir (State: $STATE)"
+                rm -rf "$dir"
+              else
+                echo "Keeping $dir (State: $STATE)"
+              fi
+            fi
+          done
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Cleanup PR previews (triggered by #${{ github.event.pull_request.number }})"
+          git push origin gh-pages

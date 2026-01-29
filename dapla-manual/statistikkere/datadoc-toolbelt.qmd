@@ -1,12 +1,18 @@
 ---
 title: Datadoc
-date-modified: "06/20/2025"
+date-modified: "13/01/2026"
 lightbox: true
 ---
 
 [Datadoc](./datadoc.qmd) er SSBs system for dokumentasjon av datasett. Datadoc lagrer dokumentasjonen i et strukturert format ved siden av dataene. Man kan jobbe programmatisk med metadataene til Datadoc med Datadoc-delen av [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
 
 Første gang man skal dokumentere et datasett i Datadoc så er det anbefalt å bruke det grafiske grensesnittet i [Datadoc-editor](./datadoc-editor.qmd). I løpende produksjon er det dermed anbefalt å benytte en programmatisk tilnærming gjennom `Datadoc`-delen av Python-pakken [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/).
+
+::: {.callout-caution}
+## Datadoc støtter Parquet-formatet
+
+Alle datasett som skal dokumenteres må være i filformatet **Parquet**. Andre filformater støttes foreløpig ikke. 
+:::
 
 ## Forberedelser
 
@@ -56,6 +62,57 @@ meta = Datadoc(
 I koden over angir vi det nye datasettet som skal dokumenteres i `dataset_path=`. Deretter angir vi filstien til metadatadokumentet i `metadata_document_path=` som det delvis skal kopieres metadata fra. Til slutt angir vi at feilmeldinger skal behandles som advarsler med argumentet `errors_as_warnings=True`. 
 
 Med dette utgangspunktet kan man deretter gjøre endringer på evt. nye eller eksisterende kolonner ved å enten bruke [Datadoc-editor], eller en programmatisk tilnærming som forklart senere i kapitlet. 
+
+### Kopiere en variable fra en annen metadata fil
+
+I noen tilfeller kan det være nyttig å kopiere over metadata for en spesifikk variabel i et datasett til et annet. F.eks. hvis man kobler på data fra andre team sine delte-data, så er fint å gjenbruke metadata fra de delte dataene. Dette kan gjøres programmatisk på følgende måte:  
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+new_dataset = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet"  # <1> 
+
+meta = Datadoc(dataset_path=new_dataset) # <2>          
+
+copy_from = "gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json" # <3> 
+
+meta.copy_variable(copy_from, "fnr") # <4>
+
+meta.write_metadata_document() # <5>
+
+```
+1.  Filsti til datasettet som det skal kopieres til
+2.  Oppretter et Datadoc-dokument i minnet
+3.  Filsti til datasett det skal kopieres fra
+3.  Kopierer over metadata for variabelen `fnr` til `new_dataset`.
+4.  Skrive metadata til fil 
+
+
+Om variabelen man ønsker å kopiere fra har et annet navn enn den variabelen det skal kopieres til, så kan man legge det til som siste argument i `copy_variable` funksjonen. 
+
+```{.python filename="Notebook"}
+from dapla_metadata.datasets import Datadoc
+
+new_dataset = "gs://ssb-dapla-felles-data-produkt-prod/datadoc/sykefratot/klargjorte-data/person_testdata_p2022_v1.parquet" # <1>
+
+meta = Datadoc(dataset_path=new_dataset)             # <2>
+
+copy_from = "gs://ssb-dapla-felles-data-produkt-test/datadoc/brukertest/10/sykefratot/klargjorte_data/person_testdata_p2021-12-31_p2021-12-31_v1__DOC.json" # <3>
+
+meta.copy_variable(
+    copy_from,
+    source_short_name="snr",
+    target_short_name="snr_mor"     # <4>
+    )     
+
+meta.write_metadata_document() # <5>
+
+```
+1.  Filsti til datasettet som det skal kopieres til
+2.  Oppretter et Datadoc-dokument i minnet
+3.  Filsti til datasett det skal kopieres fra
+3.  Kopierer over metadata for variabelen `snr` til `new_dataset` og plasserer informasjonen i variabelen `fnr_mor`.
+4.  Skrive metadata til fil 
 
 ### Opprette metadata for ny fil
 
