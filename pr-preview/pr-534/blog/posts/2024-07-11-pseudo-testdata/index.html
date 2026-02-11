@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Øyvind Bruer-Skarsbø">
+<meta name="dcterms.date" content="2024-07-11">
+
+<title>Pseudonymisering med testdata – Dapla-manualen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-701cf985b04c13a44ea29e1938249dbe.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #e3f1e6;
+      }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<meta property="og:title" content="Pseudonymisering med testdata – Dapla-manualen">
+<meta property="og:description" content="Bruk testdata for å bli kjent med pseudonymisering.">
+<meta property="og:image" content="https://manual.dapla.ssb.no/blog/posts/2024-07-11-pseudo-testdata/pseudonymize-image-chatgpt.png">
+<meta property="og:site_name" content="Dapla-manualen">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1024">
+<meta name="twitter:title" content="Pseudonymisering med testdata – Dapla-manualen">
+<meta name="twitter:description" content="Bruk testdata for å bli kjent med pseudonymisering.">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/blog/posts/2024-07-11-pseudo-testdata/pseudonymize-image-chatgpt.png">
+<meta name="twitter:image-height" content="1024">
+<meta name="twitter:image-width" content="1024">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo light-content">
+    <img src="../../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../statistikkere/index.html"> 
+<span class="menu-text">Manual</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../news/index.html"> 
+<span class="menu-text">Nyheter</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../faq.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebooks/index.html"> 
+<span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../utviklere/lenker.html"> 
+<span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../om-dapla.html"> 
+<span class="menu-text">Om Dapla</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7"><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://lab.dapla.ssb.no/"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Dapla Lab</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual"> <i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-andre-lenker" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Andre lenker</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-andre-lenker">    
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-test.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (test)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-dev.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (dev)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/"><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-controller" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Pseudonymisering med testdata</h1>
+            <p class="subtitle lead">Bruk testdata for å bli kjent med pseudonymisering.</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">pseudonymisering</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">dapla-toolbelt-pseudo</div>
+              </div>
+                  </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Forfatter</div>
+    <div class="quarto-title-meta-heading">Tilhører</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author">Øyvind Bruer-Skarsbø </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              Seksjon for dataplattform (724)
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Opprettet</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 11, 2024</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Sist endret</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">September 23, 2024</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#importere" id="toc-importere" class="nav-link active" data-scroll-target="#importere">Importere</a></li>
+  <li><a href="#forberedelse-av-datasettet" id="toc-forberedelse-av-datasettet" class="nav-link" data-scroll-target="#forberedelse-av-datasettet">Forberedelse av datasettet</a></li>
+  <li><a href="#pseudonymisering" id="toc-pseudonymisering" class="nav-link" data-scroll-target="#pseudonymisering">Pseudonymisering</a>
+  <ul class="collapse">
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
+  </ul></li>
+  <li><a href="#depseudonymisering" id="toc-depseudonymisering" class="nav-link" data-scroll-target="#depseudonymisering">Depseudonymisering</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/blog/posts/2024-07-11-pseudo-testdata/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/blog/posts/2024-07-11-pseudo-testdata/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Den strenge tilgangsstyringen til pseudonymiseringsfunksjonaliteten på Dapla gjør at det er vanskelig for brukere å bli kjent med funksjonaliteten ved bruk av produksjonsdata. Derfor bør alle som jobber med dette starte med å bruke testdata og jobbe i <a href="https://jupyter.dapla-staging.ssb.no/">test-miljøet på Dapla</a>.</p>
+<section id="importere" class="level2">
+<h2 class="anchored" data-anchor-id="importere">Importere</h2>
+<p>Først så importerer vi noen biblioteker som vi skal benytte. Du kan benytte standard-kernelen som heter <code>python3</code>, for der er biblioteket som pseudonymiserer, <a href="https://pypi.org/project/dapla-toolbelt-pseudo/">dapla-toolbelt-pseudo</a>, tilgjengelig.</p>
+<div class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Depseudonymize, Pseudonymize</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.constants <span class="im">import</span> MapFailureStrategy</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo.utils <span class="im">import</span> convert_to_date</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> JSON</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Versjonen av <a href="../../../statistikkere/dapla-toolbelt-pseudo.html">dapla-toolbelt-pseudo</a> er <strong>2.1.2</strong>.</p>
+<p>Dataene vi skal bruke syntetiske fødselsnummer fra testversjonen SNR-katalogen. På den måten får vi også testet pseudonymiseringen via SNR-katalogen som er veldig vanlig i SSB. Denne SNR-katalogen ligger som en fil i en bøtte som alle i SSB har tilgang til.</p>
+<div class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/freg/snr_kat.csv"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> dp.read_pandas(path, file_format<span class="op">=</span><span class="st">"csv"</span>, dtype<span class="op">=</span>{<span class="st">"fnr"</span>: <span class="bu">str</span>, <span class="st">"fnr_date"</span>: <span class="bu">str</span>})</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df.head(n<span class="op">=</span><span class="dv">5</span>).style.set_table_styles([</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'selector'</span>: <span class="st">'th'</span>, <span class="st">'props'</span>: [(<span class="st">'text-align'</span>, <span class="st">'left'</span>)]}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-snr" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="2">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-snr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: Syntetisk versjon av SNR-katalogen
+</figcaption>
+<div aria-describedby="tbl-snr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="2">
+<style type="text/css">
+#T_46f43 th {
+  text-align: left;
+}
+</style>
+
+<table id="T_46f43" class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_46f43_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_46f43_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">current_fnr</th>
+<th id="T_46f43_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">snr</th>
+<th id="T_46f43_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">current_snr</th>
+<th id="T_46f43_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">fnr_date</th>
+<th id="T_46f43_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">current_fnr_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_46f43_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_46f43_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_46f43_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_46f43_row0_col2" class="data row0 col2">026mxd3</td>
+<td id="T_46f43_row0_col3" class="data row0 col3">026mxd3</td>
+<td id="T_46f43_row0_col4" class="data row0 col4">20201222</td>
+<td id="T_46f43_row0_col5" class="data row0 col5">20201222</td>
+</tr>
+<tr class="even">
+<th id="T_46f43_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_46f43_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_46f43_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_46f43_row1_col2" class="data row1 col2">34qm7pt</td>
+<td id="T_46f43_row1_col3" class="data row1 col3">34qm7pt</td>
+<td id="T_46f43_row1_col4" class="data row1 col4">20201222</td>
+<td id="T_46f43_row1_col5" class="data row1 col5">20201222</td>
+</tr>
+<tr class="odd">
+<th id="T_46f43_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_46f43_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_46f43_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_46f43_row2_col2" class="data row2 col2">53uxelp</td>
+<td id="T_46f43_row2_col3" class="data row2 col3">53uxelp</td>
+<td id="T_46f43_row2_col4" class="data row2 col4">20201222</td>
+<td id="T_46f43_row2_col5" class="data row2 col5">20201222</td>
+</tr>
+<tr class="even">
+<th id="T_46f43_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_46f43_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_46f43_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_46f43_row3_col2" class="data row3 col2">f35lbnf</td>
+<td id="T_46f43_row3_col3" class="data row3 col3">f35lbnf</td>
+<td id="T_46f43_row3_col4" class="data row3 col4">20201222</td>
+<td id="T_46f43_row3_col5" class="data row3 col5">20201222</td>
+</tr>
+<tr class="odd">
+<th id="T_46f43_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_46f43_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_46f43_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_46f43_row4_col2" class="data row4 col2">c2hxvdv</td>
+<td id="T_46f43_row4_col3" class="data row4 col3">c2hxvdv</td>
+<td id="T_46f43_row4_col4" class="data row4 col4">20201222</td>
+<td id="T_46f43_row4_col5" class="data row4 col5">20201222</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Fra <a href="#tbl-snr" class="quarto-xref">Tabell&nbsp;1</a> ser vi at datasettet inkluderer en del kolonner. For utforsking av pseudonymiseringsfunksjonalitet så trenger vi kun <code>fnr</code>-kolonnen.</p>
+</section>
+<section id="forberedelse-av-datasettet" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelse-av-datasettet">Forberedelse av datasettet</h2>
+<p>La oss kun beholde <code>fnr</code>-kolonnen og kopiere den en ny kolonne slik at vi enklere kan sammenligne før og etter pseudonymisering. I tillegg kutter jeg antall rader til 10, siden vi ikke trenger noe mer for formålet her.</p>
+<div class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> df.head(n<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> df2[[<span class="st">"fnr"</span>]]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df4 <span class="op">=</span> df3.copy()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df4[<span class="st">'fnr_original'</span>] <span class="op">=</span> df4[<span class="st">'fnr'</span>]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df4.head(n<span class="op">=</span><span class="dv">5</span>).style.set_table_styles([</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'selector'</span>: <span class="st">'th'</span>, <span class="st">'props'</span>: [(<span class="st">'text-align'</span>, <span class="st">'left'</span>)]}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-snr-new" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="3">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-snr-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;2: Nedstrippet versjon av SNR-katalogen
+</figcaption>
+<div aria-describedby="tbl-snr-new-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="3">
+<style type="text/css">
+#T_9a20e th {
+  text-align: left;
+}
+</style>
+
+<table id="T_9a20e" class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_9a20e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_9a20e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_9a20e_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_9a20e_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_9a20e_row0_col1" class="data row0 col1">16890249063</td>
+</tr>
+<tr class="even">
+<th id="T_9a20e_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_9a20e_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_9a20e_row1_col1" class="data row1 col1">15854996565</td>
+</tr>
+<tr class="odd">
+<th id="T_9a20e_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_9a20e_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_9a20e_row2_col1" class="data row2 col1">27871547810</td>
+</tr>
+<tr class="even">
+<th id="T_9a20e_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_9a20e_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_9a20e_row3_col1" class="data row3 col1">50889200399</td>
+</tr>
+<tr class="odd">
+<th id="T_9a20e_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_9a20e_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_9a20e_row4_col1" class="data row4 col1">22919199052</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Hvis du ønsker å teste hvordan krypteringsalgoritmene fungerer med kolonner som inneholder navn, så kan vi generere noe data med et også.</p>
+<div class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fornavn <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Jo"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hans-August"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nils"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Eva"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lars"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Øyvind"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Kenneth"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Johnny"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Rupinder"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nicolas"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>etternavn <span class="op">=</span> [</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nordman"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Karlsen"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nordmann"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Karlsen"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Carlsen"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nordmann"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Carlsen"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Nordmann"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Karlsen"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Normann"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>df4[<span class="st">'fornavn'</span>] <span class="op">=</span> fornavn</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>df4[<span class="st">'etternavn'</span>] <span class="op">=</span> etternavn</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>df5 <span class="op">=</span> df4.copy()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Til slutt legger vi på noen ugyldige fødselsnummer slik at vi får testet hvordan algoritmene håndterer dette.</p>
+<div class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>new_row1 <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fnr"</span>: <span class="st">"99999999999"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fnr_original"</span>: <span class="st">"99999999999"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fornavn"</span>: <span class="st">"Michael"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"etternavn"</span>: <span class="st">"Norman"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>df6 <span class="op">=</span> pd.concat([df5, new_row1], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>new_row2 <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    [{<span class="st">"fnr"</span>: <span class="st">"XX"</span>, <span class="st">"fnr_original"</span>: <span class="st">"XX"</span>, <span class="st">"fornavn"</span>: <span class="st">"Ola Glenn"</span>, <span class="st">"etternavn"</span>: <span class="st">"Gåås"</span>}]</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>df7 <span class="op">=</span> pd.concat([df6, new_row2], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>new_row3 <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    [</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fnr"</span>: <span class="st">"X8b7k28"</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fnr_original"</span>: <span class="st">"X8b7k28"</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">"fornavn"</span>: <span class="st">"Lars"</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"etternavn"</span>: <span class="st">"Gaas"</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>df8 <span class="op">=</span> pd.concat([df7, new_row3], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>df8.head(n<span class="op">=</span><span class="dv">5</span>).style.set_table_styles([</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'selector'</span>: <span class="st">'th'</span>, <span class="st">'props'</span>: [(<span class="st">'text-align'</span>, <span class="st">'left'</span>)]}</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-pseudo" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="5">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;3: Datasett for å teste pseudonymiseringsfunksjonalitet
+</figcaption>
+<div aria-describedby="tbl-pseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="5">
+<style type="text/css">
+#T_0a1be th {
+  text-align: left;
+}
+</style>
+
+<table id="T_0a1be" class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_0a1be_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_0a1be_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
+<th id="T_0a1be_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">fornavn</th>
+<th id="T_0a1be_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">etternavn</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_0a1be_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_0a1be_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_0a1be_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_0a1be_row0_col2" class="data row0 col2">Jo</td>
+<td id="T_0a1be_row0_col3" class="data row0 col3">Nordman</td>
+</tr>
+<tr class="even">
+<th id="T_0a1be_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_0a1be_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_0a1be_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_0a1be_row1_col2" class="data row1 col2">Hans-August</td>
+<td id="T_0a1be_row1_col3" class="data row1 col3">Karlsen</td>
+</tr>
+<tr class="odd">
+<th id="T_0a1be_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_0a1be_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_0a1be_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_0a1be_row2_col2" class="data row2 col2">Nils</td>
+<td id="T_0a1be_row2_col3" class="data row2 col3">Nordmann</td>
+</tr>
+<tr class="even">
+<th id="T_0a1be_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_0a1be_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_0a1be_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_0a1be_row3_col2" class="data row3 col2">Eva</td>
+<td id="T_0a1be_row3_col3" class="data row3 col3">Karlsen</td>
+</tr>
+<tr class="odd">
+<th id="T_0a1be_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_0a1be_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_0a1be_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_0a1be_row4_col2" class="data row4 col2">Lars</td>
+<td id="T_0a1be_row4_col3" class="data row4 col3">Carlsen</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-pseudo" class="quarto-xref">Tabell&nbsp;3</a> viser datasettet vi skal bruke til å teste med.</p>
+</section>
+<section id="pseudonymisering" class="level2">
+<h2 class="anchored" data-anchor-id="pseudonymisering">Pseudonymisering</h2>
+<p>Nå kan vi begynne å leke med dataene. Det første vi kan gjøre er å pseudonymisere med den mest vanlige algoritmen som benyttes i produksjon: Papis-nøkkelen.</p>
+<div class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_pandas(df8)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    .run()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>result.to_pandas()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unexpected length of metadata: 2</code></pre>
+</div>
+<div id="tbl-pseudo-papis" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="6">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-pseudo-papis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;4: Pseudonymiserer med Papis-algoritmen
+</figcaption>
+<div aria-describedby="tbl-pseudo-papis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe do-not-create-environment cell caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">fnr</th>
+<th data-quarto-table-cell-role="th">fnr_original</th>
+<th data-quarto-table-cell-role="th">fornavn</th>
+<th data-quarto-table-cell-role="th">etternavn</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>BnQe23u</td>
+<td>16890249063</td>
+<td>Jo</td>
+<td>Nordman</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>I1mQmBP</td>
+<td>15854996565</td>
+<td>Hans-August</td>
+<td>Karlsen</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>eVbGYLy</td>
+<td>27871547810</td>
+<td>Nils</td>
+<td>Nordmann</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>O4jegSM</td>
+<td>50889200399</td>
+<td>Eva</td>
+<td>Karlsen</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>6JhhRKi</td>
+<td>22919199052</td>
+<td>Lars</td>
+<td>Carlsen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>vygqpLq</td>
+<td>66821775168</td>
+<td>Øyvind</td>
+<td>Nordmann</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>JWzitL8</td>
+<td>13824498614</td>
+<td>Kenneth</td>
+<td>Carlsen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>oIhVngD</td>
+<td>46927100797</td>
+<td>Johnny</td>
+<td>Nordmann</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>0y8qqUZ</td>
+<td>16907699157</td>
+<td>Rupinder</td>
+<td>Karlsen</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>FNnp5AL</td>
+<td>10920998203</td>
+<td>Nicolas</td>
+<td>Normann</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>4yI2BlkviaI</td>
+<td>99999999999</td>
+<td>Michael</td>
+<td>Norman</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">11</th>
+<td>XX</td>
+<td>XX</td>
+<td>Ola Glenn</td>
+<td>Gåås</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>tKHXmUl</td>
+<td>X8b7k28</td>
+<td>Lars</td>
+<td>Gaas</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>I <a href="#tbl-pseudo-papis" class="quarto-xref">Tabell&nbsp;4</a> ser vi at kolonnen <code>fnr</code> har blitt pseudonymisert. Det er også verdt å legge merke til at kolonnen ikke endrer navn. Grunnen til at lengden på verdiene som er pseudonymiserte er på 7 tegn for de opprinnelige fødselsnummerne, er at det først skjer en oversetting fra fnr til snr før det pseudonymiseres, og snr-nummerserien er på 7 tegn. Med andre ord så preserverer algoritmen lengden på snr-nummeret siden det er dette som pseudonymiseres.</p>
+<p>Det er også verdt å merke seg at verdier som er kortere enn 4 i lengde, f.eks. <code>XX</code> i rad 11, ikke blir pseudonymisert i det hele tatt. Verdier som er 4 eller lengre, vil bli pseudonymisert selv om de ikke fikk treff i SNR-katalogen.</p>
+<section id="metadata" class="level3">
+<h3 class="anchored" data-anchor-id="metadata">Metadata</h3>
+<p>Det genereres også 2 metadata-objekter ved pseudonymisering. Disse er:</p>
+<ol type="1">
+<li>result.datadoc</li>
+<li>result.metadata</li>
+</ol>
+<p>La oss se nærmere på de:</p>
+<div class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> json.loads(result.datadoc)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>display(data)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'document_version': '0.0.1',
+ 'pseudonymization': {'document_version': '0.1.0',
+  'pseudo_variables': [{'short_name': 'fnr',
+    'data_element_path': 'fnr',
+    'data_element_pattern': '/fnr',
+    'stable_identifier_type': 'FREG_SNR',
+    'stable_identifier_version': '2023-08-31',
+    'encryption_algorithm': 'TINK-FPE',
+    'encryption_key_reference': 'papis-common-key-1',
+    'encryption_algorithm_parameters': [{'keyId': 'papis-common-key-1'},
+     {'strategy': 'skip'}]}]}}</code></pre>
+</div>
+</div>
+<p>Dette er metadata som skal integreres i Datadoc etter hvert.</p>
+<p>La oss se på den andre typen metadata:</p>
+<div class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>display(result.metadata)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'logs': ['No SID-mapping found for fnr 999********',
+  'No SID-mapping found for fnr X8b****'],
+ 'metrics': {'MAPPED_SID': 10, 'FPE_LIMITATION': 1, 'MISSING_SID': 2}}</code></pre>
+</div>
+</div>
+<p>Her ser vo at 10 felt fikk treff i SNR-katalogen, 1 felt var for kort for algoritmen, og 2 felt fikk ikke treff SNR-katalogen. Vi får også se litt fødselsnummeret til de 2 som ikke fikk treff.</p>
+</section>
+</section>
+<section id="depseudonymisering" class="level2">
+<h2 class="anchored" data-anchor-id="depseudonymisering">Depseudonymisering</h2>
+<p>La oss ta vare på den pseudonymiserte kolonnen og så depseudonymisere og se om resultatet blir riktig:</p>
+<div class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> result.to_pandas()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>result2[<span class="st">'pseudo_fnr'</span>] <span class="op">=</span> result2[<span class="st">'fnr'</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>result_df <span class="op">=</span> (</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    Depseudonymize.from_pandas(result2)         </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)                              </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()                              </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    .run()                                         </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    .to_pandas() </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>result_df.style.set_table_styles([</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'selector'</span>: <span class="st">'th'</span>, <span class="st">'props'</span>: [(<span class="st">'text-align'</span>, <span class="st">'left'</span>)]}</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="tbl-depseudo" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="9">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-depseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;5: Depseudonymisering av fødselsnummer
+</figcaption>
+<div aria-describedby="tbl-depseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display" data-execution_count="9">
+<style type="text/css">
+#T_f8d83 th {
+  text-align: left;
+}
+</style>
+
+<table id="T_f8d83" class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_f8d83_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">fnr</th>
+<th id="T_f8d83_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">fnr_original</th>
+<th id="T_f8d83_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">fornavn</th>
+<th id="T_f8d83_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">etternavn</th>
+<th id="T_f8d83_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">pseudo_fnr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_f8d83_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_f8d83_row0_col0" class="data row0 col0">16890249063</td>
+<td id="T_f8d83_row0_col1" class="data row0 col1">16890249063</td>
+<td id="T_f8d83_row0_col2" class="data row0 col2">Jo</td>
+<td id="T_f8d83_row0_col3" class="data row0 col3">Nordman</td>
+<td id="T_f8d83_row0_col4" class="data row0 col4">BnQe23u</td>
+</tr>
+<tr class="even">
+<th id="T_f8d83_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_f8d83_row1_col0" class="data row1 col0">15854996565</td>
+<td id="T_f8d83_row1_col1" class="data row1 col1">15854996565</td>
+<td id="T_f8d83_row1_col2" class="data row1 col2">Hans-August</td>
+<td id="T_f8d83_row1_col3" class="data row1 col3">Karlsen</td>
+<td id="T_f8d83_row1_col4" class="data row1 col4">I1mQmBP</td>
+</tr>
+<tr class="odd">
+<th id="T_f8d83_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_f8d83_row2_col0" class="data row2 col0">27871547810</td>
+<td id="T_f8d83_row2_col1" class="data row2 col1">27871547810</td>
+<td id="T_f8d83_row2_col2" class="data row2 col2">Nils</td>
+<td id="T_f8d83_row2_col3" class="data row2 col3">Nordmann</td>
+<td id="T_f8d83_row2_col4" class="data row2 col4">eVbGYLy</td>
+</tr>
+<tr class="even">
+<th id="T_f8d83_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_f8d83_row3_col0" class="data row3 col0">50889200399</td>
+<td id="T_f8d83_row3_col1" class="data row3 col1">50889200399</td>
+<td id="T_f8d83_row3_col2" class="data row3 col2">Eva</td>
+<td id="T_f8d83_row3_col3" class="data row3 col3">Karlsen</td>
+<td id="T_f8d83_row3_col4" class="data row3 col4">O4jegSM</td>
+</tr>
+<tr class="odd">
+<th id="T_f8d83_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_f8d83_row4_col0" class="data row4 col0">22919199052</td>
+<td id="T_f8d83_row4_col1" class="data row4 col1">22919199052</td>
+<td id="T_f8d83_row4_col2" class="data row4 col2">Lars</td>
+<td id="T_f8d83_row4_col3" class="data row4 col3">Carlsen</td>
+<td id="T_f8d83_row4_col4" class="data row4 col4">6JhhRKi</td>
+</tr>
+<tr class="even">
+<th id="T_f8d83_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_f8d83_row5_col0" class="data row5 col0">66821775168</td>
+<td id="T_f8d83_row5_col1" class="data row5 col1">66821775168</td>
+<td id="T_f8d83_row5_col2" class="data row5 col2">Øyvind</td>
+<td id="T_f8d83_row5_col3" class="data row5 col3">Nordmann</td>
+<td id="T_f8d83_row5_col4" class="data row5 col4">vygqpLq</td>
+</tr>
+<tr class="odd">
+<th id="T_f8d83_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_f8d83_row6_col0" class="data row6 col0">13824498614</td>
+<td id="T_f8d83_row6_col1" class="data row6 col1">13824498614</td>
+<td id="T_f8d83_row6_col2" class="data row6 col2">Kenneth</td>
+<td id="T_f8d83_row6_col3" class="data row6 col3">Carlsen</td>
+<td id="T_f8d83_row6_col4" class="data row6 col4">JWzitL8</td>
+</tr>
+<tr class="even">
+<th id="T_f8d83_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_f8d83_row7_col0" class="data row7 col0">46927100797</td>
+<td id="T_f8d83_row7_col1" class="data row7 col1">46927100797</td>
+<td id="T_f8d83_row7_col2" class="data row7 col2">Johnny</td>
+<td id="T_f8d83_row7_col3" class="data row7 col3">Nordmann</td>
+<td id="T_f8d83_row7_col4" class="data row7 col4">oIhVngD</td>
+</tr>
+<tr class="odd">
+<th id="T_f8d83_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_f8d83_row8_col0" class="data row8 col0">16907699157</td>
+<td id="T_f8d83_row8_col1" class="data row8 col1">16907699157</td>
+<td id="T_f8d83_row8_col2" class="data row8 col2">Rupinder</td>
+<td id="T_f8d83_row8_col3" class="data row8 col3">Karlsen</td>
+<td id="T_f8d83_row8_col4" class="data row8 col4">0y8qqUZ</td>
+</tr>
+<tr class="even">
+<th id="T_f8d83_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_f8d83_row9_col0" class="data row9 col0">10920998203</td>
+<td id="T_f8d83_row9_col1" class="data row9 col1">10920998203</td>
+<td id="T_f8d83_row9_col2" class="data row9 col2">Nicolas</td>
+<td id="T_f8d83_row9_col3" class="data row9 col3">Normann</td>
+<td id="T_f8d83_row9_col4" class="data row9 col4">FNnp5AL</td>
+</tr>
+<tr class="odd">
+<th id="T_f8d83_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_f8d83_row10_col0" class="data row10 col0">99999999999</td>
+<td id="T_f8d83_row10_col1" class="data row10 col1">99999999999</td>
+<td id="T_f8d83_row10_col2" class="data row10 col2">Michael</td>
+<td id="T_f8d83_row10_col3" class="data row10 col3">Norman</td>
+<td id="T_f8d83_row10_col4" class="data row10 col4">4yI2BlkviaI</td>
+</tr>
+<tr class="even">
+<th id="T_f8d83_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_f8d83_row11_col0" class="data row11 col0">XX</td>
+<td id="T_f8d83_row11_col1" class="data row11 col1">XX</td>
+<td id="T_f8d83_row11_col2" class="data row11 col2">Ola Glenn</td>
+<td id="T_f8d83_row11_col3" class="data row11 col3">Gåås</td>
+<td id="T_f8d83_row11_col4" class="data row11 col4">XX</td>
+</tr>
+<tr class="odd">
+<th id="T_f8d83_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
+<td id="T_f8d83_row12_col0" class="data row12 col0">X8b7k28</td>
+<td id="T_f8d83_row12_col1" class="data row12 col1">X8b7k28</td>
+<td id="T_f8d83_row12_col2" class="data row12 col2">Lars</td>
+<td id="T_f8d83_row12_col3" class="data row12 col3">Gaas</td>
+<td id="T_f8d83_row12_col4" class="data row12 col4">tKHXmUl</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-depseudo" class="quarto-xref">Tabell&nbsp;5</a> viser at depseudonymiseringen returnerer de opprinnelige fødselsnummerne.</p>
+<p>Videre kan man utforske å pseudonymisere navn ved bruk av ulike algoritmer.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopiert!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopiert!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Kom i gang med Dapla</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/blog/posts/2024-07-11-pseudo-testdata/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/blog/posts/2024-07-11-pseudo-testdata/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
