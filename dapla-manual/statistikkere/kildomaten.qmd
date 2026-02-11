@@ -117,7 +117,7 @@ dapla-example-iac
 Kildomaten trigges ved at det oppstår nye filer i kildebøtta til teamet. Hvorvidt den skal trigges på alle filer, eller kun filer i en gitt undermappe, bestemmer brukeren ved å konfigurere tjenesten i `config.yaml`. Her kan du også angi hvor mye ressurser prosesseringen skal få.
 
 Hvis vi fortsetter eksempelet vårt fra tidligere med `dapla-example` kan vi tenke oss at teamet ønsker at kildomaten skal trigges på alle filer som oppstår i kildebøtta under filstien:
-`ssb-dapla-example-data-kilde-prod/ledstill/altinn/`.
+`ssb-dapla-example-data-kilde-prod/altinn/`.
 
 For å konfigurere tjenesten i kildomaten må vi legge til en fil som heter `config.yaml` under `automation/source-data/dapla-example-prod/altinn/` slik som vist tidligere. I dette tilfellet vil den ha innholdet som vist til venstre under:
 
@@ -125,7 +125,7 @@ For å konfigurere tjenesten i kildomaten må vi legge til en fil som heter `con
 
 ::: {.column width="47.5%"}
 ```{.yaml filename="config.yaml"}
-folder_prefix: ledstill/altinn
+folder_prefix: altinn
 memory_size: 1  # GiB
 ```
 :::
@@ -136,13 +136,8 @@ memory_size: 1  # GiB
 
 ::: {.column width="47.5%"}
 ```{.yaml filename="ssb-dapla-example-data-kilde-prod/"}
-├── ledstill/
-│   └── altinn/
-│   └── aordningen/
-├── sykefra/
-│   └── altinn/
-│   └── freg/
-│...
+├── altinn/
+...
 
 ```
 :::
@@ -150,7 +145,7 @@ memory_size: 1  # GiB
 ::::
 
 
-Mappestrukturen i kildebøtta er illustrert til høyre, mens `config.yaml`-fila til venstre viser hvordan vi angir at kildomaten kun skal trigges på nye filer som oppstår i undermappen `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Vi bruker nøkkelen `folder_prefix` for å angi hvilken sti i kildebøtta som tjenesten skal trigges på. Nøkkelen `memory_size` lar brukeren angi hvor mye minne og CPU hver prosessering skal få. Vil du at alle filer skal trigge kildomaten? Da setter du `folder_prefix` til `""`.
+Mappestrukturen i kildebøtta er illustrert til høyre, mens `config.yaml`-fila til venstre viser hvordan vi angir at kildomaten kun skal trigges på nye filer som oppstår i undermappen `ssb-dapla-example-data-kilde-prod/altinn/`. Vi bruker nøkkelen `folder_prefix` for å angi hvilken sti i kildebøtta som tjenesten skal trigges på. Nøkkelen `memory_size` lar brukeren angi hvor mye minne og CPU hver prosessering skal få. Vil du at alle filer skal trigge kildomaten? Da setter du `folder_prefix` til `""`.
 
 
 ::: {.callout-note collapse=True}
@@ -185,7 +180,7 @@ Hvis du vil stoppe prosesseringen pga. en feil bør du bruke *exceptions*. Kildo
 `main()` er en funksjon med ett parameter som heter `source_file` som du alltid får av kildomaten når en fil blir prosessert. Når man skriver koden kan man derfor anta at dette parameteret blir gitt til funksjonen, og du kan benytte det inne i `main`-funksjonen.
 
 `source_file`-parameteret gir `main()` en ferdig definert filsti til filen som skal prosesseres. For eksempel kan `source_file` ha verdien
-`gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv` hvis filen `test20231010.csv` dukker opp i `ssb-dapla-example-data-kilde-prod/ledstill/altinn/`.
+`gs://ssb-dapla-example-data-kilde-prod/altinn/test20231010.csv` hvis filen `test20231010.csv` dukker opp i `ssb-dapla-example-data-kilde-prod/altinn/`.
 
 Hvis vi fortsetter eksempelet fra tidligere ser mappen i IaC-repoet vårt slik ut nå:
 
@@ -201,7 +196,7 @@ Hvis vi fortsetter eksempelet fra tidligere ser mappen i IaC-repoet vårt slik u
 ```
 
 Vi ser nå at filene `config.yaml` og `process_source_data.py` ligger i mappen
-`automation/source-data/dapla-example-prod/ledstill/altinn/`. Senere, når vi har rullet ut tjenesten, vil en ny fil i `gs://ssb-dapla-exmaple-data-kilde-prod/ledstill/altinn/` trigge kildomaten og kjøre koden i `process_source_data.py` på filen.
+`automation/source-data/dapla-example-prod/altinn/`. Senere, når vi har rullet ut tjenesten, vil en ny fil i `gs://ssb-dapla-exmaple-data-kilde-prod/altinn/` trigge kildomaten og kjøre koden i `process_source_data.py` på filen.
 
 Under ser du et eksempel på hvordan en vanlig kodesnutt kan konverteres til å kjøre i kildomaten:
 
@@ -212,7 +207,7 @@ Under ser du et eksempel på hvordan en vanlig kodesnutt kan konverteres til å 
 import pandas as pd
 
 # Stien til filen
-source_file = "gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv"
+source_file = "gs://ssb-dapla-example-data-kilde-prod/altinn/test20231010.csv"
 
 df = pd.read_csv(source_file)
 
@@ -265,12 +260,12 @@ Før man ruller ut koden i tjenesten er det greit å teste at alt fungerer som d
 Hvis vi tar utgangspunkt i eksempelet over kan vi teste koden ved å kjøre følgende nederst i skriptet i en data-admins-tjeneste:
 
 ```{.python filename="process_source_data.py"}
-main("gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/test20231010.csv")
+main("gs://ssb-dapla-example-data-kilde-prod/altinn/test20231010.csv")
 ```
 
 Merk at siden man i en data-admins-tjeneste kun har tilgang til kildebøtta, og ikke produktbøtta, så vil kjøringen feile når den prøver å skrive resultatet til en fil i produktbøtta.
 
-Når tjenesten er rullet ut vil det være dette som kjøres når en fil dukker opp i `gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/`. Ved å kjøre det manuelt på denne måten får vi sett at ting fungerer som det skal.
+Når tjenesten er rullet ut vil det være dette som kjøres når en fil dukker opp i `gs://ssb-dapla-example-data-kilde-prod/altinn/`. Ved å kjøre det manuelt på denne måten får vi sett at ting fungerer som det skal.
 
 Husk å fjerne kjøringen av koden før du ruller ut tjenesten.
 
@@ -322,7 +317,7 @@ Det kan også forekomme at **Atlantis**, verktøyet for å rulle ut endringer fr
 Når du har rullet ut tjenesten kan du *teste* tjenesten ved at **data-admins** flytter en fil til den filstien kildomaten er satt opp for. I eksempelet vi har brukt tidligere, gjør du følgende:
 1. Åpne en tjeneste i Dapla Lab med teamets data-admins-gruppe valgt i Data-menyen.
 2. Kopier en fil over til filstien:
-`gs://ssb-dapla-example-data-kilde-prod/ledstill/altinn/`
+`gs://ssb-dapla-example-data-kilde-prod/altinn/`
 3. Sjekk om filen ble skrevet til ønsket mappe i produktbøtta.
 
 Du kan også sjekke logger og monitorere kildomaten.
@@ -485,13 +480,13 @@ from dapla_toolbelt_automation import trigger_source_data_processing
 
 project_id = "dapla-example-p"
 source_name = "altinn"
-folder_prefix = "ledstill/altinn/ra0678"
+folder_prefix = "altinn/ra0678"
 
 trigger_source_data_processing(project_id, source_name, folder_prefix)
 ```
 
 I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på alle undermapper av
-`ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/`.
+`ssb-dapla-example-data-kilde-prod/altinn/ra0678/`.
 
 Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde
 ```{.python filename="notebook"}
@@ -500,15 +495,15 @@ from dapla_toolbelt_automation import trigger_source_data_processing
 project_id = "dapla-example-p"
 source_name = "altinn"
 file_paths = [
-    'ledstill/altin/ra0678/data1.parquet',
-    'ledstill/altin/ra0678/data2.parquet',
-    'ledstill/altin/ra0678/data3.parquet'
+    'altin/ra0678/data1.parquet',
+    'altin/ra0678/data2.parquet',
+    'altin/ra0678/data3.parquet'
 ]
 for file in file_paths:
     trigger_source_data_processing(project_id, source_name, file)
 ```
 I eksempelet over trigger vi scriptet som er satt opp for kilden `altinn` til å kjøre på de tre spesifike filene
-`ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data1.parquet`, `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data2.parquet` og `ssb-dapla-example-data-kilde-prod/ledstill/altinn/ra0678/data3.parquet`.
+`ssb-dapla-example-data-kilde-prod/altinn/ra0678/data1.parquet`, `ssb-dapla-example-data-kilde-prod/altinn/ra0678/data2.parquet` og `ssb-dapla-example-data-kilde-prod/altinn/ra0678/data3.parquet`.
 
 ## Vedlikehold
 
