@@ -32,7 +32,8 @@ Husk at alle på teamet kan gjøre det meste av arbeidet her, men det er **data-
 Oppsett av kildomaten gjøres i teamets IaC-repo^[*Et Infrastructure-as-Code* (IaC)-repo er et GitHub-repo som definerer alle ressursene til teamet på Dapla. Alle Dapla-team har et eget IaC-repo på GiHub med navnet <teamnavn>-iac under [statisticsnorway](https://github.com/orgs/statisticsnorway/repositories)]. Når vi skal sette opp kildomaten må vi gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på [SSBs GitHub-organisasjon](https://github.com/statisticsnorway) og søke etter repoet som heter `<teamnavn>-iac`. Når du har funnet repoet så kan du gjøre følgende:
 
 1. Klon teamets IaC-repo `git clone <repo-url>`
-2. Opprett en ny branch: `git switch -c add-kildomaten-source`
+2. Bytte mappe til repoet `cd <repo-navn>`
+3. Opprett en ny branch: `git switch -c add-kildomaten-source`
 
 ### Mappestruktur i IaC-repo
 
@@ -48,7 +49,7 @@ dapla-example-iac
 │...
 ```
 
-Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda.
+Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda. Vær oppmerksom at mappe navnet kan ikke være lengere enn 23 tegn. 
 
 Skal du også bruke kildomaten i **test**-miljøet må du opprette en ny mappe og lage en PR i IaC-repoet til teamet. Da vil strukturen se slik ut:
 
@@ -167,7 +168,7 @@ Som standard får hver prosessering med kildomaten 1 CPU-kjerne og 512MB minne/R
 1. Skriptet ditt kommer til å bli kjørt på en-og-en fil.
 2. Skriptet ditt må skrive ut et unikt navn på filen som skal skrives til produktbøtta, ellers risikerer du at filer blir overskrevet.
 3. Python-pakkene som kan benyttes [er definert her](https://github.com/statisticsnorway/dapla-automation-processor/blob/main/source_data/pyproject.toml). Ved behov for andre pakker, [ta kontakt med Kundeservice](https://ssb.pureservice.com/#/categories/14/new).
-4. [Bøttemontering](hva-er-botter.qmd#bøttemontering-med-cloud-storage-fuse) gjelder ikke for kildomaten, så man må bruke pakken `gcfs` når man gjør filoperasjoner i kildomaten.
+4. [Bøttemontering](hva-er-botter.qmd#bøttemontering-med-cloud-storage-fuse) gjelder ikke for kildomaten, så man må bruke pakken `gcsfs` når man gjør filoperasjoner i kildomaten.
 :::
 
 Python-skriptet er der teamet angir hva slags kode som skal kjøre på hver fil som dukker opp i den angitte mappen i kildebøtta. For at dette skal være mulig må koden følge disse reglene:
@@ -283,7 +284,7 @@ Du kan teste kode fra Jupyter og andre IDE-er i prod-miljøet på Dapla med mind
 
 For å rulle ut tjenesten gjør du følgende;
 
-1. *Push branchen* til GitHub og opprette en *pull request*.
+1. *Push branchen* til GitHub og opprette en *pull request*. Se hvordan på punktet 4 [her](https://manual.dapla.ssb.no/statistikkere/git-arbeidsflyt.html#lagre-kode-og-oppdatere-repoet-p%C3%A5-github).
 2. *Pull request* må godkjennes av en **data-admins** på teamet.
 
 ::: {.grid}
@@ -466,14 +467,14 @@ Kildomaten er bygget for å trigge på nye filer som oppstår i en gitt filsti. 
 ::: {.callout-caution}
 ## Logg inn som data-admins i Dapla Lab
 
-Trigging av kilder manuelt kan kun gjøres av *data-admins* på Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn.
+Trigging av kilder manuelt kan kun gjøres av *data-admins* på Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn. Man må også klone og jobbe fra et annet repo enn det IaC repoet, dersom det er nødvendig å kunne hente inn pakker.
 :::
 
 
 Før du kan gjøre dette trenger du følgende informasjon:
 
 1. **project-id** for *standardprosjektet*. [Slik finner du prosjekt-id](../faq.qmd#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id). Merk at dette ikke er kilde-prosjektet!
-2. **folder_prefix** er mappen i kilde-bøtten. Man vil da kjøre Kildomaten-scriptet for hver fil i denne mappen.
+2. **folder_prefix** er mappen i kilde-bøtten, det vil si, mappen akkurat under `<dapla-example-prod>`. Man vil da kjøre Kildomaten-scriptet for hver fil i denne mappen.
 3. **source_name** er navnet på *kilden*, og vil bestemme hvilket Kildomat-script man bruker for å prosessere filene fra *punkt 2*. Det vil tilsvare mappenavnene under mappen `automation/source-data/<team-navn>-prod/` i IaC-repoet for teamet. I eksempelet over ( [@lst-dapla-example]) har vi to kilder -  `altinn` og `ledstill`.
 
 Hvis man under **folder_prefix** legger inn en hel filsti med filnavn og filending, så trigges Kildomaten kun på denne ene fila.
