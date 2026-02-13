@@ -873,6 +873,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Oppsett av kildomaten gjøres i teamets IaC-repo<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Når vi skal sette opp kildomaten må vi gjøre endringer i teamets IaC-repo. Man finner teamets IaC-repo ved gå inn på <a href="https://github.com/statisticsnorway">SSBs GitHub-organisasjon</a> og søke etter repoet som heter <code>&lt;teamnavn&gt;-iac</code>. Når du har funnet repoet så kan du gjøre følgende:</p>
 <ol type="1">
 <li>Klon teamets IaC-repo <code>git clone &lt;repo-url&gt;</code></li>
+<li>Bytte mappe til repoet <code>cd &lt;repo-navn&gt;</code></li>
 <li>Opprett en ny branch: <code>git switch -c add-kildomaten-source</code></li>
 </ol>
 </section>
@@ -891,7 +892,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda.</p>
+<p>Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda. Vær oppmerksom at mappe navnet kan ikke være lengere enn 23 tegn.</p>
 <p>Skal du også bruke kildomaten i <strong>test</strong>-miljøet må du opprette en ny mappe og lage en PR i IaC-repoet til teamet. Da vil strukturen se slik ut:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -1028,7 +1029,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Skriptet ditt kommer til å bli kjørt på en-og-en fil.</li>
 <li>Skriptet ditt må skrive ut et unikt navn på filen som skal skrives til produktbøtta, ellers risikerer du at filer blir overskrevet.</li>
 <li>Python-pakkene som kan benyttes <a href="https://github.com/statisticsnorway/dapla-automation-processor/blob/main/source_data/pyproject.toml">er definert her</a>. Ved behov for andre pakker, <a href="https://ssb.pureservice.com/#/categories/14/new">ta kontakt med Kundeservice</a>.</li>
-<li><a href="../statistikkere/hva-er-botter.html#bøttemontering-med-cloud-storage-fuse">Bøttemontering</a> gjelder ikke for kildomaten, så man må bruke pakken <code>gcfs</code> når man gjør filoperasjoner i kildomaten.</li>
+<li><a href="../statistikkere/hva-er-botter.html#bøttemontering-med-cloud-storage-fuse">Bøttemontering</a> gjelder ikke for kildomaten, så man må bruke pakken <code>gcsfs</code> når man gjør filoperasjoner i kildomaten.</li>
 </ol>
 </div>
 </div>
@@ -1148,7 +1149,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="rull-ut-tjenesten">Rull ut tjenesten</h3>
 <p>For å rulle ut tjenesten gjør du følgende;</p>
 <ol type="1">
-<li><em>Push branchen</em> til GitHub og opprette en <em>pull request</em>.</li>
+<li><em>Push branchen</em> til GitHub og opprette en <em>pull request</em>. Se hvordan på punktet 4 <a href="https://manual.dapla.ssb.no/statistikkere/git-arbeidsflyt.html#lagre-kode-og-oppdatere-repoet-p%C3%A5-github">her</a>.</li>
 <li><em>Pull request</em> må godkjennes av en <strong>data-admins</strong> på teamet.</li>
 </ol>
 <div class="grid">
@@ -1357,13 +1358,13 @@ Oppføring&nbsp;1: Eksempel filstruktur
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Trigging av kilder manuelt kan kun gjøres av <em>data-admins</em> på Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn.</p>
+<p>Trigging av kilder manuelt kan kun gjøres av <em>data-admins</em> på Dapla Lab. På Dapla Lab må man representere en av gruppene når man logger seg inn. Man må også klone og jobbe fra et annet repo enn det IaC repoet, dersom det er nødvendig å kunne hente inn pakker.</p>
 </div>
 </div>
 <p>Før du kan gjøre dette trenger du følgende informasjon:</p>
 <ol type="1">
 <li><strong>project-id</strong> for <em>standardprosjektet</em>. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>. Merk at dette ikke er kilde-prosjektet!</li>
-<li><strong>folder_prefix</strong> er mappen i kilde-bøtten. Man vil da kjøre Kildomaten-scriptet for hver fil i denne mappen.</li>
+<li><strong>folder_prefix</strong> er mappen i kilde-bøtten, det vil si, mappen akkurat under <code>&lt;dapla-example-prod&gt;</code>. Man vil da kjøre Kildomaten-scriptet for hver fil i denne mappen.</li>
 <li><strong>source_name</strong> er navnet på <em>kilden</em>, og vil bestemme hvilket Kildomat-script man bruker for å prosessere filene fra <em>punkt 2</em>. Det vil tilsvare mappenavnene under mappen <code>automation/source-data/&lt;team-navn&gt;-prod/</code> i IaC-repoet for teamet. I eksempelet over ( <a href="#lst-dapla-example" class="quarto-xref">Oppføring&nbsp;1</a>) har vi to kilder - <code>altinn</code> og <code>ledstill</code>.</li>
 </ol>
 <p>Hvis man under <strong>folder_prefix</strong> legger inn en hel filsti med filnavn og filending, så trigges Kildomaten kun på denne ene fila.</p>
