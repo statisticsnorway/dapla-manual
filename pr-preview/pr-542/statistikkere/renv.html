@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Pakkehåndtering i R – Dapla-manualen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../statistikkere/standarder.html" rel="next">
+<link href="../statistikkere/poetry-ssb-project.html" rel="prev">
+<link href="../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6d7ffbe06f1941744ba677a4ef56847d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Pakkehåndtering i R – Dapla-manualen">
+<meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
+<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
+<meta property="og:site_name" content="Dapla-manualen">
+<meta name="twitter:title" content="Pakkehåndtering i R – Dapla-manualen">
+<meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo light-content">
+    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../statistikkere/index.html" aria-current="page"> 
+<span class="menu-text">Manual</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../news/index.html"> 
+<span class="menu-text">Nyheter</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog/index.html"> 
+<span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../faq.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../notebooks/index.html"> 
+<span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../utviklere/lenker.html"> 
+<span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../om-dapla.html"> 
+<span class="menu-text">Om Dapla</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7"><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://lab.dapla.ssb.no/"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Dapla Lab</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual"> <i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-andre-lenker" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Andre lenker</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-andre-lenker">    
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-test.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (test)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-dev.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (dev)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/"><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-controller" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/git-og-github.html">Kode</a></li><li class="breadcrumb-item"><a href="../statistikkere/renv.html">Pakkehåndtering i R</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kom i gang</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hurtigstart</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-overgang.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hvordan flytte statistikkproduksjon til Dapla?</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dapla-team</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er Dapla-team?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/tilgangsstyring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tilgangsstyring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/administrasjon-av-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Administrasjon av team</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jobbe med data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-botter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er bøtter?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/deling-av-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deling av data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/backup-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/editeringsrammeverk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Editeringsrammeverket</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kode</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er Git og GitHub?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/github-oppsett.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">GitHub: Bruker og oppsett</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/git-arbeidsflyt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Anbefalt arbeidsflyt med Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SSB-project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/poetry-ssb-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pakkehåndtering i Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/renv.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Pakkehåndtering i R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standarder</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standarder</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datatilstander.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datatilstander</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/navnestandard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Navnestandard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kvakk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kvalitet i kode og koding (KVAKK)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/dapla-lab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dapla Lab</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc-editor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datadoc-editor</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jdemetra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jdemetra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jupyter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jupyter-playground.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter-playground</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jupyter-pyspark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter-pyspark</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rstudio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vardef-forvaltning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vardef-forvaltning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vscode-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vscode-python</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/metadata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Metadata</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/datadoc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datadoc</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datamodell</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/klass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Klass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/vardef.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vardef</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vardef-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datamodell</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datatjenester</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-dapla-suv-tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-suv-tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-statbank-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-statbank-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-auth-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-auth-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-pseudo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-toolbelt-pseudo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-whodat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-toolbelt-whodat</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/dapla-toolbelt-metadata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-toolbelt-metadata</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc-toolbelt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datadoc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vardef-toolbelt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vardef</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/standards-toolbelt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standards</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-ctrl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dapla Ctrl</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kildomaten</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/delomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Delomaten</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Maskinporten</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Features</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/transfer-service.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Transfer Service</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/metodebibliotek.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Metodebiblioteket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Google Cloud Console (GCC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-altinn-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-altinn-python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-collector-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-collector-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-gcp-identity-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-gcp-identity-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-guardian-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-guardian-client</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Altinn 3</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Oversikt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-bygge-prefill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefill</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-skjema-administrasjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Administrasjon av skjema</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-utsending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utsending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-sfu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data fra bakke</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/appendix/dashboard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hvordan bidra til Dapla-manualen</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/arkivering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Arkivering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/dashboard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dash og dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/jit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Just-in-Time Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/spark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apache Spark</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/kartdata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kartdata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/filinnsamling-moveit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Filinnsamling via MoveIT</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/langtkjorende-jobber.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kjøre tidkrevende jobber på Dapla</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#hvor-skal-jeg-kjøre-kommandoer-for-renv" id="toc-hvor-skal-jeg-kjøre-kommandoer-for-renv" class="nav-link active" data-scroll-target="#hvor-skal-jeg-kjøre-kommandoer-for-renv">Hvor skal jeg kjøre kommandoer for renv?</a></li>
+  <li><a href="#starte-renv-i-et-eksisterende-prosjekt" id="toc-starte-renv-i-et-eksisterende-prosjekt" class="nav-link" data-scroll-target="#starte-renv-i-et-eksisterende-prosjekt">Starte renv i et eksisterende prosjekt</a></li>
+  <li><a href="#ta-i-bruk-renv-miljø" id="toc-ta-i-bruk-renv-miljø" class="nav-link" data-scroll-target="#ta-i-bruk-renv-miljø">Ta i bruk renv-miljø</a></li>
+  <li><a href="#installering-av-pakker" id="toc-installering-av-pakker" class="nav-link" data-scroll-target="#installering-av-pakker">Installering av pakker</a></li>
+  <li><a href="#dele-prosjektet-og-renv-miljøet-med-andre" id="toc-dele-prosjektet-og-renv-miljøet-med-andre" class="nav-link" data-scroll-target="#dele-prosjektet-og-renv-miljøet-med-andre">Dele prosjektet og renv-miljøet med andre</a></li>
+  <li><a href="#ta-i-bruk-et-prosjekt-og-renv-miljø-fra-andre" id="toc-ta-i-bruk-et-prosjekt-og-renv-miljø-fra-andre" class="nav-link" data-scroll-target="#ta-i-bruk-et-prosjekt-og-renv-miljø-fra-andre">Ta i bruk et prosjekt og renv-miljø fra andre</a></li>
+  <li><a href="#avinstallering" id="toc-avinstallering" class="nav-link" data-scroll-target="#avinstallering">Avinstallering</a></li>
+  <li><a href="#oppgradere-pakker" id="toc-oppgradere-pakker" class="nav-link" data-scroll-target="#oppgradere-pakker">Oppgradere pakker</a></li>
+  <li><a href="#oppgradering-av-r-kun-produksjonssone-på-bakken" id="toc-oppgradering-av-r-kun-produksjonssone-på-bakken" class="nav-link" data-scroll-target="#oppgradering-av-r-kun-produksjonssone-på-bakken">Oppgradering av R (kun produksjonssone på bakken)</a></li>
+  <li><a href="#ta-det-lang-tid-til-å-starte-et-renv-miljø" id="toc-ta-det-lang-tid-til-å-starte-et-renv-miljø" class="nav-link" data-scroll-target="#ta-det-lang-tid-til-å-starte-et-renv-miljø">Ta det lang tid til å starte et renv-miljø?</a></li>
+  <li><a href="#flytting-mellom-jupyter-på-bakken-og-dapla" id="toc-flytting-mellom-jupyter-på-bakken-og-dapla" class="nav-link" data-scroll-target="#flytting-mellom-jupyter-på-bakken-og-dapla">Flytting mellom Jupyter på bakken og Dapla</a></li>
+  <li><a href="#kjøring-mellom-rstudio-og-jupyter-prodsone" id="toc-kjøring-mellom-rstudio-og-jupyter-prodsone" class="nav-link" data-scroll-target="#kjøring-mellom-rstudio-og-jupyter-prodsone">Kjøring mellom RStudio og Jupyter (prodsone)</a></li>
+  <li><a href="#hvordan-å-løse-problemer-med-pakkeinstallering-i-produksjonssone-på-bakken" id="toc-hvordan-å-løse-problemer-med-pakkeinstallering-i-produksjonssone-på-bakken" class="nav-link" data-scroll-target="#hvordan-å-løse-problemer-med-pakkeinstallering-i-produksjonssone-på-bakken">Hvordan å løse problemer med pakkeinstallering i produksjonssone på bakken</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/renv.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/renv.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/git-og-github.html">Kode</a></li><li class="breadcrumb-item"><a href="../statistikkere/renv.html">Pakkehåndtering i R</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Pakkehåndtering i R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">January 16, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>R-pakken, <a href="https://rstudio.github.io/renv/articles/renv.html"><code>renv</code></a>, er et verktøy som lar oss opprette et miljø for R og installere pakker. Det er anbefalt å bruke renv for å sikre at alle som jobber med prosjektet har samme versjon av pakkene. I tillegg er det enkelt å dele prosjektet med andre.</p>
+<section id="hvor-skal-jeg-kjøre-kommandoer-for-renv" class="level3">
+<h3 class="anchored" data-anchor-id="hvor-skal-jeg-kjøre-kommandoer-for-renv">Hvor skal jeg kjøre kommandoer for renv?</h3>
+<p>Når du oppretter et renv-miljø, installerer eller oppdaterer pakker må du kjøre noen kommandoer. Hvor disse skal kjøres er avhengig av om du bruker RStudio, eller Jupyter.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Jupyter</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">RStudio</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>I jupyter anbefaler vi at du oppretter renv-miljøet og installerer pakker fra R i terminalen. For å starte R i terminalen:</p>
+<ol type="1">
+<li>Åpne en terminal fra Launcher</li>
+<li>Stå i mappen der du vil aktivere det virtuelle miljøet/installere pakker, dvs. prosjekt mappen.</li>
+<li>Starte R ved å skrive in <code>R</code></li>
+</ol>
+<p>Her er en kort video (uten lyd) for å vise dette:</p>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927091838?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Start R i terminal">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>I Rstudio kan du fint kjøre kommandoene direkte i <em>console</em>. Du finner <em>console</em> vanligvis nederste på venstre i RStudio.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="starte-renv-i-et-eksisterende-prosjekt" class="level3">
+<h3 class="anchored" data-anchor-id="starte-renv-i-et-eksisterende-prosjekt">Starte renv i et eksisterende prosjekt</h3>
+<p>For å installere R-pakker må du opprette et renv-miljø med <strong>renv</strong>. Dette kan gjøres ved å kjøre:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">init</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Jupyter</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">RStudio</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>For å opprette et renv-miljø i Jupyter, navigere først til hovedmappen for prosjektet i terminalen og starter R. Etterpå, kan du kjøre <code>renv::init()</code>.</p>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927094706?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="init">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>Initialisere renv-miljø i RStudio med <code>renv::init()</code> i <em>console</em>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For at renv skal fungere i RStudio er det viktig å jobbe i et <strong>R-project</strong>. Dvs. at du har en prosjekt-fil (.Rproj) i GitHub repoen din.</p>
+<p>Hvis du ikke har det, kan du opprette en ved å velge File &gt; New Project… &gt; Version Control &gt; Git &gt; og lim inn git adressen for å clone ned repoen på nytt. Da vil det også kommer en .Rproj fil. Denne kan fint ligger på repoen.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Kommandoen <code>renv::init()</code> setter opp et renv-miljø i mappen du står i. Hvis du jobber i Jupyter, sjekk at du står i root av repoen (hovedmappen til repository).</p>
+<p>Rent praktisk vil det si at du fikk følgende filer/mapper i mappen din:</p>
+<ul>
+<li><p><strong>renv.lock</strong><br>
+En fil som inneholder versjoner av alle pakker du benytter i koden din.</p></li>
+<li><p><strong>.Rprofile</strong> En fil som inneholder informasjon om oppsetting av miljø.</p></li>
+<li><p><strong>renv</strong><br>
+Mappe som inneholder alle pakkene du installerer.</p></li>
+<li><p><strong>renv/activate.R</strong> En fil som aktiverer renv miljøet for et prosjekt.</p></li>
+</ul>
+</section>
+<section id="ta-i-bruk-renv-miljø" class="level3">
+<h3 class="anchored" data-anchor-id="ta-i-bruk-renv-miljø">Ta i bruk renv-miljø</h3>
+<p>For å ta i bruk et renv-miljø må det aktiveres før koden kjøres. Dette gjøres automatisk i både Jupyter og RStudio ved hjelp av <em>renv/activate.R</em> filen.</p>
+<p>For at renv-miljø kan brukes i Jupyter må også følgende pakke installeres.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Jupyter</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>For å åpne .R filer som notebooks i det nye renv-miljø må pakken <em>IRkernel</em> være installert hvis du jobber i Jupyter. Dette er ikke automatisk installert ved oppstart av et nytt renv-miljø. Du kan installere dette ved å kjøre</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"IRkernel"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For at denne pakken skal være med i .lock-filen <strong>må det brukes et sted</strong> med for eksempel <code>library(IRkernel)</code> og lagres til <em>renv.lock</em> med <code>renv::snapshot()</code>-funksjonen (se lengere ned for detaljer)</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Tidligere må også alle R-filene starte med <code>renv::autoload()</code> i Jupyter på Dapla. Dette er ikke nødvendig lenge med bruk av <em>.R</em>-filer, istedenfor <em>.ipynb</em>. Det er fortsatt nødvendig i produksjonssone (bakke-miljø).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="installering-av-pakker" class="level3">
+<h3 class="anchored" data-anchor-id="installering-av-pakker">Installering av pakker</h3>
+<p>Vi installerer pakker med funksjonen <code>renv::install()</code>. For eksempel, for å installere pakken <a href="https://cran.r-project.org/web/packages/PxWebApiData/vignettes/Introduction.html">PxWebApiData</a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"PxWebApiData"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927097853?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-pakke">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<p>For å installere R-pakker som ligger på ‘statisticsnorway’ området på GitHub må det spesifiseres foran pakkenavnet:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"statisticsnorway/ssb-klassr"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927094840?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="install-ssb-pakke">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<p>For å installere en spesifikk versjon av en pakke kan du spesifisere dette med installering med <code>@</code> og versjonsnummer. For eksempel å installere <code>PxWEbApiData</code> versjon 0.4.0:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"PxWebApiData@0.4.0"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For å lagre versjonsnummer av de nye pakkene som er installerte til <em>renv.lock</em> filen, kjør:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="dele-prosjektet-og-renv-miljøet-med-andre" class="level3">
+<h3 class="anchored" data-anchor-id="dele-prosjektet-og-renv-miljøet-med-andre">Dele prosjektet og renv-miljøet med andre</h3>
+<p>Før du deler prosjektet forsikre det om at <em>renv.lock</em>-filen er oppdatert. Dette kan gjøres ved å kjøre <code>renv::snapshot()</code>.</p>
+<p>For at en pakke skal lagres i <em>renv.lock</em> må pakken benyttes ved <code>library()</code> et sted i prosjektet (på en .R eller .ipynb fil).</p>
+<p>For å dele renv-miljøet som en del av prosjektet skal følgende filene være på github: <em>renv.lock</em>, <em>.Rprofile</em> og <em>renv/activate.R</em></p>
+</section>
+<section id="ta-i-bruk-et-prosjekt-og-renv-miljø-fra-andre" class="level3">
+<h3 class="anchored" data-anchor-id="ta-i-bruk-et-prosjekt-og-renv-miljø-fra-andre">Ta i bruk et prosjekt og renv-miljø fra andre</h3>
+<p>Hvis prosjektet er opprettet av noen andre, og har blitt delt med deg, kan alle pakkene i prosjektet installeres samtidig. Clone repository kjør følgende for å installere alle nødvendige pakker:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">:</span><span class="fu">restore</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927134123?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="clone-restore">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+</section>
+<section id="avinstallering" class="level3">
+<h3 class="anchored" data-anchor-id="avinstallering">Avinstallering</h3>
+<p>Individuelle pakker kan fjernes fra renv-miljøet ved <code>renv::remove()</code>-funksjonen. For eksempel:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">remove</span>(<span class="st">"PxWebApiData"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For å fjerne fra <em>renv.lock</em>-filen også må du ta en <code>snapshot()</code> etterpå.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>En annen nyttig funksjon er <code>renv::clean()</code>. Dette fjerner alle pakker fra library som ikke er i bruk</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">clean</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Igjen må du ta en <code>snapshot()</code> for at endringer skal lagres på <em>renv.lock</em>-filen</p>
+</section>
+<section id="oppgradere-pakker" class="level3">
+<h3 class="anchored" data-anchor-id="oppgradere-pakker">Oppgradere pakker</h3>
+<p>For å oppgradere en pakke kan du bruke <code>renv::update()</code>. For eksempel, for å oppgradere <code>PxWebApiData</code> skriv:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">update</span>(<span class="st">"PxWebApiData"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Husk å ta en <code>snapshot()</code> etterpå for å lagre endringer til <em>renv.lock</em>-filen. Det betyr at du og andre kan gjenskape miljøet på nytt.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="oppgradering-av-r-kun-produksjonssone-på-bakken" class="level3">
+<h3 class="anchored" data-anchor-id="oppgradering-av-r-kun-produksjonssone-på-bakken">Oppgradering av R (kun produksjonssone på bakken)</h3>
+<p>Versjonen av R i produksjonssone oppgraderes jevnlig, i både Jupyter og RStudio. Dette er fordi operativsystemet og programmer som R er avhengig skal holdes oppdatert. For at R skal fungere optimalt må det oppgraderes ofte. Dette skaper noen utfordringer for renv-miljøer som er avhengig av en spesifikk versjon av R.</p>
+<p>Hvis du plutselig får en feilmelding ved oppstart at R-versjonen er forskjellig fra det den som er oppgitt <em>renv.lock</em>-filen, har det trolig vært en oppgradering av R siden sist noen jobbet med koden. Følg denne oppskriften for å løse opp i problemene:</p>
+<p>Kjør følgende kommandoer i R i terminal (Jupyter) eller i console (RStudio)</p>
+<ol type="1">
+<li>Oppgrader versjon av renv ved:</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="terminal"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">upgrade</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li>Oppgrader alle pakkene ved:</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="terminal"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">hydrate</span>(<span class="at">update =</span> <span class="st">"all"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="3" type="1">
+<li>Lagre <em>renv.lock</em> filen:</li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="terminal"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927098000?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="upgrade-R">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<p>For mer informasjon kan du lese denne <a href="https://inbo.github.io/tutorials/tutorials/r_renv_update/">artikkelen om oppdatering av renv her</a></p>
+</section>
+<section id="ta-det-lang-tid-til-å-starte-et-renv-miljø" class="level3">
+<h3 class="anchored" data-anchor-id="ta-det-lang-tid-til-å-starte-et-renv-miljø">Ta det lang tid til å starte et renv-miljø?</h3>
+<p>Ved å aktivere et renv-miljø ved oppstart, søker R i alle programfiler for å sjekke at alle pakker som benyttes er installerte. Hvis du har en veldig stor repository kan dette ta lang tid. En løsning er å opprette en <em>.renvignore</em> fil som spesifisere hvilke filer skal ignoreres. For eksempel om alle R kode ligger i .R filer kan <em>.renvignore</em> inneholder linjen <code>*.ipynb</code> for å ignorere all notebookene om de finnes.</p>
+<div style="padding:56.75% 0 0 0;position:relative;">
+<iframe src="https://player.vimeo.com/video/927094915?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="renvignore">
+</iframe>
+</div>
+<script src="https://player.vimeo.com/api/player.js"></script>
+</section>
+<section id="flytting-mellom-jupyter-på-bakken-og-dapla" class="level3">
+<h3 class="anchored" data-anchor-id="flytting-mellom-jupyter-på-bakken-og-dapla">Flytting mellom Jupyter på bakken og Dapla</h3>
+<p>R-pakker installeres fra ulike sted når vi jobber på Dapla vs produksjonssone på bakken. For å bruke et renv-miljø i en repo som var laget på bakken, på Dapla, må vi endre adressen hvor pakkene skal installeres fra i <em>renv.lock</em>. Addressen skal se slik ut:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>renv.lock</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="renv.lock"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="er">"Repositories":</span> <span class="ot">[</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"Name"</span><span class="fu">:</span> <span class="st">"CRAN"</span><span class="fu">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"URL"</span><span class="fu">:</span> <span class="st">"https://packagemanager.posit.co/cran/latest"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">}</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="ot">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="kjøring-mellom-rstudio-og-jupyter-prodsone" class="level3">
+<h3 class="anchored" data-anchor-id="kjøring-mellom-rstudio-og-jupyter-prodsone">Kjøring mellom RStudio og Jupyter (prodsone)</h3>
+<p>Hvis du bytter mellom Jupyter og RStudio i prodsone, må du også endre adressen hvor pakkene skal installeres fra i <em>renv.lock</em>-filen. Disse to miljø kan har ulike versjoner av R og/eller ulike adresser å hente pakker fra. Det er anbefalt å holde deg til Jupyter eller RStudio om mulig.</p>
+</section>
+<section id="hvordan-å-løse-problemer-med-pakkeinstallering-i-produksjonssone-på-bakken" class="level3">
+<h3 class="anchored" data-anchor-id="hvordan-å-løse-problemer-med-pakkeinstallering-i-produksjonssone-på-bakken">Hvordan å løse problemer med pakkeinstallering i produksjonssone på bakken</h3>
+<p>Prosessen med å installere R-pakker på bakken er det samme som på Dapla. Noen pakker (for eksempel <code>arrow</code> og <code>ROracle</code>) kan være vanskelig å installere på grunn av 3. parti avhengigheter.</p>
+<p><strong>arrow</strong></p>
+<p>Hvis du sliter med installering av <code>arrow</code> kan du prøve å spesifisere versjonen som skal installeres. Det er foreløpige ulike versjoner av avhengigheter i RStudio og Jupyter pga de ulike systemer og oppsett.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Jupyter</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">RStudio</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"arrow@18.1.0.1"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Pakken er ganske stor, så det kan ta tid å installere den.</p>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"arrow@17.0.0.1"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Pakken er ganske stor, så det kan ta tid å installere den.</p>
+</div>
+</div>
+</div>
+<p><strong>ROracle</strong></p>
+<p>Pakken <code>ROracle</code> har systemavhengigheter som betyr at det kan være vanskelig å installere i produksjonssone på bakken i et renv-miljø. Hvis du opplever problemer, prøv å installere pakken fra en lokal versjon med følgende kommando i R:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ROracle_pakke <span class="ot">&lt;-</span> <span class="st">"/ssb/bruker/felles/R_pakker/ROracle_1.4-1_R_x86_64-unknown-linux-gnu.tar.gz"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  ROracle_pakke,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="cn">NULL</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"source"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopiert!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopiert!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../statistikkere/poetry-ssb-project.html" class="pagination-link" aria-label="Pakkehåndtering i Python">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Pakkehåndtering i Python</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../statistikkere/standarder.html" class="pagination-link" aria-label="Standarder">
+        <span class="nav-page-text">Standarder</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Kom i gang med Dapla</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/renv.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/renv.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
