@@ -1,0 +1,30 @@
+---
+title: Ny release av ssb-altinn-python (0.4.19)
+categories:
+  - ssb-altinn-python
+  - altinn
+  - delomaten
+  - isee
+author:
+  - name: Team Fellesfunksjoner
+    affiliation: 
+      - name: Seksjon for dataplattform (724)
+        email: vst@ssb.no
+date: "02/18/2026"
+date-modified: "02/19/2026"
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+Noen altinn3-skjema inneholder kompliserte strukturer, såkalt tabell-i-tabell, eller tabell-i-tabell-i-tabell osv. I disse tilfellene er det nødvendig med videre tilpassing av resultatet fra isee_transform() for å kunne klargjøre data for lasting til ISEE.
+For å lette denne tilpasningen er det nå mulighet for å ta ut en ekstra kolonne `LEVEL` ved bruk av `isee_transform()`. 
+`LEVEL`-kolonnen inneholder en liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kan være til hjelp for å lage spesialtilpassede løpenr m.m.
+
+- [] → vanlig struktur, ingen tabell
+- [1] → første element i en tabell
+- [1,4] → tabell-i-tabell, 1 er første element i tabellen, og 4 er fjerde element i undertabell 
+
+`include_level` er satt til `False` som default, så de som allerede benytter `isee_transform()` i Kildomaten eller andre løsninger trenger ikke foreta seg noe.
+
+[Les mer her for kodeeksempler og bruk av pakken](../../../statistikkere/ssb-altinn-python.html). 
