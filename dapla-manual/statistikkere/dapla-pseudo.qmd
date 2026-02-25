@@ -1,6 +1,6 @@
 ---
 title: dapla-toolbelt-pseudo
-date-modified: 01/28/2025
+date-modified: 02/24/2025
 lightbox: true
 ---
 
@@ -347,6 +347,33 @@ Den andre typen av metadata kan hentes ut etter et kall til `Pseudonymize ` med 
 
 I Kildomaten kan det vært nyttig å printe denne informasjonen til loggene. Av eksempelet over ser vi at verdier som er over 6 karakterer lange blir maskert. 
 
+### Prosessering av store datasett
+
+Når man pseudonymiserer med Pandas eller Polars DataFrames må hele datasettet leses inn i minnet for at det skal kunne pseudonymiseres. Det kan være problematisk hvis datasettet er stort, fortrinnsvis i Kildomaten. For å løse dette problemet tilbyr dapla-toolbelt-pseudo muligheten til å strømme alle kolonner i datasettet som ikke skal pseudonymiseres - upseudonymiserte kolonner blir da delt opp i mindre biter ("chunks") når den nye filen skrives til bøttene. Man trenger da kun å holde de pseudonymiserte kolonnene i minnet, noe som kan betydelig redusere minnebruken.
+
+Eksempel for Kildomaten:
+```{.python filename="Strømming i Kildomaten"}
+import polars as pl
+from dapla_pseudo import Pseudonymize
+
+def main(source_file):
+    # Les inn data som en "lazy" DataFrame
+    lazy_df = pl.scan_csv(source_file)
+
+    result = Pseudonymize.from_polars(lazy_df).on_fields("fnr").with_stable_id().run()
+
+    output_file = source_file.replace("kilde", "produkt")
+    result.to_file(output_file)
+```
+
+Funksjonaliteten lener seg på Polars' LazyFrames. I stedet for `pl.read_csv()` som leser hele datasettet inn i minnet, bruker man `pl.scan_csv()` - denne funksjonen leser inn dataene som en "lazy" DataFrame, kalt en LazyFrame.
+
+**Når man skriver eller henter ut resultatet av pseudonymiseringen, må man bruke `to_file()`-funksjonen for å strømme
+dataen til fil som i eksempelet over, eller `result.to_polars_lazy()` for å få resultatet som en LazyFrame**. Merk at hvis man har flere mellomsteg i koden mellom innlesning og pseudonymisering, kan man måtte tilpasse koden for LazyFrames. Man kan lese mer i Polars-dokumentasjonen [her](https://docs.pola.rs/user-guide/lazy/using/).
+
+::: {.callout-important}
+Strømming av data støttes ikke med hierarkiske filer.
+:::
 
 ## Brukerveiledning
 
