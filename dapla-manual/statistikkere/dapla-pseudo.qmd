@@ -366,7 +366,12 @@ def main(source_file):
     result.to_file(output_file)
 ```
 
-Funksjonaliteten lener seg på Polars' LazyFrames. I stedet for `pl.read_csv()` som leser hele datasettet inn i minnet, bruker man `pl.scan_csv()` - denne funksjonen leser inn dataene som en "lazy" DataFrame, kalt en LazyFrame. `to_file()` funksjonen i dapla-toolbelt-pseudo vil da strømme de uendrede kolonnene til bøttene. Merk at hvis man har flere mellomsteg i koden mellom innlesning og pseudonymisering, kan man måtte tilpasse koden for LazyFrames. Man kan lese mer i Polars-dokumentasjonen [her](https://docs.pola.rs/user-guide/lazy/using/).
+Funksjonaliteten lener seg på Polars' LazyFrames. I stedet for `pl.read_csv()` som leser hele datasettet inn i minnet, bruker man `pl.scan_csv()` - denne funksjonen leser inn dataene som en "lazy" DataFrame, kalt en LazyFrame.
+
+**Når man skriver eller henter ut resultatet av pseudonymiseringen, må man bruke `to_file()`-funksjonen for å strømme
+dataen til fil som i eksempelet over, eller `result.to_polars_lazy()` for å få resultatet som en LazyFrame**. Merk at hvis man har flere mellomsteg i koden mellom innlesning og pseudonymisering, kan man måtte tilpasse koden for LazyFrames. Man kan lese mer i Polars-dokumentasjonen [her](https://docs.pola.rs/user-guide/lazy/using/).
+
+Strømming av data støttes ikke med hierarkiske filer.
 
 ## Brukerveiledning
 
