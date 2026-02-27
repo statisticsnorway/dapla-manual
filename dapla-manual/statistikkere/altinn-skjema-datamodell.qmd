@@ -1,0 +1,135 @@
+---
+title: Skjema – datamodell og metadata
+date-modified: 02/27/2026
+lightbox: true
+---
+
+Denne dokumentasjonen beskriver hvordan du:
+
+- Henter metadata fra skjemadata (CSV-format)
+- Henter hele JSON-schema direkte fra Altinn
+
+## Hente metadata fra skjemadata (CSV)
+Metadataene er generert fra JSON-schema, begrenset til **SkjemaData**, og lagret som CSV.
+
+::: {.callout-note}
+## Hva hvis metadata mangler?
+Dersom du ikke får hentet ut metadata, ta kontakt med seksjon 821 (betinger at skjemadata er eksportert fra A3Admin i pålogget miljø).
+:::
+
+### Kodeeksempel
+
+Eksempelet under viser hvordan du henter metadata som CSV og leser resulatet inn i en Pandas DataFrame.
+
+```{.python filename="notebook"}
+# Initialiser en klient ved å bruke SuvClient
+client = SuvClient()
+
+# Setter parametere for henting av metadata
+ra_nummer = "RA-1234A3"   
+version = 1               
+
+# Henter angitt skjema - viser i lagret format (csv)
+test = client.get_prefill_meta_datamodel_as_csv(ra_nummer=ra_nummer, version=version)
+
+print(test["csv_data"])
+
+# --- Load CSV into DataFrame ---
+df = pd.read_csv(
+    StringIO(test["csv_data"]),
+    sep=";",
+    quotechar='"',
+    dtype=str
+)
+
+df = df.replace("null", pd.NA)
+df["min"]  = pd.to_numeric(df["min"], errors="coerce").astype("Int64")
+df["maks"] = pd.to_numeric(df["maks"], errors="coerce").astype("Int64")
+
+# --- Add request metadata ---
+df = df.assign(
+    ra_nummer=ra_nummer,
+    version=version
+)
+
+# --- Reorder columns (metadata first) ---
+meta_cols = ["ra_nummer", "version"]
+df = df[meta_cols + [c for c in df.columns if c not in meta_cols]]
+
+# --- Styling ---
+text_cols = ["navn", "tittel", "sti", "type", "sti_navn", "kommentar"]
+
+styled_df = (
+    df.style
+      .set_properties(
+          subset=[c for c in text_cols if c in df.columns],
+          **{"text-align": "left"}
+      )
+)
+
+styled_df
+
+```
+
+## Hente hele JSON-schema direkte fra Altinn
+
+Du kan hente komplett JSON-schema direkte fra Altinn API.
+
+**Miljøer og endepunkter**
+
+- Produksjon:
+```{.python filename="notebook"}
+https://ssb.apps.altinn.no/ssb/{app-id}/api/jsonschema/{schema-id}
+```
+
+- Test:
+```{.python filename="notebook"}
+https://ssb.apps.tt02.altinn.no/ssb/{app-id}/api/jsonschema/{schema-id}
+```
+
+| Parameter   | Beskrivelse                         |
+| ----------- | ----------------------------------- |
+| `app-id`    | Format: `raXXXX-XX`                 |
+| `schema-id` | Format: `A3_RA-XXXX_M`              |
+
+Eksempel:
+
+- app-id: ra1234-01
+- schema-id: A3_RA-1234_M
+
+
+### Kodeeksempel
+
+Nedenfor finner du eksempel på hvordan du kan hente JSON-schema direkte fra Altinn
+
+```{.python filename="notebook"}
+# Initialiser en klient ved å bruke SuvClient
+client = SuvClient()
+
+# Setter parametere for henting av metadata
+ra_nummer = "RA-1234A3"   
+version = 1               
+
+environment = os.getenv("DAPLA_ENVIRONMENT")
+
+# Kjører kall mot Altinn-prod (basert på paramtere ovenfor) og lager Pandas Dataframes
+ra_base = ra_nummer.split("A3")[0]       
+ra_id = ra_base.replace("-", "").lower() 
+version_str = f"{version:02d}"          
+
+if (environment == 'PROD'):
+    env_url = 'https://ssb.apps.altinn.no'   
+else:
+    env_url = 'https://ssb.apps.tt02.altinn.no'
+
+url = f"{env_url}/ssb/{ra_id}-{version_str}/api/jsonschema/A3_{ra_base}_M"
+
+print(url)
+
+res = requests.get(url)
+
+# Tilrettelegger og printer JSON
+res2 = res.content.decode("UTF-8")
+res3 = json.loads(res2)
+res3
+```
