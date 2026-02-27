@@ -1,0 +1,53 @@
+---
+title: Datadoc håndterer datatyper mer konsekvent
+categories:
+    - dapla-toolbelt-metadata
+    - datadoc
+author:
+  - name: Miles Mason Winther
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: mmw@ssb.no
+date: 02/27/2026
+date-modified: 02/27/2026
+lightbox: true
+---
+
+## Hvorfor gjør vi disse endringene?
+
+En av de viktigste egenskapene til metadata er at det er presist. Med tanke på Datadoc er det kritisk at datatypene som beskrives i metadataen har total samsvar med datatypene i det fysiske datasettet man beskriver.
+
+Enn så lenge har Datadoc tillat at datatypene avviker fra det fysiske datasettet men det blir villedende for dem som etterhvert konsumerer data.
+
+## Hva endres?
+
+Datadoc, både i `Datadoc-editor` og `dapla-toolbelt-metadata` sjekker og overskriver datatyper slik at de alltid samsvarer de i det fysiske datasettet. Det er oppnådd gjennom flere endringer beskrevet under.
+
+### Datasett med ukjente datatyper ikke tillat
+
+Når et datasett åpnes i Datadoc er datatypene oversatt til [abstrakte datatyper](../../../statistikkere/datadoc-model.qmd#datatype). Dersom en datatype er ukjent så nekter Datadoc å dokumentere dataene og utgir en errormelding. Det eneste måten å rette opp i dette er å endre datatypen i det fysiske datasettet.
+
+I eksempelet under har datasettet en kolonne med den Pandas datatype `category`. Dette er ikke en tillat datatype på Dapla og dermed viser Datadoc-editor en errormelding. Errormeldingen lister opp alle de tillatte datatypene. For å gå videre med dokumentasjon av dette datasettet så må man endre datatypen i selve datasettet. Dette gjelder også datasett som allerede har vært dokumentert og skal sjekkes på nytt i det metadataen etterhvert publiseres.
+
+![Feilmelding i Datadoc-editor når Parquet-fil inneholder ustøttede datatyper.](./unsupported-data-type-error.png){#fig-datadoc-datadoc-type-error}
+
+
+### Datatypen alltid overskrives fra datasettet
+
+Før har Datadoc tatt eksisterende metadata som godfisk dersom det allerede finnes, men nå sjekker vi alltid datatypene i det fysiske datasettet og overskriver de i metadataen for å sørge for at de samsvarer alltid.
+
+### Alltid sjekker samsvar mellom datasettet og metadata
+
+Datadoc nå utfører grundige sjekker på konsistens mellom eksisterende metadata og datasettet. Det skal plukke opp om det er blitt noen forskjeller i filnavn, variabelnavn eller variabel datatype og vise en varsel til brukeren.
+
+### Datatype felt ikke redigerbar i Datadoc-editor
+
+Det er ikke lenger tillat å manuelt redigere datatypen i Datadoc-editor dersom det må samsvare med datasettet.
+
+![Datatype felt ikke lenger redigerbar](./data-type-field-read-only.png)
+
+## Hva betyr det for meg?
+
+Dersom man bruker støttede datatyper i datasettene sine er det ingenting man må gjøre. Man kan stole på at Datadoc sørger for at datatypene blir korrekt dokumentert.
+
+Dersom man har datasett med ustøttede datatyper så må man endre de i selve datasettene. Det kan potensielt medføre endringer i kode i produksjonsløp også.
