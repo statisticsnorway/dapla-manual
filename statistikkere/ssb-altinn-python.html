@@ -822,7 +822,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 3, 2025</p>
+      <p class="date-modified">February 19, 2026</p>
     </div>
   </div>
     
@@ -886,32 +886,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>checkboxList <span class="op">=</span> [<span class="st">"storOkningOmsAarsak"</span>]</span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>isee_transform(<span class="bu">file</span><span class="op">=</span><span class="bu">file</span>, mapping<span class="op">=</span>mapping, checkbox_vars<span class="op">=</span>checkboxList, unique_code<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Noen altinn3-skjema inneholder kompliserte strukturer, såkalt tabell-i-tabell, eller tabell-i-tabell-i-tabell osv. I disse tilfellene er det nødvendig med videre tilpassing av resultatet fra isee_transform() for å kunne klargjøre data for lasting til ISEE. For å lette denne tilpasningen er det mulighet for å ta ut en ekstra kolonne <code>LEVEL</code> ved bruk av <code>isee_transform()</code>. <code>LEVEL</code>-kolonnen inneholder en liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kan være til hjelp for å lage spesialtilpassede løpenr m.m.</p>
+<ul>
+<li>[] → vanlig struktur, ingen tabell</li>
+<li>[1] → første element i en tabell</li>
+<li>[1,4] → tabell-i-tabell, 1 er første element i tabellen, og 4 er fjerde element i undertabell</li>
+</ul>
+<p>Eksempel på bruk:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> altinn <span class="im">import</span> isee_transform</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">'gs://ra0187-01-altinn-data-staging-c629-ssb-altinn/2024/4/11/7d5b52259b89_de4a24aa-4948-48d8-b2e4-a0f2160a0bd0/form_7d5b52259b89.xml'</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>tags <span class="op">=</span> [<span class="st">'SkjemaData'</span>, <span class="st">'Kontakt'</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> isee_transform(source_file, tag_list <span class="op">=</span> tags, include_level<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>include_level</code> er satt til <code>False</code> som default, så de som allerede benytter <code>isee_transform()</code> i Kildomaten eller andre løsninger trenger ikke foreta seg noe.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>NB! - ‘LEVEL’-kolonnen må fjernes igjen før lastefil til ISEE lages.</p>
+</div>
+</div>
 </section>
 <section id="create_isee_filename" class="level3">
 <h3 class="anchored" data-anchor-id="create_isee_filename"><code>create_isee_filename()</code></h3>
 <p>Dersom data skal overføres til ISEE, må csv-filen med dataene ha en spesifikk notasjon. Dette er noe funksjonen <code>create_isee_filname()</code> håndterer.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> altinn <span class="im">import</span> create_isee_filename</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>create_isee_filename(<span class="bu">file</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> altinn <span class="im">import</span> create_isee_filename</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>create_isee_filename(<span class="bu">file</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="xml_transform" class="level3">
 <h3 class="anchored" data-anchor-id="xml_transform"><code>xml_transform()</code></h3>
 <p>Funksjonen flater ut hele XML-filen og legger innholdet i en Pandas DataFrame. Funksjonen kan være nyttig for de som skal jobbe med Altinn3-data på Dapla.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> altinn <span class="im">import</span> xml_transform</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>xml_transform(<span class="bu">file</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> altinn <span class="im">import</span> xml_transform</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">file</span> <span class="op">=</span> <span class="st">"gs://ssb-prod-dapla-felles-data-delt/altinn3/RA-0595/2023/2/6/810409282_460784f978a2_ebc7af7e-4ebe-4883-b844-66ee6292a93a/form_460784f978a2.xml"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>xml_transform(<span class="bu">file</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Dataframet som returneres fra funksjonen inneholder følgende kolonner:</p>
 <p><strong>FELTNAVN</strong><br>
 Inneholder også prefikset til området verdien er hentet fra, som Tidsbruk, Brukeropplevelse, Kontakt. Disse er ikke inkludert i isee_transform</p>
 <p><strong>FELTVERDI</strong><br>
 Verdien tilhørende aktuelt FELTNAVN</p>
 <p><strong>LEVEL</strong><br>
-En liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet. Denne kolonnen kan være nyttig hvis skjemaet inneholder komplekse data, som Tabell-i-tabell og Tabell-i-tabell-i-tabell. Da kan man sammen med <code>isee_transform()</code>-funksjonen koble disse sammen og lage egentilpassede løpenumre på felter som skal inn i ISEE.</p>
-<p>Siden det finnes mange ulike måter å bygge et skjema på, og ønske om å holde funskjonene så generiske som mulig uten for mange parametre, må man i noen tilfeller tilpasse lastefilen til ISEE med ekstra steg etter <code>isee_transfom()</code>. <code>xml_transform()</code> kan være til hjelp for å se kompleksiteten i et skjema, og så benytte opplysningene i FELTNAVN/LEVEL-kolonnene for å lage spesialtipassede løpenr m.m.</p>
+En liste med verdier/tellere som beskriver kompleksiteten og nivået til feltet.</p>
 </section>
 </section>
 <section id="lasting-til-isee" class="level2">
