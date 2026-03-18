@@ -826,16 +826,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata">Metadata</a></li>
   <li><a href="#prosessering-av-store-datasett" id="toc-prosessering-av-store-datasett" class="nav-link" data-scroll-target="#prosessering-av-store-datasett">Prosessering av store datasett</a></li>
   <li><a href="#pseudonymisering-av-hierarkisk-data" id="toc-pseudonymisering-av-hierarkisk-data" class="nav-link" data-scroll-target="#pseudonymisering-av-hierarkisk-data">Pseudonymisering av hierarkisk data</a></li>
+  <li><a href="#path" id="toc-path" class="nav-link" data-scroll-target="#path"><code>path</code></a></li>
+  <li><a href="#pattern" id="toc-pattern" class="nav-link" data-scroll-target="#pattern"><code>pattern</code></a></li>
   </ul></li>
-  <li><a href="#leser-schema" id="toc-leser-schema" class="nav-link" data-scroll-target="#leser-schema">Leser schema:</a></li>
-  <li><a href="#matcher-reglene-for-pseudonymisering-med-feltene-i-schema" id="toc-matcher-reglene-for-pseudonymisering-med-feltene-i-schema" class="nav-link" data-scroll-target="#matcher-reglene-for-pseudonymisering-med-feltene-i-schema">Matcher reglene for pseudonymisering med feltene i schema:</a>
-  <ul class="collapse">
   <li><a href="#brukerveiledning" id="toc-brukerveiledning" class="nav-link" data-scroll-target="#brukerveiledning">Brukerveiledning</a>
   <ul class="collapse">
   <li><a href="#interaktiv-utvikling" id="toc-interaktiv-utvikling" class="nav-link" data-scroll-target="#interaktiv-utvikling">Interaktiv utvikling</a></li>
   <li><a href="#kildomaten-i-test" id="toc-kildomaten-i-test" class="nav-link" data-scroll-target="#kildomaten-i-test">Kildomaten i test</a></li>
   <li><a href="#kildomaten-i-prod" id="toc-kildomaten-i-prod" class="nav-link" data-scroll-target="#kildomaten-i-prod">Kildomaten i prod</a></li>
-  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/dapla-pseudo.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/dapla-pseudo.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -1272,24 +1270,24 @@ Tabell&nbsp;2: Oversikt over algoritmer, nøkler og mapping som støttes på Dap
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-23" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-23-1"><a href="#annotated-cell-23-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
-<span id="annotated-cell-23-2"><a href="#annotated-cell-23-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
-<span id="annotated-cell-23-3"><a href="#annotated-cell-23-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
-<span id="annotated-cell-23-4"><a href="#annotated-cell-23-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
-<span id="annotated-cell-23-5"><a href="#annotated-cell-23-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
-<span id="annotated-cell-23-6"><a href="#annotated-cell-23-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="annotated-cell-23-7"><a href="#annotated-cell-23-7" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-23-8" class="code-annotation-target"><a href="#annotated-cell-23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-23-9" class="code-annotation-target"><a href="#annotated-cell-23-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-25" data-filename="Notebook"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-25-1"><a href="#annotated-cell-25-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> (</span>
+<span id="annotated-cell-25-2"><a href="#annotated-cell-25-2" aria-hidden="true" tabindex="-1"></a>    Pseudonymize.from_polars(df)    </span>
+<span id="annotated-cell-25-3"><a href="#annotated-cell-25-3" aria-hidden="true" tabindex="-1"></a>    .on_fields(<span class="st">"fnr"</span>)           </span>
+<span id="annotated-cell-25-4"><a href="#annotated-cell-25-4" aria-hidden="true" tabindex="-1"></a>    .with_stable_id()</span>
+<span id="annotated-cell-25-5"><a href="#annotated-cell-25-5" aria-hidden="true" tabindex="-1"></a>    .run()                      </span>
+<span id="annotated-cell-25-6"><a href="#annotated-cell-25-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-25-7"><a href="#annotated-cell-25-7" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-25" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-25-8" class="code-annotation-target"><a href="#annotated-cell-25-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.datadoc)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-25" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-25-9" class="code-annotation-target"><a href="#annotated-cell-25-9" aria-hidden="true" tabindex="-1"></a>result.to_file(<span class="st">"gs://bucket/test.parquet"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-23" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-25" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-23" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
+<span data-code-cell="annotated-cell-25" data-code-lines="8" data-code-annotation="1">Printer metadata i en Notebook.</span>
 </dd>
-<dt data-target-cell="annotated-cell-23" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-25" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-23" data-code-lines="9" data-code-annotation="2">Skriver data og metadata direkte til bøtte.</span>
+<span data-code-cell="annotated-cell-25" data-code-lines="9" data-code-annotation="2">Skriver data og metadata direkte til bøtte.</span>
 </dd>
 </dl>
 </div>
@@ -1408,180 +1406,268 @@ Important
 <section id="pseudonymisering-av-hierarkisk-data" class="level3">
 <h3 class="anchored" data-anchor-id="pseudonymisering-av-hierarkisk-data">Pseudonymisering av hierarkisk data</h3>
 <p>Hierarkisk data er data som har en trestruktur, og som ofte lagres i formater som JSON eller XML. Hierarkisk data ser slik ut:</p>
-<p>```json filename=“hierarchical_data.json” [ { // Person 1 “person_info”: { “fnr”: “11854898347”, “fornavn”: “Donald”, “etternavn”: “Duck” }, “kjonn”: “M”, “fodselsdato”: “020995” },</p>
-<pre><code>{ // Person 2
-"person_info": {
-    "fnr": "01839899544",
-    "fornavn": "Mikke",
-    "etternavn": "Mus"
-},
-"kjonn": "M",
-"fodselsdato": "060970"
-},</code></pre>
-<p>]</p>
-<pre><code>
-I dette eksempelet er det det nøstede feltet "person_info" som gjør strukturen hierarkisk. Dette står i kontrast til "flate" data, hvor man gjerne kun har en tabellstruktur som i en CSV-fil.
-
-Pseudonymisering av hierarkisk data er noe mer komplisert enn pseudonymisering av flate data, da man må beskrive hvor i den hierarkiske strukturen man skal pseudonymisere. Dette gjøres ved å lage såkalte **PseudoRules**.
-
-En **PseudoRule** har hovedsakelig tre komponenter:
-
-1. **Function**: Beskriver enkrypteringsalgoritmen som skal brukes for feltene i `path`. 
-Eksempel: `map-sid-ff31(sid-snapshot-date=2019-12-31)` 
-2. **Path**: En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`. Skråstreken bestemmer hvilket nivå i hierarkiet man peker på.
-3. **Pattern**: Glob-uttrykk som beskriver hvor i den hierarkiske strukturen man skal pseudonymisere. Eksempel: `**/fnr`
-
-Hvordan man genererer de tre feltene vil bli beskrevet senere.
-
-#### Pseudonymisering av hierarkisk data
-
-Typisk vil man ha flere PseudoRules for å kunne pseudonymisere flere felt i den hierarkiske strukturen. Da er det vanlig å samle alle PseudoRules in en felles .json-fil, som kan se noe slik ut for eksempelet over:
-
-```json filename="pseudo_rules.json"
-[
-    {
-        "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
-        "path": "person_info/fnr",
-        "pattern": "**/fnr"
-    },
-    {
-        "func": "daead()",
-        "path": "person_info/fornavn",
-        "pattern": "**/fornavn"
-    },
-    {
-        "func": "daead()",
-        "path": "person_info/etternavn",
-        "pattern": "**/etternavn"
-    }
-]</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>hierarchical_data.json</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="hierarchical_data.json"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="er">//</span> <span class="er">Person</span> <span class="er">1</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"person_info"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fnr"</span><span class="fu">:</span> <span class="st">"11854898347"</span><span class="fu">,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fornavn"</span><span class="fu">:</span> <span class="st">"Donald"</span><span class="fu">,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"etternavn"</span><span class="fu">:</span> <span class="st">"Duck"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kjonn"</span><span class="fu">:</span> <span class="st">"M"</span><span class="fu">,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fodselsdato"</span><span class="fu">:</span> <span class="st">"020995"</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span> <span class="er">//</span> <span class="er">Person</span> <span class="er">2</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"person_info"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fnr"</span><span class="fu">:</span> <span class="st">"01839899544"</span><span class="fu">,</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fornavn"</span><span class="fu">:</span> <span class="st">"Mikke"</span><span class="fu">,</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"etternavn"</span><span class="fu">:</span> <span class="st">"Mus"</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kjonn"</span><span class="fu">:</span> <span class="st">"M"</span><span class="fu">,</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fodselsdato"</span><span class="fu">:</span> <span class="st">"060970"</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I dette eksempelet er det det nøstede feltet “person_info” som gjør strukturen hierarkisk. Dette står i kontrast til “flate” data, hvor man gjerne kun har en tabellstruktur som i en CSV-fil.</p>
+<p>Pseudonymisering av hierarkisk data er noe mer komplisert enn pseudonymisering av flate data, da man må beskrive hvor i den hierarkiske strukturen man skal pseudonymisere. Dette gjøres ved å lage såkalte <strong>PseudoRules</strong>.</p>
+<p>En <strong>PseudoRule</strong> har hovedsakelig tre komponenter:</p>
+<ol type="1">
+<li><strong>Function</strong>: Beskriver enkrypteringsalgoritmen som skal brukes for feltene i <code>path</code>. Eksempel: <code>map-sid-ff31(sid-snapshot-date=2019-12-31)</code></li>
+<li><strong>Path</strong>: En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til <code>fnr</code> være <code>person_info/fnr</code>, og pathen til <code>kjonn</code> vil enkelt nok være <code>kjonn</code>. Skråstreken bestemmer hvilket nivå i hierarkiet man peker på.</li>
+<li><strong>Pattern</strong>: Glob-uttrykk som beskriver hvor i den hierarkiske strukturen man skal pseudonymisere. Eksempel: <code>**/fnr</code></li>
+</ol>
+<p>Hvordan man genererer de tre feltene vil bli beskrevet senere.</p>
+<section id="pseudonymisering-av-hierarkisk-data-1" class="level4">
+<h4 class="anchored" data-anchor-id="pseudonymisering-av-hierarkisk-data-1">Pseudonymisering av hierarkisk data</h4>
+<p>Typisk vil man ha flere PseudoRules for å kunne pseudonymisere flere felt i den hierarkiske strukturen. Da er det vanlig å samle alle PseudoRules in en felles .json-fil, som kan se noe slik ut for eksempelet over:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pseudo_rules.json</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="pseudo_rules.json"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"func"</span><span class="fu">:</span> <span class="st">"map-sid-ff31(sid-snapshot-date=2019-12-31)"</span><span class="fu">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"path"</span><span class="fu">:</span> <span class="st">"person_info/fnr"</span><span class="fu">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"**/fnr"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"func"</span><span class="fu">:</span> <span class="st">"daead()"</span><span class="fu">,</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"path"</span><span class="fu">:</span> <span class="st">"person_info/fornavn"</span><span class="fu">,</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"**/fornavn"</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"func"</span><span class="fu">:</span> <span class="st">"daead()"</span><span class="fu">,</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"path"</span><span class="fu">:</span> <span class="st">"person_info/etternavn"</span><span class="fu">,</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"**/etternavn"</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>Ved å lese denne JSON-filen sammen med dataene, forstår dapla-toolbelt-pseudo nøyaktig hvilke felter som skal pseudonymiseres, hvor de befinner seg i den hierarkiske strukturen, og hvilken algoritme som skal benyttes for å pseudonymisere hvert felt. Man kan da bruke dapla-toolbelt-pseudo slik for å pseudonymisere:</p>
-<p>```python filename=“process_source_data.py” import json import pandas as pd from dapla_pseudo import Pseudonymize, PseudoRule</p>
-<p>RULES_FILENAME = “gs://<kildebøtte-navn>/pseudo_rules.json”</kildebøtte-navn></p>
-<p>def main(source_file: str): with open(RULES_FILENAME, ‘r’) as rules_file: pseudo_rule_list = json.load(file)</p>
-<pre><code># Konverter fra Python dictionaries til PseudoRule-objekter
-pseudo_rules = [PseudoRule.from_json(rule) for rule in pseudo_rule_list]
-
-df = pd.read_json(source_file) # Eksempel på innlesning av data, tilpass etter behov
-
-result = (
-    Pseudonymize
-    .from_pandas(df) 
-    .add_rules(pseudo_rules)
-    .run(hierarchical=True) # Viktig å spesifisere at dataene er hierarkiske!
-)
-
-output_file = source_file.replace("kilde", "produkt").replace(".json", ".parquet")
-
-result.to_file(output_file) # Eksempel på skriving av data, tilpass etter behov</code></pre>
-<pre><code>
-#### PseudoRules - anatomi og oppsett
-
-Som sagt er en PseudoRule en sammensetning av tre komponenter: `func`, `path` og `pattern`. Vi kommer til å se på hvordan man forholder seg til disse feltene når man setter opp `PseudoRules` for datagrunnlaget sitt
-
-#### `func`
-
-`func` beskriver hvilken algoritme som skal benyttes for å pseudonymisere det aktuelle feltet. I JSON-strukturen over supplerer man en enkel streng som korresponderer til algoritmen. Dette er veldig likt måten man bruker `dapla-toolbelt-pseudo` ellers - det er bare en annen syntaks. Bruk tabellen under:
-
-| Algoritme | dapla-toolbelt-pseudo (flat)          | dapla-toolbelt-pseudo (hierarkisk)       | SID-mapping |
-| --------- | --------------------------------------| ------------------                       | ----------- |
-| TINK-DAED | `with_default_encryption()`           | `daead()`                                | Nei         |
-| TINK-FPE  | `with_stable_id()`                    | `map-sid-ff31()`                         | Ja          |
-| TINK-FPE  | `with_papis_compatible_encryption()`  | `ff31()`                                 | Nei         |
-| Redact[^1]| Ikke tilgjengelig                     | `redact()`                               | Nei         |
-
-I tillegg til funksjonene i tabellen over, kan man også sende inn argumenter til funksjonene i strengen. Disse argumentene må være på formatet `func(arg=value)`. For eksempel, for å spesifisere hvilken versjon av SNR-katalogen, bruker man `map-sid-ff31(sid-snapshot-date=2019-12-31)`. Merk at argumentene bruker bindestrek `-`, i motsetning til funksjonene i flat format som bruker understrek `_`.
-
-### `path`
-
-En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`.
-
-### `pattern`
-
-Pattern er et [glob-uttrykk](https://code2prompt.dev/docs/explanations/glob_patterns/) som kan brukes til å generere paths for flere felt i den hierarkiske strukture - *dette blir beskrevet under*. 
-
-Det viktigste symbolet å være klar over er `*`, også kjent som wildcard-symbolet. `*` kan erstatte hvilket som helst felt i en path på et gitt nivå i hierarkiet. Dobbel-stjernesymbolet `**` kan erstatte hvilket som helst felt i en path uavhengig av hierarki. Noen eksempler:
-
-* `*/fnr` vil matche alle strenger på det første nivået i hierarkiet, og søker etter `fnr` på det andre nivået. Det vil for eksempel matche `person_info/fnr` og `person_data/fnr`, og `anything/fnr`, men ikke `person_info/barn/fnr` fordi FNR-et ligger på det tredje nivået i hierarkiet.
-* `person_*/fnr` vil matche både `person_info/fnr` og `person_data/fnr`, men *ikke* `something/fnr`
-* `**/fnr` vil matche på alle paths som slutter på `fnr`, uavhengig av hvor i hierarkiet det befinner seg. Det vil for eksempel matche `person_info/fnr`, `person_info/barn/fnr` og `fnr`
-
-#### Hvordan generere PseudoRules
-
-##### Enkel struktur
-For hierarkiske data med en enkel struktur, vil det lønne seg å manuelt skrive PseudoRules i en JSON-fil som i eksempelet over. Disse lagres i kildebøtta, og kan leses inn i Kildomaten. Går man denne ruta, fyller man ut `path` for feltene man ønsker å pseudonymisere, velger `func` for hvert felt, og lar `pattern = **` (match alle felter).
-
-#### Kompleks struktur
-For mer komplekse datasett med mange felt og/eller dypt hierarki, kan det være tidkrevende å manuelt skrive PseudoRules og spesielt da `path` for alle relevante felt. I disse tilfellene kan man generere PseudoRules ved å bruke `pattern`-feltet.
-
-For å generere `PseudoRules`, trenger man:
-
-1. Et sett med delvis utfylte `PseudoRules`, hvor `func` og `pattern` er fylt ut. `path` skal ikke fylles ut - det er det som skal genereres. For hver PseudoRule, lag et `pattern` som matcher feltene man ønsker å pseudonymisere i datasettet. For dette vil man typisk bruke wildcard-karakterene `*` og `**`, som beskrevet over over.
-
-2. Dataenes *schema*. Et *schema* beskriver strukturen til dataene og alle mulige felter. Eksempel:
-
-Data:
-``json filename="hierarchical_data.json"
-[
-    {
-    "person_info": {
-        "fnr": "11854898347",
-        "fornavn": "Donald",
-        "etternavn": "Duck"
-    },
-    "kjonn": "M",
-    "fodselsdato": "020995"
-    },
-]
-``
-
-Schema:
-``
-"person_info": Struct(
-        "fnr": String,
-        "fornavn": String,
-        "etternavn": String
-),
-"kjonn": String,
-"fodselsdato": String
-``
-
-Schemaene må være Parquet-schemaer, og blir typisk hentet fra API-definisjonen hos dataleverandør. Ta kontakt med Team Statistikktjenester for hjelp til å hente ut schema for dine data.
-
-Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path` for alle relevante felt i datasettet ved hjelp av `SchemaTraverser()`-klassen i `dapla-toolbelt-pseudo`. Dette kan gjøres i Dapla Lab, i et Poetry prosjekt med `dapla-toolbelt-pseudo` installert slik:
-
-```json filename="partial_pseudo_rules.json"
-[ // Utfylt i Dapla Lab, og lagres i kildebøtta
-    {
-        "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
-        "pattern": "**/fnr"
-    },
-    {
-        "func": "daead()",
-        "pattern": "**/fornavn"
-    },
-    {
-        "func": "daead()",
-        "pattern": "**/etternavn"
-    }
-]</code></pre>
-<p>``python filename=“generate_pseudo_rules.py” import json import gcsfs import polars as pl from dapla_pseudo import PseudoRule from dapla_pseudo import SchemaTraverser from pydantic_core import to_jsonable_python</p>
-<p>schema_path = “/buckets/kilde/someschema.parquet”</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>process_source_data.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="process_source_data.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> Pseudonymize, PseudoRule</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>RULES_FILENAME <span class="op">=</span> <span class="st">"gs://&lt;kildebøtte-navn&gt;/pseudo_rules.json"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(source_file: <span class="bu">str</span>):</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(RULES_FILENAME, <span class="st">'r'</span>) <span class="im">as</span> rules_file:</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        pseudo_rule_list <span class="op">=</span> json.load(<span class="bu">file</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Konverter fra Python dictionaries til PseudoRule-objekter</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    pseudo_rules <span class="op">=</span> [PseudoRule.from_json(rule) <span class="cf">for</span> rule <span class="kw">in</span> pseudo_rule_list]</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_json(source_file) <span class="co"># Eksempel på innlesning av data, tilpass etter behov</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> (</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        Pseudonymize</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>        .from_pandas(df) </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        .add_rules(pseudo_rules)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        .run(hierarchical<span class="op">=</span><span class="va">True</span>) <span class="co"># Viktig å spesifisere at dataene er hierarkiske!</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    output_file <span class="op">=</span> source_file.replace(<span class="st">"kilde"</span>, <span class="st">"produkt"</span>).replace(<span class="st">".json"</span>, <span class="st">".parquet"</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    result.to_file(output_file) <span class="co"># Eksempel på skriving av data, tilpass etter behov</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="pseudorules---anatomi-og-oppsett" class="level4">
+<h4 class="anchored" data-anchor-id="pseudorules---anatomi-og-oppsett">PseudoRules - anatomi og oppsett</h4>
+<p>Som sagt er en PseudoRule en sammensetning av tre komponenter: <code>func</code>, <code>path</code> og <code>pattern</code>. Vi kommer til å se på hvordan man forholder seg til disse feltene når man setter opp <code>PseudoRules</code> for datagrunnlaget sitt</p>
+</section>
+<section id="func" class="level4">
+<h4 class="anchored" data-anchor-id="func"><code>func</code></h4>
+<p><code>func</code> beskriver hvilken algoritme som skal benyttes for å pseudonymisere det aktuelle feltet. I JSON-strukturen over supplerer man en enkel streng som korresponderer til algoritmen. Dette er veldig likt måten man bruker <code>dapla-toolbelt-pseudo</code> ellers - det er bare en annen syntaks. Bruk tabellen under:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 50%">
+<col style="width: 23%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Algoritme</th>
+<th>dapla-toolbelt-pseudo (flat)</th>
+<th>dapla-toolbelt-pseudo (hierarkisk)</th>
+<th>SID-mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>TINK-DAED</td>
+<td><code>with_default_encryption()</code></td>
+<td><code>daead()</code></td>
+<td>Nei</td>
+</tr>
+<tr class="even">
+<td>TINK-FPE</td>
+<td><code>with_stable_id()</code></td>
+<td><code>map-sid-ff31()</code></td>
+<td>Ja</td>
+</tr>
+<tr class="odd">
+<td>TINK-FPE</td>
+<td><code>with_papis_compatible_encryption()</code></td>
+<td><code>ff31()</code></td>
+<td>Nei</td>
+</tr>
+<tr class="even">
+<td>Redact<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a></td>
+<td>Ikke tilgjengelig</td>
+<td><code>redact()</code></td>
+<td>Nei</td>
+</tr>
+</tbody>
+</table>
+<p>I tillegg til funksjonene i tabellen over, kan man også sende inn argumenter til funksjonene i strengen. Disse argumentene må være på formatet <code>func(arg=value)</code>. For eksempel, for å spesifisere hvilken versjon av SNR-katalogen, bruker man <code>map-sid-ff31(sid-snapshot-date=2019-12-31)</code>. Merk at argumentene bruker bindestrek <code>-</code>, i motsetning til funksjonene i flat format som bruker understrek <code>_</code>.</p>
 </section>
 </section>
-<section id="leser-schema" class="level1">
-<h1>Leser schema:</h1>
-<p>schema = pl.read_parquet_schema( schema_path )</p>
-<p>partial_pseudo_rules = json.load(“partial_pseudo_rules.json”)</p>
-<p>rules = [PseudoRule.from_json(rule) for rule in partial_pseudo_rules]</p>
-<p>sc = SchemaTraverser(schema, rules)</p>
+<section id="path" class="level3">
+<h3 class="anchored" data-anchor-id="path"><code>path</code></h3>
+<p>En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til <code>fnr</code> være <code>person_info/fnr</code>, og pathen til <code>kjonn</code> vil enkelt nok være <code>kjonn</code>.</p>
 </section>
-<section id="matcher-reglene-for-pseudonymisering-med-feltene-i-schema" class="level1">
-<h1>Matcher reglene for pseudonymisering med feltene i schema:</h1>
-<p>pseudo_rules = sc.match_rules()</p>
-<p>matched_rules_output_path = “buckets/kilde/pseudo_rules.json” # Brukes for pseudonymisering i Kildomaten # Lagrer fil med matchede regler for pseudonymisering def write_rules(file_path: str, rules: list[PseudoRule]) -&gt; None: with gcsfs.GCSFileSystem().open(file_path, “w”) as matched_rules_output: matched_rules_output.write( to_jsonable_python(rules) )</p>
-<p>write_rules(matched_rules_output_path, concrete_rules) ``</p>
+<section id="pattern" class="level3">
+<h3 class="anchored" data-anchor-id="pattern"><code>pattern</code></h3>
+<p>Pattern er et <a href="https://code2prompt.dev/docs/explanations/glob_patterns/">glob-uttrykk</a> som kan brukes til å generere paths for flere felt i den hierarkiske strukture - <em>dette blir beskrevet under</em>.</p>
+<p>Det viktigste symbolet å være klar over er <code>*</code>, også kjent som wildcard-symbolet. <code>*</code> kan erstatte hvilket som helst felt i en path på et gitt nivå i hierarkiet. Dobbel-stjernesymbolet <code>**</code> kan erstatte hvilket som helst felt i en path uavhengig av hierarki. Noen eksempler:</p>
+<ul>
+<li><code>*/fnr</code> vil matche alle strenger på det første nivået i hierarkiet, og søker etter <code>fnr</code> på det andre nivået. Det vil for eksempel matche <code>person_info/fnr</code> og <code>person_data/fnr</code>, og <code>anything/fnr</code>, men ikke <code>person_info/barn/fnr</code> fordi FNR-et ligger på det tredje nivået i hierarkiet.</li>
+<li><code>person_*/fnr</code> vil matche både <code>person_info/fnr</code> og <code>person_data/fnr</code>, men <em>ikke</em> <code>something/fnr</code></li>
+<li><code>**/fnr</code> vil matche på alle paths som slutter på <code>fnr</code>, uavhengig av hvor i hierarkiet det befinner seg. Det vil for eksempel matche <code>person_info/fnr</code>, <code>person_info/barn/fnr</code> og <code>fnr</code></li>
+</ul>
+<section id="hvordan-generere-pseudorules" class="level4">
+<h4 class="anchored" data-anchor-id="hvordan-generere-pseudorules">Hvordan generere PseudoRules</h4>
+<section id="enkel-struktur" class="level5">
+<h5 class="anchored" data-anchor-id="enkel-struktur">Enkel struktur</h5>
+<p>For hierarkiske data med en enkel struktur, vil det lønne seg å manuelt skrive PseudoRules i en JSON-fil som i eksempelet over. Disse lagres i kildebøtta, og kan leses inn i Kildomaten. Går man denne ruta, fyller man ut <code>path</code> for feltene man ønsker å pseudonymisere, velger <code>func</code> for hvert felt, og lar <code>pattern = **</code> (match alle felter).</p>
+</section>
+</section>
+<section id="kompleks-struktur" class="level4">
+<h4 class="anchored" data-anchor-id="kompleks-struktur">Kompleks struktur</h4>
+<p>For mer komplekse datasett med mange felt og/eller dypt hierarki, kan det være tidkrevende å manuelt skrive PseudoRules og spesielt da <code>path</code> for alle relevante felt. I disse tilfellene kan man generere PseudoRules ved å bruke <code>pattern</code>-feltet.</p>
+<p>For å generere <code>PseudoRules</code>, trenger man:</p>
+<ol type="1">
+<li><p>Et sett med delvis utfylte <code>PseudoRules</code>, hvor <code>func</code> og <code>pattern</code> er fylt ut. <code>path</code> skal ikke fylles ut - det er det som skal genereres. For hver PseudoRule, lag et <code>pattern</code> som matcher feltene man ønsker å pseudonymisere i datasettet. For dette vil man typisk bruke wildcard-karakterene <code>*</code> og <code>**</code>, som beskrevet over over.</p></li>
+<li><p>Dataenes <em>schema</em>. Et <em>schema</em> beskriver strukturen til dataene og alle mulige felter. Eksempel:</p></li>
+</ol>
+<p>Data:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>hierarchical_data.json</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="hierarchical_data.json"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"person_info"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fnr"</span><span class="fu">:</span> <span class="st">"11854898347"</span><span class="fu">,</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"fornavn"</span><span class="fu">:</span> <span class="st">"Donald"</span><span class="fu">,</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"etternavn"</span><span class="fu">:</span> <span class="st">"Duck"</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">},</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kjonn"</span><span class="fu">:</span> <span class="st">"M"</span><span class="fu">,</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"fodselsdato"</span><span class="fu">:</span> <span class="st">"020995"</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="er">``</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="er">Schema:</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="er">``</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="er">"person_info":</span> <span class="er">Struct(</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        <span class="er">"fnr":</span> <span class="er">String,</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>        <span class="er">"fornavn":</span> <span class="er">String,</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>        <span class="er">"etternavn":</span> <span class="er">String</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="er">),</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="er">"kjonn":</span> <span class="er">String,</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="er">"fodselsdato":</span> <span class="er">String</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Schemaene må være Parquet-schemaer, og blir typisk hentet fra API-definisjonen hos dataleverandør. Ta kontakt med Team Statistikktjenester for hjelp til å hente ut schema for dine data.</p>
+<p>Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede <code>path</code> for alle relevante felt i datasettet ved hjelp av <code>SchemaTraverser()</code>-klassen i <code>dapla-toolbelt-pseudo</code>. Dette kan gjøres i Dapla Lab, i et Poetry prosjekt med <code>dapla-toolbelt-pseudo</code> installert slik:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>partial_pseudo_rules.json</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="partial_pseudo_rules.json"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span> <span class="er">//</span> <span class="er">Utfylt</span> <span class="er">i</span> <span class="er">Dapla</span> <span class="er">Lab</span><span class="ot">,</span> <span class="er">og</span> <span class="er">lagres</span> <span class="er">i</span> <span class="er">kildebøtta</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"func"</span><span class="fu">:</span> <span class="st">"map-sid-ff31(sid-snapshot-date=2019-12-31)"</span><span class="fu">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"**/fnr"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"func"</span><span class="fu">:</span> <span class="st">"daead()"</span><span class="fu">,</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"**/fornavn"</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"func"</span><span class="fu">:</span> <span class="st">"daead()"</span><span class="fu">,</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"pattern"</span><span class="fu">:</span> <span class="st">"**/etternavn"</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>generate_pseudo_rules.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="generate_pseudo_rules.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gcsfs</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> PseudoRule</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dapla_pseudo <span class="im">import</span> SchemaTraverser</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic_core <span class="im">import</span> to_jsonable_python</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>schema_path <span class="op">=</span> <span class="st">"/buckets/kilde/someschema.parquet"</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Leser schema:</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>schema <span class="op">=</span> pl.read_parquet_schema(</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    schema_path</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>partial_pseudo_rules <span class="op">=</span> json.load(<span class="st">"partial_pseudo_rules.json"</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>rules <span class="op">=</span> [PseudoRule.from_json(rule) <span class="cf">for</span> rule <span class="kw">in</span> partial_pseudo_rules]</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>sc <span class="op">=</span> SchemaTraverser(schema, rules)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Matcher reglene for pseudonymisering med feltene i schema:</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>pseudo_rules <span class="op">=</span> sc.match_rules()</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>matched_rules_output_path <span class="op">=</span> <span class="st">"buckets/kilde/pseudo_rules.json"</span> <span class="co"># Brukes for pseudonymisering i Kildomaten</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Lagrer fil med matchede regler for pseudonymisering</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_rules(file_path: <span class="bu">str</span>, rules: <span class="bu">list</span>[PseudoRule]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> gcsfs.GCSFileSystem().<span class="bu">open</span>(file_path, <span class="st">"w"</span>) <span class="im">as</span> matched_rules_output:</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        matched_rules_output.write(</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>            to_jsonable_python(rules)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>write_rules(matched_rules_output_path, concrete_rules)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>Man kan da, med den ferdig utfylte <code>pseudo_rules.json</code>-filen, pseudonymisere dataene i Kildomaten ved å lese inn denne filen og sende den inn i <code>add_rules()</code>-funksjonen i <code>dapla-toolbelt-pseudo</code> som vist i eksempelet over.</p>
+</section>
+</section>
+</section>
 <section id="brukerveiledning" class="level2">
 <h2 class="anchored" data-anchor-id="brukerveiledning">Brukerveiledning</h2>
 <p>På grunn av den strenge tilgangsstyringen til dapla-pseudo-toolbelt og kildedata er det anbefalt å utvikle kode for overgangen fra kildedata til inndata i test-miljøet til teamet. I denne delen viser vi hvordan denne arbeidsflyten kan se ut, fra testing til en automatisert produksjon med ekte data, med et helt konkret eksempel.</p>
@@ -1600,7 +1686,6 @@ Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path
 
 </section>
 </section>
-</section>
 
 
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
@@ -1615,6 +1700,7 @@ Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path
 <li id="fn7"><p>Papis var et prosjekt med fokus på bakkesystemene i SSB som skulle bringe SSBs behandling av personopplysninger, som brukes i statistikkproduksjon, i samsvar med GDPR gjennom en enhetlig pseudonymiseringsløsning.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn8"><p>Generelt sett er det ikke å anbefale å benytte denne nøkkelen på annen informasjon enn fødselsnummer. Grunnen er at den er svakere enn andre algoritmer, der blant annet tekst som er kortere enn 4 karakter lang ikke blir pseudonymisert.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>Datadoc er det nye systemet for dokumentasjon av datasett i SSB.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Redact er en algoritme som erstatter innholdet i et felt med karakteren <code>*</code>. Dette er ikke en enkrypteringsalgoritme, og det er ikke mulig å de-pseudonymisere data som har brukt <code>redact</code>. Det kan likevel være nyttig i noen tilfeller hvis man ønsker å fjerne irrelevant data.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
