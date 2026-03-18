@@ -379,7 +379,7 @@ Strømming av data støttes ikke med hierarkiske filer.
 
 Hierarkisk data er data som har en trestruktur, og som ofte lagres i formater som JSON eller XML. Hierarkisk data ser slik ut:
 
-```json filename="hierarchical_data.json"
+```{.json filename="hierarchical_data.json"}
 [
     { // Person 1
     "person_info": {
@@ -420,7 +420,7 @@ Hvordan man genererer de tre feltene vil bli beskrevet senere.
 
 Typisk vil man ha flere PseudoRules for å kunne pseudonymisere flere felt i den hierarkiske strukturen. Da er det vanlig å samle alle PseudoRules in en felles .json-fil, som kan se noe slik ut for eksempelet over:
 
-```json filename="pseudo_rules.json"
+```{.json filename="pseudo_rules.json"}
 [
     {
         "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
@@ -442,7 +442,7 @@ Typisk vil man ha flere PseudoRules for å kunne pseudonymisere flere felt i den
 
 Ved å lese denne JSON-filen sammen med dataene, forstår dapla-toolbelt-pseudo nøyaktig hvilke felter som skal pseudonymiseres, hvor de befinner seg i den hierarkiske strukturen, og hvilken algoritme som skal benyttes for å pseudonymisere hvert felt. Man kan da bruke dapla-toolbelt-pseudo slik for å pseudonymisere:
 
-```python filename="process_source_data.py"
+```{.python filename="process_source_data.py"}
 import json
 import pandas as pd
 from dapla_pseudo import Pseudonymize, PseudoRule
@@ -516,7 +516,7 @@ For å generere `PseudoRules`, trenger man:
 2. Dataenes *schema*. Et *schema* beskriver strukturen til dataene og alle mulige felter. Eksempel:
 
 Data:
-``json filename="hierarchical_data.json"
+```{.json filename="hierarchical_data.json"}
 [
     {
     "person_info": {
@@ -539,13 +539,13 @@ Schema:
 ),
 "kjonn": String,
 "fodselsdato": String
-``
+```
 
 Schemaene må være Parquet-schemaer, og blir typisk hentet fra API-definisjonen hos dataleverandør. Ta kontakt med Team Statistikktjenester for hjelp til å hente ut schema for dine data.
 
 Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path` for alle relevante felt i datasettet ved hjelp av `SchemaTraverser()`-klassen i `dapla-toolbelt-pseudo`. Dette kan gjøres i Dapla Lab, i et Poetry prosjekt med `dapla-toolbelt-pseudo` installert slik:
 
-```json filename="partial_pseudo_rules.json"
+```{.json filename="partial_pseudo_rules.json"}
 [ // Utfylt i Dapla Lab, og lagres i kildebøtta
     {
         "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
@@ -562,7 +562,7 @@ Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path
 ]
 ```
 
-``python filename="generate_pseudo_rules.py"
+```{.python filename="generate_pseudo_rules.py"}
 import json
 import gcsfs
 import polars as pl
@@ -595,7 +595,7 @@ def write_rules(file_path: str, rules: list[PseudoRule]) -> None:
         )
 
 write_rules(matched_rules_output_path, concrete_rules)
-``
+```
 
 Man kan da, med den ferdig utfylte `pseudo_rules.json`-filen, pseudonymisere dataene i Kildomaten ved å lese inn denne filen og sende den inn i `add_rules()`-funksjonen i `dapla-toolbelt-pseudo` som vist i eksempelet over.
 
