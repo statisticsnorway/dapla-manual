@@ -411,7 +411,7 @@ En **PseudoRule** har hovedsakelig tre komponenter:
 
 1. **Function**: Beskriver enkrypteringsalgoritmen som skal brukes for feltene i `path`. 
 Eksempel: `map-sid-ff31(sid-snapshot-date=2019-12-31)` 
-2. **Path**: En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`.
+2. **Path**: En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`. Skråstreken bestemmer hvilket nivå i hierarkiet man peker på.
 3. **Pattern**: Glob-uttrykk som beskriver hvor i den hierarkiske strukturen man skal pseudonymisere. Eksempel: `**/fnr`
 
 Hvordan man genererer de tre feltene vil bli beskrevet senere.
@@ -516,7 +516,7 @@ For å generere `PseudoRules`, trenger man:
 2. Dataenes *schema*. Et *schema* beskriver strukturen til dataene og alle mulige felter. Eksempel:
 
 Data:
-```json filename="hierarchical_data.json"
+``json filename="hierarchical_data.json"
 [
     {
     "person_info": {
@@ -528,10 +528,10 @@ Data:
     "fodselsdato": "020995"
     },
 ]
-```
+``
 
 Schema:
-```
+``
 "person_info": Struct(
         "fnr": String,
         "fornavn": String,
@@ -539,7 +539,7 @@ Schema:
 ),
 "kjonn": String,
 "fodselsdato": String
-```
+``
 
 Schemaene må være Parquet-schemaer, og blir typisk hentet fra API-definisjonen hos dataleverandør. Ta kontakt med Team Statistikktjenester for hjelp til å hente ut schema for dine data.
 
@@ -562,7 +562,7 @@ Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path
 ]
 ```
 
-```python filename="generate_pseudo_rules.py"
+``python filename="generate_pseudo_rules.py"
 import json
 import gcsfs
 import polars as pl
@@ -595,7 +595,7 @@ def write_rules(file_path: str, rules: list[PseudoRule]) -> None:
         )
 
 write_rules(matched_rules_output_path, concrete_rules)
-```
+``
 
 Man kan da, med den ferdig utfylte `pseudo_rules.json`-filen, pseudonymisere dataene i Kildomaten ved å lese inn denne filen og sende den inn i `add_rules()`-funksjonen i `dapla-toolbelt-pseudo` som vist i eksempelet over.
 
