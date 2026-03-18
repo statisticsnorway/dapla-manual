@@ -487,17 +487,17 @@ Som sagt er en PseudoRule en sammensetning av tre komponenter: `func`, `path` og
 
 I tillegg til funksjonene i tabellen over, kan man også sende inn argumenter til funksjonene i strengen. Disse argumentene må være på formatet `func(arg=value)`. For eksempel, for å spesifisere hvilken versjon av SNR-katalogen, bruker man `map-sid-ff31(sid-snapshot-date=2019-12-31)`. Merk at argumentene bruker bindestrek `-`, i motsetning til funksjonene i flat format som bruker understrek `_`.
 
-### `path`
+#### `path`
 
 En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`.
 
-### `pattern`
+#### `pattern`
 
-Pattern er et [glob-uttrykk](https://code2prompt.dev/docs/explanations/glob_patterns/) som kan brukes til å generere paths for flere felt i den hierarkiske strukture - *dette blir beskrevet under*. 
+Pattern er et [glob-uttrykk](https://code2prompt.dev/docs/explanations/glob_patterns/) som kan brukes til å generere paths for flere felt i den hierarkiske strukturen - *fremgangsmåten for dette blir beskrevet under*. Glob-uttryk er et mønster som forsøker å finne "matchende" strenger, det vil si strenger som følger mønsteret i glob-uttrykket.
 
-Det viktigste symbolet å være klar over er `*`, også kjent som wildcard-symbolet. `*` kan erstatte hvilket som helst felt i en path på et gitt nivå i hierarkiet. Dobbel-stjernesymbolet `**` kan erstatte hvilket som helst felt i en path uavhengig av hierarki. Noen eksempler:
+Det viktigste symbolet er `*`, også kjent som wildcard-symbolet. `*` kan erstatte hvilket som helst felt i en path på et gitt nivå i hierarkiet. Dobbel-stjernesymbolet `**` kan erstatte hvilket som helst felt i en path uavhengig av hierarkinivå. Noen eksempler:
 
-* `*/fnr` vil matche alle strenger på det første nivået i hierarkiet, og søker etter `fnr` på det andre nivået. Det vil for eksempel matche `person_info/fnr` og `person_data/fnr`, og `anything/fnr`, men ikke `person_info/barn/fnr` fordi FNR-et ligger på det tredje nivået i hierarkiet.
+* `*/fnr` vil matche alle strenger på det første nivået i hierarkiet, og søker etter `fnr` på det andre nivået. Dette patternet vil for eksempel matche `person_info/fnr` og `person_data/fnr`, og `anything/fnr`, men ikke `person_info/barn/fnr` fordi FNR-et her ligger på det tredje nivået i hierarkiet.
 * `person_*/fnr` vil matche både `person_info/fnr` og `person_data/fnr`, men *ikke* `something/fnr`
 * `**/fnr` vil matche på alle paths som slutter på `fnr`, uavhengig av hvor i hierarkiet det befinner seg. Det vil for eksempel matche `person_info/fnr`, `person_info/barn/fnr` og `fnr`
 
@@ -528,10 +528,10 @@ Data:
     "fodselsdato": "020995"
     },
 ]
-``
+```
 
 Schema:
-``
+```
 "person_info": Struct(
         "fnr": String,
         "fornavn": String,
