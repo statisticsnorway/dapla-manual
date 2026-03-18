@@ -1,6 +1,6 @@
 ---
 title: dapla-toolbelt-pseudo
-date-modified: 02/24/2025
+date-modified: 03/18/2025
 lightbox: true
 ---
 
@@ -375,6 +375,230 @@ dataen til fil som i eksempelet over, eller `result.to_polars_lazy()` for å få
 Strømming av data støttes ikke med hierarkiske filer.
 :::
 
+### Pseudonymisering av hierarkisk data
+
+Hierarkisk data er data som har en trestruktur, og som ofte lagres i formater som JSON eller XML. Hierarkisk data ser slik ut:
+
+```json filename="hierarchical_data.json"
+[
+    { // Person 1
+    "person_info": {
+        "fnr": "11854898347",
+        "fornavn": "Donald",
+        "etternavn": "Duck"
+    },
+    "kjonn": "M",
+    "fodselsdato": "020995"
+    },
+
+    { // Person 2
+    "person_info": {
+        "fnr": "01839899544",
+        "fornavn": "Mikke",
+        "etternavn": "Mus"
+    },
+    "kjonn": "M",
+    "fodselsdato": "060970"
+    },
+]
+```
+
+I dette eksempelet er det det nøstede feltet "person_info" som gjør strukturen hierarkisk. Dette står i kontrast til "flate" data, hvor man gjerne kun har en tabellstruktur som i en CSV-fil.
+
+Pseudonymisering av hierarkisk data er noe mer komplisert enn pseudonymisering av flate data, da man må beskrive hvor i den hierarkiske strukturen man skal pseudonymisere. Dette gjøres ved å lage såkalte **PseudoRules**.
+
+En **PseudoRule** har hovedsakelig tre komponenter:
+
+1. **Function**: Beskriver enkrypteringsalgoritmen som skal brukes for feltene i `path`. 
+Eksempel: `map-sid-ff31(sid-snapshot-date=2019-12-31)` 
+2. **Path**: En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`.
+3. **Pattern**: Glob-uttrykk som beskriver hvor i den hierarkiske strukturen man skal pseudonymisere. Eksempel: `**/fnr`
+
+Hvordan man genererer de tre feltene vil bli beskrevet senere.
+
+#### Pseudonymisering av hierarkisk data
+
+Typisk vil man ha flere PseudoRules for å kunne pseudonymisere flere felt i den hierarkiske strukturen. Da er det vanlig å samle alle PseudoRules in en felles .json-fil, som kan se noe slik ut for eksempelet over:
+
+```json filename="pseudo_rules.json"
+[
+    {
+        "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
+        "path": "person_info/fnr",
+        "pattern": "**/fnr"
+    },
+    {
+        "func": "daead()",
+        "path": "person_info/fornavn",
+        "pattern": "**/fornavn"
+    },
+    {
+        "func": "daead()",
+        "path": "person_info/etternavn",
+        "pattern": "**/etternavn"
+    }
+]
+```
+
+Ved å lese denne JSON-filen sammen med dataene, forstår dapla-toolbelt-pseudo nøyaktig hvilke felter som skal pseudonymiseres, hvor de befinner seg i den hierarkiske strukturen, og hvilken algoritme som skal benyttes for å pseudonymisere hvert felt. Man kan da bruke dapla-toolbelt-pseudo slik for å pseudonymisere:
+
+```python filename="process_source_data.py"
+import json
+import pandas as pd
+from dapla_pseudo import Pseudonymize, PseudoRule
+
+RULES_FILENAME = "gs://<kildebøtte-navn>/pseudo_rules.json"
+
+def main(source_file: str):
+    with open(RULES_FILENAME, 'r') as rules_file:
+        pseudo_rule_list = json.load(file)
+    
+    # Konverter fra Python dictionaries til PseudoRule-objekter
+    pseudo_rules = [PseudoRule.from_json(rule) for rule in pseudo_rule_list]
+
+    df = pd.read_json(source_file) # Eksempel på innlesning av data, tilpass etter behov
+
+    result = (
+        Pseudonymize
+        .from_pandas(df) 
+        .add_rules(pseudo_rules)
+        .run(hierarchical=True) # Viktig å spesifisere at dataene er hierarkiske!
+    )
+
+    output_file = source_file.replace("kilde", "produkt").replace(".json", ".parquet")
+
+    result.to_file(output_file) # Eksempel på skriving av data, tilpass etter behov
+```
+
+#### PseudoRules - anatomi og oppsett
+
+Som sagt er en PseudoRule en sammensetning av tre komponenter: `func`, `path` og `pattern`. Vi kommer til å se på hvordan man forholder seg til disse feltene når man setter opp `PseudoRules` for datagrunnlaget sitt
+
+#### `func`
+
+`func` beskriver hvilken algoritme som skal benyttes for å pseudonymisere det aktuelle feltet. I JSON-strukturen over supplerer man en enkel streng som korresponderer til algoritmen. Dette er veldig likt måten man bruker `dapla-toolbelt-pseudo` ellers - det er bare en annen syntaks. Bruk tabellen under:
+
+| Algoritme | dapla-toolbelt-pseudo (flat)          | dapla-toolbelt-pseudo (hierarkisk)       | SID-mapping |
+| --------- | --------------------------------------| ------------------                       | ----------- |
+| TINK-DAED | `with_default_encryption()`           | `daead()`                                | Nei         |
+| TINK-FPE  | `with_stable_id()`                    | `map-sid-ff31()`                         | Ja          |
+| TINK-FPE  | `with_papis_compatible_encryption()`  | `ff31()`                                 | Nei         |
+| Redact[^1]| Ikke tilgjengelig                     | `redact()`                               | Nei         |
+
+I tillegg til funksjonene i tabellen over, kan man også sende inn argumenter til funksjonene i strengen. Disse argumentene må være på formatet `func(arg=value)`. For eksempel, for å spesifisere hvilken versjon av SNR-katalogen, bruker man `map-sid-ff31(sid-snapshot-date=2019-12-31)`. Merk at argumentene bruker bindestrek `-`, i motsetning til funksjonene i flat format som bruker understrek `_`.
+
+### `path`
+
+En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`.
+
+### `pattern`
+
+Pattern er et [glob-uttrykk](https://code2prompt.dev/docs/explanations/glob_patterns/) som kan brukes til å generere paths for flere felt i den hierarkiske strukture - *dette blir beskrevet under*. 
+
+Det viktigste symbolet å være klar over er `*`, også kjent som wildcard-symbolet. `*` kan erstatte hvilket som helst felt i en path på et gitt nivå i hierarkiet. Dobbel-stjernesymbolet `**` kan erstatte hvilket som helst felt i en path uavhengig av hierarki. Noen eksempler:
+
+* `*/fnr` vil matche alle strenger på det første nivået i hierarkiet, og søker etter `fnr` på det andre nivået. Det vil for eksempel matche `person_info/fnr` og `person_data/fnr`, og `anything/fnr`, men ikke `person_info/barn/fnr` fordi FNR-et ligger på det tredje nivået i hierarkiet.
+* `person_*/fnr` vil matche både `person_info/fnr` og `person_data/fnr`, men *ikke* `something/fnr`
+* `**/fnr` vil matche på alle paths som slutter på `fnr`, uavhengig av hvor i hierarkiet det befinner seg. Det vil for eksempel matche `person_info/fnr`, `person_info/barn/fnr` og `fnr`
+
+#### Hvordan generere PseudoRules
+
+##### Enkel struktur
+For hierarkiske data med en enkel struktur, vil det lønne seg å manuelt skrive PseudoRules i en JSON-fil som i eksempelet over. Disse lagres i kildebøtta, og kan leses inn i Kildomaten. Går man denne ruta, fyller man ut `path` for feltene man ønsker å pseudonymisere, velger `func` for hvert felt, og lar `pattern = **` (match alle felter).
+
+#### Kompleks struktur
+For mer komplekse datasett med mange felt og/eller dypt hierarki, kan det være tidkrevende å manuelt skrive PseudoRules og spesielt da `path` for alle relevante felt. I disse tilfellene kan man generere PseudoRules ved å bruke `pattern`-feltet.
+
+For å generere `PseudoRules`, trenger man:
+
+1. Et sett med delvis utfylte `PseudoRules`, hvor `func` og `pattern` er fylt ut. `path` skal ikke fylles ut - det er det som skal genereres. For hver PseudoRule, lag et `pattern` som matcher feltene man ønsker å pseudonymisere i datasettet. For dette vil man typisk bruke wildcard-karakterene `*` og `**`, som beskrevet over over.
+
+2. Dataenes *schema*. Et *schema* beskriver strukturen til dataene og alle mulige felter. Eksempel:
+
+Data:
+```json filename="hierarchical_data.json"
+[
+    {
+    "person_info": {
+        "fnr": "11854898347",
+        "fornavn": "Donald",
+        "etternavn": "Duck"
+    },
+    "kjonn": "M",
+    "fodselsdato": "020995"
+    },
+]
+```
+
+Schema:
+```
+"person_info": Struct(
+        "fnr": String,
+        "fornavn": String,
+        "etternavn": String
+),
+"kjonn": String,
+"fodselsdato": String
+```
+
+Schemaene må være Parquet-schemaer, og blir typisk hentet fra API-definisjonen hos dataleverandør. Ta kontakt med Team Statistikktjenester for hjelp til å hente ut schema for dine data.
+
+Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path` for alle relevante felt i datasettet ved hjelp av `SchemaTraverser()`-klassen i `dapla-toolbelt-pseudo`. Dette kan gjøres i Dapla Lab, i et Poetry prosjekt med `dapla-toolbelt-pseudo` installert slik:
+
+```json filename="partial_pseudo_rules.json"
+[ // Utfylt i Dapla Lab, og lagres i kildebøtta
+    {
+        "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
+        "pattern": "**/fnr"
+    },
+    {
+        "func": "daead()",
+        "pattern": "**/fornavn"
+    },
+    {
+        "func": "daead()",
+        "pattern": "**/etternavn"
+    }
+]
+```
+
+```python filename="generate_pseudo_rules.py"
+import json
+import gcsfs
+import polars as pl
+from dapla_pseudo import PseudoRule
+from dapla_pseudo import SchemaTraverser
+from pydantic_core import to_jsonable_python
+
+schema_path = "/buckets/kilde/someschema.parquet"
+
+# Leser schema:
+schema = pl.read_parquet_schema(
+    schema_path
+)
+
+partial_pseudo_rules = json.load("partial_pseudo_rules.json")
+
+rules = [PseudoRule.from_json(rule) for rule in partial_pseudo_rules]
+
+sc = SchemaTraverser(schema, rules)
+
+# Matcher reglene for pseudonymisering med feltene i schema:
+pseudo_rules = sc.match_rules()
+
+matched_rules_output_path = "buckets/kilde/pseudo_rules.json" # Brukes for pseudonymisering i Kildomaten
+# Lagrer fil med matchede regler for pseudonymisering
+def write_rules(file_path: str, rules: list[PseudoRule]) -> None:
+    with gcsfs.GCSFileSystem().open(file_path, "w") as matched_rules_output:
+        matched_rules_output.write(
+            to_jsonable_python(rules)
+        )
+
+write_rules(matched_rules_output_path, concrete_rules)
+```
+
+Man kan da, med den ferdig utfylte `pseudo_rules.json`-filen, pseudonymisere dataene i Kildomaten ved å lese inn denne filen og sende den inn i `add_rules()`-funksjonen i `dapla-toolbelt-pseudo` som vist i eksempelet over.
+
 ## Brukerveiledning
 
 På grunn av den strenge tilgangsstyringen til dapla-pseudo-toolbelt og kildedata er det anbefalt å utvikle kode for overgangen fra kildedata til inndata i test-miljøet til teamet. I denne delen viser vi hvordan denne arbeidsflyten kan se ut, fra testing til en automatisert produksjon med ekte data, med et helt konkret eksempel. 
@@ -391,3 +615,4 @@ Kommer snart.
 
 Kommer snart. 
 
+[^1]: Redact er en algoritme som erstatter innholdet i et felt med karakteren `*`. Dette er ikke en enkrypteringsalgoritme, og det er ikke mulig å de-pseudonymisere data som har brukt `redact`. Det kan likevel være nyttig i noen tilfeller hvis man ønsker å fjerne irrelevant data.
