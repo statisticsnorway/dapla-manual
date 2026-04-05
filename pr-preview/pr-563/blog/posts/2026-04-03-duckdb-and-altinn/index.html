@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Øyvind Bruer-Skarsbø">
+<meta name="dcterms.date" content="2026-04-03">
+
+<title>Duckdb for håndtering av mange småfiler – Dapla-manualen</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-56d83cfb55626cb5d4606d52739e6118.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #e3f1e6;
+      }
+</style>
+
+
+<meta property="og:title" content="Duckdb for håndtering av mange småfiler – Dapla-manualen">
+<meta property="og:description" content="Ytelsestest med Altinn3-skjemadata">
+<meta property="og:image" content="https://manual.dapla.ssb.no/blog/posts/2026-04-03-duckdb-and-altinn/DuckDB_inline-lightmode.svg">
+<meta property="og:site_name" content="Dapla-manualen">
+<meta name="twitter:title" content="Duckdb for håndtering av mange småfiler – Dapla-manualen">
+<meta name="twitter:description" content="Ytelsestest med Altinn3-skjemadata">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/blog/posts/2026-04-03-duckdb-and-altinn/DuckDB_inline-lightmode.svg">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo light-content">
+    <img src="../../../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../statistikkere/index.html"> 
+<span class="menu-text">Manual</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../news/index.html"> 
+<span class="menu-text">Nyheter</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog/index.html"> 
+<span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../faq.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../notebooks/index.html"> 
+<span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../utviklere/lenker.html"> 
+<span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../om-dapla.html"> 
+<span class="menu-text">Om Dapla</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7"><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://lab.dapla.ssb.no/"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Dapla Lab</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual"> <i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-andre-lenker" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Andre lenker</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-andre-lenker">    
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-test.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (test)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-dev.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (dev)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/"><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://dapla-ctrl.intern.ssb.no/"><i class="bi bi-controller" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Ctrl</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Duckdb for håndtering av mange småfiler</h1>
+            <p class="subtitle lead">Ytelsestest med Altinn3-skjemadata</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">duckdb</div>
+              </div>
+                  </div>
+  </div>
+    
+  <div class="quarto-title-meta-author">
+    <div class="quarto-title-meta-heading">Forfatter</div>
+    <div class="quarto-title-meta-heading">Tilhører</div>
+    
+      <div class="quarto-title-meta-contents">
+      <p class="author">Øyvind Bruer-Skarsbø </p>
+    </div>
+    <div class="quarto-title-meta-contents">
+          <p class="affiliation">
+              Seksjon for dataplattform (724)
+            </p>
+        </div>
+    </div>
+
+  <div class="quarto-title-meta">
+
+        
+      <div>
+      <div class="quarto-title-meta-heading">Opprettet</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 3, 2026</p>
+      </div>
+    </div>
+    
+      <div>
+      <div class="quarto-title-meta-heading">Sist endret</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date-modified">April 3, 2026</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#generere-testdata" id="toc-generere-testdata" class="nav-link active" data-scroll-target="#generere-testdata">Generere testdata</a></li>
+  <li><a href="#simulere-kildomaten" id="toc-simulere-kildomaten" class="nav-link" data-scroll-target="#simulere-kildomaten">Simulere Kildomaten</a></li>
+  <li><a href="#slå-sammen-10-000-filer" id="toc-slå-sammen-10-000-filer" class="nav-link" data-scroll-target="#slå-sammen-10-000-filer">Slå sammen 10 000 filer</a>
+  <ul class="collapse">
+  <li><a href="#strategien-for-sammenslåing" id="toc-strategien-for-sammenslåing" class="nav-link" data-scroll-target="#strategien-for-sammenslåing">Strategien for sammenslåing</a></li>
+  </ul></li>
+  <li><a href="#når-nye-data-kommer-inn" id="toc-når-nye-data-kommer-inn" class="nav-link" data-scroll-target="#når-nye-data-kommer-inn">Når nye data kommer inn</a>
+  <ul class="collapse">
+  <li><a href="#nye-filer" id="toc-nye-filer" class="nav-link" data-scroll-target="#nye-filer">3000 nye filer</a></li>
+  <li><a href="#nye-filer-1" id="toc-nye-filer-1" class="nav-link" data-scroll-target="#nye-filer-1">50 000 nye filer</a></li>
+  </ul></li>
+  <li><a href="#analysere-hierarkiske-data" id="toc-analysere-hierarkiske-data" class="nav-link" data-scroll-target="#analysere-hierarkiske-data">Analysere hierarkiske data</a></li>
+  <li><a href="#fordelene-med-en-hierarkisk-struktur" id="toc-fordelene-med-en-hierarkisk-struktur" class="nav-link" data-scroll-target="#fordelene-med-en-hierarkisk-struktur">Fordelene med en hierarkisk struktur</a></li>
+  <li><a href="#ulemper-med-duckdb" id="toc-ulemper-med-duckdb" class="nav-link" data-scroll-target="#ulemper-med-duckdb">Ulemper med Duckdb</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/blog/posts/2026-04-03-duckdb-and-altinn/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/blog/posts/2026-04-03-duckdb-and-altinn/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Noen datafangstprosesser i SSB genererer veldig mange småfiler som må slåes sammen før de kan analyseres og prosesseres til statistikk. Et godt eksempel er skjemadata fra Altinn3 der mellom 5 000 og 100 000 skjemaer kan bli sendt inn hver periode, og hvert av skjemaene dukker opp som en enkeltfil i kildebøtta til Dapla-teamet.</p>
+<p>DuckDB er en moderne, filbasert analytisk database som er skreddersydd for nettopp denne typen utfordringer. Der tradisjonelle databaser ofte krever tunge serveroppsett, fungerer DuckDB som en lynrask motor rett i din egen Jupyter-notebook eller VS Code-sesjon.</p>
+<p>I denne artikkelen ser vi på hvordan vi kan bruke DuckDB til å temme “småfil-problemet”. Ved å transformere titusenvis av spredte XML-filer til én samlet, indeksert databasefil, reduserer vi ikke bare kompleksiteten i koden, men vi oppnår også en ytelse som gjør at analyser på tvers av hele datasettet går fra minutter til millisekunder. Vi skal se nærmere på hvordan vi simulerte 63 000 innrapporteringer, og hvorfor denne teknologien kan være en “game changer” for hvordan vi håndterer denne typen data på Dapla.</p>
+<section id="generere-testdata" class="level2">
+<h2 class="anchored" data-anchor-id="generere-testdata">Generere testdata</h2>
+<p>Første steg å generere testdata som kan benyttes til å simulere rådata fra Altinn3 i kildebøtta. Følgende kode er brukt til å generere test-skjemaer med og uten en del for Tidsbruk:</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Generere test-data
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> uuid</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor, as_completed</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, timedelta</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xml.etree.ElementTree <span class="im">as</span> ET</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gcsfs</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_fake_xml_content(org_nr, date_str, has_tidsbruk, delreg_nr):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Genererer XML-strengen (innholdet) uten å skrive til disk ennå."""</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    ansatte_k <span class="op">=</span> random.randint(<span class="dv">1</span>, <span class="dv">15</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    ansatte_m <span class="op">=</span> random.randint(<span class="dv">1</span>, <span class="dv">15</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    lonn <span class="op">=</span> random.randint(<span class="dv">100000</span>, <span class="dv">750000</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    tidsbruk_xml <span class="op">=</span> <span class="st">""</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> has_tidsbruk:</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>        tidsbruk_xml <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;Tidsbruk&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;hjelpAvAndreMin&gt;</span><span class="sc">{</span>random<span class="sc">.</span>randint(<span class="dv">10</span>, <span class="dv">600</span>)<span class="sc">}</span><span class="ss">&lt;/hjelpAvAndreMin&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;utfyllingMin&gt;</span><span class="sc">{</span>random<span class="sc">.</span>randint(<span class="dv">10</span>, <span class="dv">600</span>)<span class="sc">}</span><span class="ss">&lt;/utfyllingMin&gt;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;/Tidsbruk&gt;"""</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f"""&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;melding xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" dataFormatId="7095"&gt;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;InternInfo&gt;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;raNummer&gt;RA-0657&lt;/raNummer&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;delregNr&gt;</span><span class="sc">{</span>delreg_nr<span class="sc">}</span><span class="ss">&lt;/delregNr&gt;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;enhetsOrgNr&gt;</span><span class="sc">{</span>org_nr<span class="sc">}</span><span class="ss">&lt;/enhetsOrgNr&gt;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;enhetsNavn&gt;BEDRIFT </span><span class="sc">{</span>org_nr<span class="sc">}</span><span class="ss"> AS&lt;/enhetsNavn&gt;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;periodeAAr&gt;</span><span class="sc">{</span>date_str[:<span class="dv">4</span>]<span class="sc">}</span><span class="ss">&lt;/periodeAAr&gt;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;enhetsIdent&gt;ATB</span><span class="sc">{</span>random<span class="sc">.</span>randint(<span class="dv">1000000</span>, <span class="dv">9999999</span>)<span class="sc">}</span><span class="ss">&lt;/enhetsIdent&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;/InternInfo&gt;</span><span class="sc">{</span>tidsbruk_xml<span class="sc">}</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;SkjemaData&gt;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;bemanning&gt;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;heltidAnsattKvinnerAnt&gt;</span><span class="sc">{</span>ansatte_k<span class="sc">}</span><span class="ss">&lt;/heltidAnsattKvinnerAnt&gt;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;heltidAnsattMennAnt&gt;</span><span class="sc">{</span>ansatte_m<span class="sc">}</span><span class="ss">&lt;/heltidAnsattMennAnt&gt;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;/bemanning&gt;</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;kostnader&gt;</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;lonnskostTotVirksomhet&gt;</span><span class="sc">{</span>lonn<span class="sc">}</span><span class="ss">&lt;/lonnskostTotVirksomhet&gt;</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;/kostnader&gt;</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;tilskudd&gt;</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;givere&gt;</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">                &lt;offentligTilskuddGiver&gt;NVE&lt;/offentligTilskuddGiver&gt;</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;/givere&gt;</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">        &lt;/tilskudd&gt;</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">    &lt;/SkjemaData&gt;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/melding&gt;"""</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_real_test_set_gcs(bucket_path, num_files, start_date_str<span class="op">=</span><span class="st">"2023-03-01"</span>):</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Lager XML-filer direkte i en GCS-bøtte."""</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Opprett forbindelse til GCS</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># GKE bruker vanligvis Workload Identity, så vi trenger ikke eksplisitte nøkler</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Siden GCS ikke har ekte mapper (bare nøkler), trenger vi ikke "makedirs"</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Men vi sletter eksisterende data i den spesifikke "mappen" hvis ønskelig:</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> fs.exists(bucket_path):</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Sletter eksisterende data i: </span><span class="sc">{</span>bucket_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>        fs.rm(bucket_path, recursive<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Genererer </span><span class="sc">{</span>num_files<span class="sc">}</span><span class="ss"> filer direkte til </span><span class="sc">{</span>bucket_path<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    start_date <span class="op">=</span> datetime.strptime(start_date_str, <span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st">"</span>)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(num_files):</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>        current_date <span class="op">=</span> start_date <span class="op">+</span> timedelta(days<span class="op">=</span>random.randint(<span class="dv">0</span>, <span class="dv">30</span>))</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>        year <span class="op">=</span> current_date.strftime(<span class="st">"%Y"</span>)</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>        month <span class="op">=</span> <span class="bu">str</span>(current_date.month)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>        day <span class="op">=</span> <span class="bu">str</span>(current_date.day)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>        unique_id <span class="op">=</span> <span class="ss">f"f0</span><span class="sc">{</span>uuid<span class="sc">.</span>uuid4()<span class="sc">.</span><span class="bu">hex</span>[:<span class="dv">12</span>]<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>uuid<span class="sc">.</span>uuid4()<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>        filename <span class="op">=</span> <span class="ss">f"form_e</span><span class="sc">{</span>random<span class="sc">.</span>randint(<span class="dv">10000000000</span>, <span class="dv">99999999999</span>)<span class="sc">}</span><span class="ss">.xml"</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Bygg full GCS-sti</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>        full_gcs_path <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>bucket_path<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>month<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>day<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>unique_id<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Variabler</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>        has_tidsbruk <span class="op">=</span> random.choice([<span class="va">True</span>, <span class="va">False</span>])</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>        delreg_nr <span class="op">=</span> random.choice([<span class="dv">22721</span>, <span class="dv">22722</span>])</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>        fake_org <span class="op">=</span> random.randint(<span class="dv">900000000</span>, <span class="dv">999999999</span>)</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Generer innhold</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>        xml_content <span class="op">=</span> generate_fake_xml_content(fake_org, current_date.strftime(<span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st">"</span>), has_tidsbruk, delreg_nr)</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Skriv direkte til GCS</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> fs.<span class="bu">open</span>(full_gcs_path, <span class="st">'w'</span>, encoding<span class="op">=</span><span class="st">'utf-8'</span>) <span class="im">as</span> f:</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>            f.write(xml_content)</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (i <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> <span class="dv">1000</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Ferdig med </span><span class="sc">{</span>i <span class="op">+</span> <span class="dv">1</span><span class="sc">}</span><span class="ss"> filer..."</span>)</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="co"># --- KJØR GENERERINGEN ---</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>ANTALL_FILER_TEST <span class="op">=</span> <span class="dv">10000</span> </span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>GCS_PATH <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1"</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>create_real_test_set_gcs(GCS_PATH, ANTALL_FILER_TEST)</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ferdig!"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>I alt er det generert 63 000 skjemaer i test-miljøet på Dapla Lab under <code>gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1</code>. Filstiene er også bygget opp på samme måte som er vanlig for Altinn3-data. Her er et eksempel på hvordan filstiene er bygget opp:</p>
+<p><code>gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1/2023/3/10/f000586ea4da2a_7f71dbff-b461-401c-9263-96d7df11321c/form_e79563181389.xml</code></p>
+<p>En fil med en Tidsbruk-del kan se slik ut:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Altinn3-skjema</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="Altinn3-skjema"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">"1.0"</span> <span class="ot">encoding=</span><span class="st">"utf-8"</span><span class="fu">?&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">melding</span> <span class="ot">xmlns:xsi=</span><span class="st">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="ot">dataFormatId=</span><span class="st">"7095"</span>&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">InternInfo</span>&gt;</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">raNummer</span>&gt;RA-0657&lt;/<span class="kw">raNummer</span>&gt;</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">delregNr</span>&gt;22721&lt;/<span class="kw">delregNr</span>&gt;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">enhetsOrgNr</span>&gt;987654321&lt;/<span class="kw">enhetsOrgNr</span>&gt;</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">enhetsNavn</span>&gt;EKSEMPELBEDRIFT AS&lt;/<span class="kw">enhetsNavn</span>&gt;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">periodeAAr</span>&gt;2023&lt;/<span class="kw">periodeAAr</span>&gt;</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">enhetsIdent</span>&gt;ATB1234567&lt;/<span class="kw">enhetsIdent</span>&gt;</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">InternInfo</span>&gt;</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Tidsbruk</span>&gt;</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">hjelpAvAndreMin</span>&gt;45&lt;/<span class="kw">hjelpAvAndreMin</span>&gt;</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">utfyllingMin</span>&gt;30&lt;/<span class="kw">utfyllingMin</span>&gt;</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Tidsbruk</span>&gt;</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">SkjemaData</span>&gt;</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">bemanning</span>&gt;</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">heltidAnsattKvinnerAnt</span>&gt;12&lt;/<span class="kw">heltidAnsattKvinnerAnt</span>&gt;</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">heltidAnsattMennAnt</span>&gt;8&lt;/<span class="kw">heltidAnsattMennAnt</span>&gt;</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">bemanning</span>&gt;</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">kostnader</span>&gt;</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">lonnskostTotVirksomhet</span>&gt;450000&lt;/<span class="kw">lonnskostTotVirksomhet</span>&gt;</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">kostnader</span>&gt;</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">tilskudd</span>&gt;</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">givere</span>&gt;</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">offentligTilskuddGiver</span>&gt;NVE&lt;/<span class="kw">offentligTilskuddGiver</span>&gt;</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">givere</span>&gt;</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">tilskudd</span>&gt;</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">SkjemaData</span>&gt;</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">melding</span>&gt;</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="simulere-kildomaten" class="level2">
+<h2 class="anchored" data-anchor-id="simulere-kildomaten">Simulere Kildomaten</h2>
+<p>Etter at XML-filene lander i kildebøtta til teamene, prosesseres de av en Kildomaten-jobb per fil og skrives til produktbøtta. Siden XML-filene er hierarkiske av natur, og det ligger metadata i filstien, lar vi Kildomaten produsere Parquet-filer som bevarer denne strukturen. Dette har flere fordeler: det gjør det mulig å beholde komplekse, nøstede data (structs) samtidig som vi kan trekke ut viktige metadata som id og reporting_date direkte fra mappestrukturen og inn i datasettet.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Kode for Kildomaten-transformasjon
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kildomaten_final_task(fs, xml_path, parquet_base_path):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    1. Leser XML fra GCS med Python (gcsfs).</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">    2. Skriver til lokal /tmp for å unngå nettverks-krøll i DuckDB.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">    3. Prosesserer XML med DuckDB (webbed) og trekker ut OrgNr og delregNr.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">    4. Skriver Parquet tilbake til GCS med Python.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    con <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    local_xml_path <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    local_parquet_path <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># --- 1. Metadata og stier ---</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        path_parts <span class="op">=</span> xml_path.split(<span class="st">'/'</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Forventer format: gs://.../test-data-1/YYYY/M/D/ID/fil.xml</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        unique_id <span class="op">=</span> path_parts[<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        day <span class="op">=</span> path_parts[<span class="op">-</span><span class="dv">3</span>]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        month <span class="op">=</span> path_parts[<span class="op">-</span><span class="dv">4</span>]</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        year <span class="op">=</span> path_parts[<span class="op">-</span><span class="dv">5</span>]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        parquet_path <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>parquet_base_path<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>month<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>day<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>unique_id<span class="sc">}</span><span class="ss">/data.parquet"</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Lag unike lokale filstier i /tmp for denne tråden</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        local_xml_path <span class="op">=</span> <span class="ss">f"/tmp/</span><span class="sc">{</span>unique_id<span class="sc">}</span><span class="ss">.xml"</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        local_parquet_path <span class="op">=</span> <span class="ss">f"/tmp/</span><span class="sc">{</span>unique_id<span class="sc">}</span><span class="ss">.parquet"</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># --- 2. Last ned XML lokalt ---</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> fs.<span class="bu">open</span>(xml_path, <span class="st">'rb'</span>) <span class="im">as</span> f_remote:</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(local_xml_path, <span class="st">'wb'</span>) <span class="im">as</span> f_local:</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                f_local.write(f_remote.read())</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># --- 3. Prosesser med DuckDB ---</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        con <span class="op">=</span> duckdb.<span class="ex">connect</span>(<span class="st">':memory:'</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        con.execute(<span class="st">"LOAD webbed;"</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># SQL-spørring som trekker ut spesifikke felter fra InternInfo-strukturen</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        query <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="ss">            COPY (</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="ss">                SELECT </span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="ss">                    '</span><span class="sc">{</span>unique_id<span class="sc">}</span><span class="ss">' AS id,</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="ss">                    make_date(</span><span class="sc">{</span>year<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>month<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>day<span class="sc">}</span><span class="ss">) AS reporting_date,</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="ss">                    InternInfo.enhetsOrgNr AS enhetsOrgNr, -- Løfter ut OrgNr</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="ss">                    InternInfo.delregNr AS delregNr,       -- Løfter ut delregNr</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="ss">                    '</span><span class="sc">{</span>xml_path<span class="sc">}</span><span class="ss">' AS kilde_path,</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="ss">                    * EXCLUDE (dataFormatId)               -- Henter resten av XML-dataene</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="ss">                FROM read_xml('</span><span class="sc">{</span>local_xml_path<span class="sc">}</span><span class="ss">', record_element='melding')</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="ss">            ) TO '</span><span class="sc">{</span>local_parquet_path<span class="sc">}</span><span class="ss">' (FORMAT 'PARQUET');</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="ss">        """</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        con.execute(query)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># --- 4. Last opp ferdig Parquet-fil til GCS ---</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(local_parquet_path, <span class="st">'rb'</span>) <span class="im">as</span> f_p:</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> fs.<span class="bu">open</span>(parquet_path, <span class="st">'wb'</span>) <span class="im">as</span> f_out:</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                f_out.write(f_p.read())</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Feilet på </span><span class="sc">{</span>xml_path<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">finally</span>:</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> con:</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>            con.close()</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Rydd opp i /tmp for å unngå at noden går tom for diskplass</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> p <span class="kw">in</span> [local_xml_path, local_parquet_path]:</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> p <span class="kw">and</span> os.path.exists(p):</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>                os.remove(p)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_kildomaten_pipeline(max_workers<span class="op">=</span><span class="dv">60</span>):</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">    Hovedfunksjon for å kjøre transformasjonen i parallell.</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Opprett GCS-filsystem (bruker OIDC_TOKEN automatisk i Onyxia)</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    XML_SOURCE <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1"</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    PARQUET_TARGET <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1"</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Søker etter filer i </span><span class="sc">{</span>XML_SOURCE<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    all_xml_files <span class="op">=</span> [<span class="ss">f"gs://</span><span class="sc">{</span>f<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> f <span class="kw">in</span> fs.glob(<span class="ss">f"</span><span class="sc">{</span>XML_SOURCE<span class="sc">}</span><span class="ss">/**/*.xml"</span>)]</span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    num_files <span class="op">=</span> <span class="bu">len</span>(all_xml_files)</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num_files <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Ingen filer funnet. Sjekk kilde-stien."</span>)</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Fant </span><span class="sc">{</span>num_files<span class="sc">}</span><span class="ss"> filer. Starter transformasjon med </span><span class="sc">{</span>max_workers<span class="sc">}</span><span class="ss"> tråder..."</span>)</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span>max_workers) <span class="im">as</span> executor:</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Mapper hver XML-fil til transformasjons-oppgaven</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>        executor.<span class="bu">map</span>(<span class="kw">lambda</span> xml: kildomaten_final_task(fs, xml, PARQUET_TARGET), all_xml_files)</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="co"># --- EXECUTE ---</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>    run_kildomaten_pipeline(max_workers<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Ferdig! Alle 10 000 filer er transformert med enhetsOrgNr og delregNr."</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Det resulterende datasettet får da denne formen:</p>
+<div id="tbl-iac-autonomy" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-iac-autonomy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: Parquet-fil som er output fra Kildomaten
+</figcaption>
+<div aria-describedby="tbl-iac-autonomy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 24%">
+<col style="width: 31%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">reporting_date</th>
+<th style="text-align: right;">enhetsOrgNr</th>
+<th style="text-align: right;">delregNr</th>
+<th style="text-align: left;">kilde_path</th>
+<th style="text-align: left;">SkjemaData</th>
+<th style="text-align: left;">InternInfo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">f000586ea4da2a_7f71dbff-b461-401c-9263-96d7df11321c</td>
+<td style="text-align: left;">2023-03-10</td>
+<td style="text-align: right;">989600399</td>
+<td style="text-align: right;">22721</td>
+<td style="text-align: left;">gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1/2023/3/10/f000586ea4da2a_7f71dbff-b461-401c-9263-96d7df11321c/form_e79563181389.xml</td>
+<td style="text-align: left;">{‘bemanning’: {‘heltidAnsattKvinnerAnt’: 9, ‘heltidAnsattMennAnt’: 14}, ‘kostnader’: {‘lonnskostTotVirksomhet’: 593140}, ‘tilskudd’: {‘givere’: {‘offentligTilskuddGiver’: ‘NVE’}}}</td>
+<td style="text-align: left;">{‘raNummer’: ‘RA-0657’, ‘delregNr’: 22721, ‘enhetsOrgNr’: 989600399, ‘enhetsNavn’: ‘BEDRIFT 989600399 AS’, ‘periodeAAr’: 2023, ‘enhetsIdent’: ‘ATB4107076’}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+<section id="slå-sammen-10-000-filer" class="level2">
+<h2 class="anchored" data-anchor-id="slå-sammen-10-000-filer">Slå sammen 10 000 filer</h2>
+<p>Under filstien <code>ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1/2023/3</code> ligger det nå 10 000 små Parquet-filer med en rad med data i hver. Nå ønsker vi å slå de sammen. Under foreslår jeg at dette gjøres ved å opprette en DuckDB-databasefil, fordi den fungerer som en ekstremt effektiv “beholder” som broer gapet mellom uoversiktlige objektlagre og strukturerte relasjonsdatabaser.</p>
+<p>Ved å samle disse filene i én .duckdb-fil oppnår vi flere fordeler:</p>
+<ul>
+<li><p>Ytelse: I stedet for at filsystemet må liste og åpne 10 000 individuelle filer hver gang vi skal stille et spørsmål, kan DuckDB hoppe rett til riktig dataposisjon ved hjelp av indekser.</p></li>
+<li><p>Enkelhet: For en statistiker blir grensesnittet én tabell i én fil, i stedet for en dyp og kompleks mappestruktur på GCS.</p></li>
+<li><p>Metadata og Typer: Vi kan lagre faste datatyper (Date, Integer, etc.) og legge til indekser på for eksempel enhetsOrgNr, noe som gjør søk i historiske data lynraske.</p></li>
+</ul>
+<section id="strategien-for-sammenslåing" class="level3">
+<h3 class="anchored" data-anchor-id="strategien-for-sammenslåing">Strategien for sammenslåing</h3>
+<p>Siden vi jobber på Dapla, er strategien å trekke dataene inn i en midlertidig lokal instans, utføre sammenslåingen, og deretter “flushe” resultatet til en permanent databasefil som lastes opp til GCS.</p>
+<p>En viktig detalj her er bruken av CHECKPOINT. DuckDB bruker en såkalt Write-Ahead Log (.wal). Hvis vi bare laster opp .duckdb-fila uten å kjøre en checkpoint, risikerer vi at de nyeste dataene fortsatt ligger i logg-fila og ikke i selve hovedfila. Ved å tvinge gjennom et checkpoint sikrer vi at databasen er konsistent og klar til bruk for nestemann som laster den ned.</p>
+<p>Her er koden for å utføre dette fra Dapla Lab:</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Kode for å slå sammen 10 000 filer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_and_upload_master_db():</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Konfigurasjon</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    PARQUET_ROOT <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    GCS_DESTINATION <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/obr/database/obr_master.duckdb"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    LOCAL_TMP_DB <span class="op">=</span> <span class="st">"/tmp/obr_master.duckdb"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Søker etter de nye Parquet-filene..."</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    files <span class="op">=</span> [<span class="ss">f"gs://</span><span class="sc">{</span>f<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> f <span class="kw">in</span> fs.glob(<span class="ss">f"</span><span class="sc">{</span>PARQUET_ROOT<span class="sc">}</span><span class="ss">/**/*.parquet"</span>)]</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> files:</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Fant ingen filer. Har du kjørt transformasjonen på nytt?"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Les alle filer parallelt (Hybrid-metoden som tok 23 sekunder)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Laster </span><span class="sc">{</span><span class="bu">len</span>(files)<span class="sc">}</span><span class="ss"> filer inn i minnet..."</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> read_single_file(file_path):</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> fs.<span class="bu">open</span>(file_path, <span class="st">'rb'</span>) <span class="im">as</span> f:</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> pd.read_parquet(f)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span>:</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span><span class="dv">60</span>) <span class="im">as</span> executor:</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        df_list <span class="op">=</span> <span class="bu">list</span>(executor.<span class="bu">map</span>(read_single_file, files))</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    full_df <span class="op">=</span> pd.concat([df <span class="cf">for</span> df <span class="kw">in</span> df_list <span class="cf">if</span> df <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>], ignore_index<span class="op">=</span><span class="va">True</span>, sort<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Opprett en fysisk DuckDB-fil lokalt i /tmp</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Oppretter databasefil lokalt..."</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.path.exists(LOCAL_TMP_DB):</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        os.remove(LOCAL_TMP_DB)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    con <span class="op">=</span> duckdb.<span class="ex">connect</span>(database<span class="op">=</span>LOCAL_TMP_DB)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    con.register(<span class="st">'temp_df'</span>, full_df)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Flytt data fra Pandas til en permanent tabell i fila</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"CREATE TABLE alle_skjema AS SELECT * FROM temp_df"</span>)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Legg gjerne på en indeks for enda raskere søk senere</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Optimaliserer databasen..."</span>)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"CREATE INDEX idx_orgnr ON alle_skjema (enhetsOrgNr)"</span>)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    row_count <span class="op">=</span> con.execute(<span class="st">"SELECT count(*) FROM alle_skjema"</span>).fetchone()[<span class="dv">0</span>]</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    con.close()</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Last opp til GCS</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Laster opp </span><span class="sc">{</span>row_count<span class="sc">}</span><span class="ss"> rader til </span><span class="sc">{</span>GCS_DESTINATION<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(LOCAL_TMP_DB, <span class="st">'rb'</span>) <span class="im">as</span> f_src:</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> fs.<span class="bu">open</span>(GCS_DESTINATION, <span class="st">'wb'</span>) <span class="im">as</span> f_dst:</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>            f_dst.write(f_src.read())</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rydd opp</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    os.remove(LOCAL_TMP_DB)</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Suksess! Master-databasen er nå tilgjengelig på GCS."</span>)</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    create_and_upload_master_db()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Det tok <strong>23</strong> sekunder å slå sammen 10 000 filer og opprette databasefilen i GCS. Filen ser nå slik ut:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">reporting_date</th>
+<th style="text-align: left;">enhetsOrgNr</th>
+<th style="text-align: left;">delregNr</th>
+<th style="text-align: left;">kilde_path</th>
+<th style="text-align: left;">SkjemaData</th>
+<th style="text-align: left;">Tidsbruk</th>
+<th style="text-align: left;">InternInfo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>f0000d892c...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">989176871</td>
+<td style="text-align: left;">22721</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 11, ...}</code></td>
+<td style="text-align: left;"><code>{'hjelpAvAndreMin': 133, 'utfyllingMin': 49}</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22721, ...}</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>1f00480ea7...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">990569046</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 5, ...}</code></td>
+<td style="text-align: left;"><code>{'hjelpAvAndreMin': 600, 'utfyllingMin': 539}</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22722, ...}</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>2f0052ff59...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">938802704</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 8, ...}</code></td>
+<td style="text-align: left;"><code>{'hjelpAvAndreMin': 285, 'utfyllingMin': 322}</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22722, ...}</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>3f006294ba...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">906468302</td>
+<td style="text-align: left;">22721</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 4, ...}</code></td>
+<td style="text-align: left;"><code>&lt;NA&gt;</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22721, ...}</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>4f006544ad...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">956690196</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 8, ...}</code></td>
+<td style="text-align: left;"><code>&lt;NA&gt;</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22722, ...}</code></td>
+</tr>
+</tbody>
+</table>
+<p>De hierarkiske feltene er nå laget som structs i databasen, noe som betyr at de er veldig lett tilgjengelig for analyse.</p>
+</section>
+</section>
+<section id="når-nye-data-kommer-inn" class="level2">
+<h2 class="anchored" data-anchor-id="når-nye-data-kommer-inn">Når nye data kommer inn</h2>
+<p>Anta at det kommer nye data inn som man ønsker å legge til Ducklake-databasen. Da må man først sjekke hva som allerede ligger i databasen og deretter laste opp det som ikke allerede ligger der. Med Ducklake kan man gjøre det på en elegant og effektiv måte. Vi skal nå se på et scenario der det er kommet inn 3000 nye filer og et annet scenario der det har kommet inn 50 000 nye filer. Vi skal også måle hvor lang tid operasjonene tar.</p>
+<section id="nye-filer" class="level3">
+<h3 class="anchored" data-anchor-id="nye-filer">3000 nye filer</h3>
+<p>Anta at det har kommet inn 3000 nye PArquet-filer i produktbøtta under stien: <code>ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1/2023/4</code>. Denne koden sjekker om filer allerede er lagt til og legger til de 3000 filene på <strong>9 sekunder</strong>:</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Kode for å legge til nye filer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_master_db_with_checkpoint():</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Oppdaterer master-basen med April-data og bruker CHECKPOINT </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    for å tvinge alle endringer fra minne/logg til selve .duckdb-fila.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- 1. Oppsett ---</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    PARQUET_ROOT <span class="op">=</span> <span class="st">"ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    GCS_DB_PATH <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/obr/database/obr_master.duckdb"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    LOCAL_DB <span class="op">=</span> <span class="st">"/tmp/obr_master_checkpoint.duckdb"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- 2. Hent eksisterende database ---</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> fs.exists(GCS_DB_PATH):</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Henter database fra GCS: </span><span class="sc">{</span>GCS_DB_PATH<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sletter lokal kopi hvis den finnes fra før for å starte ferskt</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> os.path.exists(LOCAL_DB):</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            os.remove(LOCAL_DB)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        fs.get(GCS_DB_PATH, LOCAL_DB)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Feil: Fant ingen database på GCS å oppdatere."</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- 3. Finn og les nye April-filer ---</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Søker etter nye filer..."</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    all_files <span class="op">=</span> [<span class="ss">f"gs://</span><span class="sc">{</span>f<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> f <span class="kw">in</span> fs.glob(<span class="ss">f"</span><span class="sc">{</span>PARQUET_ROOT<span class="sc">}</span><span class="ss">/**/*.parquet"</span>)]</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    con <span class="op">=</span> duckdb.<span class="ex">connect</span>(database<span class="op">=</span>LOCAL_DB)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Finn ID-er som ikke er i databasen ennå</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    existing_ids <span class="op">=</span> <span class="bu">set</span>(con.execute(<span class="st">"SELECT id FROM alle_skjema"</span>).df()[<span class="st">'id'</span>])</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    files_to_read <span class="op">=</span> [f <span class="cf">for</span> f <span class="kw">in</span> all_files <span class="cf">if</span> f.split(<span class="st">'/'</span>)[<span class="op">-</span><span class="dv">2</span>] <span class="kw">not</span> <span class="kw">in</span> existing_ids]</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> files_to_read:</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Ingen nye data å legge til. Avbryter."</span>)</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>        con.close()</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Laster </span><span class="sc">{</span><span class="bu">len</span>(files_to_read)<span class="sc">}</span><span class="ss"> nye filer..."</span>)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> read_file(p):</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> fs.<span class="bu">open</span>(p, <span class="st">'rb'</span>) <span class="im">as</span> f: <span class="cf">return</span> pd.read_parquet(f)</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span><span class="dv">60</span>) <span class="im">as</span> executor:</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>        updates_df <span class="op">=</span> pd.concat(<span class="bu">list</span>(executor.<span class="bu">map</span>(read_file, files_to_read)), ignore_index<span class="op">=</span><span class="va">True</span>, sort<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- 4. SQL Operasjoner ---</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    con.register(<span class="st">'updates'</span>, updates_df)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Utfører sammenslåing med UNION BY NAME..."</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"""</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="st">        CREATE TABLE ny_alle_skjema AS </span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="st">        SELECT * FROM alle_skjema</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="st">        UNION BY NAME</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="st">        SELECT * FROM updates;</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span>)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"DROP TABLE alle_skjema"</span>)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"ALTER TABLE ny_alle_skjema RENAME TO alle_skjema"</span>)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Oppdaterer indeksen på den nye tabellen</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"CREATE INDEX idx_orgnr ON alle_skjema (enhetsOrgNr)"</span>)</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- 5. SIKKERHETSSJEKK OG LÅSING ---</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Tvinger CHECKPOINT (flushing av WAL-fil)..."</span>)</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Dette tvinger alle endringer fra .wal-fila inn i hovedfila (.duckdb)</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    con.execute(<span class="st">"CHECKPOINT;"</span>) </span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>    final_count <span class="op">=</span> con.execute(<span class="st">"SELECT count(*) FROM alle_skjema"</span>).fetchone()[<span class="dv">0</span>]</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Verifisert antall rader lokalt før opplasting: </span><span class="sc">{</span>final_count<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># VIKTIG: Lukk forbindelsen helt før vi rører fila med GCSFS</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    con.close() </span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># --- 6. Last opp til GCS ---</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Laster opp til GCS (</span><span class="sc">{</span>GCS_DB_PATH<span class="sc">}</span><span class="ss">)..."</span>)</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    fs.put(LOCAL_DB, GCS_DB_PATH)</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rydd opp lokalt</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.path.exists(LOCAL_DB):</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>        os.remove(LOCAL_DB)</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Suksess! Oppdateringen er bekreftet og lagret med </span><span class="sc">{</span>final_count<span class="sc">}</span><span class="ss"> rader."</span>)</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>    update_master_db_with_checkpoint()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</section>
+<section id="nye-filer-1" class="level3">
+<h3 class="anchored" data-anchor-id="nye-filer-1">50 000 nye filer</h3>
+<p>Under filstien <code>ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1/2023/5</code> ligger det 50 000 nye filer produsert av Kildomaten. Hvis vi kjører samme operasjon som over på disse, så tar det <strong>2 minutter og 19 sekunder</strong> å kjøre operasjonen.</p>
+</section>
+</section>
+<section id="analysere-hierarkiske-data" class="level2">
+<h2 class="anchored" data-anchor-id="analysere-hierarkiske-data">Analysere hierarkiske data</h2>
+<p>Duckdb er lynrask på analyse på disse dataene. La oss sette opp en kobling til en lokal versjon av databasen:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- OPPSETT ---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> gcsfs.GCSFileSystem()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>GCS_DB_PATH <span class="op">=</span> <span class="st">"gs://ssb-dapla-felles-data-produkt-test/obr/database/obr_master.duckdb"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>LOCAL_READ_DB <span class="op">=</span> <span class="st">"/tmp/obr_lesing.duckdb"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> last_og_koble_til():</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Henter nyeste versjon fra GCS og åpner en tilkobling."""</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.path.exists(LOCAL_READ_DB):</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        os.remove(LOCAL_READ_DB)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Henter fersk kopi av master-basen fra GCS..."</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    fs.get(GCS_DB_PATH, LOCAL_READ_DB)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Vi åpner i 'read_only' modus. Det er raskere og tryggere for analyse.</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> duckdb.<span class="ex">connect</span>(LOCAL_READ_DB, read_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Start tilkoblingen</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> last_og_koble_til()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Deretter kan vi analysere innholdet:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Hent absolutt alt</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_alle <span class="op">=</span> con.execute(<span class="st">"SELECT * FROM alle_skjema"</span>).df()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">reporting_date</th>
+<th style="text-align: left;">enhetsOrgNr</th>
+<th style="text-align: left;">delregNr</th>
+<th style="text-align: left;">kilde_path</th>
+<th style="text-align: left;">SkjemaData</th>
+<th style="text-align: left;">Tidsbruk</th>
+<th style="text-align: left;">InternInfo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>f01bbe4c2a...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">973952440</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 2, ...}</code></td>
+<td style="text-align: left;"><code>&lt;NA&gt;</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22722, ...}</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f0143cd463...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">966023200</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 3, ...}</code></td>
+<td style="text-align: left;"><code>&lt;NA&gt;</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22722, ...}</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>f01f54bddd...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">963228743</td>
+<td style="text-align: left;">22721</td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+<td style="text-align: left;"><code>{'bemanning': {'heltidAnsattKvinnerAnt': 7, ...}</code></td>
+<td style="text-align: left;"><code>&lt;NA&gt;</code></td>
+<td style="text-align: left;"><code>{'raNummer': 'RA-0657', 'delregNr': 22721, ...}</code></td>
+</tr>
+</tbody>
+</table>
+<p>La oss regne ut hvilke bedrifter som har høyest kvinneandel i mai:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Eksempel på et dypdykk: Finn bedrifter med høyest kvinneandel i Mai</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>kvinneandel_query <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">        enhetsOrgNr,</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">        reporting_date,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">        SkjemaData.bemanning.heltidAnsattKvinnerAnt as kvinner,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">        SkjemaData.bemanning.heltidAnsattMennAnt as menn,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">        (kvinner * 100.0 / (kvinner + menn)) as kvinne_prosent</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM alle_skjema</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE month(reporting_date) = 5</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="st">      AND (kvinner + menn) &gt; 5</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY kvinne_prosent DESC</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="st">    LIMIT 10</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>con.execute(kvinneandel_query).df()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">enhetsOrgNr</th>
+<th style="text-align: left;">reporting_date</th>
+<th style="text-align: left;">kvinner</th>
+<th style="text-align: left;">menn</th>
+<th style="text-align: left;">kvinne_prosent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">995282908</td>
+<td style="text-align: left;">2023-05-10</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">966880705</td>
+<td style="text-align: left;">2023-05-11</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">965022273</td>
+<td style="text-align: left;">2023-05-12</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">906986734</td>
+<td style="text-align: left;">2023-05-14</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">951804890</td>
+<td style="text-align: left;">2023-05-02</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">993876474</td>
+<td style="text-align: left;">2023-05-29</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">985217777</td>
+<td style="text-align: left;">2023-05-03</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">965743533</td>
+<td style="text-align: left;">2023-05-31</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">933878271</td>
+<td style="text-align: left;">2023-05-10</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">931607198</td>
+<td style="text-align: left;">2023-05-10</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">93.75</td>
+</tr>
+</tbody>
+</table>
+<p>Og vi kan flate ut datasett med dot-notasjon:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">    id,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">    reporting_date,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">    enhetsOrgNr,</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">    delregNr,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">    -- Flater ut InternInfo</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="st">    InternInfo.enhetsNavn AS enhetsNavn,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="st">    InternInfo.periodeAAr AS periodeAAr,</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">    InternInfo.enhetsIdent AS enhetsIdent,</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">    -- Flater ut Bemanning</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">    SkjemaData.bemanning.heltidAnsattKvinnerAnt AS kvinner,</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">    SkjemaData.bemanning.heltidAnsattMennAnt AS menn,</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="st">    -- Flater ut Kostnader</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="st">    SkjemaData.kostnader.lonnskostTotVirksomhet AS lonnskost,</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="st">    -- Flater ut Tidsbruk (Håndterer at denne kan være NULL for Mars/April)</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="st">    Tidsbruk.hjelpAvAndreMin AS tidsbruk_hjelp,</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="st">    Tidsbruk.utfyllingMin AS tidsbruk_utfylling,</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="st">    </span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="st">    kilde_path</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="st">FROM alle_skjema</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Hent til en helt flat Pandas DataFrame</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>df_flat <span class="op">=</span> con.execute(query).df()</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>df_flat</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">reporting_date</th>
+<th style="text-align: left;">enhetsOrgNr</th>
+<th style="text-align: left;">delregNr</th>
+<th style="text-align: left;">enhetsNavn</th>
+<th style="text-align: left;">periodeAAr</th>
+<th style="text-align: left;">enhetsIdent</th>
+<th style="text-align: left;">kvinner</th>
+<th style="text-align: left;">menn</th>
+<th style="text-align: left;">lonnskost</th>
+<th style="text-align: left;">tidsbruk_hjelp</th>
+<th style="text-align: left;">tidsbruk_utfylling</th>
+<th style="text-align: left;">kilde_path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>f01bbe4c2a...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">973952440</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;">BEDRIFT 973952440 AS</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">ATB8718910</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">293933</td>
+<td style="text-align: left;"><na></na></td>
+<td style="text-align: left;"><na></na></td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>f0143cd463...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">966023200</td>
+<td style="text-align: left;">22722</td>
+<td style="text-align: left;">BEDRIFT 966023200 AS</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">ATB4697363</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: left;">441271</td>
+<td style="text-align: left;"><na></na></td>
+<td style="text-align: left;"><na></na></td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>f01f54bddd...</code></td>
+<td style="text-align: left;">2023-03-01</td>
+<td style="text-align: left;">963228743</td>
+<td style="text-align: left;">22721</td>
+<td style="text-align: left;">BEDRIFT 963228743 AS</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">ATB2007874</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">13</td>
+<td style="text-align: left;">748260</td>
+<td style="text-align: left;"><na></na></td>
+<td style="text-align: left;"><na></na></td>
+<td style="text-align: left;"><code>gs://ssb-dapla...</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fordelene-med-en-hierarkisk-struktur" class="level2">
+<h2 class="anchored" data-anchor-id="fordelene-med-en-hierarkisk-struktur">Fordelene med en hierarkisk struktur</h2>
+<p>Selv om stabile datatilstander ikke skal forekomme med hierarkiske strukturer, så er det flere fordeler med å beholde denne strukturen mellom datatilstandene. I eksempelet over så bevarer vi denne strukturen i mellomfasen mellom kildedata og inndata for å oppnå noen konkrete gevinster:</p>
+<ol type="1">
+<li><strong>Fremtidssikring mot endringer (Skjema endringer)</strong><br>
+Skjemadata er levende. Plutselig legges det til et nytt felt, eller fjerner et gammelt. Hvis du lagrer hele <strong>SkjemaData</strong> som ett objekt, vil nye felter bare dukke opp som nye “grener” i treet. Koden din krasjer ikke selv om kilden endrer seg.</li>
+</ol>
+<p>Hvis du har 200 faste kolonner og kilden plutselig sender 201, må du endre koden din manuelt før du kan jobbe med dataene.</p>
+<ol start="2" type="1">
+<li><p><strong>Enklere feilsøking</strong><br>
+Det er mye enklere å feilsøke når dataene dine speiler strukturen i XML-filen fra Altinn. Hvis man lurer på hvorfor en verdi ser rar ut, kan de se på SkjemaData.bemanning og umiddelbart kjenne igjen logikken fra det originale spørreskjemaet. Du slipper å lure på om “kolonne_142” egentlig var en del av bemanningsmodulen eller kostnadsmodulen.</p></li>
+<li><p><strong>Lagringseffektivitet</strong><br>
+I undersøkelser er det ofte mange betingede hopp (hvis “Ja” på spørsmål A, svar på spørsmål B). I en flat struktur må du ha kolonner for alle mulige spørsmål, noe som resulterer i tusenvis av NULL-verdier som tar plass og skaper støy. I en hierarkisk struktur eksisterer bare de grenene som faktisk ble fylt ut. Dette gjør filene mer kompakte og oversiktlige.</p></li>
+<li><p><strong>Enkelt å spørre mot</strong><br>
+Duckdb gjør det veldig enkelt å spørre mot hierarkiske data (json eller xml). Med dot-notasjonen kan enkelt gå nedover i hierarkiet med vanlig sql, f.eks:</p></li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> SkjemaData.bemanning.kvinner <span class="kw">AS</span> kvinner</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="op">..</span>.</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<ol start="5" type="1">
+<li><strong>Bevare kontekst</strong><br>
+Ved å beholde grupper som InternInfo og Tidsbruk samlet, beholder du konteksten. Du vet at alle variablene inne i Tidsbruk hører sammen. Hvis du flater ut alt med en gang, risikerer du å “miste” logiske koblinger mellom variabler som i utgangspunktet var ment å tolkes sammen.</li>
+</ol>
+</section>
+<section id="ulemper-med-duckdb" class="level2">
+<h2 class="anchored" data-anchor-id="ulemper-med-duckdb">Ulemper med Duckdb</h2>
+<p>Selv om DuckDB er en kraftpakke for analyse, er det viktig å være klar over hva den ikke er. DuckDB er en enbruker-database designet for OLAP (analytiske spørringer), ikke OLTP (mange små transaksjoner mot en base). Den støtter ikke at mange brukere skriver til samme fil samtidig; prøver man på det, vil filen bli låst.</p>
+<p>I et produksjonsmiljø på Dapla betyr dette at vi ikke bruker DuckDB som en tradisjonell sentral database som “alltid står på”. I stedet løser vi dette ved å bruke automatiseringsverktøy som Cloud Composer (under utvikling nå). Ved å la Composer styre køen av transformasjonsjobber, sikrer vi at oppdateringer skjer kontrollert og i riktig rekkefølge. DuckDB fungerer da som den lynraske motoren i hver enkelt oppgave, mens orkestreringslaget tar seg av koordineringen mellom brukere og prosesser. På denne måten får vi hastigheten til en lokal database, men stabiliteten til et profesjonelt datasystem.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopiert!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopiert!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Kom i gang med Dapla</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/blog/posts/2026-04-03-duckdb-and-altinn/index.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/blog/posts/2026-04-03-duckdb-and-altinn/index.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
