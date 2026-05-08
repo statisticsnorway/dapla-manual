@@ -774,10 +774,14 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#opprette-dapla-team" id="toc-opprette-dapla-team" class="nav-link active" data-scroll-target="#opprette-dapla-team">Opprette Dapla-team</a></li>
-  <li><a href="#autonomitetsnivå" id="toc-autonomitetsnivå" class="nav-link" data-scroll-target="#autonomitetsnivå">Autonomitetsnivå</a></li>
-  <li><a href="#roller-i-teamet" id="toc-roller-i-teamet" class="nav-link" data-scroll-target="#roller-i-teamet">Roller i teamet</a>
+  <li><a href="#autonomitetsnivå" id="toc-autonomitetsnivå" class="nav-link" data-scroll-target="#autonomitetsnivå">Autonomitetsnivå</a>
   <ul class="collapse">
-  <li><a href="#managers" id="toc-managers" class="nav-link" data-scroll-target="#managers">Managers</a></li>
+  <li><a href="#managed" id="toc-managed" class="nav-link" data-scroll-target="#managed">Managed</a></li>
+  <li><a href="#self-managed" id="toc-self-managed" class="nav-link" data-scroll-target="#self-managed">Self-Managed</a></li>
+  </ul></li>
+  <li><a href="#roller-og-grupper" id="toc-roller-og-grupper" class="nav-link" data-scroll-target="#roller-og-grupper">Roller og grupper</a>
+  <ul class="collapse">
+  <li><a href="#teamansvarlig" id="toc-teamansvarlig" class="nav-link" data-scroll-target="#teamansvarlig">Teamansvarlig</a></li>
   <li><a href="#developers" id="toc-developers" class="nav-link" data-scroll-target="#developers">Developers</a></li>
   <li><a href="#data-admins" id="toc-data-admins" class="nav-link" data-scroll-target="#data-admins">Data-admins</a></li>
   </ul></li>
@@ -827,18 +831,27 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="autonomitetsnivå" class="level2">
 <h2 class="anchored" data-anchor-id="autonomitetsnivå">Autonomitetsnivå</h2>
-<p>Et team på Dapla er i en av følgende autonomitetsnivåer:</p>
-<ol type="1">
-<li>Managed</li>
-<li>Semi-Managed</li>
-<li>Self-Managed</li>
-</ol>
-<p>Nivået er definert i metadataene til teamet og vises i Teamvisningen i <a href="./dapla-ctrl.html">Dapla Ctrl</a>. Det er kun plattformteamene som kan endre nivået til et team.</p>
-<p>Formålet med å definere autonomiten til et team er å tydeliggjøre hvem som har hvilket ansvar for de produktene teamet benytter på Dapla. Nivået settes når teamet opprettes, men kan også endres senere ved behov.</p>
-<p>Et <em>Managed</em> team benytter seg kun av tjenestene/<a href="./features.html">features</a> som tilbys av plattformen, og kan være sikker på at disse er satt opp i iht de krav som gjelder i SSB. Typisk vil de fleste statistikkteam være <em>managed</em>, og eksempler på tjenester er standard lagringsbøtter, <a href="./transfer-service.html">Transfer Service</a>, <a href="./kildomaten.html">Kildomaten</a>, osv.. Et <em>Managed</em> team kan kun benytte seg av tilgangsgruppene <em>managers</em>, <em>data-admins</em> og <em>developers</em>.</p>
-<p>Et <em>Semi-Managed</em> team benytter seg av tjenestene som tilbys på plattformen, akkurat som et <em>Managed</em> team, men de ønsker også ta i bruk noe funksjonalitet som ikke tilbys enda. F.eks. kan det være et statistikkproduserende team som ønsker å ta i bruk en Google-tjeneste som ikke tilbys på Dapla. I disse tilfellene kan teamet velge å ta et større ansvar for denne tjenesten og få noe bredere tilganger på plattformen. Ansvaret fordrer at teamet har kompetansen til å ta dette ansvaret, og de spesifikke detaljene vil avhenge hvilken tjeneste det er snakk om, og om de ønsker å benytte tjenesten i prod- eller test-miljøet til teamet.</p>
-<p>Et <em>Self-Managed</em> team vil typisk være team som består IT-utviklere med god kompetanse på skyutvikling i Google Cloud Platform. Teamet har kompetanse til å ta i bruk de tjenestene de mener er best for å løse sine oppgaver.</p>
-<p>I resten av dette kapitlet beskrives hovedsakelig <em>Managed</em> teams.</p>
+<p>Formålet med autonomitetsnivåer er å tydeliggjøre ansvarsfordelingen mellom plattformen og det enkelte team. Ved å skille mellom nivåene kan vi tilby standardiserte løsninger som ivaretar sikkerheten for de fleste, samtidig som vi gir rom for teknisk frihet til team med særskilte behov og høy IT-kompetanse.</p>
+<p>Nivået settes når teamet opprettes, men kan endres senere ved behov. Det er kun plattformteamene som kan endre nivået til et team, og gjeldende nivå vises i <a href="../statistikkere/dapla-ctrl.html">Dapla Ctrl</a>.</p>
+<section id="managed" class="level3">
+<h3 class="anchored" data-anchor-id="managed">Managed</h3>
+<p>Dette er standardløsningen for de fleste team i SSB.</p>
+<ul>
+<li><strong>Funksjonalitet:</strong> Teamet benytter ferdig oppsatte tjenester fra plattformen (f.eks. standard lagringsbøtter, <a href="./transfer-service.html">Transfer Service</a> og <a href="./kildomaten.html">Kildomaten</a>).</li>
+<li><strong>Sikkerhet:</strong> Plattformen garanterer at oppsettet er i tråd med SSBs krav til sikkerhet og forvaltning.</li>
+<li><strong>Tilganger:</strong> Teamet benytter de tekniske tilgangsgruppene <strong>data-admins</strong> og <strong>developers</strong>.</li>
+</ul>
+</section>
+<section id="self-managed" class="level3">
+<h3 class="anchored" data-anchor-id="self-managed">Self-Managed</h3>
+<p>Dette nivået er for team med behov for utvidet frihet i Google Cloud Platform (GCP).</p>
+<ul>
+<li><strong>Funksjonalitet:</strong> Teamet kan ta i bruk GCP-tjenester som ikke tilbys som standard på Dapla, og kan bygge applikasjoner på Nais.</li>
+<li><strong>Krav:</strong> Teamet må ha en ansvarlig seksjon på avdeling 700. Dette innebærer at <strong>Teamansvarlig</strong> (seksjonsleder) kommer fra IT-avdelingen. Teamet må også inneha sterk teknisk kompetanse på skyutvikling.</li>
+<li><strong>Ansvar:</strong> Siden teamet får bredere tilganger, tar de selv et større ansvar for konfigurasjon, kostnadskontroll og etterlevelse av krav.</li>
+<li><strong>Tilganger:</strong> Teamet benytter de tekniske tilgangsgruppene <strong>data-admins</strong> og <strong>developers</strong>, samtidig har de friheten til å opprette andre tilgangsgrupper ved behov.</li>
+</ul>
+<p>I resten av dette kapitlet beskrives hovedsakelig funksjonalitet for <strong>Managed</strong> teams.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -851,7 +864,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Siden hvert team får definert sine ressurser i et eget IaC-repo, så er det nær sammenheng mellom <em>Autonomitetsnivå</em> og hvilke tilganger teamet har til å gjøre endringer i IaC-repoet. <a href="#tbl-iac-autonomy" class="quarto-xref">Tabell&nbsp;1</a> viser hvilke tilganger de ulike nivåene gir.</p>
+<p>Siden hvert team får definert sine ressurser i et eget IaC-repo, er det en nær sammenheng mellom autonomitetsnivå og hvilke endringer teamet kan gjøre selv.</p>
 <div id="tbl-iac-autonomy" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-iac-autonomy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -861,83 +874,81 @@ Tabell&nbsp;1: Autonomitet og tilganger i IaC-repo
 <table class="table-striped caption-top table">
 <colgroup>
 <col style="width: 33%">
-<col style="width: 48%">
-<col style="width: 11%">
-<col style="width: 5%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th></th>
-<th>Managed</th>
-<th>Semi-Managed</th>
-<th>Self-Managed</th>
+<th style="text-align: left;">Egenskap</th>
+<th style="text-align: left;">Managed</th>
+<th style="text-align: left;">Self-Managed</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Kan lage PR på IaC-kode</td>
-<td>Ja</td>
-<td>Ja</td>
-<td>Ja</td>
+<td style="text-align: left;"><strong>Kan lage PR på IaC-kode</strong></td>
+<td style="text-align: left;">Ja</td>
+<td style="text-align: left;">Ja</td>
 </tr>
 <tr class="even">
-<td>Tilgang på IaC-kode</td>
-<td>Kun yaml-“støttefiler” (team-info, iam, buckets-shared, projects) og filer de endrer (dapla-filer)</td>
-<td>Ja</td>
-<td>Ja</td>
+<td style="text-align: left;"><strong>Tilgang på IaC-kode</strong></td>
+<td style="text-align: left;">Kun utvalgte yaml-filer (team-info, iam, etc.)</td>
+<td style="text-align: left;">Full tilgang til repo</td>
 </tr>
 <tr class="odd">
-<td>Kan ta i bruk funksjonalitet utover dapla-features</td>
-<td>Nei</td>
-<td>Ja</td>
-<td>Ja</td>
+<td style="text-align: left;"><strong>Bruk av funksjonalitet utover Dapla-features</strong></td>
+<td style="text-align: left;">Nei</td>
+<td style="text-align: left;">Ja</td>
 </tr>
 <tr class="even">
-<td>IaC-filstruktur (under infra-mappen)</td>
-<td>Predefinert</td>
-<td>Predefinert + egne filer</td>
-<td>Fritt</td>
+<td style="text-align: left;"><strong>IaC-filstruktur</strong></td>
+<td style="text-align: left;">Predefinert</td>
+<td style="text-align: left;">Fritt oppsett</td>
 </tr>
 </tbody>
 </table>
 </div>
 </figure>
 </div>
-<p><a href="https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3667787890/Team+Iac-tilgang+i+Kuben">Les mer her</a>.</p>
+<p><a href="https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3667787890/Team+Iac-tilgang+i+Kuben">Les mer om detaljene i dokumentasjonen på Kuben</a>.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="roller-i-teamet" class="level2">
-<h2 class="anchored" data-anchor-id="roller-i-teamet">Roller i teamet</h2>
-<p>Medlemskap i et Dapla-team gir tilgang på spesifikke ressurser på Dapla. Men siden kildedataene til alle team er klassifisert som <em>sensitive</em>, så kan ikke alle på teamet ha lik tilgang til alle ressurser. Av den grunn er det definert 3 ulike roller på et team. To av disse, <strong>data-admins</strong> og <strong>developers</strong>, er forbeholdt de som jobber med data på teamet. Mens den tredje, <strong>managers</strong>, skal innehas av de som er ansvarlige for teamet. I de fleste tilfeller vil <strong>managers</strong> være seksjonslederen som er ansvarlige for statistikkproduktene teamet leverer. Under forklarer vi nærmere hva de ulike rollene innebærer.</p>
-<section id="managers" class="level3">
-<h3 class="anchored" data-anchor-id="managers">Managers</h3>
-<p>Rollen <em>managers</em> skal bestå av en eller flere data-ansvarlige (ofte omtalt som data-eiere eller seksjonsledere). <em>managers</em> har ansvar for følgende i teamet:</p>
+</section>
+<section id="roller-og-grupper" class="level2">
+<h2 class="anchored" data-anchor-id="roller-og-grupper">Roller og grupper</h2>
+<p>Medlemskap i et Dapla-team gir tilgang til spesifikke ressurser. Siden kildedataene til alle team er klassifisert som <em>sensitive</em>, kan ikke alle i teamet ha lik tilgang til alle ressurser. For å sikre forsvarlig tilgangsstyring skiller vi mellom den organisatoriske rollen <strong>Teamansvarlig</strong> og de tekniske tilgangsgruppene <strong>developers</strong> og <strong>data-admins</strong>.</p>
+<section id="teamansvarlig" class="level3">
+<h3 class="anchored" data-anchor-id="teamansvarlig">Teamansvarlig</h3>
+<p>Rollen som <em>Teamansvarlig</em> innehas alltid av seksjonslederen ved teamets ansvarlige seksjon. Dette er ikke en teknisk tilgangsgruppe i selve plattformen, men en administrativ rolle med det overordnede ansvaret for teamet.</p>
+<p><strong>Teamansvarlig har ansvar for:</strong></p>
 <ul>
-<li>hvem i teamet som får tilgang til hvilke data og tjenester.</li>
-<li>at teamet følger SSBs retningslinjer for tilgangsstyring.</li>
-<li>at teamet følger SSBs retningslinjer for klassifisering av data.</li>
-<li>vedlikehold og monitorering av tilganger.</li>
-<li>at teamet følger og forstår hvordan sensitive data skal behandles i SSB.</li>
+<li>At teamet følger SSBs retningslinjer for tilgangsstyring og klassifisering av data.</li>
+<li>Vedlikehold og monitorering av hvem som har tilgang til teamets ressurser.</li>
+<li>At alle i teamet forstår hvordan sensitive data skal behandles.</li>
+<li>Godkjenning av hvem som skal tildeles de tekniske rollene <em>developers</em> og <em>data-admins</em>.</li>
 </ul>
-<p><em>Manager</em>-rollen krever ingen tilgang til data eller databehandlende tjenester på Dapla.</p>
+<p>Rollen som Teamansvarlig krever i seg selv ingen teknisk tilgang til data eller databehandlingstjenester på Dapla.</p>
 </section>
 <section id="developers" class="level3">
 <h3 class="anchored" data-anchor-id="developers">Developers</h3>
-<p>Rollen <em>developers</em> er den mest vanlige rollen på et Dapla-team. Denne rollen skal tildeles alle som jobber med data i teamet. <em>developers</em> har tilgang til følgende ressurser:</p>
+<p>Rollen <em>developers</em> er den vanligste tekniske tilgangsgruppen på et Dapla-team. Denne gruppen skal inneholde alle som jobber operativt med data i teamet.</p>
+<p><strong>Medlemmer i developers har tilgang til:</strong></p>
 <ul>
-<li>alt av teamets data, med unntak av kildedata.</li>
-<li>alle ressurser som behandler datatilstandene fra inndata til utdata.</li>
+<li>Alt av teamets data, med unntak av kildedata.</li>
+<li>Alle ressurser og tjenester som behandler data i tilstandene fra inndata til utdata.</li>
+<li>Teamets felles lagringsbøtter for produkt og deling.</li>
 </ul>
 </section>
 <section id="data-admins" class="level3">
 <h3 class="anchored" data-anchor-id="data-admins">Data-admins</h3>
-<p>Rollen <em>data-admins</em> er en priveligert rolle blant de som jobber med data i teamet. Rollen skal kun tildeles 2-3 personer på et team og disse er da medlem av både <em>developers</em>- og <em>data-admins</em>-gruppen. De som er medlem av <em>data-admins</em>-gruppen kan gjøre følgende:</p>
+<p>Rollen <em>data-admins</em> er en privilegert teknisk gruppe. Denne skal kun tildeles 2–3 personer i teamet som har et særskilt behov for å administrere kildedata. Personer i denne gruppen er normalt medlem av både <em>developers</em>- og <em>data-admins</em>-gruppen.</p>
+<p><strong>Medlemmer i data-admins kan gjøre følgende:</strong></p>
 <ul>
-<li>de er forhåndsgodkjent til å gi seg selv tidsbegrenset tilgang til kildedata ved behov. Tilgang til kildedata skal kun aktiveres i særskilte tilfeller, der eneste løsning er å se på kildedata i klartekst. Tilgang skal kun aktiveres i en begrenset periode, og krever en skriftlig begrunnelse. <em>managers</em> skal lett kunne monitere hvem som aktiverer denne tilgangen og hvor ofte.</li>
-<li>de kan godkjenne endringer i automatiske jobber som prosesserer kildedata til inndata.</li>
-<li>de kan overføre kildedata mellom bakke og sky.</li>
+<li><strong>JIT-tilgang (Just-In-Time):</strong> De er forhåndsgodkjent til å gi seg selv tidsbegrenset tilgang til kildedata i klartekst ved særskilte behov. Dette krever skriftlig begrunnelse og kan enkelt moniteres av Teamansvarlig. Les mer <a href="../statistikkere/appendix/jit.html">her</a>.</li>
+<li><strong>Automatisering:</strong> De kan godkjenne endringer i automatiske jobber som prosesserer kildedata til inndata.</li>
+<li><strong>Dataoverføring:</strong> De har fullmakt til å overføre kildedata mellom bakke og sky (Transfer Service).</li>
 </ul>
 </section>
 </section>
@@ -976,7 +987,7 @@ Figur&nbsp;1: Diagram over hvilke miljøer, Google-prosjekter og bøtter et Dapl
 <section id="github-team" class="level2">
 <h2 class="anchored" data-anchor-id="github-team">GitHub-team</h2>
 <p>Ved opprettelsen av et Dapla-team så blir det også opprettet et tilsvarende GitHub-team med samme navn som Dapla-teamet. Grunnen til at det blir opprettet et GitHub-team er at GitHub er en sentral del av Dapla. Alle ressurser som skal opprettes på plattformen defineres av GitHub-repoer, og vi ønsker at tilganger her også skal reflektere tilgangene på Dapla.</p>
-<p>For eksempel vil et team med navnet <strong>dapla-example</strong> få et GitHub-team med navnet <strong>dapla-example</strong>. Alle som er medlem av Dapla-teamet vil automatisk bli medlem av GitHub-teamet. I tillegg vil gruppetilhørighet og tilgangsroller på GitHub-teamet reflektere tilgangsroller på Dapla-teamet. For eksempel så kan <strong>dapla-example-data-admins</strong> gis tilgang til repo, og da vil alle som er medlem av Dapla-teamet med rollen <em>data-admins</em> få tilgang til repoet. Dette benyttes blant annet for å gi teamet tilgang til automation-mappen i sitt IaC-repo. I tillegg kan teamet bruke GitHub-teamet til å gi tilgang til andre GitHub-repoer som er relevante for teamet, for eksempel kodenbasen til en statistikkproduksjon eller lignende. Fordelen er at tilganger er gitt på teamnivå og ikke på personnivå. For eksempel hvis <em>manager</em> for teamet fjerner en ansatt fra developers-gruppa, så mister de all tilgang til data, tjenester og kode på GitHub som er tilgjengelig for <em>developers</em>.</p>
+<p>For eksempel vil et team med navnet <strong>dapla-example</strong> få et GitHub-team med navnet <strong>dapla-example</strong>. Alle som er medlem av Dapla-teamet vil automatisk bli medlem av GitHub-teamet. I tillegg vil gruppetilhørighet og tilgangsroller på GitHub-teamet reflektere tilgangsroller på Dapla-teamet. For eksempel så kan <strong>dapla-example-data-admins</strong> gis tilgang til repo, og da vil alle som er medlem av Dapla-teamet med rollen <em>data-admins</em> få tilgang til repoet. Dette benyttes blant annet for å gi teamet tilgang til automation-mappen i sitt IaC-repo. I tillegg kan teamet bruke GitHub-teamet til å gi tilgang til andre GitHub-repoer som er relevante for teamet, for eksempel kodenbasen til en statistikkproduksjon eller lignende. Fordelen er at tilganger er gitt på teamnivå og ikke på personnivå. For eksempel hvis <em>Teamansvarlig</em> for teamet fjerner en ansatt fra developers-gruppa, så mister de all tilgang til data, tjenester og kode på GitHub som er tilgjengelig for <em>developers</em>.</p>
 </section>
 <section id="navnestruktur" class="level2">
 <h2 class="anchored" data-anchor-id="navnestruktur">Navnestruktur</h2>
@@ -1004,30 +1015,26 @@ Tabell&nbsp;2: Navnestruktur for teamet <strong>Skatt næring</strong> sine ress
 <td>Teknisk teamnavn</td>
 </tr>
 <tr class="even">
-<td>skatt-naering-managers</td>
-<td>AD-gruppe for managers</td>
-</tr>
-<tr class="odd">
 <td>skatt-naering-data-admins</td>
 <td>AD-gruppe for data-admins og et GitHub-team</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>skatt-naering-developers</td>
 <td>AD-gruppe for developers og et GitHub-team</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>skatt-naering-kilde-p</td>
 <td>Navn på kildeprosjekt i prod</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>skatt-naering-p</td>
 <td>Navn på standardprosjekt i prod</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>skatt-naering-kilde-t</td>
 <td>Navn på kildeprosjekt i test</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>skatt-naering-t</td>
 <td>Navn på standardprosjekt i test</td>
 </tr>
@@ -1036,7 +1043,7 @@ Tabell&nbsp;2: Navnestruktur for teamet <strong>Skatt næring</strong> sine ress
 </div>
 </figure>
 </div>
-<p>I <a href="#tbl-navn-struktur" class="quarto-xref">Tabell&nbsp;2</a> ser vi at teamet får opprettet 3 AD-grupper og 4 Google-prosjekter. AD-gruppene brukes til å gi tilgang til ressursene på Dapla, mens Google-prosjektene brukes til å organisere ressursene. I tillegg er det en fast navnestruktur for bøttene i hvert prosjekt, slikt som vist i <a href="#tbl-navn-buckets" class="quarto-xref">Tabell&nbsp;3</a>.</p>
+<p>I <a href="#tbl-navn-struktur" class="quarto-xref">Tabell&nbsp;2</a> ser vi at teamet får opprettet 2 AD-grupper og 4 Google-prosjekter. AD-gruppene brukes til å gi tilgang til ressursene på Dapla, mens Google-prosjektene brukes til å organisere ressursene. I tillegg er det en fast navnestruktur for bøttene i hvert prosjekt, slikt som vist i <a href="#tbl-navn-buckets" class="quarto-xref">Tabell&nbsp;3</a>.</p>
 <div id="tbl-navn-buckets" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-navn-buckets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
