@@ -1,7 +1,7 @@
 ---
 title: Hva er Dapla-team?
 freeze: true
-last-modified: "2024-11-09"
+date-modified: 05/08/2026
 ---
 
 For å kunne jobbe på Dapla må man være en del av et **Dapla-team**. Et Dapla-team er en gruppe personer som har tilgang til spesifikke ressurser på Dapla. Ressursene kan være data, kode eller tjenester. Følgelig er teamet helt sentral for tilgangsstyringen på Dapla. Derfor er det viktig at alle som jobber på Dapla gjør seg godt kjent med innholdet i denne delen.
@@ -13,73 +13,81 @@ Alle Dapla-team tilhører en seksjon og opprettes av seksjonslederen i den seksj
 
 ## Autonomitetsnivå
 
-Et team på Dapla er i en av følgende autonomitetsnivåer: 
+Formålet med autonomitetsnivåer er å tydeliggjøre ansvarsfordelingen mellom plattformen og det enkelte team. Ved å skille mellom nivåene kan vi tilby standardiserte løsninger som ivaretar sikkerheten for de fleste, samtidig som vi gir rom for teknisk frihet til team med særskilte behov og høy IT-kompetanse.
 
-1. Managed 
-2. Semi-Managed
-3. Self-Managed
+Nivået settes når teamet opprettes, men kan endres senere ved behov. Det er kun plattformteamene som kan endre nivået til et team, og gjeldende nivå vises i [Dapla Ctrl](./dapla-ctrl.qmd).
 
-Nivået er definert i metadataene til teamet og vises i Teamvisningen i [Dapla Ctrl](./dapla-ctrl.html). Det er kun plattformteamene som kan endre nivået til et team.
 
-Formålet med å definere autonomiten til et team er å tydeliggjøre hvem som har hvilket ansvar for de produktene teamet benytter på Dapla. Nivået settes når teamet opprettes, men kan også endres senere ved behov.
+### Managed
+Dette er standardløsningen for de fleste team i SSB.
 
-Et *Managed* team benytter seg kun av tjenestene/[features](./features.html) som tilbys av plattformen, og kan være sikker på at disse er satt opp i iht de krav som gjelder i SSB. Typisk vil de fleste statistikkteam være *managed*, og eksempler på tjenester er standard lagringsbøtter, [Transfer Service](./transfer-service.html), [Kildomaten](./kildomaten.html), osv.. Et *Managed* team kan kun benytte seg av tilgangsgruppene *managers*, *data-admins* og *developers*. 
+-   **Funksjonalitet:** Teamet benytter ferdig oppsatte tjenester fra plattformen (f.eks. standard lagringsbøtter, [Transfer Service](./transfer-service.html) og [Kildomaten](./kildomaten.html)).
+*   **Sikkerhet:** Plattformen garanterer at oppsettet er i tråd med SSBs krav til sikkerhet og forvaltning.
+*   **Tilganger:** Teamet benytter de tekniske tilgangsgruppene **data-admins** og **developers**.
 
-Et *Semi-Managed* team benytter seg av tjenestene som tilbys på plattformen, akkurat som et *Managed* team, men de ønsker også ta i bruk noe funksjonalitet som ikke tilbys enda. F.eks. kan det være et statistikkproduserende team som ønsker å ta i bruk en Google-tjeneste som ikke tilbys på Dapla. I disse tilfellene kan teamet velge å ta et større ansvar for denne tjenesten og få noe bredere tilganger på plattformen. Ansvaret fordrer at teamet har kompetansen til å ta dette ansvaret, og de spesifikke detaljene vil avhenge hvilken tjeneste det er snakk om, og om de ønsker å benytte tjenesten i prod- eller test-miljøet til teamet.
+### Self-Managed
+Dette nivået er for team med behov for utvidet frihet i Google Cloud Platform (GCP).
 
-Et *Self-Managed* team vil typisk være team som består IT-utviklere med god kompetanse på skyutvikling i Google Cloud Platform. Teamet har kompetanse til å ta i bruk de tjenestene de mener er best for å løse sine oppgaver.
+*   **Funksjonalitet:** Teamet kan ta i bruk GCP-tjenester som ikke tilbys som standard på Dapla, og kan bygge applikasjoner på Nais.
+*   **Krav:** Teamet må ha en ansvarlig seksjon på avdeling 700. Dette innebærer at **Teamansvarlig** (seksjonsleder) kommer fra IT-avdelingen. Teamet må også inneha sterk teknisk kompetanse på skyutvikling.
+*   **Ansvar:** Siden teamet får bredere tilganger, tar de selv et større ansvar for konfigurasjon, kostnadskontroll og etterlevelse av krav.
+*   **Tilganger:** Teamet benytter de tekniske tilgangsgruppene **data-admins** og **developers**, samtidig har de friheten til å opprette andre tilgangsgrupper ved behov.
 
-I resten av dette kapitlet beskrives hovedsakelig *Managed* teams.
+I resten av dette kapitlet beskrives hovedsakelig funksjonalitet for **Managed** teams.
 
 ::: {.callout-note collapse="true"}
 ## Autonomitetsnivå og tilganger i IaC-repo
 
-Siden hvert team får definert sine ressurser i et eget IaC-repo, så er det nær sammenheng mellom *Autonomitetsnivå* og hvilke tilganger teamet har til å gjøre endringer i IaC-repoet. @tbl-iac-autonomy viser hvilke tilganger de ulike nivåene gir. 
+Siden hvert team får definert sine ressurser i et eget IaC-repo, er det en nær sammenheng mellom autonomitetsnivå og hvilke endringer teamet kan gjøre selv.
 
-|                                                                  | Managed                                                                                            | Semi-Managed             | Self-Managed |
-| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------ | ------------ |
-| Kan lage PR på IaC-kode                                             | Ja                                                                                                 | Ja                       | Ja           |
-| Tilgang på IaC-kode                                                 | Kun yaml-“støttefiler” (team-info, iam, buckets-shared, projects) og filer de endrer (dapla-filer) | Ja                       | Ja           |
-| Kan ta i bruk funksjonalitet utover dapla-features                  | Nei                                                                                                | Ja                       | Ja           |
-| IaC-filstruktur (under infra-mappen)                                | Predefinert                                                                                        | Predefinert + egne filer | Fritt        |
+| Egenskap | Managed | Self-Managed |
+| :--- | :--- | :--- |
+| **Kan lage PR på IaC-kode** | Ja | Ja |
+| **Tilgang på IaC-kode** | Kun utvalgte yaml-filer (team-info, iam, etc.) | Full tilgang til repo |
+| **Bruk av funksjonalitet utover Dapla-features** | Nei | Ja |
+| **IaC-filstruktur** | Predefinert | Fritt oppsett |
 
 : Autonomitet og tilganger i IaC-repo {#tbl-iac-autonomy .striped}
 
-[Les mer her](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3667787890/Team+Iac-tilgang+i+Kuben). 
-
+[Les mer om detaljene i dokumentasjonen på Kuben](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/3667787890/Team+Iac-tilgang+i+Kuben).
 :::
 
+## Roller og grupper
 
-## Roller i teamet
+Medlemskap i et Dapla-team gir tilgang til spesifikke ressurser. Siden kildedataene til alle team er klassifisert som *sensitive*, kan ikke alle i teamet ha lik tilgang til alle ressurser. For å sikre forsvarlig tilgangsstyring skiller vi mellom den organisatoriske rollen **Teamansvarlig** og de tekniske tilgangsgruppene **developers** og **data-admins**.
 
-Medlemskap i et Dapla-team gir tilgang på spesifikke ressurser på Dapla. Men siden kildedataene til alle team er klassifisert som *sensitive*, så kan ikke alle på teamet ha lik tilgang til alle ressurser. Av den grunn er det definert 3 ulike roller på et team. To av disse, **data-admins** og **developers**, er forbeholdt de som jobber med data på teamet. Mens den tredje, **managers**, skal innehas av de som er ansvarlige for teamet. I de fleste tilfeller vil **managers** være seksjonslederen som er ansvarlige for statistikkproduktene teamet leverer. Under forklarer vi nærmere hva de ulike rollene innebærer.
+### Teamansvarlig
 
-### Managers
+Rollen som *Teamansvarlig* innehas alltid av seksjonslederen ved teamets ansvarlige seksjon. Dette er ikke en teknisk tilgangsgruppe i selve plattformen, men en administrativ rolle med det overordnede ansvaret for teamet.
 
-Rollen *managers* skal bestå av en eller flere data-ansvarlige (ofte omtalt som data-eiere eller seksjonsledere). *managers* har ansvar for følgende i teamet:
+**Teamansvarlig har ansvar for:**
 
-- hvem i teamet som får tilgang til hvilke data og tjenester.
-- at teamet følger SSBs retningslinjer for tilgangsstyring.
-- at teamet følger SSBs retningslinjer for klassifisering av data.
-- vedlikehold og monitorering av tilganger.
-- at teamet følger og forstår hvordan sensitive data skal behandles i SSB.
+- At teamet følger SSBs retningslinjer for tilgangsstyring og klassifisering av data.
+- Vedlikehold og monitorering av hvem som har tilgang til teamets ressurser.
+- At alle i teamet forstår hvordan sensitive data skal behandles.
+- Godkjenning av hvem som skal tildeles de tekniske rollene *developers* og *data-admins*.
 
-*Manager*-rollen krever ingen tilgang til data eller databehandlende tjenester på Dapla.
+Rollen som Teamansvarlig krever i seg selv ingen teknisk tilgang til data eller databehandlingstjenester på Dapla.
 
 ### Developers
 
-Rollen *developers* er den mest vanlige rollen på et Dapla-team. Denne rollen skal tildeles alle som jobber med data i teamet. *developers* har tilgang til følgende ressurser:
+Rollen *developers* er den vanligste tekniske tilgangsgruppen på et Dapla-team. Denne gruppen skal inneholde alle som jobber operativt med data i teamet.
 
-- alt av teamets data, med unntak av kildedata.
-- alle ressurser som behandler datatilstandene fra inndata til utdata.
+**Medlemmer i developers har tilgang til:**
+
+- Alt av teamets data, med unntak av kildedata.
+- Alle ressurser og tjenester som behandler data i tilstandene fra inndata til utdata.
+- Teamets felles lagringsbøtter for produkt og deling.
 
 ### Data-admins
 
-Rollen *data-admins* er en priveligert rolle blant de som jobber med data i teamet. Rollen skal kun tildeles 2-3 personer på et team og disse er da medlem av både *developers*- og *data-admins*-gruppen. De som er medlem av *data-admins*-gruppen kan gjøre følgende:
+Rollen *data-admins* er en privilegert teknisk gruppe. Denne skal kun tildeles 2–3 personer i teamet som har et særskilt behov for å administrere kildedata. Personer i denne gruppen er normalt medlem av både *developers*- og *data-admins*-gruppen.
 
-- de er forhåndsgodkjent til å gi seg selv tidsbegrenset tilgang til kildedata ved behov. Tilgang til kildedata skal kun aktiveres i særskilte tilfeller, der eneste løsning er å se på kildedata i klartekst. Tilgang skal kun aktiveres  i en begrenset periode, og krever en skriftlig begrunnelse. *managers* skal lett kunne monitere hvem som aktiverer denne tilgangen og hvor ofte. Les mer [her](./appendix/jit.html).
-- de kan godkjenne endringer i automatiske jobber som prosesserer kildedata til inndata.
-- de kan overføre kildedata mellom bakke og sky.  
+**Medlemmer i data-admins kan gjøre følgende:**
+
+- **JIT-tilgang (Just-In-Time):** De er forhåndsgodkjent til å gi seg selv tidsbegrenset tilgang til kildedata i klartekst ved særskilte behov. Dette krever skriftlig begrunnelse og kan enkelt moniteres av Teamansvarlig. Les mer [her](./appendix/jit.qmd).
+- **Automatisering:** De kan godkjenne endringer i automatiske jobber som prosesserer kildedata til inndata.
+- **Dataoverføring:** De har fullmakt til å overføre kildedata mellom bakke og sky (Transfer Service).
 
 
 
@@ -186,7 +194,7 @@ Les mer om features [her]((./features.html)).
 
 Ved opprettelsen av et Dapla-team så blir det også opprettet et tilsvarende GitHub-team med samme navn som Dapla-teamet. Grunnen til at det blir opprettet et GitHub-team er at GitHub er en sentral del av Dapla. Alle ressurser som skal opprettes på plattformen defineres av GitHub-repoer, og vi ønsker at tilganger her også skal reflektere tilgangene på Dapla. 
 
-For eksempel vil et team med navnet **dapla-example** få et GitHub-team med navnet **dapla-example**. Alle som er medlem av Dapla-teamet vil automatisk bli medlem av GitHub-teamet. I tillegg vil gruppetilhørighet og tilgangsroller på GitHub-teamet reflektere tilgangsroller på Dapla-teamet. For eksempel så kan **dapla-example-data-admins** gis tilgang til repo, og da vil alle som er medlem av Dapla-teamet med rollen *data-admins* få tilgang til repoet. Dette benyttes blant annet for å gi teamet tilgang til automation-mappen i sitt IaC-repo. I tillegg kan teamet bruke GitHub-teamet til å gi tilgang til andre GitHub-repoer som er relevante for teamet, for eksempel kodenbasen til en statistikkproduksjon eller lignende. Fordelen er at tilganger er gitt på teamnivå og ikke på personnivå. For eksempel hvis *manager* for teamet fjerner en ansatt fra developers-gruppa, så mister de all tilgang til data, tjenester og kode på GitHub som er tilgjengelig for *developers*. 
+For eksempel vil et team med navnet **dapla-example** få et GitHub-team med navnet **dapla-example**. Alle som er medlem av Dapla-teamet vil automatisk bli medlem av GitHub-teamet. I tillegg vil gruppetilhørighet og tilgangsroller på GitHub-teamet reflektere tilgangsroller på Dapla-teamet. For eksempel så kan **dapla-example-data-admins** gis tilgang til repo, og da vil alle som er medlem av Dapla-teamet med rollen *data-admins* få tilgang til repoet. Dette benyttes blant annet for å gi teamet tilgang til automation-mappen i sitt IaC-repo. I tillegg kan teamet bruke GitHub-teamet til å gi tilgang til andre GitHub-repoer som er relevante for teamet, for eksempel kodenbasen til en statistikkproduksjon eller lignende. Fordelen er at tilganger er gitt på teamnivå og ikke på personnivå. For eksempel hvis *Teamansvarlig* for teamet fjerner en ansatt fra developers-gruppa, så mister de all tilgang til data, tjenester og kode på GitHub som er tilgjengelig for *developers*. 
 
 ## Navnestruktur
 
@@ -195,7 +203,6 @@ Når du oppretter et Dapla-team så må du velge et navn på teamet. Teamet velg
 | Navn                      | Beskrivelse                                 |
 | ------------------------- | ------------------------------------------- |
 | skatt-naering             | Teknisk teamnavn                            |
-| skatt-naering-managers    | AD-gruppe for managers                      |
 | skatt-naering-data-admins | AD-gruppe for data-admins og et GitHub-team |
 | skatt-naering-developers  | AD-gruppe for developers og et GitHub-team  |
 | skatt-naering-kilde-p     | Navn på kildeprosjekt i prod                |
@@ -204,7 +211,7 @@ Når du oppretter et Dapla-team så må du velge et navn på teamet. Teamet velg
 | skatt-naering-t           | Navn på standardprosjekt i test             |
 : Navnestruktur for teamet **Skatt næring** sine ressurser {#tbl-navn-struktur}
 
-I @tbl-navn-struktur ser vi at teamet får opprettet 3 AD-grupper og 4 Google-prosjekter. AD-gruppene brukes til å gi tilgang til ressursene på Dapla, mens Google-prosjektene brukes til å organisere ressursene. I tillegg er det en fast navnestruktur for bøttene i hvert prosjekt, slikt som vist i @tbl-navn-buckets.
+I @tbl-navn-struktur ser vi at teamet får opprettet 2 AD-grupper og 4 Google-prosjekter. AD-gruppene brukes til å gi tilgang til ressursene på Dapla, mens Google-prosjektene brukes til å organisere ressursene. I tillegg er det en fast navnestruktur for bøttene i hvert prosjekt, slikt som vist i @tbl-navn-buckets.
 
 | Prosjektnavn          | Bøttenavn                                |
 | --------------------- | ---------------------------------------- |
