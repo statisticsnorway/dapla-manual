@@ -3208,32 +3208,60 @@
     "text": "Vi har skrevet en artikkel om hvordan man bør gjennomføre overgangen til Dapla. Les artikkelen her."
   },
   {
-    "objectID": "news/posts/2025-06-23-startup-script/index.html",
-    "href": "news/posts/2025-06-23-startup-script/index.html",
-    "title": "Personliggjør dine tjenester på Dapla Lab",
+    "objectID": "news/posts/2026-02-26-ytelse-pseudo/index.html",
+    "href": "news/posts/2026-02-26-ytelse-pseudo/index.html",
+    "title": "Forbedret ytelse i Kildomaten og Delomaten ved pseudonymisering",
     "section": "",
-    "text": "Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et bash-script og det må ligger lagret i et repo på www.github.com/statisticsnorway. Brukeren kan deretter referere til skriptet under Avansert i tjenestekonfigurasjonen på Dapla Lab, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Avansert-fanen til en tjeneste på Dapla Lab\n\n\n\nEksempelt i Figur 1 viser en bruker som ber om å få kjørt et skript (personal-init.sh) som ligger lagret i https://github.com/statisticsnorway/obr-test.\nOppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.\nUnder er et eksempel på et oppstartsskript hvor det gjøres noen endringer i $HOME/.bashrc og theme i Jupyter defineres.\n\n\n\n\n\n\nNoteEksempel på et oppstartskript\n\n\n\n\n\ndemo-script.sh\n\n#!/bin/bash\n\n# Update .bashrc with environment variables and aliases\necho \"\" &gt;&gt; \"$HOME/.bashrc\"\necho \"# Opprettet av mitt personlige startupscript:\" &gt;&gt; \"$HOME/.bashrc\"\necho \"export TEST=true\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias gs='git status'\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias ll='ls -alF'\" &gt;&gt; \"$HOME/.bashrc\"\n\n# Set Jupyter-theme via settings file\nTHEME_NAME=\"JupyterLab Dark\"\nSETTINGS_DIR=\"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension\"\nSETTINGS_FILE=\"$SETTINGS_DIR/themes.jupyterlab-settings\"\n\nmkdir -p \"$SETTINGS_DIR\"\n\ncat &gt; \"$SETTINGS_FILE\" &lt;&lt;EOF\n{\n    // Theme set from init-script\n    \"theme\": \"$THEME_NAME\"\n}\nEOF\n\necho \"[Init Script] JupyterLab theme set to '$THEME_NAME'\"\n\n\n\nHvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: $HOME/personal_init_script.log."
+    "text": "Team Statistikktjenester har gjort forbedringer i måten pseudonymisering gjennomføres på Dapla. Dette igjen gir økt ytelse i Kildomaten og Delomaten. Denne problemstillingen er spesielt relevant for brukere som skal pseudonymisere større datasett."
   },
   {
-    "objectID": "news/posts/2026-04-24-daplanytt-apr26/index.html",
-    "href": "news/posts/2026-04-24-daplanytt-apr26/index.html",
-    "title": "DaplaNytt-møte 22.04.2026",
-    "section": "",
-    "text": "DaplaNytt fra april 2026 ble avholdt som Teams-møte 22. april 2026. Se opptak her.\nSlides finner du her."
+    "objectID": "news/posts/2026-02-26-ytelse-pseudo/index.html#hva-betyr-endringen",
+    "href": "news/posts/2026-02-26-ytelse-pseudo/index.html#hva-betyr-endringen",
+    "title": "Forbedret ytelse i Kildomaten og Delomaten ved pseudonymisering",
+    "section": "Hva betyr endringen?",
+    "text": "Hva betyr endringen?\nBrukere trenger ikke å foreta seg noe ifm. med endringen. Brukere som tidligere har opplevd ytelseproblemer i Kildomaten kan lese denne artikkelen for å finne hvordan de kan optimalisere koden sin for å få økt ytelse."
   },
   {
-    "objectID": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
-    "href": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
-    "title": "Nytt tidspunkt for automatisk pausing på Dapla Lab",
+    "objectID": "news/posts/2025-04-11-bug-dapla-lab-admins/index.html",
+    "href": "news/posts/2025-04-11-bug-dapla-lab-admins/index.html",
+    "title": "Forbedring av kildedatatilgang i Dapla Lab",
     "section": "",
-    "text": "Alle tjenester på Dapla Lab blir pauset kl 22.00 hver dag. I forbindelse med at vi nå tilbyr brukere å melde seg ut av den automatiske pausingen ved behov, så endrer vi nå tidspunktet for pausing fra 22.00 til 17.00 fra og med torsdag 27. mars.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
+    "text": "Når man har startet en tjeneste på Dapla Lab som data-admins, så har er tilgangen til data alltid tidsbegrenset. Tidligere har man ikke kunne starte tjenesten igjen når tilgangen har gått ut. Dette har skapt utfordringer for brukere som ikke har pushet koden til GitHub.\nNå vi gjort endriner i Dapla Lab slik at tjenesten også kan startes opp etter at datatilgangen har utgått. Formålet med dette er å la brukere pushe kode til GitHub, og det er ønskelig at brukere sletter disse tjenestene etter at det er gjort."
   },
   {
-    "objectID": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
-    "href": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
-    "title": "Støtte for langtkjørende jobber på Dapla Lab",
+    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
+    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
+    "title": "Statistikk over datadeling på Dapla",
     "section": "",
-    "text": "Brukere som har behov for å kjøre jobber på Dapla Lab som tar mer enn 12 timer, har opplevd at kjøringene avbrytes etter noen timer uten noen åpenbar grunn. Feilen har også oppstått når brukeren har lukket nettleser-fanen eller maskinen til brukeren har gått i dvale, selv om dette ikke i teorien skulle påvirke kjøringen. Årsaken virker å være IDE-ene (Jupyter, VS Code og RStudio) pauser jobbene når de blir pauset.\nFor å unngå denne oppførselen er terminal-verktøyet tmux installert i Jupyter, VS Code og RStudio. tmux er terminal multiplexer som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (&gt;12h) kjører koden i en tmux-session.\nDu kan kjøre ditt Python-script ved å kjøre følgende:\n\n\nTerminal\n\ntmux new -s minsesjon\n\nI koden over startes en session med navn minsesjon. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med python-kommandoen i en terminal, så kan du kjøre kommandoen:\n\n\nTerminal\n\npoetry shell\n\nNå kan du kjøre scriptet ditt på følgende måte:\n\n\nTerminal\n\npython mittskript.py\n\nDeretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge denne oppskriften.\ntmux operer med konsepter som session, window og panes. Over startet vi en session med navnet minsesjon. Dette er et komplett arbeidsmiljø hvor man kan ha flere windows og splitte de opp i panes.\nEn av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en session kan være attached, at brukeren kan se sesjonen i terminalen, og detached, som betyr at den kan kjøre i bakgrunnen mens brukeren jobber med noe annet. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:\n\n\nTerminal\n\ntmux ls\n\nI eksempelet over så kan vi koble til (attach) til vår sesjon ved å skrive:\n\n\nTerminal\n\ntmux attach -t minsesjon\n\nDu vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Statusbar for en tmux-sesjon\n\n\n\nDu kan koble fra en sesjon (detach) ved å skrive CTRL B og deretter d, eller skrive følgende i terminalen:\n\n\nTerminal\n\ntmux detach -s minsesjon\n\nProsessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten."
+    "text": "Ett år etter at Dapla-team kunne opprette delt-bøtter selvbetjent på Dapla, så er det tilsammen opprettet 118 bøtter per 22. April 2025. 83 av disse er i prod-miljøet til teamene, mens 35 er i test-miljøet.\nAv de 171 teamene totalt på Dapla, så er det 33 av disse som har opprettet en eller flere delt-bøtter.\nTabell 1 viser en oversikt over alle delt-bøtter som er opprettet1, dens kortnavn, hvilket team som er eier den, hvilket miljø den finnes i, og hvilken seksjon som er ansvarlig for teamet.\nTabell 1 viser mer informasjon enn hva som er tilgjengelig i dag i Dapla Ctrl. Grunnen er at det i Tabell 1 også inkluderes delt-bøtter i test-miljøet, samt at Dapla Ctrl kun viser delt-bøtter hvor andre team faktisk har blitt gitt tilgang. I fremtiden vil denne informasjonen kunne inspiseres i en datakatalog, med mye mer detaljert informasjon om dataene som deles.\nFigur 1 viser at det er avdeling 200 som har opprettet flest bøtter, i alt 52 delt-bøtter. Deretter følger avdeling 300 med 26 bøtter.\nAv Figur 2, som viser hvilke 10 team som har flest delt-bøtter, så ser vi at 48 av de 52 bøttene i avdeling 200 kommer fra team Kostra. Vi ser også at team arbmark-register har opprettet 9 av totalt 26 bøtter i avdeling 300.\nFigur 1: Antall delt-bøtter per avdeling og miljø\nFigur 2: Antall delt-bøtter per team og miljø"
+  },
+  {
+    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
+    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
+    "title": "Statistikk over datadeling på Dapla",
+    "section": "Fotnoter",
+    "text": "Fotnoter\n\n\nHelt presist viser tabellen alle delt-bøtter som er opprettet gjennom shared-buckets-featuren.↩︎"
+  },
+  {
+    "objectID": "news/posts/2024-12-23-standarder-chapter/index.html",
+    "href": "news/posts/2024-12-23-standarder-chapter/index.html",
+    "title": "Nytt kapittel om Standarder og standardutvalget",
+    "section": "",
+    "text": "Vi har skrevet et kapittel i Dapla-manualen som gir et overblikk over standardutvalget og standardene på Dapla. Sjekk det ut her."
+  },
+  {
+    "objectID": "news/posts/2024-11-20-daplanytt-nov24/index.html",
+    "href": "news/posts/2024-11-20-daplanytt-nov24/index.html",
+    "title": "DaplaNytt-møte 19.11.2024",
+    "section": "",
+    "text": "DaplaNytt for november 2024 ble avholdt som Teams-møte 19. november 2024.\nSe opptaket her (intern lenke)."
+  },
+  {
+    "objectID": "news/posts/2025-12-11-delomaten-release/index.html",
+    "href": "news/posts/2025-12-11-delomaten-release/index.html",
+    "title": "Delomaten - ny tjeneste for deling av data",
+    "section": "",
+    "text": "I dag lanseres en ny tjeneste for å dele data mellom team på Dapla: Delomaten. Formålet med tjenesten er å la Dapla-team dele data med hverandre selv om de behandler personopplysninger ulikt. Delomaten utvider funksjonaliteten for deling av data som allerede eksisterer, men med et sterkt fokus på personvern i data.\nFør man benytter seg av tjenesten bør man diskutere med nærmeste leder og Personvernombud for å kartlegge hvilke konsekvenser delingen kan ha.\nDokumentasjon av Delomaten\n\n\n\nFiguren viser hvordan hvordan team A deler de-pseudonymisert data med team B ved hjelp av Delomaten."
   },
   {
     "objectID": "news/posts/2025-09-08-datadoc-model-breaking-changes/index.html",
@@ -3278,60 +3306,60 @@
     "text": "Hva med Datadoc-editor\nDatadoc-editor oppdateres til å reflektere disse endringene. Det kommer informasjon om dette i et eget innlegg etterhvert."
   },
   {
-    "objectID": "news/posts/2025-12-11-delomaten-release/index.html",
-    "href": "news/posts/2025-12-11-delomaten-release/index.html",
-    "title": "Delomaten - ny tjeneste for deling av data",
+    "objectID": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
+    "href": "news/posts/2025-03-24-dapla-lab-tmux/index.html",
+    "title": "Støtte for langtkjørende jobber på Dapla Lab",
     "section": "",
-    "text": "I dag lanseres en ny tjeneste for å dele data mellom team på Dapla: Delomaten. Formålet med tjenesten er å la Dapla-team dele data med hverandre selv om de behandler personopplysninger ulikt. Delomaten utvider funksjonaliteten for deling av data som allerede eksisterer, men med et sterkt fokus på personvern i data.\nFør man benytter seg av tjenesten bør man diskutere med nærmeste leder og Personvernombud for å kartlegge hvilke konsekvenser delingen kan ha.\nDokumentasjon av Delomaten\n\n\n\nFiguren viser hvordan hvordan team A deler de-pseudonymisert data med team B ved hjelp av Delomaten."
+    "text": "Brukere som har behov for å kjøre jobber på Dapla Lab som tar mer enn 12 timer, har opplevd at kjøringene avbrytes etter noen timer uten noen åpenbar grunn. Feilen har også oppstått når brukeren har lukket nettleser-fanen eller maskinen til brukeren har gått i dvale, selv om dette ikke i teorien skulle påvirke kjøringen. Årsaken virker å være IDE-ene (Jupyter, VS Code og RStudio) pauser jobbene når de blir pauset.\nFor å unngå denne oppførselen er terminal-verktøyet tmux installert i Jupyter, VS Code og RStudio. tmux er terminal multiplexer som lar brukeren kjøre og organisere mange terminal-sesjoner i et vindu. En av fordelene med tmux i denne sammenhengen er at den lar brukeren kjøre prosesser selv om terminalen lukkes. Derfor anbefaler vi at brukere som skal kjøre kode over lang tid (&gt;12h) kjører koden i en tmux-session.\nDu kan kjøre ditt Python-script ved å kjøre følgende:\n\n\nTerminal\n\ntmux new -s minsesjon\n\nI koden over startes en session med navn minsesjon. For å aktivere et shell for ditt ssb-project, slik at din Python-installasjon kan kalles på med python-kommandoen i en terminal, så kan du kjøre kommandoen:\n\n\nTerminal\n\npoetry shell\n\nNå kan du kjøre scriptet ditt på følgende måte:\n\n\nTerminal\n\npython mittskript.py\n\nDeretter kan lukke PC-en, eller nettleser-fanen, og være trygg på at skriptet ditt vil kjøre til det er ferdig. Husk at alle tjenester pauses kl 22 hver kveld, så hvis du ikke ønsker det må du også følge denne oppskriften.\ntmux operer med konsepter som session, window og panes. Over startet vi en session med navnet minsesjon. Dette er et komplett arbeidsmiljø hvor man kan ha flere windows og splitte de opp i panes.\nEn av styrkene til tmux er at man kan kjøre prosesser i bakgrunnen. Derfor er det også viktig å kjenne til at en session kan være attached, at brukeren kan se sesjonen i terminalen, og detached, som betyr at den kan kjøre i bakgrunnen mens brukeren jobber med noe annet. Du kan liste ut dine sesjoner ved å skrive følgende i en terminal:\n\n\nTerminal\n\ntmux ls\n\nI eksempelet over så kan vi koble til (attach) til vår sesjon ved å skrive:\n\n\nTerminal\n\ntmux attach -t minsesjon\n\nDu vet at din sesjon er attached ved at du ser en grønn statusbar nederst med navnet til sesjonen, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Statusbar for en tmux-sesjon\n\n\n\nDu kan koble fra en sesjon (detach) ved å skrive CTRL B og deretter d, eller skrive følgende i terminalen:\n\n\nTerminal\n\ntmux detach -s minsesjon\n\nProsessen vil deretter kjøre i sesjonen, samtidig som du kan jobbe med andre ting i tjenesten."
   },
   {
-    "objectID": "news/posts/2024-11-20-daplanytt-nov24/index.html",
-    "href": "news/posts/2024-11-20-daplanytt-nov24/index.html",
-    "title": "DaplaNytt-møte 19.11.2024",
+    "objectID": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
+    "href": "news/posts/2025-03-25-dapla-lab-pausing-time/index.html",
+    "title": "Nytt tidspunkt for automatisk pausing på Dapla Lab",
     "section": "",
-    "text": "DaplaNytt for november 2024 ble avholdt som Teams-møte 19. november 2024.\nSe opptaket her (intern lenke)."
+    "text": "Alle tjenester på Dapla Lab blir pauset kl 22.00 hver dag. I forbindelse med at vi nå tilbyr brukere å melde seg ut av den automatiske pausingen ved behov, så endrer vi nå tidspunktet for pausing fra 22.00 til 17.00 fra og med torsdag 27. mars.\n\n\n\n\n\n\nFigur 1: Bilde av tjeneste som er pauset."
   },
   {
-    "objectID": "news/posts/2024-12-23-standarder-chapter/index.html",
-    "href": "news/posts/2024-12-23-standarder-chapter/index.html",
-    "title": "Nytt kapittel om Standarder og standardutvalget",
+    "objectID": "news/posts/2026-04-24-daplanytt-apr26/index.html",
+    "href": "news/posts/2026-04-24-daplanytt-apr26/index.html",
+    "title": "DaplaNytt-møte 22.04.2026",
     "section": "",
-    "text": "Vi har skrevet et kapittel i Dapla-manualen som gir et overblikk over standardutvalget og standardene på Dapla. Sjekk det ut her."
+    "text": "DaplaNytt fra april 2026 ble avholdt som Teams-møte 22. april 2026. Se opptak her.\nSlides finner du her."
   },
   {
-    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
-    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html",
-    "title": "Statistikk over datadeling på Dapla",
+    "objectID": "news/posts/2025-06-23-startup-script/index.html",
+    "href": "news/posts/2025-06-23-startup-script/index.html",
+    "title": "Personliggjør dine tjenester på Dapla Lab",
     "section": "",
-    "text": "Ett år etter at Dapla-team kunne opprette delt-bøtter selvbetjent på Dapla, så er det tilsammen opprettet 118 bøtter per 22. April 2025. 83 av disse er i prod-miljøet til teamene, mens 35 er i test-miljøet.\nAv de 171 teamene totalt på Dapla, så er det 33 av disse som har opprettet en eller flere delt-bøtter.\nTabell 1 viser en oversikt over alle delt-bøtter som er opprettet1, dens kortnavn, hvilket team som er eier den, hvilket miljø den finnes i, og hvilken seksjon som er ansvarlig for teamet.\nTabell 1 viser mer informasjon enn hva som er tilgjengelig i dag i Dapla Ctrl. Grunnen er at det i Tabell 1 også inkluderes delt-bøtter i test-miljøet, samt at Dapla Ctrl kun viser delt-bøtter hvor andre team faktisk har blitt gitt tilgang. I fremtiden vil denne informasjonen kunne inspiseres i en datakatalog, med mye mer detaljert informasjon om dataene som deles.\nFigur 1 viser at det er avdeling 200 som har opprettet flest bøtter, i alt 52 delt-bøtter. Deretter følger avdeling 300 med 26 bøtter.\nAv Figur 2, som viser hvilke 10 team som har flest delt-bøtter, så ser vi at 48 av de 52 bøttene i avdeling 200 kommer fra team Kostra. Vi ser også at team arbmark-register har opprettet 9 av totalt 26 bøtter i avdeling 300.\nFigur 1: Antall delt-bøtter per avdeling og miljø\nFigur 2: Antall delt-bøtter per team og miljø"
+    "text": "Tjenestene på Dapla Lab støtter nå at brukere kan kjøre sitt eget oppstartsskript når en tjeneste startes. Det gir brukere mulighet til å definere sine egne farger, snarveier, osv. Skriptet må være et bash-script og det må ligger lagret i et repo på www.github.com/statisticsnorway. Brukeren kan deretter referere til skriptet under Avansert i tjenestekonfigurasjonen på Dapla Lab, slik som vist Figur 1.\n\n\n\n\n\n\nFigur 1: Avansert-fanen til en tjeneste på Dapla Lab\n\n\n\nEksempelt i Figur 1 viser en bruker som ber om å få kjørt et skript (personal-init.sh) som ligger lagret i https://github.com/statisticsnorway/obr-test.\nOppstartsskript er et kraftfullt verktøy som lar brukere tilpasse tjenesten sin på mange forskjellige måter. Generelt sett kan man gjør alt man kan gjøre i en terminal inne i tjenesten, bare at det ved oppstart.\nUnder er et eksempel på et oppstartsskript hvor det gjøres noen endringer i $HOME/.bashrc og theme i Jupyter defineres.\n\n\n\n\n\n\nNoteEksempel på et oppstartskript\n\n\n\n\n\ndemo-script.sh\n\n#!/bin/bash\n\n# Update .bashrc with environment variables and aliases\necho \"\" &gt;&gt; \"$HOME/.bashrc\"\necho \"# Opprettet av mitt personlige startupscript:\" &gt;&gt; \"$HOME/.bashrc\"\necho \"export TEST=true\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias gs='git status'\" &gt;&gt; \"$HOME/.bashrc\"\necho \"alias ll='ls -alF'\" &gt;&gt; \"$HOME/.bashrc\"\n\n# Set Jupyter-theme via settings file\nTHEME_NAME=\"JupyterLab Dark\"\nSETTINGS_DIR=\"$HOME/work/.jupyter/config/lab/user-settings/@jupyterlab/apputils-extension\"\nSETTINGS_FILE=\"$SETTINGS_DIR/themes.jupyterlab-settings\"\n\nmkdir -p \"$SETTINGS_DIR\"\n\ncat &gt; \"$SETTINGS_FILE\" &lt;&lt;EOF\n{\n    // Theme set from init-script\n    \"theme\": \"$THEME_NAME\"\n}\nEOF\n\necho \"[Init Script] JupyterLab theme set to '$THEME_NAME'\"\n\n\n\nHvis oppstartsskriptet feiler, eller man er interessert i hva som ble kjørt, så kan man undersøke logg-filen til oppstartskriptet inne i tjenesten: $HOME/personal_init_script.log."
   },
   {
-    "objectID": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
-    "href": "news/posts/2025-04-22-dapla-metrics-shared-buckets/index.html#footnotes",
-    "title": "Statistikk over datadeling på Dapla",
-    "section": "Fotnoter",
-    "text": "Fotnoter\n\n\nHelt presist viser tabellen alle delt-bøtter som er opprettet gjennom shared-buckets-featuren.↩︎"
-  },
-  {
-    "objectID": "news/posts/2025-04-11-bug-dapla-lab-admins/index.html",
-    "href": "news/posts/2025-04-11-bug-dapla-lab-admins/index.html",
-    "title": "Forbedring av kildedatatilgang i Dapla Lab",
+    "objectID": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html",
+    "href": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html",
+    "title": "Nye Dapla Ctrl slippes i dag!",
     "section": "",
-    "text": "Når man har startet en tjeneste på Dapla Lab som data-admins, så har er tilgangen til data alltid tidsbegrenset. Tidligere har man ikke kunne starte tjenesten igjen når tilgangen har gått ut. Dette har skapt utfordringer for brukere som ikke har pushet koden til GitHub.\nNå vi gjort endriner i Dapla Lab slik at tjenesten også kan startes opp etter at datatilgangen har utgått. Formålet med dette er å la brukere pushe kode til GitHub, og det er ønskelig at brukere sletter disse tjenestene etter at det er gjort."
+    "text": "Etter noen måneder med testing på “ctrl-alt-del”-adressen, vil vi i løpet av dagen rulle ut løsningen til hele organisasjonen. Den gamle løsningen er pensjonert, og du finner den nye versjonen på den vante adressen:\n👉 https://dapla-ctrl.intern.ssb.no/\n👉 Oppdatert dokumentasjon"
   },
   {
-    "objectID": "news/posts/2026-02-26-ytelse-pseudo/index.html",
-    "href": "news/posts/2026-02-26-ytelse-pseudo/index.html",
-    "title": "Forbedret ytelse i Kildomaten og Delomaten ved pseudonymisering",
-    "section": "",
-    "text": "Team Statistikktjenester har gjort forbedringer i måten pseudonymisering gjennomføres på Dapla. Dette igjen gir økt ytelse i Kildomaten og Delomaten. Denne problemstillingen er spesielt relevant for brukere som skal pseudonymisere større datasett."
+    "objectID": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html#hva-er-nytt",
+    "href": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html#hva-er-nytt",
+    "title": "Nye Dapla Ctrl slippes i dag!",
+    "section": "Hva er nytt?",
+    "text": "Hva er nytt?\nMed denne oppgraderingen har vi bygget om fundamentet (Dapla API) for å gjøre plattformen enklere og mer gjennomsiktig for både statistikere, utviklere og ledere.\nDe viktigste nyhetene inkluderer:\n\nFull tilgangsstyring: I motsetning til betaversjonen, kan du nå utføre all tilgangsstyring direkte i den nye løsningen.\nBedre oversikt over deltbøtter: Se nøyaktig hvilke team og enkeltmedlemmer som har tilgang til hvilke data.\nRikere team-informasjon: Hvert team har fått en egen side med detaljert oversikt over medlemmer og ressurser.\nNye roller: Vi har innført rollen Teamansvarlig (seksjonsleder) og fjernet Managers-rollen. Vi har også innført mulighet til å delegere tilgangsstyring til andre i SSB."
   },
   {
-    "objectID": "news/posts/2026-02-26-ytelse-pseudo/index.html#hva-betyr-endringen",
-    "href": "news/posts/2026-02-26-ytelse-pseudo/index.html#hva-betyr-endringen",
-    "title": "Forbedret ytelse i Kildomaten og Delomaten ved pseudonymisering",
-    "section": "Hva betyr endringen?",
-    "text": "Hva betyr endringen?\nBrukere trenger ikke å foreta seg noe ifm. med endringen. Brukere som tidligere har opplevd ytelseproblemer i Kildomaten kan lese denne artikkelen for å finne hvordan de kan optimalisere koden sin for å få økt ytelse."
+    "objectID": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html#hvorfor-har-vi-gjort-disse-endringene",
+    "href": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html#hvorfor-har-vi-gjort-disse-endringene",
+    "title": "Nye Dapla Ctrl slippes i dag!",
+    "section": "Hvorfor har vi gjort disse endringene?",
+    "text": "Hvorfor har vi gjort disse endringene?\nMålet er at Dapla skal kreve mindre teknisk innsikt for de som bare skal forvalte tilganger. Ved å automatisere mer av oppsettet og gi bedre visuell oversikt, reduserer vi kompleksiteten og gjør hverdagen smidigere for alle brukere. I tillegg forbedereder vi systemene for at managed Daplateam i fremtiden skal slippe å forholde seg IaC-repoer."
+  },
+  {
+    "objectID": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html#hva-betyr-dette-for-deg",
+    "href": "news/posts/2026-05-08-dapla-ctrl-upgrade/index.html#hva-betyr-dette-for-deg",
+    "title": "Nye Dapla Ctrl slippes i dag!",
+    "section": "Hva betyr dette for deg?",
+    "text": "Hva betyr dette for deg?\n\nOppdater bokmerker: Hvis du har brukt beta-adressen (dapla-ctrl-alt-del), kan du slette dette bokmerket nå.\nSjekk tilgangene dine: Du vil nå se teamene dine i et nytt og mer oversiktlig grensesnitt.\n\nHar du spørsmål eller finner du noe som ikke fungerer som forventet? Ta kontakt med oss i Team Skyinfra."
   },
   {
     "objectID": "news/posts/2025-04-11-ssb-altinn-python-fix/index.html",
