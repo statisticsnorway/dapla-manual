@@ -1,6 +1,6 @@
 ---
 title: Hente data fra bakke
-date-modified: 01/21/2026
+date-modified: 05/12/2026
 lightbox: true
 ---
 
@@ -242,14 +242,35 @@ print(json.dumps(response, indent=4))
 ```
 :::
 
-### Hente prefill fra ISEE
+### Prefill fra ISEE
 
-For å hente prefill fra ISEE, bruk metoden `get_prefill_isee` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer.
+#### Generere prefill
+
+For å generere prefill fra ISEE brukes metoden `initialize_prefill_isee` i `SuvClient`. Metoden oppretter en jobb som genererer prefill-data og lagrer resultatet i `DYNAREV.VW_PRE_SKJEMA_DATA`. Sørg for at du oppgir riktig delregisternummer og RA-nummer.
 
 ```{.python filename="notebook"}
 client = SuvClient()
 
-response = client.get_prefill_isee(
+response = client.initialize_prefill_isee(
+    delreg_nr=190125,
+    ra_nummer="RA-0484A3" 
+)
+
+print(json.dumps(response, indent=4))
+```
+
+#### Hente generert prefill
+
+Når genereringen er fullført kan prefill hentes med metoden `fetch_prefill_isee` i `SuvClient`. Sørg for at du oppgir riktig delregisternummer og RA-nummer. 
+
+Som standard returneres kun prefill-data som er generert de siste 24 timene. Dersom dataene er eldre må enten prefill genereres på nytt, eller parameteren `max_age_minutes` overstyres. 
+
+Standardverdi for `max_age_minutes` er `1440` minutter (24 timer).
+
+```{.python filename="notebook"}
+client = SuvClient()
+
+response = client.fetch_prefill_isee(
     delreg_nr=190125,
     ra_nummer="RA-0484A3" 
 )
@@ -287,6 +308,7 @@ Disse parameterne kan brukes for å filtrere resultatet ytterligere:
 
 | Parameter | Type | Beskrivelse |
 |------------|------|-------------|
+| `max_age_minutes` | int | Maks alder på prefill-data i minutter. Standard er `1440` (24 timer) |
 | `ident_nr` | str | Hent spesifikk enhet |
 | `enhets_type` | str | Hent spesifikk enhetstype |
 | `felt_ids` | list[str] | Hent bare spesifikke felt |
@@ -295,9 +317,10 @@ Disse parameterne kan brukes for å filtrere resultatet ytterligere:
 
 Eksempel:
 ```python
-response = client.get_prefill_isee(
+response = client.fetch_prefill_isee(
     delreg_nr=190125,
     ra_nummer="RA-0484A3",
+    max_age_minutes=2880,
     ident_nr="ATB1149212",
     enhets_type="BEDR",
     felt_ids=["VARENAVN", "VARENR"],
