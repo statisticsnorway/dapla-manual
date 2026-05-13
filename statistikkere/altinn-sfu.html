@@ -809,7 +809,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#hente-enhetsinformasjon-fra-sfu" id="toc-hente-enhetsinformasjon-fra-sfu" class="nav-link" data-scroll-target="#hente-enhetsinformasjon-fra-sfu">Hente enhetsinformasjon fra SFU</a></li>
   <li><a href="#hente-delregister-fra-sfu" id="toc-hente-delregister-fra-sfu" class="nav-link" data-scroll-target="#hente-delregister-fra-sfu">Hente delregister fra SFU</a></li>
   <li><a href="#hente-vareliste-fra-sfu" id="toc-hente-vareliste-fra-sfu" class="nav-link" data-scroll-target="#hente-vareliste-fra-sfu">Hente vareliste fra SFU</a></li>
-  <li><a href="#hente-prefill-fra-isee" id="toc-hente-prefill-fra-isee" class="nav-link" data-scroll-target="#hente-prefill-fra-isee">Hente prefill fra ISEE</a></li>
+  <li><a href="#prefill-fra-isee" id="toc-prefill-fra-isee" class="nav-link" data-scroll-target="#prefill-fra-isee">Prefill fra ISEE</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/altinn-sfu.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/altinn-sfu.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -831,7 +831,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 21, 2026</p>
+      <p class="date-modified">May 12, 2026</p>
     </div>
   </div>
     
@@ -1207,21 +1207,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="hente-prefill-fra-isee" class="level3">
-<h3 class="anchored" data-anchor-id="hente-prefill-fra-isee">Hente prefill fra ISEE</h3>
-<p>For å hente prefill fra ISEE, bruk metoden <code>get_prefill_isee</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig delregisternummer og RA-nummer.</p>
+<section id="prefill-fra-isee" class="level3">
+<h3 class="anchored" data-anchor-id="prefill-fra-isee">Prefill fra ISEE</h3>
+<section id="generere-prefill" class="level4">
+<h4 class="anchored" data-anchor-id="generere-prefill">Generere prefill</h4>
+<p>For å generere prefill fra ISEE brukes metoden <code>initialize_prefill_isee</code> i <code>SuvClient</code>. Metoden oppretter en jobb som genererer prefill-data og lagrer resultatet i <code>DYNAREV.VW_PRE_SKJEMA_DATA</code>. Sørg for at du oppgir riktig delregisternummer og RA-nummer.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.get_prefill_isee(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.initialize_prefill_isee(</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    delreg_nr<span class="op">=</span><span class="dv">190125</span>,</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    ra_nummer<span class="op">=</span><span class="st">"RA-0484A3"</span> </span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(response, indent<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="hente-generert-prefill" class="level4">
+<h4 class="anchored" data-anchor-id="hente-generert-prefill">Hente generert prefill</h4>
+<p>Når genereringen er fullført kan prefill hentes med metoden <code>fetch_prefill_isee</code> i <code>SuvClient</code>. Sørg for at du oppgir riktig delregisternummer og RA-nummer.</p>
+<p>Som standard returneres kun prefill-data som er generert de siste 24 timene. Dersom dataene er eldre må enten prefill genereres på nytt, eller parameteren <code>max_age_minutes</code> overstyres.</p>
+<p>Standardverdi for <code>max_age_minutes</code> er <code>1440</code> minutter (24 timer).</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> SuvClient()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.fetch_prefill_isee(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    delreg_nr<span class="op">=</span><span class="dv">190125</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    ra_nummer<span class="op">=</span><span class="st">"RA-0484A3"</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(response, indent<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -1235,21 +1256,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"delreg_nr"</span><span class="fu">:</span> <span class="dv">190125</span><span class="fu">,</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"enhets_id"</span><span class="fu">:</span> <span class="st">"ATB1149185"</span><span class="fu">,</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"skjema"</span><span class="fu">:</span> <span class="st">"RA-0484A3"</span><span class="fu">,</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"lopenr"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"felt_id"</span><span class="fu">:</span> <span class="st">"BESKRIVELSE"</span><span class="fu">,</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"felt_verdi"</span><span class="fu">:</span> <span class="st">"Corona"</span><span class="fu">,</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kilde"</span><span class="fu">:</span> <span class="st">"DYNAREV"</span><span class="fu">,</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"endret_dato"</span><span class="fu">:</span> <span class="st">"2025-11-07T09:35:42.000"</span><span class="fu">,</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"endret_av"</span><span class="fu">:</span> <span class="st">"SUV_ORDS"</span><span class="fu">,</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"enhets_type"</span><span class="fu">:</span> <span class="st">"BEDR"</span><span class="fu">,</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"rad_nr"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"for_kilde"</span><span class="fu">:</span> <span class="st">"DEFAULT"</span><span class="fu">,</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"nokkel_verdier"</span><span class="fu">:</span> <span class="kw">null</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"delreg_nr"</span><span class="fu">:</span> <span class="dv">190125</span><span class="fu">,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"enhets_id"</span><span class="fu">:</span> <span class="st">"ATB1149185"</span><span class="fu">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"skjema"</span><span class="fu">:</span> <span class="st">"RA-0484A3"</span><span class="fu">,</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"lopenr"</span><span class="fu">:</span> <span class="dv">3</span><span class="fu">,</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"felt_id"</span><span class="fu">:</span> <span class="st">"BESKRIVELSE"</span><span class="fu">,</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"felt_verdi"</span><span class="fu">:</span> <span class="st">"Corona"</span><span class="fu">,</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"kilde"</span><span class="fu">:</span> <span class="st">"DYNAREV"</span><span class="fu">,</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"endret_dato"</span><span class="fu">:</span> <span class="st">"2025-11-07T09:35:42.000"</span><span class="fu">,</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"endret_av"</span><span class="fu">:</span> <span class="st">"SUV_ORDS"</span><span class="fu">,</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"enhets_type"</span><span class="fu">:</span> <span class="st">"BEDR"</span><span class="fu">,</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"rad_nr"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"for_kilde"</span><span class="fu">:</span> <span class="st">"DEFAULT"</span><span class="fu">,</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"nokkel_verdier"</span><span class="fu">:</span> <span class="kw">null</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1267,6 +1288,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>Disse parameterne kan brukes for å filtrere resultatet ytterligere:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 19%">
+<col style="width: 41%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Parameter</th>
@@ -1276,26 +1302,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
+<td><code>max_age_minutes</code></td>
+<td>int</td>
+<td>Maks alder på prefill-data i minutter. Standard er <code>1440</code> (24 timer)</td>
+</tr>
+<tr class="even">
 <td><code>ident_nr</code></td>
 <td>str</td>
 <td>Hent spesifikk enhet</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>enhets_type</code></td>
 <td>str</td>
 <td>Hent spesifikk enhetstype</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>felt_ids</code></td>
 <td>list[str]</td>
 <td>Hent bare spesifikke felt</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>max_results</code></td>
 <td>int</td>
 <td>Maks antall resultater som returneres</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>pagination_info</code></td>
 <td>object</td>
 <td>Pagineringsinformasjon</td>
@@ -1303,22 +1334,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>Eksempel:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.get_prefill_isee(</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    delreg_nr<span class="op">=</span><span class="dv">190125</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    ra_nummer<span class="op">=</span><span class="st">"RA-0484A3"</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    ident_nr<span class="op">=</span><span class="st">"ATB1149212"</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    enhets_type<span class="op">=</span><span class="st">"BEDR"</span>,</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    felt_ids<span class="op">=</span>[<span class="st">"VARENAVN"</span>, <span class="st">"VARENR"</span>],</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    max_results<span class="op">=</span><span class="dv">200</span>,</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    pagination_info<span class="op">=</span>p_info</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(response, indent<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.fetch_prefill_isee(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    delreg_nr<span class="op">=</span><span class="dv">190125</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    ra_nummer<span class="op">=</span><span class="st">"RA-0484A3"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    max_age_minutes<span class="op">=</span><span class="dv">2880</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    ident_nr<span class="op">=</span><span class="st">"ATB1149212"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    enhets_type<span class="op">=</span><span class="st">"BEDR"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    felt_ids<span class="op">=</span>[<span class="st">"VARENAVN"</span>, <span class="st">"VARENR"</span>],</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    max_results<span class="op">=</span><span class="dv">200</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    pagination_info<span class="op">=</span>p_info</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(response, indent<span class="op">=</span><span class="dv">4</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 
 
+</section>
 </section>
 </section>
 
