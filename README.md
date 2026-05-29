@@ -2,9 +2,23 @@
 
 Dette repoet er ment å være en enkel beskrivelse av hvordan man tar i bruk SSB sin nye skyplattform DAPLA. Besøk hjemmesiden på denne adressen: https://manual.dapla.ssb.no/
 
-## Installasjon av avhengigheter
+## Avhengigheter
 
-For å kunne åpne dapla-manualen lokalt trenger man `quarto`. Hvis du bruker Nix kan du få dette gjennom `nix develop .#` kommandoen i rotmappen.
+For å kunne åpne dapla-manualen lokalt trenger man `quarto`.
+
+### Installer med pipx
+
+1. [Installer pipx](https://pipx.pypa.io/stable/how-to/install-pipx/)
+1. `pipx install quarto-cli`
+
+### Installer med uv
+
+1. [Installer uv](https://docs.astral.sh/uv/getting-started/installation/)
+1. `uv tool install quarto-cli`
+
+### Installer med Nix
+
+Hvis du bruker Nix kan du få dette gjennom `nix develop .#` kommandoen i rotmappen.
 
 ## Bidra
 
