@@ -1,0 +1,38 @@
+---
+title: "GITHUB_TOKEN: read-only som standard rettigheter"
+author: "Tech Lead Forum"
+date: "05/29/2026"
+format: html
+categories: [GitHub, Security]
+---
+
+## Hva skjer?
+
+I lys av nylige angrep mot kjente åpenkildeprosjekter som benytter GitHub Workflower, har vi i Tech Lead Forum bestemt å stramme inn i de rettighetene en Workflow får som standard. Det gir en mye forbedret sikkerhet for vår GitHub organisasjon fremover. Når det skjer er det mulig at enkelte Workflower slutte å fungere som forventet men heldigvis er det enkelt å fikse opp i de.
+
+## Hvem er rammet?
+
+De alle fleste blir ikke rammet av denne endringen. Tech Coachene har sjekket Worflower i de standard stat- repoene og de er trygge. Det kan hende noen ekspertteam som har særegen oppsett blir rammet.
+
+De som kan være rammet:
+- Bruker `GITHUB_TOKEN` til autentisering i Workflow
+- Utfører operasjoner som trenger rettigheter utover les
+- Har ikke allerede satt rettighetene de trenger i selve Workflowen
+
+## Når skal det skje?
+
+Onsdag 3. juni kl 09
+
+## Dersom jeg er rammet, hvordan fikser jeg problemene?
+
+I utgangspunktet er det bar å sette rettighetene i Workflowen eksplisitt. f.eks
+
+```yaml
+permissions:
+  contents: write
+```
+
+## Mer informasjon
+
+- <https://github.blog/changelog/2021-04-20-github-actions-control-permissions-for-github_token/>
+- <https://docs.github.com/en/actions/tutorials/authenticate-with-github_token>
