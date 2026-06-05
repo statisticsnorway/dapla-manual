@@ -54,7 +54,7 @@ Initialisere renv-miljø i RStudio med `renv::init()` i *console*.
 
 For at renv skal fungere i RStudio er det viktig å jobbe i et **R-project**. Dvs. at du har en prosjekt-fil (.Rproj) i GitHub repoen din. 
 
-Hvis du ikke har det, kan du opprette en ved å velge File > New Project... > Version Control > Git > og lim inn git adressen for å clone ned repoen på nytt. Da vil det også kommer en .Rproj fil. Denne kan fint ligger på repoen.
+Hvis du ikke har det, kan du opprette en ved å velge File > New Project... > Version Control > Git > og lim inn git adressen for å clone ned repoen. Da vil det også kommer en .Rproj fil. Denne kan fint ligger på repoen. Det er lurte å **ikke** clone ned repoen i oppstart av Dapla-tjenesten når du første oppretter R-prosjektet; ellers får du repoen på nytt som en undermappe.
 
 :::
 
@@ -78,6 +78,8 @@ Rent praktisk vil det si at du fikk følgende filer/mapper i mappen din:
 ### Ta i bruk renv-miljø
 
 For å ta i bruk et renv-miljø må det aktiveres før koden kjøres. Dette gjøres automatisk i både Jupyter og RStudio ved hjelp av *renv/activate.R* filen. 
+
+I RStudio, pakkene fra din renv-miljøet kan installeres automatiske ved oppstart av en nye Dapla tjeneste. Til å gjøre dette, legger du inn *ssb-fellesr/scripts/startup-rstudio.sh* som Bash-skript (under Avansert - Oppstartsskript).
 
 For at renv-miljø kan brukes i Jupyter må også følgende pakke installeres.
 
@@ -236,29 +238,18 @@ Hvis du bytter mellom Jupyter og RStudio i prodsone, må du også endre adressen
 
 ### Hvordan å løse problemer med pakkeinstallering i produksjonssone på bakken
 
-Prosessen med å installere R-pakker på bakken er det samme som på Dapla. Noen pakker (for eksempel `arrow` og `ROracle`) kan være vanskelig å installere på grunn av 3. parti avhengigheter. 
+Installasjonsprosessen for R-pakker på bakken er den samme som på Dapla. Enkelte pakker (som `arrow` og `ROracle`) kan imidlertid være krevende å installere på grunn av avhengigheter til tredjepartsprogramvare.
 
 **arrow**
 
-Hvis du sliter med installering av `arrow` kan du prøve å spesifisere versjonen som skal installeres. Det er foreløpige ulike versjoner av avhengigheter i RStudio og Jupyter pga de ulike systemer og oppsett.
-
-::: {.panel-tabset}
-
-## Jupyter
+Hvis du sliter med installering av `arrow` kan du prøve å spesifisere versjonen som skal installeres.
 
 ```{.r}
-renv::install("arrow@18.1.0.1")
+renv::install("arrow@23.0.0")
 ```
-Pakken er ganske stor, så det kan ta tid å installere den.
 
-## RStudio
+Pakken er ganske stor, så det kan ta noen minutter å installere den.
 
-```{.r}
-renv::install("arrow@17.0.0.1")
-```
-Pakken er ganske stor, så det kan ta tid å installere den.
-
-:::
 
 **ROracle**
 
@@ -271,4 +262,12 @@ install.packages(
   ROracle_pakke,
   repos = NULL,
   type = "source")
+```
+
+**ReGenesees**
+
+Pakken `ReGenesees` finnes ikke på CRAN, men kun på Github. Ettersom det kun er tillatt å installere pakker på SSB sin Github-side har denne pakken blitt "forket" til SSB sitt område. Pakken kan installeres med renv ved å kjøre følgende kommando i R:
+
+```{.r}
+renv::install("statisticsnorway/ReGenesees")
 ```

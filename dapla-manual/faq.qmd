@@ -1,11 +1,70 @@
 ---
 title: "Spørsmål og svar"
-toc-location: body
 css: faq.css
 image: ./images/faq-logo.png
 lightbox: true
+callout-appearance: minimal
 ---
+## Data
 
+::: {.callout-tip collapse="true"}
+### Hvordan kan jeg se innholdet i mitt team sine bøtter?
+
+For å se innholdet i ditt teams sine bøtter kan du enten gjøre dette [med kode fra Jupyter](./statistikkere/jobbe-med-data.qmd#filbehandling), eller via [Google Cloud Console (GCC)](https://console.cloud.google.com/). Les mer om hvordan man kan [benytte GCC i SSB](./gcc.html).
+
+Husk at det er kun [data-admins](./statistikkere/hva-er-dapla-team.html#data-admins) som skal kunne se innhold i kildeprosjektet til teamet. For å gjøre det må de aktivere en tilgang i [JIT-applikasjonen](/statistikkere/appendix/jit.qmd).
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvordan kan jeg gjenopprette filer fra bøtter? 
+
+Fremgangsmåten for gjenoppretting av filer er [beskrevet i Backup-kapitlet](./statistikkere/backup-data.qmd). 
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvorfor får jeg ikke opprettet mapper fra Google Cloud Console (GCC)? 
+
+[I mars 2024 ble det gjort sikkerhetstiltak på Dapla](https://engage.cloud.microsoft/main/org/ssb.no/threads/eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMjcxODgyNTU2MTQ5NzYwMCJ9?trk_copy_link=V2) som innebar at funksjonaliteten **Download**, **Upload** og **Create folder** i GCC ble skrudd av. Hvis man prøver å opprette en mappe på den måten vil man få en feilemelding som starter med  
+`Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier:`  
+
+Hvis man skal opprette mapper i en bøtte så må man gjøre det med [dapla-toolbelt](./statistikkere/jobbe-med-data.qmd#opprette-mapper), eller gjøre det fra en tjeneste som [Jupyter](./statistikkere/jupyter.qmd) i [Dapla Lab](./statistikkere/dapla-lab.qmd). Sistnevnte metode betyr at man åpner tjenesten som det teamet og tilgangsgruppen som har tilgang til ønsket bøtte, og deretter kan man opprette mapper med `mkdir` i terminalen. 
+:::
+
+## Datatjenester
+
+::: {.callout-tip collapse="true"}
+### Jeg får meldingen **Account already exists** når jeg prøver å logge meg inn på Dapla. Hvordan løser jeg det?
+
+:::: {.columns}
+
+::: {.column width="47.5%"}
+Det hender at man får melding om at *Account already exists* når man logger seg inn på en Dapla-tjeneste. For å løse dette gjør man følgende:
+
+1. Velg *Add to existing account* som vist i @fig-add-existing-account.
+2. Velg *Google* slik som vist i @fig-authenticate.
+
+I @fig-authenticate skal du IKKE fylle inn *Username or email* og *Password*. Du skal kun trykke på *Google*-knappen. 
+
+Meldingen om at *Account already exists* forekommer svært sjelden, og typisk skjer det første gang man logger seg inn på en tjeneste. 
+
+:::
+
+::: {.column width="5%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="47.5%"}
+
+![](./images/account-already-exist.png){#fig-add-existing-account}
+
+![](./images/account-authenticate-link.png){#fig-authenticate}
+
+:::
+
+::::
+:::
+
+::: {.callout-tip collapse="true"}
 ### Hvordan finner jeg et Google-prosjekt sin prosjekt-ID?
 
 Prosjekt-ID-en til et Google-prosjekt er en unik identifikator som brukes til å identifisere prosjektet i Google Cloud Platform. Prosjekt-ID-en er en streng som består av små bokstaver, tall og bindestrek. Prosjekt-ID-en er ikke det samme som prosjektnavnet, som kan inneholde store bokstaver og mellomrom.
@@ -13,45 +72,50 @@ Prosjekt-ID-en til et Google-prosjekt er en unik identifikator som brukes til å
 Du finner prosjekt-ID ved logge deg inn på [GCC](./statistikkere/gcc.html#innlogging), [åpne prosjektvelgeren](./statistikkere/gcc.html#prosjektvelger), søk opp ditt prosjekt, og så ser du det i høyre kolonne, slik som vist i denne sladdete kolonnen i @fig-prosjektvelger.
 
 ![Prosjektvelgeren i Google Cloud Console](./images/prosjektvelger.png){fig-alt="Bilde som viser prosjektvelgeren i Google Cloud Console" #fig-prosjektvelger}
+:::
 
-### Hvordan får jeg slettet et GitHub-repo under statisticsnorway? 
+::: {.callout-tip collapse="true"}
+### Hva gjør jeg når jeg får en feilmelding ved utrulling av en ny Delomaten-jobb?
 
-Hovedregelen er at vi arkiverer repoer istedenfor å slette. Det skyldes at vi kan trenge å ettergå historikken i repoer ved et senere tidspunkt. Arkivering av repoer kan du gjøre selv under **Settings** i repoet. 
+Hvis man får feilmeldinger ved utrulling av Delomat-jobber, så bør man først undersøke hva feilmeldingen sier. Den gir ofte nyttige tilbakemelding om det er gjort noen formelle feil. Hvis dette ikke fører frem, så kan man ta kontakt med Kundeservice for hjelp.   
 
-I de tilfellene der du mener at det gir mest mening å slette repoet, så må dette gjøres av en Github-administrator. Da [sender du en henvendelse til Kundeservice](https://ssb.pureservice.com/) og ber om at repoet slettes. Husk å oppgi navnet på repoet du ønsker å få slettet.
+Konfigurasjonsfilen valideres automatisk når du oppretter en pull request i GitHub.
+Hvis noe er feil får du en feilmelding:
+![Delomaten test feil](./images/delomaten_error.png)
 
+Eksempel på feilmelding i workflow
+![Delomaten feilmelding](./images/delomaten_error_msg.png)
+:::
 
-### Hvordan løser jeg feilmeldinger knyttet til at **data rate exceeded** i Jupyter? 
+::: {.callout-tip collapse="true"}
+### Hvorfor får jeg feilmelding når jeg prøver å slette en delt-bøtte? Jeg får melding om at **Error trying to delete bucket <bøttenavn> objects without 'force destroy' set to true**  når jeg prøver å slette en delt-bøtte ved å fjerne den fra *shared-buckets.yaml*
 
-Når du mottar følgende melding i Jupyter:
+En delt-bøtte kan kun slettes hvis den er helt tom for data. Det betyr at:
 
-> **Feilmelding:**
-> ```
-> IOPub data rate exceeded.
-> The Jupyter server will temporarily stop sending output
-> to the client in order to avoid crashing it.
-> To change this limit, set the config variable
-> `--ServerApp.iopub_data_rate_limit`.
-> 
-> Current values:
-> ServerApp.iopub_data_rate_limit=1000000.0 (bytes/sec)
-> ServerApp.rate_limit_window=3.0 (secs)
-> ```
+- Alle filer og mapper må være slettet. 
+- Siden filer versjoneres i delt-bøtter må også alle gamle versjoner av filer også være slettet (såkalt *non-current* objekter).
 
-betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-frontend overskrider den tillatte grensen. Selv om det er mulig å justere `ServerApp.iopub_data_rate_limit` og `ServerApp.rate_limit_window` for å endre denne grensen, ønsker vi ikke dette. Å endre disse verdiene kan ha en negativ påvirkning på Jupyterlab sin ytelse.
+Hvis man har prøvd å slette en delt-bøtte ved fjerne bøtten fra [shared-buckets.yaml](./statistikkere/deling-av-data.qmd#opprettelse-av-bøtte), kjøre `atlantis apply` og deretter fått feilmeldingen `Error trying to delete bucket <bøttenavn> objects without 'force destroy' set to true`, så betyr det at det fortsatt ligger data i bøtta. Da kan du gjøre følgende for å få slettet bøtta: 
 
-#### Her er noen løsningsforslag:
+1. Legg til delt-bøtta i buckets-shared.yaml igjen og kjør `atlantis apply` etter å ha fått godkjenning.
 
-1. Reduser datamengden: Prøv å redusere datamengden du prøver å vise. Hvis du for eksempel viser en stor pandas dataframe, kan du vise kun toppradene med `df.head()` eller et tilfeldig utvalg med `df.sample(10)`.
-2. Legg til forsinkelse: Bruk `time.sleep()`-funksjonen i Python for å legge til en pause mellom hver utskrift. Dette kan spre utdataene over en lengre tidsperiode, noe som kan hjelpe med å unngå å overskride datagrensen.
-3. Skriv til en fil: I stedet for å skrive utdata direkte i Jupyter, kan du vurdere å skrive dataene til en fil. Dette omgår IOPub-datahastighetsgrensen, og du kan se gjennom dataene i ettertid.
-4. Unngå utskrift: Hvis du kun trenger å utføre beregninger eller operasjoner på dataene, vurder å gjøre det uten å skrive ut resultatene i Jupyter.
+2. Kjør følgende Python-script i en tjeneste på Dapla Lab som er startet med teamets **developers**-gruppe og `google-cloud-storage` er installert:
 
-### Hvordan kan jeg gjenopprette filer fra bøtter? 
+```{.python filename="Notebook"}
+import google.cloud.storage as storage
 
-Fremgangsmåten for gjenoppretting av filer er [beskrevet i Backup-kapitlet](./statistikkere/backup-data.qmd). 
+client = storage.Client()
 
+for blob in client.list_blobs("FULLT NAVN PÅ DELT-BØTTE", versions=True):
+    blob.delete()
+```
 
+3. Fjern delt-bøtta fra buckets-shared.yaml igjen og kjør `atlantis apply` etter godkjenning.
+
+Fungerer ikke det så kan man ta kontakt med Kundeservice og få hjelp.
+:::
+
+::: {.callout-tip collapse="true"}
 ### Hvordan sjekker jeg om Kildomaten er tilgjengelig for mitt team? 
 
 :::: {.columns}
@@ -88,103 +152,143 @@ projects:
 :::
 
 ::::
+:::
 
-### Hvordan kan jeg se innholdet i mitt team sine bøtter?
-
-For å se innholdet i ditt teams sine bøtter kan du enten gjøre dette [med kode fra Jupyter](./statistikkere/jobbe-med-data.qmd#filbehandling), eller via [Google Cloud Console (GCC)](https://console.cloud.google.com/). Les mer om hvordan man kan [benytte GCC i SSB](./gcc.html).
-
-Husk at det er kun [data-admins](./statistikkere/hva-er-dapla-team.html#data-admins) som skal kunne se innhold i kildeprosjektet til teamet. For å gjøre det må de aktivere en tilgang i [JIT-applikasjonen](/statistikkere/appendix/jit.qmd).
-
+::: {.callout-tip collapse="true"}
 ### Atlantis feiler når jeg skrur på en *feature*. Hva gjør jeg? 
 
-Når man skrur på en *[feature](./features.html)* på Dapla, så er det verktøyet **Atlantis** som ruller ut infrastrukturen på GCP. I mange tilfeller kan det hjelpe å skrive `atlantis plan` i kommentarfeltet til PR'en, slik at Atlantis får kjørt planen en gang til. Hvis den da ikke viser noen feil, så kan du skrive `atlantis apply` i kommentarfeltet og endringene vil bli effektuert. Får du fortsatt feilmeldinger etter å ha kjørt `atlantis plan` på nytt, så bør du kontakte Kundeservice for hjelp.
-
-### Jeg får meldingen **Account already exists** når jeg prøver å logge meg inn på Dapla. Hvordan løser jeg det?
-
-:::: {.columns}
-
-::: {.column width="47.5%"}
-Det hender at man får melding om at *Account already exists* når man logger seg inn på en Dapla-tjeneste. For å løse dette gjør man følgende:
-
-1. Velg *Add to existing account* som vist i @fig-add-existing-account.
-2. Velg *Google* slik som vist i @fig-authenticate.
-
-I @fig-authenticate skal du IKKE fylle inn *Username or email* og *Password*. Du skal kun trykke på *Google*-knappen. 
-
-Meldingen om at *Account already exists* forekommer svært sjelden, og typisk skjer det første gang man logger seg inn på en tjeneste. 
-
+Når man skrur på en *[feature](./features.html)* på Dapla, så er det verktøyet **Atlantis** som ruller ut infrastrukturen på GCP. 
+I mange tilfeller kan det hjelpe å skrive `atlantis plan` i kommentarfeltet til PR'en, slik at Atlantis får kjørt planen en gang til. 
+Hvis den da ikke viser noen feil, så kan du skrive `atlantis apply` i kommentarfeltet og endringene vil bli effektuert. 
+Får du fortsatt feilmeldinger etter å ha kjørt `atlantis plan` på nytt, så bør du kontakte Kundeservice for hjelp.
 :::
 
-::: {.column width="5%"}
-<!-- empty column to create gap -->
+::: {.callout-tip collapse="true"}
+### Hvordan kan jeg pause en regelmessig jobb i Transfer Service?
+
+Man kan pause en regelmessig jobb med Transfer Service fra [Google Cloud Console](https://console.cloud.google.com/) i nettleseren. 
+
+1. Åpne [Consolet](https://console.cloud.google.com/)
+2. Velge riktig Google prosjekt, slik som vist @fig-project
+
+![Prosjektvelger i Consolet](./images/gcc-project-selector.png){#fig-project}
+
+3. Søk opp **Transfer Jobs** i søkefeltet øverst på siden. 
+4. Velg hvilken Transfer Service jobb som skal endres. 
+5. Velg **Disable job** som vist i @fig-disable
+
+![Valg for Transfer Service jobber. ](./images/transfer-service-disable.png){#fig-disable}
+
+For å aktivere jobben kan man følge stegene over, men da velge **Enable job** i siste steg. 
 :::
 
-::: {.column width="47.5%"}
+## Dapla Lab
 
-![](./images/account-already-exist.png){#fig-add-existing-account}
-
-![](./images/account-authenticate-link.png){#fig-authenticate}
-
-:::
-
-::::
-
-### Hvorfor viser `git status` endringer når jeg ikke har endret filene? 
-
-Dette kan noen ganger forekomme med notebooks eller `ipynb`-filer fordi de inneholder metadata som kan bli endret over tid. Siden `ipynb`-filer er et `json`-basert format, som inkluderer metadata som oppdaterer seg i bakgrunnen, så kan en endring i strukturen til metadataene føre til endringer i den underliggende `json`-fila selv om man ikke har gjort endringer i `ipynb`-fila. Endringene blir deretter plukket opp av `git` som følger med på endringer i filene. 
-
-En mulig løsning er å sjekke inn endringene i kodebasen.
-
-I noen tilfeller viser `git status` at det har skjedd endringer i filer, men `git diff` viser ingen endring. I disse tilfellene kan det være ulike problemer i bakgrunnen. [Se denne oversikten](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3211952133/Git+status+viser+endrede+filer+men+git+diff+viser+ingen+endring) over problemer og tilhørende løsninger.
-
-### Hvordan setter jeg opp 2FA med Authenticator-appen mot GitHub etter at jeg har byttet telefon?
-
-Første gang man begynner å jobbe med kode i SSBs GitHub-organisasjon [statisticsnorway](https://github.com/statisticsnorway), så følger man [denne oppskriften fra Dapla-manualen](./statistikkere/git-og-github.qmd#to-faktor-autentisering). Men hvis man bytter telefon eller lignende, så må man sette opp dette på nytt. 
-
-Prosessen for å bytte 2FA-metode for autentisering er [beskrevet i GitHub sin dokumentasjon](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/changing-your-two-factor-authentication-method#changing-an-existing-two-factor-authentication-method). Gjør følgende:
-
-1. Logg deg inn med din bruker på <https://github.com/>.
-2. Klikk på din profil, øverst til høyre på siden, og velg **Settings**
-3. I menyen til venstre velger du **Password and authentication**
-4. Skroll ned til **Two-factor-authentication**
-5. Under **Two-factor-methods** vil du se **Authenticator app (Configured)** hvis du har brukt dette tidligere. 
-6. Trykk **Edit**
-7. Skann QR-koden som dukker opp med Authenticator-appen på din nye mobil.
-8. Følg instruksjonene og lagre autentiseringsmetoden når du er ferdig.
-
-### Hvorfor får jeg ikke opprettet mapper fra Google Cloud Console (GCC)? 
-
-[I mars 2024 ble det gjort sikkerhetstiltak på Dapla](https://engage.cloud.microsoft/main/org/ssb.no/threads/eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMjcxODgyNTU2MTQ5NzYwMCJ9?trk_copy_link=V2) som innebar at funksjonaliteten **Download**, **Upload** og **Create folder** i GCC ble skrudd av. Hvis man prøver å opprette en mappe på den måten vil man få en feilemelding som starter med  
-`Request is prohibited by organization's policy. vpcServiceControlsUniqueIdentifier:`  
-
-Hvis man skal opprette mapper i en bøtte så må man gjøre det med [dapla-toolbelt](./statistikkere/jobbe-med-data.qmd#opprette-mapper), eller gjøre det fra en tjeneste som [Jupyter](./statistikkere/jupyter.qmd) i [Dapla Lab](./statistikkere/dapla-lab.qmd). Sistnevnte metode betyr at man åpner tjenesten som det teamet og tilgangsgruppen som har tilgang til ønsket bøtte, og deretter kan man opprette mapper med `mkdir` i terminalen. 
-
+::: {.callout-tip collapse="true"}
 ### Hvor finner jeg dokumentasjonen til Dapla Lab tjenester der?
 
 Her finner du [Dokumentasjonen for Dapla Lab](./statistikkere/dapla-lab.qmd). 
 
 [Dokumentasjon for tjenestene](./statistikkere/jupyter.qmd) finner du i Dapla-manualen under Datatjenester/Dapla Lab tjenester.
+:::
 
+::: {.callout-tip collapse="true"}
 ### Hvorfor får jeg feilmelding i Dapla Lab etter å ha vært borte fra datamaskinen min en stund?
 
 I de fleste tilfeller vil dette løses seg ved at laster inn siden på nytt eller *refresher* siden.
 
 Grunnen til at det skjer er at Dapla Lab bare er tilgjengelig for de som er logget på SSBs nettverk. Hvis du forlater maskinen med Dapla Lab åpnet i nettleseren over lang tid, så kan det være at du har falt ut av SSBs nettverk og Dapla Lab ikke oppdager at du er logget inn igjen.
+:::
 
+::: {.callout-tip collapse="true"}
 ### Hva betyr det at tjenesten min er *suspendert*?
 
 ![](./images/dapla-lab-pause.png){style="max-width: 50%; float: right;" fig-alt="Tjenesteikon for Jupyter"}
 
 At en tjeneste er suspendert betyr at tjenesten er satt på pause. I praksis vil det si at ressursene, f.eks. CPU og RAM, som tjenesten har reservert har blitt frigjort. Man kan starte tjenesten på nytt ved å trykke på *Play*-knappen i bildet til høyre, og man starter opp tjenesten på nytt med de samme ressursene. Alt som ble lagret i tjenestens lokale filsystem under `/home/onyxia/work/`blir også gjennopprettet, mens resten blir borte. Derfor bør alltid kode lagres under `work`-mappen.   
+:::
 
+::: {.callout-tip collapse="true"}
+### Hvorfor fungerer det ikke med å melde seg ut av automatiske pausingen av tjenester på Dapla Lab? 
+
+Hvis man opplever at en tjeneste fortsatt pauses selv om man har endret visningsnavnet til tjenesten til å inkludere ` [nosuspend]`, så kan det skyldes at man faktisk ikke har lagret det nye navnet. For å lagre det nye navnet så må man trykke **Enter** etter at man skrevet inn ` [nosuspend]`. Gjør man ikke dette kan det tilsynelatende virke som om du har endret navnet selv om det ikke lagret. Du kan verifisere at navnet er riktig ved *refreshe* siden og se at navnet nå er riktig.
+:::
+
+::: {.callout-tip collapse="true"}
 ### Kan jeg jobbe med kildedata fra Dapla Lab? 
 
 Ja. Medlemmer av gruppen **data-admins** kan gi seg selv midlertidig tilgang til kildedata. Dette gjøres ved å bruke Just-in-Time Access (JIT) applikasjonen: [https://jitaccess.dapla.ssb.no](https://jitaccess.dapla.ssb.no). Les [manual-artikkelen om JIT](./statistikkere/appendix/jit.qmd) for en veiledning.
+:::
 
+::: {.callout-tip collapse="true"}
 ### Hvorfor kan jeg ikke jobbe med dataene til alle team jeg er med i fra tjenestene i Dapla Lab?
 
 Mange ansatte i SSB er med i flere Dapla-team, og hvert av brukernes teammedlemskap gir ofte tilgang til data iht til formaålet for teamet. hver av teamene har tilgang til sine data og potensielt andres delt data. For å unngå for brede tilganger til data så innfører vi at en bruker må bestemme seg for hvilket team og tilgangsgruppe de skal representere før de starter arbeid med data i et programmeringsmiljø. Dette gjør at vi kan være sikker på at ingen kan koble data på tvers av team. 
+:::
 
+::: {.callout-tip collapse="true"}
+### Hvordan søker jeg om åpning for utgående trafikk i Dapla Lab (åpning av APIer for å hente data)?
+
+Hvis du trenger å hente data fra eksterne kilder til bruk i statistikkproduksjonen (f.eks. APIer), må du søke om tilgang til dette hos Team M2M. Dette gjøres ved å melde sak til Kundeservice. Se veiledning nedenfor.
+
+Fra Byrånettet velg **Arbeidsverktøy** og **Meld sak til kundeservice**. Logg deg inn ved å velge **Logg inn med federert autentisering**. Inne løsningen velger du deretter **Dapla helpdesk**. @fig-dapla-helpdesk viser menyen som vises. 
+
+![Visning av en Kundeservice-sak](./images/dapla-helpdesk.png){fig-alt="Visning av Dapla Helpdesk" #fig-dapla-helpdesk}
+
+Fra menyen velger du **Søknad for utgående trafikk i DaplaLab**, fyller ut skjemaet som vises og trykker på «Send».
+
+Team M2M vil så godkjenne eller avslå søknaden. Hvis søknaden godkjennes sendes saken videre til Kundeservice for effektuering. Hvis avslag så får du en begrunnelse for dette fra Team M2M.
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvilke miljøvariabler er tilgjengelig i utviklingstjenestene?
+
+Dette er miljøvariablene som alltid vil være tilgjengelig i Jupyterlab, Rstudio og VSCode:
+
+| Miljøvariabel                   | Forklaring                                                            |
+|---------------------------------|-----------------------------------------------------------------------|
+| DAPLA_ENVIRONMENT               | Hvilket dapla-lab miljø du kjører i f.eks PROD, TEST eller DEV        |
+| DAPLA_REGION                    | Hvilket dapla miljø du kjører i f.eks. DAPLA_LAB eller BIP            |
+| DAPLA_USER                      | Epostaddressen til den innloggede brukeren f.eks. obr@ssb.no          |
+| DAPLA_SERVICE                   | Dapla tjenesten som er i bruk f.eks. JUPYTERLAB eller VS_CODE         |
+| STAT_TEMPLATE_DEFAULT_REFERENCE | Hvilken versjon av ssb-project templatet som skal brukes f.eks. 1.1.8 |
+| PSEUDO_SERVICE_URL              | URL til pseudotjenesten for bruk til testing                          |
+| STATBANK_BASE_URL               | URL til statistikkbanken                                              |
+| STATBANK_ENCRYPT_URL            | URL til 'statbank-authenticator' sitt krypteringsendepunkt            |
+| STATBANK_TEST_BASE_URL          | URL til statistikkbanken (i test)                                     |
+| STATBANK_TEST_ENCRYPT_URL       | URL til 'statbank-authenticator (i test)' sitt krypteringsendepunkt   |
+
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvordan løser jeg feilmeldinger knyttet til at **data rate exceeded** i Jupyter? 
+
+Når du mottar følgende melding i Jupyter:
+
+> **Feilmelding:**
+> ```
+> IOPub data rate exceeded.
+> The Jupyter server will temporarily stop sending output
+> to the client in order to avoid crashing it.
+> To change this limit, set the config variable
+> `--ServerApp.iopub_data_rate_limit`.
+> 
+> Current values:
+> ServerApp.iopub_data_rate_limit=1000000.0 (bytes/sec)
+> ServerApp.rate_limit_window=3.0 (secs)
+> ```
+
+betyr det at mengden data som sendes fra jupyter-kernelen til jupyterlab-frontend overskrider den tillatte grensen. Selv om det er mulig å justere `ServerApp.iopub_data_rate_limit` og `ServerApp.rate_limit_window` for å endre denne grensen, ønsker vi ikke dette. Å endre disse verdiene kan ha en negativ påvirkning på Jupyterlab sin ytelse.
+
+#### Her er noen løsningsforslag:
+
+1. Reduser datamengden: Prøv å redusere datamengden du prøver å vise. Hvis du for eksempel viser en stor pandas dataframe, kan du vise kun toppradene med `df.head()` eller et tilfeldig utvalg med `df.sample(10)`.
+2. Legg til forsinkelse: Bruk `time.sleep()`-funksjonen i Python for å legge til en pause mellom hver utskrift. Dette kan spre utdataene over en lengre tidsperiode, noe som kan hjelpe med å unngå å overskride datagrensen.
+3. Skriv til en fil: I stedet for å skrive utdata direkte i Jupyter, kan du vurdere å skrive dataene til en fil. Dette omgår IOPub-datahastighetsgrensen, og du kan se gjennom dataene i ettertid.
+4. Unngå utskrift: Hvis du kun trenger å utføre beregninger eller operasjoner på dataene, vurder å gjøre det uten å skrive ut resultatene i Jupyter.
+:::
+
+::: {.callout-tip collapse="true"}
 ### Hvordan jobber jeg med notebooks i VS Code? 
 
 For å jobbe med notebooks i VS Code kan du gjøre følgende: 
@@ -202,7 +306,9 @@ For å jobbe med notebooks i VS Code kan du gjøre følgende:
 9. Til slutt kan du teste at riktig Python-installasjon er valgt ved å importere pakken du akkurat installerte. 
 
 Du må kjøre en `ssb-project build`, som beskrevet over, hver gang en instans av Jupyter, eller VSCode blir startet. Hvis du isteden åpner en pauset (suspendert) instans, vil du kunne fortsette arbeidet fra forrige kjøring uten å måtte kjøre `ssb-project build`.
+:::
 
+::: {.callout-tip collapse="true"}
 ### Hvordan kjører man en Dash-app?
 
 #### Fra vscode-python tjenesten
@@ -324,95 +430,75 @@ if __name__ == '__main__':
     # 'jupyterlab' should also be poosible, but doesn't seem to work...
     app.run(jupyter_mode="external", jupyter_server_url=domain, port=port)
 ```
+:::
 
-
-### Hvilke miljøvariabler er tilgjengelig i utviklingstjenestene?
-
-Dette er miljøvariablene som alltid vil være tilgjengelig i Jupyterlab, Rstudio og VSCode:
-
-| Miljøvariabel                   | Forklaring                                                            |
-|---------------------------------|-----------------------------------------------------------------------|
-| DAPLA_ENVIRONMENT               | Hvilket dapla-lab miljø du kjører i f.eks PROD, TEST eller DEV        |
-| DAPLA_REGION                    | Hvilket dapla miljø du kjører i f.eks. DAPLA_LAB eller BIP            |
-| DAPLA_USER                      | Epostaddressen til den innloggede brukeren f.eks. obr@ssb.no          |
-| DAPLA_SERVICE                   | Dapla tjenesten som er i bruk f.eks. JUPYTERLAB eller VS_CODE         |
-| STAT_TEMPLATE_DEFAULT_REFERENCE | Hvilken versjon av ssb-project templatet som skal brukes f.eks. 1.1.8 |
-| PSEUDO_SERVICE_URL              | URL til pseudotjenesten for bruk til testing                          |
-| STATBANK_BASE_URL               | URL til statistikkbanken                                              |
-| STATBANK_ENCRYPT_URL            | URL til 'statbank-authenticator' sitt krypteringsendepunkt            |
-| STATBANK_TEST_BASE_URL          | URL til statistikkbanken (i test)                                     |
-| STATBANK_TEST_ENCRYPT_URL       | URL til 'statbank-authenticator (i test)' sitt krypteringsendepunkt   |
-
-### Hvorfor får jeg feilmelding når jeg prøver å slette en delt-bøtte? Jeg får melding om at **Error trying to delete bucket <bøttenavn> objects without 'force destroy' set to true**  når jeg prøver å slette en delt-bøtte ved å fjerne den fra *shared-buckets.yaml*
-
-En delt-bøtte kan kun slettes hvis den er helt tom for data. Det betyr at:
-
-- Alle filer og mapper må være slettet. 
-- Siden filer versjoneres i delt-bøtter må også alle gamle versjoner av filer også være slettet (såkalt *non-current* objekter).
-
-Hvis man har prøvd å slette en delt-bøtte ved fjerne bøtten fra [shared-buckets.yaml](./statistikkere/deling-av-data.qmd#opprettelse-av-bøtte), kjøre `atlantis apply` og deretter fått feilmeldingen `Error trying to delete bucket <bøttenavn> objects without 'force destroy' set to true`, så betyr det at det fortsatt ligger data i bøtta. Da kan du gjøre følgende for å få slettet bøtta: 
-
-1. Legg til delt-bøtta i buckets-shared.yaml igjen og kjør `atlantis apply` etter å ha fått godkjenning.
-
-2. Kjør følgende Python-script i en tjeneste på Dapla Lab som er startet med teamets **developers**-gruppe og `google-cloud-storage` er installert:
-
-```{.python filename="Notebook"}
-import google.cloud.storage as storage
-
-client = storage.Client()
-
-for blob in client.list_blobs("FULLT NAVN PÅ DELT-BØTTE", versions=True):
-    blob.delete()
-```
-
-3. Fjern delt-bøtta fra buckets-shared.yaml igjen og kjør `atlantis apply` etter godkjenning.
-
-Fungerer ikke det så kan man ta kontakt med Kundeservice og få hjelp.
-
-### Hvordan kan jeg pause en regelmessig jobb i Transfer Service?
-
-Man kan pause en regelmessig jobb med Transfer Service fra [Google Cloud Console](https://console.cloud.google.com/) i nettleseren. 
-
-1. Åpne [Consolet](https://console.cloud.google.com/)
-2. Velge riktig Google prosjekt, slik som vist @fig-project
-
-![Prosjektvelger i Consolet](./images/gcc-project-selector.png){#fig-project}
-
-3. Søk opp **Transfer Jobs** i søkefeltet øverst på siden. 
-4. Velg hvilken Transfer Service jobb som skal endres. 
-5. Velg **Disable job** som vist i @fig-disable
-
-![Valg for Transfer Service jobber. ](./images/transfer-service-disable.png){#fig-disable}
-
-For å aktivere jobben kan man følge stegene over, men da velge **Enable job** i siste steg. 
-
-### Hvordan søker jeg om åpning for utgående trafikk i Dapla Lab (åpning av APIer for å hente data)?
-
-Hvis du trenger å hente data fra eksterne kilder til bruk i statistikkproduksjonen (f.eks. APIer), må du søke om tilgang til dette hos Team M2M. Dette gjøres ved å melde sak til Kundeservice. Se veiledning nedenfor.
-
-Fra Byrånettet velg **Arbeidsverktøy** og **Meld sak til kundeservice**. Logg deg inn ved å velge **Logg inn med federert autentisering**. Inne løsningen velger du deretter **Dapla helpdesk**. @fig-dapla-helpdesk viser menyen som vises. 
-
-![Visning av en Kundeservice-sak](./images/dapla-helpdesk.png){fig-alt="Visning av Dapla Helpdesk" #fig-dapla-helpdesk}
-
-Fra menyen velger du **Søknad for utgående trafikk i DaplaLab**, fyller ut skjemaet som vises og trykker på «Send».
-
-Team M2M vil så godkjenne eller avslå søknaden. Hvis søknaden godkjennes sendes saken videre til Kundeservice for effektuering. Hvis avslag så får du en begrunnelse for dette fra Team M2M.
-
-### Hvorfor fungerer det ikke med å melde seg ut av automatiske pausingen av tjenester på Dapla Lab? 
-
-Hvis man opplever at en tjeneste fortsatt pauses selv om man har endret visningsnavnet til tjenesten til å inkludere ` [nosuspend]`, så kan det skyldes at man faktisk ikke har lagret det nye navnet. For å lagre det nye navnet så må man trykke **Enter** etter at man skrevet inn ` [nosuspend]`. Gjør man ikke dette kan det tilsynelatende virke som om du har endret navnet selv om det ikke lagret. Du kan verifisere at navnet er riktig ved *refreshe* siden og se at navnet nå er riktig.
-
-### Hva gjør jeg når jeg får en feilmelding ved utrulling av en ny Delomaten-jobb?
-
-Hvis man får feilmeldinger ved utrulling av Delomat-jobber, så bør man først undersøke hva feilmeldingen sier. Den gir ofte nyttige tilbakemelding om det er gjort noen formelle feil. Hvis dette ikke fører frem, så kan man ta kontakt med Kundeservice for hjelp.   
-
-Konfigurasjonsfilen valideres automatisk når du oppretter en pull request i GitHub.
-Hvis noe er feil får du en feilmelding:
-![Delomaten test feil](./images/delomaten_error.png)
-
-Eksempel på feilmelding i workflow
-![Delomaten feilmelding](./images/delomaten_error_msg.png)
-
+::: {.callout-tip collapse="true"}
 ### Hvorfor har blitt mine lagrede tjenestekonfigurasjoner blitt borte? 
 
 Lagrede tjenestekonfigurasjoner er kun lagret lokalt i brukerens nettleser. Hvis du akkurat har slettet nettleserens nettlesingsdata (historikk, logg, etc.) vil også lagrede tjenestekonfigurasjoner slettes. Det samme er tilfellet hvis man tar i bruk en ny nettleser. 
+:::
+
+## Git og GitHub
+
+::: {.callout-tip collapse="true"}
+### Hvordan får jeg slettet et GitHub-repo under statisticsnorway? 
+
+Hovedregelen er at vi arkiverer repoer istedenfor å slette. Det skyldes at vi kan trenge å ettergå historikken i repoer ved et senere tidspunkt. Arkivering av repoer kan du gjøre selv under **Settings** i repoet. 
+
+I de tilfellene der du mener at det gir mest mening å slette repoet, så må dette gjøres av en Github-administrator. Da [sender du en henvendelse til Kundeservice](https://ssb.pureservice.com/) og ber om at repoet slettes. Husk å oppgi navnet på repoet du ønsker å få slettet.
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvorfor viser `git status` endringer når jeg ikke har endret filene? 
+
+Dette kan noen ganger forekomme med notebooks eller `ipynb`-filer fordi de inneholder metadata som kan bli endret over tid. Siden `ipynb`-filer er et `json`-basert format, som inkluderer metadata som oppdaterer seg i bakgrunnen, så kan en endring i strukturen til metadataene føre til endringer i den underliggende `json`-fila selv om man ikke har gjort endringer i `ipynb`-fila. Endringene blir deretter plukket opp av `git` som følger med på endringer i filene. 
+
+En mulig løsning er å sjekke inn endringene i kodebasen.
+
+I noen tilfeller viser `git status` at det har skjedd endringer i filer, men `git diff` viser ingen endring. I disse tilfellene kan det være ulike problemer i bakgrunnen. [Se denne oversikten](https://statistics-norway.atlassian.net/wiki/spaces/A700/pages/3211952133/Git+status+viser+endrede+filer+men+git+diff+viser+ingen+endring) over problemer og tilhørende løsninger.
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvordan setter jeg opp 2FA med Authenticator-appen mot GitHub etter at jeg har byttet telefon?
+
+Første gang man begynner å jobbe med kode i SSBs GitHub-organisasjon [statisticsnorway](https://github.com/statisticsnorway), så følger man [denne oppskriften fra Dapla-manualen](./statistikkere/git-og-github.qmd#to-faktor-autentisering). Men hvis man bytter telefon eller lignende, så må man sette opp dette på nytt. 
+
+Prosessen for å bytte 2FA-metode for autentisering er [beskrevet i GitHub sin dokumentasjon](https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/changing-your-two-factor-authentication-method#changing-an-existing-two-factor-authentication-method). Gjør følgende:
+
+1. Logg deg inn med din bruker på <https://github.com/>.
+2. Klikk på din profil, øverst til høyre på siden, og velg **Settings**
+3. I menyen til venstre velger du **Password and authentication**
+4. Skroll ned til **Two-factor-authentication**
+5. Under **Two-factor-methods** vil du se **Authenticator app (Configured)** hvis du har brukt dette tidligere. 
+6. Trykk **Edit**
+7. Skann QR-koden som dukker opp med Authenticator-appen på din nye mobil.
+8. Følg instruksjonene og lagre autentiseringsmetoden når du er ferdig.
+:::
+
+::: {.callout-tip collapse="true"}
+### Hvordan kan jeg gi flere brukere tilgang til et GitHub-repository?
+
+Når du oppretter et GitHub-repository, blir din bruker automatisk satt som **admin** på repositoryet. For at flere personer skal få tilgang, må du selv legge dem til i GitHub.
+
+#### Legge til et helt team (anbefalt)
+
+Hvis du jobber i et team, anbefales det å gi tilgang via et **GitHub-team**. Da slipper du å administrere enkeltbrukere én og én.
+
+1. Gå til repositoryet på GitHub
+2. Velg **Settings**
+3. Gå til **Collaborators and teams**
+4. Under **Teams**, søk opp og legg til ønsket team
+5. Velg riktig tilgangsnivå (for eksempel `Read`, `Write` eller `Admin`)
+
+Alle medlemmene i teamet vil da få tilgang til repositoryet.
+
+#### Legge til enkeltbrukere
+
+Hvis du kun skal gi tilgang til én personer:
+
+1. Gå til repositoryet på GitHub
+2. Velg **Settings**
+3. Gå til **Collaborators and teams**
+4. Under **Collaborators**, legg til GitHub-brukernavnet til personen
+5. Velg ønsket tilgangsnivå
+:::

@@ -1,12 +1,12 @@
 ---
 title: dapla-toolbelt-pseudo
-date-modified: 01/28/2025
+date-modified: 06/01/2026
 lightbox: true
 ---
 
 ![](../images/mask.png){style="max-width: 60%; float: right;" fig-alt="Dapla logo"}
 
-[dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/) er en python-pakke som har som sitt hovedformål å gi Dapla-brukere muligheten til å pseudonymisere, de-pseudonymisere og re-pseudonymisere data. Det skal sikre at brukerne av Dapla har verktøyene de trenger for å jobbe med *direkte identifiserende opplysninger* i henhold til lovverk og SSBs tolkninger av disse. 
+[dapla-toolbelt-pseudo](https://pypi.org/project/dapla-toolbelt-pseudo/) er en python-pakke som har som sitt hovedformål å gi Dapla-team muligheten til å pseudonymisere, de-pseudonymisere og re-pseudonymisere data. Det skal sikre at brukerne av Dapla har verktøyene de trenger for å jobbe med *direkte identifiserende opplysninger* i henhold til lovverk og SSBs tolkninger av disse. 
 
 Siden tilgang til direkte identifiserende opplysninger er underlagt strenge regler, så krever bruken av *dapla-pseudo-toolbelt* at man forholder seg til vedtatte standarder som [datatilstander](./datatilstander.html) og systemer som [Kildomaten](./kildomaten.html). I tillegg er det en streng tilgangsstyring til hvor man kan kalle funksjonaliteten fra. Tjenestene er satt opp på en slik måte at Dapla-team skal være selvbetjent i bruken av funksjonaliteten, samtidig som regler, prosesser og standarder etterleves på enklest mulig måte.
 
@@ -70,6 +70,10 @@ poetry add dapla-toolbelt-pseudo
 
 ### Dataformater
 
+*dapla-toolbelt-pseudo*
+
+#### Innlesing
+
 *dapla-toolbelt-pseudo* støtter innlesing av følgende dataformater: 
 
 - CSV
@@ -77,24 +81,38 @@ poetry add dapla-toolbelt-pseudo
 - [Pandas dataframes](https://pandas.pydata.org/docs/index.html)
 - [Polars dataframes](https://docs.pola.rs/py-polars/html/reference/index.html)
 
-Eksemplene under viser hovedskelig innlesing av dataframes fra minnet^[Pandas og Polars dataframes er eksempler på dataformater som lever i minnet, og må konverteres før de skrives til et lagringsommråde. I praksis vil det ofte si at man jobber med dataframes når man jobber i verktøy som Jupyterlab, mens man skriver til lagringsområde når man er ferdig i Jupyterlab.], men du kan [lese mer om filbasert prosessering lenger ned i kapitlet](./dapla-pseudo.html#filbasert-prosessering).   
+Eksemplene under viser hovedskelig innlesing av dataframes fra minnet^[Pandas og Polars dataframes er eksempler på dataformater som lever i minnet, og må konverteres før de skrives til et lagringsommråde. I praksis vil det ofte si at man jobber med dataframes når man jobber i verktøy som Jupyterlab, mens man skriver til lagringsområde når man er ferdig i Jupyterlab.], men du kan [lese mer om filbasert prosessering lenger ned i kapitlet](./dapla-pseudo.html#filbasert-prosessering).
+
+#### Skriving
+
+*dapla-toolbelt-pseudo* støtter skriving av data til minnet eller til bøtte. Det er anbefalt å bruke `to_file()` siden denne skriver både data og metadata til bøtte. 
+
+*dapla-toolbelt-pseudo* støtter skriving til følgende dataformater:
+
+- Parquet (data)
+- json (metadata)
+- [Pandas dataframes](https://pandas.pydata.org/docs/index.html)
+- [Polars dataframes](https://docs.pola.rs/py-polars/html/reference/index.html)
+
+I eksemplene under vises hovedsakelig `to_file()`-metoden i eksemplene. 
 
 ### Pseudonymisering
 
 Pseudonymisering tilbys via `Pseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal pseudonymiseres. Da vil koden se slik ut:
 
-```{.python filename="Notebook"}
+```{.python filename="Kildomaten"}
 from dapla_pseudo import Pseudonymize
 
-result_df = (
+(
     Pseudonymize.from_polars(df) 
     .on_fields("fnr")
     .with_default_encryption()                     
     .run()                                
-    .to_polars()                                   
+    .to_file("gs://bucket/produkt/filer.parquet")                                   
+)                              
 )
 ```
-I koden over så angir `from_polars(df)` at kolonnen vi ønsker å pseudonymisere ligger i en [Polars](https://docs.pola.rs/) dataframe i minnet og heter `df`. Deretter spesifiserer vi at kolonnen `fnr` er den som skal behandles med funksjonen `on_fields("fnr")`. Videre angir `with_default_encryption()` at `fnr` skal pseudonymiseres med dapla-toolbelt-speudo sin standard-algoritme^[Standardalgoritmen i *dapla-toolbelt-pseudo* er den deterministiske krypteringsalgoritmen *Deterministic Authenticated Encryption with Associated Data*, eller DAEAD-algoritmen.]. Til slutt ber vi om at det ovennevnte blir kjørt med funksjonen `run()`, og at dataene skal returneres som en Polars dataframe med funksjonen `to_polars()`. 
+I koden over så angir `from_polars(df)` at kolonnen vi ønsker å pseudonymisere ligger i en [Polars](https://docs.pola.rs/) dataframe i minnet og heter `df`. Deretter spesifiserer vi at kolonnen `fnr` er den som skal behandles med funksjonen `on_fields("fnr")`. Videre angir `with_default_encryption()` at `fnr` skal pseudonymiseres med dapla-toolbelt-speudo sin standard-algoritme^[Standardalgoritmen i *dapla-toolbelt-pseudo* er den deterministiske krypteringsalgoritmen *Deterministic Authenticated Encryption with Associated Data*, eller DAEAD-algoritmen.]. Til slutt ber vi om at det ovennevnte blir kjørt med funksjonen `run()`, og at dataene og metadataene skal skrives til en bøtte med funksjonen `to_file()`. 
 
 Se flere [eksempler i dokumentasjonen](https://statisticsnorway.github.io/dapla-toolbelt-pseudo/index.html#pseudonymize).
 
@@ -102,29 +120,27 @@ Se flere [eksempler i dokumentasjonen](https://statisticsnorway.github.io/dapla-
 
 De-pseudonymisering tilbys via `Depseudonymize`-metoden i **dapla-toolbelt-pseudo**. Den følger et *builder-pattern* der man spesifiserer hva og i hvilken rekkefølge operasjonene skal gjøres. Anta at det finnes i en Polars dataframe i minnet som heter `df` hvor kolonnen `fnr` skal de-pseudonymiseres. Da vil koden se slik ut:
 
-```{.python filename="Notebook"}
-result_df = (
+```{.python filename="Kildomaten"}
+(
     Depseudonymize.from_polars(df)            
     .on_fields("fnr")                          
     .with_default_encryption()                     
     .run()                                         
-    .to_polars()                                   
+    .to_file("gs://bucket/utdata/de_pseudo_filer.parquet")                                   
 )
 ```
 Oppbygningen av koden med `Depseudonymize()` er helt lik som for `Pseudonomize()`. Les beskrivelsen der for å se hva de ulike funksjonskallene gjør. Se flere [eksempler i dokumentasjonen](https://github.com/statisticsnorway/dapla-toolbelt-pseudo#depseudonymize).
 
 De-pseudonymisering er også støttet for informasjon som først er transformert til stabil ID og deretter pseudonymisert med Papis-nøkkelen. I disse tilfellene kan det også være behov for å spesifisere hvilken versjon av snr-katalogen man ønsker å benytte for å erstatte snr med fødselsnummer:
 
-```{.python filename="Notebook"}
-from dapla_pseudo import Depseudonymize
-
-result_df = (
+```{.python filename="Kildomaten"}
+(
     Depseudonymize.from_pandas(df)            
     .on_fields("fnr")                          
     .with_stable_id(
       sid_snapshot_date="2023-05-29")                    
     .run()                                         
-    .to_pandas()                                   
+    .to_file("gs://bucket/utdata/de_pseudo_filer.parquet")                                 
 )
 ```
 
@@ -156,25 +172,25 @@ Dapla tilbyr samme pseudonym som Papis-prosjektet^[Papis var et prosjekt med fok
 
 Punkt 1 er nyttig for de som har pseudonymisert informasjon på bakken tidligere og vil ha samme pseudonym på Dapla^[Generelt sett er det ikke å anbefale å benytte denne nøkkelen på annen informasjon enn fødselsnummer. Grunnen er at den er svakere enn andre algoritmer, der blant annet tekst som er kortere enn 4 karakter lang ikke blir pseudonymisert.]. Dette kan gjelde hvilken som helst informasjon, også direkte pseudonymisering av fødselsnummer, uten at det er gått via snr-nummer. Her er et eksempel på hvordan man pseudonymiserer på denne måten:
 
-```{.python filename="Notebook"}
-result = (
+```{.python filename="Kildomaten"}
+(
     Pseudonymize.from_pandas(df)
     .on_fields("fornavn")                      
     .with_papis_compatible_encryption()         
     .run()                               
-    .to_pandas()                                  
+    .to_file("gs://bucket/produkt/papis_fornavn.parquet")                                  
 )
 ```
 
 Punkt 2 over er nok den som benyttes mest i SSB siden den sikrer at pseudonymisert fødselsnummer kan kobles med data som er pseudonymisert på bakken. Her er et eksempel på hvordan man pseudonymiserer snr med Papis-nøkkelen:
 
-```{.python filename="Notebook"}
-result = (
+```{.python filename="Kildomaten"}
+(
     Pseudonymize.from_pandas(df)
     .on_fields("fnr")                      
     .with_stable_id()         
     .run()                               
-    .to_pandas()                                  
+    .to_file("gs://bucket/produkt/papis_fnr.parquet")                                  
 )
 ```
 ::: {.callout-note}
@@ -347,6 +363,257 @@ Den andre typen av metadata kan hentes ut etter et kall til `Pseudonymize ` med 
 
 I Kildomaten kan det vært nyttig å printe denne informasjonen til loggene. Av eksempelet over ser vi at verdier som er over 6 karakterer lange blir maskert. 
 
+### Prosessering av store datasett
+
+Når man pseudonymiserer med Pandas eller Polars DataFrames må hele datasettet leses inn i minnet for at det skal kunne pseudonymiseres. Det kan være problematisk hvis datasettet er stort, fortrinnsvis i Kildomaten. For å løse dette problemet tilbyr dapla-toolbelt-pseudo muligheten til å strømme alle kolonner i datasettet som ikke skal pseudonymiseres - upseudonymiserte kolonner blir da delt opp i mindre biter ("chunks") når den nye filen skrives til bøttene. Man trenger da kun å holde de pseudonymiserte kolonnene i minnet, noe som kan betydelig redusere minnebruken.
+
+Eksempel for Kildomaten:
+```{.python filename="Strømming i Kildomaten"}
+import polars as pl
+from dapla_pseudo import Pseudonymize
+
+def main(source_file):
+    # Les inn data som en "lazy" DataFrame
+    lazy_df = pl.scan_csv(source_file)
+
+    result = Pseudonymize.from_polars(lazy_df).on_fields("fnr").with_stable_id().run()
+
+    output_file = source_file.replace("kilde", "produkt")
+    result.to_file(output_file)
+```
+
+Funksjonaliteten lener seg på Polars' LazyFrames. I stedet for `pl.read_csv()` som leser hele datasettet inn i minnet, bruker man `pl.scan_csv()` - denne funksjonen leser inn dataene som en "lazy" DataFrame, kalt en LazyFrame.
+
+**Når man skriver eller henter ut resultatet av pseudonymiseringen, må man bruke `to_file()`-funksjonen for å strømme
+dataen til fil som i eksempelet over, eller `result.to_polars_lazy()` for å få resultatet som en LazyFrame**. Merk at hvis man har flere mellomsteg i koden mellom innlesning og pseudonymisering, kan man måtte tilpasse koden for LazyFrames. Man kan lese mer i Polars-dokumentasjonen [her](https://docs.pola.rs/user-guide/lazy/using/).
+
+::: {.callout-important}
+Strømming av data støttes ikke med hierarkiske filer.
+:::
+
+### Pseudonymisering av hierarkisk data
+
+Hierarkisk data er data som har en trestruktur, og som ofte lagres i formater som JSON eller XML. Hierarkisk data ser slik ut:
+
+```{.json filename="hierarchical_data.json"}
+[
+    { // Person 1
+    "person_info": {
+        "fnr": "11854898347",
+        "fornavn": "Donald",
+        "etternavn": "Duck"
+    },
+    "kjonn": "M",
+    "fodselsdato": "020995"
+    },
+
+    { // Person 2
+    "person_info": {
+        "fnr": "01839899544",
+        "fornavn": "Mikke",
+        "etternavn": "Mus"
+    },
+    "kjonn": "M",
+    "fodselsdato": "060970"
+    },
+]
+```
+
+I dette eksempelet er det det nøstede feltet "person_info" som gjør strukturen hierarkisk. Dette står i kontrast til "flate" data, hvor man gjerne kun har en tabellstruktur som i en CSV-fil.
+
+Pseudonymisering av hierarkisk data er noe mer komplisert enn pseudonymisering av flate data, da man må beskrive hvor i den hierarkiske strukturen man skal pseudonymisere. Dette gjøres ved å lage såkalte **PseudoRules**.
+
+En **PseudoRule** har hovedsakelig tre komponenter:
+
+1. **Function**: Beskriver enkrypteringsalgoritmen som skal brukes for feltene i `path`. 
+Eksempel: `map-sid-ff31(sid-snapshot-date=2019-12-31)` 
+2. **Path**: En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`. Skråstreken bestemmer hvilket nivå i hierarkiet man peker på.
+3. **Pattern**: Glob-uttrykk som beskriver hvor i den hierarkiske strukturen man skal pseudonymisere. Eksempel: `**/fnr`
+
+Hvordan man genererer de tre feltene vil bli beskrevet senere.
+
+#### Pseudonymisering av hierarkisk data
+
+Typisk vil man ha flere PseudoRules for å kunne pseudonymisere flere felt i den hierarkiske strukturen. Da er det vanlig å samle alle PseudoRules in en felles .json-fil, som kan se noe slik ut for eksempelet over:
+
+```{.json filename="pseudo_rules.json"}
+[
+    {
+        "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
+        "path": "person_info/fnr",
+        "pattern": "**/fnr"
+    },
+    {
+        "func": "daead()",
+        "path": "person_info/fornavn",
+        "pattern": "**/fornavn"
+    },
+    {
+        "func": "daead()",
+        "path": "person_info/etternavn",
+        "pattern": "**/etternavn"
+    }
+]
+```
+
+Ved å lese denne JSON-filen sammen med dataene, forstår dapla-toolbelt-pseudo nøyaktig hvilke felter som skal pseudonymiseres, hvor de befinner seg i den hierarkiske strukturen, og hvilken algoritme som skal benyttes for å pseudonymisere hvert felt. Man kan da bruke dapla-toolbelt-pseudo slik for å pseudonymisere:
+
+```{.python filename="process_source_data.py"}
+import json
+import pandas as pd
+from dapla_pseudo import Pseudonymize, PseudoRule
+
+RULES_FILENAME = "gs://<kildebøtte-navn>/pseudo_rules.json"
+
+def main(source_file: str):
+    with open(RULES_FILENAME, 'r') as rules_file:
+        pseudo_rule_list = json.load(file)
+    
+    # Konverter fra Python dictionaries til PseudoRule-objekter
+    pseudo_rules = [PseudoRule.from_json(rule) for rule in pseudo_rule_list]
+
+    df = pd.read_json(source_file) # Eksempel på innlesning av data, tilpass etter behov
+
+    result = (
+        Pseudonymize
+        .from_pandas(df) 
+        .add_rules(pseudo_rules)
+        .run(hierarchical=True) # Viktig å spesifisere at dataene er hierarkiske!
+    )
+
+    output_file = source_file.replace("kilde", "produkt").replace(".json", ".parquet")
+
+    result.to_file(output_file) # Eksempel på skriving av data, tilpass etter behov
+```
+
+#### PseudoRules - anatomi og oppsett
+
+Som sagt er en PseudoRule en sammensetning av tre komponenter: `func`, `path` og `pattern`. Vi kommer til å se på hvordan man forholder seg til disse feltene når man setter opp `PseudoRules` for datagrunnlaget sitt
+
+#### `func`
+
+`func` beskriver hvilken algoritme som skal benyttes for å pseudonymisere det aktuelle feltet. I JSON-strukturen over supplerer man en enkel streng som korresponderer til algoritmen. Dette er veldig likt måten man bruker `dapla-toolbelt-pseudo` ellers - det er bare en annen syntaks. Bruk tabellen under:
+
+| Algoritme | dapla-toolbelt-pseudo (flat)          | dapla-toolbelt-pseudo (hierarkisk)       | SID-mapping |
+| --------- | --------------------------------------| ------------------                       | ----------- |
+| TINK-DAED | `with_default_encryption()`           | `daead()`                                | Nei         |
+| TINK-FPE  | `with_stable_id()`                    | `map-sid-ff31()`                         | Ja          |
+| TINK-FPE  | `with_papis_compatible_encryption()`  | `ff31()`                                 | Nei         |
+| Redact[^1]| Ikke tilgjengelig                     | `redact()`                               | Nei         |
+
+I tillegg til funksjonene i tabellen over, kan man også sende inn argumenter til funksjonene i strengen. Disse argumentene må være på formatet `func(arg=value)`. For eksempel, for å spesifisere hvilken versjon av SNR-katalogen, bruker man `map-sid-ff31(sid-snapshot-date=2019-12-31)`. Merk at argumentene bruker bindestrek `-`, i motsetning til funksjonene i flat format som bruker understrek `_`.
+
+#### `path`
+
+En beskrivelse av nøyaktig hvor i den hierarkiske strukturen det skal pseudonymiseres. I eksempelet over vil pathen til `fnr` være `person_info/fnr`, og pathen til `kjonn` vil enkelt nok være `kjonn`.
+
+#### `pattern`
+
+Pattern er et [glob-uttrykk](https://code2prompt.dev/docs/explanations/glob_patterns/) som kan brukes til å generere paths for flere felt i den hierarkiske strukturen - *fremgangsmåten for dette blir beskrevet under*. Glob-uttryk er et mønster som forsøker å finne "matchende" strenger, det vil si strenger som følger mønsteret i glob-uttrykket.
+
+Det viktigste symbolet er `*`, også kjent som wildcard-symbolet. `*` kan erstatte hvilket som helst felt i en path på et gitt nivå i hierarkiet. Dobbel-stjernesymbolet `**` kan erstatte hvilket som helst felt i en path uavhengig av hierarkinivå. Noen eksempler:
+
+* `*/fnr` vil matche alle strenger på det første nivået i hierarkiet, og søker etter `fnr` på det andre nivået. Dette patternet vil for eksempel matche `person_info/fnr` og `person_data/fnr`, og `anything/fnr`, men ikke `person_info/barn/fnr` fordi FNR-et her ligger på det tredje nivået i hierarkiet.
+* `person_*/fnr` vil matche både `person_info/fnr` og `person_data/fnr`, men *ikke* `something/fnr`
+* `**/fnr` vil matche på alle paths som slutter på `fnr`, uavhengig av hvor i hierarkiet det befinner seg. Det vil for eksempel matche `person_info/fnr`, `person_info/barn/fnr` og `fnr`
+
+#### Hvordan generere PseudoRules
+
+##### Enkel struktur
+For hierarkiske data med en enkel struktur, vil det lønne seg å manuelt skrive PseudoRules i en JSON-fil som i eksempelet over. Disse lagres i kildebøtta, og kan leses inn i Kildomaten. Går man denne ruta, fyller man ut `path` for feltene man ønsker å pseudonymisere, velger `func` for hvert felt, og lar `pattern = **` (match alle felter).
+
+#### Kompleks struktur
+For mer komplekse datasett med mange felt og/eller dypt hierarki, kan det være tidkrevende å manuelt skrive PseudoRules og spesielt da `path` for alle relevante felt. I disse tilfellene kan man generere PseudoRules ved å bruke `pattern`-feltet.
+
+For å generere `PseudoRules`, trenger man:
+
+1. Et sett med delvis utfylte `PseudoRules`, hvor `func` og `pattern` er fylt ut. `path` skal ikke fylles ut - det er det som skal genereres. For hver PseudoRule, lag et `pattern` som matcher feltene man ønsker å pseudonymisere i datasettet. For dette vil man typisk bruke wildcard-karakterene `*` og `**`, som beskrevet over over.
+
+2. Dataenes *schema*. Et *schema* beskriver strukturen til dataene og alle mulige felter. Eksempel:
+
+Data:
+```{.json filename="hierarchical_data.json"}
+[
+    {
+    "person_info": {
+        "fnr": "11854898347",
+        "fornavn": "Donald",
+        "etternavn": "Duck"
+    },
+    "kjonn": "M",
+    "fodselsdato": "020995"
+    },
+]
+```
+
+Schema:
+```
+"person_info": Struct(
+        "fnr": String,
+        "fornavn": String,
+        "etternavn": String
+),
+"kjonn": String,
+"fodselsdato": String
+```
+
+Schemaene må være Parquet-schemaer, og blir typisk hentet fra API-definisjonen hos dataleverandør. Ta kontakt med Team Statistikktjenester for hjelp til å hente ut schema for dine data.
+
+Med utgangspunkt i de delvis utfylte PseudoRules og schema, kan man utlede `path` for alle relevante felt i datasettet ved hjelp av `SchemaTraverser()`-klassen i `dapla-toolbelt-pseudo`. Dette kan gjøres i Dapla Lab, i et Poetry prosjekt med `dapla-toolbelt-pseudo` installert slik:
+
+```{.json filename="partial_pseudo_rules.json"}
+[ // Utfylt i Dapla Lab, og lagres i kildebøtta
+    {
+        "func": "map-sid-ff31(sid-snapshot-date=2019-12-31)",
+        "pattern": "**/fnr"
+    },
+    {
+        "func": "daead()",
+        "pattern": "**/fornavn"
+    },
+    {
+        "func": "daead()",
+        "pattern": "**/etternavn"
+    }
+]
+```
+
+```{.python filename="generate_pseudo_rules.py"}
+import json
+import gcsfs
+import polars as pl
+from dapla_pseudo import PseudoRule
+from dapla_pseudo import SchemaTraverser
+from pydantic_core import to_jsonable_python
+
+schema_path = "/buckets/kilde/someschema.parquet"
+
+# Leser schema:
+schema = pl.read_parquet_schema(
+    schema_path
+)
+
+partial_pseudo_rules = json.load("partial_pseudo_rules.json")
+
+rules = [PseudoRule.from_json(rule) for rule in partial_pseudo_rules]
+
+sc = SchemaTraverser(schema, rules)
+
+# Matcher reglene for pseudonymisering med feltene i schema:
+pseudo_rules = sc.match_rules()
+
+matched_rules_output_path = "buckets/kilde/pseudo_rules.json" # Brukes for pseudonymisering i Kildomaten
+# Lagrer fil med matchede regler for pseudonymisering
+def write_rules(file_path: str, rules: list[PseudoRule]) -> None:
+    with gcsfs.GCSFileSystem().open(file_path, "w") as matched_rules_output:
+        matched_rules_output.write(
+            to_jsonable_python(rules)
+        )
+
+write_rules(matched_rules_output_path, concrete_rules)
+```
+
+Man kan da, med den ferdig utfylte `pseudo_rules.json`-filen, pseudonymisere dataene i Kildomaten ved å lese inn denne filen og sende den inn i `add_rules()`-funksjonen i `dapla-toolbelt-pseudo` som vist i eksempelet over.
 
 ## Brukerveiledning
 
@@ -364,3 +631,4 @@ Kommer snart.
 
 Kommer snart. 
 
+[^1]: Redact er en algoritme som erstatter innholdet i et felt med karakteren `*`. Dette er ikke en enkrypteringsalgoritme, og det er ikke mulig å de-pseudonymisere data som har brukt `redact`. Det kan likevel være nyttig i noen tilfeller hvis man ønsker å fjerne irrelevant data.

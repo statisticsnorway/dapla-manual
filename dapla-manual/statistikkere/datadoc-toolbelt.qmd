@@ -46,6 +46,11 @@ meta.write_metadata_document() # <3>
 
 Det veldig viktig at man ikke bruker denne metoden hvis det er endringer i hvilke kolonner som finnes i datasettet eller andre større endringer. Metoden over antar at den eneste informasjonen som har endret seg er den som kan leses ut av filstien. Ved større endringer i selve dataene bør man heller gjøre en manuell gjennomgang av metadataene med [Datadoc-editor](./datadoc-editor.qmd), eller bruke metoden som beskrives i neste avsnitt. 
 
+::: {.callout-caution}
+#### Felter som ikke kopieres
+For å sikre at dokumentasjonen av datasett ikke får feil verdier, settes feltene «Inneholder data f.o.m.» og «Inneholder data t.o.m.» på variabelnivå til None når en ny periode opprettes. Brukeren må aktivt spesifisere verdiene for hver variabel, mens datasettnivået automatisk får gyldighetsperioden fra den nye filen. Dette forhindrer at gamle variabelmetadata gir feil informasjon.
+:::
+
 ### Kopiere fra forrige periode med endringer
 
 Hvis det har skjedd noen endringer i datasettet ditt, men mange av kolonnene har matchende navn og likt innhold, så kan man lage et nytt metadatadokument basert metadataene til en annen fil. 
@@ -62,6 +67,11 @@ meta = Datadoc(
 I koden over angir vi det nye datasettet som skal dokumenteres i `dataset_path=`. Deretter angir vi filstien til metadatadokumentet i `metadata_document_path=` som det delvis skal kopieres metadata fra. Til slutt angir vi at feilmeldinger skal behandles som advarsler med argumentet `errors_as_warnings=True`. 
 
 Med dette utgangspunktet kan man deretter gjøre endringer på evt. nye eller eksisterende kolonner ved å enten bruke [Datadoc-editor], eller en programmatisk tilnærming som forklart senere i kapitlet. 
+
+::: {.callout-caution}
+#### Felter som ikke kopieres
+For å sikre at dokumentasjonen av datasett ikke får feil verdier, settes feltene «Inneholder data f.o.m.» og «Inneholder data t.o.m.» på variabelnivå til None når en ny periode opprettes. Brukeren må aktivt spesifisere verdiene for hver variabel, mens datasettnivået automatisk får gyldighetsperioden fra den nye filen. Dette forhindrer at gamle variabelmetadata gir feil informasjon.
+:::
 
 ### Kopiere en variable fra en annen metadata fil
 
