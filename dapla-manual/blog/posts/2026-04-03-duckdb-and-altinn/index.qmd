@@ -1,0 +1,638 @@
+---
+title: Duckdb for håndtering av mange småfiler
+subtitle: Ytelsestest med Altinn3-skjemadata
+categories:
+  - duckdb
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+image: DuckDB_inline-lightmode.svg
+date: 04/03/2026
+date-modified: 04/03/2026
+freeze: true
+draft: false
+---
+
+Noen datafangstprosesser i SSB genererer veldig mange småfiler som må slåes sammen før de kan analyseres og prosesseres til statistikk. Et godt eksempel er skjemadata fra Altinn3 der mellom 5 000 og 100 000 skjemaer kan bli sendt inn hver periode, og hvert av skjemaene dukker opp som en enkeltfil i kildebøtta til Dapla-teamet.
+
+DuckDB er en moderne, filbasert analytisk database som er skreddersydd for nettopp denne typen utfordringer. Der tradisjonelle databaser ofte krever tunge serveroppsett, fungerer DuckDB som en lynrask motor rett i din egen Jupyter-notebook eller VS Code-sesjon.
+
+I denne artikkelen ser vi på hvordan vi kan bruke DuckDB til å temme "småfil-problemet". Ved å transformere titusenvis av spredte XML-filer til én samlet, indeksert databasefil, reduserer vi ikke bare kompleksiteten i koden, men vi oppnår også en ytelse som gjør at analyser på tvers av hele datasettet går fra minutter til millisekunder. Vi skal se nærmere på hvordan vi simulerte 63 000 innrapporteringer, og hvorfor denne teknologien kan være en "game changer" for hvordan vi håndterer denne typen data på Dapla.
+
+
+
+## Generere testdata
+
+Første steg å generere testdata som kan benyttes til å simulere rådata fra Altinn3 i kildebøtta. Følgende kode er brukt til å generere test-skjemaer med og uten en del for Tidsbruk:
+
+::: {.callout-caution collapse="true"}
+## Generere test-data
+
+``` {.python}
+import io
+import os
+import random
+import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta
+import xml.etree.ElementTree as ET
+
+import duckdb
+import gcsfs
+import pandas as pd
+
+def generate_fake_xml_content(org_nr, date_str, has_tidsbruk, delreg_nr):
+    """Genererer XML-strengen (innholdet) uten å skrive til disk ennå."""
+    ansatte_k = random.randint(1, 15)
+    ansatte_m = random.randint(1, 15)
+    lonn = random.randint(100000, 750000)
+    
+    tidsbruk_xml = ""
+    if has_tidsbruk:
+        tidsbruk_xml = f"""
+    <Tidsbruk>
+        <hjelpAvAndreMin>{random.randint(10, 600)}</hjelpAvAndreMin>
+        <utfyllingMin>{random.randint(10, 600)}</utfyllingMin>
+    </Tidsbruk>"""
+
+    return f"""<?xml version="1.0" encoding="utf-8"?>
+<melding xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" dataFormatId="7095">
+    <InternInfo>
+        <raNummer>RA-0657</raNummer>
+        <delregNr>{delreg_nr}</delregNr>
+        <enhetsOrgNr>{org_nr}</enhetsOrgNr>
+        <enhetsNavn>BEDRIFT {org_nr} AS</enhetsNavn>
+        <periodeAAr>{date_str[:4]}</periodeAAr>
+        <enhetsIdent>ATB{random.randint(1000000, 9999999)}</enhetsIdent>
+    </InternInfo>{tidsbruk_xml}
+    <SkjemaData>
+        <bemanning>
+            <heltidAnsattKvinnerAnt>{ansatte_k}</heltidAnsattKvinnerAnt>
+            <heltidAnsattMennAnt>{ansatte_m}</heltidAnsattMennAnt>
+        </bemanning>
+        <kostnader>
+            <lonnskostTotVirksomhet>{lonn}</lonnskostTotVirksomhet>
+        </kostnader>
+        <tilskudd>
+            <givere>
+                <offentligTilskuddGiver>NVE</offentligTilskuddGiver>
+            </givere>
+        </tilskudd>
+    </SkjemaData>
+</melding>"""
+
+def create_real_test_set_gcs(bucket_path, num_files, start_date_str="2023-03-01"):
+    """Lager XML-filer direkte i en GCS-bøtte."""
+    
+    # Opprett forbindelse til GCS
+    # GKE bruker vanligvis Workload Identity, så vi trenger ikke eksplisitte nøkler
+    fs = gcsfs.GCSFileSystem()
+
+    # Siden GCS ikke har ekte mapper (bare nøkler), trenger vi ikke "makedirs"
+    # Men vi sletter eksisterende data i den spesifikke "mappen" hvis ønskelig:
+    if fs.exists(bucket_path):
+        print(f"Sletter eksisterende data i: {bucket_path}")
+        fs.rm(bucket_path, recursive=True)
+
+    print(f"Genererer {num_files} filer direkte til {bucket_path}...")
+    
+    start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+    
+    for i in range(num_files):
+        current_date = start_date + timedelta(days=random.randint(0, 30))
+        year = current_date.strftime("%Y")
+        month = str(current_date.month)
+        day = str(current_date.day)
+        
+        unique_id = f"f0{uuid.uuid4().hex[:12]}_{uuid.uuid4()}"
+        filename = f"form_e{random.randint(10000000000, 99999999999)}.xml"
+        
+        # Bygg full GCS-sti
+        full_gcs_path = f"{bucket_path}/{year}/{month}/{day}/{unique_id}/{filename}"
+        
+        # Variabler
+        has_tidsbruk = random.choice([True, False])
+        delreg_nr = random.choice([22721, 22722])
+        fake_org = random.randint(900000000, 999999999)
+        
+        # Generer innhold
+        xml_content = generate_fake_xml_content(fake_org, current_date.strftime("%Y-%m-%d"), has_tidsbruk, delreg_nr)
+        
+        # Skriv direkte til GCS
+        with fs.open(full_gcs_path, 'w', encoding='utf-8') as f:
+            f.write(xml_content)
+        
+        if (i + 1) % 1000 == 0:
+            print(f"Ferdig med {i + 1} filer...")
+
+# --- KJØR GENERERINGEN ---
+ANTALL_FILER_TEST = 10000 
+GCS_PATH = "gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1"
+
+create_real_test_set_gcs(GCS_PATH, ANTALL_FILER_TEST)
+print("Ferdig!")
+```
+:::
+
+I alt er det generert 63 000 skjemaer i test-miljøet på Dapla Lab under `gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1`. Filstiene er også bygget opp på samme måte som er vanlig for Altinn3-data. Her er et eksempel på hvordan filstiene er bygget opp:
+
+`gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1/2023/3/10/f000586ea4da2a_7f71dbff-b461-401c-9263-96d7df11321c/form_e79563181389.xml`
+
+
+En fil med en Tidsbruk-del kan se slik ut:
+
+``` {.xml filename="Altinn3-skjema"}
+<?xml version="1.0" encoding="utf-8"?>
+<melding xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" dataFormatId="7095">
+    <InternInfo>
+        <raNummer>RA-0657</raNummer>
+        <delregNr>22721</delregNr>
+        <enhetsOrgNr>987654321</enhetsOrgNr>
+        <enhetsNavn>EKSEMPELBEDRIFT AS</enhetsNavn>
+        <periodeAAr>2023</periodeAAr>
+        <enhetsIdent>ATB1234567</enhetsIdent>
+    </InternInfo>
+    <Tidsbruk>
+        <hjelpAvAndreMin>45</hjelpAvAndreMin>
+        <utfyllingMin>30</utfyllingMin>
+    </Tidsbruk>
+    <SkjemaData>
+        <bemanning>
+            <heltidAnsattKvinnerAnt>12</heltidAnsattKvinnerAnt>
+            <heltidAnsattMennAnt>8</heltidAnsattMennAnt>
+        </bemanning>
+        <kostnader>
+            <lonnskostTotVirksomhet>450000</lonnskostTotVirksomhet>
+        </kostnader>
+        <tilskudd>
+            <givere>
+                <offentligTilskuddGiver>NVE</offentligTilskuddGiver>
+            </givere>
+        </tilskudd>
+    </SkjemaData>
+</melding>
+```
+
+## Simulere Kildomaten
+
+Etter at XML-filene lander i kildebøtta til teamene, prosesseres de av en Kildomaten-jobb per fil og skrives til produktbøtta. Siden XML-filene er hierarkiske av natur, og det ligger metadata i filstien, lar vi Kildomaten produsere Parquet-filer som bevarer denne strukturen. Dette har flere fordeler: det gjør det mulig å beholde komplekse, nøstede data (structs) samtidig som vi kan trekke ut viktige metadata som id og reporting_date direkte fra mappestrukturen og inn i datasettet.
+
+::: {.callout-caution collapse="true"}
+## Kode for Kildomaten-transformasjon
+
+``` {.python}
+def kildomaten_final_task(fs, xml_path, parquet_base_path):
+    """
+    1. Leser XML fra GCS med Python (gcsfs).
+    2. Skriver til lokal /tmp for å unngå nettverks-krøll i DuckDB.
+    3. Prosesserer XML med DuckDB (webbed) og trekker ut OrgNr og delregNr.
+    4. Skriver Parquet tilbake til GCS med Python.
+    """
+    con = None
+    local_xml_path = None
+    local_parquet_path = None
+    
+    try:
+        # --- 1. Metadata og stier ---
+        path_parts = xml_path.split('/')
+        # Forventer format: gs://.../test-data-1/YYYY/M/D/ID/fil.xml
+        unique_id = path_parts[-2]
+        day = path_parts[-3]
+        month = path_parts[-4]
+        year = path_parts[-5]
+        
+        parquet_path = f"{parquet_base_path}/{year}/{month}/{day}/{unique_id}/data.parquet"
+        
+        # Lag unike lokale filstier i /tmp for denne tråden
+        local_xml_path = f"/tmp/{unique_id}.xml"
+        local_parquet_path = f"/tmp/{unique_id}.parquet"
+        
+        # --- 2. Last ned XML lokalt ---
+        with fs.open(xml_path, 'rb') as f_remote:
+            with open(local_xml_path, 'wb') as f_local:
+                f_local.write(f_remote.read())
+        
+        # --- 3. Prosesser med DuckDB ---
+        con = duckdb.connect(':memory:')
+        con.execute("LOAD webbed;")
+        
+        # SQL-spørring som trekker ut spesifikke felter fra InternInfo-strukturen
+        query = f"""
+            COPY (
+                SELECT 
+                    '{unique_id}' AS id,
+                    make_date({year}, {month}, {day}) AS reporting_date,
+                    InternInfo.enhetsOrgNr AS enhetsOrgNr, -- Løfter ut OrgNr
+                    InternInfo.delregNr AS delregNr,       -- Løfter ut delregNr
+                    '{xml_path}' AS kilde_path,
+                    * EXCLUDE (dataFormatId)               -- Henter resten av XML-dataene
+                FROM read_xml('{local_xml_path}', record_element='melding')
+            ) TO '{local_parquet_path}' (FORMAT 'PARQUET');
+        """
+        con.execute(query)
+        
+        # --- 4. Last opp ferdig Parquet-fil til GCS ---
+        with open(local_parquet_path, 'rb') as f_p:
+            with fs.open(parquet_path, 'wb') as f_out:
+                f_out.write(f_p.read())
+
+    except Exception as e:
+        print(f"Feilet på {xml_path}: {e}")
+    finally:
+        if con:
+            con.close()
+        # Rydd opp i /tmp for å unngå at noden går tom for diskplass
+        for p in [local_xml_path, local_parquet_path]:
+            if p and os.path.exists(p):
+                os.remove(p)
+
+def run_kildomaten_pipeline(max_workers=60):
+    """
+    Hovedfunksjon for å kjøre transformasjonen i parallell.
+    """
+    # Opprett GCS-filsystem (bruker OIDC_TOKEN automatisk i Onyxia)
+    fs = gcsfs.GCSFileSystem()
+    
+    XML_SOURCE = "gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1"
+    PARQUET_TARGET = "gs://ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1"
+    
+    print(f"Søker etter filer i {XML_SOURCE}...")
+    all_xml_files = [f"gs://{f}" for f in fs.glob(f"{XML_SOURCE}/**/*.xml")]
+    
+    num_files = len(all_xml_files)
+    if num_files == 0:
+        print("Ingen filer funnet. Sjekk kilde-stien.")
+        return
+
+    print(f"Fant {num_files} filer. Starter transformasjon med {max_workers} tråder...")
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Mapper hver XML-fil til transformasjons-oppgaven
+        executor.map(lambda xml: kildomaten_final_task(fs, xml, PARQUET_TARGET), all_xml_files)
+
+# --- EXECUTE ---
+if __name__ == "__main__":
+    run_kildomaten_pipeline(max_workers=60)
+    print("\nFerdig! Alle 10 000 filer er transformert med enhetsOrgNr og delregNr.")
+```
+:::
+
+Det resulterende datasettet får da denne formen:
+
+| id                                                  | reporting_date   |   enhetsOrgNr |   delregNr | kilde_path                                                                                                                                  | SkjemaData                                                                                                                                                                          | InternInfo                                                                                                                                                  |
+|:----------------------------------------------------|:-----------------|--------------:|-----------:|:--------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| f000586ea4da2a_7f71dbff-b461-401c-9263-96d7df11321c | 2023-03-10       |     989600399 |      22721 | gs://ssb-dapla-felles-data-produkt-test/obr/test-data-1/2023/3/10/f000586ea4da2a_7f71dbff-b461-401c-9263-96d7df11321c/form_e79563181389.xml | {'bemanning': {'heltidAnsattKvinnerAnt': 9, 'heltidAnsattMennAnt': 14}, 'kostnader': {'lonnskostTotVirksomhet': 593140}, 'tilskudd': {'givere': {'offentligTilskuddGiver': 'NVE'}}} | {'raNummer': 'RA-0657', 'delregNr': 22721, 'enhetsOrgNr': 989600399, 'enhetsNavn': 'BEDRIFT 989600399 AS', 'periodeAAr': 2023, 'enhetsIdent': 'ATB4107076'} |
+
+: Parquet-fil som er output fra Kildomaten {#tbl-iac-autonomy .striped}
+
+
+## Slå sammen 10 000 filer
+
+Under filstien `ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1/2023/3` ligger det nå 10 000 små Parquet-filer med en rad med data i hver. Nå ønsker vi å slå de sammen. Under foreslår jeg at dette gjøres ved å opprette en DuckDB-databasefil, fordi den fungerer som en ekstremt effektiv "beholder" som broer gapet mellom uoversiktlige objektlagre og strukturerte relasjonsdatabaser.
+
+Ved å samle disse filene i én .duckdb-fil oppnår vi flere fordeler:
+
+- Ytelse: I stedet for at filsystemet må liste og åpne 10 000 individuelle filer hver gang vi skal stille et spørsmål, kan DuckDB hoppe rett til riktig dataposisjon ved hjelp av indekser.
+
+- Enkelhet: For en statistiker blir grensesnittet én tabell i én fil, i stedet for en dyp og kompleks mappestruktur på GCS.
+
+- Metadata og Typer: Vi kan lagre faste datatyper (Date, Integer, etc.) og legge til indekser på for eksempel enhetsOrgNr, noe som gjør søk i historiske data lynraske.
+
+### Strategien for sammenslåing
+
+Siden vi jobber på Dapla, er strategien å trekke dataene inn i en midlertidig lokal instans, utføre sammenslåingen, og deretter "flushe" resultatet til en permanent databasefil som lastes opp til GCS.
+
+En viktig detalj her er bruken av CHECKPOINT. DuckDB bruker en såkalt Write-Ahead Log (.wal). Hvis vi bare laster opp .duckdb-fila uten å kjøre en checkpoint, risikerer vi at de nyeste dataene fortsatt ligger i logg-fila og ikke i selve hovedfila. Ved å tvinge gjennom et checkpoint sikrer vi at databasen er konsistent og klar til bruk for nestemann som laster den ned.
+
+Her er koden for å utføre dette fra Dapla Lab:
+
+::: {.callout-caution collapse="true"}
+## Kode for å slå sammen 10 000 filer
+
+```{.python}
+def create_and_upload_master_db():
+    # 1. Konfigurasjon
+    fs = gcsfs.GCSFileSystem()
+    PARQUET_ROOT = "ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1"
+    GCS_DESTINATION = "gs://ssb-dapla-felles-data-produkt-test/obr/database/obr_master.duckdb"
+    LOCAL_TMP_DB = "/tmp/obr_master.duckdb"
+
+    print("Søker etter de nye Parquet-filene...")
+    files = [f"gs://{f}" for f in fs.glob(f"{PARQUET_ROOT}/**/*.parquet")]
+    
+    if not files:
+        print("Fant ingen filer. Har du kjørt transformasjonen på nytt?")
+        return
+
+    # 2. Les alle filer parallelt (Hybrid-metoden som tok 23 sekunder)
+    print(f"Laster {len(files)} filer inn i minnet...")
+    def read_single_file(file_path):
+        try:
+            with fs.open(file_path, 'rb') as f:
+                return pd.read_parquet(f)
+        except:
+            return None
+
+    with ThreadPoolExecutor(max_workers=60) as executor:
+        df_list = list(executor.map(read_single_file, files))
+    
+    full_df = pd.concat([df for df in df_list if df is not None], ignore_index=True, sort=False)
+
+    # 3. Opprett en fysisk DuckDB-fil lokalt i /tmp
+    print("Oppretter databasefil lokalt...")
+    if os.path.exists(LOCAL_TMP_DB):
+        os.remove(LOCAL_TMP_DB)
+        
+    con = duckdb.connect(database=LOCAL_TMP_DB)
+    con.register('temp_df', full_df)
+    
+    # Flytt data fra Pandas til en permanent tabell i fila
+    con.execute("CREATE TABLE alle_skjema AS SELECT * FROM temp_df")
+    
+    # Legg gjerne på en indeks for enda raskere søk senere
+    print("Optimaliserer databasen...")
+    con.execute("CREATE INDEX idx_orgnr ON alle_skjema (enhetsOrgNr)")
+    
+    row_count = con.execute("SELECT count(*) FROM alle_skjema").fetchone()[0]
+    con.close()
+
+    # 4. Last opp til GCS
+    print(f"Laster opp {row_count} rader til {GCS_DESTINATION}...")
+    with open(LOCAL_TMP_DB, 'rb') as f_src:
+        with fs.open(GCS_DESTINATION, 'wb') as f_dst:
+            f_dst.write(f_src.read())
+
+    # Rydd opp
+    os.remove(LOCAL_TMP_DB)
+    print("\nSuksess! Master-databasen er nå tilgjengelig på GCS.")
+
+if __name__ == "__main__":
+    create_and_upload_master_db()
+```
+
+:::
+
+Det tok **23** sekunder å slå sammen 10 000 filer og opprette databasefilen i GCS. Filen ser nå slik ut:
+
+| id | reporting_date | enhetsOrgNr | delregNr | kilde_path | SkjemaData | Tidsbruk | InternInfo |
+|:---|:---|:---|:---|:---|:---|:---|:---|
+| `f0000d892c...` | 2023-03-01 | 989176871 | 22721 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 11, ...}` | `{'hjelpAvAndreMin': 133, 'utfyllingMin': 49}` | `{'raNummer': 'RA-0657', 'delregNr': 22721, ...}` |
+| `1f00480ea7...` | 2023-03-01 | 990569046 | 22722 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 5, ...}` | `{'hjelpAvAndreMin': 600, 'utfyllingMin': 539}` | `{'raNummer': 'RA-0657', 'delregNr': 22722, ...}` |
+| `2f0052ff59...` | 2023-03-01 | 938802704 | 22722 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 8, ...}` | `{'hjelpAvAndreMin': 285, 'utfyllingMin': 322}` | `{'raNummer': 'RA-0657', 'delregNr': 22722, ...}` |
+| `3f006294ba...` | 2023-03-01 | 906468302 | 22721 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 4, ...}` | `<NA>` | `{'raNummer': 'RA-0657', 'delregNr': 22721, ...}` |
+| `4f006544ad...` | 2023-03-01 | 956690196 | 22722 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 8, ...}` | `<NA>` | `{'raNummer': 'RA-0657', 'delregNr': 22722, ...}` |
+
+De hierarkiske feltene er nå laget som structs i databasen, noe som betyr at de er veldig lett tilgjengelig for analyse. 
+
+## Når nye data kommer inn
+
+Anta at det kommer nye data inn som man ønsker å legge til Ducklake-databasen. Da må man først sjekke hva som allerede ligger i databasen og deretter laste opp det som ikke allerede ligger der. Med Ducklake kan man gjøre det på en elegant og effektiv måte. Vi skal nå se på et scenario der det er kommet inn 3000 nye filer og et annet scenario der det har kommet inn 50 000 nye filer. Vi skal også måle hvor lang tid operasjonene tar.
+
+### 3000 nye filer
+
+Anta at det har kommet inn 3000 nye PArquet-filer i produktbøtta under stien: `ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1/2023/4`. Denne koden sjekker om filer allerede er lagt til og legger til de 3000 filene på **9 sekunder**:
+
+::: {.callout-caution collapse="true"}
+## Kode for å legge til nye filer
+
+```{.python}
+def update_master_db_with_checkpoint():
+    """
+    Oppdaterer master-basen med April-data og bruker CHECKPOINT 
+    for å tvinge alle endringer fra minne/logg til selve .duckdb-fila.
+    """
+    # --- 1. Oppsett ---
+    fs = gcsfs.GCSFileSystem()
+    PARQUET_ROOT = "ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1"
+    GCS_DB_PATH = "gs://ssb-dapla-felles-data-produkt-test/obr/database/obr_master.duckdb"
+    LOCAL_DB = "/tmp/obr_master_checkpoint.duckdb"
+
+    # --- 2. Hent eksisterende database ---
+    if fs.exists(GCS_DB_PATH):
+        print(f"Henter database fra GCS: {GCS_DB_PATH}...")
+        # Sletter lokal kopi hvis den finnes fra før for å starte ferskt
+        if os.path.exists(LOCAL_DB):
+            os.remove(LOCAL_DB)
+        fs.get(GCS_DB_PATH, LOCAL_DB)
+    else:
+        print("Feil: Fant ingen database på GCS å oppdatere.")
+        return
+
+    # --- 3. Finn og les nye April-filer ---
+    print("Søker etter nye filer...")
+    all_files = [f"gs://{f}" for f in fs.glob(f"{PARQUET_ROOT}/**/*.parquet")]
+    
+    con = duckdb.connect(database=LOCAL_DB)
+    
+    # Finn ID-er som ikke er i databasen ennå
+    existing_ids = set(con.execute("SELECT id FROM alle_skjema").df()['id'])
+    files_to_read = [f for f in all_files if f.split('/')[-2] not in existing_ids]
+
+    if not files_to_read:
+        print("Ingen nye data å legge til. Avbryter.")
+        con.close()
+        return
+
+    print(f"Laster {len(files_to_read)} nye filer...")
+    def read_file(p):
+        with fs.open(p, 'rb') as f: return pd.read_parquet(f)
+
+    with ThreadPoolExecutor(max_workers=60) as executor:
+        updates_df = pd.concat(list(executor.map(read_file, files_to_read)), ignore_index=True, sort=False)
+
+    # --- 4. SQL Operasjoner ---
+    con.register('updates', updates_df)
+    
+    print("Utfører sammenslåing med UNION BY NAME...")
+    con.execute("""
+        CREATE TABLE ny_alle_skjema AS 
+        SELECT * FROM alle_skjema
+        UNION BY NAME
+        SELECT * FROM updates;
+    """)
+    
+    con.execute("DROP TABLE alle_skjema")
+    con.execute("ALTER TABLE ny_alle_skjema RENAME TO alle_skjema")
+    
+    # Oppdaterer indeksen på den nye tabellen
+    con.execute("CREATE INDEX idx_orgnr ON alle_skjema (enhetsOrgNr)")
+
+    # --- 5. SIKKERHETSSJEKK OG LÅSING ---
+    print("Tvinger CHECKPOINT (flushing av WAL-fil)...")
+    # Dette tvinger alle endringer fra .wal-fila inn i hovedfila (.duckdb)
+    con.execute("CHECKPOINT;") 
+    
+    final_count = con.execute("SELECT count(*) FROM alle_skjema").fetchone()[0]
+    print(f"Verifisert antall rader lokalt før opplasting: {final_count}")
+    
+    # VIKTIG: Lukk forbindelsen helt før vi rører fila med GCSFS
+    con.close() 
+
+    # --- 6. Last opp til GCS ---
+    print(f"Laster opp til GCS ({GCS_DB_PATH})...")
+    fs.put(LOCAL_DB, GCS_DB_PATH)
+
+    # Rydd opp lokalt
+    if os.path.exists(LOCAL_DB):
+        os.remove(LOCAL_DB)
+    
+    print(f"Suksess! Oppdateringen er bekreftet og lagret med {final_count} rader.")
+
+if __name__ == "__main__":
+    update_master_db_with_checkpoint()
+```
+
+:::
+
+
+### 50 000 nye filer
+
+Under filstien `ssb-dapla-felles-data-produkt-test/obr/produkt/parquet/test-data-1/2023/5` ligger det 50 000 nye filer produsert av Kildomaten. Hvis vi kjører samme operasjon som over på disse, så tar det **2 minutter og 19 sekunder** å kjøre operasjonen.
+
+## Analysere hierarkiske data
+
+Duckdb er lynrask på analyse på disse dataene. La oss sette opp en kobling til en lokal versjon av databasen:
+
+```{.python}
+# --- OPPSETT ---
+fs = gcsfs.GCSFileSystem()
+GCS_DB_PATH = "gs://ssb-dapla-felles-data-produkt-test/obr/database/obr_master.duckdb"
+LOCAL_READ_DB = "/tmp/obr_lesing.duckdb"
+
+def last_og_koble_til():
+    """Henter nyeste versjon fra GCS og åpner en tilkobling."""
+    if os.path.exists(LOCAL_READ_DB):
+        os.remove(LOCAL_READ_DB)
+    
+    print(f"Henter fersk kopi av master-basen fra GCS...")
+    fs.get(GCS_DB_PATH, LOCAL_READ_DB)
+    
+    # Vi åpner i 'read_only' modus. Det er raskere og tryggere for analyse.
+    return duckdb.connect(LOCAL_READ_DB, read_only=True)
+
+# 1. Start tilkoblingen
+con = last_og_koble_til()
+```
+
+Deretter kan vi analysere innholdet:
+
+```{.python}
+# 1. Hent absolutt alt
+df_alle = con.execute("SELECT * FROM alle_skjema").df()
+```
+
+| id | reporting_date | enhetsOrgNr | delregNr | kilde_path | SkjemaData | Tidsbruk | InternInfo |
+|:---|:---|:---|:---|:---|:---|:---|:---|
+| `f01bbe4c2a...` | 2023-03-01 | 973952440 | 22722 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 2, ...}` | `<NA>` | `{'raNummer': 'RA-0657', 'delregNr': 22722, ...}` |
+| `f0143cd463...` | 2023-03-01 | 966023200 | 22722 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 3, ...}` | `<NA>` | `{'raNummer': 'RA-0657', 'delregNr': 22722, ...}` |
+| `f01f54bddd...` | 2023-03-01 | 963228743 | 22721 | `gs://ssb-dapla...` | `{'bemanning': {'heltidAnsattKvinnerAnt': 7, ...}` | `<NA>` | `{'raNummer': 'RA-0657', 'delregNr': 22721, ...}` |
+
+La oss regne ut hvilke bedrifter som har høyest kvinneandel i mai:
+
+```{.python}
+# 3. Eksempel på et dypdykk: Finn bedrifter med høyest kvinneandel i Mai
+kvinneandel_query = """
+    SELECT 
+        enhetsOrgNr,
+        reporting_date,
+        SkjemaData.bemanning.heltidAnsattKvinnerAnt as kvinner,
+        SkjemaData.bemanning.heltidAnsattMennAnt as menn,
+        (kvinner * 100.0 / (kvinner + menn)) as kvinne_prosent
+    FROM alle_skjema
+    WHERE month(reporting_date) = 5
+      AND (kvinner + menn) > 5
+    ORDER BY kvinne_prosent DESC
+    LIMIT 10
+"""
+con.execute(kvinneandel_query).df()
+```
+
+| enhetsOrgNr | reporting_date | kvinner | menn | kvinne_prosent |
+|:---|:---|:---|:---|:---|
+| 995282908 | 2023-05-10 | 15 | 1 | 93.75 |
+| 966880705 | 2023-05-11 | 15 | 1 | 93.75 |
+| 965022273 | 2023-05-12 | 15 | 1 | 93.75 |
+| 906986734 | 2023-05-14 | 15 | 1 | 93.75 |
+| 951804890 | 2023-05-02 | 15 | 1 | 93.75 |
+| 993876474 | 2023-05-29 | 15 | 1 | 93.75 |
+| 985217777 | 2023-05-03 | 15 | 1 | 93.75 |
+| 965743533 | 2023-05-31 | 15 | 1 | 93.75 |
+| 933878271 | 2023-05-10 | 15 | 1 | 93.75 |
+| 931607198 | 2023-05-10 | 15 | 1 | 93.75 |
+
+Og vi kan flate ut datasett med dot-notasjon:
+
+```{.python}
+query = """
+SELECT 
+    id,
+    reporting_date,
+    enhetsOrgNr,
+    delregNr,
+    -- Flater ut InternInfo
+    InternInfo.enhetsNavn AS enhetsNavn,
+    InternInfo.periodeAAr AS periodeAAr,
+    InternInfo.enhetsIdent AS enhetsIdent,
+    
+    -- Flater ut Bemanning
+    SkjemaData.bemanning.heltidAnsattKvinnerAnt AS kvinner,
+    SkjemaData.bemanning.heltidAnsattMennAnt AS menn,
+    
+    -- Flater ut Kostnader
+    SkjemaData.kostnader.lonnskostTotVirksomhet AS lonnskost,
+    
+    -- Flater ut Tidsbruk (Håndterer at denne kan være NULL for Mars/April)
+    Tidsbruk.hjelpAvAndreMin AS tidsbruk_hjelp,
+    Tidsbruk.utfyllingMin AS tidsbruk_utfylling,
+    
+    kilde_path
+FROM alle_skjema
+"""
+
+# Hent til en helt flat Pandas DataFrame
+df_flat = con.execute(query).df()
+
+df_flat
+```
+
+| id | reporting_date | enhetsOrgNr | delregNr | enhetsNavn | periodeAAr | enhetsIdent | kvinner | menn | lonnskost | tidsbruk_hjelp | tidsbruk_utfylling | kilde_path |
+|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
+| `f01bbe4c2a...` | 2023-03-01 | 973952440 | 22722 | BEDRIFT 973952440 AS | 2023 | ATB8718910 | 2 | 15 | 293933 | <NA> | <NA> | `gs://ssb-dapla...` |
+| `f0143cd463...` | 2023-03-01 | 966023200 | 22722 | BEDRIFT 966023200 AS | 2023 | ATB4697363 | 3 | 15 | 441271 | <NA> | <NA> | `gs://ssb-dapla...` |
+| `f01f54bddd...` | 2023-03-01 | 963228743 | 22721 | BEDRIFT 963228743 AS | 2023 | ATB2007874 | 7 | 13 | 748260 | <NA> | <NA> | `gs://ssb-dapla...` |
+
+
+## Fordelene med en hierarkisk struktur
+
+Selv om stabile datatilstander ikke skal forekomme med hierarkiske strukturer, så er det flere fordeler med å beholde denne strukturen mellom datatilstandene. I eksempelet over så bevarer vi denne strukturen i mellomfasen mellom kildedata og inndata for å oppnå noen konkrete gevinster:
+
+1. **Fremtidssikring mot endringer (Skjema endringer)**  
+Skjemadata er levende. Plutselig legges det til et nytt felt, eller fjerner et gammelt. Hvis du lagrer hele **SkjemaData** som ett objekt, vil nye felter bare dukke opp som nye "grener" i treet. Koden din krasjer ikke selv om kilden endrer seg.
+
+Hvis du har 200 faste kolonner og kilden plutselig sender 201, må du endre koden din manuelt før du kan jobbe med dataene.
+
+2. **Enklere feilsøking**  
+Det er mye enklere å feilsøke når dataene dine speiler strukturen i XML-filen fra Altinn. Hvis man lurer på hvorfor en verdi ser rar ut, kan de se på SkjemaData.bemanning og umiddelbart kjenne igjen logikken fra det originale spørreskjemaet. Du slipper å lure på om "kolonne_142" egentlig var en del av bemanningsmodulen eller kostnadsmodulen.
+
+3. **Lagringseffektivitet**  
+I undersøkelser er det ofte mange betingede hopp (hvis "Ja" på spørsmål A, svar på spørsmål B). I en flat struktur må du ha kolonner for alle mulige spørsmål, noe som resulterer i tusenvis av NULL-verdier som tar plass og skaper støy. I en hierarkisk struktur eksisterer bare de grenene som faktisk ble fylt ut. Dette gjør filene mer kompakte og oversiktlige.
+
+4. **Enkelt å spørre mot**  
+Duckdb gjør det veldig enkelt å spørre mot hierarkiske data (json eller xml). Med dot-notasjonen kan enkelt gå nedover i hierarkiet med vanlig sql, f.eks:
+
+```{.sql}
+SELECT SkjemaData.bemanning.kvinner AS kvinner
+FROM ...
+```
+
+5. **Bevare kontekst**  
+Ved å beholde grupper som InternInfo og Tidsbruk samlet, beholder du konteksten. Du vet at alle variablene inne i Tidsbruk hører sammen. Hvis du flater ut alt med en gang, risikerer du å "miste" logiske koblinger mellom variabler som i utgangspunktet var ment å tolkes sammen.
+
+
+## Ulemper med Duckdb
+
+Selv om DuckDB er en kraftpakke for analyse, er det viktig å være klar over hva den ikke er. DuckDB er en enbruker-database designet for OLAP (analytiske spørringer), ikke OLTP (mange små transaksjoner mot en base). Den støtter ikke at mange brukere skriver til samme fil samtidig; prøver man på det, vil filen bli låst.
+
+I et produksjonsmiljø på Dapla betyr dette at vi ikke bruker DuckDB som en tradisjonell sentral database som "alltid står på". I stedet løser vi dette ved å bruke automatiseringsverktøy som Cloud Composer (under utvikling nå). Ved å la Composer styre køen av transformasjonsjobber, sikrer vi at oppdateringer skjer kontrollert og i riktig rekkefølge. DuckDB fungerer da som den lynraske motoren i hver enkelt oppgave, mens orkestreringslaget tar seg av koordineringen mellom brukere og prosesser. På denne måten får vi hastigheten til en lokal database, men stabiliteten til et profesjonelt datasystem.
