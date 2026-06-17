@@ -1,6 +1,6 @@
 ---
 title: KuDoc datamodell
-date-modified: 06/15/2026
+date-modified: 06/17/2026
 lightbox: true
 ---
 
@@ -13,10 +13,10 @@ Informasjonselementer som inngår i KuDoc er delt i tre nivåer:
 2b. informasjonselementer for instrument, som bare er aktuelle for en bestemt instrumenttype – f.eks. opplysninger om intervju-modus: CATI | CAPI | CAWI m.m. kun gjelder for instrumenter av type spørreskjema for personer; \ mens RA/RS-skjemanummer (jf. [Kodeliste for RA/RS-nummer (skjema)](https://www.ssb.no/klass/klassifikasjoner/916)) vil kun være relevant for innsamlinger vha. skjemaer i Altinn; \ osv.  
 De to første grupper informasjonselementer (1 og 2a) er angitt i to underkapitler nedenfor: [Innsamling](#innsamling) og hhv. [Instrument - alle typer](#instrument-alle-typer).
 
-Ved innføring av opplysninger inn i KuDoc, vil man alltid starte i status Draft. I denne tilstanden, er det kun noen få opplysninger som er obligatoriske, mens i alle andre felter kan det "kladdes" fritt uten at konsistensregler for entry'et blir validert. Disse få informasjonselementene som er obligatoriske allerede i status Draft, er merket med ✅.  
-Når man er ferdig med innlegging av opplysninger i KuDoc og vil gjøre disse åpent tilgjengelige for hele SSB, skal man gå over i status Publisert. I denne tilstanden er det krav om flere korrekt og konsistent utfylte opplysninger enn mens i Draft; informasjonselementer som er obligatoriske i status Publisert (men ikke i Draft) er merket med ⚠️:
-
-✅ = obligatorisk i både status Draft og Publisert, ⚠️ = obligatorisk kun for status Publisert
+Bruk av symboler:  
+✅ = obligatorisk i både status *Draft* og *Publisert*  
+⬆️ = obligatorisk kun for status *Publisert*  
+(for forklaring av status Draft vs. Publisert, se kapittel [Legge inn opplysninger](./kudoc-data-entry-via-gui.qmd))
 
 ## Innsamling
 
@@ -34,7 +34,7 @@ Hvis du er nødt til dele en datainnsamling som du har ansvar for, i flere separ
 Verdi i denne velges fra listen over [Dapla-team](./hva-er-dapla-team.qmd) fra [Dapla Ctrl](./dapla-ctrl.qmd#teamoversikt). Valget blir styrende for hvilket team sin bøtte som data fra innsamlingen skal legges i.
 
 ### Grunngivende statistikkprodukt
-⚠️  
+⬆️  
 Statistisk produkt (statistikk, indeks e.l.) som utgjør opprinnelig formål med å etablere innsamlingen. Gjerne det produktet som fremgår i et DM-dokument som knytter sammen en statistikk med innsamlingen (f.eks. vedtak om etablering av statistikk, e.a. i DM).  
 Angis ved **kortnavn**, som velges fra liste fra Statistikkregisteret.  
 Obligatorisk først ved *publisering* i KuDoc, og kun for innsamlinger med offisiell statistikk som formål (dvs. unntak for innsamlinger som merkes av som markedsoppdrag - jf. neste felt).
@@ -45,13 +45,17 @@ Med utgangspunkt i det angitte kortnavnet til statistikken, blir det hentet inn 
 
 To-valgs felt: Offisiell statistikk (default) vs. Markedsoppdrag. Den første verdien fordrer krav om at det må angis grunngivende statistikkprodukt (jf. forrige felt).
 
+### Lenke til utvalgsplan
+
+Url-adresse til der utvalgsplan for innsamlingen kan finnes (enten i en strukturert form eller kun som et tekstdokument)
+
 ### Leverandører av data
-⚠️  
+⬆️  
 Liste med verdier fra [Kodeliste for SSB-datakilder](https://www.ssb.no/klass/klassifikasjoner/712). Angir konkrete kilder/leverandører - f.eks. NAV, Utdanningsdirektoratet, \ eller samlebegrep for SSBs egne utvalgsundersøkelser (–> kodeverdi 67).  
 Verdier valgt i listen her på innsamlings-nivå, utgjør tillatte verdier for *Instrument-datakilde* på de enkelte instrumentene som er knyttet til innsamlingen (se neste avsnitt: [Instrument](#instrument-(alle-typer)))
 
 ### Enhetstyper for rapporteringsenheter
-⚠️  
+⬆️  
 Liste med verdier fra [KLASS kodeliste for enhetstyper](https://www.ssb.no/klass/klassifikasjoner/702), dog begrenset til Foretak, Bedrift eller Person. Angir hvilke typer enheter som er rapporteringsenheter i innsamlingen.
 
 ### Særlige kategorier av data
@@ -60,12 +64,12 @@ Avkryssingsboks for å angi om innsamlingen inkluderer særlige kategorier av pe
 Default er Nei, må endres til Ja hvis det er tilfellet.
 
 ### Innkvitteringsfrekvens
-⚠️  
+⬆️  
 Frekvensen som data samles inn med og kontrolleres om alle enheter har rapportert.  
 Velges fra liste med følgende verdier: Engangs (el. ad-hoc) | Hvert 10. år | Hvert 5. år | Hvert 4. år | Hvert 3. år | Hvert 2. år | Årlig | Halvårlig | Kvartalsvis | Termin (= hverannen mnd.) | Månedlig | Ukentlig.
 
 ### Oppstarts-/initieringsdato for innsamling
-⚠️  
+⬆️  
 For ***planlagte innsamlinger:*** foreslått startdato for innsamlingen, dvs. når datainnsamlingen skal påstartes/initieres for første gang.  
 For ***eksisterende innsamlinger:*** den tidligste kjente datoen når innsamlingen ble kjørt for første gang. Nb. hvis de nyere tidspunkter for kjøring av innsamlingen ikke lenger stemmer med tidsmønster: *(den faktiske) Oppstartsdato + N x [frekvens](#innkvitteringsfrekvens)* \ (f.eks. en årlig innsamling som opprinnelig var kjørt på våren, men senere flyttet til høsten, e.l.), da bør datoen som angis justeres frem ("jukses litt") slik at de nåværende innsamlings-forekomstene stemmer med mønsteret – slik at mønsteret kan brukes for å anslå og planlegge / omtrentlig beramme nye, kommende kjøringer av innsamlingen.
 
