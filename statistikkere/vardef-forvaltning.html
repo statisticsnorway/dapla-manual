@@ -833,6 +833,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#yaml-filstruktur" id="toc-yaml-filstruktur" class="nav-link" data-scroll-target="#yaml-filstruktur">YAML-filstruktur</a></li>
   <li><a href="#redigere-yaml-filen" id="toc-redigere-yaml-filen" class="nav-link" data-scroll-target="#redigere-yaml-filen">Redigere YAML-filen</a></li>
+  <li><a href="#hvordan-slette-felt" id="toc-hvordan-slette-felt" class="nav-link" data-scroll-target="#hvordan-slette-felt">Hvordan slette felt</a></li>
   <li><a href="#yaml-fil-ny-variabeldefinisjon" id="toc-yaml-fil-ny-variabeldefinisjon" class="nav-link" data-scroll-target="#yaml-fil-ny-variabeldefinisjon">YAML-fil: Ny variabeldefinisjon</a></li>
   <li><a href="#yaml-fil-redigere-utkast" id="toc-yaml-fil-redigere-utkast" class="nav-link" data-scroll-target="#yaml-fil-redigere-utkast">YAML-fil: Redigere utkast</a></li>
   <li><a href="#yaml-fil-redigere-publisert" id="toc-yaml-fil-redigere-publisert" class="nav-link" data-scroll-target="#yaml-fil-redigere-publisert">YAML-fil: Redigere publisert</a></li>
@@ -1425,56 +1426,96 @@ Caution
 </div>
 </section>
 </section>
+<section id="hvordan-slette-felt" class="level4">
+<h4 class="anchored" data-anchor-id="hvordan-slette-felt">Hvordan slette felt</h4>
+<p>Det er enkelte felt som er valgfrie og kan slettes, enten i utkast eller når man lager en ny Patch eller Gyldighetsperiode.</p>
+<p>Feltene det gjelder:</p>
+<ul>
+<li><code>classification_reference</code></li>
+<li><code>measurement_type</code></li>
+<li><code>valid_until</code> (kan ikke slettes for publiserte variabeldefinisjoner)</li>
+<li><code>external_reference_uri</code></li>
+<li><code>comment</code></li>
+<li><code>related_variable_definition_uris</code></li>
+</ul>
+<p>Man sletter de ved å fjerne verdien fra YAML-fila</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Før
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span><span class="at"> 2030-01-01</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>For å slette
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
 <section id="yaml-fil-ny-variabeldefinisjon" class="level4">
 <h4 class="anchored" data-anchor-id="yaml-fil-ny-variabeldefinisjon">YAML-fil: Ny variabeldefinisjon</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon mal ---</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        Buss</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"bus"</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span></span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-04-01</span></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span></span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
-<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
-<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
-<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
-<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon mal ---</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"bus"</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-04-01</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="yaml-fil-redigere-utkast" class="level4">
 <h4 class="anchored" data-anchor-id="yaml-fil-redigere-utkast">YAML-fil: Redigere utkast</h4>
@@ -1489,55 +1530,55 @@ Caution
 <li><code>external_reference_uri</code></li>
 <li><code>subject_fields</code></li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>        Buss</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-01-01</span></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvignforbund.no"</span></span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
-<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
-<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-01-01</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvignforbund.no"</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">nn</span><span class="kw">:</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">en</span><span class="kw">:</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> DRAFT</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="yaml-fil-redigere-publisert" class="level4">
 <h4 class="anchored" data-anchor-id="yaml-fil-redigere-publisert">YAML-fil: Redigere publisert</h4>
@@ -1557,63 +1598,63 @@ Caution
 <li><code>related_variable_definition_uris</code></li>
 <li><code>measurement_type</code></li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        Buss </span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        Buss</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>        Bus</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>        Buss er eit køyretøy som er spesialkonstruert for å frakte mange passasjerar.</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>        A bus is a motor vehicle that is specially designed to carry many passengers.</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"02"</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-01-01</span></span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvognforbund.no"</span></span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"https://example.com/"</span></span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a><span class="fu">        nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a><span class="fu">        en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>            Section for Industrial and Environmental Statistics</span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
-<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
-<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
-<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
-<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
-<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
-<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"arbmark-aku-developers"</span></span>
-<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
-<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
-<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
-<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
-<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
-<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-03-25 10:15:19.038000+00:00</span></span>
-<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        Buss </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>        Bus</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte mange passasjerer.</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>        Buss er eit køyretøy som er spesialkonstruert for å frakte mange passasjerar.</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        A bus is a motor vehicle that is specially designed to carry many passengers.</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">"02"</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-01-01</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvognforbund.no"</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"https://example.com/"</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a><span class="fu">        nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="fu">        en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>            Section for Industrial and Environmental Statistics</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"arbmark-aku-developers"</span></span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">1</span></span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-03-25 10:15:19.038000+00:00</span></span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="yaml-fil-ny-gyldighetsperiode" class="level4">
 <h4 class="anchored" data-anchor-id="yaml-fil-ny-gyldighetsperiode">YAML-fil: Ny gyldighetsperiode</h4>
@@ -1626,74 +1667,74 @@ Caution
 <li><code>valid_from</code></li>
 <li><code>definition</code></li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        Buss </span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        Buss</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>        Bus</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte flere enn </span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        16 passasjerer.</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        Buss er eit køyretøy som er spesialkonstruert for å frakte flere enn </span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        16 passasjerar.</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>        A bus is a motor vehicle that is specially designed to carry more than </span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        16 passengers.</span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">""</span></span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-06-01</span></span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvognforbund.no"</span></span>
-<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
-<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>        Krav til spesifikasjon av antall passasjerer i en buss for å skille "buss" fra "minibuss".</span>
-<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>        Krav til spesifikasjon av talet på passasjerar i ein buss for å skilje </span>
-<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>        mellom «buss» og «minibuss».</span>
-<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>        Requirements for specification of the number of passengers in a bus to distinguish </span>
-<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>        "bus" from "minibus".</span>
-<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
-<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"https://example.com/"</span></span>
-<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
-<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
-<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
-<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a><span class="fu">        nn</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
-<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a><span class="fu">        en</span><span class="kw">: </span><span class="ch">|-</span></span>
-<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>            Section for Industrial and Environmental Statistics</span>
-<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
-<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
-<span id="cb26-53"><a href="#cb26-53" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
-<span id="cb26-54"><a href="#cb26-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-55"><a href="#cb26-55" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
-<span id="cb26-56"><a href="#cb26-56" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
-<span id="cb26-57"><a href="#cb26-57" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
-<span id="cb26-58"><a href="#cb26-58" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
-<span id="cb26-59"><a href="#cb26-59" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
-<span id="cb26-60"><a href="#cb26-60" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"arbmark-aku-developers"</span></span>
-<span id="cb26-61"><a href="#cb26-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-62"><a href="#cb26-62" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
-<span id="cb26-63"><a href="#cb26-63" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
-<span id="cb26-64"><a href="#cb26-64" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
-<span id="cb26-65"><a href="#cb26-65" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
-<span id="cb26-66"><a href="#cb26-66" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
-<span id="cb26-67"><a href="#cb26-67" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-04-05 11:15:19.038000+00:00</span></span>
-<span id="cb26-68"><a href="#cb26-68" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" style="font-size: 0.9em;"><pre class="sourceCode YAML code code-with-copy"><code class="sourceCode yaml"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Variabeldefinisjon ---</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        Buss </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        Buss</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>        Bus</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">short_name</span><span class="kw">:</span><span class="at"> </span><span class="st">"reg_bus"</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="fu">definition</span><span class="kw">:</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>        Buss er en motorvogn som er spesialkonstruert for å frakte flere enn </span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>        16 passasjerer.</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>        Buss er eit køyretøy som er spesialkonstruert for å frakte flere enn </span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>        16 passasjerar.</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>        A bus is a motor vehicle that is specially designed to carry more than </span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>        16 passengers.</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="fu">classification_reference</span><span class="kw">:</span><span class="at"> </span><span class="st">"111"</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="fu">unit_types</span><span class="kw">:</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"15"</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="fu">subject_fields</span><span class="kw">:</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr01"</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"tr04"</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="fu">contains_special_categories_of_personal_data</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="fu">measurement_type</span><span class="kw">:</span><span class="at"> </span><span class="st">""</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_from</span><span class="kw">:</span><span class="at"> 2025-06-01</span></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="fu">valid_until</span><span class="kw">:</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="fu">external_reference_uri</span><span class="kw">:</span><span class="at"> </span><span class="st">"https://www.norges-motorvognforbund.no"</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a><span class="fu">comment</span><span class="kw">:</span></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="fu">    nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>        Krav til spesifikasjon av antall passasjerer i en buss for å skille "buss" fra "minibuss".</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a><span class="fu">    nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>        Krav til spesifikasjon av talet på passasjerar i ein buss for å skilje </span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>        mellom «buss» og «minibuss».</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a><span class="fu">    en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>        Requirements for specification of the number of passengers in a bus to distinguish </span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a>        "bus" from "minibus".</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a><span class="fu">related_variable_definition_uris</span><span class="kw">:</span></span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"https://example.com/"</span></span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a><span class="fu">contact</span><span class="kw">:</span></span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">title</span><span class="kw">:</span></span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a><span class="fu">        nb</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a><span class="fu">        nn</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a>            Seksjon for Nærings- og miljøstatistikk</span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a><span class="fu">        en</span><span class="kw">: </span><span class="ch">|-</span></span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a>            Section for Industrial and Environmental Statistics</span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span><span class="at"> s400@ssb.no</span></span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Statusfelt. Verdi 'DRAFT' før publisering. Ikke rediger hvis du oppretter en ny variabeldefinisjon. ---</span></span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a><span class="fu">variable_status</span><span class="kw">:</span><span class="at"> PUBLISHED_INTERNAL</span></span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Eierteam og grupper. Ikke rediger hvis du oppretter en ny variabeldefinisjon, verdien genereres ---</span></span>
+<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a><span class="fu">owner</span><span class="kw">:</span></span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">team</span><span class="kw">:</span><span class="at"> </span><span class="st">"aordning-register"</span></span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">groups</span><span class="kw">:</span></span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"aordning-register-developers"</span></span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="kw">-</span><span class="at"> </span><span class="st">"arbmark-aku-developers"</span></span>
+<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Maskin-genererte felt. Ikke rediger. ---</span></span>
+<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a><span class="fu">id</span><span class="kw">:</span><span class="at"> </span><span class="st">"wypvb3wd"</span></span>
+<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a><span class="fu">patch_id</span><span class="kw">:</span><span class="at"> </span><span class="dv">2</span></span>
+<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a><span class="fu">created_at</span><span class="kw">:</span><span class="at"> 2025-01-11 08:15:19.038000+00:00</span></span>
+<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a><span class="fu">created_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span>
+<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_at</span><span class="kw">:</span><span class="at"> 2025-04-05 11:15:19.038000+00:00</span></span>
+<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a><span class="fu">last_updated_by</span><span class="kw">:</span><span class="at"> </span><span class="st">"ano@ssb.no"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 <style>
 code span.co {
     color:#408080;
