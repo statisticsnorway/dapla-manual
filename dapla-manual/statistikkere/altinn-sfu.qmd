@@ -1,6 +1,6 @@
 ---
 title: Hente data fra bakke
-date-modified: 05/19/2026
+date-modified: 06/18/2026
 lightbox: true
 ---
 
@@ -43,7 +43,7 @@ Disse parameterne kan brukes for å filtrere resultatet ytterligere:
 
 | Parameter | Type | Beskrivelse |
 |------------|------|-------------|
-| `pulje` | int | Hent spesifikk pulje |
+| `pulje` | string | Filtrer på én eller flere puljer. Angi puljenummer som kommaseparert streng, f.eks. "1" eller "1,2". Verdien "0" brukes for å hente enheter uten pulje. "0" kan ikke kombineres med andre puljer. Dersom parameteren ikke oppgis, returneres hele utvalget uavhengig av pulje. |
 | `status` | string | Hent spesifikk status. Mulige verdier er "besvart", "ikke-besvart", "alle" |
 | `max_results` | int | Maks antall resultater som returneres |
 | `pagination_info` | object | Pagineringsinformasjon |
@@ -61,6 +61,16 @@ response = client.get_utvalg_from_sfu(
 
 print(json.dumps(response, indent=4))
 ```
+
+| Verdi for `pulje` | Resultat                              |
+| ----------------- | ------------------------------------- |
+| `"1"`             | Hent kun pulje 1                      |
+| `"1,2"`           | Hent pulje 1 og 2                     |
+| `"0"`             | Hent kun enheter uten pulje      |
+| *(ikke oppgitt)*  | Hent hele utvalget uavhengig av pulje |
+
+**Merk:** Verdien "0" kan ikke kombineres med andre puljer. For eksempel er "0,1" ikke gyldig.
+
 :::
 
 ::: {.callout-caution collapse="true"}
