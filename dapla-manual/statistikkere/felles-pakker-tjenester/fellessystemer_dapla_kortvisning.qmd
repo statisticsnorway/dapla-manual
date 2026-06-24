@@ -1,0 +1,163 @@
+---
+title: "Felles oversikt over Dapla-relaterte systemer og verktøy"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+<style>
+.fellesoversikt-intro {
+  max-width: 920px;
+  margin-bottom: 1rem;
+}
+
+.fellesoversikt-updated {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: -0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.observablehq form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem 1rem;
+  align-items: end;
+  max-width: 920px;
+  margin-bottom: 1rem;
+}
+
+.observablehq form label {
+  font-weight: 600;
+}
+
+.observablehq form input,
+.observablehq form select {
+  width: 100%;
+  max-width: 100%;
+}
+
+.system-results-summary {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.5rem 0 0.8rem 0;
+}
+
+.system-card-list {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 980px;
+}
+
+.system-card {
+  border: 1px solid #ddd;
+  border-radius: 0.55rem;
+  padding: 0.95rem 1rem;
+  background: #fff;
+}
+
+.system-card h3 {
+  margin: 0 0 0.15rem 0;
+  font-size: 1.12rem;
+}
+
+.system-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.15rem 0 0.55rem 0;
+}
+
+.system-tag {
+  font-size: 0.78rem;
+  color: #555;
+  background: #f2f2f2;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+}
+
+.system-card p {
+  margin: 0.35rem 0;
+}
+
+.system-meta {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.system-link {
+  display: inline-block;
+  margin-top: 0.35rem;
+}
+</style>
+
+<div class="fellesoversikt-intro">
+
+Denne oversikten er ment som et oppslagsverk for Dapla-relaterte fellessystemer, tjenester og verktøy i SSB. Den skal gi en kort og overordnet forklaring av navn som ofte brukes i arbeid med statistikkproduksjon, forskning og forvaltning av data. Oversikten utfyller [Godkjentlisten](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3538355352/Godkjentliste+for+statistikkproduksjon+p+Dapla) ved å gi korte forklaringer av hva ulike verktøy brukes til, hvem de er relevante for, og hvor man finner mer informasjon. Den erstatter ikke Godkjentlisten og skal ikke forstås som en selvstendig godkjenning av teknologier eller verktøy. Ved valg av verktøy til statistikkproduksjon gjelder Godkjentlisten og øvrige interne retningslinjer. 
+
+</div>
+
+<div class="fellesoversikt-updated">
+**Sist oppdatert:** 24. juni 2026
+</div>
+
+```{ojs}
+//| echo: false
+systemer = FileAttachment("fellessystemer_dapla_hovedoversikt.csv").csv({typed: false})
+```
+
+```{ojs}
+//| echo: false
+notBlank = (x) => x !== undefined && x !== null && String(x).trim() !== ""
+normaliser = (x) => String(x ?? "")
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+
+sorterNorsk = (a, b) => String(a).localeCompare(String(b), "nb-NO")
+
+kategorier = ["Alle", ...Array.from(new Set(systemer.map(d => d.Kategori).filter(notBlank))).sort(sorterNorsk)]
+typer = ["Alle", ...Array.from(new Set(systemer.map(d => d.Type).filter(notBlank))).sort(sorterNorsk)]
+```
+
+```{ojs}
+//| echo: false
+viewof filtre = Inputs.form({
+  kategori: Inputs.select(kategorier, {label: "Kategori"}),
+  type: Inputs.select(typer, {label: "Type"}),
+  sok: Inputs.text({label: "Søk", placeholder: "Søk etter navn, målgruppe eller forklaring"})
+})
+```
+
+```{ojs}
+//| echo: false
+filtrerteSystemer = systemer.filter(d => {
+  const riktigKategori = filtre.kategori === "Alle" || d.Kategori === filtre.kategori
+  const riktigType = filtre.type === "Alle" || d.Type === filtre.type
+  const q = normaliser(filtre.sok)
+  const sokefelt = [d.Navn, d["Målgruppe"], d.Forklaring, d.Type, d.Kategori].map(normaliser).join(" ")
+  return riktigKategori && riktigType && (q === "" || sokefelt.includes(q))
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="system-results-summary">
+  <strong>${filtrerteSystemer.length}</strong> av <strong>${systemer.length}</strong> oppføringer vises.
+</div>
+
+<div class="system-card-list">
+${filtrerteSystemer.map(d => {
+  const tags = [d.Type, d.Kategori].filter(notBlank)
+  const kilde = d["Kilde / mer informasjon"]
+  return html`<article class="system-card">
+    <h3>${d.Navn}</h3>
+    ${tags.length ? html`<div class="system-tags">${tags.map(t => html`<span class="system-tag">${t}</span>`)}</div>` : ""}
+    ${notBlank(d.Forklaring) ? html`<p>${d.Forklaring}</p>` : ""}
+    ${notBlank(d["Målgruppe"]) ? html`<p class="system-meta"><strong>Målgruppe:</strong> ${d["Målgruppe"]}</p>` : ""}
+    ${notBlank(kilde) ? html`<a class="system-link" href=${kilde} target="_blank" rel="noopener noreferrer">Mer informasjon</a>` : ""}
+  </article>`
+})}
+</div>`
+```
