@@ -1,0 +1,255 @@
+---
+title: "Felles oversikt over Dapla-relaterte systemer og verktøy"
+format:
+  html:
+    toc: false
+    page-layout: full
+---
+
+<style>
+.fellesoversikt-intro {
+  max-width: 920px;
+  margin-bottom: 1rem;
+}
+
+.fellesoversikt-updated {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: -0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.observablehq form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem 1rem;
+  align-items: end;
+  max-width: 920px;
+  margin-bottom: 0.5rem;
+}
+
+.observablehq form label {
+  font-weight: 600;
+}
+
+.observablehq form input,
+.observablehq form select {
+  width: 100%;
+  max-width: 100%;
+}
+
+.system-filter-help {
+  max-width: 920px;
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 0 0.8rem 0;
+}
+
+.system-results-summary {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0.5rem 0 0.8rem 0;
+}
+
+.system-card-list {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 980px;
+}
+
+.system-card {
+  border: 1px solid #ddd;
+  border-radius: 0.55rem;
+  padding: 0.95rem 1rem;
+  background: #fff;
+}
+
+.system-card h3 {
+  margin: 0 0 0.15rem 0;
+  font-size: 1.12rem;
+}
+
+.system-tags,
+.system-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.system-tags {
+  margin: 0.15rem 0 0.55rem 0;
+}
+
+.system-tag {
+  font-size: 0.78rem;
+  color: #555;
+  background: #f2f2f2;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  line-height: 1.4;
+}
+
+.system-card p {
+  margin: 0.35rem 0;
+}
+
+.system-meta {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.system-link {
+  display: inline-block;
+  margin-top: 0.35rem;
+}
+
+.system-tag-details {
+  max-width: 920px;
+  margin: 0.25rem 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.system-tag-details summary {
+  cursor: pointer;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.system-tag-cloud {
+  padding: 0.5rem 0;
+}
+
+.no-results {
+  max-width: 920px;
+  padding: 0.8rem 1rem;
+  background: #fff8e1;
+  border: 1px solid #f1d98b;
+  border-radius: 0.55rem;
+}
+</style>
+
+<div class="fellesoversikt-intro">
+
+Denne oversikten er ment som et oppslagsverk for Dapla-relaterte fellessystemer, tjenester og verktøy i SSB. Den skal gi en kort og overordnet forklaring av navn som ofte brukes i arbeid med statistikkproduksjon, forskning og forvaltning av data. Oversikten utfyller [Godkjentlisten](https://statistics-norway.atlassian.net/wiki/spaces/Arkitektur/pages/3538355352/Godkjentliste+for+statistikkproduksjon+p+Dapla) ved å gi korte forklaringer av hva ulike verktøy brukes til, hvem de er relevante for, og hvor man finner mer informasjon. Den erstatter ikke Godkjentlisten og skal ikke forstås som en selvstendig godkjenning av teknologier eller verktøy. Ved valg av verktøy til statistikkproduksjon gjelder Godkjentlisten og øvrige interne retningslinjer.
+
+</div>
+
+<div class="fellesoversikt-updated">
+<strong>Sist oppdatert:</strong> 25. juni 2026
+</div>
+
+```{ojs}
+//| echo: false
+systemer = FileAttachment("fellessystemer_dapla_hovedoversikt_tags.csv").csv({typed: false})
+```
+
+```{ojs}
+//| echo: false
+notBlank = (x) => x !== undefined && x !== null && String(x).trim() !== ""
+
+normaliser = (x) => String(x ?? "")
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/æ/g, "ae")
+  .replace(/ø/g, "o")
+  .replace(/å/g, "a")
+
+sorterNorsk = (a, b) => String(a).localeCompare(String(b), "nb-NO")
+
+parseTags = (x) => String(x ?? "")
+  .split(";")
+  .map(t => t.trim())
+  .filter(notBlank)
+
+parseTagFilter = (x) => normaliser(x)
+  .split(/[\s,;+]+/)
+  .map(t => t.trim())
+  .filter(notBlank)
+
+systemerMedTags = systemer.map(d => ({
+  ...d,
+  _tags: parseTags(d.Tags),
+  _tagsNormalisert: parseTags(d.Tags).map(normaliser)
+}))
+
+alleTags = Array.from(
+  new Set(systemerMedTags.flatMap(d => d._tags))
+).sort(sorterNorsk)
+```
+
+```{ojs}
+//| echo: false
+viewof filtre = Inputs.form({
+  sok: Inputs.text({
+    label: "Søk",
+    placeholder: "Søk etter navn, målgruppe, forklaring eller tag"
+  }),
+  tags: Inputs.text({
+    label: "Filtrer på tags",
+    placeholder: "f.eks. metadata + python"
+  })
+})
+```
+
+<div class="system-filter-help">
+Søkefeltet søker bredt i hele oppføringen. Taggfilteret snevrer inn resultatet: skriver du for eksempel <code>metadata + python</code>, vises bare oppføringer som har begge taggene.
+</div>
+
+```{ojs}
+//| echo: false
+html`<details class="system-tag-details">
+  <summary>Vis tilgjengelige tags</summary>
+  <div class="system-tag-cloud">
+    ${alleTags.map(t => html`<span class="system-tag">${t}</span>`)}
+  </div>
+</details>`
+```
+
+```{ojs}
+//| echo: false
+filtrerteSystemer = systemerMedTags.filter(d => {
+  const q = normaliser(filtre.sok)
+  const tagFilter = parseTagFilter(filtre.tags)
+
+  const sokefelt = [
+    d.Navn,
+    d["Målgruppe"],
+    d.Forklaring,
+    d.Tags
+  ].map(normaliser).join(" ")
+
+  const riktigSok = q === "" || sokefelt.includes(q)
+
+  // Alle tags i taggfilteret må finnes. Delvis treff er tillatt,
+  // slik at "kontroll" matcher taggen "kontroll-og-editering".
+  const riktigTags = tagFilter.length === 0 || tagFilter.every(
+    t => d._tagsNormalisert.some(dt => dt === t || dt.includes(t))
+  )
+
+  return riktigSok && riktigTags
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="system-results-summary">
+  <strong>${filtrerteSystemer.length}</strong> av <strong>${systemer.length}</strong> oppføringer vises.
+</div>
+
+${filtrerteSystemer.length === 0
+  ? html`<div class="no-results">Ingen treff. Prøv færre tags eller et bredere søk.</div>`
+  : html`<div class="system-card-list">
+      ${filtrerteSystemer.map(d => {
+        const kilde = d["Kilde / mer informasjon"]
+        return html`<article class="system-card">
+          <h3>${d.Navn}</h3>
+          ${d._tags.length ? html`<div class="system-tags">${d._tags.map(t => html`<span class="system-tag">${t}</span>`)}</div>` : ""}
+          ${notBlank(d.Forklaring) ? html`<p>${d.Forklaring}</p>` : ""}
+          ${notBlank(d["Målgruppe"]) ? html`<p class="system-meta"><strong>Målgruppe:</strong> ${d["Målgruppe"]}</p>` : ""}
+          ${notBlank(kilde) ? html`<a class="system-link" href=${kilde} target="_blank" rel="noopener noreferrer">Mer informasjon</a>` : ""}
+        </article>`
+      })}
+    </div>`
+}`
+```
