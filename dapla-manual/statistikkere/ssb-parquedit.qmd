@@ -1,15 +1,37 @@
 ---
-title: "ssb-parquedit"
-date-modified: "06/15/2026"
+title: "Parquedit"
+date-modified: "07/01/2026"
 lightbox: true
 ---
 
-[ssb-parquedit](https://pypi.org/project/ssb-parquedit/) er en Python-pakke for manuell redigering av tabelldata lagret som Parquet i Dapla Lab. Pakken er laget for situasjoner der du trenger kontrollerte enkeltendringer i en tabell, med sporbarhet på hva som er endret, hvorfor det ble endret, og hvem som gjorde endringen.
+::: {.callout-caution}
+## Tjenesten lanseres september 2026
 
-Pakken bygger på DuckDB og DuckLake, og fungerer best når du jobber i et [ssb-project](./ssb-project.qmd). Du får et enkelt Python-grensesnitt for å opprette tabeller, sette inn data, hente ut resultater og redigere enkeltrader direkte fra Google Cloud Storage (GCS).
+Parquedit lanseres september 2026 og er ikke klar for bruk.
+:::
+
+
+ **Parquedit** er en tjeneste som gir statistikere database-funksjonalitet over Parquet-filer. Formålet med tjenesten er å dekke lagringsbehovene knyttet til arbeid med **manuell editering** av data i SSB. Les mer om [Prinsipper og retningslinjer for dataeditering i SSB](https://www.ssb.no/teknologi-og-innovasjon/informasjons-og-kommunikasjonsteknologi-ikt/artikler/prinsipper-og-retningslinjer-for-dataeditering). 
+ 
+ **Parquedit** inkluderer IKKE et grafisk grensesnitt (GUI) for å gjøre manuelle endringer på data, kun en enkel Python-funksjon som oppdaterer informasjon i en rad i et datasett. Parquedit kan derimot benyttes som en underliggende lagringsløsning som oppdateres via GUI'er som [Editeringsrammeverket](./editeringsrammeverk.qmd) eller andre løsninger. 
+
+**ssb-parquedit** er bygget på [Ducklake](https://ducklake.select/) og har følgende egenskaper:
+
+- versjonering av data
+- tidsreiser
+- flere samtidige brukere (*concurrency*)
+- [ACID](https://en.wikipedia.org/wiki/ACID-transaksjoner)-transaksjoner 
+- logging av endringer
+    - hva ble endret?
+    - hvem endret?
+    - hvorfor ble det endret?
+
+
+Tjenesten lagrer data i statistikkteamets produktbøtte, mens metadata lagres i en sentral katalog på Dapla. Teamene kan benytte seg av Python-pakken [ssb-parquedit](https://pypi.org/project/ssb-parquedit/) for å jobbe med Parquedit-tabellen sine fra [Dapla Lab](./dapla-lab.qmd).  
+
 
 :::{.callout-note collapse="true"}
-## I farta? ssb-parquedit på 1-2-3
+## TL;DR ⏱️ Hurtigstart
 
 1. Installer pakken i prosjektet ditt:
 ```{.bash filename="Terminal"}
@@ -39,43 +61,35 @@ con.edit(
 ```
 :::
 
-## Når passer ssb-parquedit?
+## Bruksområde
 
-ssb-parquedit passer når du skal:
+Parquedit er ment som et **midlertidig lagringsformat** under arbeidsprosessen for manuell editering. Tjenesten forutsetter at brukeren ønsker å oppdatere en og en rad etter manuelle vurderinger av en person, og at dette skjer etter maskinelle kontroller og rettinger er gjennomført. Tjenesten forutsetter også at oppdateringer skjer i en enkelttabell. Parquedit har ikke støtte for *primary* eller *foreign* nøkler.  
 
-- korrigere enkeltverdier i eksisterende tabeller
-- laste inn nye rader i eksisterende tabeller
-- opprette mindre tabeller som skal vedlikeholdes manuelt
-- dokumentere manuelle endringer med årsak og kommentar
+Når arbeidsprosessen med manuell editering er gjennomført og data lagres i stabile datatilstander, så forutsetter systemet at teamet som eier dataene selv henter ut opplysninger fra Parquedit med logger som skal benyttes til kvalitetsrapporter og gi evnen til å gjenskape manuelle editeringer på et senere tidspunkt.     
 
-Begrensninger:
+## Forberedelser
 
-- biblioteket er laget for redigering av enkelttabeller
-- det støtter ikke primær- eller fremmednøkler
+For at et team skal kunne benytte seg av Parquedit må [Teamansvarlig](./hva-er-dapla-team.qmd#teamansvarlig) først aktivere tilgang i Dapla Ctrl. Det gjøres på følgende måte:
 
-## Forutsetninger
+1. Gå inn i [Dapla Ctrl](https://dapla-ctrl.intern.ssb.no/)
+2. Åpne **Instillinger** på Teamsiden
+3. Under **Parquedit** velger du **Aktiver tilgang**
 
-For å bruke pakken trenger du:
+Etter dette kan teamets medlemmer opprette så mange Parquedit-tabeller de ønsker. 
 
-- et aktivt [ssb-project](./ssb-project.qmd)
-- tilgang til et Dapla-miljø
-- tilgang til data-produkt-bøtte i GCS
+Et team som har aktivert tilgangen kan åpne en tjeneste i Dapla Lab og installere Python-pakken [ssb-parquedit](https://pypi.org/project/ssb-parquedit/) i et [ssb-project](./ssb-project.qmd) på følgende måte:
 
-:::{.callout-note}
-`ParquEdit()` leser normalt oppsett automatisk fra miljøvariabler i Dapla, så du slipper manuell konfigurasjon i de fleste tilfeller.
-:::
-
-## Installasjon
-
-Installer pakken i prosjektet ditt:
-
-```{.bash filename="Terminal"}
+```{.python filename="Terminal"}
 poetry add ssb-parquedit
 ```
 
-## Kom i gang
+## Funksjonalitet
 
-### Opprett klient
+Under beskrives funksjonaliteten som tilbys av Parquedit. Vanlig funksjonalitet tilbys som funksjoner i Python-biblioteket [ssb-parquedit](https://pypi.org/project/ssb-parquedit/). 
+
+### Opprette kobling
+
+For å jobbe med Parquedit-tabeller må man første opprette en kobling. Opprett en standardkobling på følgende måte: 
 
 ```{.python filename="Notebook"}
 from ssb_parquedit import ParquEdit
@@ -83,29 +97,32 @@ from ssb_parquedit import ParquEdit
 con = ParquEdit()
 ```
 
-### Se data
+Avanserte brukere kan også konfigurere sin egen kobling til Parquedit. Det beskrives nærmere senere. 
+
+### Opprette ny tabell
+
+Man kan opprette en ny Parquedit-tabell basert på følgende input:
+
+- Parquet-fil
+- Dataframe i minnet (Pandas, Polars, etc.)
+- json-skjema
+
+
+::: {.panel-tabset}
+
+## Parquet
 
 ```{.python filename="Notebook"}
-# Hent alle rader (pandas DataFrame)
-df = con.view(table_name="manuell_tabell")
-
-# Filter og velg kolonner
-utvalg = con.view(
-    table_name="manuell_tabell",
-    where="aar = 2025",
-    columns=["enhet_id", "status", "verdi"],
-    order_by="enhet_id ASC",
+# Opprett fra eksisterende Parquet-fil i GCS (skjema utledes fra filen)
+con.create_table(
+    table_name="manuell_tabell_gcs",
+    source="gs://my-bucket/path/to/file.parquet",
+    product_name="eksempelprodukt",
+    unique_key=["enhet_id", "aar"],
 )
 ```
 
-### Opprett tabell
-
-Du kan opprette tabell fra DataFrame, JSON-skjema eller eksisterende Parquet-fil i GCS.
-
-:::{.callout-note collapse="true"}
-`product_name` er obligatorisk og lagres som en kommentar på tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.
-`unique_key` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
-:::
+## Dataframe
 
 ```{.python filename="Notebook"}
 import pandas as pd
@@ -127,15 +144,21 @@ con.create_table(
 )
 ```
 
-```{.python filename="Notebook"}
-# Opprett fra eksisterende Parquet-fil i GCS (skjema utledes fra filen)
-con.create_table(
-    table_name="manuell_tabell_gcs",
-    source="gs://my-bucket/path/to/file.parquet",
-    product_name="eksempelprodukt",
-    unique_key=["enhet_id", "aar"],
-)
-```
+:::
+
+Følgende argumenter må oppgis ved opprettelse av ny tabell:
+
+`table_name` er det navnet på tabellen du ønsker å opprette. Siden et team kan ha flere tabeller, er det dette navnet som benyttes senere for å referere til tabellen. 
+
+`source` er kilden (Parquet, Dataframe eller json-skjema) som skal benyttes til å opprette tabellen.
+
+`product_name` er obligatorisk og lagres som en kommentar på tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.
+
+`unique_key` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
+
+
+#### Partisjonert tabeller
+
 
 ```{.python filename="Notebook"}
 # Opprett partisjonert tabell og fyll med data
@@ -149,7 +172,7 @@ con.create_table(
 )
 ```
 
-### Legg til data i eksisterende tabell
+### Laste data
 
 ```{.python filename="Notebook"}
 con.insert_data(
@@ -158,7 +181,42 @@ con.insert_data(
 )
 ```
 
-## Redigere en rad
+### Lese data
+
+```{.python filename="Notebook"}
+# Hent alle rader (pandas DataFrame)
+df = con.view(table_name="manuell_tabell")
+
+# Filter og velg kolonner
+utvalg = con.view(
+    table_name="manuell_tabell",
+    where="aar = 2025",
+    columns=["enhet_id", "status", "verdi"],
+    order_by="enhet_id ASC",
+)
+```
+
+```{.python filename="Notebook"}
+# Alle rader (returnerer pandas DataFrame som standard)
+result = con.view("manuell_tabell")
+
+# Filtrering med WHERE-betingelse
+result = con.view("manuell_tabell", where="aar = 2025")
+result = con.view("manuell_tabell", where="enhet_id = 'A1' AND aar >= 2025")
+
+# Velg spesifikke kolonner
+result = con.view("manuell_tabell", columns=["enhet_id", "aar"])
+
+# Sorter resultater
+result = con.view("manuell_tabell", order_by="aar DESC")
+
+# Returner som polars eller pyarrow
+result = con.view("manuell_tabell", output_format="polars")
+result = con.view("manuell_tabell", output_format="pyarrow")
+```
+
+
+### Editering
 
 En vanlig flyt er:
 
@@ -195,7 +253,7 @@ Gyldige verdier for `change_event_reason` er:
 - `DUPLICATE`
 - `OTHER`
 
-## Endringslogg og sporbarhet
+### Lese logger
 
 Bruk `get_edits()` for å hente historikk over manuelle endringer.
 
@@ -214,76 +272,42 @@ Dette gir blant annet:
 - begrunnelse og kommentar
 - gamle og nye verdier
 
-## Nyttige hjelpefunksjoner
+### Liste tabeller
+
+Liste ut alle tabeller som tilhører teamet: 
 
 ```{.python filename="Notebook"}
-# Alle rader (returnerer pandas DataFrame som standard)
-result = con.view("manuell_tabell")
-
-# Filtrering med WHERE-betingelse
-result = con.view("manuell_tabell", where="aar = 2025")
-result = con.view("manuell_tabell", where="enhet_id = 'A1' AND aar >= 2025")
-
-# Velg spesifikke kolonner
-result = con.view("manuell_tabell", columns=["enhet_id", "aar"])
-
-# Sorter resultater
-result = con.view("manuell_tabell", order_by="aar DESC")
-
-# Returner som polars eller pyarrow
-result = con.view("manuell_tabell", output_format="polars")
-result = con.view("manuell_tabell", output_format="pyarrow")
-
-# Teller rader
-antall = con.count(table_name="manuell_tabell")
-
-# Sjekker om tabell finnes
-finnes = con.exists(table_name="manuell_tabell")
-
-# Lister tabeller
 tabeller = con.list_tables()
 ```
 
-## Feilsøking
 
-### Finner ikke tabellen
 
-Sjekk at du bruker riktig `table_name`, og at du er i riktig miljø/team. Bruk `con.list_tables()` for å verifisere tilgjengelige tabeller.
 
-### Feil ved redigering
+### Antall rader i en tabell
 
-Kontroller at `rowid` faktisk finnes i tabellen, og at kolonnenavn i `changes` er skrevet riktig.
+```{.python filename="Notebook"}
+con.count(table_name="manuell_tabell")
+```
 
-### Uventet resultat etter endring
 
-Kjør `con.get_edits(table_name="...")` for å se hva som ble skrevet til endringsloggen.
 
-### Slette tabell og opprydding
+### Sjekk av eksistens
 
-`drop_table()` fjerner tabellen fra katalogen.
-Med `cleanup=True` (standard) ryddes også tilhørende datafiler.
+```{.python filename="Notebook"}
+con.exists(table_name="manuell_tabell")
+```
+
+### Slette tabell
+
+Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte: 
+
 
 ```{.python filename="Notebook"}
 con.drop_table("manuell_tabell")
-
-# Behold underliggende data ved sletting av katalogoppføring
-con.drop_table("manuell_tabell", cleanup=False)
 ```
 
-## Anbefalt arbeidsmåte
+Hvis man ønsker å beholde selve datafilene i produktbøtta, legger man til `cleanup=False` på denne måten:
 
-- filtrer alltid frem raden du vil endre først
-- oppgi tydelig `change_comment` så andre forstår hvorfor endringen ble gjort
-- hold manuelle tabeller små og oversiktlige
-- bruk automatiserte løp der det er mulig, og manuelle endringer kun der det trengs
-
-For avanserte brukere finnes det også mulighet til å bruke en intern/raw connection. Da må du selv implementere tilsvarende logikk som ordinær bruk legger til gjennom `commit_extra_info`.
-
-Hvis du ikke gjør det, bryter bruken med forventede standarder for dokumentasjon av editering og sporbarhet.
-
-## Ressurser
-
-- Dokumentasjon: <https://statisticsnorway.github.io/ssb-parquedit>
-- Referanseguide: <https://statisticsnorway.github.io/ssb-parquedit/reference.html>
-- Kildekode: <https://github.com/statisticsnorway/ssb-parquedit>
-- PyPI: <https://pypi.org/project/ssb-parquedit/>
+```{.python filename="Notebook"}
+con.drop_table("manuell_tabell", cleanup=False)
+```
