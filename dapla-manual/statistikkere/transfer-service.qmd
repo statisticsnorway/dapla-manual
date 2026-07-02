@@ -11,37 +11,23 @@ freeze: true
 
 Tjenesten støtter både automatiserte og ad-hoc overføringer, og den inkluderer et brukergrensesnitt for å sette opp og administrere overføringene i [Google Cloud Console (GCC)](https://console.cloud.google.com/).
 
-::: {.callout-important}
-# Overføring av kildedata
-Ved overføring av kildedata med Transfer Service så følger de samme prosedyrene som ved all annen behandling av kildedata. Det betyr at den som setter opp overføringen må være i tilgangsgruppen [data-admins](./hva-er-dapla-team.html#data-admins), og de må aktivere tilgangen i [JIT-applikasjonen](https://jitaccess.dapla.ssb.no/) før de setter opp overføringen. Rollene som må aktiveres er **storagetransfer.admin** og **ssb.bucket.write**. [Les mer om JIT-applikasjonen her](./appendix/jit.html).
-:::
-
-
 ## Tilgangsstyring
 
 Tilgangsstyringen til data gjelder også for overføringer av data med Transfer Service. Det betyr at du må ha tilgang til dataene du skal sette opp overføringsjobber for. Ved bruk av Transfer Service for overføring av data mellom bakke og sky så er det satt opp dedikerte mapper for dette i prodsonen. Også her følges tilgangsstyringen til dataene, med unntak av at data-admins har permanent tilgang til kildedata som er synkronisert ned til bakken, mens man på Dapla må gi seg selv korte, begrunnede tilganger ved behov.
 
-:::: {.columns}
+Hvert prosjekt, eksempelvis `prisstat-produkt-p` har to dedikerte bøtter for overføring av data: **tilsky** og **frasky**. Disse bøttene er *mellomstasjoner* for bakke og sky. Data skal deretter flyttes til riktig bøtte.
 
-::: {.column width="60%"}
-På Dapla så er det opprettet dedikerte bøtter for overføring av data mellom bakke og sky. Disse heter **tilsky** og **frasky**. Tanken med disse "*mellomstasjonene*" for overføring av data er at de skal beskytte Dapla-team fra å overskrive data ved en feil. Ved å ha egne bøtter som data blir synkronisert gjennom, så legges det opp til at man deretter manuelt^[Med manuelt menes her at man går inn og flytter filer fra en bøtte til en annen. Men det kan også bety at man flytter data til riktig bøtte som en del produksjonskoden sin, som igjen kan kjøres automatisk.] flytter dataene til riktig bøtte. 
-
-Men det er ikke lagt noen sperrer for synkronisere direkte til en annen bøtte man har tilgang til. Systembrukeren (se forklaringsboks) som kjører Transfer Service har tilgang til alle bøttene i prosjektet. Det betyr at en data-admin kan velge å synkronisere data direkte inn i kildebøtta hvis man mener at det er hensiktsmessig. Det samme gjelder for **developers** som setter opp dataoverføringer i standardprosjektet. Men da er det som sagt viktig å være bevisst på hvordan man setter opp reglene for overskriving av data hvis filene har like navn. Disse opsjonene forklares nærmere senere i kapitlet. 
+:::{.callout-note}
+# Hvorfor ha dedikerte mellomstasjoner?
+Tanken med disse "*mellomstasjonene*" for overføring av data er at de skal beskytte Dapla-team fra å overskrive data ved en feil. Ved å ha egne bøtter som data blir synkronisert gjennom, så legges det opp til at man deretter manuelt^[Med manuelt menes her at man går inn og flytter filer fra en bøtte til en annen. Men det kan også bety at man flytter data til riktig bøtte som en del produksjonskoden sin, som igjen kan kjøres automatisk.] flytter dataene til riktig bøtte. 
 :::
 
-::: {.column width="5%"}
-<!-- empty column to create gap -->
-:::
+Det er ikke lagt noen sperrer for synkronisere direkte til en annen bøtte man har tilgang til. Systembrukeren (se forklaringsboks) som kjører Transfer Service har tilgang til alle bøttene i prosjektet. Det betyr at en data-admin kan velge å synkronisere data direkte inn i kildebøtta hvis man mener at det er hensiktsmessig. Det samme gjelder for **developers** som setter opp dataoverføringer i standardprosjektet. Men da er det som sagt viktig å være bevisst på hvordan man setter opp reglene for overskriving av data hvis filene har like navn.
 
-::: {.column width="35%"}
-::: {.callout-note}
+::: {.callout-caution collapse="true"}
 # Personlig bruker vs systembruker
 Når du setter opp en overføringsjobb med Transfer Service så setter du opp en jobb som kjøres av en systembruker^[Systembrukere heter *Service Accounts* på engelsk og blir ofte referert til som *SA*-er i dagligtale.] og ikke din egen personlige bruker. Dette er spesielt viktig å være klar over når man setter opp automatiserte overføringsjobber. En konsekves av dette er at automatiske overføringsjobber vil fortsette å kjøre selv om din tilgang til dataene er midlertidig, siden det er en systembruker som faktisk kjører jobben.
 :::
-:::
-
-::::
-
 
 ## Forberedelser
 
@@ -61,7 +47,7 @@ I filen over ser du at teamet har skrudd på tjenesten i prod-miljøet, siden `t
 
 ## Overføring av data
 
-::: {.callout-note}
+::: {.callout-important collapse="true"}
 # Overføring av kildedata
 Overføring av kildedata må gjøres av en *data-admin* i teamet som har aktivert sin forhåndsgodkjente tilgang til kildedata. Tilgangen aktiveres ved å gå inn i [JIT-applikasjonen](https://jitaccess.dapla.ssb.no/) og velge prosjekt-id. Deretter velger du rollene **ssb.bucket.write**, **ssb.buckets.list** og **storagetransfer.admin**, og hvor lenge du ønsker tilgangen. Til slutt oppgir du en begrunnelse for hvorfor du trenger tilgangen og trykker **Request access**. Når du har gjort dette vil du få en bekreftelse på at tilgangen er aktivert, og det tar ca 1 minutt før den aktiverte tilgangen er synlig i GCC. 
 :::
@@ -104,84 +90,6 @@ Når du kommer inn på siden til **Storage Transfer** så trykker du på  **Set 
 ![Opprett overføringsjobb i Google Cloud Console.](../images/data-transfer-tilsky.png){fig-alt="Bilde som viser Create a transfer job i Google Cloud Console." #fig-transfer-tilsky}
 
 Videre vil det variere om man skal overføre data mellom bøtter eller mellom Dapla og prodsonen. Under forklarer vi begge fremgangsmåtene.
-
-```{python}
-# | echo: false
-
-# Lager et diagram
-from diagrams import Cluster, Diagram, Edge
-from diagrams.gcp.storage import GCS
-from diagrams.generic.storage import Storage
-from diagrams.generic.blank import Blank
-from PIL import Image
-
-graph_attr_cluster = {
-    "fontsize": "8",
-    "bgcolor": "lightyellow",
-    "gradientangle": "360"
-    # "style": 'filled',
-    # "label": "test",
-    # "fontcolor": "blue",
-}
-
-graph_attr_diagram = {
-    # "fontsize": "45",
-    "bgcolor": "transparent"
-}
-
-with Diagram(
-    "", show=False, filename="../images/ts-kilde", graph_attr={}, direction="TB"
-):
-    with Cluster("DAPLA", graph_attr={"fontsize": "20"}):
-        Blank("")
-
-        with Cluster("kilde", graph_attr=graph_attr_cluster):
-            dkf = GCS("frasky")
-            dkt = GCS("tilsky")
-
-        with Cluster("standard", graph_attr=graph_attr_cluster):
-            dpf = GCS("frasky")
-            dpt = GCS("tilsky")
-
-    with Cluster("PRODSONE", graph_attr={"fontsize": "20", "bgcolor": "lightgrey"}):
-        Blank("/ssb/cloud_sync/")
-
-        with Cluster("kilde", graph_attr=graph_attr_cluster):
-            okf = Storage("frasky")
-            okt = Storage("tilsky")
-
-        with Cluster("standard", graph_attr=graph_attr_cluster):
-            opf = Storage("frasky")
-            opt = Storage("tilsky")
-
-        edge_admins = Edge(xlabel="data-admins")
-        edge_devs = Edge(xlabel="developers")
-
-    dkf >> edge_admins >> okf
-    okt >> dkt
-    dpf >> edge_devs >> opf
-    opt >> dpt
-
-# Cropper bildet så det skal ta mindre plass
-
-
-# Open the image
-img = Image.open("../images/ts-kilde.png")
-
-# Define the coordinates for the cropping box
-# The box is defined as (left, upper, right, lower)
-left = 200
-upper = 200
-right = 1150
-lower = 800
-cropping_box = (left, upper, right, lower)
-
-# Crop the image
-cropped_img = img.crop(cropping_box)
-
-# Save the cropped image
-cropped_img.save("../images/ts-kilde-cropped.png")
-```
 
 ### Prodsonen og Dapla
 
@@ -228,7 +136,7 @@ Valgene **When to overwrite** og **When to delete** er det viktig at tenkes nøy
 
 #### Mappestrukturen i prodsonen
 
-Mappestrukturen for overføringer med Transfer Service mellom bakke og sky har en fast struktur som er likt for alle team. Hvis du logger deg inn i terminalen på en av Linux-serverne i prodsonen, åpner du mappen ved å skrive `cd /ssb/cloud_sync`. Under denne mappen finner du en mappe for hvert team som har aktivert Transfer Service. Hvis et team for eksempel heter **dapla-example** så vil det være en mappe som heter `dapla-example`. Her kan teamet hente og levere data som skal synkroniseres mellom bakke og sky. Videre er det undermapper for kilde- og standardprosjektet til teamet. Det er kun **data-admins** som har tilgang til kildeprosjektet, og det er kun **developers** som har tilgang til standardprosjektet. Under finner du en oversikt over hvordan mappene ser ut for et team som heter **dapla-example**. 
+Mappestrukturen for overføringer med Transfer Service mellom bakke og sky er fast og lik for alle team. Hvis du logger deg inn i terminalen på en av Linux-serverne i prodsonen, åpner du mappen ved å skrive `cd /ssb/cloud_sync`. Under denne mappen finner du en mappe for hvert team som har aktivert Transfer Service Hvis et team for eksempel heter **dapla-example** så vil det være en mappe som heter `dapla-example`. Her kan teamet hente og levere data som skal synkroniseres mellom bakke og sky. Videre er det undermapper for kilde- og standardprosjektet til teamet. Det er kun **data-admins** som har tilgang til kildeprosjektet, og det er kun **developers** som har tilgang til standardprosjektet. Under finner du en oversikt over hvordan mappene ser ut for et team som heter **dapla-example**. 
 
 
 ```{.yaml filename="/ssb/cloud_sync/dapla-example/"}
@@ -251,3 +159,4 @@ dapla-example
 
 Overføring mellom bøtter er en overføring av data mellom to bøtter på Dapla. Fremgangsmåten er helt likt som beskrevet tidligere, men at du nå velger **Google Cloud Storage** som både kilde og destinasjon. Igjen er vi avhengig av at systembrukeren som utfører jobben har tilgang til begge bøttene som er involvert i overføringen. Default er at et team kan overføre mellom bøtter i kildeprosjektet, og at de kan overføre mellom bøtter i standardprosjektet, men aldri mellom de to. For å overføre fra kildeprosjektet til standardprosjektet, må man bruke [kildomaten](./kildomaten.qmd). Hvis du ønsker å overføre mellom bøtter i ditt prosjekt og et annet teams prosjekt, så må du be det andre teamet om å gi din systembruker tilgang til dette.
 
+{{< video ../images/transfer-service-example.mp4 aspect-ratio="1x1" >}}
