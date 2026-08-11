@@ -299,15 +299,57 @@ con.exists(table_name="manuell_tabell")
 
 ### Slette tabell
 
-Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte: 
+Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte og all editeringshistorikk: 
 
 
 ```{.python filename="Notebook"}
-con.drop_table("manuell_tabell")
+con.drop_table("manuell_tabell", cleanup=True)
 ```
 
-Hvis man ønsker å beholde selve datafilene i produktbøtta, legger man til `cleanup=False` på denne måten:
+Hvis man ønsker å beholde selve datafilene i produktbøtta og editeringshistorikk, legger man til `cleanup=False` på denne måten:
 
 ```{.python filename="Notebook"}
 con.drop_table("manuell_tabell", cleanup=False)
+```
+
+### Vedlikehold
+
+#### Flush inlined data
+
+Flush inlined data materialiserer inline-rader til Parquet-filer for en tabell. Dette er en vedlikeholdsoperasjon for arbeidsmengder med hyppige, små skriveoperasjoner, og bidrar til å holde lagringsstrukturen effektiv og spørreytelsen stabil. Den endrer ikke tabellverdiene, kun hvordan dataene fysisk lagres. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe å flushe har ingen effekt.
+
+```{.python filename="Notebook"}
+con.flush_inlined_table(table_name="manuell_tabell")
+```
+
+#### Merge adjacent files
+
+Merge adjacent files komprimerer en tabells små Parquet-filer til færre, større filer. Dette er et vedlikeholdssteg for tabeller som mottar mange små skriveoperasjoner, og forbedrer skanneeffektiviteten og reduserer overhead knyttet til filhåndtering. Den bevarer tabelldata og historikksemantikk, og endrer kun den fysiske fillayouten. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe å slå sammen har ingen effekt.
+
+```{.python filename="Notebook"}
+con.merge_adjacent_files(table_name="manuell_tabell")
+```
+
+### Avansert
+
+#### Få tilgang til en rå DuckDB-tilkobling
+
+ParquEdit pakker inn en DuckDBConnection, som eksponerer den underliggende duckdb.DuckDBPyConnection via .raw-egenskapen. Dette er nyttig når man integrerer med biblioteker som krever en native DuckDB-tilkobling, som Ibis.
+
+```{.python filename="Notebook"}
+con = ParquEdit()
+raw = con._get_connection().raw  # duckdb.DuckDBPyConnection
+```
+
+Merknader:
+
+- _get_connection() er en intern metode. Den rå tilkoblingen deler tilstand med ParquEdit — å lukke den ene vil påvirke begge. Ikke lukk den rå tilkoblingen manuelt mens ParquEdit fortsatt er i bruk.
+- Ved bruk av den rå tilkoblingen er brukeren selv ansvarlig for å oppgi den nødvendige informasjonen som ParquEdit-metodene ellers gir. F.eks. ved oppretting og redigering av tabeller.
+
+#### Sette opp lokal tilkobling
+
+Opprett en ParquEdit-instans støttet av en persistent lokal SQLite-katalog. Nyttig for lokal utvikling og testing uten tilgang til GCS eller PostgreSQL. Katalogen og datafilene lagres på path og består på tvers av økter. Katalogen opprettes dersom den ikke allerede finnes.
+
+```{.python filename="Notebook"}
+con = ParquEdit().local(path="/home/onyxia/work/")
 ```
