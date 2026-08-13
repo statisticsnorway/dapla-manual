@@ -854,6 +854,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#antall-rader-i-en-tabell" id="toc-antall-rader-i-en-tabell" class="nav-link" data-scroll-target="#antall-rader-i-en-tabell">Antall rader i en tabell</a></li>
   <li><a href="#sjekk-av-eksistens" id="toc-sjekk-av-eksistens" class="nav-link" data-scroll-target="#sjekk-av-eksistens">Sjekk av eksistens</a></li>
   <li><a href="#slette-tabell" id="toc-slette-tabell" class="nav-link" data-scroll-target="#slette-tabell">Slette tabell</a></li>
+  <li><a href="#vedlikehold" id="toc-vedlikehold" class="nav-link" data-scroll-target="#vedlikehold">Vedlikehold</a></li>
+  <li><a href="#avansert" id="toc-avansert" class="nav-link" data-scroll-target="#avansert">Avansert</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/ssb-parquedit.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/ssb-parquedit.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -1222,22 +1224,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="slette-tabell" class="level3">
 <h3 class="anchored" data-anchor-id="slette-tabell">Slette tabell</h3>
-<p>Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte:</p>
+<p>Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte og all editeringshistorikk:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Hvis man ønsker å beholde selve datafilene i produktbøtta, legger man til <code>cleanup=False</code> på denne måten:</p>
+<p>Hvis man ønsker å beholde selve datafilene i produktbøtta og editeringshistorikk, legger man til <code>cleanup=False</code> på denne måten:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="vedlikehold" class="level3">
+<h3 class="anchored" data-anchor-id="vedlikehold">Vedlikehold</h3>
+<section id="flush-inlined-data" class="level4">
+<h4 class="anchored" data-anchor-id="flush-inlined-data">Flush inlined data</h4>
+<p>Flush inlined data materialiserer inline-rader til Parquet-filer for en tabell. Dette er en vedlikeholdsoperasjon for arbeidsmengder med hyppige, små skriveoperasjoner, og bidrar til å holde lagringsstrukturen effektiv og spørreytelsen stabil. Den endrer ikke tabellverdiene, kun hvordan dataene fysisk lagres. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe å flushe har ingen effekt.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>con.flush_inlined_table(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="merge-adjacent-files" class="level4">
+<h4 class="anchored" data-anchor-id="merge-adjacent-files">Merge adjacent files</h4>
+<p>Merge adjacent files komprimerer en tabells små Parquet-filer til færre, større filer. Dette er et vedlikeholdssteg for tabeller som mottar mange små skriveoperasjoner, og forbedrer skanneeffektiviteten og reduserer overhead knyttet til filhåndtering. Den bevarer tabelldata og historikksemantikk, og endrer kun den fysiske fillayouten. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe å slå sammen har ingen effekt.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>con.merge_adjacent_files(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="avansert" class="level3">
+<h3 class="anchored" data-anchor-id="avansert">Avansert</h3>
+<section id="få-tilgang-til-en-rå-duckdb-tilkobling" class="level4">
+<h4 class="anchored" data-anchor-id="få-tilgang-til-en-rå-duckdb-tilkobling">Få tilgang til en rå DuckDB-tilkobling</h4>
+<p>ParquEdit pakker inn en DuckDBConnection, som eksponerer den underliggende duckdb.DuckDBPyConnection via .raw-egenskapen. Dette er nyttig når man integrerer med biblioteker som krever en native DuckDB-tilkobling, som Ibis.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> con._get_connection().raw  <span class="co"># duckdb.DuckDBPyConnection</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Merknader:</p>
+<ul>
+<li>_get_connection() er en intern metode. Den rå tilkoblingen deler tilstand med ParquEdit — å lukke den ene vil påvirke begge. Ikke lukk den rå tilkoblingen manuelt mens ParquEdit fortsatt er i bruk.</li>
+<li>Ved bruk av den rå tilkoblingen er brukeren selv ansvarlig for å oppgi den nødvendige informasjonen som ParquEdit-metodene ellers gir. F.eks. ved oppretting og redigering av tabeller.</li>
+</ul>
+</section>
+<section id="sette-opp-lokal-tilkobling" class="level4">
+<h4 class="anchored" data-anchor-id="sette-opp-lokal-tilkobling">Sette opp lokal tilkobling</h4>
+<p>Opprett en ParquEdit-instans støttet av en persistent lokal SQLite-katalog. Nyttig for lokal utvikling og testing uten tilgang til GCS eller PostgreSQL. Katalogen og datafilene lagres på path og består på tvers av økter. Katalogen opprettes dersom den ikke allerede finnes.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit().local(path<span class="op">=</span><span class="st">"/home/onyxia/work/"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
+</section>
 </section>
 </section>
 
