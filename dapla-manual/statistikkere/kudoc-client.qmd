@@ -1,0 +1,250 @@
+---
+title: kudoc-client
+date-modified: "07/02/2026"
+lightbox: true
+---
+
+`kudoc-client` er en del av Python-pakken [dapla-toolbelt-datafangst](./dapla-toolbelt-datafangst.qmd) og er et Python-bibliotek for å jobbe med [KuDoc](./kudoc.qmd) sitt REST API. Biblioteket kan brukes fra Jupyter-notebooks eller Python-skript for å bla i publiserte innsamlinger og administrere kladder programmatisk.
+
+## Forberedelser
+
+For å bruke `kudoc-client` må man først installere [dapla-toolbelt-datafangst](./dapla-toolbelt-datafangst.qmd) i et [ssb-project](./ssb-project.qmd):
+
+```{.bash filename="Terminal"}
+poetry add dapla-toolbelt-datafangst
+```
+
+Man kan importere biblioteket med enten det korte aliaset `kudoc_client`, eller det fulle pakkenavnet:
+
+```{.python filename="Notebook"}
+# Kort alias (anbefalt)
+from kudoc_client import Collections, Drafts
+
+# Fullt pakkenavn (virker også)
+from dapla_toolbelt_datafangst import Collections, Drafts
+```
+
+## Funksjonalitet
+
+Biblioteket håndterer automatisk autentisering via `dapla-auth-client`, og gir et objektorientert grensesnitt mot to hoveddeler av KuDoc APIet: publiserte innsamlinger (`Collections`) og kladder (`Drafts`).
+
+### Bla i publiserte innsamlinger
+
+`Collections` gir skrivebeskyttet tilgang til publiserte innsamlinger.
+
+**Liste alle publiserte innsamlinger:**
+
+```{.python filename="Notebook"}
+import json
+from kudoc_client import Collections
+
+collections = Collections.list_collections()
+print(json.dumps([c.to_dict() for c in collections], indent=2, default=str))
+```
+
+**Hente én innsamling basert på ID:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Collections
+
+collection = Collections.get_collection(collection_id=42)
+print(collection.name)
+print(collection.to_json())
+```
+
+**Søke etter innsamlinger basert på navn:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Collections
+
+results = Collections.search_by_name("Loennsstatistikk")
+for c in results:
+    print(f"{c.id}: {c.name}")
+```
+
+**Søke etter innsamlinger basert på Altinn skjema-ID:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Collections
+
+results = Collections.search_by_altinn_id("RA-0329")
+for c in results:
+    print(f"{c.id}: {c.name}")
+```
+
+**Hente alle versjoner av en innsamling:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Collections
+
+versions = Collections.get_versions(collection_id=42)
+for v in versions:
+    info = v.version_information
+    print(f"Version {info.id} — status: {info.status}, updated: {info.last_updated_at}")
+```
+
+### Administrere kladder
+
+`Drafts` gir CRUD-tilgang (opprette, lese, oppdatere, slette) til kladder, i tillegg til publisering.
+
+**Liste egne kladder:**
+
+```{.python filename="Notebook"}
+import json
+from kudoc_client import Drafts
+
+my_drafts = Drafts.list_mine()
+print(json.dumps([d.to_dict() for d in my_drafts], indent=2, default=str))
+```
+
+**Liste kladder for alle teamene du er medlem av:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Drafts
+
+team_drafts = Drafts.list_team_drafts()
+for d in team_drafts:
+    print(f"{d.id}: {d.name} (team: {d.dapla_team.display_name})")
+```
+
+**Hente en spesifikk kladd:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Drafts
+
+draft = Drafts.get(draft_id=123)
+print(draft.to_json())
+```
+
+**Opprette en ny kladd:**
+
+```{.python filename="Notebook"}
+from kudoc_client import (
+    CollectionInstrument,
+    Drafts,
+    RequestCollection,
+    ToolConfig,
+    ToolAltinn,
+)
+from dapla_toolbelt_datafangst._generated.kudoc_client.models.altinn_form import AltinnForm
+
+draft = Drafts.create(
+    RequestCollection(
+        name="Min nye innsamling",
+        dapla_team_uniform_name="team-mitt-team",
+        spec_categ_data=False,
+        collection_instrument=[
+            CollectionInstrument(
+                name="Altinn skjema",
+                tool=ToolConfig(
+                    actual_instance=ToolAltinn(
+                        tool_type="skjemaAltinn",
+                        forms=[AltinnForm(id="RA-0329", prefill=False)],
+                    )
+                ),
+            )
+        ],
+    )
+)
+print(f"Opprettet kladd med ID: {draft.id}")
+```
+
+**Oppdatere en eksisterende kladd:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Drafts, RequestCollection
+
+existing = Drafts.get(draft_id=123)
+
+updated = Drafts.update(
+    draft_id=123,
+    draft=RequestCollection(
+        name="Oppdatert navn",
+        dapla_team_uniform_name=existing.dapla_team.uniform_name,
+        spec_categ_data=existing.spec_categ_data,
+        collection_instrument=existing.collection_instrument,
+    ),
+)
+print(f"Oppdatert: {updated.name}")
+```
+
+**Publisere en kladd:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Drafts
+
+published = Drafts.publish(draft_id=123)
+print(f"Publisert innsamling med ID: {published.id}")
+```
+
+**Slette en kladd:**
+
+```{.python filename="Notebook"}
+from kudoc_client import Drafts
+
+Drafts.delete(draft_id=123)
+```
+
+## Datamodeller
+
+`kudoc-client` bruker samme begreper og felter som beskrevet i [KuDoc sin datamodell](./kudoc-model.qmd). De viktigste typene er:
+
+- `RequestCollection` — brukes når man oppretter eller oppdaterer en kladd
+- `ResponseCollection` — returneres fra alle leseoperasjoner, og inneholder i tillegg `id`, `dapla_team` og `version_information`
+- `CollectionInstrument` — beskriver et enkelt innsamlingsinstrument, med et `tool`-felt som er én av `ToolAltinn` (skjema), `ToolBlaise` (intervju) eller `ToolAPI` (API-basert innsamling)
+
+## Konfigurasjon
+
+### Miljøvariabler
+
+| Variabel | Beskrivelse | Standardverdi |
+|---|---|---|
+| `DAPLA_ENVIRONMENT` | Dapla-miljø (`DEV`, `QA`, `TEST`) | Ikke satt (bruker localhost) |
+| `KUDOC_HOST` | Manuell overstyring av URL til KuDoc APIet | `http://localhost:8080` |
+
+Når `DAPLA_ENVIRONMENT` er satt, løser biblioteket automatisk riktig API-host:
+
+| Miljø | API-host |
+|---|---|
+| `DEV` | `https://dev-collection-gateway.intern.test.ssb.no/kudoc` |
+| `QA` | `https://qa-collection-gateway.intern.test.ssb.no/kudoc` |
+| `TEST` | `https://test-collection-gateway.intern.test.ssb.no/kudoc` |
+
+::: {.callout-note appearance="simple"}
+PROD-miljøet er ikke tilgjengelig ennå.
+:::
+
+### Autentisering
+
+Autentisering håndteres automatisk via [dapla-auth-client](https://github.com/statisticsnorway/dapla-auth-client). Biblioteket henter et personlig token med scopene `all_groups` og `current_group` for `kudoc`-audiencen. Tokenet fornyes ved hvert API-kall.
+
+Får du en `Unauthorized`-feil, prøv å logge ut og inn igjen av Dapla-sesjonen din.
+
+## Feilsøking
+
+Alle API-feil pakkes inn i `DaplaClientError` (også tilgjengelig som `KudocClientError`) med brukervennlige meldinger:
+
+```{.python filename="Notebook"}
+from kudoc_client import Collections, DaplaClientError
+
+try:
+    collection = Collections.get_collection(collection_id=999999)
+except DaplaClientError as e:
+    print(e)  # "Not found. Check that the ID is correct and the resource exists."
+```
+
+| HTTP-status | Melding |
+|---|---|
+| 400 | Problem med data som er sendt inn (inkluderer feltnivå-validering) |
+| 401 | Autentiseringsproblem — tokenet kan ha utløpt |
+| 403 | Forbidden — ingen tilgang til ressursen |
+| 404 | Not found — sjekk at ID-en er riktig |
+| 405 | Operasjonen er ikke tillatt for gjeldende ressurstilstand |
+| 409 | Konflikt med eksisterende data |
+
+## Ressurser
+
+- **Dokumentasjon**: [https://statisticsnorway.github.io/dapla-toolbelt-datafangst](https://statisticsnorway.github.io/dapla-toolbelt-datafangst)
+- **Kildekode**: [https://github.com/statisticsnorway/dapla-toolbelt-datafangst](https://github.com/statisticsnorway/dapla-toolbelt-datafangst)
+- **PyPI**: [https://pypi.org/project/dapla-toolbelt-datafangst/](https://pypi.org/project/dapla-toolbelt-datafangst/)
+- **Rapporter problemer**: [GitHub Issues](https://github.com/statisticsnorway/dapla-toolbelt-datafangst/issues)
