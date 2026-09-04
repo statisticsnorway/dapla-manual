@@ -139,7 +139,7 @@ con.create_table(
     table_name="manuell_tabell",
     source=df,
     product_name="eksempelprodukt",
-    unique_key=["enhet_id", "aar"],
+    user_defined_id=["enhet_id", "aar"],
     fill=True,
 )
 ```
@@ -154,7 +154,7 @@ Følgende argumenter må oppgis ved opprettelse av ny tabell:
 
 `product_name` er obligatorisk og lagres som en kommentar på tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.
 
-`unique_key` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
+`user_defined_id` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
 
 
 #### Partisjonert tabeller
@@ -167,7 +167,7 @@ con.create_table(
     source=df,
     product_name="eksempelprodukt",
     part_columns=["aar"],
-    unique_key=["enhet_id"],
+    user_defined_id=["enhet_id"],
     fill=True,
 )
 ```
