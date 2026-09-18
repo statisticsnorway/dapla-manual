@@ -15,7 +15,98 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.10.18</generator>
-<lastBuildDate>Wed, 16 Sep 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 18 Sep 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Python-funksjonalitet for å generere filstier som følger navnestandarden</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2026-09-18-metadata-path-generator/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="../../../statistikkere/dapla-toolbelt-metadata.html">dapla-toolbelt-metadata</a> har nå en funksjon for å generere korrekte filstier iht SSBs <a href="../../../statistikkere/navnestandard.html">Navnestandard</a>. Funksjonaliteten skal gjøre det lettere for statistikkprodusenter å følge navnestandarden på en programmatisk måte. Funksjonen lar brukeren legge inn:</p>
+<ul>
+<li>bøttenavn</li>
+<li>kortnavn for dataprodukt</li>
+<li>datatilstand</li>
+<li>datasettes kortnavn</li>
+<li>periode</li>
+<li>versjon</li>
+<li>filtype</li>
+</ul>
+<p>og deretter returneres en tekststreng som følger navnestandarden. Se eksempel under.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Kode</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Kode" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> dapla_metadata.standards <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> DataState, FileType, create_dataset_path</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">path <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> create_dataset_path(</span>
+<span id="cb1-4">    bucket<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ssb-dapla-example-data-produkt-prod"</span>,</span>
+<span id="cb1-5">    product<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ledstill"</span>,</span>
+<span id="cb1-6">    data_state<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>DataState.OUTPUT_DATA,</span>
+<span id="cb1-7">    short_description<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"varehandel"</span>,</span>
+<span id="cb1-8">    period_from<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"2018-Q1"</span>,</span>
+<span id="cb1-9">    version<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb1-10">    file_type<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>FileType.PARQUET,</span>
+<span id="cb1-11">)</span>
+<span id="cb1-12">path</span></code></pre></div></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Output</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="Output" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">'gs://ssb-dapla-example-data-produkt-prod/ledstill/utdata/varehandel_p2018-Q1_v3.parquet'</span></span></code></pre></div></div>
+</div>
+<section id="hvorfor-er-dette-viktig" class="level2">
+<h2 class="anchored" data-anchor-id="hvorfor-er-dette-viktig">Hvorfor er dette viktig?</h2>
+<p>Navnestandarden er en sentral del av SSBs metadata rundt datasett og dataprodukter på Dapla. For å gjøre det enklere å følge tilbyr vi nå en programmatisk måte å generere denne filstien. <a href="../../../statistikkere/standards-toolbelt.html#generere-filstier">Les mer om funksjonaliten her</a>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>ssb dataportal</category>
+  <category>klass</category>
+  <category>metadata</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2026-09-18-metadata-path-generator/</guid>
+  <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
 <item>
   <title>Delomaten støtter pseudonymisering av listekolonner</title>
   <dc:creator>Nicholas Vallipuram Jaunsen</dc:creator>
@@ -792,30 +883,6 @@ Figur&nbsp;1: Siden som viser dataproduktet ifhus
   <guid>https://manual.dapla.ssb.no/news/posts/2026-05-08-dapla-ctrl-upgrade/</guid>
   <pubDate>Fri, 08 May 2026 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/dapla-ctrl-teamoversikt.png" medium="image" type="image/png" height="66" width="144"/>
-</item>
-<item>
-  <title>DaplaNytt-møte 22.04.2026</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2026-04-24-daplanytt-apr26/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>DaplaNytt fra april 2026 ble avholdt som Teams-møte 22. april 2026. <a href="https://engage.cloud.microsoft/main/org/ssb.no/threads/eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMzgyMzI4MDE3NzUxMjQ0OCJ9?trk_copy_link=V2">Se opptak her</a>.</p>
-<p>Slides <a href="https://ideal-guide-egkqq6z.pages.github.io/daplanytt-apr26.html#/title-slide">finner du her</a>.</p>
-
-
-
- ]]></description>
-  <category>daplanytt</category>
-  <category>dataportal</category>
-  <category>vardef</category>
-  <category>ssb dataportal</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2026-04-24-daplanytt-apr26/</guid>
-  <pubDate>Thu, 23 Apr 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 </channel>
 </rss>
