@@ -1,0 +1,157 @@
+---
+title: "Slik henter du ut informasjon om Daplateam direkte fra Dapla API "
+categories:
+  - dapla api
+  - dapla ctrl
+  - tilgangsstyring
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+image: ./graphiql.png
+image-alt: Bilde av GraphiQL
+date: 09/18/2026
+date-modified: 09/18/2026
+draft: false
+---
+
+[Dapla Ctrl](../../../statistikkere/dapla-ctrl.qmd) er grensesnittet for å administrere Dapla-team. «Under panseret» benytter Dapla Ctrl [GraphQL](https://graphql.org/)-API-et [Dapla API](https://github.com/statisticsnorway/dapla-ctrl) til å hente ut informasjonen det trenger. Alle som jobber på Dapla har tilgang til å utforske API-et direkte via GraphiQL på denne adressen:
+
+<https://dapla-ctrl.intern.ssb.no/api-docs>
+
+Dette kan være nyttig for brukere som ønsker å hente ut informasjon i en struktur som ikke finnes ferdig i Dapla Ctrl – for eksempel hvis man ønsker en oversikt over alle Dapla-team og autonominivå.
+
+### Hvordan gjøre spørringer i GraphiQL
+
+I motsetning til tradisjonelle REST-API-er, der serveren bestemmer hva du får i retur, spesifiserer du i GraphQL nøyaktig hvilke felter du vil ha ved hjelp av klammeparenteser `{ ... }`. Du skriver spørringen i redigeringsfeltet i midten og trykker på «Play»-knappen for å kjøre den. 
+
+I venstremenyen finner du dokumentasjonen (*Documentation Explorer* / *Docs*), som lister opp alle tilgjengelige spørringer og informasjonsfelter du kan hente ut. Et godt tips er å bruke hurtigtasten `Ctrl + Space` inne i klammeparentesene – da får du opp en autofullføringsliste med gyldige felter på det aktuelle nivået.
+
+![Videon viser hvordan man bygger en enkel spørring GraphiQL](./graphiql-video.mov)
+
+Under viser vi noen vanlige spørringer som kan være nyttige for flere.
+
+
+## Hente ut oversikt over alle Dapla-team
+
+For å hente ut en liste over team bruker vi feltet `teams`. Siden API-et støtter paginering, bruker vi argumentet `first` for å angi hvor mange resultater vi ønsker i retur. 
+
+I eksempelet under henter vi de to første teamene (`first: 2`), inkludert teamets kortnavn (`slug`), visningsnavn (`displayName`), samt hvilken seksjon teamet tilhører:
+
+```graphql
+{
+  teams(first: 2) {
+    nodes {
+      slug
+      displayName
+      section {
+        name
+        code
+      }
+    }
+  }
+}
+```
+
+## Hente ut informasjon om et team
+
+Dersom du bare ønsker informasjon om et spesifikt team, bruker du feltet `team` (i entall) og oppgir teamets kortnavn via argumentet `slug`. 
+
+I dette eksempelet henter vi detaljer for teamet `play-obr`, inkludert visningsnavn, autonominivå(`isManaged`), samt seksjonstilhørighet og navnet på seksjonssjefen:
+
+```graphql
+{
+  team(slug: "play-obr") {
+    slug
+    displayName
+    isManaged
+    section {
+      name
+      code
+      manager {
+        name
+      }
+    }
+  }
+}
+```
+
+## Hente ut epostadresser til medlemmer av et team
+
+For å se hvem som er tilknyttet et bestemt team, legger vi til feltet `members`. Siden listen over medlemmer også støtter paginering, bruker vi `first: 10` sammen med `nodes`. 
+
+Hver node representerer en kobling til et medlem, der selve brukerdetaljene ligger under objektet `user`. Her henter vi ut navn og e-postadresse:
+
+```graphql
+{
+  team(slug: "play-obr") {
+    slug
+    displayName
+    isManaged
+    members(first: 10) {
+      nodes {
+        user {
+          name
+          email
+        }
+      }
+    }
+    section {
+      name
+      code
+      manager {
+        name
+      }
+    }
+  }
+}
+```
+
+## Hente ut alle delte bøtter til et team
+
+Hvis du vil se hvilke deltebøtter et team har opprettet, bruker du feltet `sharedBuckets`. 
+
+Under `nodes` kan du hente ut detaljer som det fulle bøttenavnet (`name`), kortnavn (`shortName`) og bøttetype/kategori (`kind`):
+
+```graphql
+{
+  team(slug: "play-obr") {
+    slug
+    displayName
+    sharedBuckets {
+      nodes {
+        name
+        shortName
+        kind
+      }
+    }
+  }
+}
+```
+
+## Hente ut epost til alle som har tilgang til en deltbøtte
+
+Når du skal kontakte alle som har tilgang til en bestemt deltbøtte, så kan du gjøre et direkte oppslag på bøttenivå ved hjelp av feltet `sharedBucket` og bøttas fulle navn (`name`) for å hente ut epostadressene til alle som har tilgang.  
+
+Under feltet `users` henter du ut alle personer med tilgang via `nodes`. Her får du både brukerinformasjonen (`name`, `email`, `jobTitle`) og hvilket team tilgangen er forankret gjennom (`team { slug }`):
+
+```graphql
+{
+  sharedBucket(name: "ssb-play-obr-data-delt-delomatentest-prod") {
+    name
+    users {
+      nodes {
+        team {
+          slug
+        }
+        user {
+          name
+          email
+          jobTitle
+        }
+      }
+    }
+  }
+}
+```
