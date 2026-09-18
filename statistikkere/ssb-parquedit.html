@@ -84,6 +84,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-4630fa2272c0caf6b27be1180cae143f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -115,11 +118,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <meta property="og:title" content="Parquedit – Dapla-manualen">
 <meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
-<meta property="og:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/parquedit_daplalab.png">
 <meta property="og:site_name" content="Dapla-manualen">
+<meta property="og:image:height" content="199">
+<meta property="og:image:width" content="533">
 <meta name="twitter:title" content="Parquedit – Dapla-manualen">
 <meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
-<meta name="twitter:image" content="https://manual.dapla.ssb.no/statistikkere/images/dapla-long.png">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/parquedit_daplalab.png">
+<meta name="twitter:image-height" content="199">
+<meta name="twitter:image-width" content="533">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -901,13 +908,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#laste-data" id="toc-laste-data" class="nav-link" data-scroll-target="#laste-data">Laste data</a></li>
   <li><a href="#lese-data" id="toc-lese-data" class="nav-link" data-scroll-target="#lese-data">Lese data</a></li>
   <li><a href="#editering" id="toc-editering" class="nav-link" data-scroll-target="#editering">Editering</a></li>
+  <li><a href="#sletting-av-rader" id="toc-sletting-av-rader" class="nav-link" data-scroll-target="#sletting-av-rader">Sletting av rader</a></li>
   <li><a href="#lese-logger" id="toc-lese-logger" class="nav-link" data-scroll-target="#lese-logger">Lese logger</a></li>
   <li><a href="#liste-tabeller" id="toc-liste-tabeller" class="nav-link" data-scroll-target="#liste-tabeller">Liste tabeller</a></li>
   <li><a href="#antall-rader-i-en-tabell" id="toc-antall-rader-i-en-tabell" class="nav-link" data-scroll-target="#antall-rader-i-en-tabell">Antall rader i en tabell</a></li>
   <li><a href="#sjekk-av-eksistens" id="toc-sjekk-av-eksistens" class="nav-link" data-scroll-target="#sjekk-av-eksistens">Sjekk av eksistens</a></li>
+  </ul></li>
+  <li><a href="#vedlikehold" id="toc-vedlikehold" class="nav-link" data-scroll-target="#vedlikehold">Vedlikehold</a>
+  <ul class="collapse">
   <li><a href="#slette-tabell" id="toc-slette-tabell" class="nav-link" data-scroll-target="#slette-tabell">Slette tabell</a></li>
-  <li><a href="#vedlikehold" id="toc-vedlikehold" class="nav-link" data-scroll-target="#vedlikehold">Vedlikehold</a></li>
-  <li><a href="#avansert" id="toc-avansert" class="nav-link" data-scroll-target="#avansert">Avansert</a></li>
+  <li><a href="#flush-av-inlinede-data" id="toc-flush-av-inlinede-data" class="nav-link" data-scroll-target="#flush-av-inlinede-data">Flush av inlinede data</a></li>
+  <li><a href="#merge-adjacent-files" id="toc-merge-adjacent-files" class="nav-link" data-scroll-target="#merge-adjacent-files">Merge adjacent files</a></li>
+  <li><a href="#eksporter-katalog" id="toc-eksporter-katalog" class="nav-link" data-scroll-target="#eksporter-katalog">Eksporter katalog</a></li>
+  <li><a href="#importer-katalog" id="toc-importer-katalog" class="nav-link" data-scroll-target="#importer-katalog">Importer katalog</a></li>
+  </ul></li>
+  <li><a href="#avansert" id="toc-avansert" class="nav-link" data-scroll-target="#avansert">Avansert</a>
+  <ul class="collapse">
+  <li><a href="#sette-opp-lokal-tilkobling" id="toc-sette-opp-lokal-tilkobling" class="nav-link" data-scroll-target="#sette-opp-lokal-tilkobling">Sette opp lokal tilkobling</a></li>
+  <li><a href="#få-tilgang-til-den-underliggende-duckdb-tilkoblingen" id="toc-få-tilgang-til-den-underliggende-duckdb-tilkoblingen" class="nav-link" data-scroll-target="#få-tilgang-til-den-underliggende-duckdb-tilkoblingen">Få tilgang til den underliggende DuckDB-tilkoblingen</a></li>
+  <li><a href="#gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data" id="toc-gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data" class="nav-link" data-scroll-target="#gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data">Gjenopprette en lokal katalogsikkerhetskopi med GCS-data</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/ssb-parquedit.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/ssb-parquedit.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -1037,7 +1056,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Under <strong>Parquedit</strong> velger du <strong>Aktiver tilgang</strong></li>
 </ol>
 <p>Etter dette kan teamets medlemmer opprette så mange Parquedit-tabeller de ønsker.</p>
-<p>Et team som har aktivert tilgangen kan åpne en tjeneste i Dapla Lab og installere Python-pakken <a href="https://pypi.org/project/ssb-parquedit/">ssb-parquedit</a> i et <a href="../statistikkere/ssb-project.html">ssb-project</a> på følgende måte:</p>
+<p>Et team som har aktivert tilgangen kan åpne en tjeneste i Dapla Lab. For at ParquEdit skal kunne benyttes sammen med andre løsninger som benytter Postgres, må man aktivere Parquedit-tilgang under <strong>Avansert</strong> når man setter opp tjenesten:</p>
+<p><a href="../images/parquedit_daplalab.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/parquedit_daplalab.png" class="img-fluid"></a></p>
+<p>og installere Python-pakken <a href="https://pypi.org/project/ssb-parquedit/">ssb-parquedit</a> i et <a href="../statistikkere/ssb-project.html">ssb-project</a> på følgende måte:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
@@ -1105,7 +1126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    source<span class="op">=</span>df,</span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    product_name<span class="op">=</span><span class="st">"eksempelprodukt"</span>,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    unique_key<span class="op">=</span>[<span class="st">"enhet_id"</span>, <span class="st">"aar"</span>],</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    user_defined_id<span class="op">=</span>[<span class="st">"enhet_id"</span>, <span class="st">"aar"</span>],</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    fill<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1116,7 +1137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>table_name</code> er det navnet på tabellen du ønsker å opprette. Siden et team kan ha flere tabeller, er det dette navnet som benyttes senere for å referere til tabellen.</p>
 <p><code>source</code> er kilden (Parquet, Dataframe eller json-skjema) som skal benyttes til å opprette tabellen.</p>
 <p><code>product_name</code> er obligatorisk og lagres som en kommentar på tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.</p>
-<p><code>unique_key</code> er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.</p>
+<p><code>user_defined_id</code> er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.</p>
 <section id="partisjonert-tabeller" class="level4">
 <h4 class="anchored" data-anchor-id="partisjonert-tabeller">Partisjonert tabeller</h4>
 <div class="code-with-filename">
@@ -1129,7 +1150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    source<span class="op">=</span>df,</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    product_name<span class="op">=</span><span class="st">"eksempelprodukt"</span>,</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    part_columns<span class="op">=</span>[<span class="st">"aar"</span>],</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    unique_key<span class="op">=</span>[<span class="st">"enhet_id"</span>],</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    user_defined_id<span class="op">=</span>[<span class="st">"enhet_id"</span>],</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    fill<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1225,6 +1246,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>OTHER</code></li>
 </ul>
 </section>
+<section id="sletting-av-rader" class="level3">
+<h3 class="anchored" data-anchor-id="sletting-av-rader">Sletting av rader</h3>
+<p>For å slette rader fra en tabell kaller man <code>delete_row()</code> med <code>where</code> for å identifisere raden(e) som skal fjernes.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>con.delete_row(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    where<span class="op">=</span><span class="st">"enhet_id = 'A1' AND aar = 2025"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    change_event_reason<span class="op">=</span><span class="st">"REVIEW"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    change_comment<span class="op">=</span><span class="st">"Slettet etter intern kontroll"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Sletting av rader krever at man oppgir både <code>change_event_reason</code> og <code>change_comment</code> for å dokumentere hvorfor raden(e) ble fjernet. Gyldige verdier for <code>change_event_reason</code> er:</p>
+<ul>
+<li><code>OTHER_SOURCE</code></li>
+<li><code>REVIEW</code></li>
+<li><code>OWNER</code></li>
+<li><code>MARGINAL_UNIT</code></li>
+<li><code>DUPLICATE</code></li>
+<li><code>OTHER</code></li>
+</ul>
+<p>Sletting av flere rader logges som en hendelse i endringsloggen. <code>get_edits()</code> vil vise hvor mange rader som ble påvirket og hvilken <code>where</code>-betingelse som ble brukt.</p>
+</section>
 <section id="lese-logger" class="level3">
 <h3 class="anchored" data-anchor-id="lese-logger">Lese logger</h3>
 <p>Bruk <code>get_edits()</code> for å hente historikk over manuelle endringer.</p>
@@ -1232,11 +1277,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Endringer for en tabell</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>logg <span class="op">=</span> con.get_edits(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativt alle tabeller</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>alle_endringer <span class="op">=</span> con.get_edits()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Endringer for en tabell</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>logg <span class="op">=</span> con.get_edits(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativt alle tabeller</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>alle_endringer <span class="op">=</span> con.get_edits()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Dette gir blant annet:</p>
 <ul>
@@ -1244,6 +1289,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>tidspunkt for endringen</li>
 <li>begrunnelse og kommentar</li>
 <li>gamle og nye verdier</li>
+<li>endringstype (UPDATE/DELETE)</li>
+<li><code>where</code>-betingelsen som ble brukt ved sletting av rad(er)</li>
+<li>hvor mange rader som ble påvirket av endringen</li>
 </ul>
 </section>
 <section id="liste-tabeller" class="level3">
@@ -1253,7 +1301,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tabeller <span class="op">=</span> con.list_tables()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tabeller <span class="op">=</span> con.list_tables()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="antall-rader-i-en-tabell" class="level3">
@@ -1262,7 +1310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>con.count(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>con.count(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sjekk-av-eksistens" class="level3">
@@ -1271,79 +1319,122 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>con.exists(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>con.exists(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
+</section>
+<section id="vedlikehold" class="level2">
+<h2 class="anchored" data-anchor-id="vedlikehold">Vedlikehold</h2>
 <section id="slette-tabell" class="level3">
 <h3 class="anchored" data-anchor-id="slette-tabell">Slette tabell</h3>
-<p>Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte og all editeringshistorikk:</p>
+<p>Gjør følgende for å fjerne tabellen fra den sentrale katalogen, slette editeringshistorikk og filene i teamets bøtte:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Hvis man ønsker å beholde selve datafilene i produktbøtta og editeringshistorikk, legger man til <code>cleanup=False</code> på denne måten:</p>
+<p>Hvis man ønsker å beholde editeringshistorikk og selve datafilene i produktbøtta, legger man til <code>cleanup=False</code> på denne måten:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="vedlikehold" class="level3">
-<h3 class="anchored" data-anchor-id="vedlikehold">Vedlikehold</h3>
-<section id="flush-inlined-data" class="level4">
-<h4 class="anchored" data-anchor-id="flush-inlined-data">Flush inlined data</h4>
-<p>Flush inlined data materialiserer inline-rader til Parquet-filer for en tabell. Dette er en vedlikeholdsoperasjon for arbeidsmengder med hyppige, små skriveoperasjoner, og bidrar til å holde lagringsstrukturen effektiv og spørreytelsen stabil. Den endrer ikke tabellverdiene, kun hvordan dataene fysisk lagres. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe å flushe har ingen effekt.</p>
+<section id="flush-av-inlinede-data" class="level3">
+<h3 class="anchored" data-anchor-id="flush-av-inlinede-data">Flush av inlinede data</h3>
+<p>Flush av inlinede data materialiserer inlinede rader til Parquet-filer for en tabell. Dette er en vedlikeholdsoperasjon for arbeidsflyter med hyppige, små skriveoperasjoner, og bidrar til å holde lagringsstrukturen effektiv og spørreytelsen stabil. Operasjonen endrer ikke tabellverdiene, kun hvordan dataene er fysisk lagret. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe ventende har ingen effekt.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>con.flush_inlined_table(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flusher inlinede data for tabellen 'manuell_tabell'</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>con.flush_inlined_table(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="merge-adjacent-files" class="level4">
-<h4 class="anchored" data-anchor-id="merge-adjacent-files">Merge adjacent files</h4>
-<p>Merge adjacent files komprimerer en tabells små Parquet-filer til færre, større filer. Dette er et vedlikeholdssteg for tabeller som mottar mange små skriveoperasjoner, og forbedrer skanneeffektiviteten og reduserer overhead knyttet til filhåndtering. Den bevarer tabelldata og historikksemantikk, og endrer kun den fysiske fillayouten. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe å slå sammen har ingen effekt.</p>
+<section id="merge-adjacent-files" class="level3">
+<h3 class="anchored" data-anchor-id="merge-adjacent-files">Merge adjacent files</h3>
+<p>Å slå sammen tilstøtende filer komprimerer en tabells små Parquet-filer til færre, større filer. Dette er et vedlikeholdssteg for tabeller som mottar mange små skriveoperasjoner, som forbedrer skanneeffektiviteten og reduserer overhead ved filhåndtering. Operasjonen bevarer tabelldata og historikksemantikk, og endrer kun det fysiske fillayoutet. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når ingenting kan slås sammen har ingen effekt.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>con.merge_adjacent_files(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Slår sammen tilstøtende filer for tabellen 'manuell_tabell'</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>con.merge_adjacent_files(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-</section>
-<section id="avansert" class="level3">
-<h3 class="anchored" data-anchor-id="avansert">Avansert</h3>
-<section id="få-tilgang-til-en-rå-duckdb-tilkobling" class="level4">
-<h4 class="anchored" data-anchor-id="få-tilgang-til-en-rå-duckdb-tilkobling">Få tilgang til en rå DuckDB-tilkobling</h4>
-<p>ParquEdit pakker inn en DuckDBConnection, som eksponerer den underliggende duckdb.DuckDBPyConnection via .raw-egenskapen. Dette er nyttig når man integrerer med biblioteker som krever en native DuckDB-tilkobling, som Ibis.</p>
+<section id="eksporter-katalog" class="level3">
+<h3 class="anchored" data-anchor-id="eksporter-katalog">Eksporter katalog</h3>
+<p><code>export_catalog()</code> tar sikkerhetskopi av DuckLake-metadatakatalogen. Den flusher og slår sammen inlinede data for alle tabeller, og kopierer deretter alle tabeller fra det PostgreSQL-baserte katalogskjemaet inn i en DuckDB-fil, som lastes opp til GCS. Returnerer hele GCS-stien (inkludert filnavn) til den eksporterte sikkerhetskopien.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> con._get_connection().raw  <span class="co"># duckdb.DuckDBPyConnection</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksporter med standard sti ({data_path}/catalog-export)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>con.export_catalog()</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksporter til en egendefinert GCS-sti</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>con.export_catalog(export_path<span class="op">=</span><span class="st">"gs://bucket/backups"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Merknader:</p>
+</section>
+<section id="importer-katalog" class="level3">
+<h3 class="anchored" data-anchor-id="importer-katalog">Importer katalog</h3>
+<p><code>import_catalog()</code> gjenoppretter DuckLake-metadatakatalogen fra en sikkerhetskopifil produsert av <code>export_catalog()</code>. For hver tabell som finnes i sikkerhetskopien, blir eksisterende rader i katalogen slettet og erstattet med de sikkerhetskopierte radene.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gjenopprett katalogen fra en sikkerhetskopifil</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>con.import_catalog(backup_file_path<span class="op">=</span><span class="st">"gs://bucket/backups/20250101_120000_my_schema.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="avansert" class="level2">
+<h2 class="anchored" data-anchor-id="avansert">Avansert</h2>
+<section id="sette-opp-lokal-tilkobling" class="level3">
+<h3 class="anchored" data-anchor-id="sette-opp-lokal-tilkobling">Sette opp lokal tilkobling</h3>
+<p>Opprett en ParquEdit-instans støttet av en persistent lokal SQLite-katalog. Nyttig for lokal utvikling og testing uten tilgang til GCS eller PostgreSQL. Katalogen og datafilene lagres på <code>path</code> og består mellom økter. Mappen opprettes hvis den ikke allerede finnes.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit().local(path<span class="op">=</span><span class="st">"/home/onyxia/work/"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="få-tilgang-til-den-underliggende-duckdb-tilkoblingen" class="level3">
+<h3 class="anchored" data-anchor-id="få-tilgang-til-den-underliggende-duckdb-tilkoblingen">Få tilgang til den underliggende DuckDB-tilkoblingen</h3>
+<p>ParquEdit pakker inn en <code>DuckDBConnection</code>, som eksponerer den underliggende <code>duckdb.DuckDBPyConnection</code> via <code>.raw</code>-egenskapen. Dette er nyttig når man integrerer med biblioteker som krever en nativ DuckDB-tilkobling, som Ibis.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ibis</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_parquedit <span class="im">import</span> ParquEdit</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> con._get_connection().raw  <span class="co"># duckdb.DuckDBPyConnection</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>ibis_conn <span class="op">=</span> ibis.duckdb.<span class="ex">connect</span>(conn<span class="op">=</span>raw)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> ibis_conn.table(<span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Merk:</p>
 <ul>
-<li>_get_connection() er en intern metode. Den rå tilkoblingen deler tilstand med ParquEdit — å lukke den ene vil påvirke begge. Ikke lukk den rå tilkoblingen manuelt mens ParquEdit fortsatt er i bruk.</li>
-<li>Ved bruk av den rå tilkoblingen er brukeren selv ansvarlig for å oppgi den nødvendige informasjonen som ParquEdit-metodene ellers gir. F.eks. ved oppretting og redigering av tabeller.</li>
+<li><code>_get_connection()</code> er en intern metode. Den underliggende tilkoblingen deler tilstand med ParquEdit — å lukke den ene påvirker den andre. Ikke lukk den underliggende tilkoblingen manuelt mens ParquEdit fortsatt er i bruk.</li>
+<li>Ved bruk av den underliggende tilkoblingen er det brukerens ansvar å oppgi den informasjonen som ParquEdit-metodene ellers gir. F.eks. ved oppretting og redigering av tabeller.</li>
 </ul>
 </section>
-<section id="sette-opp-lokal-tilkobling" class="level4">
-<h4 class="anchored" data-anchor-id="sette-opp-lokal-tilkobling">Sette opp lokal tilkobling</h4>
-<p>Opprett en ParquEdit-instans støttet av en persistent lokal SQLite-katalog. Nyttig for lokal utvikling og testing uten tilgang til GCS eller PostgreSQL. Katalogen og datafilene lagres på path og består på tvers av økter. Katalogen opprettes dersom den ikke allerede finnes.</p>
+<section id="gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data" class="level3">
+<h3 class="anchored" data-anchor-id="gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data">Gjenopprette en lokal katalogsikkerhetskopi med GCS-data</h3>
+<p><code>ParquEdit.local_with_gcs_data()</code> kobler til en lokal DuckDB-katalogfil (f.eks. en produsert av <code>export_catalog()</code>), mens selve Parquet-dataene fortsatt ligger på GCS. Nyttig for å inspisere eller gjenopprette fra en DuckLake-katalogsikkerhetskopi uten behov for en aktiv PostgreSQL-tilkobling. Må brukes i DaplaLab for å få tilgang til GCS-bøtter.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit().local(path<span class="op">=</span><span class="st">"/home/onyxia/work/"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit.local_with_gcs_data(catalog_path<span class="op">=</span><span class="st">"localcopy.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
-</section>
 </section>
 </section>
 
@@ -1774,6 +1865,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
   </div>
 </footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
