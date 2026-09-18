@@ -77,7 +77,13 @@ For at et team skal kunne benytte seg av Parquedit må [Teamansvarlig](./hva-er-
 
 Etter dette kan teamets medlemmer opprette så mange Parquedit-tabeller de ønsker. 
 
-Et team som har aktivert tilgangen kan åpne en tjeneste i Dapla Lab og installere Python-pakken [ssb-parquedit](https://pypi.org/project/ssb-parquedit/) i et [ssb-project](./ssb-project.qmd) på følgende måte:
+Et team som har aktivert tilgangen kan åpne en tjeneste i Dapla Lab. For at ParquEdit skal kunne benyttes sammen med andre løsninger som benytter Postgres, må man aktivere Parquedit-tilgang under **Avansert** når man setter opp tjenesten:
+
+
+![](../images/parquedit_daplalab.png)
+
+
+og installere Python-pakken [ssb-parquedit](https://pypi.org/project/ssb-parquedit/) i et [ssb-project](./ssb-project.qmd) på følgende måte:
 
 ```{.python filename="Terminal"}
 poetry add ssb-parquedit
@@ -118,7 +124,7 @@ con.create_table(
     table_name="manuell_tabell_gcs",
     source="gs://my-bucket/path/to/file.parquet",
     product_name="eksempelprodukt",
-    unique_key=["enhet_id", "aar"],
+    user_defined_id=["enhet_id", "aar"],
 )
 ```
 
@@ -139,7 +145,7 @@ con.create_table(
     table_name="manuell_tabell",
     source=df,
     product_name="eksempelprodukt",
-    unique_key=["enhet_id", "aar"],
+    user_defined_id=["enhet_id", "aar"],
     fill=True,
 )
 ```
@@ -154,7 +160,7 @@ Følgende argumenter må oppgis ved opprettelse av ny tabell:
 
 `product_name` er obligatorisk og lagres som en kommentar på tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.
 
-`unique_key` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
+`user_defined_id` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
 
 
 #### Partisjonert tabeller
@@ -167,7 +173,7 @@ con.create_table(
     source=df,
     product_name="eksempelprodukt",
     part_columns=["aar"],
-    unique_key=["enhet_id"],
+    user_defined_id=["enhet_id"],
     fill=True,
 )
 ```
@@ -253,6 +259,27 @@ Gyldige verdier for `change_event_reason` er:
 - `DUPLICATE`
 - `OTHER`
 
+### Sletting av rader
+For å slette rader fra en tabell kaller man `delete_row()` med `where` for å identifisere raden(e) som skal fjernes.
+```{.python filename="Notebook"}
+con.delete_row(
+    table_name="manuell_tabell",
+    where="enhet_id = 'A1' AND aar = 2025",
+    change_event_reason="REVIEW",
+    change_comment="Slettet etter intern kontroll")
+```
+Sletting av rader krever at man oppgir både `change_event_reason` og `change_comment` for å dokumentere hvorfor raden(e) ble fjernet.
+Gyldige verdier for `change_event_reason` er:
+
+- `OTHER_SOURCE`
+- `REVIEW`
+- `OWNER`
+- `MARGINAL_UNIT`
+- `DUPLICATE`
+- `OTHER`
+
+Sletting av flere rader logges som en hendelse i endringsloggen. `get_edits()` vil vise hvor mange rader som ble påvirket og hvilken `where`-betingelse som ble brukt.
+
 ### Lese logger
 
 Bruk `get_edits()` for å hente historikk over manuelle endringer.
@@ -271,6 +298,9 @@ Dette gir blant annet:
 - tidspunkt for endringen
 - begrunnelse og kommentar
 - gamle og nye verdier
+- endringstype (UPDATE/DELETE)
+- `where`-betingelsen som ble brukt ved sletting av rad(er)
+- hvor mange rader som ble påvirket av endringen
 
 ### Liste tabeller
 
@@ -281,15 +311,11 @@ tabeller = con.list_tables()
 ```
 
 
-
-
 ### Antall rader i en tabell
 
 ```{.python filename="Notebook"}
 con.count(table_name="manuell_tabell")
 ```
-
-
 
 ### Sjekk av eksistens
 
@@ -297,17 +323,89 @@ con.count(table_name="manuell_tabell")
 con.exists(table_name="manuell_tabell")
 ```
 
+## Vedlikehold
+
 ### Slette tabell
 
-Gjør følgende for å fjerne tabellen fra den sentrale katalogen og slette filene i teamets bøtte: 
-
+Gjør følgende for å fjerne tabellen fra den sentrale katalogen, slette editeringshistorikk og filene i teamets bøtte: 
 
 ```{.python filename="Notebook"}
-con.drop_table("manuell_tabell")
+con.drop_table("manuell_tabell", cleanup=True)
 ```
 
-Hvis man ønsker å beholde selve datafilene i produktbøtta, legger man til `cleanup=False` på denne måten:
+Hvis man ønsker å beholde editeringshistorikk og selve datafilene i produktbøtta, legger man til `cleanup=False` på denne måten:
 
 ```{.python filename="Notebook"}
 con.drop_table("manuell_tabell", cleanup=False)
+```
+
+### Flush av inlinede data
+Flush av inlinede data materialiserer inlinede rader til Parquet-filer for en tabell. Dette er en vedlikeholdsoperasjon for arbeidsflyter med hyppige, små skriveoperasjoner, og bidrar til å holde lagringsstrukturen effektiv og spørreytelsen stabil. Operasjonen endrer ikke tabellverdiene, kun hvordan dataene er fysisk lagret. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når det ikke er noe ventende har ingen effekt.
+
+```{.python filename="Notebook"}
+# Flusher inlinede data for tabellen 'manuell_tabell'
+con.flush_inlined_table(table_name="manuell_tabell")
+```
+
+### Merge adjacent files
+Å slå sammen tilstøtende filer komprimerer en tabells små Parquet-filer til færre, større filer. Dette er et vedlikeholdssteg for tabeller som mottar mange små skriveoperasjoner, som forbedrer skanneeffektiviteten og reduserer overhead ved filhåndtering. Operasjonen bevarer tabelldata og historikksemantikk, og endrer kun det fysiske fillayoutet. Operasjonen er trygg å kjøre gjentatte ganger: Å kjøre den når ingenting kan slås sammen har ingen effekt.
+
+```{.python filename="Notebook"}
+# Slår sammen tilstøtende filer for tabellen 'manuell_tabell'
+con.merge_adjacent_files(table_name="manuell_tabell")
+```
+
+### Eksporter katalog
+`export_catalog()` tar sikkerhetskopi av DuckLake-metadatakatalogen. Den flusher og slår sammen inlinede data for alle tabeller, og kopierer deretter alle tabeller fra det PostgreSQL-baserte katalogskjemaet inn i en DuckDB-fil, som lastes opp til GCS. Returnerer hele GCS-stien (inkludert filnavn) til den eksporterte sikkerhetskopien.
+
+```{.python filename="Notebook"}
+# Eksporter med standard sti ({data_path}/catalog-export)
+con.export_catalog()
+
+# Eksporter til en egendefinert GCS-sti
+con.export_catalog(export_path="gs://bucket/backups")
+```
+
+### Importer katalog
+`import_catalog()` gjenoppretter DuckLake-metadatakatalogen fra en sikkerhetskopifil produsert av `export_catalog()`. For hver tabell som finnes i sikkerhetskopien, blir eksisterende rader i katalogen slettet og erstattet med de sikkerhetskopierte radene.
+
+```{.python filename="Notebook"}
+# Gjenopprett katalogen fra en sikkerhetskopifil
+con.import_catalog(backup_file_path="gs://bucket/backups/20250101_120000_my_schema.duckdb")
+```
+
+## Avansert
+
+### Sette opp lokal tilkobling
+Opprett en ParquEdit-instans støttet av en persistent lokal SQLite-katalog. Nyttig for lokal utvikling og testing uten tilgang til GCS eller PostgreSQL. Katalogen og datafilene lagres på `path` og består mellom økter. Mappen opprettes hvis den ikke allerede finnes.
+
+```{.python filename="Notebook"}
+con = ParquEdit().local(path="/home/onyxia/work/")
+```
+
+### Få tilgang til den underliggende DuckDB-tilkoblingen
+ParquEdit pakker inn en `DuckDBConnection`, som eksponerer den underliggende `duckdb.DuckDBPyConnection` via `.raw`-egenskapen. Dette er nyttig når man integrerer med biblioteker som krever en nativ DuckDB-tilkobling, som Ibis.
+
+```{.python filename="Notebook"}
+import ibis
+from ssb_parquedit import ParquEdit
+
+con = ParquEdit()
+raw = con._get_connection().raw  # duckdb.DuckDBPyConnection
+
+ibis_conn = ibis.duckdb.connect(conn=raw)
+table = ibis_conn.table("manuell_tabell")
+```
+
+Merk:
+
+- `_get_connection()` er en intern metode. Den underliggende tilkoblingen deler tilstand med ParquEdit — å lukke den ene påvirker den andre. Ikke lukk den underliggende tilkoblingen manuelt mens ParquEdit fortsatt er i bruk.
+- Ved bruk av den underliggende tilkoblingen er det brukerens ansvar å oppgi den informasjonen som ParquEdit-metodene ellers gir. F.eks. ved oppretting og redigering av tabeller.
+
+
+### Gjenopprette en lokal katalogsikkerhetskopi med GCS-data
+`ParquEdit.local_with_gcs_data()` kobler til en lokal DuckDB-katalogfil (f.eks. en produsert av `export_catalog()`), mens selve Parquet-dataene fortsatt ligger på GCS. Nyttig for å inspisere eller gjenopprette fra en DuckLake-katalogsikkerhetskopi uten behov for en aktiv PostgreSQL-tilkobling. Må brukes i DaplaLab for å få tilgang til GCS-bøtter.
+
+```{.python filename="Notebook"}
+con = ParquEdit.local_with_gcs_data(catalog_path="localcopy.duckdb")
 ```
