@@ -1,12 +1,13 @@
 ---
 title: Standards
-date-modified: 09/24/2025
+date-modified: 08/31/2026
 lightbox: true
 ---
 
 
-Modulen `standards` i [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) tilbyr metoder for å sjekke om filer i bøtter er i tråd med SSBs definerte [navnestandard](https://manual.dapla.ssb.no/statistikkere/navnestandard.html). Metodene inkluderer:
+Modulen `standards` i [dapla-toolbelt-metadata](https://pypi.org/project/dapla-toolbelt-metadata/) tilbyr metoder for å lage filstier og sjekke om filer i bøtter er i tråd med SSBs definerte [navnestandard](./navnestandard.qmd). Metodene inkluderer:
 
+- Generere komplette eller deler av filstier som følger navnestandarden
 - Validere at bøtter, mapper og filer eksisterer
 - Validere at filstier som ikke eksisterer følger navnestandard^[Når man validerer en filsti som ikke eksisterer så får man beskjed om at `Filen eksisterer ikke. Validerer uansett.`.]
 - Informasjon om hva som bryter med navnestandarden.
@@ -15,7 +16,93 @@ For å effektivisere validering av bøtter med store mengder filer, benytter met
 
 ## Funksjonalitet
 
-`standards` tilbyr to typer av funksjonalitet. Den første er å sjekke om en bøtte, mappe eller fil følger standarden. Den andre er å produsere en rapport som oppsummerer resultatet av valideringen.
+`standards` tilbyr tre typer funksjonalitet. Du kan generere filstier som følger navnestandarden, sjekke om en bøtte, mappe eller fil følger standarden, og produsere en rapport som oppsummerer resultatet av valideringen.
+
+### Generere filstier
+
+Funksjonen `create_dataset_path()` setter sammen og validerer en filsti fra informasjon om datasettet. For å lage en komplett filsti oppgir du bøttenavn, produktkortnavn, datatilstand og delene som skal inngå i filnavnet:
+
+```{.python filename="Notebook"}
+from dapla_metadata.standards import DataState, FileType, create_dataset_path
+
+path = create_dataset_path(
+	bucket="ssb-dapla-example-data-produkt-prod",
+	product="ledstill",
+	data_state=DataState.OUTPUT_DATA,
+	short_description="varehandel",
+	period_from="2018-Q1",
+	version=3,
+	file_type=FileType.PARQUET,
+)
+path
+```
+
+```{.python}
+'gs://ssb-dapla-example-data-produkt-prod/ledstill/utdata/varehandel_p2018-Q1_v3.parquet'
+```
+
+Hvis datasettet dekker et tidsintervall, kan du også oppgi `period_to`. Egendefinerte mapper under datatilstanden oppgis som en liste i `folders`:
+
+```{.python filename="Notebook"}
+path = create_dataset_path(
+	bucket="ssb-dapla-example-data-produkt-prod",
+	product="ledstill",
+	data_state=DataState.PROCESSED_DATA,
+	folders=["dapla", "revidert"],
+	short_description="ufo-observasjoner",
+	period_from="2019",
+	period_to="2020",
+	version=2,
+	file_type=FileType.CSV,
+)
+path
+```
+
+```{.python}
+'gs://ssb-dapla-example-data-produkt-prod/ledstill/klargjorte-data/dapla/revidert/ufo-observasjoner_p2019_p2020_v2.csv'
+```
+
+Du kan også generere bare filnavnet eller en sammenhengende del av filstien. Dette kan for eksempel brukes når bøttenavnet legges til et annet sted i koden:
+
+```{.python filename="Notebook"}
+filename = create_dataset_path(
+	short_description="befolkning",
+	period_from="2025",
+	version=1,
+	file_type=FileType.JSON,
+)
+
+relative_path = create_dataset_path(
+	product="ledstill",
+	data_state=DataState.INPUT_DATA,
+)
+
+print(filename)
+print(relative_path)
+```
+
+```{.python}
+befolkning_p2025_v1.json
+ledstill/inndata
+```
+
+Følgende filtyper støttes: `FileType.PARQUET`, `FileType.CSV`, `FileType.JSON` og `FileType.XML`.
+
+Datatilstand oppgis med `DataState`: `DataState.INPUT_DATA` (`inndata`), `DataState.PROCESSED_DATA` (`klargjorte-data`), `DataState.STATISTICS` (`statistikk`) og `DataState.OUTPUT_DATA` (`utdata`). Kildedata er ikke støttet, fordi filnavn i `kildedata` ikke er omfattet av navnestandarden.
+
+Periodene `period_from` og `period_to` støtter disse formatene: år (`2019`), måned (`2022-10`), dato (`2022-01-24`), ISO-uke (`2020-W15`), ISO-dagnummer (`2022-015`), dato og tid (`2024-12-31T23-59-30.000`), samt SSBs perioder for to måneder (`2024-B1`), kvartal (`2024-Q1`), tertial (`2024-T1`) og halvår (`2024-H1`).
+
+::: {.callout-important}
+## Oppgi verdier uten syntaksen fra navnestandarden
+
+Oppgi kun selve verdiene til funksjonen. `create_dataset_path()` legger selv til `gs://`, prefiksene `p` og `v`, skilletegn og filendelse. Bruk derfor for eksempel `period_from="2018-Q1"`, `version=1` og `file_type=FileType.PARQUET` ikke `p2018-Q1`, `v1` eller `".parquet"`.
+
+`data_state` og `file_type` må oppgis som enum-medlemmer, ikke som tekst. `data_state="utdata"` gir en `TypeError`.
+
+Alle delene av et filnavn må oppgis samlet: `short_description`, `period_from`, `version` og `file_type`. En delvis filsti må også være sammenhengende. Du kan for eksempel generere `product/data_state`, men ikke kombinere `bucket` og `data_state` uten å oppgi `product`.
+:::
+
+Funksjonen validerer blant annet datatilstand, periodeformat, kronologisk rekkefølge, versjonsnummer og tegn i mappe og filnavn. Ugyldige verdier gir en `TypeError` eller `ValueError`. Funksjonen oppretter ikke mapper eller filer og kontrollerer ikke om filstien finnes i GCS.
 
 ### Validering
 

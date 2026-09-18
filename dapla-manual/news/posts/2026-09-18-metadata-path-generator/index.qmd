@@ -1,0 +1,52 @@
+---
+title: "Python-funksjonalitet for å generere filstier som følger navnestandarden"
+categories:
+  - ssb dataportal
+  - klass
+  - metadata
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: 2026-09-18
+date-modified: 2026-09-18
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+[dapla-toolbelt-metadata](../../../statistikkere/dapla-toolbelt-metadata.qmd) har nå en funksjon for å generere korrekte filstier iht SSBs [Navnestandard](../../../statistikkere/navnestandard.qmd). Funksjonaliteten skal gjøre det lettere for statistikkprodusenter å følge navnestandarden på en programmatisk måte. Funksjonen lar brukeren legge inn:
+
+- bøttenavn
+- kortnavn for dataprodukt
+- datatilstand
+- datasettes kortnavn
+- periode
+- versjon
+- filtype
+
+og deretter returneres en tekststreng som følger navnestandarden. Se eksempel under. 
+
+```{.python filename="Kode"}
+from dapla_metadata.standards import DataState, FileType, create_dataset_path
+
+path = create_dataset_path(
+	bucket="ssb-dapla-example-data-produkt-prod",
+	product="ledstill",
+	data_state=DataState.OUTPUT_DATA,
+	short_description="varehandel",
+	period_from="2018-Q1",
+	version=3,
+	file_type=FileType.PARQUET,
+)
+path
+```
+
+```{.python filename="Output"}
+'gs://ssb-dapla-example-data-produkt-prod/ledstill/utdata/varehandel_p2018-Q1_v3.parquet'
+```
+
+## Hvorfor er dette viktig? 
+
+Navnestandarden er en sentral del av SSBs metadata rundt datasett og dataprodukter på Dapla. For å gjøre det enklere å følge tilbyr vi nå en programmatisk måte å generere denne filstien. [Les mer om funksjonaliten her](../../../statistikkere/standards-toolbelt.qmd#generere-filstier). 

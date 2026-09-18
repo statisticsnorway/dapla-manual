@@ -1,0 +1,85 @@
+---
+title: "AI-kodeassistent"
+date-modified: "08/14/2026"
+lightbox: true
+---
+
+::: {.callout-caution}
+## Funksjonalitet under utvikling
+
+Funksjonaliteten i dette kapitlet er under utvikling og det er kun noen få team tester det ut. Følg med [Viva Engage](https://engage.cloud.microsoft/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiIyMDc1MjMwNjk5NTIifQ/all) for å vite når alle team kan ta det i bruk.
+:::
+
+**AI-kodeassistent** gir Dapla-brukere tilgang til to AI-tjenester i testmiljøet til Dapla Lab:
+
+- **Open Code** i Jupyterlab, VS Code, RStudio på Dapla Lab
+- chattegrensesnitt i **Google Cloud Console**
+
+Når et Dapla-team har fått tilgang til AI-kodestøtte, kan medlemmer av teamets `developers`-gruppe i testmiljøet benytte seg av noen av Googles AI-modeller via Gemini Enterprise Agent Platform.
+
+::: {.callout-note}
+## Kostnader
+
+SSB betaler for bruk basert på hvor mange tokens som benyttes. I testperioden er det ingen hard grense for bruk, men det settes opp kostnadsvarsling basert på et budsjett på **10 euro per developer** i teamet.
+
+Det betyr at et team med 10 medlemmer i `developers`-gruppen får et samlet budsjett på **100 euro**. Tjenestene kan fortsatt benyttes selv om budsjettet er brukt opp.
+
+Informer gjerne resten av teamet om dette, også de som ikke bruker AI-tjenestene selv.
+:::
+
+## Bruksområde
+
+AI-kodeassistent er ment som et hjelpemiddel for brukere som jobber med kode og overgang til Dapla. Tjenestene egner seg blant annet til å:
+
+- forklare eksisterende kode
+- foreslå utkast til ny kode
+- hjelpe med feilsøking
+- foreslå forbedringer i scripts og notebooks
+- svare på spørsmål om kommandoer, biblioteker og arbeidsflyter
+
+Tjenestene er ikke ment som en erstatning for faglige vurderinger eller kvalitetssikring. Brukeren må selv vurdere om forslagene er riktige og egnet for formålet.
+
+Siden SSB betaler for faktisk bruk, bør tjenestene brukes til oppgaver som er relevante for statistikkproduksjon og overgangen til Dapla.
+
+## Forberedelser
+
+For at et team skal kunne benytte seg av AI-kodeassistanse, må [Teamansvarlig](./hva-er-dapla-team.qmd#teamansvarlig) først skru på tilgangen under innstillinger i [Dapla Ctrl](https://dapla-ctrl.intern.ssb.no/). Tilgangen gjelder medlemmer av teamets `developers`-gruppe i testmiljøet.
+
+### Open Code i Dapla Lab
+
+For å bruke Open Code i Dapla Lab gjør du følgende:
+
+1. Logg inn i [Dapla Lab testmiljø](https://lab.dapla-test.ssb.no/).
+2. Under **Tjenestekatalog** velger du en av tjenestene **Jupyterlab**, **Rstudio**, **VS Code** eller **Marimo**.
+3. I tjenestekonfigurasjonen velger du under **Data** å representere `developers`-gruppen til teamet som har fått tilgang.
+4. Start tjenesten.
+5. Åpne en terminal i tjenesten og kjør kommandoen `opencode`.
+
+Open Code er et terminalbasert grensesnitt (*Terminal User Interface*, TUI) for agentisk AI-kodeassistanse. Verktøyet er kraftig, og det er anbefalt at brukeren setter seg inn i dokumentasjonen før det tas i bruk i større arbeidsoppgaver.
+
+### Chattevindu i Google Cloud Console
+
+Hvis du ikke ønsker å bruke Dapla Lab for å få tilgang til AI-tjenestene, kan du benytte chattegrensesnittet i Google Cloud Console. Gjør følgende:
+
+1. Gå til [Google Cloud Console](https://console.cloud.google.com/).
+2. Logg inn med SSB-brukeren din.
+3. Velg test-prosjektet til teamet i prosjektvelgeren.
+4. Åpne menyen øverst til venstre og velg **Agent Platform** og deretter **Studio**.
+
+Her får du tilgang til et chattevindu der du kan diskutere med en AI-modell. Plattformen tilbyr også andre funksjoner, som bildegenerering og musikkgenerering, men disse bør bare brukes dersom de er relevante for statistikkproduksjon og overgangen til Dapla.
+
+## Funksjonalitet
+
+I denne delen beskriver vi det som er unikt ved SSBs implementasjon av [Open Code](https://opencode.ai/). Open Code er åpen kildekode-basert AI-utviklerassistent og CLI-agent som lar brukeren generere, redigere og automatisere kode direkte i prosjektet ditt ved hjelp av AI-modeller. Open Code er et kraftig verktøy for å jobbe effektivt med kode og AI, og det er anbefalt brukere setter seg godt inn i all funksjonalitet. [Dokumentasjon av funksjonaliteten i Open Code finner du her](https://opencode.ai/docs/nb).   
+
+### Modeller
+
+Det tilbys kun et fåtall modeller på Dapla Lab. Standard valg er **Gemini 2.5 Pro**. Se hvilke modeller som er tilgjengelige i Open Code ved å skrive inn `/models`. 
+
+### SSB-kontekst
+
+SSB har [en felles kontekstfil](https://github.com/statisticsnorway/dapla-lab-helm-charts-standard-test/blob/main/charts/vscode/files/AGENTS.md) som gjør at agenten bedre forstår beste praksis i SSB og kommer med forslag iht til dette. Den ligger lagret under `$HOME/work/AGENTS.md`. Den sikrer at bl.a. agenten vet at statistikkproduksjon kodes i [ssb-project](./ssb-project.qmd) og at dokumentasjon av funksjonalitet ligger i Dapla-manualen. Fremover vil denne kontekstfilen endres og optimaliseres for best mulige svar i en SSB-kontekst. Team og brukere kan også lage sine egne kontekstfiler og underagenter.
+
+## Retningslinjer for bruk av KI
+
+Alle som bruker AI-kodeassistanse i arbeid med data skal følge [Retningslinjer for bruk av KI-assistenter i SSB](https://ssbno.sharepoint.com/sites/Megsomansatt/SitePages/Bruk-av-generativ-kunstig-intelligens.aspx?web=1). 
