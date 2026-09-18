@@ -15,7 +15,184 @@
 <link>https://manual.dapla.ssb.no/blog/</link>
 </image>
 <generator>quarto-1.10.18</generator>
-<lastBuildDate>Fri, 29 May 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 18 Sep 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Slik henter du ut informasjon om Daplateam direkte fra Dapla API</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/blog/posts/2026-09-18-explore-dapla-api/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="../../../statistikkere/dapla-ctrl.html">Dapla Ctrl</a> er grensesnittet for å administrere Dapla-team. «Under panseret» benytter Dapla Ctrl <a href="https://graphql.org/">GraphQL</a>-API-et <a href="https://github.com/statisticsnorway/dapla-ctrl">Dapla API</a> til å hente ut informasjonen det trenger. Alle som jobber på Dapla har tilgang til å utforske API-et direkte via GraphiQL på denne adressen:</p>
+<p><a href="https://dapla-ctrl.intern.ssb.no/api-docs" class="uri">https://dapla-ctrl.intern.ssb.no/api-docs</a></p>
+<p>Dette kan være nyttig for brukere som ønsker å hente ut informasjon i en struktur som ikke finnes ferdig i Dapla Ctrl – for eksempel hvis man ønsker en oversikt over alle Dapla-team og autonominivå.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Får du 401 (unauthenticated)?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I Dapla Ctrl blir man bedt om å logge seg inn igjen 30 minutter etter man sist logget seg på. På samme måte må man autentisiere seg i Dapla API, og det må gjøres via Dapla Ctrl. Får du en <code>401 (unauthenticated)</code> i GraphiQL så må du inn i Dapla Ctrl og trykke <strong>Logg inn</strong>.</p>
+</div>
+</div>
+<section id="hvordan-gjøre-spørringer-i-graphiql" class="level3">
+<h3 class="anchored" data-anchor-id="hvordan-gjøre-spørringer-i-graphiql">Hvordan gjøre spørringer i GraphiQL</h3>
+<p>I motsetning til tradisjonelle REST-API-er, der serveren bestemmer hva du får i retur, spesifiserer du i GraphQL nøyaktig hvilke felter du vil ha ved hjelp av klammeparenteser <code>{ ... }</code>. Du skriver spørringen i redigeringsfeltet i midten og trykker på «Play»-knappen for å kjøre den.</p>
+<p>I venstremenyen finner du dokumentasjonen (<em>Documentation Explorer</em> / <em>Docs</em>), som lister opp alle tilgjengelige spørringer og informasjonsfelter du kan hente ut. Et godt tips er å bruke hurtigtasten <code>Ctrl + Space</code> inne i klammeparentesene – da får du opp en autofullføringsliste med gyldige felter på det aktuelle nivået.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><video src="./graphiql-video.mov" class="img-fluid" controls=""><a href="./graphiql-video.mov">Video</a></video></p>
+<figcaption>Videon viser hvordan man bygger en enkel spørring GraphiQL</figcaption>
+</figure>
+</div>
+<p>Under viser vi noen vanlige spørringer som kan være nyttige for flere.</p>
+</section>
+<section id="hente-ut-oversikt-over-alle-dapla-team" class="level2">
+<h2 class="anchored" data-anchor-id="hente-ut-oversikt-over-alle-dapla-team">Hente ut oversikt over alle Dapla-team</h2>
+<p>For å hente ut en liste over team bruker vi feltet <code>teams</code>. Siden API-et støtter paginering, bruker vi argumentet <code>first</code> for å angi hvor mange resultater vi ønsker i retur.</p>
+<p>I eksempelet under henter vi de to første teamene (<code>first: 2</code>), inkludert teamets kortnavn (<code>slug</code>), visningsnavn (<code>displayName</code>), samt hvilken seksjon teamet tilhører:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode graphql code-with-copy"><code class="sourceCode graphql"><span id="cb1-1">{</span>
+<span id="cb1-2">  teams(first: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>) {</span>
+<span id="cb1-3">    nodes {</span>
+<span id="cb1-4">      slug</span>
+<span id="cb1-5">      displayName</span>
+<span id="cb1-6">      section {</span>
+<span id="cb1-7">        name</span>
+<span id="cb1-8">        code</span>
+<span id="cb1-9">      }</span>
+<span id="cb1-10">    }</span>
+<span id="cb1-11">  }</span>
+<span id="cb1-12">}</span></code></pre></div></div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Caution</span>Hente ut mye informasjon
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Alle spørringer som er paginerte (nodes/edges/pageInfo) viser kun de 25 første elementene i GraphiQL. Ønsker du å liste ut alle team for eksempel så bør man sette <code>first</code> til et høyt tall som du vet dekker alle elementer i et svar.</p>
+</div>
+</div>
+</section>
+<section id="hente-ut-informasjon-om-et-team" class="level2">
+<h2 class="anchored" data-anchor-id="hente-ut-informasjon-om-et-team">Hente ut informasjon om et team</h2>
+<p>Dersom du bare ønsker informasjon om et spesifikt team, bruker du feltet <code>team</code> (i entall) og oppgir teamets kortnavn via argumentet <code>slug</code>.</p>
+<p>I dette eksempelet henter vi detaljer for teamet <code>play-obr</code>, inkludert visningsnavn, autonominivå(<code>isManaged</code>), samt seksjonstilhørighet og navnet på seksjonssjefen:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode graphql code-with-copy"><code class="sourceCode graphql"><span id="cb2-1">{</span>
+<span id="cb2-2">  team(slug: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"play-obr"</span>) {</span>
+<span id="cb2-3">    slug</span>
+<span id="cb2-4">    displayName</span>
+<span id="cb2-5">    isManaged</span>
+<span id="cb2-6">    section {</span>
+<span id="cb2-7">      name</span>
+<span id="cb2-8">      code</span>
+<span id="cb2-9">      manager {</span>
+<span id="cb2-10">        name</span>
+<span id="cb2-11">      }</span>
+<span id="cb2-12">    }</span>
+<span id="cb2-13">  }</span>
+<span id="cb2-14">}</span></code></pre></div></div>
+</section>
+<section id="hente-ut-epostadresser-til-medlemmer-av-et-team" class="level2">
+<h2 class="anchored" data-anchor-id="hente-ut-epostadresser-til-medlemmer-av-et-team">Hente ut epostadresser til medlemmer av et team</h2>
+<p>For å se hvem som er tilknyttet et bestemt team, legger vi til feltet <code>members</code>. Siden listen over medlemmer også støtter paginering, bruker vi <code>first: 10</code> sammen med <code>nodes</code>.</p>
+<p>Hver node representerer en kobling til et medlem, der selve brukerdetaljene ligger under objektet <code>user</code>. Her henter vi ut navn og e-postadresse:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode graphql code-with-copy"><code class="sourceCode graphql"><span id="cb3-1">{</span>
+<span id="cb3-2">  team(slug: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"play-obr"</span>) {</span>
+<span id="cb3-3">    slug</span>
+<span id="cb3-4">    displayName</span>
+<span id="cb3-5">    isManaged</span>
+<span id="cb3-6">    members(first: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>) {</span>
+<span id="cb3-7">      nodes {</span>
+<span id="cb3-8">        user {</span>
+<span id="cb3-9">          name</span>
+<span id="cb3-10">          email</span>
+<span id="cb3-11">        }</span>
+<span id="cb3-12">      }</span>
+<span id="cb3-13">    }</span>
+<span id="cb3-14">    section {</span>
+<span id="cb3-15">      name</span>
+<span id="cb3-16">      code</span>
+<span id="cb3-17">      manager {</span>
+<span id="cb3-18">        name</span>
+<span id="cb3-19">      }</span>
+<span id="cb3-20">    }</span>
+<span id="cb3-21">  }</span>
+<span id="cb3-22">}</span></code></pre></div></div>
+</section>
+<section id="hente-ut-alle-delte-bøtter-til-et-team" class="level2">
+<h2 class="anchored" data-anchor-id="hente-ut-alle-delte-bøtter-til-et-team">Hente ut alle delte bøtter til et team</h2>
+<p>Hvis du vil se hvilke deltebøtter et team har opprettet, bruker du feltet <code>sharedBuckets</code>.</p>
+<p>Under <code>nodes</code> kan du hente ut detaljer som det fulle bøttenavnet (<code>name</code>), kortnavn (<code>shortName</code>) og bøttetype/kategori (<code>kind</code>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode graphql code-with-copy"><code class="sourceCode graphql"><span id="cb4-1">{</span>
+<span id="cb4-2">  team(slug: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"play-obr"</span>) {</span>
+<span id="cb4-3">    slug</span>
+<span id="cb4-4">    displayName</span>
+<span id="cb4-5">    sharedBuckets {</span>
+<span id="cb4-6">      nodes {</span>
+<span id="cb4-7">        name</span>
+<span id="cb4-8">        shortName</span>
+<span id="cb4-9">        kind</span>
+<span id="cb4-10">      }</span>
+<span id="cb4-11">    }</span>
+<span id="cb4-12">  }</span>
+<span id="cb4-13">}</span></code></pre></div></div>
+</section>
+<section id="hente-ut-epost-til-alle-som-har-tilgang-til-en-deltbøtte" class="level2">
+<h2 class="anchored" data-anchor-id="hente-ut-epost-til-alle-som-har-tilgang-til-en-deltbøtte">Hente ut epost til alle som har tilgang til en deltbøtte</h2>
+<p>Når du skal kontakte alle som har tilgang til en bestemt deltbøtte, så kan du gjøre et direkte oppslag på bøttenivå ved hjelp av feltet <code>sharedBucket</code> og bøttas fulle navn (<code>name</code>) for å hente ut epostadressene til alle som har tilgang.</p>
+<p>Under feltet <code>users</code> henter du ut alle personer med tilgang via <code>nodes</code>. Her får du både brukerinformasjonen (<code>name</code>, <code>email</code>, <code>jobTitle</code>) og hvilket team tilgangen er forankret gjennom (<code>team { slug }</code>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode graphql code-with-copy"><code class="sourceCode graphql"><span id="cb5-1">{</span>
+<span id="cb5-2">  sharedBucket(name: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ssb-play-obr-data-delt-delomatentest-prod"</span>) {</span>
+<span id="cb5-3">    name</span>
+<span id="cb5-4">    users {</span>
+<span id="cb5-5">      nodes {</span>
+<span id="cb5-6">        team {</span>
+<span id="cb5-7">          slug</span>
+<span id="cb5-8">        }</span>
+<span id="cb5-9">        user {</span>
+<span id="cb5-10">          name</span>
+<span id="cb5-11">          email</span>
+<span id="cb5-12">          jobTitle</span>
+<span id="cb5-13">        }</span>
+<span id="cb5-14">      }</span>
+<span id="cb5-15">    }</span>
+<span id="cb5-16">  }</span>
+<span id="cb5-17">}</span></code></pre></div></div>
+
+
+</section>
+
+ ]]></description>
+  <category>dapla api</category>
+  <category>dapla ctrl</category>
+  <category>tilgangsstyring</category>
+  <guid>https://manual.dapla.ssb.no/blog/posts/2026-09-18-explore-dapla-api/</guid>
+  <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/blog/posts/2026-09-18-explore-dapla-api/graphiql.png" medium="image" type="image/png" height="110" width="144"/>
+</item>
 <item>
   <title>GITHUB_TOKEN: read-only som standard rettigheter</title>
   <dc:creator>Tech Lead Forum</dc:creator>
