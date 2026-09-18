@@ -22,6 +22,13 @@ draft: false
 
 Dette kan være nyttig for brukere som ønsker å hente ut informasjon i en struktur som ikke finnes ferdig i Dapla Ctrl – for eksempel hvis man ønsker en oversikt over alle Dapla-team og autonominivå.
 
+::: {.callout-caution}
+## Får du 401 (unauthenticated)?
+
+I Dapla Ctrl blir man bedt om å logge seg inn igjen 30 minutter etter man sist logget seg på. På samme måte må man autentisiere seg i Dapla API, og det må gjøres via Dapla Ctrl. Får du en `401 (unauthenticated)` i GraphiQL så må du inn i Dapla Ctrl og trykke **Logg inn**. 
+:::
+
+
 ### Hvordan gjøre spørringer i GraphiQL
 
 I motsetning til tradisjonelle REST-API-er, der serveren bestemmer hva du får i retur, spesifiserer du i GraphQL nøyaktig hvilke felter du vil ha ved hjelp av klammeparenteser `{ ... }`. Du skriver spørringen i redigeringsfeltet i midten og trykker på «Play»-knappen for å kjøre den. 
@@ -53,6 +60,13 @@ I eksempelet under henter vi de to første teamene (`first: 2`), inkludert teame
   }
 }
 ```
+
+::: {.callout-caution}
+## Hente ut mye informasjon
+
+Alle spørringer som er paginerte (nodes/edges/pageInfo) viser kun de 25 første elementene i GraphiQL. Ønsker du å liste ut alle team for eksempel så bør man sette `first` til et høyt tall som du vet dekker alle elementer i et svar. 
+:::
+
 
 ## Hente ut informasjon om et team
 
