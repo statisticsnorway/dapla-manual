@@ -1,10 +1,10 @@
 ---
 title: Hurtig guide datatilstander
-date-modified: 01/01/2025
+date-modified: 21/09/2026
 lightbox: true
 ---
 
-En datatilstand er et resultat av at et datasett har gått gjennom gitte operasjoner og prosesser. Basert på det interne dokumentet [Datatilstander SSB - 3. utgave](https://www.ssb.no/teknologi-og-innovasjon/metoder-og-dokumentasjon/datatilstander-ssb-3.utgave/_/attachment/inline/411ebf27-1ce3-42d3-a52e-47fd8d0af188:706ed5ec7279bbea5801a2a27bdc9e8a015280dd/NOT2026-04.pdf). Definisjonene er direkte utdrag fra dette dokumentet. Se interndokumentet for en mer grundig gjennomgang av datatilstander i SSB.
+En datatilstand er et resultat av at et datasett har gått gjennom gitte operasjoner og prosesser. Basert på det interne dokumentet [Datatilstander SSB - 3. utgave](https://www.ssb.no/teknologi-og-innovasjon/metoder-og-dokumentasjon/datatilstander-ssb-3.utgave/_/attachment/inline/411ebf27-1ce3-42d3-a52e-47fd8d0af188:706ed5ec7279bbea5801a2a27bdc9e8a015280dd/NOT2026-04.pdf). Definisjonene og hovedpunktene bygger på dette dokumentet. Guiden inneholder i tillegg praktiske presiseringer for bruk i statistikkproduksjonen. Se interndokumentet for en mer grundig gjennomgang av datatilstander i SSB.
 
 I SSB skiller vi mellom fem datatilstander:
 
@@ -14,8 +14,10 @@ I SSB skiller vi mellom fem datatilstander:
 4. Statistikk
 5. Utdata
 
+![En grafisk fremstilling av forskjellene mellom datatilstandene i SSB [@datatilstander2].](../images/datatilstander.png){fig-alt="Figur som viser ulikhetene mellom datatilstandene som er definert i SSB." width="100%" #fig-datatilstander}
+
 # 1. Kildedata
-Kildedata lagres i kildebøtten og dersom steg krever anonym behandling må behandling utføres med kildomaten av en databehandler. Data som er sikret og pseudonymisert og kan behandles av utviklere, kan behandles videre i produkt bøtten til inndata.
+Kildedata lagres i kildebøtten og dersom steg krever anonym behandling må viderebehandling utføres med kildomaten av en databehandler. Data som er sikret og pseudonymisert og kan behandles av utviklere, kan behandles videre i produkt bøtten.
 
 ## Kildedata er data lagret slik de ble levert til SSB fra dataeier.
 - Dataformat og datamodell, 
@@ -94,7 +96,7 @@ Data må gå gjennom alle nødvendige behandlinger av kildedata til Inndata, for
 # 2. Inndata (Ikke obligatorisk, dersom kravene er oppfylt)
 Noen inndata oppfyller allerede kravet til klargjorte data og kan brukes direkte i klargjorte data. Det betyr at dersom ingenting skal gjøres med dataene så kan du hoppe over inndata steget eller lagre de dit uten videre handling dersom du bruker standardisert kode på tvers av statistikker.
 
-Inndata utgjør statistikkens startdata. Inndata oppfyller alle kravene i foregående datatilstander. Kan kombineres med delte data fra andre i SSB, som også skal oppfylle kravene til å være behandlet som kildedata. 
+Inndata er hovedsakelig kildedata som er transformert til SSBs standard lagringsformat og eventuelt omstrukturert. Inndata oppfyller alle kravene i foregående datatilstander. Kan kombineres med delte data fra andre i SSB, som også skal oppfylle kravene til å være behandlet som kildedata. 
 
 ## Klargjorte data fra andre statistikker 
 - Dersom data som klargjøres er tidligere klargjorte data som transformeres eller brukes som vekter.  
@@ -129,7 +131,7 @@ Gjenta metadata og utbedring om nødvendig
 - Validering
 **Lagres**
 - Data skal navngis og versjoneres i henhold til «Navnestandard og versjonering av datasett i DAPLA»
-- Det er ikke et krav å ta vare på mellomversjoner som ikke inngår i en publisering, men vær forsiktig med å skrive over.
+- Det er ikke krav om å arkivere alle mellomversjoner. Mellomversjoner som ikke inngår i en publisering kan derfor normalt erstattes av senere versjoner. Vær likevel oppmerksom på at produksjonen skal kunne etterprøves, og at det må være mulig å dokumentere hvilke datasett og hvilken behandling som ligger til grunn for publiserte resultater.
 - Lagres i bøtter
 
 
@@ -146,11 +148,11 @@ hvordan den er beregnet.
 - Statistikker som benytter klargjorte data fra andre, er ansvarlige for å ta vare på informasjon om hvilke datasett som er brukt, slik at produksjonen kan etterprøves.
 (Valgene vil kunne være forskjellige for forskjellige statistikker)
 
-Data som består alle kravene og kravene til foregående datatilstander tilsvarer Klargjorte data. De kan lagres i klargjorte-data som parquet filer.
+Data som består alle kravene og kravene til foregående datatilstander tilsvarer Klargjorte data. De kan lagres i klargjorte-data som parquet filer. Det skal ikke gjøres endringer på inndata som følge av klargjøringsprosessen. Korrigerte data lagres som klargjorte data, ikke overskrive inndata.
 
 
 # 3. Klargjorte data
-Klargjorte data oppfyller alle kravene til foregående datatilstander. Klargjorte data reflekterer i hovedsak enkeltobservasjoner, på lik linje med kildedataene.  I klargjorte data er det som regel ikke foretatt aggregeringer. Klargjorte data kan deles internt ved at de inngår i andre statistikkers startdata, særlig makrostatistikkenes, og kan da inneholde konfidensielle og detaljerte data som ikke publiseres. 
+Klargjorte data oppfyller alle kravene til foregående datatilstander. Klargjorte data reflekterer i hovedsak enkeltobservasjoner, på lik linje med kildedataene.  I klargjorte data er det som regel ikke foretatt aggregeringer. Klargjorte data kan deles internt ved at de inngår i andre statistikkers startdata, særlig makrostatistikkenes, og kan da inneholde konfidensielle og detaljerte data som ikke publiseres. Klargjorte data anses som arkivverdige.
 
 ## Behandling av klargjorte data til statistikk. (statistikkproduksjon til intern bruk)
 
@@ -195,9 +197,10 @@ Eksempler på utdata er:
 • Internasjonal rapportering
 
 
+# Om krav til datatilstander
 
+Som hovedregel er kildedata, klargjorte data, statistikk og utdata obligatoriske datatilstander, mens inndata er valgfri. Statistikk er ikke nødvendig som egen datatilstand dersom statistikkdataene ikke skiller seg fra utdata.
 
-![En grafisk fremstilling av forskjellene mellom datatilstandene i SSB [@datatilstander2].](../images/datatilstander.png){fig-alt="Figur som viser ulikhetene mellom datatilstandene som er definert i SSB." width="100%" #fig-datatilstander}
+Hvilke datatilstander som faktisk er nødvendige, avhenger imidlertid av typen statistikkproduksjon. For eksempel er kildedata og klargjorte data obligatoriske for dataprodukter, mens makrostatistikk som baserer seg på andres klargjorte data kan ha en annen dataflyt. Se Datatilstander SSB – 3. utgave for detaljene.
 
-
-Alle datatilstander er obligatoriske bortsett fra **inndata** og **statistikkdata**(Det kan være hensiktsmessig å bruke alle tilstandene for standardisering av kode på tvers). Statistikkdata er ikke obligatorisk dersom den allerede oppnår kriteriene og dermed ikke skiller seg fra utdata. @fig-datatilstander viser hvordan de forskjellige datatilstandene henger sammen.
+Det kan likevel være hensiktsmessig å bruke alle datatilstandene for å standardisere kode og produksjonsprosesser på tvers av statistikker.
