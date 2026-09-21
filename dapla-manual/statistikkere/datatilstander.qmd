@@ -1,10 +1,12 @@
 ---
 title: Datatilstander
-date-modified: 01/01/2025
+date-modified: 21/09/2026
 lightbox: true
 ---
 
-En datatilstand er et resultat av at et datasett har gått gjennom gitte operasjoner og prosesser [@datatilstander2 pp. 5]. Denne siden er ment som en kort innføring i de forskjellige datatilstandene. Siden er basert på det interne dokumentet [Datatilstander SSB - 3. utgave](https://www.ssb.no/teknologi-og-innovasjon/metoder-og-dokumentasjon/datatilstander-ssb-3.utgave/_/attachment/inline/411ebf27-1ce3-42d3-a52e-47fd8d0af188:706ed5ec7279bbea5801a2a27bdc9e8a015280dd/NOT2026-04.pdf). Definisjonene er direkte utdrag fra dette dokumentet. Se interndokumentet for en mer grundig gjennomgang av datatilstander i SSB.
+Denne siden gir en innføring i de forskjellige datatilstandene og sentrale krav til behandling, dokumentasjon og etterprøvbarhet.
+
+En datatilstand er et resultat av at et datasett har gått gjennom gitte operasjoner og prosesser. Basert på det interne dokumentet [Datatilstander SSB - 3. utgave](https://www.ssb.no/teknologi-og-innovasjon/metoder-og-dokumentasjon/datatilstander-ssb-3.utgave/_/attachment/inline/411ebf27-1ce3-42d3-a52e-47fd8d0af188:706ed5ec7279bbea5801a2a27bdc9e8a015280dd/NOT2026-04.pdf). Definisjonene og hovedpunktene bygger på dette dokumentet. Guiden inneholder i tillegg praktiske presiseringer for bruk i statistikkproduksjonen. Se interndokumentet for en mer grundig gjennomgang av datatilstander i SSB.
 
 I SSB skiller vi mellom fem datatilstander:
 
@@ -14,57 +16,201 @@ I SSB skiller vi mellom fem datatilstander:
 4. Statistikk
 5. Utdata
 
-Alle datatilstander er obligatoriske bortsett fra **inndata** og **statistikkdata**. Statistikkdata er ikke obligatorisk dersom den ikke skiller seg fra utdata. @fig-datatilstander viser hvordan de forskjellige datatilstandene henger sammen.
-
 ![En grafisk fremstilling av forskjellene mellom datatilstandene i SSB [@datatilstander2].](../images/datatilstander.png){fig-alt="Figur som viser ulikhetene mellom datatilstandene som er definert i SSB." width="100%" #fig-datatilstander}
 
-## Kildedata
-Kildedata er **data lagret slik de ble levert til SSB fra dataeier**. Eksempler på kildedata er: *grunndata*, *transaksjonsdata*, *administrative data*, *statistiske data* og *aggregerte data og rapporter* [@datatilstander2 pp. 7]. Kildedata lagres i bøtten `ssb-<teamnavn>-data-kilde-prod`. Les mer om bøtter [her](hva-er-botter.qmd) og lagringsstandarder [her](navnestandard.qmd).
+# 1. Kildedata
+Kildedata lagres i kildebøtten og dersom steg krever anonym behandling må viderebehandling utføres med kildomaten av en databehandler. Data som er sikret og pseudonymisert og kan behandles av utviklere, kan behandles videre i produkt bøtten.
 
-## Inndata
-Inndata er **kildedata som er transformert til SSBs standard lagringsformat** [@datatilstander2 pp. 8]. Denne transformeringer inkluderer blant annet at dataene skal benytte UTF-8 tegnsett. Les mer om SSBs standard lagringsformat [her](https://statistics-norway.atlassian.net/wiki/spaces/MPD/pages/2953084957/Standardformater#UTF-8-tegnsett).
-Inndata kan også være andre statistikkers klargjorte data og/eller statistikkdata [@datatilstander2 pp. 8]. Inndata er ikke en obligatorisk datatilstand. Inndata lagres i bøtten `ssb-<teamnavn>-data-produkt-prod`.
+## Kildedata er data lagret slik de ble levert til SSB fra dataeier.
+- Dataformat og datamodell, 
+- ustrukturerte eller strukturerte. 
+- informasjon om tidspunkt og rekkefølge for avlevering. 
+- Kan inneholde personlig identifiserbar informasjon og sensitive opplysninger. 
 
-## Klargjorte data
-Klargjorte data er inndata hvor:
+## Kildedata er en del av statistikkenes dokumentasjon
+- Kilde til forskning
+- Kilde for å lage nye statistikker. 
+- oppfyller krav om etterprøvbarhet
 
-* variablene er beregnet gjennom utregninger og koblinger mellom datasett
-* nøyaktigheten er forbedret
-    + for eksempel som resultat av editering eller imputering
-* metadata med variabeldefinisjoner er lagt til.
 
-Enhver endring som er gjort skal være sporbare og dokumentert slik at statistikkene skal være etterprøvbare. Klargjorte date er som regel *ikke* aggregerte - med mindre dataen vi mottar er aggregert. Med andre ord inneholder klargjorte data oftest enkeltobservasjoner - i likhet med kildedata og inndata [@datatilstander2 pp. 9]. Klargjorte data lagres i bøtten `ssb-<teamnavn>-data-produkt-prod`.
+## Eksempler på kildedata er:  
+- **Grunndata:** (ofte kalt masterdata): Data som endrer seg relativt sjelden og som ofte anvendes i mange ulike sammenhenger. Basisdata om personer (Folkeregisteret), virksomheter (Enhetsregisteret) og steder (Matrikkelen) er eksempler på grunndata.  
+- **Transaksjonsdata:** Data som reflekterer at utveksling av informasjon eller hendelser har funnet sted. Banktransaksjoner, kvitteringsdata og lønningsdata, er eksempler på transaksjonsdata.  
+- **Administrative data:** Data som er sammenstilt, primært av offentlige myndigheter, for bred anvendelse, som rapporterings- eller skatteformål. Administrative data kan, i likhet med transaksjonsdata, reflektere at en utveksling eller hendelse har funnet sted. Tolldeklarasjoner og a-ordningen er eksempler på administrative data. 
+- **Statistiske data:** Data som er samlet inn med produksjon av statistikk som hovedformål. Spørreundersøkelser/skjemadata brukes der vi ikke har etablert maskinell innsamling eller der det ikke finnes data med nødvendig frekvens, aktualitet, detaljeringsnivå eller avgrensing som er nødvendig for statistikkproduksjonen. De brukes også for å følge europeiske forordninger, som i noen tilfeller krever datainnsamling med en gitt skjemautforming. 
+- **Aggregerte data og rapporter:** Data som dataeier har bearbeidet før SSB mottar dem. Dette innebærer at deler av produksjonsprosessen er utført utenfor SSB, og at SSB ofte ikke har innsyn i alle algoritmene eller prosessene som er benyttet i fremstillingen av dataene.  
+<br>
+Data som oppstår hos dataeier, vil ofte utgjøre en form for dokument (slik som for eksempel en kassakvittering). For å minimere mulighet for feil i databehandlingen hos dataeier, bør vi tilstrebe å fange disse dataene
+- så nær som mulig kilden der de oppstår  
+- mest mulig ubearbeidet (kopi av originaldokument)  
+- så nær som mulig tidspunktet hvor dataene oppstår. 
 
-## Statistikk
-Statistikk er "Tallfestede opplysninger om en gruppe eller et fenomen, og som kommer frem ved en sammenstilling og bearbeidelse av opplysninger om de enkelte enhetene i gruppen eller et utvalg av disse enhetene, eller ved systematisk observasjon av fenomenet" ifølge statistikkloven § 3a [@datatilstander2 pp. 10]. Statistikk lagres i bøtten `ssb-<teamnavn>-data-produkt-prod`.
 
-Statistikk er ofte aggregerte data eller estimerte størrelser. Vi skiller mellom ujustert statistikk og justert statistikk. Indekser og sesongjusterte tall er eksempler på justert statistikk [@datatilstander2 pp. 10].
+## Behandling av Kildedata til inndata:
+- **Kontrolleres** for å avdekke eventuelle datafeil slik at dataeier kan kontaktes. 
+    - frekvens (data kommer ikke/kommer sjeldnere enn forutsatt)
+    - omfang (færre variabler enn forutsatt)
+    - volum (betydelig færre observasjoner enn ventet) 
+    - innhold (f.eks. andel null-verdier mye større enn forventet eller verdiene åpenbart 
+ulogiske). 
+- **Minimeres** til kun nødvendige data
+    - Variabel reduksjon
+    - Variabler som er nødvendige for ___ beholdes:
+        - Kontroll
+        - Feilkorrigering
+        - Imputering
+        - Vekting
+        - Analyse
+        - Andre estimater(Usikkerhet, maskinlæring)
+        - Deling til andre statistikker
+        - Forskning
+        - Nødvendig for å forvalte koden
+        - Andre fornuftige formål som dataene brukes til
+- **Pseudonymiseres** for å ivareta personvern og konfidensialitet
+    - Fødselsnummer
+    - Bedriftsnavn
+    - Annen sensitiv informasjon
+- **Struktureres** til formålet
+    - Rekkefølgen på kolonner
+    - Gruppering
+- **Standardiseres** til SSB standardformat
+    - Tegnsett
+    - Datoformat
+    - Adresse
+    - Parquet
+    - Systemer
+    - SSB sine variabeldefinisjoner
+- Validering
 
-Statistikk kan være inndata til andre statistikker, og kan dermed inneholde konfidensielle og detaljerte data som ikke publiseres.
+- De originale kildedataene vil ofte komprimeres og krypteres for lagring etter at de delene av datasettet som skal brukes videre, er transformert til inndata.
+- I tilfeller hvor det er behov for data utover originaldokumentet, kan det være nødvendig å hente data fra flere kilder eller å hente data som er bearbeidet av dataeier.  
+- I tilfeller hvor SSB mottar bearbeidede data, som for eksempel administrative data fra registre, er det viktig med et samarbeid med dataeierne slik at dataeierne selv tar et ansvar for kvalitetssikring og feilretting før SSB tar imot data.
 
-Dersom statistikkdata er ikke obligatorisk dersom det ikke skiller seg fra utdata. 
+## Supplementere og ta med aktuelle metadata 
+- Informasjon på datasettnivå slik som 
+- dataeier, 
+- hvilket område dataene omhandler og tidsinformasjon
+- relevante metadata for kildedata. 
+( Metadata om hvilke enkeltvariabler følger av, og er begrenset til, den informasjonen dataeier selv avleverer. )
 
-## Utdata
-Utdata er **statistikk der kravene til konfidensialtet er ivaretatt**. Dette er datatilstanden som publiseres. Eksempler inkluderer: *statistikkbanktabeller*, *tabelloppdrag* og *internasjonal rapportering* [@datatilstander2 pp. 11]. Utdata lagres i bøtten `ssb-<teamnavn>-data-produkt-produkt`.
+Data må gå gjennom alle nødvendige behandlinger av kildedata til Inndata, for å klassifiseres som inndata. Når kravene er oppnådd lagres de i bøtten for inndata i parquet.
 
-## Metadata for datatilstandene
+# 2. Inndata (Ikke obligatorisk, dersom kravene er oppfylt)
+Noen inndata oppfyller allerede kravet til klargjorte data og kan brukes direkte i klargjorte data. Det betyr at dersom ingenting skal gjøres med dataene så kan du hoppe over inndata steget eller lagre de dit uten videre handling dersom du bruker standardisert kode på tvers av statistikker.
 
-Det er forskjellige forventinger til metadata for de ulike datatilstandene. Forskjellene er skildret underdisse punktene:
+Inndata er hovedsakelig kildedata som er transformert til SSBs standard lagringsformat og eventuelt omstrukturert. Inndata oppfyller alle kravene i foregående datatilstander. Kan kombineres med delte data fra andre i SSB, som også skal oppfylle kravene til å være behandlet som kildedata. 
 
-###### [Kildedata]{.underline}
-- Informasjon på datasettnivå som dataeier, området dataene omhandler og tidsinformasjon
-- Metadata om enkeltvariabler er begrenset til informasjonen dataeier selv avleverer.
+## Klargjorte data fra andre statistikker 
+- Dersom data som klargjøres er tidligere klargjorte data som transformeres eller brukes som vekter.  
+    - Dokumenter: konkret (ny) vurdering om hvorvidt det er nødvendig å supplere med nye eller gjøre andre endringer i dataene.
+    - Slike data skal tilfredsstille kravene i dette dokumentet
+- Dersom kildedataene er aggregater som videreføres, må SSB likevel stå for 
+    - SSB variabeldefinisjon
+    - Variabelnavn
+    - Følge alle krav for behandling av Inndata
+- Ulike versjoner av klargjorte data behandles som egen statistikk og skal følge alle kravene
 
-###### [Inndata]{.underline}
-- I utgangspunktet samme som kildedata
+## Behandling av inndata til klargjorte data. (klargjøring)
+- Generer evt. metadata 
+    - utregninger 
+    - koblinger mellom datasett   
 
-###### [Klargjorte data]{.underline} 
-- Variabeldefinisjoner - beskrivelse av hver enkelt variabel og hvordan den er beregnet
-- Nøyaktighetsforbedrende tiltak som er utført
+- Utbedre **nøyaktigheten** og korrigere
+    - kontroll av dataenes gyldighet 
+    - filtrering
+    - editering 
+    - imputering  
 
-###### [Statistikk]{.underline}
-- Variabeldefinisjoner
-- Hvilke metoder og programmer/kode som er benyttet for å produsere statistikken
+Gjenta metadata og utbedring om nødvendig  
 
-###### [Utdata]{.underline}
-- I utgangspunktet samme som for statistikk
+- **Standardiseres** til SSB standardformat
+    - Tegnsett
+    - Datoformat
+    - Adresse
+    - SSB sine variabeldefinisjoner
+    - Deles til systemer
+    - Parquet
+- Validering
+**Lagres**
+- Data skal navngis og versjoneres i henhold til «Navnestandard og versjonering av datasett i DAPLA»
+- Det er ikke krav om å arkivere alle mellomversjoner. Mellomversjoner som ikke inngår i en publisering kan derfor normalt erstattes av senere versjoner. Vær likevel oppmerksom på at produksjonen skal kunne etterprøves, og at det må være mulig å dokumentere hvilke datasett og hvilken behandling som ligger til grunn for publiserte resultater.
+- Lagres i bøtter
+
+
+## Supplementere og ta med aktuelle metadata 
+- Metadata fra Kildedata
+- Legg til nødvendige **metadata** med **variabeldefinisjoner**
+- Legg til metadata og variabeldefinisjoner for nye variabler og alle som mangler definisjon, det vil si beskrivelse av hver enkelt variabel og 
+hvordan den er beregnet.
+- Supplerende informasjon om hvordan data er bearbeidet.
+    - Konkrete valg for hvordan feil og mangler i inndataene ble håndtert
+    - Hvordan variablene ble etablert
+- Dokumentasjon av hvilke nøyaktighetsforbedrende tiltak som er utført og hvorfor de er gjort. 
+- Legg ved informasjon i variabler som skal deles.
+- Statistikker som benytter klargjorte data fra andre, er ansvarlige for å ta vare på informasjon om hvilke datasett som er brukt, slik at produksjonen kan etterprøves.
+(Valgene vil kunne være forskjellige for forskjellige statistikker)
+
+Data som består alle kravene og kravene til foregående datatilstander tilsvarer Klargjorte data. De kan lagres i klargjorte-data som parquet filer. Det skal ikke gjøres endringer på inndata som følge av klargjøringsprosessen. Korrigerte data lagres som klargjorte data, ikke overskrive inndata.
+
+
+# 3. Klargjorte data
+Klargjorte data oppfyller alle kravene til foregående datatilstander. Klargjorte data reflekterer i hovedsak enkeltobservasjoner, på lik linje med kildedataene.  I klargjorte data er det som regel ikke foretatt aggregeringer. Klargjorte data kan deles internt ved at de inngår i andre statistikkers startdata, særlig makrostatistikkenes, og kan da inneholde konfidensielle og detaljerte data som ikke publiseres. Klargjorte data anses som arkivverdige.
+
+## Behandling av klargjorte data til statistikk. (statistikkproduksjon til intern bruk)
+
+- Aggreger data der dette er nødvendig
+- Gi navn til de enkelte variablene i tråd med gjeldende praksis. 
+    - Ikke nødvendigvis sammenfallende med variabelnavnene og -definisjonene i klargjorte data. 
+- Noen ganger følger statistikken av de klargjorte dataene ved enkle aggregeringer (ujustert statistikk).  
+- Andre ganger vil det i tillegg benyttes statistiske metoder 
+    - for å estimere tall basert på utvalgsdata og beregne indekser, 
+    - kalenderjusterte tall, 
+    - sesongjusterte tall og 
+    - trendserier (justert statistikk)  
+
+Data som er behandlet lagres som parquet fil i statistikk, dersom den ikke skal behandles videre i statistikk og består alle kravene som kreves i statistikk, kan den lagres direkte i utdata.
+
+# 4  Statistikk (Ikke obligatorisk, dersom kravene er oppfylt)
+Statistikkdata er ikke obligatorisk dersom det ikke skiller seg fra utdata. Dersom dataene er fullt anonymiserte og oppfyller kravene for behandling av statistikk til utdata og alle kravene til foregående datatilstander, kan de brukes direkte i Utdata.
+
+Statistikk er data som faller inn under definisjonen av statistikk i statistikkloven: «Tallfestede opplysninger om en gruppe eller et fenomen, og som kommer frem ved en sammenstilling og bearbeidelse av opplysninger om de enkelte enhetene i gruppen eller et utvalg av disse enhetene, eller ved systematisk observasjon av fenomenet.» (Statistikkloven § 3a).  De kan inngå i andre statistikkers startdata, særlig makrostatistikkenes, og kan da inneholde konfidensielle og detaljerte data som ikke publiseres. 
+
+## Behandling av statistikk til utdata (ekstern statistikkproduksjon til ekstern bruk)
+
+Full anonymisering, konfidensielle data undertrykkes ved 
+- prikking av celler
+- aggregering 
+- andre metoder som ivaretar krav til konfidensialitet  
+
+Det skal ikke være mulig å reprodusere data om enkeltindivider, prikking gjøres med obligatoriske pakker.
+
+
+# 5 Utdata 
+
+Utdata er statistikk der kravene til konfidensialitet er ivaretatt. Det er denne datatilstanden som publiseres av SSB selv eller utleveres til andre. Regler og mekanismer for utlevering av for eksempel kildedata eller klargjorte data, faller utenfor rammene for dette notatet. Transformasjonen fra statistikk til utdata kjennetegnes ved at  
+• konfidensielle data er undertrykt ved prikking av celler, aggregering eller andre metoder som 
+ivaretar krav til konfidensialitet  
+• kvaliteten er vurdert å være god nok for publisering i henhold til krav om kvalitet i offisiell statistikk   
+• eventuelle krav til sampublisering er ivaretatt. Dette kan for eksempel være samtidig publisering av ujusterte, kalender- og sesongjusterte tall.  
+
+Eksempler på utdata er:  
+• Statistikkbanktabeller  
+• Tabelloppdrag 
+• Internasjonal rapportering
+
+
+# Om krav til datatilstander
+
+Som hovedregel er kildedata, klargjorte data, statistikk og utdata obligatoriske datatilstander, mens inndata er valgfri. Statistikk er ikke nødvendig som egen datatilstand dersom statistikkdataene ikke skiller seg fra utdata.
+
+Hvilke datatilstander som faktisk er nødvendige, avhenger imidlertid av typen statistikkproduksjon. For eksempel er kildedata og klargjorte data obligatoriske for dataprodukter, mens makrostatistikk som baserer seg på andres klargjorte data kan ha en annen dataflyt. Se Datatilstander SSB – 3. utgave for detaljene.
+
+Det kan likevel være hensiktsmessig å bruke alle datatilstandene for å standardisere kode og produksjonsprosesser på tvers av statistikker.
+
+# Etterprøvbarhet på tvers av datatilstandene
+
+For at en statistikkproduksjon skal være etterprøvbar, må det være mulig å følge hvordan dataene er behandlet fra kilde til utdata. Datatilstandene beskriver sentrale punkter i denne prosessen, men dokumenterer ikke nødvendigvis alle mellomliggende behandlinger.
+
+Det bør derfor være mulig å identifisere hvilke versjoner av datasett, kode, metoder og relevante metadata som ligger til grunn for produksjonen. Når data fra andre statistikker benyttes, må det også være mulig å dokumentere hvilke datasett som er brukt.
+
+Det er ikke nødvendigvis nødvendig å lagre alle mellomversjoner av data. Det viktige er at behandlingen og datagrunnlaget kan forstås og etterprøves i ettertid.
