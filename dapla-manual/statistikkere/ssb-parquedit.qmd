@@ -410,3 +410,26 @@ Merk:
 ```{.python filename="Notebook"}
 con = ParquEdit.local_with_gcs_data(catalog_path="localcopy.duckdb")
 ```
+
+### Konfigurere logging
+`ssb-parquedit` bruker Pythons standard logging-modul. Hver intern modul har sin egen logger via `logging.getLogger(__name__)`, så biblioteket konfigurerer ikke selv noen handlers — initialiser logging i din egen applikasjon før du bruker `ParquEdit`:
+
+```{.python filename="Notebook"}
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)-8s %(name)s: %(message)s",
+)
+
+from ssb_parquedit import ParquEdit
+
+con = ParquEdit()
+```
+
+For å se mer detaljert output (f.eks. for feilsøking), sett nivået til `logging.DEBUG`, eventuelt bare for `ssb_parquedit`s egne loggere:
+
+```{.python filename="Notebook"}
+logging.getLogger("ssb_parquedit").setLevel(logging.DEBUG)
+```
+
