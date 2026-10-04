@@ -1,0 +1,100 @@
+---
+title: Marimo
+date-modified: 10/04/2026
+lightbox: true
+---
+
+![](../images/marimo-logotype-thick.svg){style="max-width: 350%; float: right;" fig-alt="Jupyter Service"}
+
+**Marimo** er en tjeneste på [Dapla Lab](./dapla-lab.qmd) for utvikling av kode, notebooks og enkle apper i Python. Tjenesten bygger på [Marimo](https://marimo.io/), som er et reaktivt Python-miljo der kode, dokumentasjon og brukergrensesnitt kan leve i samme fil. Tjenesten er et alternativ i samme kategori som [Vscode-python](./vscode-python.qmd), men er spesielt godt egnet for arbeidsflyter der man vil kombinere analyse, dokumentasjon og interaktive komponenter.
+
+Siden tjenesten er ment for kode som skal kunne vedlikeholdes og reproduseres, er det bare et begrenset sett med pakker som er forhåndsinstallert. Antagelsen er at brukeren eller teamet heller installerer avhengighetene de faktisk trenger i prosjektet sitt, framfor at tjenesten skal forsøke å dekke alle behov på forhånd.
+
+## Forberedelser
+
+Før man starter **Marimo** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab.qmd) og satt opp Git- og GitHub-konfigurasjonen under **Min konto**. Deretter gjør du følgende:
+
+1. Logg deg inn på [Dapla Lab](https://lab.dapla.ssb.no/)
+2. Under **Tjenestekatalog** trykker du på **Start**-knappen for **Marimo**
+3. Gi tjenesten et navn
+4. Åpne **Marimo konfigurasjoner**
+
+## Konfigurasjon
+
+Mye av konfigurasjonen for **Marimo** er lik det som gjelder for [Jupyter](./jupyter.qmd#konfigurasjon). Det gjelder blant annet valg av team og tilgangsgruppe, Git/GitHub, ressurser, diskplass og avanserte valg som oppstartsskript.
+
+Det viktigste som er spesifikt for Marimo ligger under tjenestedelen:
+
+### Marimo-versjon
+
+Her velger man hvilken versjon av Marimo-tjenesten som skal startes. I praksis vil de fleste bruke standardvalget.
+
+### Marimo-repo
+
+Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten. Dette er nyttig hvis man allerede har et prosjekt med Marimo-filer som man vil åpne direkte i tjenesten. Feltet støtter GitHub-repo.
+
+### App filsti
+
+Dette feltet styrer hvordan tjenesten starter:
+
+1. Hvis feltet står tomt, starter Marimo i **edit-modus**.
+2. Hvis feltet er satt til en filsti i repoet, starter Marimo i **app-modus** og kjører den aktuelle filen.
+
+Et eksempel på filsti kan være `src/app.py` eller `notebooks/demo.py`, avhengig av hvordan repoet er strukturert.
+
+## Bruksmoduser
+
+Marimo-tjenesten kan brukes på to ulike måter:
+
+### Edit-modus
+
+I edit-modus kan man utvikle og redigere Marimo-filer direkte i nettleseren. Dette passer når man skriver analysekode, bygger notebook-lignende arbeidsflater eller utvikler en app steg for steg.
+
+### App-modus
+
+I app-modus kjører tjenesten en bestemt Marimo-fil som en app. Dette passer når man allerede har laget en ferdig fil som skal vises som et brukergrensesnitt, for eksempel for utforsking av data eller deling av resultater internt i et team.
+
+Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus først.
+
+## Data og Git/GitHub
+
+Marimo følger samme mønster som de andre utviklingstjenestene i Dapla Lab:
+
+1. Datatilgang styres av hvilket team og hvilken tilgangsgruppe du velger.
+2. Teamets bøtter blir tilgjengelige i filsystemet under `/buckets/`.
+3. Git-bruker, e-post og GitHub-token kan arves fra **Min konto** i Dapla Lab.
+
+For detaljer om datatilgang, delt-bøtter, Git/GitHub, ressurser, diskplass og oppstartsskript, se [Jupyter-kapitlet](./jupyter.qmd#konfigurasjon).
+
+## Datatilgang
+
+Slik kan man inspisere dataene fra en terminal inne i tjenesten:
+
+1. Åpne en instans av Marimo med data fra bøtter
+2. Åpne en terminal inne i tjenesten
+3. Gå til mappen med bøttene ved å kjøre `cd /buckets`
+4. Kjør `ls -ahl` i terminalen for å se hvilke bøtter som er montert
+
+## Installere pakker
+
+Siden det nesten ikke er installert noen pakker i tjenesten, anbefales det å opprette et [ssb-project](./ssb-project.qmd) og installere pakker som vanlig.
+
+For et nytt prosjekt kan man bruke `ssb-project create <prosjektnavn>`. Hvis man jobber i et eksisterende prosjekt, kan man bygge miljøet med `ssb-project build`.
+
+Marimo-tjenesten kjører Python, og tjenesten er satt opp med Python 3.12.
+
+## Lagring av arbeid
+
+Kode bør lagres i GitHub og data bør lagres i bøtter. Filer som bare ligger lokalt i tjenesten kan gå tapt hvis tjenesten slettes, og filer utenfor `$HOME/work` slettes når tjenesten pauses.
+
+## Slette tjenesten
+
+For å slette tjenesten kan man trykke på **Slett**-knappen i Dapla Lab under **Mine tjenester**. Når man sletter en tjeneste, slettes også filsystemet i tjenesten og ressursene frigjøres. Hvis du har installert pakker lokalt i tjenesten, må disse installeres på nytt neste gang.
+
+## Pause tjenesten
+
+Man kan pause tjenesten ved å trykke på **Pause**-knappen i Dapla Lab under **Mine tjenester**. Når man pauser tjenesten, slettes alt på den lokale disken som ikke er lagret under `$HOME/work`.
+
+## Monitorering
+
+Man kan monitorere en instans av Marimo ved å trykke på tjenesten under **Mine tjenester** i Dapla Lab. Derfra kommer man til overvåkningssiden for tjenesten, med lenker til teknisk informasjon og eksternt dashboard på samme måte som for andre tjenester i Dapla Lab. Se [monitorering i Dapla Lab](./dapla-lab.qmd#monitorering).
