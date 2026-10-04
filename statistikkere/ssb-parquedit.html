@@ -455,6 +455,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../statistikkere/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Marimo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../statistikkere/datadoc-editor.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Datadoc-editor</span></a>
   </div>
@@ -927,6 +933,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sette-opp-lokal-tilkobling" id="toc-sette-opp-lokal-tilkobling" class="nav-link" data-scroll-target="#sette-opp-lokal-tilkobling">Sette opp lokal tilkobling</a></li>
   <li><a href="#få-tilgang-til-den-underliggende-duckdb-tilkoblingen" id="toc-få-tilgang-til-den-underliggende-duckdb-tilkoblingen" class="nav-link" data-scroll-target="#få-tilgang-til-den-underliggende-duckdb-tilkoblingen">Få tilgang til den underliggende DuckDB-tilkoblingen</a></li>
   <li><a href="#gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data" id="toc-gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data" class="nav-link" data-scroll-target="#gjenopprette-en-lokal-katalogsikkerhetskopi-med-gcs-data">Gjenopprette en lokal katalogsikkerhetskopi med GCS-data</a></li>
+  <li><a href="#konfigurere-logging" id="toc-konfigurere-logging" class="nav-link" data-scroll-target="#konfigurere-logging">Konfigurere logging</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/ssb-parquedit.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/ssb-parquedit.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
@@ -1433,6 +1440,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><strong>Notebook</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit.local_with_gcs_data(catalog_path<span class="op">=</span><span class="st">"localcopy.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="konfigurere-logging" class="level3">
+<h3 class="anchored" data-anchor-id="konfigurere-logging">Konfigurere logging</h3>
+<p><code>ssb-parquedit</code> bruker Pythons standard logging-modul. Hver intern modul har sin egen logger via <code>logging.getLogger(__name__)</code>, så biblioteket konfigurerer ikke selv noen handlers — initialiser logging i din egen applikasjon før du bruker <code>ParquEdit</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    level<span class="op">=</span>logging.INFO,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(asctime)s</span><span class="st"> </span><span class="sc">%(levelname)-8s</span><span class="st"> </span><span class="sc">%(name)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_parquedit <span class="im">import</span> ParquEdit</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>For å se mer detaljert output (f.eks. for feilsøking), sett nivået til <code>logging.DEBUG</code>, eventuelt bare for <code>ssb_parquedit</code>s egne loggere:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"ssb_parquedit"</span>).setLevel(logging.DEBUG)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
