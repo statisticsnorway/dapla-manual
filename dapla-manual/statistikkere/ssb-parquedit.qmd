@@ -1,13 +1,13 @@
 ---
 title: "Parquedit"
-date-modified: "07/01/2026"
+date-modified: "10/04/2026"
 lightbox: true
 ---
 
 ::: {.callout-caution}
-## Tjenesten lanseres september 2026
+## Tjenesten lanseres oktober 2026
 
-Parquedit lanseres september 2026 og er ikke klar for bruk.
+Parquedit lanseres oktober 2026 og er ikke klar for bruk.
 :::
 
 
@@ -88,6 +88,43 @@ og installere Python-pakken [ssb-parquedit](https://pypi.org/project/ssb-parqued
 ```{.python filename="Terminal"}
 poetry add ssb-parquedit
 ```
+
+### Anbefalt tabelloppsett
+
+`ssb-parquedit` er konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). For at pakken og tilknyttede brukergrensesnitt skal fungere mest mulig effektivt, anbefales det å strukturere dataene som flate, brede tabeller med standard primitive datatyper (heltall, flyttall, tekst, dato, boolsk).
+
+
+| orgnr | foretak_navn | kontakt_epost | kontakt_tlf | omsetning_nok | ansatte_antall |
+| :--- | :--- | :--- | :--- | ---: | ---: |
+| 987654321 | Eksempel AS | post@eksempel.no | 22334455 | 14500000 | 12 |
+| 123456789 | Statistikk Drift | hei@statistikk.no | 99887766 | 3200000 | 3 |
+: Eksempel på anbefalt flat tabellstruktur i ssb-parquedit {#tbl-datastruktur .striped}
+
+Komplekse datatyper som `STRUCT` og `LIST` støttes teknisk av ssb-parquedit, men frarådes per nå for felter som skal editeres manuelt. Per i dag støtter ikke `con.edit()` delvise oppdateringer av underfelter. Skal du endre én verdi inni en nøstet struktur, må hele strukturen eller listen overskrives i sin helhet. I tillegg er endringsloggen (get_edits()) foreløpig ikke tilrettelagt for sporing på underfeltnivå; endringer logges kun for hele kolonnen, noe som gjør revisjonshistorikken grovkornet og vanskeliggjør beregning av kvalitetsindikatorer per variabel.  
+
+
+
+| orgnr | foretak_navn | kontakt (STRUCT) | avdelinger (LIST<STRUCT>) |
+| :--- | :--- | :--- | :--- |
+| 987654321 | Eksempel AS | `{'epost': 'post@eksempel.no', 'tlf': '22334455'}` | `[{'avd_nr': 1, 'ansatte': 8}, {'avd_nr': 2, 'ansatte': 4}]` |
+| 123456789 | Statistikk Drift | `{'epost': 'hei@statistikk.no', 'tlf': '99887766'}` | `[{'avd_nr': 1, 'ansatte': 3}]` |
+: Ikke-anbefalt struktur med nøstede typer (STRUCT og LIST) {#tbl-ikke-anbefalt-struktur}
+
+Det frarådes å lagre data på langform ([id, variabel, verdi]). ssb-parquedit er utviklet for å oppdatere én logisk enhet per rad via con.edit(). Dersom dataene lagres på langform, vil en oppdatering av flere opplysninger for samme enhet (f.eks. både adresse og omsetning) kreve mange separate radvise oppdateringer og commits mot basen. Dette skaper unødig mange transaksjoner, gjør tabellen tregere å vedlikeholde og bryter med den kolonneorienterte styrken i Parquet-formatet.
+
+
+| foretak_id | variabel_navn | verdi |
+| :--- | :--- | :--- |
+| 987654321 | foretak_navn | Eksempel AS |
+| 987654321 | kontakt_epost | post@eksempel.no |
+| 987654321 | kontakt_tlf | 22334455 |
+| 987654321 | omsetning_nok | 14500000 |
+| 987654321 | ansatte_antall | 12 |
+| 123456789 | foretak_navn | Statistikk Drift |
+| 123456789 | kontakt_epost | hei@statistikk.no |
+| 123456789 | kontakt_tlf | 99887766 |
+: Ikke-anbefalt struktur på langform (EAV-mønster) {#tbl-ikke-anbefalt-langform}
+
 
 ## Funksjonalitet
 
