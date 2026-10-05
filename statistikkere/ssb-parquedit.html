@@ -906,7 +906,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#bruksområde" id="toc-bruksområde" class="nav-link active" data-scroll-target="#bruksområde">Bruksområde</a></li>
-  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a>
+  <ul class="collapse">
+  <li><a href="#anbefalt-tabelloppsett" id="toc-anbefalt-tabelloppsett" class="nav-link" data-scroll-target="#anbefalt-tabelloppsett">Anbefalt tabelloppsett</a></li>
+  </ul></li>
   <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
   <ul class="collapse">
   <li><a href="#opprette-kobling" id="toc-opprette-kobling" class="nav-link" data-scroll-target="#opprette-kobling">Opprette kobling</a></li>
@@ -955,7 +958,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">01.07.2026</p>
+      <p class="date-modified">04.10.2026</p>
     </div>
   </div>
     
@@ -972,11 +975,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Caution</span>Tjenesten lanseres september 2026
+<span class="screen-reader-only">Caution</span>Tjenesten lanseres oktober 2026
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Parquedit lanseres september 2026 og er ikke klar for bruk.</p>
+<p>Parquedit lanseres oktober 2026 og er ikke klar for bruk.</p>
 </div>
 </div>
 <p><strong>Parquedit</strong> er en tjeneste som gir statistikere database-funksjonalitet over Parquet-filer. Formålet med tjenesten er å dekke lagringsbehovene knyttet til arbeid med <strong>manuell editering</strong> av data i SSB. Les mer om <a href="https://www.ssb.no/teknologi-og-innovasjon/informasjons-og-kommunikasjonsteknologi-ikt/artikler/prinsipper-og-retningslinjer-for-dataeditering">Prinsipper og retningslinjer for dataeditering i SSB</a>.</p>
@@ -1072,6 +1075,158 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="Terminal"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>poetry add ssb<span class="op">-</span>parquedit</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<section id="anbefalt-tabelloppsett" class="level3">
+<h3 class="anchored" data-anchor-id="anbefalt-tabelloppsett">Anbefalt tabelloppsett</h3>
+<p><code>ssb-parquedit</code> er konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). For at pakken og tilknyttede brukergrensesnitt skal fungere mest mulig effektivt, anbefales det å strukturere dataene som flate, brede tabeller med standard primitive datatyper (heltall, flyttall, tekst, dato, boolsk).</p>
+<div id="tbl-datastruktur" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-datastruktur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;1: Eksempel på anbefalt flat tabellstruktur i ssb-parquedit
+</figcaption>
+<div aria-describedby="tbl-datastruktur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">orgnr</th>
+<th style="text-align: left;">foretak_navn</th>
+<th style="text-align: left;">kontakt_epost</th>
+<th style="text-align: left;">kontakt_tlf</th>
+<th style="text-align: right;">omsetning_nok</th>
+<th style="text-align: right;">ansatte_antall</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">Eksempel AS</td>
+<td style="text-align: left;">post@eksempel.no</td>
+<td style="text-align: left;">22334455</td>
+<td style="text-align: right;">14500000</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">123456789</td>
+<td style="text-align: left;">Statistikk Drift</td>
+<td style="text-align: left;">hei@statistikk.no</td>
+<td style="text-align: left;">99887766</td>
+<td style="text-align: right;">3200000</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Komplekse datatyper som <code>STRUCT</code> og <code>LIST</code> støttes teknisk av ssb-parquedit, men frarådes per nå for felter som skal editeres manuelt. Per i dag støtter ikke <code>con.edit()</code> delvise oppdateringer av underfelter. Skal du endre én verdi inni en nøstet struktur, må hele strukturen eller listen overskrives i sin helhet. I tillegg er endringsloggen (get_edits()) foreløpig ikke tilrettelagt for sporing på underfeltnivå; endringer logges kun for hele kolonnen, noe som gjør revisjonshistorikken grovkornet og vanskeliggjør beregning av kvalitetsindikatorer per variabel.</p>
+<div id="tbl-ikke-anbefalt-struktur" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ikke-anbefalt-struktur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;2: Ikke-anbefalt struktur med nøstede typer (STRUCT og LIST)
+</figcaption>
+<div aria-describedby="tbl-ikke-anbefalt-struktur-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">orgnr</th>
+<th style="text-align: left;">foretak_navn</th>
+<th style="text-align: left;">kontakt (STRUCT)</th>
+<th style="text-align: left;">avdelinger (LIST<struct>)</struct></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">Eksempel AS</td>
+<td style="text-align: left;"><code>{'epost': 'post@eksempel.no', 'tlf': '22334455'}</code></td>
+<td style="text-align: left;"><code>[{'avd_nr': 1, 'ansatte': 8}, {'avd_nr': 2, 'ansatte': 4}]</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">123456789</td>
+<td style="text-align: left;">Statistikk Drift</td>
+<td style="text-align: left;"><code>{'epost': 'hei@statistikk.no', 'tlf': '99887766'}</code></td>
+<td style="text-align: left;"><code>[{'avd_nr': 1, 'ansatte': 3}]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Det frarådes å lagre data på langform ([id, variabel, verdi]). ssb-parquedit er utviklet for å oppdatere én logisk enhet per rad via con.edit(). Dersom dataene lagres på langform, vil en oppdatering av flere opplysninger for samme enhet (f.eks. både adresse og omsetning) kreve mange separate radvise oppdateringer og commits mot basen. Dette skaper unødig mange transaksjoner, gjør tabellen tregere å vedlikeholde og bryter med den kolonneorienterte styrken i Parquet-formatet.</p>
+<div id="tbl-ikke-anbefalt-langform" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ikke-anbefalt-langform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabell&nbsp;3: Ikke-anbefalt struktur på langform (EAV-mønster)
+</figcaption>
+<div aria-describedby="tbl-ikke-anbefalt-langform-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">foretak_id</th>
+<th style="text-align: left;">variabel_navn</th>
+<th style="text-align: left;">verdi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">foretak_navn</td>
+<td style="text-align: left;">Eksempel AS</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">kontakt_epost</td>
+<td style="text-align: left;">post@eksempel.no</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">kontakt_tlf</td>
+<td style="text-align: left;">22334455</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">omsetning_nok</td>
+<td style="text-align: left;">14500000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">987654321</td>
+<td style="text-align: left;">ansatte_antall</td>
+<td style="text-align: left;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">123456789</td>
+<td style="text-align: left;">foretak_navn</td>
+<td style="text-align: left;">Statistikk Drift</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">123456789</td>
+<td style="text-align: left;">kontakt_epost</td>
+<td style="text-align: left;">hei@statistikk.no</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">123456789</td>
+<td style="text-align: left;">kontakt_tlf</td>
+<td style="text-align: left;">99887766</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
 </section>
 <section id="funksjonalitet" class="level2">
 <h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
