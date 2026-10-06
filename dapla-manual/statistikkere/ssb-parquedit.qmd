@@ -4,14 +4,7 @@ date-modified: "10/04/2026"
 lightbox: true
 ---
 
-::: {.callout-caution}
-## Tjenesten lanseres oktober 2026
-
-Parquedit lanseres oktober 2026 og er ikke klar for bruk.
-:::
-
-
- **Parquedit** er en tjeneste som gir statistikere database-funksjonalitet over Parquet-filer. Formålet med tjenesten er å dekke lagringsbehovene knyttet til arbeid med **manuell editering** av data i SSB. Les mer om [Prinsipper og retningslinjer for dataeditering i SSB](https://www.ssb.no/teknologi-og-innovasjon/informasjons-og-kommunikasjonsteknologi-ikt/artikler/prinsipper-og-retningslinjer-for-dataeditering). 
+ [**Parquedit**](https://pypi.org/project/ssb-parquedit/) er en tjeneste som gir statistikere database-funksjonalitet over Parquet-filer. Formålet med tjenesten er å dekke lagringsbehovene knyttet til arbeid med **manuell editering** av data i SSB. Les mer om [Prinsipper og retningslinjer for dataeditering i SSB](https://www.ssb.no/teknologi-og-innovasjon/informasjons-og-kommunikasjonsteknologi-ikt/artikler/prinsipper-og-retningslinjer-for-dataeditering). 
  
  **Parquedit** inkluderer IKKE et grafisk grensesnitt (GUI) for å gjøre manuelle endringer på data, kun en enkel Python-funksjon som oppdaterer informasjon i en rad i et datasett. Parquedit kan derimot benyttes som en underliggende lagringsløsning som oppdateres via GUI'er som [Editeringsrammeverket](./editeringsrammeverk.qmd) eller andre løsninger. 
 
@@ -93,6 +86,8 @@ poetry add ssb-parquedit
 
 `ssb-parquedit` er konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). For at pakken og tilknyttede brukergrensesnitt skal fungere mest mulig effektivt, anbefales det å strukturere dataene som flate, brede tabeller med standard primitive datatyper (heltall, flyttall, tekst, dato, boolsk).
 
+@tbl-datastruktur viser et eksempel på dette. Her er dataene strukturert med en linje per bedrift som skal manuelt editeres, og hver kolonne er en egenskap ved bedriften. Hvis man oppretter en Parquedit-tabell med denne strukturen vil man kunne editere en og en virksomhet samtidig som Parquedit håndterer historikken og detaljerte logger over årsakskode og hvilken endring som ble gjort av hvem.  
+
 
 | orgnr | foretak_navn | kontakt_epost | kontakt_tlf | omsetning_nok | ansatte_antall |
 | :--- | :--- | :--- | :--- | ---: | ---: |
@@ -100,7 +95,7 @@ poetry add ssb-parquedit
 | 123456789 | Statistikk Drift | hei@statistikk.no | 99887766 | 3200000 | 3 |
 : Eksempel på anbefalt flat tabellstruktur i ssb-parquedit {#tbl-datastruktur .striped}
 
-Komplekse datatyper som `STRUCT` og `LIST` støttes teknisk av ssb-parquedit, men frarådes per nå for felter som skal editeres manuelt. Per i dag støtter ikke `con.edit()` delvise oppdateringer av underfelter. Skal du endre én verdi inni en nøstet struktur, må hele strukturen eller listen overskrives i sin helhet. I tillegg er endringsloggen (get_edits()) foreløpig ikke tilrettelagt for sporing på underfeltnivå; endringer logges kun for hele kolonnen, noe som gjør revisjonshistorikken grovkornet og vanskeliggjør beregning av kvalitetsindikatorer per variabel.  
+Komplekse datatyper som `STRUCT` og `LIST`, slik som vist i @tbl-ikke-anbefalt-struktur, støttes teknisk av ssb-parquedit, men frarådes per nå for felter som skal editeres manuelt. Per i dag støtter ikke `con.edit()` delvise oppdateringer av underfelter. Skal du endre én verdi inni en nøstet struktur, må hele strukturen eller listen overskrives i sin helhet. I tillegg er endringsloggen (get_edits()) foreløpig ikke tilrettelagt for sporing på underfeltnivå; endringer logges kun for hele kolonnen, noe som gjør revisjonshistorikken grovkornet og vanskeliggjør beregning av kvalitetsindikatorer per variabel.  
 
 
 
@@ -110,7 +105,7 @@ Komplekse datatyper som `STRUCT` og `LIST` støttes teknisk av ssb-parquedit, me
 | 123456789 | Statistikk Drift | `{'epost': 'hei@statistikk.no', 'tlf': '99887766'}` | `[{'avd_nr': 1, 'ansatte': 3}]` |
 : Ikke-anbefalt struktur med nøstede typer (STRUCT og LIST) {#tbl-ikke-anbefalt-struktur}
 
-Det frarådes å lagre data på langform ([id, variabel, verdi]). ssb-parquedit er utviklet for å oppdatere én logisk enhet per rad via con.edit(). Dersom dataene lagres på langform, vil en oppdatering av flere opplysninger for samme enhet (f.eks. både adresse og omsetning) kreve mange separate radvise oppdateringer og commits mot basen. Dette skaper unødig mange transaksjoner, gjør tabellen tregere å vedlikeholde og bryter med den kolonneorienterte styrken i Parquet-formatet.
+Det frarådes å lagre data på langform ([id, variabel, verdi]) slik som vist i @tbl-ikke-anbefalt-langform. ssb-parquedit er utviklet for å oppdatere én logisk enhet per rad via con.edit(). Dersom dataene lagres på langform, vil en oppdatering av flere opplysninger for samme enhet (f.eks. både adresse og omsetning) kreve mange separate radvise oppdateringer og commits mot basen. Dette skaper unødig mange transaksjoner, gjør tabellen tregere å vedlikeholde og bryter med den kolonneorienterte styrken i Parquet-formatet.
 
 
 | foretak_id | variabel_navn | verdi |
@@ -318,7 +313,7 @@ Gyldige verdier for `change_event_reason` er:
 
 Sletting av flere rader logges som en hendelse i endringsloggen. `get_edits()` vil vise hvor mange rader som ble påvirket og hvilken `where`-betingelse som ble brukt.
 
-### Lese logger
+### Endringshistorikk
 
 Bruk `get_edits()` for å hente historikk over manuelle endringer.
 
@@ -339,6 +334,18 @@ Dette gir blant annet:
 - endringstype (UPDATE/DELETE)
 - `where`-betingelsen som ble brukt ved sletting av rad(er)
 - hvor mange rader som ble påvirket av endringen
+
+### Backup
+
+::: {.callout-caution}
+## Viktig: Brukere må selv ta backup av Parquedit-tabeller
+
+I første versjon av ssb-parquedit tas det **ikke** en sentral backup av enkelttabeller. Det vil si at hvis en tabell blir ødelagt, så kan den ikke gjenskapes. Derfor anbefaler vi at brukerne eksporterer teamets tabeller med jevne mellomrom slik at den kan gjennopprettes ved behov med funksjonen [`export_catalog()`](#eksporter-katalog). Det er også anbefalt å eksportere endringshistorikken med jevne mellomrom med funksjonen [´get_edits()´](#endringshistorikk). 
+:::
+
+
+
+
 
 ### Liste tabeller
 
