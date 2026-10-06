@@ -1,0 +1,73 @@
+---
+title: "Parquedit - ny tjeneste for datalagring ved manuell editering"
+categories:
+  - parquedit
+  - editering
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: 2026-10-06
+date-modified: 2026-10-06
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+Standard lagringsformat på Dapla er Parquet-filer i Google Cloud Storage (GCS)-bøtter. Parquet er kolonneorientert og optimalisert for batch-lesing og skriving, noe som fungerer godt i faste produksjonsløp. 
+
+Ved manuell editering – der statistikere kontrollerer, vurderer og korrigerer enkeltverdier i dataene – oppstår det imidlertid utfordringer med rene Parquet-filer:
+
+* Filer kan ikke delvis oppdateres; hele datasettet må skrives på nytt ved hver minste korreksjon.
+* Formatet mangler støtte for samtidig redigering (concurrency), noe som skaper skrivekonflikter hvis flere samarbeider.
+* Det mangler innebygde ACID-garantier for transaksjoner og versjonshistorikk.
+* Endringer må loggføres manuelt for å oppfylle kravene til revisjonsspor.
+
+For å løse dette lanserer team Fellesfunksjoner nå [**Parquedit**](../../../statistikkere/ssb-parquedit.qmd) som en ny tjeneste på Dapla. **Torsdag 8. oktober** inviterer vi derfor til [lansering av Parquedit i Auditoriet](https://ssbno.sharepoint.com/sites/byraanettet/_layouts/15/Event.aspx?ListGuid=a0801a90-f230-4501-b2bb-a1182a162a94&ItemId=1881) i Akersveien.  
+
+## Hva er Parquedit?
+
+Parquedit er en "enkel" Python-pakke som lar Dapla-team lagre datafilene sine som åpne, komprimerte Parquet-filer i teamets produktbøtte på GCS, samtidig som vi lagrer metadata, transaksjoner, snapshots og tidsreiser om editeringen i en felles katalog som håndterer sentralt i SSB. 
+
+For statistikeren betyr dette at Python-pakken gir de:
+
+* **Full transaksjonsstøtte (ACID):** Trygg samtidig editering for flere teammedlemmer uten fare for tapte oppdateringer.
+* **Automatisk revisjonsspor:** Hvem som utførte endringen, tidspunkt, endret verdi, årsak og fritekstkommentar loggføres automatisk og sentralt.
+* **Responsiv brukeropplevelse:** Rask celle- og radoppdatering egnet for integrasjon mot grafiske editeringsgrensesnitt på Dapla (f.eks. [Editeringsrammeverket](../../../statistikkere/editeringsrammeverk.qmd)).
+* **Overordnet innsikt:** Løsningen gir SSB samlet oversikt over volum og omfang av manuell editering på tvers av organisasjonen, noe som støtter opp under arbeidet med kvalitetsindikatorer.
+
+## Hvem er dette relevant for? 
+
+Alle som gjør **manuell editering** som en del av statistikkproduksjon på Dapla. Alle som gjør manuelle editeringer i sine data på Dapla bør gjøre det i Parquedit-tabeller. 
+
+## Hvordan ta det i bruk?
+
+Tjenesten aktiveres ved at seksjonsleder/Teamansvarlig skrur på tilgangen i **Dapla Ctrl**. Når tilgangen er aktiv, har alle *developers* i teamet lik tilgang til å opprette og editere tabeller. Les mer om funksjonalitet i [dokumentasjonen til Parquedit](../../../statistikkere/ssb-parquedit.qmd).
+
+I videoen under viser vi hvordan Parquedit kan benyttes i Jupyter etter at Python-pakken er installert i et ssb-project på følgende måte: 
+
+```{.bash filename="Terminal"}
+poetry add ssb-parquedit
+```
+<br>
+
+![Demo av hvordan Parquedit kan benyttes i Jupyter. ](./parquedit-demo.mov){fig-alt="Alternativtekst" #fig-parquedit-demo}
+
+## Hva er sammenhengen mellom Editeringsrammeverket, EimerDB og Parquedit?
+
+[Editeringsrammeverket](../../../statistikkere/editeringsrammeverk.qmd) er et Python-bibliotek som lar brukerne lage et grafisk grensesnitt for manuell editering, mens **EimerDB** var ofte lagringsløsningen som ble benyttet under de grafiske gresnesnittene laget med Editeringsrammeverket. Parquedit er en ny lagringsløsning som **erstatter EimerDB**, og som fremover skal benyttes som lagringsløsning for grensesnitt laget med Editeringsrammeverket.   
+
+## Planer fremover
+
+Dagens lansering er første versjon av Parquedit. Fremover planlegger vi følgende:
+
+- lansere en enkel Dapla Lab tjeneste som lar brukeren manuelt editere Parquedit-tabeller i et grafisk grensesnitt. 
+- lansere en Dapla Lab tjeneste som lar brukerne lage sine egne grafiske grensesnitt med hjelp av KI-agenter der Parquedit er den underliggende lagringsløsningen. 
+- sentraliserte vedlikehold som optimaliserer ytelsen til Parquedit.
+- sentralisert backup av Parquedit-metadata.
+- sentrale metrikker om mengden manuell editering på Dapla. 
+
+## Hvordan kan jeg gi tilbakemeldinger på løsningen?
+
+Vi ønsker veldig gjerne å få tilbakemeldinger på tjenesten. Dere kan gi tilbakemeldinger på [Viva Engage](https://engage.cloud.microsoft/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all), som Kundeservice-sak, eller ved å kontakt med oss direkte. Det blir også mulighet til å stille spørsmål og komme med kommentarer ved [lanseringen torsdag 8. oktober](https://ssbno.sharepoint.com/sites/byraanettet/_layouts/15/Event.aspx?ListGuid=a0801a90-f230-4501-b2bb-a1182a162a94&ItemId=1881).  
