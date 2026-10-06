@@ -1,0 +1,74 @@
+---
+title: Editering
+date-modified: 05/10/2026
+lightbox: true
+---
+
+Dataeditering er kontroll, gransking og retting av data. Prosessen består av en rekke aktiviteter som tar sikte på å vurdere rimeligheten til dataene, identifisere potensielle problemer og deretter utføre handlinger for å avhjelpe de identifiserte problemene. Formålet med dataeditering er å sikre tilstrekkelig god kvalitet på publisert statistikk.
+
+Dette kapitlet er oppsummering av følgende SSB-utgivelse i serien Notater:  
+[Prinsipper og retningslinjer for dataeditering](https://www.ssb.no/teknologi-og-innovasjon/informasjons-og-kommunikasjonsteknologi-ikt/artikler/prinsipper-og-retningslinjer-for-dataeditering)
+
+## Prinsipper for dataeditering
+
+Det finnes ni overordnede prinsipper for dataeditering i SSB:
+
+#### 1. God kunnskap
+
+Kunnskap om fagfeltet og kildedatas bakgrunn er fundamentet for en god editeringsprosess, slik at man kjenner mulige feilkilder og forstår avvik.
+
+#### 2. Klart formål
+
+Formålet må være tydelig definert med et makroperspektiv, der innsatsen rettes mot det som faktisk påvirker sluttresultatet.
+
+#### 3. Gode data inn er best
+
+Det er mest effektivt å forebygge feil ved kilden (f.eks. via gode skjemaer og dialog med dataeiere/oppgavegivere) fremfor å rette opp i etterkant.
+
+#### 4. Kontroller alltid data
+
+Selv om kilden oppgir at dataene er kontrollert, skal mottaker alltid utføre egne kontroller tilpasset statistikkens behov.
+
+#### 5. Jo tidligere, jo bedre
+
+Feil bør avdekkes og korrigeres så tidlig som mulig i produksjonskjeden der kunnskapen er ferskest og opprettingen mest effektiv.
+
+#### 6. Veldokumenterte prosesser
+
+Kontroller, kontrollutslag og alle endringer (både manuelle og maskinelle) skal defineres, logges og dokumenteres entydig.
+
+#### 7. Mest mulig automatisering
+
+Rutiner, kontroller og korrigeringer (ved logiske regler eller statistisk imputering) bør automatiseres så langt det er hensiktsmessig, men overvåkes.
+
+#### 8. Effektivisering av arbeidet
+
+Bruk selektiv editering og makrokontroller slik at ressurskrevende manuell kontroll forbeholdes kritiske enheter med reell innflytelse på statistikken.
+
+#### 9. Evaluering
+
+Editeringsprosessen skal evalueres jevnlig ved hjelp av kvalitetsindikatorer for å sikre kontinuerlig forbedring og god ressursbruk.
+
+## Maskinell vs manuell editering
+
+SSB skiller prinsipielt mellom to måter å rette og bearbeide data på: maskinell (automatisk) editering og manuell (interaktiv) editering. En effektiv produksjonsprosess på Dapla bygger på et klart skille i ansvarsfordeling, verktøybruk og rekkefølge mellom disse to formene.
+
+#### 1. Maskinell (automatisk) editering
+
+- **Hva det er**: Prosessen med å oppdage og rette feil eller imputere manglende verdier helt automatisk ved hjelp av forhåndsdefinerte regler, beregninger eller statistiske modeller (f.eks. HB-metoden eller regresjon), uten menneskelig innblanding.
+- **Hvor det hører hjemme**: Utføres deterministisk i teamets ordinære kodebase og kjøres som notebooks, skript eller automatiserte pipelines. 
+- **Krav**: All logikk skal ligge i versjonshåndtert kode (Git/GitHub), slik at transformasjonen fra en datatilstand til en annen er reproduserbar med kode.
+
+#### 2. Manuell editering
+
+- **Hva det er**: Saksbehandling der en statistiker vurderer og korrigerer enkeltceller og enheter manuelt, basert på fagkunnskap, støtteinformasjon eller oppslag i andre kilder.
+- **Hvor det hører hjemme**: Utføres via spesialiserte editeringsgrensesnitt der dataene er lagret [Parquedit](./ssb-parquedit.qmd)-tabeller.
+- **Krav**: Alle manuelle endringer må logges med hvem som utførte endringen, tidspunkt, gammel og ny verdi, samt begrunnelse/endringsårsak (jf. krav til revisjonsspor). Parquedit-lagringen håndterer dette for brukeren. 
+
+#### Anbefalt rekkefølge: Maskinelt først, deretter manuelt
+
+Hovedregelen i SSBs retningslinjer er å automatisere så mye som mulig tidlig i løpet (jf. prinsipp 3, 5 og 7). Dette innebærer editeringsprosessen ideelt sett gjøres i denne rekkefølgen:
+
+1. Maskinell editering basert på kode
+2. Selektiv editering for å identifisere kritiske enheter med stor innflytelse på sluttresultat.
+3. Manuell editering av de kritiske enhetene som ikke kan rettes automatisk. 
