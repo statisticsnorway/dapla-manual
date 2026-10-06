@@ -15,7 +15,94 @@
 <link>https://manual.dapla.ssb.no/news/</link>
 </image>
 <generator>quarto-1.10.19</generator>
-<lastBuildDate>Fri, 18 Sep 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 06 Oct 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Parquedit - ny tjeneste for datalagring ved manuell editering</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2026-10-06-parquedit-lansering/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Standard lagringsformat på Dapla er Parquet-filer i Google Cloud Storage (GCS)-bøtter. Parquet er kolonneorientert og optimalisert for batch-lesing og skriving, noe som fungerer godt i faste produksjonsløp.</p>
+<p>Ved manuell editering – der statistikere kontrollerer, vurderer og korrigerer enkeltverdier i dataene – oppstår det imidlertid utfordringer med rene Parquet-filer:</p>
+<ul>
+<li>Filer kan ikke delvis oppdateres; hele datasettet må skrives på nytt ved hver minste korreksjon.</li>
+<li>Formatet mangler støtte for samtidig redigering (concurrency), noe som skaper skrivekonflikter hvis flere samarbeider.</li>
+<li>Det mangler innebygde ACID-garantier for transaksjoner og versjonshistorikk.</li>
+<li>Endringer må loggføres manuelt for å oppfylle kravene til revisjonsspor.</li>
+</ul>
+<p>For å løse dette lanserer team Fellesfunksjoner nå <a href="../../../statistikkere/ssb-parquedit.html"><strong>Parquedit</strong></a> som en ny tjeneste på Dapla. <strong>Torsdag 8. oktober</strong> inviterer vi derfor til <a href="https://ssbno.sharepoint.com/sites/byraanettet/_layouts/15/Event.aspx?ListGuid=a0801a90-f230-4501-b2bb-a1182a162a94&amp;ItemId=1881">lansering av Parquedit i Auditoriet</a> i Akersveien.</p>
+<section id="hva-er-parquedit" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-parquedit">Hva er Parquedit?</h2>
+<p>Parquedit er en “enkel” Python-pakke som lar Dapla-team lagre datafilene sine som åpne, komprimerte Parquet-filer i teamets produktbøtte på GCS, samtidig som vi lagrer metadata, transaksjoner, snapshots og tidsreiser om editeringen i en felles katalog som håndterer sentralt i SSB.</p>
+<p>For statistikeren betyr dette at Python-pakken gir de:</p>
+<ul>
+<li><strong>Full transaksjonsstøtte (ACID):</strong> Trygg samtidig editering for flere teammedlemmer uten fare for tapte oppdateringer.</li>
+<li><strong>Automatisk revisjonsspor:</strong> Hvem som utførte endringen, tidspunkt, endret verdi, årsak og fritekstkommentar loggføres automatisk og sentralt.</li>
+<li><strong>Responsiv brukeropplevelse:</strong> Rask celle- og radoppdatering egnet for integrasjon mot grafiske editeringsgrensesnitt på Dapla (f.eks. <a href="../../../statistikkere/editeringsrammeverk.html">Editeringsrammeverket</a>).</li>
+<li><strong>Overordnet innsikt:</strong> Løsningen gir SSB samlet oversikt over volum og omfang av manuell editering på tvers av organisasjonen, noe som støtter opp under arbeidet med kvalitetsindikatorer.</li>
+</ul>
+</section>
+<section id="hvem-er-dette-relevant-for" class="level2">
+<h2 class="anchored" data-anchor-id="hvem-er-dette-relevant-for">Hvem er dette relevant for?</h2>
+<p>Alle som gjør <strong>manuell editering</strong> som en del av statistikkproduksjon på Dapla. Alle som gjør manuelle editeringer i sine data på Dapla bør gjøre det i Parquedit-tabeller.</p>
+</section>
+<section id="hvordan-ta-det-i-bruk" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-ta-det-i-bruk">Hvordan ta det i bruk?</h2>
+<p>Tjenesten aktiveres ved at seksjonsleder/Teamansvarlig skrur på tilgangen i <strong>Dapla Ctrl</strong>. Når tilgangen er aktiv, har alle <em>developers</em> i teamet lik tilgang til å opprette og editere tabeller. Les mer om funksjonalitet i <a href="../../../statistikkere/ssb-parquedit.html">dokumentasjonen til Parquedit</a>.</p>
+<p>I videoen under viser vi hvordan Parquedit kan benyttes i Jupyter etter at Python-pakken er installert i et ssb-project på følgende måte:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Terminal" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">poetry</span> add ssb-parquedit</span></code></pre></div></div>
+</div>
+<p><br></p>
+<div id="fig-parquedit-demo" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Alternativtekst">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-parquedit-demo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./parquedit-demo.mov" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figur&nbsp;1: Demo av hvordan Parquedit kan benyttes i Jupyter."><video src="./parquedit-demo.mov" class="img-fluid" alt="Alternativtekst" controls=""></video></a><a href="./parquedit-demo.mov">Video</a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parquedit-demo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figur&nbsp;1: Demo av hvordan Parquedit kan benyttes i Jupyter.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="hva-er-sammenhengen-mellom-editeringsrammeverket-eimerdb-og-parquedit" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-sammenhengen-mellom-editeringsrammeverket-eimerdb-og-parquedit">Hva er sammenhengen mellom Editeringsrammeverket, EimerDB og Parquedit?</h2>
+<p><a href="../../../statistikkere/editeringsrammeverk.html">Editeringsrammeverket</a> er et Python-bibliotek som lar brukerne lage et grafisk grensesnitt for manuell editering, mens <strong>EimerDB</strong> var ofte lagringsløsningen som ble benyttet under de grafiske gresnesnittene laget med Editeringsrammeverket. Parquedit er en ny lagringsløsning som <strong>erstatter EimerDB</strong>, og som fremover skal benyttes som lagringsløsning for grensesnitt laget med Editeringsrammeverket.</p>
+</section>
+<section id="planer-fremover" class="level2">
+<h2 class="anchored" data-anchor-id="planer-fremover">Planer fremover</h2>
+<p>Dagens lansering er første versjon av Parquedit. Fremover planlegger vi følgende:</p>
+<ul>
+<li>lansere en enkel Dapla Lab tjeneste som lar brukeren manuelt editere Parquedit-tabeller i et grafisk grensesnitt.</li>
+<li>lansere en Dapla Lab tjeneste som lar brukerne lage sine egne grafiske grensesnitt med hjelp av KI-agenter der Parquedit er den underliggende lagringsløsningen.</li>
+<li>sentraliserte vedlikehold som optimaliserer ytelsen til Parquedit.</li>
+<li>sentralisert backup av Parquedit-metadata.</li>
+<li>sentrale metrikker om mengden manuell editering på Dapla.</li>
+</ul>
+</section>
+<section id="hvordan-kan-jeg-gi-tilbakemeldinger-på-løsningen" class="level2">
+<h2 class="anchored" data-anchor-id="hvordan-kan-jeg-gi-tilbakemeldinger-på-løsningen">Hvordan kan jeg gi tilbakemeldinger på løsningen?</h2>
+<p>Vi ønsker veldig gjerne å få tilbakemeldinger på tjenesten. Dere kan gi tilbakemeldinger på <a href="https://engage.cloud.microsoft/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all">Viva Engage</a>, som Kundeservice-sak, eller ved å kontakt med oss direkte. Det blir også mulighet til å stille spørsmål og komme med kommentarer ved <a href="https://ssbno.sharepoint.com/sites/byraanettet/_layouts/15/Event.aspx?ListGuid=a0801a90-f230-4501-b2bb-a1182a162a94&amp;ItemId=1881">lanseringen torsdag 8. oktober</a>.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>parquedit</category>
+  <category>editering</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2026-10-06-parquedit-lansering/</guid>
+  <pubDate>Tue, 06 Oct 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
 <item>
   <title>Blogg-innlegg om hvordan man bruker Dapla API</title>
   <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
@@ -831,39 +918,6 @@ Figur&nbsp;1: Siden som viser dataproduktet ifhus
   <guid>https://manual.dapla.ssb.no/news/posts/2026-06-09-updated-data-catalog/</guid>
   <pubDate>Tue, 09 Jun 2026 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/news/posts/2026-02-25-new-dataportal/dataportal-landingpage.png" medium="image" type="image/png" height="93" width="144"/>
-</item>
-<item>
-  <title>Sletting av “gamle” tjenester på Dapla Lab før sommeren</title>
-  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2026-06-08-dapla-lab-delete-services/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Team Skyinfra har oppgradert hvilke maskintyper som benyttes når man starter opp tjenester på Dapla Lab. Det betyr at alle som kjører på tjenester som opprinnelig ble startet før de maskintypene ble tatt i bruk, må slette sine tjenester og starte en ny.</p>
-<section id="hva-er-nytt" class="level2">
-<h2 class="anchored" data-anchor-id="hva-er-nytt">Hva er nytt?</h2>
-<p>Med denne oppgraderingen får vi maskintyper som har <strong>bedre ytelse</strong> og <strong>tilgjengelighet</strong>. Men brukere må ha startet en ny tjeneste for å få tildelt den nye typen, og de gamle tjenestene må slettes for at de gamle maskinene kan avvikles.</p>
-</section>
-<section id="hvorfor-har-vi-gjort-disse-endringene" class="level2">
-<h2 class="anchored" data-anchor-id="hvorfor-har-vi-gjort-disse-endringene">Hvorfor har vi gjort disse endringene?</h2>
-<p>Maskintypen som ble benyttet tidligere var utdatert og Google anbefalte at vi over til den nye typen. Det vil også løse kapasitetsutfordringene vi har hatt ved noen anledninger. Den nye maskintypen har også bedre utelse og tilgjengelighet.</p>
-</section>
-<section id="hva-betyr-dette-for-deg" class="level2">
-<h2 class="anchored" data-anchor-id="hva-betyr-dette-for-deg">Hva betyr dette for deg?</h2>
-<p>For deg som har hatt tjenester på Dapla Lab som kjørt lengre enn 11 dager per 8. juni 2026, så bør du slette tjenesten og starte en helt ny en. Vi ønsker at alle tjenester som benytter de gamle maskintypene er slettet innen <strong>30. juni 2026</strong>. Husk følgende å lagre arbeid som ligger inne i tjenesten før du sletter. Kode skal lagres på GitHub og data lagres i GCS-bøtter.</p>
-<p>Har du spørsmål eller finner du noe som ikke fungerer som forventet? Ta kontakt med oss i Team Skyinfra.</p>
-
-
-</section>
-
- ]]></description>
-  <category>dapla lab</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2026-06-08-dapla-lab-delete-services/</guid>
-  <pubDate>Mon, 08 Jun 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-lab-jupyter-service.png" medium="image" type="image/png" height="103" width="144"/>
 </item>
 </channel>
 </rss>
