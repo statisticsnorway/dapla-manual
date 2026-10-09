@@ -10,6 +10,21 @@ Denne siden forklarer hvordan du går fram for å bygge din egen skjemaprefill. 
 I utgangspunktet er det kun InternInfo som er obligatorisk “blokk” i instansieringsfila. I tillegg vil de aller fleste ha blokka for Kontakt (kontaktperson-info). Blokka for SkjemaData vil finnes for alle som har prefill ut over det som ligger i InternInfo.
 :::
 
+## Test- og produksjonsmiljø
+Det anbefales å sette opp og teste skjemaprefill i testmiljø før løsningen tas i bruk i produksjon. En typisk testprosess er:
+
+1. Lagre prefill på testenhetene.
+2. Instansier skjemaet via Altinns testmiljø.
+3. Kontroller at skjemaet er forhåndsutfylt med forventede verdier.
+
+I testmiljø benyttes [Dapla Lab Test](https://lab.dapla-test.ssb.no/) sammen med [Altinns testmiljø (TT02)](https://tt02.altinn.no/).
+
+Når løsningen er klar for produksjon, benyttes [Dapla Lab](https://lab.dapla.ssb.no/) og [Altinns produksjonsmiljø](https://altinn.no/). For å teste skjemaprefill i produksjon legges en SSB-enhet inn i utvalget. Dette gjør det mulig å verifisere at skjemaet blir korrekt forhåndsutfylt i produksjonsmiljøet før løsningen tas i ordinær bruk.
+
+::: {.callout-note} 
+Det anbefales å teste alle endringer i skjemaprefill i Dapla Lab Test og TT02 før de tas i bruk i produksjon. Dette gjør det enklere å avdekke feil i prefill uten å påvirke ordinære rapportører. 
+:::
+
 ## Skjema prefill meta
 For hver skjemaversjon eksisterer det en skjema prefill meta tabell. Tabellen gir informasjon om hvilke skjemaspesifikke prefill-felter som skjemaet kan inneholde.
 
@@ -110,12 +125,15 @@ Eksempel på output for hierarkisk struktur uten metadata:
 ## Lagre prefill data
 For å lagre prefill for en enhet bruker du metoden `save_prefill_for_enhet` i `SuvClient`. Metoden lagrer skjemaprefill for en spesifikk enhet i utvalget. Beskrivelse av hvordan du henter utvalg finner du på siden [Utvalg fra SFU](./altinn-sfu.html)
 
+Parameteren `undersokelsesnummer` er valgfri. Dersom den ikke oppgis, brukes standardverdien `None`.
+
 ```{.python filename="notebook"}
 client = SuvClient()
 
 output = client.save_prefill_for_enhet(
      ra_nummer = 'RA-0666A3',
      versjon = 1,
+     undersokelsesnummer='12345',  # valgfri
      periode_aar = 2024,
      periode_type = 'KVRT',
      periode_nr = 2,
@@ -139,6 +157,7 @@ print(output)
 | :----------------- | :-------------------------------------------------------------------------------------- |
 | RA-nummer | RA-nummer for skjemaet.  
 | versjon | Skjemaversjon.
+| undersokelsesnummer | Valgfri parameter. Må oppgis dersom samme RA-nummer og versjon finnes flere ganger i samme periode med ulike undersøkelsesnumre. Dette brukes for å identifisere riktig undersøkelse.
 | periode_aar | Årstall for perioden.
 | periode_type | Periode type. Gyldige verdier er `AAR`, `MND`, `KVRT`, `UKE` 
 | periode_nr | Periode nummer
@@ -150,12 +169,15 @@ print(output)
 ## Validering av prefill data
 Validering av skjemaprefill sikrer at dataene oppfyller kravene til struktur og innhold. Dette gjøres automatisk i `save_prefill_for_enhet`. Feil i valideringen vil føre til at dataene ikke lagres, og det gis en feilmelding. Dersom du ønsker å sjekke om prefill er gyldig før lagring er dette mulig ved hjelp av metoden `validate_skjemadata`. 
 
+Parameteren `undersokelsesnummer` er valgfri. Dersom den ikke oppgis, brukes standardverdien `None`.
+
 ```{.python filename="notebook"}
 client = SuvClient()
 
 client.validate_skjemadata(      
         ra_nummer = 'RA-0678A3',
         versjon = 2,
+        undersokelsesnummer='12345',  # valgfri
         skjemadata = {"antallAnsattePrefill": "10"}
 )   
 ```
@@ -249,33 +271,57 @@ Resultatet kan brukes til kvalitetssikring før utsending.
 ## Eksempelkode
 [Noe demokode ligger i repoet](https://github.com/statisticsnorway/s821-datafangst-python/tree/main/src/notebooks/Prefill%20eksempler), og kan være ett godt utgangspunkt å kopiere og endre fra.
 
-### RA-0678 (Ledige stillinger)
-Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0678 (Ledige stillinger). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
+### RA-0867 (KOSTRA - Energibruk i utvalgte kommunale formålsbygg)
+Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0867 (KOSTRA - Energibruk i utvalgte kommunale formålsbygg). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
 
 ```json
 {
-    "SkjemaData": {
-        "antallAnsattePrefill": {
-            "type": "string"
-        },
-        "datoPrefill": {
-            "type": "string"
-        }
-    }
+    "prefill": {
+        "type": "object",
+        "properties": {
+            "pfElektrisitetAarMinus1": {
+                "type": "integer",
+                "title": "Prefill elektrisitet forrige år",
+                "description": "Prefillfelt. Brukes i tabellen"
+            },
+            "pfFjernvarmeAarMinus1": {
+                "type": "integer",
+                "title": "Prefill fjernvarme forrige år",
+                "description": "Prefillfelt. Brukes i tabellen"
+            },
+            "pfFyringsoljeOgParafinAarMinus1": {
+                "type": "integer",
+                "title": "Prefill fyringsolje og parafin forrige år",
+                "description": "Prefillfelt. Brukes i tabellen"
+            },
+            "pfNaturgassOgLPGAarMinus1": {
+                "type": "integer",
+                "title": "Prefill naturgass og LPG forrige år",
+                "description": "Prefillfelt. Brukes i tabellen"
+            },
+            "pfBioenergiAarMinus1": {
+                "type": "integer",
+                "title": "Prefill bioenergi forrige år",
+                "description": "Prefillfelt. Brukes i tabellen"
+            }
+          }
 }
 ```
 
-Skjemaet inneholder to felter som skal forhåndsutfylles. Det er `antallAnsattePrefill` og `datoPrefill`. 
+Skjemaet inneholder fem felter som skal forhåndsutfylles. 
 
-@tbl-prefill-ra0678 beskriver feltene som kan forhåndsutfylles. 
+@tbl-prefill-ra0867 beskriver feltene som kan forhåndsutfylles. 
 
 | Felt | Sti |
 | :----------------- |:-------------------------------------------------------------------------------------- |
-| antallAnsattePrefill | -
-| datoPrefill | -
-: Prefill felter {#tbl-prefill-ra0678 .striped}
+| pfElektrisitetAarMinus1 | prefill
+| pfFjernvarmeAarMinus1 | prefill
+| pfFyringsoljeOgParafinAarMinus1 | prefill
+| pfNaturgassOgLPGAarMinus1 | prefill
+| pfBioenergiAarMinus1 | prefill
+: Prefill felter {#tbl-prefill-ra0867 .striped}
 
-Eksempelet leser prefill-data fra en tekstfil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
+Eksempelet leser prefill-data fra en json fil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.
 
 ### RA-0255 (Omsetning, kostnader og investeringer i næringslivet)
 Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0255 (Omsetning, kostnader og investeringer i næringslivet). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert. 
