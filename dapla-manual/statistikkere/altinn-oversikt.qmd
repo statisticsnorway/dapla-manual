@@ -1,21 +1,23 @@
 ---
 title: Oversikt
-date-modified: 05/19/2026
+date-modified: 10/09/2026
 lightbox: true
 ---
 
 ![](../images/altinn_logo.png){style="max-width: 50%; float: right;" fig-alt="Dapla logo"}
 
-Frem mot sommeren 2026 skal alle skjema-undersøkelser i SSB som gjennomføres på **Altinn 2** flyttes over til [Altinn 3](https://docs.altinn.studio/nb/community/about/). Skjemaer som flyttes til Altinn 3 vil motta sine data på **Dapla**, og ikke på *bakken* som tidligere. Datafangsten håndteres av [Team SU-V](https://statistics-norway.atlassian.net/wiki/spaces/CUL/pages/2805530625/Teamsider), mens statistikkseksjonene henter sine data fra Team SU-V sitt lagringsområde på Dapla. I dette kapitlet beskriver vi nærmere hvordan statistikkseksjonene kan jobbe med Altinn3-data på Dapla. Kort oppsummert består det av disse stegene:
+Skjemadata fra Altinn 3 lagres og forvaltes av Team SU-V på Dapla. Statistikkseksjonene henter data fra Team SU-Vs lagringsområde og kan deretter bearbeide og analysere dataene i egne Dapla-team.
 
-1. Statistikkprodusenten avtaler overføring av skjema fra **Altinn 2** til **Altinn 3** med planleggere på **S821**, som koordinerer denne jobben. 
-2. Når statistikkprodusentene får beskjed om at Altinn3-skjemaet skal sendes ut til oppgavegiverne, så må de opprette et [Dapla-team](./opprette-dapla-team.html).
-3. Når Dapla-teamet er opprettet, og første skjema er sendt inn, se ber de om at Team SU-V gir tilgang til teamets *Transfer Service* instans. Søknad om tilgang gjøres gjennom Kundeservice og [selvbetjeningsportalen](https://ssb.pureservice.com/). For å søke om tilgang velger du **Meld sak til Spørreundersøkelser virksomhet (SU-V)**. Her vil du finne et eget skjema som du fyller ut for å søke om tilgang. Merk at det må gis separate tilganger for data i test- og produksjonsmiljø. 
-4. Statistikkprodusenten setter opp en automatisk overføring av skjemadata med [Transfer Service](./transfer-service.html), fra Team SU-V sitt lagringsområde over til Dapla-teamet sin kildebøtte.
-5.  Statistikkprodusentene kan begynne å jobbe med dataene i Dapla. Blant annet tilbyr Dapla en **automatiseringstjeneste** som man kan bruke for å prosessere dataene fra kildedata til inndata^[En typisk prosessering som de fleste vil ønske å gjøre er å konvertere fra xml-formatet det kom på, og over til parquet-formatet.].
+For å ta i bruk data fra en undersøkelse i Altinn 3 består prosessen i hovedsak av følgende steg:
 
-I resten av kapitlet gis en oversikt over hvordan statistikkteam kan jobbe med data fra Altinn 3. 
+1. Opprett et [Dapla-team](./opprette-dapla-team.html) dersom undersøkelsen ikke allerede har et eget team.
+2. Be Team SU-V om tilgang til teamets *Transfer Service* instans gjennom Kundeservice og [selvbetjeningsportalen](https://ssb.pureservice.com/).
+Merk at det må gis separate tilganger for test- og produksjonsmiljø. For å søke om tilgang velger du **Meld sak til Spørreundersøkelser virksomhet (SU-V)**.
+3. Team SU-V gir deretter nødvendige tilganger slik at statistikkteamet kan sette opp overføring av data fra Team SU-Vs lagringsbøtter til egen kildebøtte. 
+4. Sett opp en automatisk overføring av skjemadata med [Transfer Service](./transfer-service.html) fra Team SU-Vs lagringsområde til Dapla-teamets kildebøtte.
+5. Begynn å jobbe med dataene i Dapla. Dataene kan prosesseres videre ved hjelp av Daplas verktøy og automatiseringstjenester.
 
+I resten av kapitlet beskrives hvordan statistikkteam kan hente, overføre og arbeide med data fra Altinn 3 på Dapla. 
 
 ## Ansvarsfordeling
 
@@ -35,7 +37,7 @@ Siden tilgangsstyringen til data i prod er ganske restriktiv, så anbefaler vi a
 
 ### Test
 
-Tilgang til bøtter med skjemadata i test-miljøet er mindre restriktive enn for prod-miljøet, siden disse dataene er fiktive. Derfor anbefales det at statistikere først jobber i test-miljøet når de skal gjøre seg kjent med dataene fra Altinn 3. I test-miljøet kan både brukere og Transfer Service få tilgang til SU-V sine delt-data. 
+Tilgang til bøtter med skjemadata i test-miljøet er mindre restriktive enn for prod-miljøet, siden disse dataene er fiktive. Derfor anbefales det at statistikere først jobber i test-miljøet når de skal gjøre seg kjent med dataene fra Altinn 3. 
 
 ## Data
 
