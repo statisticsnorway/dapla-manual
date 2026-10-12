@@ -2,10 +2,6 @@
 title: Marimo-dashboard
 date-modified: 10/13/2026
 lightbox: true
-format:
-  html:
-    code-fold: true
-    code-summary: "Vis kode"
 ---
 
 ![](../images/marimo-logotype-thick.svg){style="max-width: 350%; float: right;" fig-alt="Marimo dashboard service"}
@@ -42,9 +38,9 @@ Mye av konfigurasjonen for **Marimo-dasboards** er lik det som gjelder for [Jupy
 
 Det viktigste som er spesifikt for Marimo ligger under tjenestedelen:
 
-Bilde
+Bilde av konfigurasjonen
 
-### Modus
+### Oppstartsmåte
 
 * Edit-modus brukes når man utvikler et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
 * App-modus brukes når man vil starte et dashboard som en selvstendig applikasjon, uten å vise verken kode eller Marimo-grensesnittet. 
@@ -52,9 +48,9 @@ Bilde
 ### Dashboard-repo
 
 Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.
-Hva som forventes av repoet avhenger av modusen:
+Hva som forventes av repoet avhenger av oppstartsmåte:
 
-* I edit-modus forventes ingenting, og man kan selv opprette `dashboards/`-mappen første gang man åpner repoet.
+* I edit-modus forventes ingenting, og man kan selv opprette `dashboards/`-mappen og nye notebooks første gang man starter tjenesten.
 * I app-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
 
 Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
@@ -62,7 +58,9 @@ Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
 
 ### Marimo-studio
 
-Marimo-studio er en utvidelse til Marimo som kan skrus på dersom man ønsker å lage sine egne *views* med html og css, slik at man får mer kontroll på utseendet til den ferdige applikasjonen.
+Marimo-studio er en utvidelse til Marimo som kan skrus på dersom man ønsker å lage sine egne *views* med html og css, slik at man får mer kontroll på utseendet til den ferdige applikasjonen, som i følgende eksempel:
+
+![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
 
 Marimo-studio kan aktiveres med begge moduser og ha følgende effekt:
 
@@ -83,12 +81,28 @@ Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modu
 
 ### Marimo-studio
 
-For å ta i bruk Marimo-studio, starter man tjenesten i edit-modus med Marimo-studio skrudd på. Deretter følger man disse stegene:
+For å ta i bruk Marimo-studio, starter man tjenesten i edit-modus med Marimo-studio skrudd på.
+Deretter følger man disse stegene for a lage et *view*:
 
-1. Åpne en eksisterende notebook i mappen `dashboards/` eller lag en ny notebook.
-1. Klikk på "Create view" øverst til høyre.
-2. Velg "Html" og klikk Create view. Det er kun Html som støttes.
-3. 
+1. Åpne en eksisterende notebook i `dashboards/`, eller opprett en ny notebook.
+
+2. Klikk på "Add view" øverst til høyre, gi ønsket navn, velg "HTML document" og trykk "Create view".
+
+![](../images/marimo-studio-add-view.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo save file"}
+
+3. Du vil nå ha fått opprettet flere filer og får valget om å se en forhåndsvisning av viewet:
+
+![](../images/marimo-studio-preview.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo save file"}
+
+Merk fillokasjonen til `index.html` og de andre filene.
+Det anbefales å sjekke inn disse filene til Github.
+
+Pass på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen.
+Anbefalt tillegg til `.gitignore` er:
+
+```{.text code-copy="true"}
+__marimo__/session/
+```
 
 ## Data og Git/GitHub
 
