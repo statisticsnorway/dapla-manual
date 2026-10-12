@@ -2,22 +2,27 @@
 title: Marimo-dashboard
 date-modified: 10/13/2026
 lightbox: true
+format:
+  html:
+    code-fold: true
+    code-summary: "Vis kode"
 ---
 
 ![](../images/marimo-logotype-thick.svg){style="max-width: 350%; float: right;" fig-alt="Marimo dashboard service"}
 
-**Marimo-dashboard** er en tjeneste på [Dapla Lab](./dapla-lab.qmd) som er skreddersydd for utvikling av dashboards og apper. Tjenesten bygger på [Marimo](https://marimo.io/), som er et reaktivt Python-miljø med svært god støtte for brukerinteraksjon og dynamiske visualiseringer.
+**Marimo-dashboard** er en tjeneste på [Dapla Lab](./dapla-lab.qmd) som er skreddersydd for utvikling av dashboards og applikasjoner.
+Tjenesten bygger på [Marimo](https://marimo.io/), som er et reaktivt Python-miljø med svært god støtte for brukerinteraksjon og dynamiske visualiseringer.
 
-I tillegg kan man bruke [Marimo-studio](https://marimo-team.github.io/marimo-studio/), en utvidelse som gjør det lett å legge til form og stil ved hjelp av vanlig html/css.
+I tillegg kan man bruke [Marimo-studio](https://marimo-team.github.io/marimo-studio/), en utvidelse som gjør det lett å legge til form og stil ved hjelp av vanlig html og css.
 
-Tjenesten gjør følgende antagelser:
+Tjenesten er basert på følgende premisser:
 
 * At repoet som klones har en mappe `dashboards/` på rotnivå.
-* At notebook-filene i `dashboards/` er selvstendige og reproduserbare.
+* At `dashboards/`-mappen inneholder Marimo-notebooks med deklarerte pakkeavhengigheter.
   <details>
   <summary>Hva betyr dette?</summary>
   <ul>
-  <li>At hver notebook definerer sine egne pakkeavhengigheter i selve filen, slik at den kan kjøres isolert fra resten av repoet.</li>
+  <li>At hver notebook definerer sine egne pakkeavhengigheter i selve filen (se [eksempel](https://peps.python.org/pep-0723/#example)), slik at den kan kjøres isolert fra resten av repoet.</li>
   <li>I praksis trenger man kun å bruke vanlige `import`-uttrykk for å ta i bruk pakker; Marimo vil automatisk foreslå å legge til avhengighetene.</li> 
   </ul>
   </details>
@@ -37,23 +42,29 @@ Mye av konfigurasjonen for **Marimo-dasboards** er lik det som gjelder for [Jupy
 
 Det viktigste som er spesifikt for Marimo ligger under tjenestedelen:
 
-
-### Dashboard-repo
-
-Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten. Dette er nyttig hvis man allerede har et prosjekt som har en `dashboards/`-mappe med notebooks, som man vil åpne direkte i tjenesten.
-
-Dersom man ikke oppgir et repo, vil det automatisk opprettes en mappe `prosjekt/` med en undermappe `dashboards/`.
+Bilde
 
 ### Modus
 
 * Edit-modus brukes når man utvikler et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
 * App-modus brukes når man vil starte et dashboard som en selvstendig applikasjon, uten å vise verken kode eller Marimo-grensesnittet. 
 
+### Dashboard-repo
+
+Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.
+Hva som forventes av repoet avhenger av modusen:
+
+* I edit-modus forventes ingenting, og man kan selv opprette `dashboards/`-mappen første gang man åpner repoet.
+* I app-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
+
+Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
+
+
 ### Marimo-studio
 
 Marimo-studio er en utvidelse til Marimo som kan skrus på dersom man ønsker å lage sine egne *views* med html og css, slik at man får mer kontroll på utseendet til den ferdige applikasjonen.
 
-Marimo-studio kan aktiveres både med edit-modus og app-modus:
+Marimo-studio kan aktiveres med begge moduser og ha følgende effekt:
 
 * I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view*.
 * I app-modus vil Marimo prøve å åpne et tilhørende view dersom det finnes (ellers åpnes standard Marimo-visning).
@@ -62,12 +73,13 @@ Marimo-studio kan aktiveres både med edit-modus og app-modus:
 
 ### Edit-modus
 
-I denne modusen åpnes tjenesten med hele Marimo-grensesnittet der  man kan utvikle og redigere notebook-filer direkte i nettleseren.
+I denne modusen åpnes tjenesten med hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.
+
 ### App-modus
 
 Dette passer når man allerede har laget en ferdig notebook-fil som skal vises som et brukergrensesnitt, for eksempel for utforsking av data eller deling av resultater internt i et team.
 
-Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus først. Før man starter app-modus er det også lurt å sjekke at notebooken lar seg kjøre i edit-modus.
+Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus. Før man bruker app-modus er det lurt å sjekke at notebooken lar seg kjøre i edit-modus.
 
 ### Marimo-studio
 
