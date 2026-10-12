@@ -60,8 +60,6 @@ Marimo-studio kan aktiveres både med edit-modus og app-modus:
 
 ## Bruksmoduser
 
-Marimo-dashboard-tjenesten har flere moduser:
-
 ### Edit-modus
 
 I denne modusen åpnes tjenesten med hele Marimo-grensesnittet der  man kan utvikle og redigere notebook-filer direkte i nettleseren.
@@ -92,7 +90,41 @@ For detaljer om datatilgang, delt-bøtter, Git/GitHub, ressurser, diskplass og o
 
 ## Datatilgang
 
-Man kan gi dashboardet mulighet til å utforske data på følgende måte:
+Dersom man vil utvikle dashboards med mulighet for å utforske og visualisere data, er et godt startpunkt å legge til en `file_browser`-komponent:
+
+![](../images/marimo-file-browser.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
+
+
+Opprett filutforskeren i en egen kodecelle og konfigurer etter behov:
+```py
+import marimo as mo
+
+file_browser = mo.ui.file_browser(
+    initial_path="/buckets/",
+    filetypes=["parquet"],
+    selection_mode="file",
+    multiple=False,
+)
+file_browser
+```
+
+Den valgte filen kan nå hentes fra variabelen `file_browser` og for eksempel brukes til å vise en tabell:
+
+```py
+
+import polars as pl
+
+selected_files = file_browser.value
+if len(selected_files) > 0:
+    df = pl.read_parquet(selected_files[0].path)
+    output = mo.ui.table(df)
+else:
+    output = mo.md("Ingen fil er valgt.")
+output
+```
+
+En slik applikasjon vil være gjenbrukbar på tvers av team, ettersom man vil se de bøttene man har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, alle celler som benytter seg av variabelen `file_browser` vil oppdateres når brukeren endrer filvalg.
+
 
 
 ## Installere pakker
