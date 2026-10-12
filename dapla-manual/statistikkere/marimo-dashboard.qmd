@@ -1,0 +1,120 @@
+---
+title: Marimo
+date-modified: 10/04/2026
+lightbox: true
+---
+
+![](../images/marimo-logotype-thick.svg){style="max-width: 350%; float: right;" fig-alt="Marimo dashboard service"}
+
+**Marimo-dashboard** er en tjeneste på [Dapla Lab](./dapla-lab.qmd) som er skreddersydd for utvikling av dashboards og apper. Tjenesten bygger på [Marimo](https://marimo.io/), som er et reaktivt Python-miljø med svært god støtte for brukerinteraksjon og dynamiske visualiseringer. I tillegg kan man bruke [Marimo-studio](https://marimo-team.github.io/marimo-studio/), en utvidelse som gjør det lett å utvikle sin egen layout og styling på toppen av dashboardet, ved hjelp av vanlig html og css.
+
+Tjenesten gjør to antagelser:
+* At repoet som klones har en mappe `dashboards/` på rotnivå.
+* At notebook-filene i `dashboards/`-mappen er selvstendige og reproduserbare.
+  * Hver notebook definerer sine egne pakkeavhengigheter i selve filen, slik at den kan kjøres isolert fra resten av repoet.
+  * Marimo foreslår nødvendige avhengigheter automatisk når man utvikler på en notebook, så i praksis trenger man ikke å forholde seg spesielt til dette.
+
+## Forberedelser
+
+Før man starter **Marimo** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab.qmd) og satt opp Git- og GitHub-konfigurasjonen under **Min konto**. Deretter gjør du følgende:
+
+1. Logg deg inn på [Dapla Lab](https://lab.dapla.ssb.no/)
+2. Under **Tjenestekatalog** trykker du på **Start**-knappen for **Marimo-studio**
+3. Gi tjenesten et navn
+4. Åpne **Marimo-dashboard konfigurasjoner**
+
+## Konfigurasjon
+
+Mye av konfigurasjonen for **Marimo-dasboards** er lik det som gjelder for [Jupyter](./jupyter.qmd#konfigurasjon). Det gjelder blant annet valg av team og tilgangsgruppe, Git/GitHub, ressurser, diskplass og avanserte valg som Parquedit-støtte.
+
+Det viktigste som er spesifikt for Marimo ligger under tjenestedelen:
+
+
+### Dashboard-repo
+
+Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten. Dette er nyttig hvis man allerede har et prosjekt som har en `dashboards/`-mappe med Marimo-notebooks, som man vil åpne direkte i tjenesten.
+
+### App-modus
+
+App-modus kan slås på når man vil starte dashboards som en selvstendig applikasjon, uten å vise verken kode eller Marimo-grensesnittet. 
+
+Mens man utvikler et dashboard må app-modus være skrudd av. I Marimo-grensesnittet finnes da en knapp for app-modus slik at man kan forhåndsvise den ferdige applikajonen.
+
+### Marimo Studio
+
+Marimo Studio er en utvidelse til Marimo som kan skrus på dersom man ønsker å lage sine egne *views* med html og css, slik at man får mer kontroll på utseendet til den ferdige applikasjonen. 
+
+### Marimo
+
+## Bruksmoduser
+
+Marimo-dashboard-tjenesten har flere moduser:
+
+### Edit-modus
+
+
+### App-modus
+
+Dette passer når man allerede har laget en ferdig fil som skal vises som et brukergrensesnitt, for eksempel for utforsking av data eller deling av resultater internt i et team.
+
+Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus først. Før du starter app-modus, sjekk gjerne at notebooken kan reproduseres i app-modus først.
+
+### Marimo Studio
+
+Marimo Studio er veldig nytt (høsten 2026), men bør fungere for de fleste formål. Bidra gjerne ved å opprette issue på [marimo-team/marimo-studio](https://github.com/marimo-team/marimo-studio/issues) dersom du finner feil eller mangler som du tror skyldes Marimo Studio.
+
+Marimo Studio kan aktiveres både i edit-modus og app-modus.
+
+I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view*:
+
+I app-modus vil Marimo sjekke om notebooken som skal åpnes har et tilhørende view, og forsøke å åpne viewet. Hvis det mangler et tilhørende view, vil applikasjonen vises som en standard Marimo-applikasjon.
+
+Her følger litt mer informasjon rundt Marimo Studio.
+
+## Data og Git/GitHub
+
+Marimo følger samme mønster som de andre utviklingstjenestene i Dapla Lab:
+
+1. Datatilgang styres av hvilket team og hvilken tilgangsgruppe du velger.
+2. Teamets bøtter blir tilgjengelige i filsystemet under `/buckets/`.
+3. Git-bruker, e-post og GitHub-token kan arves fra **Min konto** i Dapla Lab.
+
+For detaljer om datatilgang, delt-bøtter, Git/GitHub, ressurser, diskplass og oppstartsskript, se [Jupyter-kapitlet](./jupyter.qmd#konfigurasjon).
+
+## Datatilgang
+
+Slik kan man inspisere dataene fra en terminal inne i tjenesten:
+
+1. Åpne en instans av Marimo med data fra bøtter
+2. Åpne en terminal inne i tjenesten
+3. Gå til mappen med bøttene ved å kjøre `cd /buckets`
+4. Kjør `ls -ahl` i terminalen for å se hvilke bøtter som er montert
+
+## Installere pakker
+
+Marimo-dashboard-tjenesten skiller seg fra Marimo-tjenesten ved at den ikke tar i bruk Python-miljøet i prosjektet.
+
+I stedet er tjenesten ment for å jobbe på frittstående notebooks i dashboards/-mappen av prosjektet.
+Tanken er at disse filene lett kan deles og reproduseres uavhengig av Python-miljø.
+
+I praksis betyr dette at man ikke forholder seg til en `pyproject.toml`-fil i denne tjenesten, men heller definerer avhengigheter direkte i notebook-filene. Man trenger i de fleste tilfeller ikke å gjøre noe spesielt; når man importerer pakker i koden, så vil Marimo automatisk foreslå å installere avhengigheter:
+
+Avhengighetene vil da deretter legges inn i filen slik at man ikke trenger å gjenta prosessen neste gang man åpner tjenesten.
+
+Avhengighetene blir lagt inn som en kommentar på toppen av notebook-filen following en Python-standard:
+
+## Lagring av arbeid
+
+Kode bør lagres i GitHub og data bør lagres i bøtter. Filer som bare ligger lokalt i tjenesten kan gå tapt hvis tjenesten slettes, og filer utenfor `$HOME/work` slettes når tjenesten pauses.
+
+## Slette tjenesten
+
+For å slette tjenesten kan man trykke på **Slett**-knappen i Dapla Lab under **Mine tjenester**. Når man sletter en tjeneste, slettes også filsystemet i tjenesten og ressursene frigjøres. Hvis du har installert pakker lokalt i tjenesten, må disse installeres på nytt neste gang.
+
+## Pause tjenesten
+
+Man kan pause tjenesten ved å trykke på **Pause**-knappen i Dapla Lab under **Mine tjenester**. Når man pauser tjenesten, slettes alt på den lokale disken som ikke er lagret under `$HOME/work`.
+
+## Monitorering
+
+Man kan monitorere en instans av Marimo ved å trykke på tjenesten under **Mine tjenester** i Dapla Lab. Derfra kommer man til overvåkningssiden for tjenesten, med lenker til teknisk informasjon og eksternt dashboard på samme måte som for andre tjenester i Dapla Lab. Se [monitorering i Dapla Lab](./dapla-lab.qmd#monitorering).
