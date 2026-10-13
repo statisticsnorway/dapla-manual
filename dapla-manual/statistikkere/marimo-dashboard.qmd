@@ -14,14 +14,7 @@ I tillegg kan man bruke [Marimo-studio](https://marimo-team.github.io/marimo-stu
 Tjenesten er basert på følgende premisser:
 
 * At repoet som klones har en mappe `dashboards/` på rotnivå.
-* At `dashboards/`-mappen inneholder Marimo-notebooks med deklarerte pakkeavhengigheter.
-  <details>
-  <summary>Hva betyr dette?</summary>
-  <ul>
-  <li>At hver notebook definerer sine egne pakkeavhengigheter i selve filen (se [eksempel](https://peps.python.org/pep-0723/#example)), slik at den kan kjøres isolert fra resten av repoet.</li>
-  <li>I praksis trenger man kun å bruke vanlige `import`-uttrykk for å ta i bruk pakker; Marimo vil automatisk foreslå å legge til avhengighetene.</li> 
-  </ul>
-  </details>
+* At `dashboards/`-mappen inneholder Marimo-notebooks med deklarerte pakkeavhengigheter (se [Installere pakker](#installere-pakker)).
 
 ## Forberedelser
 
@@ -36,9 +29,17 @@ Før man starter **Marimo** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab
 
 Mye av konfigurasjonen for **Marimo-dasboards** er lik det som gjelder for [Jupyter](./jupyter.qmd#konfigurasjon). Det gjelder blant annet valg av team og tilgangsgruppe, Git/GitHub, ressurser, diskplass og avanserte valg som Parquedit-støtte.
 
-Det viktigste som er spesifikt for Marimo ligger under tjenestedelen:
+Det viktigste som er spesifikt for Marimo ligger under tjenestedelen (bilde kommer):
 
-Bilde av konfigurasjonen
+```text
+Dashboard-repo                     Oppstartsmåte                     Aktiver Marimo-studio
+┌────────────────────────────┐    ┌────────────────────────────┐    ┌────────────────────────────┐
+│                            │    │ Edit-modus                 │    │                       ◯─── │
+│                            │    ├────────────────────────────┤    │                       OFF │
+└────────────────────────────┘    │ App-modus                  │    └────────────────────────────┘
+                                  └────────────────────────────┘
+```
+
 
 ### Oppstartsmåte
 
@@ -155,27 +156,45 @@ Slike applikasjoner vil være gjenbrukbare på tvers av team, ettersom man vil s
 
 ## Installere pakker
 
-Marimo-dashboard-tjenesten skiller seg fra Marimo-tjenesten ved at man ikke trenger et Python-miljø.
-Man trenger altså ikke å forholde seg til en `pyproject.toml`-fil når man bruker denne tjenesten.
+Pakker installeres i selve notebooken gjennom Marimo-grensesnittet:
 
-I stedet er tjenesten ment for å jobbe på frittstående notebooks i `dashboards/`-mappen av prosjektet.
-Tanken er at disse filene lett kan deles og kjøres uavhengig av Python-miljø.
+![](../images/marimo-package-dependencies.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo save file"}
 
-Pakkeavhengighetene vil være definert i selve filen.
+Listen over pakker åpnes med tredje menyvalg fra toppen, og viser alle pakkene som er installert i notebooken.
+For å legge til flere pakker, skriver man pakkenavnet inputfeltet over listen og trykker "Add".
+Spesifikke versjoner kan installeres med vanlig syntaks, for eksempel `dapla-toolbelt-metadata==0.19`.
 
-Avhengighetene vil da deretter legges inn i filen slik at man ikke trenger å gjenta prosessen neste gang man åpner tjenesten.
+Når man ser på notebook-filen direkte, for eksempel i Github, kan man se avhengighetene i en metadatablokk øverst i filen: 
 
-Avhengighetene blir lagt inn som en kommentar på toppen av notebook-filen following en Python-standard:
+```py
+# /// script
+# dependencies = [
+#     "dapla-toolbelt-metadata==0.19.0",
+#     "marimo",
+#     "polars==2.0.0",
+# ]
+# requires-python = ">=3.14"
+# ///
+
+import marimo
+
+__generated_with = "0.25.1"
+app = marimo.App(width="medium")
+
+
+@app.cell
+def _():
+    import dapla_metadata
+    import polars as pl
+```
+
+Denne metadatablokken gjør at filen kan kjøres helt isolert fra resten av prosjektet.
 
 ## Lagring av arbeid
 
 Kode bør lagres i GitHub og data bør lagres i bøtter. Filer som bare ligger lokalt i tjenesten kan gå tapt hvis tjenesten slettes, og filer utenfor `$HOME/work` slettes når tjenesten pauses.
 
-For å lagre endringer til Github må man åpne en terminal i Marimo. Dette gjøres enten med tastatursnarveien `Ctrl/Cmd + j` eller ved å trykke på knappen:
-
-
-Følg deretter stegene beskrevet i:
-
+For å lagre endringer til Github må man åpne en terminal i Marimo. Den enkleste måten å åpne terminalen i Marimo er med tastatursnarveien `Ctrl/Cmd + j`. 
 
 ## Slette tjenesten
 
