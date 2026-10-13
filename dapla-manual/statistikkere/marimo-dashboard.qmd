@@ -45,7 +45,7 @@ Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.
 Hva som forventes av repoet avhenger av oppstartsmåte:
 
 * I edit-modus forventes ingenting av repoet. Man kan selv opprette `dashboards/`-mappen og nye notebooks første gang man starter tjenesten.
-* I app-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
+* I run-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
 
 Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
 
@@ -55,11 +55,11 @@ Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
 
 I denne modusen åpnes tjenesten med hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.
 
-### App-modus
+### Run-modus
 
 Dette passer når man allerede har laget en ferdig notebook-fil som skal vises som et brukergrensesnitt, for eksempel for utforsking av data eller deling av resultater internt i et team.
 
-Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus. Før man bruker app-modus er det lurt å sjekke at notebooken lar seg kjøre i edit-modus.
+Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus. Før man bruker run-modus er det lurt å sjekke at notebooken lar seg kjøre i edit-modus.
 
 ### Marimo-studio
 
@@ -84,7 +84,7 @@ Det anbefales å sjekke inn disse filene til Github.
 Pass imidlertid på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen.
 Anbefalt tillegg til `.gitignore` er:
 
-```{.text filename=".gitignore"}
+```
 __marimo__/session/
 ```
 
@@ -106,8 +106,7 @@ Dersom man vil utvikle dashboards med mulighet for å utforske og visualisere da
 
 
 Filutforskeren kan opprettes med følgende kodecelle og konfigureres etter behov:
-
-```{.python filename="Marimo kodecelle"}
+```py
 import marimo as mo
 
 file_browser = mo.ui.file_browser(
@@ -122,7 +121,7 @@ file_browser
 Variabelen `file_browser` vil til enhver tid inneholde hvilken fil som er valgt av brukeren.
 Denne kan brukes i en ny kodecelle, for eksempel til å vise en tabell med dataene:
 
-```{.python filename="Marimo kodecelle"}
+```py
 
 import polars as pl
 
