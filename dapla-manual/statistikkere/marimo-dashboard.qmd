@@ -29,22 +29,15 @@ Før man starter **Marimo** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab
 
 Mye av konfigurasjonen for **Marimo-dasboards** er lik det som gjelder for [Jupyter](./jupyter.qmd#konfigurasjon). Det gjelder blant annet valg av team og tilgangsgruppe, Git/GitHub, ressurser, diskplass og avanserte valg som Parquedit-støtte.
 
-Det viktigste som er spesifikt for Marimo ligger under tjenestedelen (bilde kommer):
+Det viktigste er den delen som er spesifikt for Marimo-dashboard:
 
-```text
-Dashboard-repo                     Oppstartsmåte                     Aktiver Marimo-studio
-┌────────────────────────────┐    ┌────────────────────────────┐    ┌────────────────────────────┐
-│                            │    │ Edit-modus                 │    │                       ◯─── │
-│                            │    ├────────────────────────────┤    │                       OFF │
-└────────────────────────────┘    │ App-modus                  │    └────────────────────────────┘
-                                  └────────────────────────────┘
-```
+![](../images/dapla-lab-marimo-dashboard-configuration.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo dashboard configuration"}
 
 
 ### Oppstartsmåte
 
-* Edit-modus brukes når man skal utvikle et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
-* App-modus brukes når man vil starte et dashboard som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet. 
+* *Edit*-modus brukes når man skal utvikle et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
+* *Run*-modus brukes når man vil kjøre et dashboard som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet. 
 
 ### Dashboard-repo
 
@@ -56,19 +49,7 @@ Hva som forventes av repoet avhenger av oppstartsmåte:
 
 Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
 
-
-### Marimo-studio
-
-Marimo-studio er en utvidelse til Marimo som kan skrus på hvis man ønsker mer kontroll på utseendet til applikasjonen (gjennom vanlig html og css), som i følgende eksempel:
-
-![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
-
-Å skru på Marimo-studio har følgende effekt:
-
-* I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view* til en notebook, samt mulighet for å forhåndsvise viewet.
-* I app-modus vil Marimo prøve å åpne notebookens tilhørende view dersom det finnes (hvis ikke åpnes standard Marimo-visning).
-
-## Bruksmoduser
+## Bruksmåter
 
 ### Edit-modus
 
@@ -82,8 +63,11 @@ Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modu
 
 ### Marimo-studio
 
-For å ta i bruk Marimo-studio, starter man tjenesten i edit-modus med Marimo-studio skrudd på.
-Deretter følger man disse stegene:
+Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen (gjennom vanlig html og css), som i følgende eksempel:
+
+![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
+
+For å ta i bruk Marimo-studio, starter man tjenesten i edit-modus og følger disse stegene:
 
 1. Åpne en eksisterende notebook i `dashboards/`, eller opprett en ny notebook.
 
@@ -100,7 +84,7 @@ Det anbefales å sjekke inn disse filene til Github.
 Pass imidlertid på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen.
 Anbefalt tillegg til `.gitignore` er:
 
-```
+```{.text filename=".gitignore"}
 __marimo__/session/
 ```
 
@@ -122,7 +106,8 @@ Dersom man vil utvikle dashboards med mulighet for å utforske og visualisere da
 
 
 Filutforskeren kan opprettes med følgende kodecelle og konfigureres etter behov:
-```py
+
+```{.python filename="Marimo kodecelle"}
 import marimo as mo
 
 file_browser = mo.ui.file_browser(
@@ -137,7 +122,7 @@ file_browser
 Variabelen `file_browser` vil til enhver tid inneholde hvilken fil som er valgt av brukeren.
 Denne kan brukes i en ny kodecelle, for eksempel til å vise en tabell med dataene:
 
-```py
+```{.python filename="Marimo kodecelle"}
 
 import polars as pl
 
