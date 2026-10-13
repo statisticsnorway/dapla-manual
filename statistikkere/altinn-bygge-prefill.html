@@ -913,7 +913,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#skjema-prefill-meta" id="toc-skjema-prefill-meta" class="nav-link active" data-scroll-target="#skjema-prefill-meta">Skjema prefill meta</a>
+  <li><a href="#test--og-produksjonsmiljø" id="toc-test--og-produksjonsmiljø" class="nav-link active" data-scroll-target="#test--og-produksjonsmiljø">Test- og produksjonsmiljø</a></li>
+  <li><a href="#skjema-prefill-meta" id="toc-skjema-prefill-meta" class="nav-link" data-scroll-target="#skjema-prefill-meta">Skjema prefill meta</a>
   <ul class="collapse">
   <li><a href="#metadata-beskrivelse" id="toc-metadata-beskrivelse" class="nav-link" data-scroll-target="#metadata-beskrivelse">Metadata beskrivelse</a></li>
   <li><a href="#hente-prefill-meta-med-kode" id="toc-hente-prefill-meta-med-kode" class="nav-link" data-scroll-target="#hente-prefill-meta-med-kode">Hente prefill meta med kode</a></li>
@@ -925,7 +926,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sjekk-prefill-for-utvalget" id="toc-sjekk-prefill-for-utvalget" class="nav-link" data-scroll-target="#sjekk-prefill-for-utvalget">Sjekk prefill for utvalget</a></li>
   <li><a href="#eksempelkode" id="toc-eksempelkode" class="nav-link" data-scroll-target="#eksempelkode">Eksempelkode</a>
   <ul class="collapse">
-  <li><a href="#ra-0678-ledige-stillinger" id="toc-ra-0678-ledige-stillinger" class="nav-link" data-scroll-target="#ra-0678-ledige-stillinger">RA-0678 (Ledige stillinger)</a></li>
+  <li><a href="#ra-0867-kostra---energibruk-i-utvalgte-kommunale-formålsbygg" id="toc-ra-0867-kostra---energibruk-i-utvalgte-kommunale-formålsbygg" class="nav-link" data-scroll-target="#ra-0867-kostra---energibruk-i-utvalgte-kommunale-formålsbygg">RA-0867 (KOSTRA - Energibruk i utvalgte kommunale formålsbygg)</a></li>
   <li><a href="#ra-0255-omsetning-kostnader-og-investeringer-i-næringslivet" id="toc-ra-0255-omsetning-kostnader-og-investeringer-i-næringslivet" class="nav-link" data-scroll-target="#ra-0255-omsetning-kostnader-og-investeringer-i-næringslivet">RA-0255 (Omsetning, kostnader og investeringer i næringslivet)</a></li>
   </ul></li>
   </ul>
@@ -948,7 +949,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Sist endret</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">21.01.2026</p>
+      <p class="date-modified">12.10.2026</p>
     </div>
   </div>
     
@@ -973,6 +974,30 @@ Note
 <p>I utgangspunktet er det kun InternInfo som er obligatorisk “blokk” i instansieringsfila. I tillegg vil de aller fleste ha blokka for Kontakt (kontaktperson-info). Blokka for SkjemaData vil finnes for alle som har prefill ut over det som ligger i InternInfo.</p>
 </div>
 </div>
+<section id="test--og-produksjonsmiljø" class="level2">
+<h2 class="anchored" data-anchor-id="test--og-produksjonsmiljø">Test- og produksjonsmiljø</h2>
+<p>Det anbefales å sette opp og teste skjemaprefill i testmiljø før løsningen tas i bruk i produksjon. En typisk testprosess er:</p>
+<ol type="1">
+<li>Lagre prefill på testenhetene.</li>
+<li>Instansier skjemaet via Altinns testmiljø.</li>
+<li>Kontroller at skjemaet er forhåndsutfylt med forventede verdier.</li>
+</ol>
+<p>I testmiljø benyttes <a href="https://lab.dapla-test.ssb.no/">Dapla Lab Test</a> sammen med <a href="https://tt02.altinn.no/">Altinns testmiljø (TT02)</a>.</p>
+<p>Når løsningen er klar for produksjon, benyttes <a href="https://lab.dapla.ssb.no/">Dapla Lab</a> og <a href="https://altinn.no/">Altinns produksjonsmiljø</a>. For å teste skjemaprefill i produksjon legges en SSB-enhet inn i utvalget. Dette gjør det mulig å verifisere at skjemaet blir korrekt forhåndsutfylt i produksjonsmiljøet før løsningen tas i ordinær bruk.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Det anbefales å teste alle endringer i skjemaprefill i Dapla Lab Test og TT02 før de tas i bruk i produksjon. Dette gjør det enklere å avdekke feil i prefill uten å påvirke ordinære rapportører.</p>
+</div>
+</div>
+</section>
 <section id="skjema-prefill-meta" class="level2">
 <h2 class="anchored" data-anchor-id="skjema-prefill-meta">Skjema prefill meta</h2>
 <p>For hver skjemaversjon eksisterer det en skjema prefill meta tabell. Tabellen gir informasjon om hvilke skjemaspesifikke prefill-felter som skjemaet kan inneholde.</p>
@@ -1138,6 +1163,7 @@ Tabell&nbsp;1: Prefill Meta
 <section id="lagre-prefill-data" class="level2">
 <h2 class="anchored" data-anchor-id="lagre-prefill-data">Lagre prefill data</h2>
 <p>For å lagre prefill for en enhet bruker du metoden <code>save_prefill_for_enhet</code> i <code>SuvClient</code>. Metoden lagrer skjemaprefill for en spesifikk enhet i utvalget. Beskrivelse av hvordan du henter utvalg finner du på siden <a href="./altinn-sfu.html">Utvalg fra SFU</a></p>
+<p>Parameteren <code>undersokelsesnummer</code> er valgfri. Dersom den ikke oppgis, brukes standardverdien <code>None</code>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -1147,21 +1173,22 @@ Tabell&nbsp;1: Prefill Meta
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> client.save_prefill_for_enhet(</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     ra_nummer <span class="op">=</span> <span class="st">'RA-0666A3'</span>,</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     versjon <span class="op">=</span> <span class="dv">1</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>     periode_aar <span class="op">=</span> <span class="dv">2024</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     periode_type <span class="op">=</span> <span class="st">'KVRT'</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     periode_nr <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     enhetsident <span class="op">=</span> <span class="st">'A3TF0018'</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>     enhetstype <span class="op">=</span> <span class="st">'FRTK'</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>     prefill <span class="op">=</span> {</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"innkjoptElektriskKost"</span>: <span class="dv">10</span>, </span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"innkjoptElektriskKraft"</span>: <span class="dv">20</span>, </span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"GassOgPetroleumKost"</span>: [</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"produktTypeBruktId"</span>: <span class="st">"1"</span>},</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"produktTypeBruktId"</span>: <span class="st">"2"</span>}</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    }                  </span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a> )</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)    </span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>     undersokelsesnummer<span class="op">=</span><span class="st">'12345'</span>,  <span class="co"># valgfri</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     periode_aar <span class="op">=</span> <span class="dv">2024</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     periode_type <span class="op">=</span> <span class="st">'KVRT'</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     periode_nr <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>     enhetsident <span class="op">=</span> <span class="st">'A3TF0018'</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>     enhetstype <span class="op">=</span> <span class="st">'FRTK'</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>     prefill <span class="op">=</span> {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"innkjoptElektriskKost"</span>: <span class="dv">10</span>, </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"innkjoptElektriskKraft"</span>: <span class="dv">20</span>, </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"GassOgPetroleumKost"</span>: [</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"produktTypeBruktId"</span>: <span class="st">"1"</span>},</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"produktTypeBruktId"</span>: <span class="st">"2"</span>}</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    }                  </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(output)    </span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><a href="#tbl-lagre-prefill-param" class="quarto-xref">Tabell&nbsp;2</a> viser en beskrivelse av de ulike parameterne i <code>save_prefill_for_enhet</code></p>
 <div id="tbl-lagre-prefill-param" class="striped quarto-float quarto-figure quarto-figure-center anchored">
@@ -1191,26 +1218,30 @@ Tabell&nbsp;2: Beskrivelse av parametere
 <td style="text-align: left;">Skjemaversjon.</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">undersokelsesnummer</td>
+<td style="text-align: left;">Valgfri parameter. Må oppgis dersom samme RA-nummer og versjon finnes flere ganger i samme periode med ulike undersøkelsesnumre. Dette brukes for å identifisere riktig undersøkelse.</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">periode_aar</td>
 <td style="text-align: left;">Årstall for perioden.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">periode_type</td>
 <td style="text-align: left;">Periode type. Gyldige verdier er <code>AAR</code>, <code>MND</code>, <code>KVRT</code>, <code>UKE</code></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">periode_nr</td>
 <td style="text-align: left;">Periode nummer</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">enhetsident</td>
 <td style="text-align: left;">Identifikator for enheten.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">enhetstype</td>
 <td style="text-align: left;">Type enhet. Gyldige verdier er <code>FRTK</code>, <code>BEDR</code>, <code>PERS</code></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">prefill</td>
 <td style="text-align: left;">Prefill-data i gyldig JSON-format.</td>
 </tr>
@@ -1223,6 +1254,7 @@ Tabell&nbsp;2: Beskrivelse av parametere
 <section id="validering-av-prefill-data" class="level2">
 <h2 class="anchored" data-anchor-id="validering-av-prefill-data">Validering av prefill data</h2>
 <p>Validering av skjemaprefill sikrer at dataene oppfyller kravene til struktur og innhold. Dette gjøres automatisk i <code>save_prefill_for_enhet</code>. Feil i valideringen vil føre til at dataene ikke lagres, og det gis en feilmelding. Dersom du ønsker å sjekke om prefill er gyldig før lagring er dette mulig ved hjelp av metoden <code>validate_skjemadata</code>.</p>
+<p>Parameteren <code>undersokelsesnummer</code> er valgfri. Dersom den ikke oppgis, brukes standardverdien <code>None</code>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -1232,8 +1264,9 @@ Tabell&nbsp;2: Beskrivelse av parametere
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>client.validate_skjemadata(      </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        ra_nummer <span class="op">=</span> <span class="st">'RA-0678A3'</span>,</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        versjon <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        skjemadata <span class="op">=</span> {<span class="st">"antallAnsattePrefill"</span>: <span class="st">"10"</span>}</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)   </span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        undersokelsesnummer<span class="op">=</span><span class="st">'12345'</span>,  <span class="co"># valgfri</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        skjemadata <span class="op">=</span> {<span class="st">"antallAnsattePrefill"</span>: <span class="st">"10"</span>}</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)   </span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><a href="./altinn-dapla-suv-tools.html">dapla-suv-tools pakken</a> inneholder også metoder for å hente ut lagret prefill og slette prefill. Det er mulig å slette prefill enten på enhetsnivå eller skjemanivå.</p>
 <p>Valideringen er basert på <a href="https://pypi.org/project/jsonschema/">JSON Schema</a>.</p>
@@ -1334,27 +1367,48 @@ Resultatet kan brukes til kvalitetssikring før utsending.</p></li>
 <section id="eksempelkode" class="level2">
 <h2 class="anchored" data-anchor-id="eksempelkode">Eksempelkode</h2>
 <p><a href="https://github.com/statisticsnorway/s821-datafangst-python/tree/main/src/notebooks/Prefill%20eksempler">Noe demokode ligger i repoet</a>, og kan være ett godt utgangspunkt å kopiere og endre fra.</p>
-<section id="ra-0678-ledige-stillinger" class="level3">
-<h3 class="anchored" data-anchor-id="ra-0678-ledige-stillinger">RA-0678 (Ledige stillinger)</h3>
-<p>Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0678 (Ledige stillinger). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert.</p>
+<section id="ra-0867-kostra---energibruk-i-utvalgte-kommunale-formålsbygg" class="level3">
+<h3 class="anchored" data-anchor-id="ra-0867-kostra---energibruk-i-utvalgte-kommunale-formålsbygg">RA-0867 (KOSTRA - Energibruk i utvalgte kommunale formålsbygg)</h3>
+<p>Dette eksemplet viser hvordan du kan bygge skjemaprefill for RA-0867 (KOSTRA - Energibruk i utvalgte kommunale formålsbygg). Nedenfor ser du hvordan innholdet i SkjemaData blokka er strukturert.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"SkjemaData"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"antallAnsattePrefill"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">},</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"datoPrefill"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"string"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Skjemaet inneholder to felter som skal forhåndsutfylles. Det er <code>antallAnsattePrefill</code> og <code>datoPrefill</code>.</p>
-<p><a href="#tbl-prefill-ra0678" class="quarto-xref">Tabell&nbsp;3</a> beskriver feltene som kan forhåndsutfylles.</p>
-<div id="tbl-prefill-ra0678" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"prefill"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"object"</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"properties"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"pfElektrisitetAarMinus1"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"integer"</span><span class="fu">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"title"</span><span class="fu">:</span> <span class="st">"Prefill elektrisitet forrige år"</span><span class="fu">,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Prefillfelt. Brukes i tabellen"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">},</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"pfFjernvarmeAarMinus1"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"integer"</span><span class="fu">,</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"title"</span><span class="fu">:</span> <span class="st">"Prefill fjernvarme forrige år"</span><span class="fu">,</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Prefillfelt. Brukes i tabellen"</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">},</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"pfFyringsoljeOgParafinAarMinus1"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"integer"</span><span class="fu">,</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"title"</span><span class="fu">:</span> <span class="st">"Prefill fyringsolje og parafin forrige år"</span><span class="fu">,</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Prefillfelt. Brukes i tabellen"</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>            <span class="fu">},</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"pfNaturgassOgLPGAarMinus1"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"integer"</span><span class="fu">,</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"title"</span><span class="fu">:</span> <span class="st">"Prefill naturgass og LPG forrige år"</span><span class="fu">,</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Prefillfelt. Brukes i tabellen"</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">},</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"pfBioenergiAarMinus1"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"integer"</span><span class="fu">,</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"title"</span><span class="fu">:</span> <span class="st">"Prefill bioenergi forrige år"</span><span class="fu">,</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>                <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Prefillfelt. Brukes i tabellen"</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>          <span class="fu">}</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Skjemaet inneholder fem felter som skal forhåndsutfylles.</p>
+<p><a href="#tbl-prefill-ra0867" class="quarto-xref">Tabell&nbsp;3</a> beskriver feltene som kan forhåndsutfylles.</p>
+<div id="tbl-prefill-ra0867" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prefill-ra0678-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-prefill-ra0867-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Tabell&nbsp;3: Prefill felter
 </figcaption>
-<div aria-describedby="tbl-prefill-ra0678-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-prefill-ra0867-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
 <colgroup>
 <col style="width: 17%">
@@ -1368,19 +1422,31 @@ Tabell&nbsp;3: Prefill felter
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">antallAnsattePrefill</td>
-<td style="text-align: left;">-</td>
+<td style="text-align: left;">pfElektrisitetAarMinus1</td>
+<td style="text-align: left;">prefill</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">datoPrefill</td>
-<td style="text-align: left;">-</td>
+<td style="text-align: left;">pfFjernvarmeAarMinus1</td>
+<td style="text-align: left;">prefill</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pfFyringsoljeOgParafinAarMinus1</td>
+<td style="text-align: left;">prefill</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pfNaturgassOgLPGAarMinus1</td>
+<td style="text-align: left;">prefill</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pfBioenergiAarMinus1</td>
+<td style="text-align: left;">prefill</td>
 </tr>
 </tbody>
 </table>
 </div>
 </figure>
 </div>
-<p>Eksempelet leser prefill-data fra en tekstfil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.</p>
+<p>Eksempelet leser prefill-data fra en json fil og bygger den nødvendige strukturen for å forhåndsutfylle skjemaet for utvalgte enheter.</p>
 </section>
 <section id="ra-0255-omsetning-kostnader-og-investeringer-i-næringslivet" class="level3">
 <h3 class="anchored" data-anchor-id="ra-0255-omsetning-kostnader-og-investeringer-i-næringslivet">RA-0255 (Omsetning, kostnader og investeringer i næringslivet)</h3>
