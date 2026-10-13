@@ -964,14 +964,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p><a href="../images/altinn_logo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/altinn_logo.png" class="img-fluid" style="max-width: 50%; float: right;" alt="Dapla logo"></a></p>
-<p>Skjemadata fra Altinn 3 lagres og forvaltes av Team SU-V på Dapla. Statistikkseksjonene henter data fra Team SU-Vs lagringsområde og kan deretter bearbeide og analysere dataene i egne Dapla-team.</p>
-<p>For å ta i bruk data fra en undersøkelse i Altinn 3 består prosessen i hovedsak av følgende steg:</p>
+<p>Datafangst fra Altinn 3 håndteres av <a href="https://statistics-norway.atlassian.net/wiki/spaces/CUL/pages/2805530625/Teamsider">Team SU-V</a>. Statistikkseksjonene henter data fra Team SU-Vs lagringsområde og kan deretter bearbeide og analysere dataene i egne Dapla-team. For å ta i bruk data fra en undersøkelse i Altinn 3 består prosessen i hovedsak av følgende steg:</p>
 <ol type="1">
 <li>Opprett et <a href="./opprette-dapla-team.html">Dapla-team</a> dersom undersøkelsen ikke allerede har et eget team.</li>
 <li>Be Team SU-V om tilgang til teamets <em>Transfer Service</em> instans gjennom Kundeservice og <a href="https://ssb.pureservice.com/">selvbetjeningsportalen</a>. Merk at det må gis separate tilganger for test- og produksjonsmiljø. For å søke om tilgang velger du <strong>Meld sak til Spørreundersøkelser virksomhet (SU-V)</strong>.</li>
 <li>Team SU-V gir deretter nødvendige tilganger slik at statistikkteamet kan sette opp overføring av data fra Team SU-Vs lagringsbøtter til egen kildebøtte.</li>
 <li>Sett opp en automatisk overføring av skjemadata med <a href="./transfer-service.html">Transfer Service</a> fra Team SU-Vs lagringsområde til Dapla-teamets kildebøtte.</li>
-<li>Begynn å jobbe med dataene i Dapla. Dataene kan prosesseres videre ved hjelp av Daplas verktøy og automatiseringstjenester.</li>
+<li>Statistikkprodusentene kan begynne å jobbe med dataene i Dapla. Blant annet tilbyr Dapla en <strong>automatiseringstjeneste</strong> som man kan bruke for å prosessere dataene fra kildedata til inndata<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</li>
 </ol>
 <p>I resten av kapitlet beskrives hvordan statistikkteam kan hente, overføre og arbeide med data fra Altinn 3 på Dapla.</p>
 <section id="ansvarsfordeling" class="level2">
@@ -997,7 +996,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Dataene som hentes inn av Team SU-V lagres som <strong>xml</strong>-filer i en bøtte. Statistikkteamet som skal hente inn dataene synkroniseres deretter dataene til sin delt-bøtte med <a href="../statistikkere/transfer-service.html">Transfer Service</a>. Det finnes både data og metadata om hvert skjema som sendes inn og under forklares innholdet i hver av de.</p>
 <section id="skjemadata" class="level3">
 <h3 class="anchored" data-anchor-id="skjemadata">Skjemadata</h3>
-<p>Hvert skjema som leveres inn av en oppgavegiver blir lagret som en separat xml-fil med et unikt filnavn<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Under ser du et eksempel på hvordan et skjema kan se ut.</p>
+<p>Hvert skjema som leveres inn av en oppgavegiver blir lagret som en separat xml-fil med et unikt filnavn<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Under ser du et eksempel på hvordan et skjema kan se ut.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1148,8 +1147,8 @@ Når vi bruker Transfer Service til å synkronisere innholdet i Team SU-V sitt l
 <ol type="1">
 <li>Følg denne beskrivelsen hvordan man <a href="./transfer-service.html#overføring-av-data">setter opp overføringsjobber</a>.</li>
 <li>Etter at du har trykket på <code>Create Transfer Job</code> velger du <strong>Google Cloud Storage</strong> på begge alternativene under <strong>Get Started</strong>. Deretter går du videre ved å klikke på <strong>Next Step</strong>.</li>
-<li>Under <strong>Choose a source</strong> så skal du velge hvor du skal kopiere data fra. Trykk på <strong>Browse</strong>. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av <strong>Project ID</strong>. I søkevinduet som dukker opp søker du opp <strong>suv-altinn-data-p</strong> og trykker på navnet. Da får du listet opp alle bøttene i suv-altinn-data-p prosjektet. Til slutt trykker du på bøtta som Team SU-V har opprettet for undersøkelsen<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> og klikker <strong>Select</strong> til nederst på siden. Trykk deretter <strong>Next step</strong> for å gå videre.</li>
-<li>Under <strong>Choose a destination</strong> så skal du velge hvor du skal kopiere data til. Dette steget er ganske likt som forrige, men du skal nå velge ditt eget projekt og kildebøtta der. Trykk på <strong>Browse</strong>. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av <strong>Project ID</strong>. I søkevinduet som dukker opp søker du opp <strong>&lt;ditt teamnavn&gt;-kilde-&lt;miljø&gt;</strong> og trykker på navnet. Da får du listet opp alle bøttene i ditt team sitt prosjekt. Velg kildebøtta som har navnet <strong>ssb-&lt;teamnavn&gt;-kilde-&lt;miljø&gt;</strong>. Hvis du ønsker å kopiere data til en undermappe i bøtta, så trykker du på <span style="color:red;"><strong>&gt;</strong></span>-ikonet ved bøttenavnet og velger ønsket undermappe<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Til slutt trykker du på <strong>Select</strong> til nederst på siden. Trykk deretter <strong>Next step</strong> for å gå videre.</li>
+<li>Under <strong>Choose a source</strong> så skal du velge hvor du skal kopiere data fra. Trykk på <strong>Browse</strong>. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av <strong>Project ID</strong>. I søkevinduet som dukker opp søker du opp <strong>suv-altinn-data-p</strong> og trykker på navnet. Da får du listet opp alle bøttene i suv-altinn-data-p prosjektet. Til slutt trykker du på bøtta som Team SU-V har opprettet for undersøkelsen<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> og klikker <strong>Select</strong> til nederst på siden. Trykk deretter <strong>Next step</strong> for å gå videre.</li>
+<li>Under <strong>Choose a destination</strong> så skal du velge hvor du skal kopiere data til. Dette steget er ganske likt som forrige, men du skal nå velge ditt eget projekt og kildebøtta der. Trykk på <strong>Browse</strong>. I vinduet som dukker opp trykker du på 🔻-ikonet ved siden av <strong>Project ID</strong>. I søkevinduet som dukker opp søker du opp <strong>&lt;ditt teamnavn&gt;-kilde-&lt;miljø&gt;</strong> og trykker på navnet. Da får du listet opp alle bøttene i ditt team sitt prosjekt. Velg kildebøtta som har navnet <strong>ssb-&lt;teamnavn&gt;-kilde-&lt;miljø&gt;</strong>. Hvis du ønsker å kopiere data til en undermappe i bøtta, så trykker du på <span style="color:red;"><strong>&gt;</strong></span>-ikonet ved bøttenavnet og velger ønsket undermappe<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Til slutt trykker du på <strong>Select</strong> til nederst på siden. Trykk deretter <strong>Next step</strong> for å gå videre.</li>
 <li>Under <strong>Choose how and when to run job</strong> velger du <strong>Run with custom frequency</strong> og <strong>Starting now</strong> i <strong>Batch</strong>-modus. Hvis du ønsker å overføre så ofte som mulig, så velger du <strong>Custom frequency</strong> og <strong>Repeat every 1 Hours</strong>. Til slutt trykker du <strong>Next Step</strong> nederst på siden.</li>
 <li>Under <strong>Choose Settings</strong> så legger du til en kort beskrivelse av jobben du har opprettet. Under de andre valgene kan du gjøre følgende:
 <ul>
@@ -1175,7 +1174,7 @@ Figur&nbsp;3: Valg av opsjoner for logging i Transfer Service
 </section>
 <section id="kildomaten" class="level2">
 <h2 class="anchored" data-anchor-id="kildomaten">Kildomaten</h2>
-<p>Når du har satt opp Transfer Service til å kopiere over filer fra Team SU-V sin bøtte til statistikkteamets kildebøtte, så vil det potensielt komme inn nye skjemaer hver time. Siden ingen på statistikkteamet har tilgang til kildebøtta som standard<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, så er neste steg å prosessere dataene med <a href="../statistikkere/kildomaten.html">Kildomaten</a> og lagre dataene i produktbøtta hvot alle i teamet har tilgang.</p>
+<p>Når du har satt opp Transfer Service til å kopiere over filer fra Team SU-V sin bøtte til statistikkteamets kildebøtte, så vil det potensielt komme inn nye skjemaer hver time. Siden ingen på statistikkteamet har tilgang til kildebøtta som standard<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, så er neste steg å prosessere dataene med <a href="../statistikkere/kildomaten.html">Kildomaten</a> og lagre dataene i produktbøtta hvot alle i teamet har tilgang.</p>
 <p><a href="./kildomaten.html">Les mer om hvordan du kan bruker tjenesten her.</a></p>
 </section>
 <section id="altinn3-til-isee" class="level2">
@@ -1199,10 +1198,11 @@ Figur&nbsp;3: Valg av opsjoner for logging i Transfer Service
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fotnoter</h2>
 
 <ol>
-<li id="fn1"><p>Teknisk sett er hele filstien det samme som et filnavn i en bøtte. Men det omtales heretter som <em>filnavn</em> og <em>filsti</em> for å kunne skille mellom hele stien, og det som tradisjonelt er oppfattet som filnavn.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Bøttenavnet starter alltid med RA-nummeret til undersøkelsen.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Alternativt oppretter du en mappe direkte vinduet ved å trykke på mappe-ikonet med en <strong>+</strong>-tegn i seg.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Kun data-admins i teamet kan aktivere tilgang ved behov<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>En typisk prosessering som de fleste vil ønske å gjøre er å konvertere fra xml-formatet det kom på, og over til parquet-formatet.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Teknisk sett er hele filstien det samme som et filnavn i en bøtte. Men det omtales heretter som <em>filnavn</em> og <em>filsti</em> for å kunne skille mellom hele stien, og det som tradisjonelt er oppfattet som filnavn.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Bøttenavnet starter alltid med RA-nummeret til undersøkelsen.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Alternativt oppretter du en mappe direkte vinduet ved å trykke på mappe-ikonet med en <strong>+</strong>-tegn i seg.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Kun data-admins i teamet kan aktivere tilgang ved behov<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
