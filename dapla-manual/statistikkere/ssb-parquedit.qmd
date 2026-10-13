@@ -145,7 +145,7 @@ Man kan opprette en ny Parquedit-tabell basert på følgende input:
 - Dataframe i minnet (Pandas, Polars, etc.)
 - json-skjema
 
-Ved opprettelse av tabeller lages det automatisk en kolonne **rowid** som fungerer som en unik identifikator for hver rad innen en tabell. Hver rad i tabellen får dermed en unik **rowid** som brukes til å identifisere raden ved editering.
+Ved opprettelse av tabeller lages det automatisk en kolonne **rowid** som fungerer som en unik identifikator for hver rad innen en tabell. Hver rad i tabellen får dermed en unik **rowid** som brukes til å identifisere raden ved editering. **rowid** er et reservert kolonnenavn og kan ikke benyttes som kolonnenavn i tabeller som lastes inn.
 
 ::: {.panel-tabset}
 
@@ -187,14 +187,15 @@ con.create_table(
 
 Følgende argumenter må oppgis ved opprettelse av ny tabell:
 
-`table_name` er det navnet på tabellen du ønsker å opprette. Siden et team kan ha flere tabeller, er det dette navnet som benyttes senere for å referere til tabellen. 
+`table_name` er det navnet på tabellen du ønsker å opprette. Siden et team kan ha flere tabeller, er det dette navnet som benyttes senere for å referere til tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.
 
 `source` er kilden (Parquet, Dataframe eller json-skjema) som skal benyttes til å opprette tabellen.
 
-`product_name` er obligatorisk og lagres som en kommentar på tabellen. Tabellnavn må være lowercase, starte med bokstav eller underscore, kun inneholde lowercase-bokstaver, tall og underscore, og være maks 20 tegn.
+`product_name` er obligatorisk og lagres som en kommentar på tabellen. 
 
 `user_defined_id` er en liste med kolonner som til sammen unikt identifiserer en rad, tilsvarende en primærnøkkel.
 
+`fill` er et boolsk argument som angir om tabellen skal fylles med eksisterende data fra kilden ved opprettelse. 
 
 #### Partisjonert tabeller
 
@@ -212,7 +213,7 @@ con.create_table(
 ```
 
 ### Laste data
-
+Last inn data i en eksisterende tabell
 ```{.python filename="Notebook"}
 con.insert_data(
     table_name="manuell_tabell",
@@ -335,6 +336,18 @@ Dette gir blant annet:
 - `where`-betingelsen som ble brukt ved sletting av rad(er)
 - hvor mange rader som ble påvirket av endringen
 
+### Timetravel
+`time_travel()` – Tar ut en tabell slik den så ut på et bestemt tidspunkt, bruker DuckLakes timetravelfunksjon. Godtar de samme argumentene som view() (where, limit, offset, columns, order_by og output_format). `at_time` angir tidspunktet for timetravel på formatet `YYYY-MM-DD HH:MM:SS`
+
+```{.python filename="Notebook"}
+# Timetravel for en tabell
+tabell_paa_tidspunkt = con.time_travel(
+    table_name="manuell_tabell",
+    at_time="2026-09-26 00:00:00",
+    where="aar=2025"
+)
+```
+
 ### Backup
 
 ::: {.callout-caution}
@@ -342,8 +355,6 @@ Dette gir blant annet:
 
 I første versjon av ssb-parquedit tas det **ikke** en sentral backup av enkelttabeller. Det vil si at hvis en tabell blir ødelagt, så kan den ikke gjenskapes. Derfor anbefaler vi at brukerne eksporterer teamets tabeller med jevne mellomrom slik at den kan gjennopprettes ved behov med funksjonen [`export_catalog()`](#eksporter-katalog). Det er også anbefalt å eksportere endringshistorikken med jevne mellomrom med funksjonen [´get_edits()´](#endringshistorikk). 
 :::
-
-
 
 
 
