@@ -59,14 +59,14 @@ Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
 
 ### Marimo-studio
 
-Marimo-studio er en utvidelse til Marimo som kan skrus på dersom man ønsker å lage sine egne *views* med html og css, slik at man får mer kontroll på utseendet til den ferdige applikasjonen, som i følgende eksempel:
+Marimo-studio er en utvidelse til Marimo som kan skrus på hvis man ønsker mer kontroll på utseendet til applikasjonen (gjennom vanlig html og css), som i følgende eksempel:
 
 ![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
 
-Marimo-studio kan skrus på med begge oppstartsmåter og har følgende effekt:
+Å skru på Marimo-studio har følgende effekt:
 
-* I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view*, samt mulighet for å fårhåndvise viewet.
-* I app-modus vil Marimo prøve å åpne notebookens tilhørende view dersom det finnes (ellers åpnes standard Marimo-visning).
+* I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view* til en notebook, samt mulighet for å forhåndsvise viewet.
+* I app-modus vil Marimo prøve å åpne notebookens tilhørende view dersom det finnes (hvis ikke åpnes standard Marimo-visning).
 
 ## Bruksmoduser
 
@@ -83,7 +83,7 @@ Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modu
 ### Marimo-studio
 
 For å ta i bruk Marimo-studio, starter man tjenesten i edit-modus med Marimo-studio skrudd på.
-Deretter følger man disse stegene for a lage et *view*:
+Deretter følger man disse stegene:
 
 1. Åpne en eksisterende notebook i `dashboards/`, eller opprett en ny notebook.
 
@@ -97,8 +97,7 @@ Deretter følger man disse stegene for a lage et *view*:
 
 Legg merke de nye filene og spesielt `index.html` der viewet ligger.
 Det anbefales å sjekke inn disse filene til Github.
-
-Pass på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen.
+Pass imidlertid på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen.
 Anbefalt tillegg til `.gitignore` er:
 
 ```
@@ -135,8 +134,8 @@ file_browser = mo.ui.file_browser(
 file_browser
 ```
 
-Variabelen `file_browser` kan nå brukes i en ny kodecelle for å jobbe videre med filen som er valgt av brukeren.
-Vi kan for eksempel vise dataene i en Marimo-tabell:
+Variabelen `file_browser` vil til enhver tid inneholde hvilken fil som er valgt av brukeren.
+Denne kan brukes i en ny kodecelle, for eksempel til å vise en tabell med dataene:
 
 ```py
 
@@ -151,7 +150,7 @@ else:
 output
 ```
 
-Slike applikasjoner vil være gjenbrukbare på tvers av team, ettersom man vil se de dataene man selv har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, det vil si at tabellen umiddelbart oppdateres når brukeren endrer fil.
+En slik applikasjon vil være gjenbrukbar på tvers av team, ettersom man kun vil se dataene man selv har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, det vil si at tabellen umiddelbart oppdateres når brukeren endrer fil.
 
 
 ## Installere pakker
@@ -160,11 +159,11 @@ Pakker installeres i selve notebooken gjennom Marimo-grensesnittet:
 
 ![](../images/marimo-package-dependencies.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo save file"}
 
-Listen over pakker åpnes med tredje menyvalg fra toppen, og viser alle pakkene som er installert i notebooken.
-For å legge til flere pakker, skriver man pakkenavnet inputfeltet over listen og trykker "Add".
+Listen over innstallerte pakker åpnes med tredje menyvalg fra toppen.
+For å legge til flere pakker, skriver man pakkenavnet i inputfeltet over listen og trykker "Add".
 Spesifikke versjoner kan installeres med vanlig syntaks, for eksempel `dapla-toolbelt-metadata==0.19`.
 
-Når man ser på notebook-filen direkte, for eksempel i Github, kan man se avhengighetene i en metadatablokk øverst i filen: 
+Når man ser på notebook-filen i en vanlig teksteditor eller Github, vil man se avhengighetene i en metadatablokk øverst i filen: 
 
 ```py
 # /// script
@@ -206,4 +205,4 @@ Man kan pause tjenesten ved å trykke på **Pause**-knappen i Dapla Lab under **
 
 ## Monitorering
 
-Man kan monitorere en instans av Marimo ved å trykke på tjenesten under **Mine tjenester** i Dapla Lab. Derfra kommer man til overvåkningssiden for tjenesten, med lenker til teknisk informasjon og eksternt dashboard på samme måte som for andre tjenester i Dapla Lab. Se [monitorering i Dapla Lab](./dapla-lab.qmd#monitorering).
+Man kan monitorere en instans av Marimo-dashboard ved å trykke på tjenesten under **Mine tjenester** i Dapla Lab. Derfra kommer man til overvåkningssiden for tjenesten, med lenker til teknisk informasjon og eksternt dashboard på samme måte som for andre tjenester i Dapla Lab. Se [monitorering i Dapla Lab](./dapla-lab.qmd#monitorering).
