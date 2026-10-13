@@ -42,15 +42,15 @@ Bilde av konfigurasjonen
 
 ### Oppstartsmåte
 
-* Edit-modus brukes når man utvikler et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
-* App-modus brukes når man vil starte et dashboard som en selvstendig applikasjon, uten å vise verken kode eller Marimo-grensesnittet. 
+* Edit-modus brukes når man skal utvikle et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
+* App-modus brukes når man vil starte et dashboard som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet. 
 
 ### Dashboard-repo
 
 Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.
 Hva som forventes av repoet avhenger av oppstartsmåte:
 
-* I edit-modus forventes ingenting, og man kan selv opprette `dashboards/`-mappen og nye notebooks første gang man starter tjenesten.
+* I edit-modus forventes ingenting av repoet. Man kan selv opprette `dashboards/`-mappen og nye notebooks første gang man starter tjenesten.
 * I app-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
 
 Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
@@ -62,10 +62,10 @@ Marimo-studio er en utvidelse til Marimo som kan skrus på dersom man ønsker å
 
 ![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
 
-Marimo-studio kan aktiveres med begge moduser og ha følgende effekt:
+Marimo-studio kan skrus på med begge oppstartsmåter og har følgende effekt:
 
-* I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view*.
-* I app-modus vil Marimo prøve å åpne et tilhørende view dersom det finnes (ellers åpnes standard Marimo-visning).
+* I edit-modus vil Marimo ha en ekstra knapp for å legge til et *view*, samt mulighet for å fårhåndvise viewet.
+* I app-modus vil Marimo prøve å åpne notebookens tilhørende view dersom det finnes (ellers åpnes standard Marimo-visning).
 
 ## Bruksmoduser
 
@@ -94,13 +94,13 @@ Deretter følger man disse stegene for a lage et *view*:
 
 ![](../images/marimo-studio-preview.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo save file"}
 
-Merk fillokasjonen til `index.html` og de andre filene.
+Legg merke de nye filene og spesielt `index.html` der viewet ligger.
 Det anbefales å sjekke inn disse filene til Github.
 
 Pass på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen.
 Anbefalt tillegg til `.gitignore` er:
 
-```{.text code-copy="true"}
+```
 __marimo__/session/
 ```
 
@@ -121,7 +121,7 @@ Dersom man vil utvikle dashboards med mulighet for å utforske og visualisere da
 ![](../images/marimo-file-browser.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
 
 
-Opprett filutforskeren i en egen kodecelle og konfigurer etter behov:
+Filutforskeren kan opprettes med følgende kodecelle og konfigureres etter behov:
 ```py
 import marimo as mo
 
@@ -134,7 +134,8 @@ file_browser = mo.ui.file_browser(
 file_browser
 ```
 
-Den valgte filen kan nå hentes fra variabelen `file_browser` og for eksempel brukes til å vise en tabell:
+Variabelen `file_browser` kan nå brukes i en ny kodecelle for å jobbe videre med filen som er valgt av brukeren.
+Vi kan for eksempel vise dataene i en Marimo-tabell:
 
 ```py
 
@@ -149,18 +150,18 @@ else:
 output
 ```
 
-En slik applikasjon vil være gjenbrukbar på tvers av team, ettersom man vil se de bøttene man har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, alle celler som benytter seg av variabelen `file_browser` vil oppdateres når brukeren endrer filvalg.
-
+Slike applikasjoner vil være gjenbrukbare på tvers av team, ettersom man vil se de dataene man selv har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, det vil si at tabellen umiddelbart oppdateres når brukeren endrer fil.
 
 
 ## Installere pakker
 
-Marimo-dashboard-tjenesten skiller seg fra Marimo-tjenesten ved at den ikke tar i bruk Python-miljøet i prosjektet.
+Marimo-dashboard-tjenesten skiller seg fra Marimo-tjenesten ved at man ikke trenger et Python-miljø.
+Man trenger altså ikke å forholde seg til en `pyproject.toml`-fil når man bruker denne tjenesten.
 
-I stedet er tjenesten ment for å jobbe på frittstående notebooks i dashboards/-mappen av prosjektet.
-Tanken er at disse filene lett kan deles og reproduseres uavhengig av Python-miljø.
+I stedet er tjenesten ment for å jobbe på frittstående notebooks i `dashboards/`-mappen av prosjektet.
+Tanken er at disse filene lett kan deles og kjøres uavhengig av Python-miljø.
 
-I praksis betyr dette at man ikke forholder seg til en `pyproject.toml`-fil i denne tjenesten, men heller definerer avhengigheter direkte i notebook-filene. Man trenger i de fleste tilfeller ikke å gjøre noe spesielt; når man importerer pakker i koden, så vil Marimo automatisk foreslå å installere avhengigheter:
+Pakkeavhengighetene vil være definert i selve filen.
 
 Avhengighetene vil da deretter legges inn i filen slik at man ikke trenger å gjenta prosessen neste gang man åpner tjenesten.
 
