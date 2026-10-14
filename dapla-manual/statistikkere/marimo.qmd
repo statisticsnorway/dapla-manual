@@ -10,6 +10,17 @@ lightbox: true
 
 Siden tjenesten er ment for kode som skal kunne vedlikeholdes og reproduseres, er det bare et begrenset sett med pakker som er forhåndsinstallert. Antagelsen er at brukeren eller teamet heller installerer avhengighetene de faktisk trenger i prosjektet sitt, framfor at tjenesten skal forsøke å dekke alle behov på forhånd.
 
+## Bruksområde
+
+Marimo-tjenesten er ment som et alternativ til Jupyter-tjenesten, der man kan ha de samme arbeidsflytene, men med de fordelene som Marimo gir.
+
+Dersom man ønsker å bruke Marimo til å lage applikasjoner og dashboards, anbefales det å bruke tjenesten [Marimo-dashboards](./marimo-dashboard.qmd) som er skreddersydd til dette formålet.
+
+Den viktigste praktiske forskjellen mellom de to tjenestene er:
+
+* I Marimo-tjenesten får man prosjektets Python-miljø, og  man utvikler notebooks i `src/`-mappen.
+* I Marimo-dashboard-tjenesten får hver fil sitt eget Python-miljø, og man utvikler notebooks i `dashboards/`-mappen.
+
 ## Forberedelser
 
 Før man starter **Marimo** bør man ha lest [kapitlet om Dapla Lab](./dapla-lab.qmd) og satt opp Git- og GitHub-konfigurasjonen under **Min konto**. Deretter gjør du følgende:
@@ -25,36 +36,12 @@ Mye av konfigurasjonen for **Marimo** er lik det som gjelder for [Jupyter](./jup
 
 Det viktigste som er spesifikt for Marimo ligger under tjenestedelen:
 
-### Marimo-versjon
-
-Her velger man hvilken versjon av Marimo-tjenesten som skal startes. I praksis vil de fleste bruke standardvalget.
-
 ### Marimo-repo
 
 Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten. Dette er nyttig hvis man allerede har et prosjekt med Marimo-filer som man vil åpne direkte i tjenesten. Feltet støtter GitHub-repo.
 
-### App filsti
+Det kreves at repoet har et `uv`-prosjekt. Dersom feltet står tomt eller repoet ikke har et `uv`-prosjekt, vil Marimo åpnes med et nytt `uv`-prosjekt.
 
-Dette feltet styrer hvordan tjenesten starter:
-
-1. Hvis feltet står tomt, starter Marimo i **edit-modus**.
-2. Hvis feltet er satt til en filsti i repoet, starter Marimo i **app-modus** og kjører den aktuelle filen.
-
-Et eksempel på filsti kan være `src/app.py` eller `notebooks/demo.py`, avhengig av hvordan repoet er strukturert.
-
-## Bruksmoduser
-
-Marimo-tjenesten kan brukes på to ulike måter:
-
-### Edit-modus
-
-I edit-modus kan man utvikle og redigere Marimo-filer direkte i nettleseren. Dette passer når man skriver analysekode, bygger notebook-lignende arbeidsflater eller utvikler en app steg for steg.
-
-### App-modus
-
-I app-modus kjører tjenesten en bestemt Marimo-fil som en app. Dette passer når man allerede har laget en ferdig fil som skal vises som et brukergrensesnitt, for eksempel for utforsking av data eller deling av resultater internt i et team.
-
-Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus først.
 
 ## Data og Git/GitHub
 
