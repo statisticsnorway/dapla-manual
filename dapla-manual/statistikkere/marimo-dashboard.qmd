@@ -11,11 +11,6 @@ Tjenesten bygger på [Marimo](https://marimo.io/), som er et reaktivt Python-mil
 
 I tillegg kan man bruke [Marimo-studio](https://marimo-team.github.io/marimo-studio/), en utvidelse som gjør det lett å legge til form og stil ved hjelp av vanlig html og css.
 
-Tjenesten er basert på følgende premisser:
-
-* At repoet som klones har en mappe `dashboards/` på rotnivå.
-* At `dashboards/`-mappen inneholder Marimo-notebooks med deklarerte pakkeavhengigheter (se [Installere pakker](#installere-pakker)).
-
 ## Bruksområde
 
 Marimo-dashboard-tjenesten er egnet for å utvikle frittstående notebook-filer og åpne dem som selvstendige, interaktive applikasjoner.
@@ -50,10 +45,12 @@ Det viktigste er den delen som er spesifikt for Marimo-dashboard:
 ### Dashboard-repo
 
 Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.
-Hva som forventes av repoet avhenger av oppstartsmåte:
+
+Som konvensjon skal Github-repoet en mappe `dashboards/` på rotnivå.
+Hva som forventes av repoet avhenger av oppstartsmåten:
 
 * I edit-modus forventes ingenting av repoet. Man kan selv opprette `dashboards/`-mappen og nye notebook-filer første gang man starter tjenesten.
-* I run-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
+* I run-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks. Notebook-filene kan organiseres fritt i undermapper.
 
 Dersom feltet er tomt vil tjenesten åpne i `work/`-mappen og man kan selv klone eller opprette et nytt repo ved hjelp av terminalen.
 
@@ -91,13 +88,13 @@ Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modu
 
 ### Marimo-studio
 
-Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen gjennom vanlig html og css, som vist i følgende eksempel:
+Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen gjennom vanlig html og css:
 
 ![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Tabell i Parqueditor"}
 
 For å ta i bruk Marimo-studio starter man tjenesten i edit-modus og følger disse stegene:
 
-1. Åpne en eksisterende notebook i `dashboards/`, eller opprett en ny notebook.
+1. Åpne en eksisterende notebook-fil i `dashboards/`-mappen, eller opprett en ny notebook-fil.
 
 2. Klikk på "Add view" øverst til høyre, gi ønsket navn, velg "HTML document" og trykk "Create view".
 
@@ -141,12 +138,12 @@ from fsspec.implementations.dirfs import DirFileSystem
 fs = DirFileSystem("/buckets", fsspec.filesystem("file"))
 ```
 
-Deretter åpner man Marimos filutforsker fra sidemenyen og velger fanen "Remote Storage":
+Deretter åpner man Marimos filutforsker i sidemenyen.
+Fanen "Remote storage" vil vise innholdet i `/buckets`:
 
 ![](../images/marimo-buckets-explorer.png){style="max-width: 80%; margin: 1rem;" fig-alt="Vise innhold i buckets"}
 
-Merk at Marimo ikke har støtte for å åpne datafiler fra den innebygde filutforskeren.
-Man kan i stedet selv utvikle applikasjoner med både filutforsker og datavisning:
+Merk at Marimo-grensesnittet ikke har innebygd støtte for å åpne datafiler. Man kan imidlertid enkelt utvikle applikasjoner med både filutforsker og datavisning:
 
 ::: {.callout-note collapse="true" title="Skjermbilde"}
 ![](../images/marimo-file-browser.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo filutforskerkomponent"}
@@ -166,7 +163,7 @@ file_browser
 ```
 
 Variabelen `file_browser` vil til enhver tid inneholde hvilken fil som er valgt av brukeren.
-Denne kan brukes i en ny kodecelle, for eksempel til å vise en tabell med dataene:
+Denne kan brukes i en ny kodecelle, for eksempel til å vise dataene i en tabell-komponent:
 
 ```py
 
@@ -181,23 +178,23 @@ else:
 output
 ```
 
-Denne filuforsker-komponenten vil vise filene som teamet har tilgang til.
-Det vil si at den ferdige applikasjonen viser forskjellig data avhengig av hvilket team man åpner tjenesten med.
-
+Applikasjonen vil følge vanlig tilgangsstyring, det vil si at den viser dataene til teamet man åpner tjenesten med.
 
 ## Installere pakker
 
-Pakker installeres i selve notebooken gjennom Marimo-grensesnittet:
+Pakker installeres i selve notebooken ved hjelp av Marimo-grensesnittet:
 
 ![](../images/marimo-package-dependencies.png){style="max-width: 80%; margin: 1rem;" fig-alt="Pakkeavhengigheter i Marimo"}
 
-Man bruker tredje menyknapp helt til venstre for å åpne listen over installerte pakker.
-For å legge til flere pakker skriver man pakkenavnet i inputfeltet og trykker "Add".
-Spesifikke versjoner kan installeres med vanlig syntaks, for eksempel `dapla-toolbelt-metadata==0.19`.
+1. Pass på at du er i riktig notebook.
+2. Klikk på boks-ikonet i sidemenyen for å se installerte pakker.
+3. For å legge til flere pakker, skriv pakkenavnet i inputfeltet og trykk "Add".
+4. For å legge til pakker med en spesifikk versjon, skriv for eksempel `dapla-toolbelt-metadata==0.19` og trykk "Add".
 
-Når man ser på notebook-filen i en vanlig teksteditor eller Github, vil man se avhengighetene i en metadatablokk øverst i filen: 
+Hver notebook-fil vil ha sin egen liste av installerte pakker.
+Når man ser på notebook-filen i en vanlig teksteditor eller på Github, vil pakkene være deklarert øverst i filen: 
 
-::: {.callout-note collapse="true" title="Marimo-fil"}
+::: {.callout-note collapse="true" title="`test.py`"}
 ```py
 # /// script
 # dependencies = [
@@ -218,10 +215,22 @@ app = marimo.App(width="medium")
 def _():
     import dapla_metadata
     import polars as pl
+
+
+if __name__ == "__main__":
+    app.run()
 ```
 :::
 
-Denne metadatablokken gjør at filen kan kjøres helt isolert fra resten av prosjektet.
+Dette gjør at filen kan kjøres helt isolert fra resten av prosjektet.
+Videre kan den kjøres som en helt vanlig Python-fil:
+
+```sh  
+uv run test.py
+```
+
+Når man kjører denne kommandoen, vil først vil alle avhengighetene installeres, og deretter vil kodecellene kjøres i riktig rekkefølge.
+Interaktive komponenter vil bruke en default-verdi, som man kan konfigurere i de fleste tilfeller.
 
 ## Lagring av arbeid
 
