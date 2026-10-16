@@ -18,11 +18,9 @@ Tjenesten er basert på følgende premisser:
 
 ## Bruksområde
 
-Marimo-dashboard-tjenesten er egnet for å utvikle frittstående notebook-filer som ikke er avhengig av et prosjektmiljø for å kjøre.
-Notebook-filene kan deretter åpnes som selvstendige, interaktive applikasjoner.
+Marimo-dashboard-tjenesten er egnet for å utvikle frittstående notebook-filer og åpne dem som selvstendige, interaktive applikasjoner.
 
-Tjenesten benytter seg ikke av Python-prosjektet i repoet.
-Det er mulig å åpne prosjektmiljøet med den vanlige [Marimo-tjenesten](./marimo.qmd).
+Tjenesten benytter seg ikke av Python-prosjektet i repoet, men lager automatisk et isolert Python-miljø for hver notebook-fil.
 
 Marimo er skreddersydd for utvikling av `Python` og `SQL`-kode, og støtter ikke `R`.
 
@@ -46,28 +44,28 @@ Det viktigste er den delen som er spesifikt for Marimo-dashboard:
 
 ### Oppstartsmåte
 
-* *Edit*-modus brukes når man skal utvikle et dashboard, det vil si skrive kode i Marimo-grensesnittet. 
-* *Run*-modus brukes når man vil kjøre et dashboard som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet. 
+* *Edit*-modus brukes når man skal utvikle en notebook-fil, det vil si skrive kode i Marimo-grensesnittet. 
+* *Run*-modus brukes når man vil kjøre en notebook-fil som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet. 
 
 ### Dashboard-repo
 
 Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.
 Hva som forventes av repoet avhenger av oppstartsmåte:
 
-* I edit-modus forventes ingenting av repoet. Man kan selv opprette `dashboards/`-mappen og nye notebooks første gang man starter tjenesten.
+* I edit-modus forventes ingenting av repoet. Man kan selv opprette `dashboards/`-mappen og nye notebook-filer første gang man starter tjenesten.
 * I run-modus forventes en eksisterende `dashboards/`-mappe med én eller flere Marimo-notebooks.
 
-Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.
+Dersom feltet er tomt vil tjenesten åpne i `work/`-mappen og man kan selv klone eller opprette et nytt repo ved hjelp av terminalen.
 
 ## Funksjonalitet
 
 ### Edit-modus
 
-I denne modusen åpnes tjenesten med hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.
+I denne modusen åpnes hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.
 
-Marimo er rik på funksjoner og et brukervennlig grensesnitt som man kan lese mer om [her](https://docs.marimo.io/guides/editor_features/).
+Marimo er rik på funksjoner og har et brukervennlig grensesnitt som man kan lese mer om [her](https://docs.marimo.io/guides/editor_features/).
 
-For å bruke `git` (Github) og `opencode` (AI) må man bruke den integrerte terminalen i Marimo, som kan åpnes på følgende måte:
+For å bruke `git` (Github) og `opencode` (KI) må man bruke den integrerte terminalen i Marimo, som kan åpnes på følgende måte:
 
 ::: {.callout-note collapse="true"}
 ## Fremgangsmåte for å åpne terminal
@@ -93,7 +91,7 @@ Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modu
 
 ### Marimo-studio
 
-Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen (gjennom vanlig html og css), som i følgende eksempel:
+Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen gjennom vanlig html og css, som vist i følgende eksempel:
 
 ![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 80%; margin: 1rem;" fig-alt="Tabell i Parqueditor"}
 
@@ -143,16 +141,16 @@ from fsspec.implementations.dirfs import DirFileSystem
 fs = DirFileSystem("/buckets", fsspec.filesystem("file"))
 ```
 
-Åpne deretter Marimos filutforsker og velg fanen "Remote Storage":
+Deretter åpner man Marimos filutforsker fra sidemenyen og velger fanen "Remote Storage":
 
 ![](../images/marimo-buckets-explorer.png){style="max-width: 80%; margin: 1rem;" fig-alt="Vise innhold i buckets"}
 
-Dersom man vil utvikle dashboards med mulighet for å utforske data i en valgt fil, kan man bruke en `file_browser`-komponent:
+Merk at Marimo ikke har støtte for å åpne datafiler fra den innebygde filutforskeren.
+Man kan i stedet selv utvikle applikasjoner med både filutforsker og datavisning:
 
 ::: {.callout-note collapse="true" title="Skjermbilde"}
 ![](../images/marimo-file-browser.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo filutforskerkomponent"}
 :::
-
 
 Filutforsker-komponenten kan opprettes med følgende kodecelle og konfigureres etter behov:
 ```py
@@ -183,7 +181,8 @@ else:
 output
 ```
 
-En slik applikasjon vil være gjenbrukbar på tvers av team, ettersom man kun vil se dataene man selv har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, det vil si at tabellen umiddelbart oppdateres når brukeren endrer fil.
+Denne filuforsker-komponenten vil vise filene som teamet har tilgang til.
+Det vil si at den ferdige applikasjonen viser forskjellig data avhengig av hvilket team man åpner tjenesten med.
 
 
 ## Installere pakker
