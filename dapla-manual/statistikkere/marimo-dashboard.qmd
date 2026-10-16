@@ -115,12 +115,25 @@ For detaljer om datatilgang, delt-bøtter, Git/GitHub, ressurser, diskplass og o
 
 ## Datatilgang
 
-Dersom man vil utvikle dashboards med mulighet for å utforske og visualisere data, er et godt startpunkt å legge til en `file_browser`-komponent:
+Dersom man ønsker å utforske hvilke filer som ligger i `/buckets` kan man kjøre en kodecelle med følgende innhold:
 
-![](../images/marimo-file-browser.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo file browser"}
+```py
+import fsspec
+from fsspec.implementations.dirfs import DirFileSystem
+
+fs = DirFileSystem("/buckets", fsspec.filesystem("file"))
+```
+
+Marimo's filutforsker vil da vise filene under fanen "Remote Storage":
+
+![](../images/marimo-buckets-explorer.png){style="max-width: 80%; margin: 1rem;" fig-alt="Vise innhold i buckets"}
+
+Dersom man vil utvikle dashboards med mulighet for å utforske data i en valgt fil, kan man bruke en `file_browser`-komponent:
+
+![](../images/marimo-file-browser.png){style="max-width: 80%; margin: 1rem;" fig-alt="Marimo filutforskerkomponent"}
 
 
-Filutforskeren kan opprettes med følgende kodecelle og konfigureres etter behov:
+Filutforsker-komponenten kan opprettes med følgende kodecelle og konfigureres etter behov:
 ```py
 import marimo as mo
 
