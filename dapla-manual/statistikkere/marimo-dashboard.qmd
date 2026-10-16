@@ -18,14 +18,11 @@ Tjenesten er basert på følgende premisser:
 
 ## Bruksområde
 
-Marimo-dashboard-tjenesten er skreddersydd for å lage frittstående dashboard-filer.
+Marimo-dashboard-tjenesten er egnet for å utvikle frittstående notebook-filer som ikke er avhengig av et prosjektmiljø for å kjøre.
+Notebook-filene kan deretter åpnes som selvstendige, interaktive applikasjoner.
 
-For generell utvikling i prosjektets Python-miljø anbefales den vanlige [Marimo-tjenesten](./marimo.qmd) i stedet.
-
-Den viktigste praktiske forskjellen mellom Marimo-tjenestene er:
-
-* I Marimo-tjenesten får man prosjektets Python-miljø, og  man utvikler notebooks i `src/`-mappen.
-* I Marimo-dashboard-tjenesten får hver fil sitt eget Python-miljø, og man utvikler notebooks i `dashboards/`-mappen.
+Tjenesten benytter seg ikke av Python-prosjektet i repoet.
+Det er mulig å åpne prosjektmiljøet med den vanlige [Marimo-tjenesten](./marimo.qmd).
 
 Marimo er skreddersydd for utvikling av `Python` og `SQL`-kode, og støtter ikke `R`.
 
@@ -137,7 +134,7 @@ For detaljer om datatilgang, delt-bøtter, Git/GitHub, ressurser, diskplass og o
 
 ## Datatilgang
 
-Dersom man ønsker å utforske hvilke filer som ligger i `/buckets` kan man kjøre en kodecelle med følgende innhold:
+Dersom man ønsker å utforske filene i `/buckets` kan man kjøre en kodecelle med følgende innhold:
 
 ```py
 import fsspec
@@ -146,7 +143,7 @@ from fsspec.implementations.dirfs import DirFileSystem
 fs = DirFileSystem("/buckets", fsspec.filesystem("file"))
 ```
 
-Marimo's filutforsker vil da vise filene under fanen "Remote Storage":
+Åpne deretter Marimos filutforsker og velg fanen "Remote Storage":
 
 ![](../images/marimo-buckets-explorer.png){style="max-width: 80%; margin: 1rem;" fig-alt="Vise innhold i buckets"}
 
