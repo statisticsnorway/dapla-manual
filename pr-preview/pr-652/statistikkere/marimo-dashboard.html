@@ -973,20 +973,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="../images/marimo-logotype-thick.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/marimo-logotype-thick.svg" class="img-fluid" style="max-width: 350%; float: right;" alt="Marimo-dashboardtjenesten"></a></p>
 <p><strong>Marimo-dashboard</strong> er en tjeneste på <a href="../statistikkere/dapla-lab.html">Dapla Lab</a> som er skreddersydd for utvikling av dashboards og applikasjoner. Tjenesten bygger på <a href="https://marimo.io/">Marimo</a>, som er et reaktivt Python-miljø med svært god støtte for brukerinteraksjon og dynamiske visualiseringer.</p>
 <p>I tillegg kan man bruke <a href="https://marimo-team.github.io/marimo-studio/">Marimo-studio</a>, en utvidelse som gjør det lett å legge til form og stil ved hjelp av vanlig html og css.</p>
-<p>Tjenesten er basert på følgende premisser:</p>
-<ul>
-<li>At repoet som klones har en mappe <code>dashboards/</code> på rotnivå.</li>
-<li>At <code>dashboards/</code>-mappen inneholder Marimo-notebooks med deklarerte pakkeavhengigheter (se <a href="#installere-pakker">Installere pakker</a>).</li>
-</ul>
 <section id="bruksområde" class="level2">
 <h2 class="anchored" data-anchor-id="bruksområde">Bruksområde</h2>
-<p>Marimo-dashboard-tjenesten er skreddersydd for å lage frittstående dashboard-filer.</p>
-<p>For generell utvikling i prosjektets Python-miljø anbefales den vanlige <a href="../statistikkere/marimo.html">Marimo-tjenesten</a> i stedet.</p>
-<p>Den viktigste praktiske forskjellen mellom Marimo-tjenestene er:</p>
-<ul>
-<li>I Marimo-tjenesten får man prosjektets Python-miljø, og man utvikler notebooks i <code>src/</code>-mappen.</li>
-<li>I Marimo-dashboard-tjenesten får hver fil sitt eget Python-miljø, og man utvikler notebooks i <code>dashboards/</code>-mappen.</li>
-</ul>
+<p>Marimo-dashboard-tjenesten er egnet for å utvikle frittstående notebook-filer og åpne dem som selvstendige, interaktive applikasjoner.</p>
+<p>Tjenesten benytter seg ikke av Python-prosjektet i repoet, men lager automatisk et isolert Python-miljø for hver notebook-fil.</p>
 <p>Marimo er skreddersydd for utvikling av <code>Python</code> og <code>SQL</code>-kode, og støtter ikke <code>R</code>.</p>
 </section>
 <section id="forberedelser" class="level2">
@@ -1007,26 +997,81 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="oppstartsmåte" class="level3">
 <h3 class="anchored" data-anchor-id="oppstartsmåte">Oppstartsmåte</h3>
 <ul>
-<li><em>Edit</em>-modus brukes når man skal utvikle et dashboard, det vil si skrive kode i Marimo-grensesnittet.</li>
-<li><em>Run</em>-modus brukes når man vil kjøre et dashboard som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet.</li>
+<li><em>Edit</em>-modus brukes når man skal utvikle en notebook-fil, det vil si skrive kode i Marimo-grensesnittet.</li>
+<li><em>Run</em>-modus brukes når man vil kjøre en notebook-fil som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet.</li>
 </ul>
 </section>
 <section id="dashboard-repo" class="level3">
 <h3 class="anchored" data-anchor-id="dashboard-repo">Dashboard-repo</h3>
-<p>Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten. Hva som forventes av repoet avhenger av oppstartsmåte:</p>
+<p>Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.</p>
+<p>Som konvensjon skal Github-repoet en mappe <code>dashboards/</code> på rotnivå. Hva som forventes av repoet avhenger av oppstartsmåten:</p>
 <ul>
-<li>I edit-modus forventes ingenting av repoet. Man kan selv opprette <code>dashboards/</code>-mappen og nye notebooks første gang man starter tjenesten.</li>
-<li>I run-modus forventes en eksisterende <code>dashboards/</code>-mappe med én eller flere Marimo-notebooks.</li>
+<li>I edit-modus forventes ingenting av repoet. Man kan selv opprette <code>dashboards/</code>-mappen og nye notebook-filer første gang man starter tjenesten.</li>
+<li>I run-modus forventes en eksisterende <code>dashboards/</code>-mappe med én eller flere Marimo-notebooks. Notebook-filene kan organiseres fritt i undermapper.</li>
 </ul>
-<p>Dersom Github-repo ikke oppgis vil det opprettes et tomt prosjekt.</p>
+<p>Dersom feltet er tomt vil tjenesten åpne i <code>work/</code>-mappen og man kan selv klone eller opprette et nytt repo ved hjelp av terminalen.</p>
 </section>
 </section>
 <section id="funksjonalitet" class="level2">
 <h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
 <section id="edit-modus" class="level3">
 <h3 class="anchored" data-anchor-id="edit-modus">Edit-modus</h3>
-<p>I denne modusen åpnes tjenesten med hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.</p>
-<p>Marimo har et brukervennlig grensesnitt som man kan lese mer om <a href="https://docs.marimo.io/guides/editor_features/">her</a>.</p>
+<p>I denne modusen åpnes hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.</p>
+<p>Marimo er rik på funksjoner og har et brukervennlig grensesnitt som man kan lese mer om <a href="https://docs.marimo.io/guides/editor_features/">her</a>.</p>
+<p>For å bruke <code>git</code> (Github) og <code>opencode</code> (KI) må man bruke den integrerte terminalen i Marimo, som kan åpnes på følgende måte:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Fremgangsmåte for å åpne terminal
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-1.png" class="lightbox" data-gallery="marimo-terminal" title="1. Åpne utviklerpanelet med Ctrl/Cmd + j eller knappen nederst til venstre."><img src="../images/marimo-terminal-1.png" class="img-fluid figure-img" alt="Marimo med utviklerpanelet lukket og snarveien Ctrl J synlig."></a></p>
+<figcaption>1. Åpne utviklerpanelet med <code>Ctrl/Cmd + j</code> eller knappen nederst til venstre.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-2.png" class="lightbox" data-gallery="marimo-terminal" title="2. Velg fanen Terminal i utviklerpanelet."><img src="../images/marimo-terminal-2.png" class="img-fluid figure-img" alt="Utviklerpanelet er åpnet med fanen Terminal valgt."></a></p>
+<figcaption>2. Velg fanen <strong>Terminal</strong> i utviklerpanelet.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-3.png" class="lightbox" data-gallery="marimo-terminal" title="3. Valgfritt: Dra terminalpanelet mot sidemenyen til venstre."><img src="../images/marimo-terminal-3.png" class="img-fluid figure-img" alt="Terminalfanen er åpnet nederst i utviklerpanelet."></a></p>
+<figcaption>3. Valgfritt: Dra terminalpanelet mot sidemenyen til venstre.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-4.png" class="lightbox" data-gallery="marimo-terminal" title="4. Terminalen er nå side om side med notebooken."><img src="../images/marimo-terminal-4.png" class="img-fluid figure-img" alt="Terminalen er flyttet til venstre sidemeny i Marimo."></a></p>
+<figcaption>4. Terminalen er nå side om side med notebooken.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="run-modus" class="level3">
 <h3 class="anchored" data-anchor-id="run-modus">Run-modus</h3>
@@ -1035,18 +1080,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="marimo-studio" class="level3">
 <h3 class="anchored" data-anchor-id="marimo-studio">Marimo-studio</h3>
-<p>Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen (gjennom vanlig html og css), som i følgende eksempel:</p>
-<p><a href="../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Tabell i Parqueditor"></a></p>
+<p>Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen gjennom vanlig html og css:</p>
+<p><a href="../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Tabell i Parqueditor"></a></p>
 <p>For å ta i bruk Marimo-studio starter man tjenesten i edit-modus og følger disse stegene:</p>
 <ol type="1">
-<li><p>Åpne en eksisterende notebook i <code>dashboards/</code>, eller opprett en ny notebook.</p></li>
+<li><p>Åpne en eksisterende notebook-fil i <code>dashboards/</code>-mappen, eller opprett en ny notebook-fil.</p></li>
 <li><p>Klikk på “Add view” øverst til høyre, gi ønsket navn, velg “HTML document” og trykk “Create view”.</p></li>
 </ol>
-<p><a href="../images/marimo-studio-add-view.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="../images/marimo-studio-add-view.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Dialogboksen Add view i Marimo Studio"></a></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Skjermbilde">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Skjermbilde
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="../images/marimo-studio-add-view.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="../images/marimo-studio-add-view.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Dialogboksen Add view i Marimo Studio"></a></p>
+</div>
+</div>
+</div>
 <ol start="3" type="1">
-<li>Du vil nå ha fått opprettet flere filer og får valget om å se en forhåndsvisning av viewet:</li>
+<li>Du vil nå ha fått opprettet flere filer og får valget om å se en forhåndsvisning av viewet.</li>
 </ol>
-<p><a href="../images/marimo-studio-preview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="../images/marimo-studio-preview.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Forhåndsvisning av et view i Marimo Studio"></a></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Skjermbilde">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Skjermbilde
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="../images/marimo-studio-preview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="../images/marimo-studio-preview.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Forhåndsvisning av et view i Marimo Studio"></a></p>
+</div>
+</div>
+</div>
 <p>Legg merke til de nye filene og spesielt <code>index.html</code> der viewet ligger. Det anbefales å sjekke inn disse filene til Github. Pass imidlertid på at du ikke sjekker inn data knyttet til selve Marimo-sesjonen. Anbefalt tillegg til <code>.gitignore</code> er:</p>
 <pre><code>__marimo__/session/</code></pre>
 </section>
@@ -1063,57 +1138,105 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="datatilgang" class="level2">
 <h2 class="anchored" data-anchor-id="datatilgang">Datatilgang</h2>
-<p>Dersom man vil utvikle dashboards med mulighet for å utforske og visualisere data, er et godt startpunkt å legge til en <code>file_browser</code>-komponent:</p>
-<p><a href="../images/marimo-file-browser.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="../images/marimo-file-browser.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Marimo file browser"></a></p>
-<p>Filutforskeren kan opprettes med følgende kodecelle og konfigureres etter behov:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file_browser <span class="op">=</span> mo.ui.file_browser(</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    initial_path<span class="op">=</span><span class="st">"/buckets/"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    filetypes<span class="op">=</span>[<span class="st">"parquet"</span>],</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    selection_mode<span class="op">=</span><span class="st">"file"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    multiple<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>file_browser</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Variabelen <code>file_browser</code> vil til enhver tid inneholde hvilken fil som er valgt av brukeren. Denne kan brukes i en ny kodecelle, for eksempel til å vise en tabell med dataene:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>selected_files <span class="op">=</span> file_browser.value</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(selected_files) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pl.read_parquet(selected_files[<span class="dv">0</span>].path)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> mo.ui.table(df)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> mo.md(<span class="st">"Ingen fil er valgt."</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>output</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p>En slik applikasjon vil være gjenbrukbar på tvers av team, ettersom man kun vil se dataene man selv har tilgang til og konfigurert ved oppstart av tjenesten. Videre er det reaktivt, det vil si at tabellen umiddelbart oppdateres når brukeren endrer fil.</p>
+<p>Dersom man ønsker å utforske filene i <code>/buckets</code> kan man kjøre en kodecelle med følgende innhold:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> fsspec</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fsspec.implementations.dirfs <span class="im">import</span> DirFileSystem</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> DirFileSystem(<span class="st">"/buckets"</span>, fsspec.filesystem(<span class="st">"file"</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Deretter åpner man Marimos filutforsker i sidemenyen. Fanen “Remote storage” vil vise innholdet i <code>/buckets</code>:</p>
+<p><a href="../images/marimo-buckets-explorer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="../images/marimo-buckets-explorer.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Vise innhold i buckets"></a></p>
+<p>Merk at Marimo-grensesnittet ikke har innebygd støtte for å åpne datafiler. Man kan imidlertid enkelt utvikle applikasjoner med både filutforsker og datavisning:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Skjermbilde">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Skjermbilde
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="../images/marimo-file-browser.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="../images/marimo-file-browser.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Marimo filutforskerkomponent"></a></p>
+</div>
+</div>
+</div>
+<p>Filutforsker-komponenten kan opprettes med følgende kodecelle og konfigureres etter behov:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>file_browser <span class="op">=</span> mo.ui.file_browser(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    initial_path<span class="op">=</span><span class="st">"/buckets/"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    filetypes<span class="op">=</span>[<span class="st">"parquet"</span>],</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    selection_mode<span class="op">=</span><span class="st">"file"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    multiple<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>file_browser</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Variabelen <code>file_browser</code> vil til enhver tid inneholde hvilken fil som er valgt av brukeren. Denne kan brukes i en ny kodecelle, for eksempel til å vise dataene i en tabell-komponent:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>selected_files <span class="op">=</span> file_browser.value</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(selected_files) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pl.read_parquet(selected_files[<span class="dv">0</span>].path)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> mo.ui.table(df)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> mo.md(<span class="st">"Ingen fil er valgt."</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>output</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Applikasjonen vil følge vanlig tilgangsstyring, det vil si at den viser dataene til teamet man åpner tjenesten med.</p>
 </section>
 <section id="installere-pakker" class="level2">
 <h2 class="anchored" data-anchor-id="installere-pakker">Installere pakker</h2>
-<p>Pakker installeres i selve notebooken gjennom Marimo-grensesnittet:</p>
-<p><a href="../images/marimo-package-dependencies.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="../images/marimo-package-dependencies.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Pakkeavhengigheter i Marimo"></a></p>
-<p>Man bruker tredje menyknapp helt til venstre for å åpne listen over installerte pakker. For å legge til flere pakker skriver man pakkenavnet i inputfeltet og trykker “Add”. Spesifikke versjoner kan installeres med vanlig syntaks, for eksempel <code>dapla-toolbelt-metadata==0.19</code>.</p>
-<p>Når man ser på notebook-filen i en vanlig teksteditor eller Github, vil man se avhengighetene i en metadatablokk øverst i filen:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># /// script</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dependencies = [</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     "dapla-toolbelt-metadata==0.19.0",</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     "marimo",</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     "polars==2.0.0",</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ]</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># requires-python = "&gt;=3.14"</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ///</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>__generated_with <span class="op">=</span> <span class="st">"0.25.1"</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> marimo.App(width<span class="op">=</span><span class="st">"medium"</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">@app.cell</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _():</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> dapla_metadata</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> polars <span class="im">as</span> pl</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Denne metadatablokken gjør at filen kan kjøres helt isolert fra resten av prosjektet.</p>
+<p>Pakker installeres i selve notebooken ved hjelp av Marimo-grensesnittet:</p>
+<p><a href="../images/marimo-package-dependencies.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="../images/marimo-package-dependencies.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Pakkeavhengigheter i Marimo"></a></p>
+<ol type="1">
+<li>Pass på at du er i riktig notebook.</li>
+<li>Klikk på boks-ikonet i sidemenyen for å se installerte pakker.</li>
+<li>For å legge til flere pakker, skriv pakkenavnet i inputfeltet og trykk “Add”.</li>
+<li>For å legge til pakker med en spesifikk versjon, skriv for eksempel <code>dapla-toolbelt-metadata==0.19</code> og trykk “Add”.</li>
+</ol>
+<p>Hver notebook-fil vil ha sin egen liste av installerte pakker. Når man ser på notebook-filen i en vanlig teksteditor eller på Github, vil pakkene være deklarert øverst i filen:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="`test.py`">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><code>test.py</code>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># /// script</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dependencies = [</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     "dapla-toolbelt-metadata==0.19.0",</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     "marimo",</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     "polars==2.0.0",</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ]</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># requires-python = "&gt;=3.14"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ///</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>__generated_with <span class="op">=</span> <span class="st">"0.25.1"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> marimo.App(width<span class="op">=</span><span class="st">"medium"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="at">@app.cell</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _():</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> dapla_metadata</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    app.run()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Dette gjør at filen kan kjøres helt isolert fra resten av prosjektet. Videre kan den kjøres som en helt vanlig Python-fil:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run test.py</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Når man kjører denne kommandoen, vil først vil alle avhengighetene installeres, og deretter vil kodecellene kjøres i riktig rekkefølge. Interaktive komponenter vil bruke en default-verdi, som man kan konfigurere i de fleste tilfeller.</p>
 </section>
 <section id="lagring-av-arbeid" class="level2">
 <h2 class="anchored" data-anchor-id="lagring-av-arbeid">Lagring av arbeid</h2>
