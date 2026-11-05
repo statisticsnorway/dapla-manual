@@ -86,43 +86,21 @@ Dette passer når man allerede har laget en ferdig notebook-fil som skal vises s
 
 Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus. Før man bruker run-modus er det lurt å sjekke at notebooken lar seg kjøre i edit-modus.
 
-### Marimo-studio
-
-Marimo-studio er en utvidelse til Marimo som kan brukes hvis man ønsker mer kontroll på utseendet til applikasjonen gjennom vanlig html og css.
-
-::: {.callout-note collapse="true" title="Skjermbilde av eksempelapplikasjon"}
-![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 100%; margin: 1rem;" fig-alt="Tabell i Parqueditor"}
-:::
-
-For å ta i bruk Marimo-studio starter man tjenesten i edit-modus og følger disse stegene:
-
-1. Åpne en eksisterende notebook-fil i `dashboards/`-mappen, eller opprett en ny notebook-fil.
-
-2. Klikk på "Add view" øverst til høyre, gi ønsket navn, velg "HTML document" og trykk "Create view".
-
-::: {.callout-note collapse="true" title="Skjermbilde"}
-![](../images/marimo-studio-add-view.png){style="max-width: 80%; margin: 1rem;" fig-alt="Dialogboksen Add view i Marimo Studio"}
-:::
-
-3. Du vil nå ha fått opprettet flere filer og får valget om å se en forhåndsvisning av viewet.
-
-::: {.callout-note collapse="true" title="Skjermbilde"}
-![](../images/marimo-studio-preview.png){style="max-width: 80%; margin: 1rem;" fig-alt="Forhåndsvisning av et view i Marimo Studio"}
-:::
-
-Legg merke til de nye filene og spesielt `index.html` der viewet ligger.
-Det anbefales å sjekke inn disse filene til Github.
-
 
 ### KI-støtte
 
-For å få hjelp av KI til å utvikle Marimo-applikasjoner, kan man følge disse stegene:
+KI kan være et effektivt hjelpemiddel for å utvikle interaktive applikasjoner i Marimo.
 
-1. Sørg for at du har en notebook åpen i Marimo-grensesnittet som er lagret i `dashboards/`-mappen.
-2. Anbefalt: sørg for å ha commitet eventuelle egne endringer først så ikke disse blir overskrevet av agenten.
-3. Anbefalt: sørg for å ha relevante pakker lastet ned i notebooken (se [Installere pakker](#installere-pakker)).
-4. Åpne terminalen og kjør `opencode` (se [Funksjonalitet](#funksjonalitet) for tips til bruk av Marimo-terminalen).
-5. Begynn å snakke med agenten om hva du ønsker. Referer gjerne til installerte pakker som du ønsker at den skal bruke. 
+Anbefalte forberedelser:
+
+* Sørg for at du har en notebook åpen i Marimo-grensesnittet som er lagret i `dashboards/`-mappen.
+* Sørg for å ha commitet eventuelle egne endringer først så ikke disse blir overskrevet av agenten.
+* Sørg for å ha relevante pakker lastet ned i notebooken (se [Installere pakker](#installere-pakker)).
+* Kjør kommandoen `ssb-marimo docs` for å laste ned nyeste versjon av Dapla-manualen som agenten kan lese. 
+
+Åpne terminalen, kjør `opencode` og begynn å snakke med agenten om hva du ønsker.
+
+Det anbefales å være så spesifikk som mulig om ønsket applikasjonsflyt, og gjerne referere til installerte pakker eller deler av Dapla-manualen som skal brukes.
 
 Merk at agenten vil spørre om å utføre kommandoer av typen:
 
@@ -132,7 +110,34 @@ bash ~/.agents/skills/marimo-pair/scripts/execute-code.sh \
     -c "import marimo._code_mode as cm; help(cm)"
 ```
 
-Dette er kommandoer som lar agenten gjøre strukturerte endringer og inspisere tilstanden til notebooken. Kort sagt får agenten muligheten til å se det samme som deg; input, output, feilmeldinger og mer. 
+Dette er kommandoer som lar agenten gjøre strukturerte endringer og inspisere tilstanden til notebooken. Kort sagt får agenten muligheten til å se det samme som deg; input, output, feilmeldinger og mer. Ofte vil disse kommandoene være vanskelige å lese. Det viktigste er å være sikker på at man kun har testdata i tjenesten, og at man alltid går gjennom den ferdige koden og pusher den til Github manuelt.
+
+### Marimo-studio
+
+Marimo-studio er en utvidelse til Marimo som kan brukes til å opprette en html-side for notebooken.
+Man kan sette cellene inn i html-siden og dermed få full kontroll på layout og stil på den interaktive applikasjonen.
+
+::: {.callout-note collapse="true" title="Skjermbilde av eksempelapplikasjon"}
+![](../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png){style="max-width: 100%; margin: 1rem;" fig-alt="Tabell i Parqueditor"}
+:::
+
+For å komme i gang, åpne en eksisterende notebook-fil i `dashboards/`-mappen. 
+Det anbefales at man allerede har utviklet det meste av notebook-filen før man oppretter en html-side. 
+
+Alternativ 1: åpne en terminal og kjør kommandoen `ssb-marimo html`. Dette vil opprette en html-fil som importerer SSB Designsystem sitt tema.
+
+::: {.callout-note collapse="true" title="Alternativ 2: Opprett en html-side gjennom grensesnittet"}
+Klikk på "Add view" øverst til høyre, gi ønsket navn, velg "HTML document" og trykk "Create view".
+
+![](../images/marimo-studio-add-view.png){style="max-width: 80%; margin: 1rem;" fig-alt="Dialogboksen Add view i Marimo Studio"}
+
+Du vil nå ha fått opprettet flere filer og får valget om å se en forhåndsvisning av viewet.
+
+![](../images/marimo-studio-preview.png){style="max-width: 80%; margin: 1rem;" fig-alt="Forhåndsvisning av et view i Marimo Studio"}
+
+Legg merke til de nye filene og spesielt `index.html` der viewet ligger.
+Det anbefales å sjekke inn disse filene til Github.
+:::
 
 ## Data og Git/GitHub
 
