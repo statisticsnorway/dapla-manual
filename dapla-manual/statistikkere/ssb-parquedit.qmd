@@ -84,9 +84,9 @@ poetry add ssb-parquedit
 
 ### Anbefalt tabelloppsett
 
-`ssb-parquedit` er konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). For at pakken og tilknyttede brukergrensesnitt skal fungere mest mulig effektivt, anbefales det å strukturere dataene som flate, brede tabeller med standard primitive datatyper (heltall, flyttall, tekst, dato, boolsk).
+`ssb-parquedit` er konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). For at pakken og tilknyttede brukergrensesnitt skal fungere mest mulig effektivt, anbefales det å strukturere dataene som flate, brede tabeller. For brukere som ønsker å strukturere data på **langform** så må man selv oppdatere hver rad som endres.  
 
-@tbl-datastruktur viser et eksempel på dette. Her er dataene strukturert med en linje per bedrift som skal manuelt editeres, og hver kolonne er en egenskap ved bedriften. Hvis man oppretter en Parquedit-tabell med denne strukturen vil man kunne editere en og en virksomhet samtidig som Parquedit håndterer historikken og detaljerte logger over årsakskode og hvilken endring som ble gjort av hvem.  
+Under vises noen eksempler på ulike datastrukturer. @tbl-datastruktur viser et eksempel der dataene er strukturert med en linje per bedrift som skal manuelt editeres, og hver kolonne er en egenskap ved bedriften. Hvis man oppretter en Parquedit-tabell med denne strukturen vil man kunne editere en og en virksomhet samtidig som Parquedit håndterer historikken og detaljerte logger over årsakskode og hvilken endring som ble gjort av hvem.  
 
 | orgnr | foretak_navn | kontakt_epost | kontakt_tlf | omsetning_nok | ansatte_antall |
 | :--- | :--- | :--- | :--- | ---: | ---: |
@@ -94,7 +94,7 @@ poetry add ssb-parquedit
 | 123456789 | Statistikk Drift | hei@statistikk.no | 99887766 | 3200000 | 3 |
 : Eksempel på anbefalt flat tabellstruktur i ssb-parquedit {#tbl-datastruktur .striped}
 
-Komplekse datatyper som  `STRUCT` og `LIST`, som vist i @tbl-struct-list, støttes av ssb-parquedit. Nøstede felt kan editeres direkte med punktnotasjon og indekser (se «Editering av nøstede felt»).  `get_edits()`  logger kun det endrede underfeltet i  old_values  og  new_values , ikke hele kolonnen.
+Komplekse datatyper som  `STRUCT` og `LIST`, som vist i @tbl-struct-list, støttes også av ssb-parquedit. Dette kan være nyttig i data som er hierarkiske av natur og hvor utflating vil generere svære mange variabler i datasettet. Nøstede felt kan editeres direkte med punktnotasjon og indekser (se «Editering av nøstede felt»).  `get_edits()`  logger kun det endrede underfeltet i  old_values  og  new_values , ikke hele kolonnen.
 
 | orgnr | foretak_navn | kontakt (STRUCT) | avdelinger (LIST<STRUCT>) |
 | :--- | :--- | :--- | :--- |
@@ -102,20 +102,6 @@ Komplekse datatyper som  `STRUCT` og `LIST`, som vist i @tbl-struct-list, støt
 | 123456789 | Statistikk Drift | `{'epost': 'hei@statistikk.no', 'tlf': '99887766'}` | `[{'avd_nr': 1, 'ansatte': 3}]` |
 : Eksempel på struktur med nøstede typer (STRUCT og LIST) {#tbl-struct-list}
 
-Det frarådes å lagre data på langform ([id, variabel, verdi]) slik som vist i @tbl-ikke-anbefalt-langform. ssb-parquedit er utviklet for å oppdatere én logisk enhet per rad via con.edit(). Dersom dataene lagres på langform, vil en oppdatering av flere opplysninger for samme enhet (f.eks. både adresse og omsetning) kreve mange separate radvise oppdateringer og commits mot basen. Dette skaper unødig mange transaksjoner, gjør tabellen tregere å vedlikeholde og bryter med den kolonneorienterte styrken i Parquet-formatet.
-
-
-| foretak_id | variabel_navn | verdi |
-| :--- | :--- | :--- |
-| 987654321 | foretak_navn | Eksempel AS |
-| 987654321 | kontakt_epost | post@eksempel.no |
-| 987654321 | kontakt_tlf | 22334455 |
-| 987654321 | omsetning_nok | 14500000 |
-| 987654321 | ansatte_antall | 12 |
-| 123456789 | foretak_navn | Statistikk Drift |
-| 123456789 | kontakt_epost | hei@statistikk.no |
-| 123456789 | kontakt_tlf | 99887766 |
-: Ikke-anbefalt struktur på langform (EAV-mønster) {#tbl-ikke-anbefalt-langform}
 
 
 ## Funksjonalitet
