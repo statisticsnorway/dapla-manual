@@ -376,6 +376,24 @@ Gyldige verdier for `change_event_reason` er:
 - `DUPLICATE`
 - `OTHER`
 
+#### Regelbasert editering med `update_where()`
+
+Hvis du vil endre flere rader på en gang, kan du bruke `update_where()`. Funksjonen oppdaterer alle rader som matcher en `where`-betingelse (SQL uten selve `WHERE`-nøkkelordet), uten at du først må finne `rowid`. Samme `changes` brukes på alle matchende rader, og man oppgir `change_event_reason` og `change_comment` som ved `edit()`. Alle endringene logges som én transaksjon (ett snapshot) i endringshistorikken.
+
+```{.python filename="Notebook"}
+con.update_where(
+    table_name="manuell_tabell",
+    where="aar = 2025 AND status = 'UTKAST'",
+    changes={"status": "KONTROLLERT"},
+    change_event_reason="REVIEW",
+    change_comment="Satt status etter intern kontroll",
+)
+```
+
+::: {.callout-note}
+`where` bruker samme syntaks som i `view()` og `delete_row()`, f.eks. `"population < 100000"` eller `"id IN (1, 2)"`.
+:::
+
 ### Sletting av rader
 For å slette rader fra en tabell kaller man `delete_row()` med `where` for å identifisere raden(e) som skal fjernes.
 ```{.python filename="Notebook"}
