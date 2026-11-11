@@ -393,12 +393,12 @@ con.update_where(
 `where` bruker samme syntaks som i `view()` og `delete_row()`, f.eks. `"population < 100000"` eller `"id IN (1, 2)"`.
 :::
 
-#### Masseeditering med `bulk_update()`
+#### Masseeditering med `update_bulk()`
 
-Hvis ulike rader skal få ulike verdier, kan du bruke `bulk_update()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. Funksjonen støtter foreløpig ikke oppdatering av Struct-typer eller List-er med dot-notasjon. Hvis disse ønskes masseoppdaterte må man erstatte hele Struct/list inkludert de nye verdiene.
+Hvis ulike rader skal få ulike verdier, kan du bruke `update_bulk()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. Funksjonen støtter foreløpig ikke oppdatering av Struct-typer eller List-er med dot-notasjon. Hvis disse ønskes masseoppdaterte må man erstatte hele Struct/list inkludert de nye verdiene.
 
 ```{.python filename="Notebook"}
-con.bulk_update(
+con.update_bulk(
     table_name="manuell_tabell",
     changes={
         1: {"status": "KONTROLLERT", "belop": 100},
