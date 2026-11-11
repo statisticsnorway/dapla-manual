@@ -394,6 +394,27 @@ con.update_where(
 `where` bruker samme syntaks som i `view()` og `delete_row()`, f.eks. `"population < 100000"` eller `"id IN (1, 2)"`.
 :::
 
+#### Masseeditering med `bulk_update()`
+
+Hvis ulike rader skal få ulike verdier, kan du bruke `bulk_update()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. 
+```{.python filename="Notebook"}
+con.bulk_update(
+    table_name="manuell_tabell",
+    changes={
+        1: {"status": "KONTROLLERT", "belop": 100},
+        2: {"status": "KONTROLLERT"},
+        },
+    change_event_reason="REVIEW",
+    change_comment="Satt status og beløp etter intern kontroll",
+    script_id="github.com/statisticsnorway/dapla_ffunk/src/editing/imputation.py@5bb8b73897eb7e26c0b7031b8e7955f0e9bbccd1",
+    script_info="threshold=18, dry_run=False",
+)
+```
+
+::: {.callout-note}
+`script_id` identifiserer skriptet som gjorde oppdateringen, og er en lenke til GitHub-repoet (filsti) sammen med commit-SHA. `script_info` inneholder tilleggsinformasjon, f.eks. parametere som ble brukt i kjøringen.
+:::
+
 ### Sletting av rader
 For å slette rader fra en tabell kaller man `delete_row()` med `where` for å identifisere raden(e) som skal fjernes.
 ```{.python filename="Notebook"}
