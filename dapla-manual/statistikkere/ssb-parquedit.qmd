@@ -378,8 +378,7 @@ Gyldige verdier for `change_event_reason` er:
 
 #### Regelbasert editering med `update_where()`
 
-Hvis du vil endre flere rader på en gang, kan du bruke `update_where()`. Funksjonen oppdaterer alle rader som matcher en `where`-betingelse (SQL uten selve `WHERE`-nøkkelordet), uten at du først må finne `rowid`. Samme `changes` brukes på alle matchende rader, og man oppgir `change_event_reason` og `change_comment` som ved `edit()`. Alle endringene logges som én transaksjon (ett snapshot) i endringshistorikken.
-
+Hvis du vil endre flere rader på en gang, kan du bruke `update_where()`. Funksjonen oppdaterer alle rader som matcher en `where`-betingelse (SQL uten selve `WHERE`-nøkkelordet), uten at du først må finne `rowid`. Samme `changes` brukes på alle matchende rader, og man oppgir `change_event_reason` og `change_comment` som ved `edit()`. Alle endringene logges som én transaksjon (ett snapshot) i endringshistorikken. 
 ```{.python filename="Notebook"}
 con.update_where(
     table_name="manuell_tabell",
@@ -396,7 +395,8 @@ con.update_where(
 
 #### Masseeditering med `bulk_update()`
 
-Hvis ulike rader skal få ulike verdier, kan du bruke `bulk_update()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. 
+Hvis ulike rader skal få ulike verdier, kan du bruke `bulk_update()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. Funksjonen støtter foreløpig ikke oppdatering av Struct-typer eller List-er med dot-notasjon. Hvis disse ønskes masseoppdaterte må man erstatte hele Struct/list inkludert de nye verdiene.
+
 ```{.python filename="Notebook"}
 con.bulk_update(
     table_name="manuell_tabell",
