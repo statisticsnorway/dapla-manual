@@ -1,0 +1,79 @@
+---
+title: "Nye funksjoner i Parquedit: masseoppdateringer, nøstede felt og oppdatert livssyklus"
+categories:
+  - parquedit
+  - editering
+author:
+  - name: Øyvind Bruer-Skarsbø
+    affiliation:
+      - name: Seksjon for dataplattform (724)
+        email: obr@ssb.no
+date: 2026-11-12
+date-modified: 2026-11-12
+image: ../../../images/dapla-long.png
+draft: false
+lightbox: true
+---
+
+Vi har videreutviklet **Parquedit** (`ssb-parquedit`) på bakgrunn av tilbakemeldinger fra statistikkteamene. Oppdateringene gjør det enklere å kombinere manuell og maskinell editering i iterative produksjonsløp, og gir mer fleksibilitet rundt datastrukturer og forvaltning av tabeller.
+
+## Hva er nytt?
+
+### Støtte for masseoppdateringer ved maskinell editering
+Mange team har en arbeidsflyt der manuelle vurderinger og skriptede korreksjoner veksler i samme produksjonsperiode. Tidligere krevde dette at teamene eksporterte data og opprettet nye tabeller for hver maskinelle kjøring. 
+
+Nå støtter Parquedit masseoppdateringer direkte i tabellen:
+* **`update_bulk()`:** Oppdaterer mange rader med ulike verdier (f.eks. etter imputering eller maskinlæring) basert på `rowid`.
+* **`update_where()`:** Oppdaterer alle rader som matcher en `where`-betingelse med samme verdi.
+
+Begge funksjonene utfører endringene i én transaksjon og logger dette som en samlet hendelse i endringshistorikken (`get_edits()`). Ved bruk av `update_bulk()` kan du i tillegg legge ved `script_id` (lenke til GitHub-fil med commit-SHA) og `script_info`, slik at de maskinelle endringene er direkte sporbare til versjonert kode.
+
+```{.python}
+con.update_bulk(
+    table_name="manuell_tabell",
+    changes={
+        1: {"status": "KONTROLLERT", "belop": 100},
+        2: {"status": "KONTROLLERT"},
+    },
+    change_event_reason="REVIEW",
+    change_comment="Satt status og beløp etter maskinell kontroll",
+    script_id="[github.com/statisticsnorway/mitt-repo/src/imputation.py@5bb8b73](https://github.com/statisticsnorway/mitt-repo/src/imputation.py@5bb8b73)",
+    script_info="threshold=18, dry_run=False",
+)
+```
+
+### Delvis oppdatering av nøstede felt (`STRUCT` og `LIST<STRUCT>`)
+
+For datasett som er hierarkiske av natur – eller der utflating gir svært mange kolonner – kan data lagres med komplekse datatyper i én og samme tabell. `con.edit()` støtter nå målrettet oppdatering av enkeltfelt inne i nøstede strukturer ved hjelp av punktnotasjon og indekser:
+
+```{.python}
+# Oppdater et underfelt i en STRUCT
+con.edit(
+    table_name="manuell_nostet",
+    rowid=rowid,
+    changes={"kontakt.epost": "ny@eksempel.no"},
+    change_event_reason="REVIEW",
+    change_comment="Oppdatert e-postadresse",
+)
+
+# Oppdater et underfelt i en LIST<STRUCT>
+con.edit(
+    table_name="manuell_nostet",
+    rowid=rowid,
+    changes={"avdelinger[0].ansatte": 10},
+    change_event_reason="REVIEW",
+    change_comment="Oppdatert antall ansatte i første avdeling",
+)
+```
+
+Endringsloggen (get_edits()) registrerer nå kun det faktiske underfeltet som ble endret i old_values og new_values, i stedet for å logge hele kolonnen på nytt.
+
+### Ikke lenger frarådet med data på langform
+
+Vi anbefaler fortsatt flate og brede tabeller (én rad per statistisk enhet) der det er mulig, fordi det gir den mest intuitive arbeidsflyten og endringsloggen[cite: 8]. Samtidig har vi fjernet teksten i dokumentasjonen som fraråder bruk av data på langform[cite: 8]. Dersom statistikken krever langform, kan dette benyttes ved at man oppdaterer de relevante radene som tilhører enheten.
+
+### Ingen automatisk sletting av Parquedit-tabeller
+
+Vi har fjernet omtalen av Parquedit-tabeller som strengt midlertidige arbeidstabeller. Systemet vil ikke gjennomføre automatisk sletting eller tvungen opprydding i tabellene. Vi ønsker å høste erfaringer sammen med brukerne om hvordan tabellene forvaltes over tid før eventuelle livssyklusregler etableres. Teamene har likevel full tilgang til verktøy for vedlikehold og rydding ved behov, inkludert export_catalog() for sikkerhetskopiering av metadatakatalogen og drop_table(..., cleanup=True) når en tabell skal fjernes helt.   
+
+Les hele den oppdaterte brukerveiledningen i [dokumentasjonen for Parquedit](../../../statistikkere/ssb-parquedit.qmd).
