@@ -1448,6 +1448,68 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <li><code>OTHER</code></li>
 </ul>
 </section>
+<section id="regelbasert-editering-med-update_where" class="level4">
+<h4 class="anchored" data-anchor-id="regelbasert-editering-med-update_where">Regelbasert editering med <code>update_where()</code></h4>
+<p>Hvis du vil endre flere rader på en gang, kan du bruke <code>update_where()</code>. Funksjonen oppdaterer alle rader som matcher en <code>where</code>-betingelse (SQL uten selve <code>WHERE</code>-nøkkelordet), uten at du først må finne <code>rowid</code>. Samme <code>changes</code> brukes på alle matchende rader, og man oppgir <code>change_event_reason</code> og <code>change_comment</code> som ved <code>edit()</code>. Alle endringene logges som én transaksjon (ett snapshot) i endringshistorikken.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>con.update_where(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    where<span class="op">=</span><span class="st">"aar = 2025 AND status = 'UTKAST'"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    changes<span class="op">=</span>{<span class="st">"status"</span>: <span class="st">"KONTROLLERT"</span>},</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    change_event_reason<span class="op">=</span><span class="st">"REVIEW"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    change_comment<span class="op">=</span><span class="st">"Satt status etter intern kontroll"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>where</code> bruker samme syntaks som i <code>view()</code> og <code>delete_row()</code>, f.eks. <code>"population &lt; 100000"</code> eller <code>"id IN (1, 2)"</code>.</p>
+</div>
+</div>
+</section>
+<section id="masseeoppdatering-med-update_bulk" class="level4">
+<h4 class="anchored" data-anchor-id="masseeoppdatering-med-update_bulk">Masseeoppdatering med <code>update_bulk()</code></h4>
+<p>Hvis ulike rader skal få ulike verdier, f.eks. etter maskinell editering, kan du bruke <code>update_bulk()</code>. Du oppgir en dictionary der nøkkelen er <code>rowid</code> og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. Funksjonen støtter foreløpig ikke oppdatering av Struct-typer eller List-er med dot-notasjon. Hvis disse ønskes masseoppdaterte må man erstatte hele Struct/list inkludert de nye verdiene. Masseoppdateringer kan generere mye inlinede data i basen og mange små parquet-filer pr tabell, så det anbefales å kjøre metodene <code>flush_inlined_data()</code> og <code>merge_adjacent_files()</code> med jevne mellomrom for å holde ytelsen stabil.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Notebook</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>con.update_bulk(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    changes<span class="op">=</span>{</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>: {<span class="st">"status"</span>: <span class="st">"KONTROLLERT"</span>, <span class="st">"belop"</span>: <span class="dv">100</span>},</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        <span class="dv">2</span>: {<span class="st">"status"</span>: <span class="st">"KONTROLLERT"</span>},</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    change_event_reason<span class="op">=</span><span class="st">"REVIEW"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    change_comment<span class="op">=</span><span class="st">"Satt status og beløp etter intern kontroll"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    script_id<span class="op">=</span><span class="st">"github.com/statisticsnorway/dapla_ffunk/src/editing/imputation.py@5bb8b73897eb7e26c0b7031b8e7955f0e9bbccd1"</span>,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    script_info<span class="op">=</span><span class="st">"threshold=18, dry_run=False"</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>script_id</code> identifiserer skriptet som gjorde oppdateringen, og er en lenke til GitHub-repoet (filsti) sammen med commit-SHA. <code>script_info</code> inneholder tilleggsinformasjon, f.eks. parametere som ble brukt i kjøringen.</p>
+</div>
+</div>
+</section>
 </section>
 <section id="sletting-av-rader" class="level3">
 <h3 class="anchored" data-anchor-id="sletting-av-rader">Sletting av rader</h3>
@@ -1456,11 +1518,11 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>con.delete_row(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    where<span class="op">=</span><span class="st">"enhet_id = 'A1' AND aar = 2025"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    change_event_reason<span class="op">=</span><span class="st">"REVIEW"</span>,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    change_comment<span class="op">=</span><span class="st">"Slettet etter intern kontroll"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>con.delete_row(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    where<span class="op">=</span><span class="st">"enhet_id = 'A1' AND aar = 2025"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    change_event_reason<span class="op">=</span><span class="st">"REVIEW"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    change_comment<span class="op">=</span><span class="st">"Slettet etter intern kontroll"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Sletting av rader krever at man oppgir både <code>change_event_reason</code> og <code>change_comment</code> for å dokumentere hvorfor raden(e) ble fjernet. Gyldige verdier for <code>change_event_reason</code> er:</p>
 <ul>
@@ -1480,11 +1542,11 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Endringer for en tabell</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>logg <span class="op">=</span> con.get_edits(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativt alle tabeller</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>alle_endringer <span class="op">=</span> con.get_edits()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Endringer for en tabell</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>logg <span class="op">=</span> con.get_edits(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternativt alle tabeller</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>alle_endringer <span class="op">=</span> con.get_edits()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Dette gir blant annet:</p>
 <ul>
@@ -1504,12 +1566,12 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Timetravel for en tabell</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tabell_paa_tidspunkt <span class="op">=</span> con.time_travel(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    at_time<span class="op">=</span><span class="st">"2026-09-26 00:00:00"</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    where<span class="op">=</span><span class="st">"aar=2025"</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Timetravel for en tabell</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>tabell_paa_tidspunkt <span class="op">=</span> con.time_travel(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    at_time<span class="op">=</span><span class="st">"2026-09-26 00:00:00"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    where<span class="op">=</span><span class="st">"aar=2025"</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="backup" class="level3">
@@ -1535,7 +1597,7 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tabeller <span class="op">=</span> con.list_tables()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tabeller <span class="op">=</span> con.list_tables()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="antall-rader-i-en-tabell" class="level3">
@@ -1544,7 +1606,7 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>con.count(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>con.count(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sjekk-av-eksistens" class="level3">
@@ -1553,7 +1615,7 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>con.exists(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>con.exists(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -1566,14 +1628,14 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Hvis man ønsker å beholde editeringshistorikk og selve datafilene i produktbøtta, legger man til <code>cleanup=False</code> på denne måten:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>con.drop_table(<span class="st">"manuell_tabell"</span>, cleanup<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="flush-av-inlinede-data" class="level3">
@@ -1583,8 +1645,8 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flusher inlinede data for tabellen 'manuell_tabell'</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>con.flush_inlined_table(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Flusher inlinede data for tabellen 'manuell_tabell'</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>con.flush_inlined_table(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="merge-adjacent-files" class="level3">
@@ -1594,8 +1656,8 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Slår sammen tilstøtende filer for tabellen 'manuell_tabell'</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>con.merge_adjacent_files(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Slår sammen tilstøtende filer for tabellen 'manuell_tabell'</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>con.merge_adjacent_files(table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="eksporter-katalog" class="level3">
@@ -1605,11 +1667,11 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksporter med standard sti ({data_path}/catalog-export)</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>con.export_catalog()</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksporter til en egendefinert GCS-sti</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>con.export_catalog(export_path<span class="op">=</span><span class="st">"gs://bucket/backups"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksporter med standard sti ({data_path}/catalog-export)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>con.export_catalog()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksporter til en egendefinert GCS-sti</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>con.export_catalog(export_path<span class="op">=</span><span class="st">"gs://bucket/backups"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="importer-katalog" class="level3">
@@ -1619,8 +1681,8 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gjenopprett katalogen fra en sikkerhetskopifil</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>con.import_catalog(backup_file_path<span class="op">=</span><span class="st">"gs://bucket/backups/20250101_120000_my_schema.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gjenopprett katalogen fra en sikkerhetskopifil</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>con.import_catalog(backup_file_path<span class="op">=</span><span class="st">"gs://bucket/backups/20250101_120000_my_schema.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -1633,7 +1695,7 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit().local(path<span class="op">=</span><span class="st">"/home/onyxia/work/"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit().local(path<span class="op">=</span><span class="st">"/home/onyxia/work/"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="få-tilgang-til-den-underliggende-duckdb-tilkoblingen" class="level3">
@@ -1643,14 +1705,14 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ibis</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_parquedit <span class="im">import</span> ParquEdit</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> con._get_connection().raw  <span class="co"># duckdb.DuckDBPyConnection</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>ibis_conn <span class="op">=</span> ibis.duckdb.<span class="ex">connect</span>(conn<span class="op">=</span>raw)</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> ibis_conn.table(<span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ibis</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_parquedit <span class="im">import</span> ParquEdit</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>raw <span class="op">=</span> con._get_connection().raw  <span class="co"># duckdb.DuckDBPyConnection</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>ibis_conn <span class="op">=</span> ibis.duckdb.<span class="ex">connect</span>(conn<span class="op">=</span>raw)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> ibis_conn.table(<span class="st">"manuell_tabell"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Merk:</p>
 <ul>
@@ -1665,7 +1727,7 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit.local_with_gcs_data(catalog_path<span class="op">=</span><span class="st">"localcopy.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit.local_with_gcs_data(catalog_path<span class="op">=</span><span class="st">"localcopy.duckdb"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="konfigurere-logging" class="level3">
@@ -1675,23 +1737,23 @@ Tabell&nbsp;2: Eksempel på struktur med nøstede typer (STRUCT og LIST)
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    level<span class="op">=</span>logging.INFO,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(asctime)s</span><span class="st"> </span><span class="sc">%(levelname)-8s</span><span class="st"> </span><span class="sc">%(name)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_parquedit <span class="im">import</span> ParquEdit</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    level<span class="op">=</span>logging.INFO,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(asctime)s</span><span class="st"> </span><span class="sc">%(levelname)-8s</span><span class="st"> </span><span class="sc">%(name)s</span><span class="st">: </span><span class="sc">%(message)s</span><span class="st">"</span>,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ssb_parquedit <span class="im">import</span> ParquEdit</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> ParquEdit()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>For å se mer detaljert output (f.eks. for feilsøking), sett nivået til <code>logging.DEBUG</code>, eventuelt bare for <code>ssb_parquedit</code>s egne loggere:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"ssb_parquedit"</span>).setLevel(logging.DEBUG)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33" data-filename="Notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>logging.getLogger(<span class="st">"ssb_parquedit"</span>).setLevel(logging.DEBUG)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
