@@ -56,7 +56,7 @@ con.edit(
 
 ## Bruksområde
 
-Parquedit er ment som et **midlertidig lagringsformat** under arbeidsprosessen for manuell editering. Tjenesten forutsetter at brukeren ønsker å oppdatere en og en rad etter manuelle vurderinger av en person, og at dette skjer etter maskinelle kontroller og rettinger er gjennomført. Tjenesten forutsetter også at oppdateringer skjer i en enkelttabell. Parquedit har ikke støtte for *primary* eller *foreign* nøkler.  
+Parquedit er ment som et lagringsformat som kan benyttes under arbeidsprosessen for manuell og maskinell editering. Tjenesten forutsetter at brukeren ønsker å enten oppdatere en og en enhet etter manuelle vurderinger av en person, og støtter oppdateringer av tabellen etter maskinell editering. Tjenesten forutsetter også at oppdateringer skjer i en enkelttabell. Parquedit har ikke støtte for *primary* eller *foreign* nøkler.  
 
 Når arbeidsprosessen med manuell editering er gjennomført og data lagres i stabile datatilstander, så forutsetter systemet at teamet som eier dataene selv henter ut opplysninger fra Parquedit med logger som skal benyttes til kvalitetsrapporter og gi evnen til å gjenskape manuelle editeringer på et senere tidspunkt.     
 
@@ -84,9 +84,9 @@ poetry add ssb-parquedit
 
 ### Anbefalt tabelloppsett
 
-`ssb-parquedit` er konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). For at pakken og tilknyttede brukergrensesnitt skal fungere mest mulig effektivt, anbefales det å strukturere dataene som flate, brede tabeller. For brukere som ønsker å strukturere data på **langform** så må man selv oppdatere hver rad som endres.  
+`ssb-parquedit` er hovedsakelig konstruert for manuell celleeditering i tabulære data der hver rad representerer én statistisk enhet (f.eks. ett foretak eller én person). Der det er mulig anbefaler vi derfor at strukturere Parquedit-tabellene som flate og brede tabeller. I de tilfellene dette ikke er ønskelig, så kan man også strukturere dataene på langform. Manuell editering av data på langform innebærer at brukeren selv må oppdatere alle radene som endres.  
 
-Under vises noen eksempler på ulike datastrukturer. @tbl-datastruktur viser et eksempel der dataene er strukturert med en linje per bedrift som skal manuelt editeres, og hver kolonne er en egenskap ved bedriften. Hvis man oppretter en Parquedit-tabell med denne strukturen vil man kunne editere en og en virksomhet samtidig som Parquedit håndterer historikken og detaljerte logger over årsakskode og hvilken endring som ble gjort av hvem.  
+Under vises noen eksempler på ulike datastrukturer. @tbl-datastruktur viser et eksempel der dataene er strukturert med en linje per bedrift som skal manuelt editeres, og hver kolonne er en egenskap eller måling ved bedriften. Hvis man oppretter en Parquedit-tabell med denne strukturen vil man kunne editere en og en virksomhet samtidig som Parquedit håndterer historikken og detaljerte logger over årsakskode og hvilken endring som ble gjort av hvem.  
 
 | orgnr | foretak_navn | kontakt_epost | kontakt_tlf | omsetning_nok | ansatte_antall |
 | :--- | :--- | :--- | :--- | ---: | ---: |
