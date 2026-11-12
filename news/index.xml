@@ -17,7 +17,161 @@
 <width>16</width>
 </image>
 <generator>quarto-1.11.9</generator>
-<lastBuildDate>Thu, 05 Nov 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 12 Nov 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Nye funksjoner i Parquedit: masseoppdateringer, nøstede felt og oppdatert livssyklus</title>
+  <dc:creator>Øyvind Bruer-Skarsbø</dc:creator>
+  <link>https://manual.dapla.ssb.no/news/posts/2026-11-12-parquedit-updates/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Vi har videreutviklet <strong>Parquedit</strong> (<code>ssb-parquedit</code>) på bakgrunn av tilbakemeldinger fra statistikkteamene. Oppdateringene gjør det enklere å kombinere manuell og maskinell editering i iterative produksjonsløp, og gir mer fleksibilitet rundt datastrukturer og forvaltning av tabeller.</p>
+<section id="hva-er-nytt" class="level2">
+<h2 class="anchored" data-anchor-id="hva-er-nytt">Hva er nytt?</h2>
+<section id="støtte-for-masseoppdateringer-ved-maskinell-editering" class="level3">
+<h3 class="anchored" data-anchor-id="støtte-for-masseoppdateringer-ved-maskinell-editering">Støtte for masseoppdateringer ved maskinell editering</h3>
+<p>Mange team har en arbeidsflyt der manuelle vurderinger og skriptede korreksjoner veksler i samme produksjonsperiode. Tidligere krevde dette at teamene eksporterte data og opprettet nye tabeller for hver maskinelle kjøring.</p>
+<p>Nå støtter Parquedit masseoppdateringer direkte i tabellen: * <strong><code>update_bulk()</code>:</strong> Oppdaterer mange rader med ulike verdier (f.eks. etter imputering eller maskinlæring) basert på <code>rowid</code>. * <strong><code>update_where()</code>:</strong> Oppdaterer alle rader som matcher en <code>where</code>-betingelse med samme verdi.</p>
+<p>Begge funksjonene utfører endringene i én transaksjon og logger dette som en samlet hendelse i endringshistorikken (<code>get_edits()</code>). Ved bruk av <code>update_bulk()</code> kan du i tillegg legge ved <code>script_id</code> (lenke til GitHub-fil med commit-SHA) og <code>script_info</code>, slik at de maskinelle endringene er direkte sporbare til versjonert kode.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">con.update_bulk(</span>
+<span id="cb1-2">    table_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"manuell_tabell"</span>,</span>
+<span id="cb1-3">    changes<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{</span>
+<span id="cb1-4">        <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>: {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"status"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"KONTROLLERT"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"belop"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>},</span>
+<span id="cb1-5">        <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>: {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"status"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"KONTROLLERT"</span>},</span>
+<span id="cb1-6">    },</span>
+<span id="cb1-7">    change_event_reason<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"REVIEW"</span>,</span>
+<span id="cb1-8">    change_comment<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Satt status og beløp etter maskinell kontroll"</span>,</span>
+<span id="cb1-9">    script_id<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[github.com/statisticsnorway/mitt-repo/src/imputation.py@5bb8b73](https://github.com/statisticsnorway/mitt-repo/src/imputation.py@5bb8b73)"</span>,</span>
+<span id="cb1-10">    script_info<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"threshold=18, dry_run=False"</span>,</span>
+<span id="cb1-11">)</span></code></pre></div></div>
+</section>
+<section id="delvis-oppdatering-av-nøstede-felt-struct-og-liststruct" class="level3">
+<h3 class="anchored" data-anchor-id="delvis-oppdatering-av-nøstede-felt-struct-og-liststruct">Delvis oppdatering av nøstede felt (<code>STRUCT</code> og <code>LIST&lt;STRUCT&gt;</code>)</h3>
+<p>For datasett som er hierarkiske av natur – eller der utflating gir svært mange kolonner – kan data lagres med komplekse datatyper i én og samme tabell. <code>con.edit()</code> støtter nå målrettet oppdatering av enkeltfelt inne i nøstede strukturer ved hjelp av punktnotasjon og indekser:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Oppdater et underfelt i en STRUCT</span></span>
+<span id="cb2-2">con.edit(</span>
+<span id="cb2-3">    table_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"manuell_nostet"</span>,</span>
+<span id="cb2-4">    rowid<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>rowid,</span>
+<span id="cb2-5">    changes<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kontakt.epost"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ny@eksempel.no"</span>},</span>
+<span id="cb2-6">    change_event_reason<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"REVIEW"</span>,</span>
+<span id="cb2-7">    change_comment<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Oppdatert e-postadresse"</span>,</span>
+<span id="cb2-8">)</span>
+<span id="cb2-9"></span>
+<span id="cb2-10"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Oppdater et underfelt i en LIST&lt;STRUCT&gt;</span></span>
+<span id="cb2-11">con.edit(</span>
+<span id="cb2-12">    table_name<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"manuell_nostet"</span>,</span>
+<span id="cb2-13">    rowid<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>rowid,</span>
+<span id="cb2-14">    changes<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>{<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"avdelinger[0].ansatte"</span>: <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>},</span>
+<span id="cb2-15">    change_event_reason<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"REVIEW"</span>,</span>
+<span id="cb2-16">    change_comment<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Oppdatert antall ansatte i første avdeling"</span>,</span>
+<span id="cb2-17">)</span></code></pre></div></div>
+<p>Endringsloggen (get_edits()) registrerer nå kun det faktiske underfeltet som ble endret i old_values og new_values, i stedet for å logge hele kolonnen på nytt.</p>
+</section>
+<section id="ikke-lenger-frarådet-med-data-på-langform" class="level3">
+<h3 class="anchored" data-anchor-id="ikke-lenger-frarådet-med-data-på-langform">Ikke lenger frarådet med data på langform</h3>
+<p>Vi anbefaler fortsatt flate og brede tabeller (én rad per statistisk enhet) der det er mulig, fordi det gir den mest intuitive arbeidsflyten og endringsloggen[cite: 8]. Samtidig har vi fjernet teksten i dokumentasjonen som fraråder bruk av data på langform[cite: 8]. Dersom statistikken krever langform, kan dette benyttes ved at man oppdaterer de relevante radene som tilhører enheten.</p>
+</section>
+<section id="ingen-automatisk-sletting-av-parquedit-tabeller" class="level3">
+<h3 class="anchored" data-anchor-id="ingen-automatisk-sletting-av-parquedit-tabeller">Ingen automatisk sletting av Parquedit-tabeller</h3>
+<p>Vi har fjernet omtalen av Parquedit-tabeller som strengt midlertidige arbeidstabeller. Systemet vil ikke gjennomføre automatisk sletting eller tvungen opprydding i tabellene. Vi ønsker å høste erfaringer sammen med brukerne om hvordan tabellene forvaltes over tid før eventuelle livssyklusregler etableres. Teamene har likevel full tilgang til verktøy for vedlikehold og rydding ved behov, inkludert export_catalog() for sikkerhetskopiering av metadatakatalogen og drop_table(…, cleanup=True) når en tabell skal fjernes helt.</p>
+<p>Les hele den oppdaterte brukerveiledningen i <a href="../../../statistikkere/ssb-parquedit.html">dokumentasjonen for Parquedit</a>.</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>parquedit</category>
+  <category>editering</category>
+  <guid>https://manual.dapla.ssb.no/news/posts/2026-11-12-parquedit-updates/</guid>
+  <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
+</item>
 <item>
   <title>Lagring av prefill på Dapla</title>
   <dc:creator>Øyvind Steinbekken</dc:creator>
@@ -900,34 +1054,6 @@ Figur&nbsp;1: Bildet viser søk på kortnavnet <strong>fnr</strong>
   <category>ai</category>
   <guid>https://manual.dapla.ssb.no/news/posts/2026-06-18-daplanytt-jun26/</guid>
   <pubDate>Thu, 18 Jun 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
-</item>
-<item>
-  <title>Slette valgfrie felt i Vardef</title>
-  <dc:creator>Miles Mason Winther</dc:creator>
-  <link>https://manual.dapla.ssb.no/news/posts/2026-06-17-vardef-delete-fields/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<section id="hva-er-nytt" class="level2">
-<h2 class="anchored" data-anchor-id="hva-er-nytt">Hva er nytt?</h2>
-<p>Det er nå mulig å fjerne verdiene for valgfrie felt i Vardef.</p>
-</section>
-<section id="hva-betyr-dette-for-meg" class="level2">
-<h2 class="anchored" data-anchor-id="hva-betyr-dette-for-meg">Hva betyr dette for meg?</h2>
-<p>Dersom man har behov, kan man slette et felt ved å <a href="../../../statistikkere/vardef-forvaltning.html#hvordan-slette-felt">følge instruksjonene</a>.</p>
-
-
-</section>
-
- ]]></description>
-  <category>metadata</category>
-  <category>vardef</category>
-  <guid>https://manual.dapla.ssb.no/news/posts/2026-06-17-vardef-delete-fields/</guid>
-  <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
   <media:content url="https://manual.dapla.ssb.no/images/dapla-long.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 </channel>
