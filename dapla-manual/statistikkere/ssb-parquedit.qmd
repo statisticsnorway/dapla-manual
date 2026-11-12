@@ -395,7 +395,7 @@ con.update_where(
 
 #### Masseeditering med `update_bulk()`
 
-Hvis ulike rader skal få ulike verdier, kan du bruke `update_bulk()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. Funksjonen støtter foreløpig ikke oppdatering av Struct-typer eller List-er med dot-notasjon. Hvis disse ønskes masseoppdaterte må man erstatte hele Struct/list inkludert de nye verdiene.
+Hvis ulike rader skal få ulike verdier, kan du bruke `update_bulk()`. Du oppgir en dictionary der nøkkelen er `rowid` og verdien er en dictionary med kolonner og nye verdier. Alle endringene utføres i én transaksjon (rulles tilbake ved feil) og logges som ett snapshot i endringshistorikken, inkludert bruker, berørte rader og kolonner. Funksjonen støtter foreløpig ikke oppdatering av Struct-typer eller List-er med dot-notasjon. Hvis disse ønskes masseoppdaterte må man erstatte hele Struct/list inkludert de nye verdiene. Masseoppdateringer kan generere mye inlinede data i basen og mange små parquet-filer pr tabell, så det anbefales å kjøre metodene `flush_inlined_data()` og `merge_adjacent_files()` med jevne mellomrom for å holde ytelsen stabil. 
 
 ```{.python filename="Notebook"}
 con.update_bulk(
