@@ -334,7 +334,11 @@ background: #274247;
 <section id="støtte-for-masseoppdateringer-ved-maskinell-editering" class="level3">
 <h3 class="anchored" data-anchor-id="støtte-for-masseoppdateringer-ved-maskinell-editering">Støtte for masseoppdateringer ved maskinell editering</h3>
 <p>Mange team har en arbeidsflyt der manuelle vurderinger og skriptede korreksjoner veksler i samme produksjonsperiode. Tidligere krevde dette at teamene eksporterte data og opprettet nye tabeller for hver maskinelle kjøring.</p>
-<p>Nå støtter Parquedit masseoppdateringer direkte i tabellen: * <strong><code>update_bulk()</code>:</strong> Oppdaterer mange rader med ulike verdier (f.eks. etter imputering eller maskinlæring) basert på <code>rowid</code>. * <strong><code>update_where()</code>:</strong> Oppdaterer alle rader som matcher en <code>where</code>-betingelse med samme verdi.</p>
+<p>Nå støtter Parquedit masseoppdateringer direkte i tabellen:</p>
+<ul>
+<li><strong><code>update_bulk()</code>:</strong> Oppdaterer mange rader med ulike verdier (f.eks. etter imputering eller maskinlæring) basert på <code>rowid</code>.</li>
+<li><strong><code>update_where()</code>:</strong> Oppdaterer alle rader som matcher en <code>where</code>-betingelse med samme verdi.</li>
+</ul>
 <p>Begge funksjonene utfører endringene i én transaksjon og logger dette som en samlet hendelse i endringshistorikken (<code>get_edits()</code>). Ved bruk av <code>update_bulk()</code> kan du i tillegg legge ved <code>script_id</code> (lenke til GitHub-fil med commit-SHA) og <code>script_info</code>, slik at de maskinelle endringene er direkte sporbare til versjonert kode.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>con.update_bulk(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    table_name<span class="op">=</span><span class="st">"manuell_tabell"</span>,</span>
@@ -368,15 +372,15 @@ background: #274247;
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    change_event_reason<span class="op">=</span><span class="st">"REVIEW"</span>,</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    change_comment<span class="op">=</span><span class="st">"Oppdatert antall ansatte i første avdeling"</span>,</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Endringsloggen (get_edits()) registrerer nå kun det faktiske underfeltet som ble endret i old_values og new_values, i stedet for å logge hele kolonnen på nytt.</p>
+<p>Endringsloggen fra <code>get_edits()</code> registrerer nå kun det faktiske underfeltet som ble endret i old_values og new_values, i stedet for å logge hele kolonnen på nytt.</p>
 </section>
 <section id="ikke-lenger-frarådet-med-data-på-langform" class="level3">
 <h3 class="anchored" data-anchor-id="ikke-lenger-frarådet-med-data-på-langform">Ikke lenger frarådet med data på langform</h3>
-<p>Vi anbefaler fortsatt flate og brede tabeller (én rad per statistisk enhet) der det er mulig, fordi det gir den mest intuitive arbeidsflyten og endringsloggen[cite: 8]. Samtidig har vi fjernet teksten i dokumentasjonen som fraråder bruk av data på langform[cite: 8]. Dersom statistikken krever langform, kan dette benyttes ved at man oppdaterer de relevante radene som tilhører enheten.</p>
+<p>Vi anbefaler fortsatt flate og brede tabeller (én rad per statistisk enhet) der det er mulig, fordi det gir den mest intuitive arbeidsflyten og endringsloggen. Samtidig har vi fjernet teksten i dokumentasjonen som fraråder bruk av data på langform. Dersom statistikken krever langform, kan dette benyttes ved at man oppdaterer de relevante radene som tilhører enheten.</p>
 </section>
 <section id="ingen-automatisk-sletting-av-parquedit-tabeller" class="level3">
 <h3 class="anchored" data-anchor-id="ingen-automatisk-sletting-av-parquedit-tabeller">Ingen automatisk sletting av Parquedit-tabeller</h3>
-<p>Vi har fjernet omtalen av Parquedit-tabeller som strengt midlertidige arbeidstabeller. Systemet vil ikke gjennomføre automatisk sletting eller tvungen opprydding i tabellene. Vi ønsker å høste erfaringer sammen med brukerne om hvordan tabellene forvaltes over tid før eventuelle livssyklusregler etableres. Teamene har likevel full tilgang til verktøy for vedlikehold og rydding ved behov, inkludert export_catalog() for sikkerhetskopiering av metadatakatalogen og drop_table(…, cleanup=True) når en tabell skal fjernes helt.</p>
+<p>Vi har fjernet omtalen av Parquedit-tabeller som strengt midlertidige arbeidstabeller. Systemet vil ikke gjennomføre automatisk sletting eller tvungen opprydding i tabellene. Vi ønsker å høste erfaringer sammen med brukerne om hvordan tabellene forvaltes over tid før eventuelle livssyklusregler etableres. Teamene har likevel full tilgang til verktøy for vedlikehold og rydding ved behov, inkludert <code>export_catalog()</code> for sikkerhetskopiering av metadatakatalogen og <code>drop_table(..., cleanup=True)</code> når en tabell skal fjernes helt.</p>
 <p>Les hele den oppdaterte brukerveiledningen i <a href="../../../statistikkere/ssb-parquedit.html">dokumentasjonen for Parquedit</a>.</p>
 
 
