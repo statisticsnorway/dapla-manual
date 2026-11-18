@@ -32,12 +32,6 @@
   font-size: 2.5rem;
 }
 
-.hero-banner .hero-image {
-  position: absolute;
-  display: none;
-  height: auto;
-}
-
 .hero-banner .content-block {
   display: flex;
   flex-direction: row;
@@ -49,6 +43,7 @@
 
 .hero-banner .content-block .hero-animation {
   margin-left: 90px;
+  /* Leaves room for the absolutely positioned .sidebar-latest-news above the cube */
   margin-top: 195px;
   width: 250px;
   height: 260px;
@@ -108,39 +103,6 @@
   animation: turn 20s ease-in-out infinite;
 }
 
-@media (min-width: 1000px) {
-  .hero-banner .hero-image {
-    display: initial;
-    width: 270px;
-  }
-}
-
-@media (min-width: 1200px) {
-  .hero-banner .hero-image {
-    width: 340px;
-  }
-}
-
-@media (min-width: 1400px) {
-  .hero-banner .hero-image {
-    width: 440px;
-  }
-}
-
-.hero-banner .hero-image p {
-  margin-bottom: 0;
-}
-
-.hero-banner .hero-image-left {
-  left: 0;
-  bottom: 0;
-}
-
-.hero-banner .hero-image-right {
-  right: 0;
-  bottom: 0;
-}
-
 .hero-banner .content-block {
   z-index: 2;
 }
@@ -180,10 +142,6 @@
   margin-bottom: 1.3rem;
 }
 
-.hero-banner h4 {
-  margin-top: 0;
-}
-
 .hero-banner a[role="button"] {
   margin-right: 17px;
   margin-top: 0.6rem;
@@ -192,11 +150,6 @@
 
 .btn {
   background-color: #1a9d49;
-}
-
-.hero-banner #btn-guide {
-  background-color: #274247 !important;
-  border: none;
 }
 
 .hero-banner ul {
@@ -216,52 +169,6 @@
 
 .hello-quarto {
   padding-bottom: 1rem;
-}
-
-@media (min-width: 600px) {
-  .hello-quarto-banner {
-    display: inline-flex;
-    align-content: center;
-    justify-content: center;
-  }
-
-  .hello-quarto-banner h1 {
-    margin-right: 40px;
-  }
-}
-
-.hello-quarto-banner .nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  border: none;
-  border-bottom: 2px solid #39729e !important;
-  color: #39729e;
-  background-color: transparent;
-}
-
-.hello-quarto-banner .nav-pills button {
-  width: 125px;
-}
-
-.hello-quarto .tab-content {
-  border: none;
-  padding: 0;
-  color: rgb(84, 85, 85);
-}
-
-.hello-quarto .tab-content p {
-  font-size: 1.1em;
-  margin-bottom: 1.5em;
-}
-
-.hello-quarto div.sourceCode {
-  background-color: white;
-  border: 1px solid #dee2e6;
-}
-
-.hello-output {
-  background-color: white;
-  border: 1px solid #dee2e6;
-  max-height: 660px;
 }
 
 .features {
@@ -300,23 +207,12 @@
   padding-bottom: 2rem;
 }
 
-.get-started h3 {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
-
 nav.page-navigation {
   display: none;
 }
 
 .nav-footer {
   border-top: none !important;
-}
-
-.nav-pills .nav-link.active,
-.nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #ff7518;
 }
 
 /* Styling for Siste Nyheter box */
@@ -332,7 +228,6 @@ nav.page-navigation {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
   color: #274247;
-  z-index: 3;
   text-align: left;
   font-size: 0.85em;
 }
@@ -369,6 +264,17 @@ nav.page-navigation {
   color: #4b7272;
   font-weight: bold;
   font-size: 0.9em;
+  /* Cap titles at two lines so the box height stays predictable */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.latest-news-loading {
+  color: #555;
+  font-style: italic;
 }
 
 #latest-news-list a:hover {
@@ -381,12 +287,12 @@ nav.page-navigation {
   margin: 3px 0 0 0;
 }
 
-@media (min-width: 1100px) {
+/* Matches the 1200px breakpoint where .content-block widens and the cube appears */
+@media (min-width: 1200px) {
   .sidebar-latest-news {
     position: absolute;
     right: 10px;
     top: 15px;
-    width: 240px;
     margin-bottom: 0;
   }
 }

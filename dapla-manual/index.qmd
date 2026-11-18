@@ -1,5 +1,5 @@
 ---
-pagetitle: "Dapla-manual-internal"
+pagetitle: "Dapla-manualen"
 page-layout: custom
 section-divs: false
 toc: false
@@ -24,10 +24,10 @@ resources:
 
 - Lær om Dapla-team
 - Utvikle kode i R eller Python
-- Velg programmeringsmiljøer som [Jupyterlab](https://jupyter.org/), [VSCode](https://github.com/coder/code-server) eller [RStudio](https://posit.co/products/open-source/rstudio-server/)
+- Velg programmeringsmiljøer som [JupyterLab](https://jupyter.org/), [VSCode](https://github.com/coder/code-server) eller [RStudio](https://posit.co/products/open-source/rstudio-server/)
 - Utnytt prosesseringskraften i et skalerbart [Kubernetes](https://kubernetes.io/)-miljø
 - Reproduserbare resultater med Git og GitHub
-- Uendelig med lagringsplass i *Google Cloud Storage* bøtter
+- Ubegrenset lagringsplass i *Google Cloud Storage* bøtter
 
 ### Hvordan? Hva? Hvorfor? Dapla-manualen gjør overgangen til Dapla enklere.
 
@@ -50,11 +50,11 @@ rgba(117,7,135,0.7) 100%
 ::: 
 
 :::{.sidebar-latest-news}
-### Siste nyheter:
+### Siste nyheter
 
 <div id="latest-news-box">
   <ul id="latest-news-list">
-    <!-- Latest news items will be appended here -->
+    <li class="latest-news-loading">Laster…</li>
   </ul>
 </div>
 :::
@@ -62,11 +62,11 @@ rgba(117,7,135,0.7) 100%
 
 ::: {.hero-animation}
 
-<div class="cube">
-  <div class="face left"><img src="images/ssb_logo.svg" alt="ssb"/></div>
-  <div class="face front"><img src="images/dapla-long.svg" alt="dapla"/></div> 
-  <div class="face right"><img src="images/ssb_logo.svg" alt="ssb"/></div>
-  <div class="face back"><img src="images/dapla-long.svg" alt="dapla"/></div>
+<div class="cube" aria-hidden="true">
+  <div class="face left"><img src="images/ssb_logo.svg" alt=""/></div>
+  <div class="face front"><img src="images/dapla-long.svg" alt=""/></div> 
+  <div class="face right"><img src="images/ssb_logo.svg" alt=""/></div>
+  <div class="face back"><img src="images/dapla-long.svg" alt=""/></div>
 </div>
 
 :::
@@ -80,14 +80,10 @@ rgba(117,7,135,0.7) 100%
 
 # Velkommen
 
-Dapla-manualen tar sikte på å gi SSB-ansatte mulighet til å ta i bruk grunnleggende funksjonalitet på Dapla uten hjelp fra *eksperter*. Den skal hjelpe statistikere, forskere og utviklere med å finne relevant informasjon på en enkel måte. Manualen er bygget opp med en del for [statistikere/forskere](./statistikkere/index.qmd), og en del for [IT-utviklere](./utviklere/lenker.qmd). I tillegg har vi en [blogg](./blog/index.qmd) der alle i SSB kan bidra med erfaringer, tanker og triks som kan være nyttig i overgangen til en ny plattform.
+Dapla-manualen tar sikte på å gi SSB-ansatte mulighet til å ta i bruk grunnleggende funksjonalitet på Dapla uten hjelp fra *eksperter*. Den skal hjelpe statistikere, forskere og utviklere med å finne relevant informasjon på en enkel måte. Manualen er bygget opp med en del for [statistikere/forskere](./statistikkere/index.qmd), og en del for [IT-utviklere](./utviklere/lenker.qmd). I tillegg har vi en [blogg](./blog/index.qmd) der alle i SSB kan bidra med erfaringer, tanker og triks som kan være nyttige i overgangen til en ny plattform.
 
-Alle ansatte i SSB kan bidra til denne manualen ved å følge [instruksjonene her](./statistikkere/appendix/contribution.qmd)
-<br>
+Alle ansatte i SSB kan bidra til denne manualen ved å følge [instruksjonene her](./statistikkere/appendix/contribution.qmd).
 
-::: {.grid}
-
-:::
 :::
 :::
 
@@ -110,7 +106,7 @@ På Dapla støttes programmeringsspråkene R og Python. Det er kraftige verktøy
 
 ::: {.feature}
 ### Metadata
-I SSB utvikles det et helhetlige metadatasystemer som skal gjøre det enklere å finne frem til data og forstå dem.
+I SSB utvikles det helhetlige metadatasystemer som skal gjøre det enklere å finne frem til data og forstå dem.
 
 ::: {.learn-more}
 [Les mer »](statistikkere/datadoc.qmd)
@@ -119,7 +115,7 @@ I SSB utvikles det et helhetlige metadatasystemer som skal gjøre det enklere å
 
 ::: {.feature}
 ### Git og GitHub
-På Dapla brukes Git til å versjonhåndtere kode og GitHub til å lagre koden. 
+På Dapla brukes Git til å versjonshåndtere kode og GitHub til å lagre koden. 
 
 ::: {.learn-more}
 [Les mer »](statistikkere/git-og-github.qmd)
@@ -128,7 +124,7 @@ På Dapla brukes Git til å versjonhåndtere kode og GitHub til å lagre koden.
 
 ::: {.feature}
 ### Programmeringsmiljøer
-Velg mellom moderne programmeringsmiljøer som Jupyterlab, VSCode eller RStudio. 
+Velg mellom moderne programmeringsmiljøer som JupyterLab, VSCode eller RStudio. 
 
 ::: {.learn-more}
 [Les mer »](statistikkere/jupyter.qmd)
@@ -181,37 +177,38 @@ rgba(117,7,135,0.7) 100%
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
 
-      const latestItems = xmlDoc.querySelectorAll("item");
+      latestNewsList.innerHTML = "";
 
-      latestItems.forEach((item, index) => {
-        if (index < 3) { 
-          const title = item.querySelector("title")?.textContent || "";
-          const pubDate = item.querySelector("pubDate")?.textContent || "";
-          const link = item.querySelector("link")?.textContent || "#";
+      const latestItems = Array.from(xmlDoc.querySelectorAll("item"))
+        .filter(item => item.querySelector("link")?.textContent)
+        .slice(0, 3);
 
-          const listItem = document.createElement('li');
-          const titleLink = document.createElement('a');
-          titleLink.href = link;
-          titleLink.target = "_blank";
-          titleLink.rel = "noopener noreferrer";
-          titleLink.innerText = title;
+      latestItems.forEach(item => {
+        const title = item.querySelector("title")?.textContent || "";
+        const pubDate = item.querySelector("pubDate")?.textContent || "";
+        const link = item.querySelector("link").textContent;
 
-          const dateText = document.createElement('p');
-          dateText.innerText = pubDate
-            ? new Date(pubDate).toLocaleDateString('nb-NO', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-              })
-            : "";
+        const listItem = document.createElement('li');
+        const titleLink = document.createElement('a');
+        titleLink.href = link;
+        titleLink.innerText = title;
 
-          listItem.appendChild(titleLink);
-          listItem.appendChild(dateText);
-          latestNewsList.appendChild(listItem);
-        }
+        const dateText = document.createElement('p');
+        dateText.innerText = pubDate
+          ? new Date(pubDate).toLocaleDateString('nb-NO', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            })
+          : "";
+
+        listItem.appendChild(titleLink);
+        listItem.appendChild(dateText);
+        latestNewsList.appendChild(listItem);
       });
     } catch (error) {
       console.error("Error loading latest news:", error);
+      latestNewsList.innerHTML = "";
       const errorMessage = document.createElement('li');
       errorMessage.innerText = "Kunne ikke laste nyheter";
       latestNewsList.appendChild(errorMessage);
