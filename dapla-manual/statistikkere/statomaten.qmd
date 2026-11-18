@@ -1,0 +1,158 @@
+---
+title: Statomaten
+date-modified: 10/13/2026
+lightbox: true
+---
+
+::: {.callout-warning}
+## Under arbeid
+:::
+
+Statomaten er en tjeneste som kjører dataarbeid automatisk. Du beskriver arbeidet i en Python-fil som kalles en **DAG**. Tenk på DAG-en som en plan: Den sier hvilke oppgaver som skal gjøres, hvilken rekkefølge de skal gjøres i, og når arbeidet skal starte. Selve oppgavene gjør jobben, for eksempel å hente, kontrollere eller lagre data.
+
+For eksempel kan en arbeidsflyt hente nye data, kontrollere at de har forventet innhold, bearbeide dem og lagre resultatet. Statomaten kjører arbeidsflytene i et administrert miljø. Teamet lagrer filene i IaC-repoet sitt. Når en endring merges til `main`, laster Cloud Build filene opp til Statomaten.
+
+Du trenger ikke å kunne alle Airflow-begrepene for å forstå denne veiledningen. Airflow er teknologien som brukes bak kulissene. Se [Airflows dokumentasjon om DAG-er](https://airflow.apache.org/docs/apache-airflow/3.1.7/core-concepts/dags.html) hvis du vil lese mer om hvordan arbeidsflyter bygges.
+
+## Eksempler på arbeidsflyter
+
+Her kan dere legge inn eksempler på vanlige arbeidsflyter fra statistikkproduksjonen, for eksempel å hente og klargjøre data på et fast tidspunkt eller å gjennomføre flere kontroll- og behandlingstrinn i riktig rekkefølge.
+
+## Forberedelser
+
+Før teamet tar i bruk Statomaten, bør dere avklare hvilke arbeidsflyter som skal automatiseres, hvilke data de skal lese og skrive, og hvem som skal vedlikeholde dem.
+
+Det er også lurt å avklare:
+
+- hvor ofte arbeidsflyten skal kjøre, eller om den bare skal startes ved behov
+- når inndataene vanligvis er klare
+- hvor resultatene skal lagres
+- hvordan dere vil kontrollere at resultatet er riktig
+- hvem som følger med på kjøringene og håndterer feil
+
+## Sette opp tjenesten
+
+Før et Dapla-team kan ta i bruk Statomaten, må teamet aktivere feature-en i IaC-repoet sitt. Kuben lager den nødvendige infrastrukturen fra en mal.
+
+### Aktiver Statomaten
+
+Følg [oppskriften for å aktivere en feature](./features.qmd#aktivere-feature) og legg til `statomaten` under `features` for miljøet dere vil bruke.
+
+```{.yaml filename="./infra/projects.yaml" caption="Eksempel: Statomaten aktivert i testmiljøet" code-line-numbers="true"}
+team_uniform_name: play-obr
+
+projects:
+  - project_name: play-obr
+    env: test
+    features:
+      - dapla-buckets
+      - statomaten
+
+  - project_name: play-obr
+    env: prod
+    features:
+      - dapla-buckets
+```
+
+### Legg til en arbeidsflyt
+
+En arbeidsflyt består av én eller flere oppgaver. Du kan for eksempel beskrive at data først skal hentes, deretter kontrolleres og til slutt lagres. Rekkefølgen er viktig: En oppgave som avhenger av resultatet fra en tidligere oppgave, starter først når den tidligere oppgaven er ferdig.
+
+Arbeidsflytene beskrives i Python-filer og lagres i teamets IaC-repo. Når endringer i repoet merges til `main`, kjører Cloud Build og laster filene opp til Statomaten. Statomaten leser inn arbeidsflytene og kan deretter kjøre dem.
+
+En arbeidsflyt kan lese fra og skrive til teamets kilde- og standardbøtter, forutsatt at nødvendige tilganger er satt opp.
+
+::: {.callout-note}
+## Dette må avklares før publisering
+
+Tech-dokumentasjonen beskriver ikke mappe- og filnavn, krav til DAG-kode, hvordan avhengigheter legges til, eller om teamet skal bruke en bestemt mal. Legg inn et minimalt eksempel på en DAG og en konkret mappestruktur. Forklar også hvordan en bruker kan teste en endring før den merges til `main`.
+:::
+
+### Planlegg når en arbeidsflyt skal kjøre
+
+En arbeidsflyt kan enten kjøre etter en plan eller startes manuelt. En plan kan for eksempel si at arbeidsflyten skal behandle data én gang per dag. Planen angis i arbeidsflytens kode; opplasting til Statomaten starter ikke i seg selv en kjøring.
+
+En plan angir hvor ofte Statomaten skal starte en kjøring, men garanterer ikke at den starter på sekundet. Tenk også gjennom hvilken periode med data hver kjøring skal behandle. For en daglig arbeidsflyt starter kjøringen normalt etter at den aktuelle dataperioden er avsluttet.
+
+::: {.callout-note}
+## Eksempel på planlegging
+
+I koden brukes for eksempel `@daily` for å angi en daglig plan. Planen må passe med når dataene er klare og hvordan datoene i dataene skal tolkes. Se [Airflows dokumentasjon om planlegging](https://airflow.apache.org/docs/apache-airflow/3.1.7/authoring-and-scheduling/index.html) for flere muligheter.
+:::
+
+En arbeidsflyt kan også konfigureres uten en fast plan og startes manuelt. Hvor i Statomaten du starter en kjøring, må beskrives når brukergrensesnitt og tilgang er avklart.
+
+### Rull ut endringer
+
+1. Gjør endringen i teamets IaC-repo på en egen branch.
+2. Opprett en pull request, og få endringen godkjent etter teamets rutine.
+3. Kontroller at testene og kontrollene i pull request-en er fullført.
+4. Merge endringen til `main`.
+5. Kontroller at Cloud Build-jobben fullførte opplastingen.
+
+Opplasting publiserer arbeidsflyten, men er ikke det samme som å starte en kjøring. Arbeidsflyten starter etter planen som er satt i koden, eller når noen starter den manuelt.
+
+::: {.callout-note}
+## Illustrasjoner
+
+Tech-dokumentet viser til et diagram over utrullingsflyten, men bildefilen fulgte ikke med i dokumentasjonen som er tilgjengelig her. Legg inn diagrammet når det er tilgjengelig.
+:::
+
+## Følg med på kjøringene
+
+Statomaten kjører arbeidsflytene i teamets miljø. Her bør brukeren kunne finne arbeidsflyten, se om en kjøring pågår eller er ferdig, og finne eventuelle feilmeldinger.
+
+::: {.callout-note}
+## Dette må avklares før publisering
+
+Tech-dokumentasjonen beskriver ikke hvor brukerne finner arbeidsflytoversikten, kjøringshistorikken eller loggene, eller hvordan de starter en kjøring manuelt. Legg inn lenker og skjermbilder fra Statomaten-grensesnittet, og beskriv hvem som har tilgang.
+:::
+
+## Data og tilganger
+
+Statomaten setter opp en tjenestekonto og gir den tilgang til teamets kilde- og standardbøtter. En arbeidsflyt kan bare lese og skrive data som tjenestekontoen har tilgang til.
+
+Ta hensyn til hvilke data arbeidsflyten behandler, hvor resultatene lagres, og om tilgangene er riktige for både test og prod. Avklar tilgangsbehov før arbeidsflyten settes i produksjon.
+
+## Nettverk
+
+Statomaten kjører i et eget nettverk for teamet. Nettverket kobles til et sentralt nettverk gjennom Network Connectivity Center (NCC). Dette kan gi nettverksforbindelse til andre tilkoblede miljøer, men er **ikke** i seg selv en brannmur eller en garanti for at en bestemt tjeneste kan nås.
+
+::: {.callout-caution}
+## Nettverkstilgang må avklares
+
+Ikke legg sensitive opplysninger eller hemmeligheter i DAG-koden. Hvis en arbeidsflyt trenger tilgang til et system eller en adresse, må teamet avklare at forbindelsen og nødvendige tilgangsregler er satt opp.
+:::
+
+::: {.callout-note}
+## Dette må avklares før publisering
+
+Legg til en brukerrettet oppskrift for å melde inn behov for nettverkstilgang og finne ut om et endepunkt er tilgjengelig. Nettverksdiagrammet fra tech-dokumentet må også legges inn når bildefilen er tilgjengelig.
+:::
+
+## Python-pakker
+
+Statomaten leveres med en administrert Composer-installasjon. Dersom arbeidsflyten trenger egne Python-pakker, kan teamet bruke en gjenbrukbar byggeflyt som lager et Python-containerbilde fra teamets `pyproject.toml` og publiserer bildet i teamets Artifact Registry. Teamet kan velge en Python-versjon som passer til koden.
+
+::: {.callout-note}
+## Dette må avklares før publisering
+
+Beskriv hvordan teamet setter opp og kjører byggeflyten for egne pakker, hvilke pakker eller Python-versjoner som støttes, og hvordan et bygget containerbilde kobles til en DAG. Tech-dokumentasjonen inneholder ikke disse brukertrinnene.
+:::
+
+## Feilsøking
+
+Hvis en arbeidsflyt ikke kjører som forventet, bør teamet først kontrollere at endringen er merget til `main`, og at Cloud Build-jobben fullførte opplastingen. Kontroller deretter DAG-status og feilmeldinger i Cloud Composer.
+
+::: {.callout-note}
+## Feilsøkingsinnhold mangler
+
+Legg til vanlige feilmeldinger og hva brukeren kan gjøre med dem, for eksempel feil i DAG-kode, manglende pakker, manglende bøttetilgang og mislykket Cloud Build. Oppgi også hvor teamet får hjelp.
+:::
+
+## Teknisk oversikt
+
+Statomaten bruker Cloud Composer 3 med Airflow 3.1.7. Miljøet settes opp separat for hvert team, med en tjenestekonto, en Composer-bøtte og en Cloud Build-integrasjon mot teamets GitHub-repo. Plattformen administrerer også nettverkstilkoblingen til det sentrale NCC-huben.
+
+Dette tekniske oppsettet vedlikeholdes i hovedsak av plattformen. Teamet trenger vanligvis ikke å endre disse ressursene for å legge til eller oppdatere en DAG.
+
