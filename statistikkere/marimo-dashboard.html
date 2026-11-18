@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Marimo-dashboard – Dapla-manualen</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../statistikkere/datadoc-editor.html" rel="next">
+<link href="../statistikkere/marimo.html" rel="prev">
+<link href="../images/dapla-favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-46450743fc8ba5dba82389f19ebaba5e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "treff",
+    "search-copy-link-title": "Kopier link til søk",
+    "search-hide-matches-text": "Skjul flere treff",
+    "search-more-match-text": "flere treff i dokumentet",
+    "search-more-matches-text": "flere treff i dokumentet",
+    "search-clear-button-title": "Nullstill",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<meta property="og:title" content="Marimo-dashboard – Dapla-manualen">
+<meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
+<meta property="og:image" content="https://manual.dapla.ssb.no/images/marimo-studio-preview.png">
+<meta property="og:site_name" content="Dapla-manualen">
+<meta property="og:image:alt" content="Forhåndsvisning av et view i Marimo Studio">
+<meta property="og:image:height" content="835">
+<meta property="og:image:width" content="1201">
+<meta name="twitter:title" content="Marimo-dashboard – Dapla-manualen">
+<meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
+<meta name="twitter:image" content="https://manual.dapla.ssb.no/images/marimo-studio-preview.png">
+<meta name="twitter:image:alt" content="Forhåndsvisning av et view i Marimo Studio">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo light-content">
+    <img src="../images/dapla-long.png" alt="Logo for Dapla" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Dapla-manualen</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../statistikkere/index.html" aria-current="page"> 
+<span class="menu-text">Manual</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../news/index.html"> 
+<span class="menu-text">Nyheter</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog/index.html"> 
+<span class="menu-text">Blogg</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../faq.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../notebooks/index.html"> 
+<span class="menu-text">Eksempler</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../utviklere/lenker.html"> 
+<span class="menu-text">Utviklere</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../om-dapla.html"> 
+<span class="menu-text">Om Dapla</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hjelp" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hjelp</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hjelp">    
+        <li>
+    <a class="dropdown-item" href="https://web.yammer.com/main/org/ssb.no/groups/eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI5MDUzMjA2In0/all"><i class="bi bi-people-fill" role="img">
+</i> 
+ <span class="dropdown-text">Diskusjonsforum</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://ssb.pureservice.com/#/new/7"><i class="bi bi-send-fill" role="img">
+</i> 
+ <span class="dropdown-text">Kundeservice</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://dapla-ctrl.intern.ssb.no/"> <i class="bi bi-controller" role="img">
+</i> 
+<span class="menu-text">Dapla Ctrl</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://lab.dapla.ssb.no/"> <i class="bi bi-graph-up" role="img">
+</i> 
+<span class="menu-text">Dapla Lab</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/statisticsnorway/dapla-manual"> <i class="bi bi-github" role="img" aria-label="Dapla-manual GitHub repository">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-andre-lenker" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Andre lenker</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-andre-lenker">    
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-test.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (test)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://lab.dapla-dev.ssb.no/"><i class="bi bi-graph-up-arrow" role="img">
+</i> 
+ <span class="dropdown-text">Dapla Lab (dev)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://console.cloud.google.com/"><i class="bi bi-google" role="img">
+</i> 
+ <span class="dropdown-text">Google Cloud Console</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/dapla-lab.html">Dapla Lab</a></li><li class="breadcrumb-item"><a href="../statistikkere/marimo-dashboard.html">Marimo-dashboard</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto" aria-label="Section">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Kom i gang</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false" aria-label="Toggle section: Kom i gang">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hurtigstart</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-overgang.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hvordan flytte statistikkproduksjon til Dapla?</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/felles-pakker-tjenester/fellessystemer_dapla_kortvisning_tags.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Fellespakker og -tjenester</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section: Fellespakker og -tjenester">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">Dapla-team</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false" aria-label="Toggle section: Dapla-team">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-dapla-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er Dapla-team?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/tilgangsstyring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tilgangsstyring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/administrasjon-av-team.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Administrasjon av team</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">Data</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false" aria-label="Toggle section: Data">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jobbe-med-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jobbe med data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/hva-er-botter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er bøtter?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/deling-av-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Deling av data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/backup-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/editeringsrammeverk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Editeringsrammeverket</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">Kode</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false" aria-label="Toggle section: Kode">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/git-og-github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hva er Git og GitHub?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/github-oppsett.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">GitHub: Bruker og oppsett</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/git-arbeidsflyt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Anbefalt arbeidsflyt med Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SSB-project</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/poetry-ssb-project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pakkehåndtering i Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/renv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Pakkehåndtering i R</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">Standarder</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false" aria-label="Toggle section: Standarder">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/standarder.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standarder</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datatilstander.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datatilstander</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/navnestandard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Navnestandard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kvakk.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kvalitet i kode og koding (KVAKK)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/dapla-lab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-9-label">Dapla Lab</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-controls="quarto-sidebar-section-9" aria-expanded="true" aria-label="Toggle section: Dapla Lab">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-9" aria-labelledby="quarto-sidebar-section-9-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/marimo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Marimo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/marimo-dashboard.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Marimo-dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc-editor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datadoc-editor</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jdemetra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jdemetra</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jupyter.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jupyter-playground.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter-playground</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/jupyter-pyspark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Jupyter-pyspark</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/parqueditor.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parqueditor</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/rstudio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rstudio</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vardef-forvaltning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vardef-forvaltning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vscode-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vscode-python</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/metadata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-10-label">Metadata</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-controls="quarto-sidebar-section-10" aria-expanded="false" aria-label="Toggle section: Metadata">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-10" aria-labelledby="quarto-sidebar-section-10-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/datadoc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-11-label">Datadoc</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-controls="quarto-sidebar-section-11" aria-expanded="false" aria-label="Toggle section: Datadoc">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-11" aria-labelledby="quarto-sidebar-section-11-label" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datamodell</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/klass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Klass</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/vardef.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-12-label">Vardef</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-controls="quarto-sidebar-section-12" aria-expanded="false" aria-label="Toggle section: Vardef">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-12" aria-labelledby="quarto-sidebar-section-12-label" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vardef-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datamodell</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-13-label">Datatjenester</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-controls="quarto-sidebar-section-13" aria-expanded="false" aria-label="Toggle section: Datatjenester">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-13" aria-labelledby="quarto-sidebar-section-13-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ai-kodeassistent.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">AI-kodeassistent</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-dapla-suv-tools.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-suv-tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-statbank-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-statbank-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-auth-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-auth-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-pseudo.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-toolbelt-pseudo</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-whodat.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">dapla-toolbelt-whodat</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/dapla-toolbelt-metadata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-14-label">dapla-toolbelt-metadata</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-controls="quarto-sidebar-section-14" aria-expanded="false" aria-label="Toggle section: dapla-toolbelt-metadata">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-14" aria-labelledby="quarto-sidebar-section-14-label" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/datadoc-toolbelt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datadoc</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/vardef-toolbelt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vardef</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/standards-toolbelt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Standards</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/dapla-toolbelt-datafangst.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-15-label">dapla-toolbelt-datafangst</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-controls="quarto-sidebar-section-15" aria-expanded="false" aria-label="Toggle section: dapla-toolbelt-datafangst">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-15" aria-labelledby="quarto-sidebar-section-15-label" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kudoc-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">kudoc-client</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/dapla-ctrl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dapla Ctrl</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/delomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Delomaten</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Features</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/gcc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Google Cloud Console (GCC)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kildomaten.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kildomaten</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/metodebibliotek.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Metodebiblioteket</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-parquedit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parquedit</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-altinn-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-altinn-python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-collector-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-collector-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-gcp-identity-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-gcp-identity-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-guardian-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-guardian-client</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/ssb-pubmd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ssb-pubmd</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/transfer-service.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Transfer Service</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/kudoc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-16-label">Datafangst</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-controls="quarto-sidebar-section-16" aria-expanded="false" aria-label="Toggle section: Datafangst">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-16" aria-labelledby="quarto-sidebar-section-16-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/maskinporten-guardian.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Maskinporten Guardian</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/data-collector.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Collector</span></a>
+  </div>
+</li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/kudoc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-17-label">KuDoc</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-controls="quarto-sidebar-section-17" aria-expanded="false" aria-label="Toggle section: KuDoc">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-17" aria-labelledby="quarto-sidebar-section-17-label" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kudoc-model.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Datamodell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kudoc-data-entry-via-gui.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Legge inn opplysninger via GUI</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kudoc-client.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">kudoc-client (Python)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/kudoc-api.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tilgang via API</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-18-label">Altinn 3</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-18" aria-controls="quarto-sidebar-section-18" aria-expanded="false" aria-label="Toggle section: Altinn 3">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-18" aria-labelledby="quarto-sidebar-section-18-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-oversikt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Oversikt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-skjema-datamodell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Skjema datamodell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-bygge-prefill.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prefill</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-skjema-administrasjon.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Administrasjon av skjema</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-utsending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utsending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/altinn-sfu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data fra bakke</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../statistikkere/appendix/dashboard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-19-label">Appendix</span></a>
+            <button type="button" class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-19" aria-controls="quarto-sidebar-section-19" aria-expanded="false" aria-label="Toggle section: Appendix">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-19" aria-labelledby="quarto-sidebar-section-19-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/contribution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hvordan bidra til Dapla-manualen</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/arkivering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Arkivering</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/dashboard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dash og dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/jit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Just-in-Time Access</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/spark.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apache Spark</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/kartdata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kartdata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/filinnsamling-moveit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Filinnsamling via MoveIT</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../statistikkere/appendix/langtkjorende-jobber.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kjøre tidkrevende jobber på Dapla</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">Innhold</h2>
+   
+  <ul>
+  <li><a href="#bruksområde" id="toc-bruksområde" class="nav-link active" data-scroll-target="#bruksområde">Bruksområde</a></li>
+  <li><a href="#forberedelser" id="toc-forberedelser" class="nav-link" data-scroll-target="#forberedelser">Forberedelser</a></li>
+  <li><a href="#konfigurasjon" id="toc-konfigurasjon" class="nav-link" data-scroll-target="#konfigurasjon">Konfigurasjon</a>
+  <ul class="collapse">
+  <li><a href="#oppstartsmåte" id="toc-oppstartsmåte" class="nav-link" data-scroll-target="#oppstartsmåte">Oppstartsmåte</a></li>
+  <li><a href="#dashboard-repo" id="toc-dashboard-repo" class="nav-link" data-scroll-target="#dashboard-repo">Dashboard-repo</a></li>
+  </ul></li>
+  <li><a href="#funksjonalitet" id="toc-funksjonalitet" class="nav-link" data-scroll-target="#funksjonalitet">Funksjonalitet</a>
+  <ul class="collapse">
+  <li><a href="#edit-modus" id="toc-edit-modus" class="nav-link" data-scroll-target="#edit-modus">Edit-modus</a></li>
+  <li><a href="#run-modus" id="toc-run-modus" class="nav-link" data-scroll-target="#run-modus">Run-modus</a></li>
+  <li><a href="#ki-støtte" id="toc-ki-støtte" class="nav-link" data-scroll-target="#ki-støtte">KI-støtte</a></li>
+  <li><a href="#marimo-studio" id="toc-marimo-studio" class="nav-link" data-scroll-target="#marimo-studio">Marimo-studio</a></li>
+  </ul></li>
+  <li><a href="#data-og-gitgithub" id="toc-data-og-gitgithub" class="nav-link" data-scroll-target="#data-og-gitgithub">Data og Git/GitHub</a></li>
+  <li><a href="#datatilgang" id="toc-datatilgang" class="nav-link" data-scroll-target="#datatilgang">Datatilgang</a></li>
+  <li><a href="#installere-pakker" id="toc-installere-pakker" class="nav-link" data-scroll-target="#installere-pakker">Installere pakker</a></li>
+  <li><a href="#lagring-av-arbeid" id="toc-lagring-av-arbeid" class="nav-link" data-scroll-target="#lagring-av-arbeid">Lagring av arbeid</a></li>
+  <li><a href="#slette-tjenesten" id="toc-slette-tjenesten" class="nav-link" data-scroll-target="#slette-tjenesten">Slette tjenesten</a></li>
+  <li><a href="#pause-tjenesten" id="toc-pause-tjenesten" class="nav-link" data-scroll-target="#pause-tjenesten">Pause tjenesten</a></li>
+  <li><a href="#monitorering" id="toc-monitorering" class="nav-link" data-scroll-target="#monitorering">Monitorering</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/marimo-dashboard.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/marimo-dashboard.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../statistikkere/dapla-lab.html">Dapla Lab</a></li><li class="breadcrumb-item"><a href="../statistikkere/marimo-dashboard.html">Marimo-dashboard</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Marimo-dashboard</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Sist endret</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">13.10.2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="../images/marimo-logotype-thick.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="../images/marimo-logotype-thick.svg" class="img-fluid" style="max-width: 350%; float: right;" alt="Marimo-dashboardtjenesten"></a></p>
+<p><strong>Marimo-dashboard</strong> er en tjeneste på <a href="../statistikkere/dapla-lab.html">Dapla Lab</a> som er skreddersydd for utvikling av dashboards og applikasjoner. Tjenesten bygger på <a href="https://marimo.io/">Marimo</a>, som er et reaktivt Python-miljø med svært god støtte for brukerinteraksjon og dynamiske visualiseringer.</p>
+<p>I tillegg kan man bruke <a href="https://marimo-team.github.io/marimo-studio/">Marimo-studio</a>, en utvidelse som gjør det lett å legge til form og stil ved hjelp av vanlig html og css.</p>
+<section id="bruksområde" class="level2">
+<h2 class="anchored" data-anchor-id="bruksområde">Bruksområde</h2>
+<p>Marimo-dashboard-tjenesten er egnet for å utvikle frittstående notebook-filer og åpne dem som selvstendige, interaktive applikasjoner.</p>
+<p>Tjenesten benytter seg ikke av Python-prosjektet i repoet, men lager automatisk et isolert Python-miljø for hver notebook-fil.</p>
+<p>Marimo er skreddersydd for utvikling av <code>Python</code> og <code>SQL</code>-kode, og støtter ikke <code>R</code>.</p>
+</section>
+<section id="forberedelser" class="level2">
+<h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
+<p>Før man starter <strong>Marimo</strong> bør man ha lest <a href="../statistikkere/dapla-lab.html">kapitlet om Dapla Lab</a> og satt opp Git- og GitHub-konfigurasjonen under <strong>Min konto</strong>. Deretter gjør du følgende:</p>
+<ol type="1">
+<li>Logg deg inn på <a href="https://lab.dapla.ssb.no/">Dapla Lab</a></li>
+<li>Under <strong>Tjenestekatalog</strong> trykker du på <strong>Start</strong>-knappen for <strong>Marimo-studio</strong></li>
+<li>Gi tjenesten et navn</li>
+<li>Åpne <strong>Marimo-dashboard konfigurasjoner</strong></li>
+</ol>
+</section>
+<section id="konfigurasjon" class="level2">
+<h2 class="anchored" data-anchor-id="konfigurasjon">Konfigurasjon</h2>
+<p>Mye av konfigurasjonen for <strong>Marimo-dasboards</strong> er lik det som gjelder for <a href="../statistikkere/jupyter.html#konfigurasjon">Jupyter</a>. Det gjelder blant annet valg av team og tilgangsgruppe, Git/GitHub, ressurser, diskplass og avanserte valg som Parquedit-støtte.</p>
+<p>Det viktigste er den delen som er spesifikt for Marimo-dashboard:</p>
+<p><a href="../images/dapla-lab-marimo-dashboard-configuration.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="../images/dapla-lab-marimo-dashboard-configuration.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Konfigurasjon av Marimo-dashboard"></a></p>
+<section id="oppstartsmåte" class="level3">
+<h3 class="anchored" data-anchor-id="oppstartsmåte">Oppstartsmåte</h3>
+<ul>
+<li><em>Edit</em>-modus brukes når man skal utvikle en notebook-fil, det vil si skrive kode i Marimo-grensesnittet.</li>
+<li><em>Run</em>-modus brukes når man vil kjøre en notebook-fil som en selvstendig applikasjon, uten å vise verken koden eller Marimo-grensesnittet.</li>
+</ul>
+</section>
+<section id="dashboard-repo" class="level3">
+<h3 class="anchored" data-anchor-id="dashboard-repo">Dashboard-repo</h3>
+<p>Man kan oppgi et GitHub-repo som skal klones ved oppstart av tjenesten.</p>
+<p>Som konvensjon skal Github-repoet en mappe <code>dashboards/</code> på rotnivå. Hva som forventes av repoet avhenger av oppstartsmåten:</p>
+<ul>
+<li>I edit-modus forventes ingenting av repoet. Man kan selv opprette <code>dashboards/</code>-mappen og nye notebook-filer første gang man starter tjenesten.</li>
+<li>I run-modus forventes en eksisterende <code>dashboards/</code>-mappe med én eller flere Marimo-notebooks. Notebook-filene kan organiseres fritt i undermapper.</li>
+</ul>
+<p>Dersom feltet er tomt vil tjenesten åpne i <code>work/</code>-mappen og man kan selv klone eller opprette et nytt repo ved hjelp av terminalen.</p>
+</section>
+</section>
+<section id="funksjonalitet" class="level2">
+<h2 class="anchored" data-anchor-id="funksjonalitet">Funksjonalitet</h2>
+<section id="edit-modus" class="level3">
+<h3 class="anchored" data-anchor-id="edit-modus">Edit-modus</h3>
+<p>I denne modusen åpnes hele Marimo-grensesnittet, slik at man kan utvikle og redigere notebook-filer direkte i nettleseren.</p>
+<p>Marimo er rik på funksjoner og har et brukervennlig grensesnitt som man kan lese mer om <a href="https://docs.marimo.io/guides/editor_features/">her</a>.</p>
+<p>For å bruke <code>git</code> (Github) og <code>opencode</code> (KI) må man bruke den integrerte terminalen i Marimo, som kan åpnes på følgende måte:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Fremgangsmåte for å åpne terminal
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-1.png" class="lightbox" data-gallery="marimo-terminal" title="1. Åpne utviklerpanelet med Ctrl/Cmd + j eller knappen nederst til venstre."><img src="../images/marimo-terminal-1.png" class="img-fluid figure-img" alt="Marimo med utviklerpanelet lukket og snarveien Ctrl J synlig."></a></p>
+<figcaption>1. Åpne utviklerpanelet med <code>Ctrl/Cmd + j</code> eller knappen nederst til venstre.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-2.png" class="lightbox" data-gallery="marimo-terminal" title="2. Velg fanen Terminal i utviklerpanelet."><img src="../images/marimo-terminal-2.png" class="img-fluid figure-img" alt="Utviklerpanelet er åpnet med fanen Terminal valgt."></a></p>
+<figcaption>2. Velg fanen <strong>Terminal</strong> i utviklerpanelet.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-3.png" class="lightbox" data-gallery="marimo-terminal" title="3. Valgfritt: Dra terminalpanelet mot sidemenyen til venstre."><img src="../images/marimo-terminal-3.png" class="img-fluid figure-img" alt="Terminalfanen er åpnet nederst i utviklerpanelet."></a></p>
+<figcaption>3. Valgfritt: Dra terminalpanelet mot sidemenyen til venstre.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../images/marimo-terminal-4.png" class="lightbox" data-gallery="marimo-terminal" title="4. Terminalen er nå side om side med notebooken."><img src="../images/marimo-terminal-4.png" class="img-fluid figure-img" alt="Terminalen er flyttet til venstre sidemeny i Marimo."></a></p>
+<figcaption>4. Terminalen er nå side om side med notebooken.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-modus" class="level3">
+<h3 class="anchored" data-anchor-id="run-modus">Run-modus</h3>
+<p>Dette passer når man allerede har laget en ferdig notebook-fil som skal vises som et brukergrensesnitt, for eksempel for utforsking av data eller deling av resultater internt i et team.</p>
+<p>Hvis målet er å utvikle selve filen, er det normalt best å starte i edit-modus. Før man bruker run-modus er det lurt å sjekke at notebooken lar seg kjøre i edit-modus.</p>
+</section>
+<section id="ki-støtte" class="level3">
+<h3 class="anchored" data-anchor-id="ki-støtte">KI-støtte</h3>
+<p>KI kan være et effektivt hjelpemiddel for å utvikle interaktive applikasjoner i Marimo.</p>
+<p>Anbefalte forberedelser:</p>
+<ul>
+<li>Sørg for at du har en notebook åpen i Marimo-grensesnittet som er lagret i <code>dashboards/</code>-mappen.</li>
+<li>Sørg for å ha commitet eventuelle egne endringer først så ikke disse blir overskrevet av agenten.</li>
+<li>Sørg for å ha relevante pakker lastet ned i notebooken (se <a href="#installere-pakker">Installere pakker</a>).</li>
+<li>Kjør kommandoen <code>ssb-marimo docs</code> for å laste ned nyeste versjon av Dapla-manualen som agenten kan lese.</li>
+</ul>
+<p>Åpne terminalen, kjør <code>opencode</code> og begynn å snakke med agenten om hva du ønsker.</p>
+<p>Det anbefales å være så spesifikk som mulig om ønsket applikasjonsflyt, og gjerne referere til installerte pakker eller deler av Dapla-manualen som skal brukes.</p>
+<p>Merk at agenten vil spørre om å utføre kommandoer av typen:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> ~/.agents/skills/marimo-pair/scripts/execute-code.sh <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--url</span> http://localhost:8080 <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">-c</span> <span class="st">"import marimo._code_mode as cm; help(cm)"</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Dette er kommandoer som lar agenten gjøre strukturerte endringer og inspisere tilstanden til notebooken. Kort sagt får agenten muligheten til å se det samme som deg; input, output, feilmeldinger og mer. Ofte vil disse kommandoene være vanskelige å lese. Det viktigste er å være sikker på at man kun har testdata i tjenesten, og at man alltid går gjennom den ferdige koden og pusher den til Github manuelt.</p>
+</section>
+<section id="marimo-studio" class="level3">
+<h3 class="anchored" data-anchor-id="marimo-studio">Marimo-studio</h3>
+<p>Marimo-studio er en utvidelse til Marimo som kan brukes til å opprette en html-side for notebooken. Man kan sette cellene inn i html-siden og dermed få full kontroll på layout og stil på den interaktive applikasjonen.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Skjermbilde av eksempelapplikasjon
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="../news/posts/2026-10-09-parqueditor-lansering/parqueditor-table.png" class="img-fluid" style="max-width: 100%; margin: 1rem;" alt="Tabell i Parqueditor"></a></p>
+</div>
+</div>
+</div>
+<p>For å komme i gang, åpne en eksisterende notebook-fil i <code>dashboards/</code>-mappen. Det anbefales at man allerede har utviklet det meste av notebook-filen før man oppretter en html-side.</p>
+<p>Alternativ 1: åpne en terminal og kjør kommandoen <code>ssb-marimo html</code>. Dette vil opprette en html-fil som importerer SSB Designsystem sitt tema.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Alternativ 2: Opprett en html-side gjennom grensesnittet
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Klikk på “Add view” øverst til høyre, gi ønsket navn, velg “HTML document” og trykk “Create view”.</p>
+<p><a href="../images/marimo-studio-add-view.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="../images/marimo-studio-add-view.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Dialogboksen Add view i Marimo Studio"></a></p>
+<p>Du vil nå ha fått opprettet flere filer og får valget om å se en forhåndsvisning av viewet.</p>
+<p><a href="../images/marimo-studio-preview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="../images/marimo-studio-preview.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Forhåndsvisning av et view i Marimo Studio"></a></p>
+<p>Legg merke til de nye filene og spesielt <code>index.html</code> der viewet ligger. Det anbefales å sjekke inn disse filene til Github.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="data-og-gitgithub" class="level2">
+<h2 class="anchored" data-anchor-id="data-og-gitgithub">Data og Git/GitHub</h2>
+<p>Marimo følger samme mønster som de andre utviklingstjenestene i Dapla Lab:</p>
+<ol type="1">
+<li>Datatilgang styres av hvilket team og hvilken tilgangsgruppe du velger.</li>
+<li>Teamets bøtter blir tilgjengelige i filsystemet under <code>/buckets/</code>.</li>
+<li>Git-bruker, e-post og GitHub-token kan arves fra <strong>Min konto</strong> i Dapla Lab.</li>
+</ol>
+<p>For detaljer om datatilgang, delt-bøtter, Git/GitHub, ressurser, diskplass og oppstartsskript, se <a href="../statistikkere/jupyter.html#konfigurasjon">Jupyter-kapitlet</a>.</p>
+</section>
+<section id="datatilgang" class="level2">
+<h2 class="anchored" data-anchor-id="datatilgang">Datatilgang</h2>
+<p>Dersom man ønsker å utforske filene i <code>/buckets</code> kan man kjøre en kodecelle med følgende innhold:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> fsspec</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fsspec.implementations.dirfs <span class="im">import</span> DirFileSystem</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> DirFileSystem(<span class="st">"/buckets"</span>, fsspec.filesystem(<span class="st">"file"</span>))</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Deretter åpner man Marimos filutforsker i sidemenyen. Fanen “Remote storage” vil vise innholdet i <code>/buckets</code>:</p>
+<p><a href="../images/marimo-buckets-explorer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="../images/marimo-buckets-explorer.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Vise innhold i buckets"></a></p>
+<p>Merk at Marimo-grensesnittet ikke har innebygd støtte for å åpne datafiler. Man kan imidlertid enkelt utvikle applikasjoner med både filutforsker og datavisning:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Skjermbilde av eksempelapplikasjon
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><a href="../images/marimo-file-browser.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="../images/marimo-file-browser.png" class="img-fluid" style="max-width: 100%; margin: 1rem;" alt="Marimo filutforskerkomponent"></a></p>
+</div>
+</div>
+</div>
+<p>Filutforsker-komponenten kan opprettes med følgende kodecelle og konfigureres etter behov:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo <span class="im">as</span> mo</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>file_browser <span class="op">=</span> mo.ui.file_browser(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    initial_path<span class="op">=</span><span class="st">"/buckets/"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    filetypes<span class="op">=</span>[<span class="st">"parquet"</span>],</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    selection_mode<span class="op">=</span><span class="st">"file"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    multiple<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>file_browser</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Variabelen <code>file_browser</code> vil til enhver tid inneholde hvilken fil som er valgt av brukeren. Denne kan brukes i en ny kodecelle, for eksempel til å vise dataene i en tabell-komponent:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>selected_files <span class="op">=</span> file_browser.value</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(selected_files) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pl.read_parquet(selected_files[<span class="dv">0</span>].path)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> mo.ui.table(df)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    output <span class="op">=</span> mo.md(<span class="st">"Ingen fil er valgt."</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>output</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Applikasjonen vil følge vanlig tilgangsstyring, det vil si at den viser dataene til teamet man åpner tjenesten med.</p>
+</section>
+<section id="installere-pakker" class="level2">
+<h2 class="anchored" data-anchor-id="installere-pakker">Installere pakker</h2>
+<p>Pakker installeres i selve notebooken ved hjelp av Marimo-grensesnittet:</p>
+<p><a href="../images/marimo-package-dependencies.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="../images/marimo-package-dependencies.png" class="img-fluid" style="max-width: 80%; margin: 1rem;" alt="Pakkeavhengigheter i Marimo"></a></p>
+<ol type="1">
+<li>Pass på at du er i riktig notebook.</li>
+<li>Klikk på boks-ikonet i sidemenyen for å se installerte pakker.</li>
+<li>For å legge til flere pakker, skriv pakkenavnet i inputfeltet og trykk “Add”.</li>
+<li>For å legge til pakker med en spesifikk versjon, skriv for eksempel <code>dapla-toolbelt-metadata==0.19</code> og trykk “Add”.</li>
+</ol>
+<p>Hver notebook-fil vil ha sin egen liste av installerte pakker. Når man ser på notebook-filen i en vanlig teksteditor eller på Github, vil pakkene være deklarert øverst i filen:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span><code>test.py</code>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># /// script</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dependencies = [</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     "dapla-toolbelt-metadata==0.19.0",</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     "marimo",</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     "polars==2.0.0",</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ]</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># requires-python = "&gt;=3.14"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ///</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> marimo</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>__generated_with <span class="op">=</span> <span class="st">"0.25.1"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> marimo.App(width<span class="op">=</span><span class="st">"medium"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="at">@app.cell</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _():</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> dapla_metadata</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    app.run()</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Dette gjør at filen kan kjøres helt isolert fra resten av prosjektet. Videre kan den kjøres som en helt vanlig Python-fil:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> run test.py</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Når man kjører denne kommandoen, vil først vil alle avhengighetene installeres, og deretter vil kodecellene kjøres i riktig rekkefølge. Interaktive komponenter vil bruke en default-verdi, som man kan konfigurere i de fleste tilfeller.</p>
+</section>
+<section id="lagring-av-arbeid" class="level2">
+<h2 class="anchored" data-anchor-id="lagring-av-arbeid">Lagring av arbeid</h2>
+<p>Kode bør lagres i GitHub og data bør lagres i bøtter. Filer som bare ligger lokalt i tjenesten kan gå tapt hvis tjenesten slettes, og filer utenfor <code>$HOME/work</code> slettes når tjenesten pauses.</p>
+</section>
+<section id="slette-tjenesten" class="level2">
+<h2 class="anchored" data-anchor-id="slette-tjenesten">Slette tjenesten</h2>
+<p>For å slette tjenesten kan man trykke på <strong>Slett</strong>-knappen i Dapla Lab under <strong>Mine tjenester</strong>. Når man sletter en tjeneste, slettes også filsystemet i tjenesten og ressursene frigjøres. Hvis du har installert pakker lokalt i tjenesten, må disse installeres på nytt neste gang.</p>
+</section>
+<section id="pause-tjenesten" class="level2">
+<h2 class="anchored" data-anchor-id="pause-tjenesten">Pause tjenesten</h2>
+<p>Man kan pause tjenesten ved å trykke på <strong>Pause</strong>-knappen i Dapla Lab under <strong>Mine tjenester</strong>. Når man pauser tjenesten, slettes alt på den lokale disken som ikke er lagret under <code>$HOME/work</code>.</p>
+</section>
+<section id="monitorering" class="level2">
+<h2 class="anchored" data-anchor-id="monitorering">Monitorering</h2>
+<p>Man kan monitorere en instans av Marimo-dashboard ved å trykke på tjenesten under <strong>Mine tjenester</strong> i Dapla Lab. Derfra kommer man til overvåkningssiden for tjenesten, med lenker til teknisk informasjon og eksternt dashboard på samme måte som for andre tjenester i Dapla Lab. Se <a href="../statistikkere/dapla-lab.html#monitorering">monitorering i Dapla Lab</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Kopiert!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Kopiert!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/manual\.dapla\.ssb\.no");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+<nav class="page-navigation" aria-label="Page">
+  <div class="nav-page nav-page-previous">
+      <a href="../statistikkere/marimo.html" class="pagination-link" aria-label="Marimo">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Marimo</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../statistikkere/datadoc-editor.html" class="pagination-link" aria-label="Datadoc-editor">
+        <span class="nav-page-text">Datadoc-editor</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>This site is heavily inspired by the <a href="https://quarto.org/">Quarto website</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Kom i gang med Dapla</p>
+<div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/marimo-dashboard.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/marimo-dashboard.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
