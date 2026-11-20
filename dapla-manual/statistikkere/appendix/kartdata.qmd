@@ -1,15 +1,10 @@
----
-title: Kartdata
-date-modified: 01/01/2025
-lightbox: true
----
+# Kartdata
+Det er tilrettelagt kartdata i Dapla til analyse og visualisering. 
+Kartdataene er lagret på **gs://ssb-areal-data-delt-kart-prod** som GeoParquet-filer med koordinatsystem UTM sone 33N. 
 
-Det er tilrettelagt kartdata i Dapla til analyse, statistikkproduksjon og visualisering. 
-Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på **ssb-areal-data-delt-kart-prod**.
-De er lagret som parquetfiler i standardprojeksjonen vi bruker i SSB (UTM sone 33N) hvis ikke annet er angitt. 
-Det er også SSBs standard-rutenett i ulike størrelser samt Eurostats rutenett over Norge.
+[Mer om lagring av geodata på Dapla her](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4927357119/Lagring+av+geodata+p+Dapla).
 
-I tillegg ligger det noe **testdata** i fellesbøtta her: **ssb-dapla-felles-data-produkt-prod/GIS/testdata**
+Alle har tilgang til **gs://ssb-areal-data-delt-kart-prod** via teamet **dapla-felles**.
 
 ## Python
 ### GIS-pakker og lesing/skriving av geodata
@@ -46,22 +41,26 @@ Og kommunedata ment for visualisering. Disse dataene er generalisert slik at de 
 kommuner = gpd.read_parquet("gs://ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet")
 ```
 
-Større filer er lagret som partisjonerte parquet-filer. Disse leses best med sgis siden geopandas ikke støtter partisjonerte filer ennå.
+Enkelte større filer er lagret som partisjonerte parquet-filer som mest effektivt leses med sgis: 
 
 ```{.python filename="notebook"}
 import sgis as sg
 arealbruk = sg.read_geopandas("ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/SSB_arealbruk_flate_p2025_v1.parquet")
 ```
 
-Man kan også gjøre vanlige tabell-filer geografiske hvis man har koordinat-kolonner. For eksempel situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF):
+**Lagring av koordinat-filer som GeoParquet**
+
+Det anbefales å lagre filer som inneholder koordinater som GeoParquet, som er en parquet-fil med geo-metadata og en kolonne for geometri.
+
+Hvis du har en pandas.DataFrame med koordinatkolonner, kan den enkelt konverteres til geopandas.GeoDataFrame og lagres som GeoParquet.
+
+Her er et eksempel for situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF). Viktig: man må vite hvilket koordinatsystem koordinatene er lagret i. Sjekk datadoc eller hør med dataeier.
 
 ```{.python filename="notebook"}
-import dapla as dp
+import pandas as pd
 
-VOFSTI = "ssb-vof-data-delt-stedfesting-prod/klargjorte-data/parquet"
-vof_df = dp.read_pandas(
-    f"{VOFSTI}/stedfesting-situasjonsuttak_p2023-01_v1.parquet"
-)
+VOFSTI = "gs://ssb-vof-data-delt-stedfesting-prod/klargjorte-data/parquet"
+vof_df = pd.read_parquet(f"{VOFSTI}/stedfesting-situasjonsuttak_p2023-01_v1.parquet")
 vof_gdf = gpd.GeoDataFrame(
     vof_df, 
     geometry=gpd.points_from_xy(
@@ -70,8 +69,11 @@ vof_gdf = gpd.GeoDataFrame(
     ),
     crs=25833,
 )
-vof_gdf
+vof_gdf.to_parquet("...) # skriver GeoParquet
 ```
+Metoden 'to_parquet' skriver her automatisk en GeoParquet-fil, ettersom at dataene er av typen GeoDataFrame.
+
+[Mer om lagring av geodata på Dapla her](https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4927357119/Lagring+av+geodata+p+Dapla).
 
 ### geopandas-eksempler i Dapla
 
