@@ -124,6 +124,31 @@ I grensesnittet kan teamet følge med på arbeidsflytene, kontrollere status på
 
 Statomaten setter opp en tjenestekonto med tilgang til teamets kilde- og standardbøtter. Arbeidsflyten kan bare lese og skrive data som denne kontoen har tilgang til.
 
+### Datafangst via Maskinporten
+
+Statomaten kan hente data fra eksterne API-er som er beskyttet av Maskinporten ved å bruke en Maskinporten Guardian M2M-bruker. Se [dokumentasjonen for Maskinporten](./maskinporten-guardian.qmd#opprette-en-maskinporten-guardian-m2m-bruker) for hvordan man oppretter en slik bruker, og [kodeeksempelet for M2M-flyten](./maskinporten-guardian.qmd#m2m-flow) for hvordan man henter ut et token.
+
+For at Statomaten skal få tilgang til et Keycloak-token, må Statomaten sin tjenestekonto legges til i `credentials_access` for klienten i [keycloak-iac](https://github.com/statisticsnorway/keycloak-iac)-repoet. For eksempel:
+
+```{.text code-line-numbers="true"}
+amends ".../pkl/MaskinportenGuardianClient.pkl"
+
+api_shortname = "elhub"
+maskinporten_client_id = "2afce3ba-e318-4cfb-8aef-43271206a31a"
+maskinporten_audience = "https://test.maskinporten.no/"
+maskinporten_default_scopes {
+  "elhub:publicstakeholder"
+}
+credentials_access {
+  "play-obr-data-admins"
+  "play-obr-developers"
+  # The service account for 'statomaten' in the Google project 'play-obr-t-ju'
+  "serviceAccount:dapla-automation-sa@play-obr-t-ju.iam.gserviceaccount.com"
+}
+```
+
+Bytt ut `play-obr-t-ju` med prosjekt-ID-en til teamets prosjekt.
+
 ### Nettverksåpning for utgående trafikk
 
 Statomaten kjører i et eget internt nettverk for teamet. Hvis arbeidsflyten må nå eksterne kilder, for eksempel API-er, må teamet søke om nettverkstilgang via Kundeservice.
