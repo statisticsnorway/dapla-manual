@@ -980,16 +980,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Kildomaten er en tjeneste for å automatisere deler av overgangen fra <a href="./datatilstander.html#kildedata">kildedata</a> til <a href="./datatilstander.html#inndata">inndata</a>.</p>
-<p>Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjonn til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.</p>
+<p>Tjenesten lar statistikkere kjøre sine egne skript automatisk på alle nye filer i kildedatabøtta og skrive resultatet til produktbøtta. Formålet med tjenesten er minimere behovet for tilgang til kildedata samtidig som teamet selv bestemmer hvordan transformasjon til inndata skal foregå. Statistikkproduksjon kan da starte i en tilstand der dataminimering og pseudonymisering allerede er gjennomført.</p>
 <p>Anbefalt prosessering som bør skje i Kildomaten er:</p>
 <ul>
 <li><strong>Dataminimering</strong>: Fjerne alle felter som ikke er strengt nødvendig for å produsere statistikk.</li>
 <li><strong>Pseudonymisering</strong>: Pseudonymisering av personidentifiserende data.</li>
 </ul>
-<p>En forutestning for å bruke kildomaten er å ha et <a href="../statistikkere/hva-er-dapla-team.html">Dapla-team</a>.</p>
+<p>En forutsetning for å bruke kildomaten er å ha et <a href="../statistikkere/hva-er-dapla-team.html">Dapla-team</a>.</p>
 <section id="forberedelser" class="level2">
 <h2 class="anchored" data-anchor-id="forberedelser">Forberedelser</h2>
-<p>Før et Dapla-team kan ta i bruk kildomaten må tjenesten være aktivert for teamet. Som standard får alle statistikkteam dette skrudd på i <strong>prod</strong>-miljøet som opprettes for teamet. Ønsker du å aktivere kildomaten i <strong>test</strong>-miljøet kan dette gjøres selvbetjent som en <a href="./features.html">feature</a>. Alternativt kan man opprette en <a href="https://ssb.pureservice.com/#/categories/14/new">Kundeservice</a>-sak og be om å hjelp til dette.</p>
+<p>Før et Dapla-team kan ta i bruk kildomaten må tjenesten være aktivert for teamet. Som standard får alle statistikkteam dette skrudd på i <strong>prod</strong>-miljøet som opprettes for teamet. Ønsker du å aktivere kildomaten i <strong>test</strong>-miljøet kan dette gjøres selvbetjent som en <a href="./features.html">feature</a>. Alternativt kan man opprette en <a href="https://ssb.pureservice.com/#/categories/14/new">Kundeservice</a>-sak og be om hjelp til dette.</p>
 </section>
 <section id="sette-opp-tjenesten" class="level2">
 <h2 class="anchored" data-anchor-id="sette-opp-tjenesten">Sette opp tjenesten</h2>
@@ -1019,7 +1019,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda. Vær oppmerksom at mappe navnet til kilden ikke kan være lengere enn 23 tegn. For eksempel vil et mappenavn som <em>frukt_innsamling</em> i stien <code>automation/source-data/data-example-prod/frukt_innsamling</code> være gyldig, men et mappenavn som <em>maanedlig_innsamling_av_frukt_data</em> i stien <code>automation/source-data/data-example-prod/maanedlig_innsamling_av_frukt_data</code> bli for langt.</p>
+<p>Skal du sette opp kildomaten i prod-miljøet kan du følge oppskriften som kommer senere i kapitlet uten å gjøre noe mer enda. Vær oppmerksom at mappenavnet til kilden ikke kan være lengre enn 23 tegn. For eksempel vil et mappenavn som <em>frukt_innsamling</em> i stien <code>automation/source-data/data-example-prod/frukt_innsamling</code> være gyldig, men et mappenavn som <em>maanedlig_innsamling_av_frukt_data</em> i stien <code>automation/source-data/data-example-prod/maanedlig_innsamling_av_frukt_data</code> bli for langt.</p>
 <p>Skal du også bruke kildomaten i <strong>test</strong>-miljøet må du opprette en ny mappe og lage en PR i IaC-repoet til teamet. Da vil strukturen se slik ut:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -1037,7 +1037,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="flere-kilder" class="level3">
 <h3 class="anchored" data-anchor-id="flere-kilder">Flere kilder</h3>
-<p>Kildomaten lar deg prosessere ulike filstier i kildebøtta med ulike python-script. Dette refereres til som at Kildomaten har flere <em>kilder</em>. For å sette opp en kilde må man følge en definert mappestruktur i IaC-repoet der alle kildene ligger rett under <code>&lt;teamnavn&gt;-prod</code>- eller <code>&lt;teamnavn&gt;-test</code>-mappen. Du kan ikke ha undermapper under en kilde. Du velger selv navnet på kildene/mappene i IaC-repoet, og det vil være navnet på kildene i Kildomaten. Senere i kapitlet ser vi at vi må bruke navnet for trigge re-kjøring av kilder.</p>
+<p>Kildomaten lar deg prosessere ulike filstier i kildebøtta med ulike Python-skript. Dette refereres til som at Kildomaten har flere <em>kilder</em>. For å sette opp en kilde må man følge en definert mappestruktur i IaC-repoet der alle kildene ligger rett under <code>&lt;teamnavn&gt;-prod</code>- eller <code>&lt;teamnavn&gt;-test</code>-mappen. Du kan ikke ha undermapper under en kilde. Du velger selv navnet på kildene/mappene i IaC-repoet, og det vil være navnet på kildene i Kildomaten. Senere i kapitlet ser vi at vi må bruke navnet for å trigge re-kjøring av kilder.</p>
 <p>Under er et eksempel på hvordan det kan se ut for eksempel-teamet dapla-example:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -1055,7 +1055,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">│       │    └── nudb</span></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>I eksempelet over ser vi at det er mapper i IaC-repoet for kildene <em>altinn</em> og <em>ameld</em> for både test- og prod-miljøet. I tillegg har test-miljøet en mappe for kilden <em>nudb</em>. Hver av disse kildene kan kjøre et eget Pyton-script på alle filer som skrives til en gitt filsti som man definerer selv.</p>
+<p>I eksempelet over ser vi at det er mapper i IaC-repoet for kildene <em>altinn</em> og <em>ameld</em> for både test- og prod-miljøet. I tillegg har test-miljøet en mappe for kilden <em>nudb</em>. Hver av disse kildene kan kjøre et eget Python-skript på alle filer som skrives til en gitt filsti som man definerer selv.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1072,7 +1072,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="konfigurasjon-og-skript" class="level3">
 <h3 class="anchored" data-anchor-id="konfigurasjon-og-skript">Konfigurasjon og skript</h3>
-<p>Når mappestrukturen er opprettet kan man legge til konfigurasjonsfilen som beskriver hvilke filer som skal prosesseres, og python-skriptet med koden som skal prosessere filene. Det er to filer for hver datakilde:</p>
+<p>Når mappestrukturen er opprettet kan man legge til konfigurasjonsfilen som beskriver hvilke filer som skal prosesseres, og Python-skriptet med koden som skal prosessere filene. Det er to filer for hver datakilde:</p>
 <ol type="1">
 <li>En konfigurasjonsfil</li>
 <li>Et Python-skript</li>
@@ -1190,7 +1190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="at">│</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Vi ser nå at filene <code>config.yaml</code> og <code>process_source_data.py</code> ligger i mappen <code>automation/source-data/dapla-example-prod/altinn/</code>. Senere, når vi har rullet ut tjenesten, vil en ny fil i <code>gs://ssb-dapla-exmaple-data-kilde-prod/altinn/</code> trigge kildomaten og kjøre koden i <code>process_source_data.py</code> på filen.</p>
+<p>Vi ser nå at filene <code>config.yaml</code> og <code>process_source_data.py</code> ligger i mappen <code>automation/source-data/dapla-example-prod/altinn/</code>. Senere, når vi har rullet ut tjenesten, vil en ny fil i <code>gs://ssb-dapla-example-data-kilde-prod/altinn/</code> trigge kildomaten og kjøre koden i <code>process_source_data.py</code> på filen.</p>
 <p>Under ser du et eksempel på hvordan en vanlig kodesnutt kan konverteres til å kjøre i kildomaten:</p>
 <div class="columns">
 <div class="column" style="width:47%;">
@@ -1237,7 +1237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta.</p>
+<p>De to kodesnuttene over gir det samme resultatet, bare at koden til venstre kjøres som vanlig Python-kode, mens koden til høyre kjøres i kildomaten. Som vi ser av koden til høyre så trenger vi aldri å hardkode inn filstier i Kildomaten. Tjenesten gir oss filstien, og vi kan bruke den til å skrive ut filen til produktbøtta.</p>
 <p>Strukturen på filene som skrives bør tenkes nøye gjennom når man automatiseres prosessering av data. Hvis vi ikke har unike filnavn eller stier kan du risikere at filer blir overskrevet. Typisk er dette allerede tenkt på når filer skrives til kildebøtta, så hvis man kopierer den strukturen, slik vi gjorde i eksempelet over, så vil det ikke være noe problem.</p>
 </section>
 </section>
@@ -1307,7 +1307,7 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <div class="callout-body-container callout-body">
 <p>For å gi raskt tilbakemelding på noen mulige feilsituasjoner kjøres det enkel validering på <code>config.yaml</code> og <code>process_source_data.py</code> når en <em>Pull request</em> er opprettet. Følgende validering gjennomføres:</p>
 <ul>
-<li>Heter python-skriptet <code>process_source_data.py</code>?</li>
+<li>Heter Python-skriptet <code>process_source_data.py</code>?</li>
 <li>Finnes en <code>config.yaml</code> med gyldig <code>folder_prefix:</code>?</li>
 <li>Bruker <code>process_source_data.py</code> biblioteker som ikke <a href="https://github.com/statisticsnorway/dapla-automation-processor/blob/main/source_data/pyproject.toml">er installert i kildomaten</a>?</li>
 <li>Har koden i <code>process_source_data.py</code> feil iht. <a href="https://pypi.org/project/pyflakes/">Pyflakes</a>?</li>
@@ -1354,7 +1354,7 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 </div>
 <section id="sjekk-prosesseringsstatus" class="level4">
 <h4 class="anchored" data-anchor-id="sjekk-prosesseringsstatus">Sjekk prosesseringsstatus</h4>
-<p>Kildomaten lar deg sjekke om filprosessering har feilet, blitt vellykket eller forstatt pågår. Kodeeksempelet fordrer at man har installert python-pakken <a href="https://pypi.org/project/google-cloud-storage/">google-cloud-storage</a>.</p>
+<p>Kildomaten lar deg sjekke om filprosessering har feilet, blitt vellykket eller forstatt pågår. Kodeeksempelet fordrer at man har installert Python-pakken <a href="https://pypi.org/project/google-cloud-storage/">google-cloud-storage</a>.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>sjekk-status-kildomaten.py</strong></pre>
@@ -1405,7 +1405,7 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(source_file):</span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  logging.error(<span class="st">"Ikke-kritisk feil"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Som det er hintet til i koden så anbefales alternativ 1 for uhåndterbare feil hvor prosesseringen ikke kan fortsette, mens alternativ 2 passer bra for feil som ikke hindrer prosessering, men som man vil bli varlset om allikevel.</p>
+<p>Som det er hintet til i koden så anbefales alternativ 1 for uhåndterbare feil hvor prosesseringen ikke kan fortsette, mens alternativ 2 passer bra for feil som ikke hindrer prosessering, men som man vil bli varslet om allikevel.</p>
 </section>
 <section id="flere-kilder-1" class="level3">
 <h3 class="anchored" data-anchor-id="flere-kilder-1">Flere kilder</h3>
@@ -1426,7 +1426,7 @@ Figur&nbsp;1: Suksessfulle tester på GitHub
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="at">│               └── process_source_data.py</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="at">│...</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>I eksempelet over ser vi det er to kilder: <code>altinn</code> og <code>ledstill</code>. Hver kilde trigges på ulike filstier i kildebøtta, og python-koden som kjøres kan være ulik mellom kilder.</p>
+<p>I eksempelet over ser vi det er to kilder: <code>altinn</code> og <code>ledstill</code>. Hver kilde trigges på ulike filstier i kildebøtta, og Python-koden som kjøres kan være ulik mellom kilder.</p>
 </section>
 <section id="test-miljø" class="level3">
 <h3 class="anchored" data-anchor-id="test-miljø">Test-miljø</h3>
@@ -1486,8 +1486,8 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <p>Før du kan gjøre dette trenger du følgende informasjon:</p>
 <ol type="1">
 <li><strong>project-id</strong> for <em>standardprosjektet</em>. <a href="../faq.html#hvordan-finner-jeg-et-google-prosjekt-sin-prosjekt-id">Slik finner du prosjekt-id</a>. Merk at dette ikke er kilde-prosjektet!</li>
-<li><strong>folder_prefix</strong> er mappen i kilde-bøtten, det vil si, mappen akkurat under <code>&lt;dapla-example-prod&gt;</code>. Man vil da kjøre Kildomaten-scriptet for hver fil i denne mappen.</li>
-<li><strong>source_name</strong> er navnet på <em>kilden</em>, og vil bestemme hvilket Kildomat-script man bruker for å prosessere filene fra <em>punkt 2</em>. Det vil tilsvare mappenavnene under mappen <code>automation/source-data/&lt;team-navn&gt;-prod/</code> i IaC-repoet for teamet. I eksempelet over ( <a href="#lst-dapla-example" class="quarto-xref">Oppføring&nbsp;1</a>) har vi to kilder - <code>altinn</code> og <code>ledstill</code>.</li>
+<li><strong>folder_prefix</strong> er mappen i kilde-bøtten, det vil si, mappen akkurat under <code>&lt;dapla-example-prod&gt;</code>. Man vil da kjøre Kildomaten-skriptet for hver fil i denne mappen.</li>
+<li><strong>source_name</strong> er navnet på <em>kilden</em>, og vil bestemme hvilket Kildomat-skript man bruker for å prosessere filene fra <em>punkt 2</em>. Det vil tilsvare mappenavnene under mappen <code>automation/source-data/&lt;team-navn&gt;-prod/</code> i IaC-repoet for teamet. I eksempelet over ( <a href="#lst-dapla-example" class="quarto-xref">Oppføring&nbsp;1</a>) har vi to kilder - <code>altinn</code> og <code>ledstill</code>.</li>
 </ol>
 <p>Hvis man under <strong>folder_prefix</strong> legger inn en hel filsti med filnavn og filending, så trigges Kildomaten kun på denne ene fila.</p>
 <p>Her er et kodeeksempel som viser hvordan man kan trigge prossesering av alle filer for kilden <code>altinn</code>:</p>
@@ -1503,8 +1503,8 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>trigger_source_data_processing(project_id, source_name, folder_prefix)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på alle undermapper av <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/</code>.</p>
-<p>Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifike filer i en kilde</p>
+<p>I eksempelet over trigger vi skriptet som er satt opp for kilden <code>altinn</code> til å kjøre på alle undermapper av <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/</code>.</p>
+<p>Her er et kodeeksempel som viser hvordan man kan trigge prosessering av spesifikke filer i en kilde:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -1521,7 +1521,7 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> file_paths:</span>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    trigger_source_data_processing(project_id, source_name, <span class="bu">file</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>I eksempelet over trigger vi scriptet som er satt opp for kilden <code>altinn</code> til å kjøre på de tre spesifike filene <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/data1.parquet</code>, <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/data2.parquet</code> og <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/data3.parquet</code>.</p>
+<p>I eksempelet over trigger vi skriptet som er satt opp for kilden <code>altinn</code> til å kjøre på de tre spesifikke filene <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/data1.parquet</code>, <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/data2.parquet</code> og <code>ssb-dapla-example-data-kilde-prod/altinn/ra0678/data3.parquet</code>.</p>
 </section>
 </section>
 <section id="vedlikehold" class="level2">
@@ -1529,12 +1529,12 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <p>Når tjenesten er rullet ut så vil den kjøre automatisk på alle filer som dukker opp i filsti i kildebøtta. Etter hvert vil det være behov for å endre på skript, endre filstier som skal trigge tjenesten, eller prosessere alle filer på nytt. I denne delen forklarer vi hvordan du går frem for å gjøre dette.</p>
 <section id="endre-skript" class="level3">
 <h3 class="anchored" data-anchor-id="endre-skript">Endre skript</h3>
-<p>Alle på team kan endre på skriptet, men det er <strong>data-admins</strong> som må godkjenne endringene før de blir rullet ut. For å endre skriptet gjør du følgende:</p>
+<p>Alle på teamet kan endre på skriptet, men det er <strong>data-admins</strong> som må godkjenne endringene før de blir rullet ut. For å endre skriptet gjør du følgende:</p>
 <ol type="1">
 <li>Klon repoet.</li>
 <li>Gjør endringene du ønsker i en <em>branch</em>.</li>
 <li>Push opp endringene til GitHub og opprett en <em>pull request</em>.</li>
-<li>Få en data-admins på teamet til å godkjenne endringene.</li>
+<li>Få en data-admin på teamet til å godkjenne endringene.</li>
 <li>Når endringene er godkjent så kan du <em>merge</em> inn i <code>main</code>-branchen.</li>
 </ol>
 <p>En endring i Python-skriptet krever ikke at tjenesten rulles ut på nytt. Derfor er det ikke like mange tester og kjøringer som gjøres som når man oppretter en helt ny kilde.</p>
@@ -1546,14 +1546,14 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <li>Klon repoet.</li>
 <li>Gjør endringene du ønsker i en <em>branch</em>.</li>
 <li>Push opp endringene til GitHub og opprett en <em>pull request</em>.</li>
-<li>Få en data-admins på teamet til å godkjenne endringene.</li>
+<li>Få en data-admin på teamet til å godkjenne endringene.</li>
 <li>Når endringene er godkjent så kan du <em>merge</em> inn i <code>main</code>-branchen.</li>
 </ol>
 <p>En endring i config.yaml krever at tjenesten rulles ut på nytt og tar derfor litt mer tid enn en endring i Python-skriptet.</p>
 </section>
 <section id="metadata" class="level3">
 <h3 class="anchored" data-anchor-id="metadata">Metadata</h3>
-<p>For å hindre dobbeltprosessering og forbedre ytelse bruker Kildomaten Cloud Storage sin innebygde metadatafunksjonalitet for å sette noen markører på kildedatafilene. Disse metadatane kan du hente ut f.eks. via dette scriptet:</p>
+<p>For å hindre dobbeltprosessering og forbedre ytelse bruker Kildomaten Cloud Storage sin innebygde metadatafunksjonalitet for å sette noen markører på kildedatafilene. Disse metadatane kan du hente ut f.eks. via dette skriptet:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>sjekk-metadata.py</strong></pre>
@@ -1590,13 +1590,13 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <p>Dette repoet oppfører seg som et vanlig Poetry-prosjekt, og blir brukt som grunnlaget for alle Kildomaten-jobber.</p>
 <p><strong>Eksisterende Kildomaten-jobber blir oppdatert til den nyeste versjonen av dette prosjektet hvis</strong>:</p>
 <ul>
-<li>Man gjør endringer i en kilde i et IAC-repo (f.eks. filen (<code>process_source_data.py</code>))</li>
+<li>Man gjør endringer i en kilde i et IAC-repo (f.eks. filen (<code>process_source_data.py</code>)).</li>
 <li>Plattformutviklere ruller ut endringer som treffer alle Kildomater. Dette skjer typisk ved:
 <ul>
-<li>Mindre pakkeoppdateringer som ikke har innvirkninger på scriptet.</li>
-<li>Viktige pakkeoppdateringer som fikser produksjonskritiske feil</li>
+<li>Mindre pakkeoppdateringer som ikke har innvirkninger på skriptet.</li>
+<li>Viktige pakkeoppdateringer som fikser produksjonskritiske feil.</li>
 </ul></li>
-<li>Man kjører en manuell oppdatering av Kildomaten (se bilde under)</li>
+<li>Man kjører en manuell oppdatering av Kildomaten (se bilde under).</li>
 </ul>
 <section id="manuell-oppdatering-av-kildomaten" class="level5">
 <h5 class="anchored" data-anchor-id="manuell-oppdatering-av-kildomaten">Manuell oppdatering av Kildomaten</h5>
@@ -1604,8 +1604,8 @@ Oppføring&nbsp;1: Eksempel filstruktur
 <div class="g-col-4">
 <ol type="1">
 <li><p>Trykk på <strong>Actions</strong>-fanen i et IAC-repo for teamet med en Kildomat</p></li>
-<li><p>Velg <strong>Kildomaten</strong> på venstre side</p></li>
-<li><p>Utvid <strong>Run workflow</strong>-menyen</p></li>
+<li><p>Velg <strong>Kildomaten</strong> på venstre side.</p></li>
+<li><p>Utvid <strong>Run workflow</strong>-menyen.</p></li>
 <li><p>Trykk på den grønne <strong>Run workflow</strong>-knappen.</p></li>
 </ol>
 <p>Etter noen minutter vil da Kildomaten være oppdatert.</p>

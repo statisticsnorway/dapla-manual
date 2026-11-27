@@ -934,6 +934,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#lage-dags" id="toc-lage-dags" class="nav-link" data-scroll-target="#lage-dags">Lage DAGs</a></li>
   <li><a href="#grafisk-grensesnitt" id="toc-grafisk-grensesnitt" class="nav-link" data-scroll-target="#grafisk-grensesnitt">Grafisk grensesnitt</a></li>
   <li><a href="#data-og-tilganger" id="toc-data-og-tilganger" class="nav-link" data-scroll-target="#data-og-tilganger">Data og tilganger</a></li>
+  <li><a href="#datafangst-via-maskinporten" id="toc-datafangst-via-maskinporten" class="nav-link" data-scroll-target="#datafangst-via-maskinporten">Datafangst via Maskinporten</a></li>
   <li><a href="#nettverksåpning-for-utgående-trafikk" id="toc-nettverksåpning-for-utgående-trafikk" class="nav-link" data-scroll-target="#nettverksåpning-for-utgående-trafikk">Nettverksåpning for utgående trafikk</a></li>
   <li><a href="#python-versjoner" id="toc-python-versjoner" class="nav-link" data-scroll-target="#python-versjoner">Python-versjoner</a></li>
   </ul></li>
@@ -1117,6 +1118,26 @@ Figur&nbsp;2: Lenken Airflow som åpner webserveren for Statomaten
 <h3 class="anchored" data-anchor-id="data-og-tilganger">Data og tilganger</h3>
 <p>Statomaten setter opp en tjenestekonto med tilgang til teamets kilde- og standardbøtter. Arbeidsflyten kan bare lese og skrive data som denne kontoen har tilgang til.</p>
 </section>
+<section id="datafangst-via-maskinporten" class="level3">
+<h3 class="anchored" data-anchor-id="datafangst-via-maskinporten">Datafangst via Maskinporten</h3>
+<p>Statomaten kan hente data fra eksterne API-er som er beskyttet av Maskinporten ved å bruke en Maskinporten Guardian M2M-bruker. Se <a href="../statistikkere/maskinporten-guardian.html#opprette-en-maskinporten-guardian-m2m-bruker">dokumentasjonen for Maskinporten</a> for hvordan man oppretter en slik bruker, og <a href="../statistikkere/maskinporten-guardian.html#m2m-flow">kodeeksempelet for M2M-flyten</a> for hvordan man henter ut et token.</p>
+<p>For at Statomaten skal få tilgang til et Keycloak-token, må Statomaten sin tjenestekonto legges til i <code>credentials_access</code> for klienten i <a href="https://github.com/statisticsnorway/keycloak-iac">keycloak-iac</a>-repoet. For eksempel:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>amends ".../pkl/MaskinportenGuardianClient.pkl"</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>api_shortname = "elhub"</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>maskinporten_client_id = "2afce3ba-e318-4cfb-8aef-43271206a31a"</span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a>maskinporten_audience = "https://test.maskinporten.no/"</span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a>maskinporten_default_scopes {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a>  "elhub:publicstakeholder"</span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a>}</span>
+<span id="cb3-9"><a href="#cb3-9" aria-label="9"></a>credentials_access {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-label="10"></a>  "play-obr-data-admins"</span>
+<span id="cb3-11"><a href="#cb3-11" aria-label="11"></a>  "play-obr-developers"</span>
+<span id="cb3-12"><a href="#cb3-12" aria-label="12"></a>  # The service account for 'statomaten' in the Google project 'play-obr-t-ju'</span>
+<span id="cb3-13"><a href="#cb3-13" aria-label="13"></a>  "serviceAccount:dapla-automation-sa@play-obr-t-ju.iam.gserviceaccount.com"</span>
+<span id="cb3-14"><a href="#cb3-14" aria-label="14"></a>}</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Bytt ut <code>play-obr-t-ju</code> med prosjekt-ID-en til teamets prosjekt.</p>
+</section>
 <section id="nettverksåpning-for-utgående-trafikk" class="level3">
 <h3 class="anchored" data-anchor-id="nettverksåpning-for-utgående-trafikk">Nettverksåpning for utgående trafikk</h3>
 <p>Statomaten kjører i et eget internt nettverk for teamet. Hvis arbeidsflyten må nå eksterne kilder, for eksempel API-er, må teamet søke om nettverkstilgang via Kundeservice.</p>
@@ -1137,14 +1158,14 @@ Figur&nbsp;2: Lenken Airflow som åpner webserveren for Statomaten
 <div class="code-with-filename-file">
 <pre><strong>automation/statomaten/dapla-example-prod/pyproject.toml</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="automation/statomaten/dapla-example-prod/pyproject.toml"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project]</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">"statomaten-example"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">requires-python</span> <span class="op">=</span> <span class="st">"&gt;=3.12"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">dependencies</span> <span class="op">=</span> <span class="op">[</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pandas==2.0.0"</span><span class="op">,</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"requests==2.31.0"</span><span class="op">,</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="automation/statomaten/dapla-example-prod/pyproject.toml"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[project]</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">name</span> <span class="op">=</span> <span class="st">"statomaten-example"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">version</span> <span class="op">=</span> <span class="st">"0.1.0"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">requires-python</span> <span class="op">=</span> <span class="st">"&gt;=3.12"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">dependencies</span> <span class="op">=</span> <span class="op">[</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pandas==2.0.0"</span><span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"requests==2.31.0"</span><span class="op">,</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">]</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Bytt <code>3.12</code> med ønsket Python-versjon, og legg til de Python-pakkene teamet trenger i <code>dependencies</code>-listen.</p>
 <ol start="2" type="1">
@@ -1164,21 +1185,21 @@ Figur&nbsp;2: Lenken Airflow som åpner webserveren for Statomaten
 <div class="code-with-filename-file">
 <pre><strong>automation/statomaten/dapla-example-prod/dags/example_dag.py</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="automation/statomaten/dapla-example-prod/dags/example_dag.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> airflow <span class="im">import</span> models</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> airflow.providers.cncf.kubernetes.operators.pod <span class="im">import</span> KubernetesPodOperator</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> models.DAG(</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    dag_id<span class="op">=</span><span class="st">"example_custom_python_dag"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    schedule<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    start_date<span class="op">=</span>datetime.datetime(<span class="dv">2024</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>) <span class="im">as</span> dag:</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    task <span class="op">=</span> KubernetesPodOperator(</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        task_id<span class="op">=</span><span class="st">'run_python_script'</span>,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span><span class="st">"europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-example-docker/automation/composer/python:latest"</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        cmds<span class="op">=</span>[<span class="st">'python3'</span>],</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        arguments<span class="op">=</span>[<span class="st">'script.py'</span>],</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="automation/statomaten/dapla-example-prod/dags/example_dag.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> airflow <span class="im">import</span> models</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> airflow.providers.cncf.kubernetes.operators.pod <span class="im">import</span> KubernetesPodOperator</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> models.DAG(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    dag_id<span class="op">=</span><span class="st">"example_custom_python_dag"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    schedule<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    start_date<span class="op">=</span>datetime.datetime(<span class="dv">2024</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>) <span class="im">as</span> dag:</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    task <span class="op">=</span> KubernetesPodOperator(</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        task_id<span class="op">=</span><span class="st">'run_python_script'</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        image<span class="op">=</span><span class="st">"europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-example-docker/automation/composer/python:latest"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        cmds<span class="op">=</span>[<span class="st">'python3'</span>],</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        arguments<span class="op">=</span>[<span class="st">'script.py'</span>],</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Erstatt <code>dapla-example</code> i <code>image="europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-example-docker/automation/composer/</code> med ditt teams navn.</p>
 

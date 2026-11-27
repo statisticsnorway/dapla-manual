@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Kartdata – Dapla-manualen</title>
+<title>kartdata – Dapla-manualen</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -114,13 +114,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<meta property="og:title" content="Kartdata – Dapla-manualen">
+<meta property="og:title" content="Dapla-manualen">
 <meta property="og:description" content="Brukermanualen for SSBs dataplattform Dapla">
 <meta property="og:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
 <meta property="og:site_name" content="Dapla-manualen">
 <meta property="og:image:height" content="403">
 <meta property="og:image:width" content="863">
-<meta name="twitter:title" content="Kartdata – Dapla-manualen">
+<meta name="twitter:title" content="Dapla-manualen">
 <meta name="twitter:description" content="Brukermanualen for SSBs dataplattform Dapla">
 <meta name="twitter:image" content="https://manual.dapla.ssb.no/images/dapla-long.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -919,45 +919,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Innhold</h2>
    
   <ul>
-  <li><a href="#python" id="toc-python" class="nav-link active" data-scroll-target="#python">Python</a>
+  <li><a href="#kartdata" id="toc-kartdata" class="nav-link active" data-scroll-target="#kartdata">Kartdata</a>
+  <ul class="collapse">
+  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a>
   <ul class="collapse">
   <li><a href="#gis-pakker-og-lesingskriving-av-geodata" id="toc-gis-pakker-og-lesingskriving-av-geodata" class="nav-link" data-scroll-target="#gis-pakker-og-lesingskriving-av-geodata">GIS-pakker og lesing/skriving av geodata</a></li>
   <li><a href="#geopandas-eksempler-i-dapla" id="toc-geopandas-eksempler-i-dapla" class="nav-link" data-scroll-target="#geopandas-eksempler-i-dapla">geopandas-eksempler i Dapla</a></li>
   </ul></li>
   <li><a href="#r" id="toc-r" class="nav-link" data-scroll-target="#r">R</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/statisticsnorway/dapla-manual/edit/main/dapla-manual/statistikkere/appendix/kartdata.qmd" class="toc-action"><i class="bi bi-github"></i>Rediger siden</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/issues/new" class="toc-action"><i class="bi empty"></i>Rapporter feil</a></li><li><a href="https://github.com/statisticsnorway/dapla-manual/blob/main/dapla-manual/statistikkere/appendix/kartdata.qmd" class="toc-action"><i class="bi empty"></i>Vis kilde</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content" tabindex="-1">
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../statistikkere/appendix/dashboard.html">Appendix</a></li><li class="breadcrumb-item"><a href="../../statistikkere/appendix/kartdata.html">Kartdata</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Kartdata</h1>
-</div>
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../statistikkere/appendix/dashboard.html">Appendix</a></li><li class="breadcrumb-item"><a href="../../statistikkere/appendix/kartdata.html">Kartdata</a></li></ol></nav></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    <div>
-    <div class="quarto-title-meta-heading">Sist endret</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">01.01.2025</p>
-    </div>
-  </div>
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>Det er tilrettelagt kartdata i Dapla til analyse, statistikkproduksjon og visualisering. Det er de samme dataene som er i GEODB i vanlig produksjonssone. Kartdataene er lagret på <strong>ssb-areal-data-delt-kart-prod</strong>. De er lagret som parquetfiler i standardprojeksjonen vi bruker i SSB (UTM sone 33N) hvis ikke annet er angitt. Det er også SSBs standard-rutenett i ulike størrelser samt Eurostats rutenett over Norge.</p>
-<p>I tillegg ligger det noe <strong>testdata</strong> i fellesbøtta her: <strong>ssb-dapla-felles-data-produkt-prod/GIS/testdata</strong></p>
+<section id="kartdata" class="level1">
+<h1>Kartdata</h1>
+<p>Det er tilrettelagt kartdata i Dapla til analyse og visualisering. Kartdataene er lagret på <strong>gs://ssb-areal-data-delt-kart-prod</strong> som GeoParquet-filer med koordinatsystem UTM sone 33N.</p>
+<p><a href="https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4927357119/Lagring+av+geodata+p+Dapla">Mer om lagring av geodata på Dapla her</a>.</p>
+<p>Alle har tilgang til <strong>gs://ssb-areal-data-delt-kart-prod</strong> via teamet <strong>dapla-felles</strong>.</p>
 <section id="python" class="level2">
 <h2 class="anchored" data-anchor-id="python">Python</h2>
 <section id="gis-pakker-og-lesingskriving-av-geodata" class="level3">
@@ -989,7 +973,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>kommuner <span class="op">=</span> gpd.read_parquet(<span class="st">"gs://ssb-areal-data-delt-kart-prod/visualisering_data/klargjorte-data/2025/parquet/N5000_kommune_flate_p2025_v1.parquet"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Større filer er lagret som partisjonerte parquet-filer. Disse leses best med sgis siden geopandas ikke støtter partisjonerte filer ennå.</p>
+<p>Enkelte større filer er lagret som partisjonerte parquet-filer som mest effektivt leses med sgis:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
@@ -997,27 +981,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sgis <span class="im">as</span> sg</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>arealbruk <span class="op">=</span> sg.read_geopandas(<span class="st">"ssb-areal-data-delt-kart-prod/analyse_data/klargjorte-data/2025/SSB_arealbruk_flate_p2025_v1.parquet"</span>)</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Man kan også gjøre vanlige tabell-filer geografiske hvis man har koordinat-kolonner. For eksempel situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF):</p>
+<p><strong>Lagring av koordinat-filer som GeoParquet</strong></p>
+<p>Det anbefales å lagre filer som inneholder koordinater som GeoParquet, som er en parquet-fil med geo-metadata og en kolonne for geometri.</p>
+<p>Hvis du har en pandas.DataFrame med koordinatkolonner, kan den enkelt konverteres til geopandas.GeoDataFrame og lagres som GeoParquet.</p>
+<p>Her er et eksempel for situasjonsuttak fra Virksomhets- og foretaksregisteret (VoF). Viktig: man må vite hvilket koordinatsystem koordinatene er lagret i. Sjekk datadoc eller hør med dataeier.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>notebook</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dapla <span class="im">as</span> dp</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="notebook"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>VOFSTI <span class="op">=</span> <span class="st">"ssb-vof-data-delt-stedfesting-prod/klargjorte-data/parquet"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>vof_df <span class="op">=</span> dp.read_pandas(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span>VOFSTI<span class="sc">}</span><span class="ss">/stedfesting-situasjonsuttak_p2023-01_v1.parquet"</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>vof_gdf <span class="op">=</span> gpd.GeoDataFrame(</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    vof_df, </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    geometry<span class="op">=</span>gpd.points_from_xy(</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        vof_df[<span class="st">"y_koordinat"</span>],</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        vof_df[<span class="st">"x_koordinat"</span>],</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    crs<span class="op">=</span><span class="dv">25833</span>,</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>vof_gdf</span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>VOFSTI <span class="op">=</span> <span class="st">"gs://ssb-vof-data-delt-stedfesting-prod/klargjorte-data/parquet"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>vof_df <span class="op">=</span> pd.read_parquet(<span class="ss">f"</span><span class="sc">{</span>VOFSTI<span class="sc">}</span><span class="ss">/stedfesting-situasjonsuttak_p2023-01_v1.parquet"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>vof_gdf <span class="op">=</span> gpd.GeoDataFrame(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    vof_df, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    geometry<span class="op">=</span>gpd.points_from_xy(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        vof_df[<span class="st">"y_koordinat"</span>],</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        vof_df[<span class="st">"x_koordinat"</span>],</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    crs<span class="op">=</span><span class="dv">25833</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>vof_gdf.to_parquet(<span class="st">"...) # skriver GeoParquet</span></span></code></pre></div><button title="Kopier til utklippstavle" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Metoden ‘to_parquet’ skriver her automatisk en GeoParquet-fil, ettersom at dataene er av typen GeoDataFrame.</p>
+<p><a href="https://statistics-norway.atlassian.net/wiki/spaces/DAPLA/pages/4927357119/Lagring+av+geodata+p+Dapla">Mer om lagring av geodata på Dapla her</a>.</p>
 </section>
 <section id="geopandas-eksempler-i-dapla" class="level3">
 <h3 class="anchored" data-anchor-id="geopandas-eksempler-i-dapla">geopandas-eksempler i Dapla</h3>
@@ -1170,6 +1157,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
